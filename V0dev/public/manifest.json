@@ -42,21 +42,35 @@
       "form_factor": "wide"
     }
   ],
-  "categories": ["medical", "education", "health"],
+  "categories": [
+    "medical",
+    "education",
+    "health"
+  ],
   "shortcuts": [
     {
       "name": "Calculadora de VM",
       "short_name": "VM",
       "description": "Acesse a calculadora de ventilação mecânica",
       "url": "/sistemas/calculadora-vm",
-      "icons": [{ "src": "/icon.svg", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "96x96"
+        }
+      ]
     },
     {
       "name": "Prontuário",
       "short_name": "Prontuário",
       "description": "Gerenciar prontuários eletrônicos",
       "url": "/sistemas/prontuario",
-      "icons": [{ "src": "/icon.svg", "sizes": "96x96" }]
+      "icons": [
+        {
+          "src": "/icon.svg",
+          "sizes": "96x96"
+        }
+      ]
     }
   ],
   "preferences_related_applications": false
