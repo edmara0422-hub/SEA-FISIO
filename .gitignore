@@ -1,0 +1,15 @@
+# Dependências e build (nunca versionar)
+node_modules/
+.next/
+.vercel/
+.trae/
+
+# Sistema e IDE
+.DS_Store
+.idea/
+*.log
+
+# Ambiente
+.env
+.env.local
+.env.*.local
