@@ -135,40 +135,37 @@ function RealisticBrain() {
   }, [])
 
   const cortexMaterial = useMemo(
-    () => new THREE.MeshPhysicalMaterial({
-      color: '#f1f5f9',
-      metalness: 0.82,
-      roughness: 0.22,
-      clearcoat: 0.4,
-      clearcoatRoughness: 0.24,
-      reflectivity: 0.98,
-      envMapIntensity: 1.15,
+    () => new THREE.MeshStandardMaterial({
+      color: '#d9d4cf',
+      metalness: 0.02,
+      roughness: 0.82,
+      emissive: '#241f1b',
+      emissiveIntensity: 0.05,
+      envMapIntensity: 0.18,
     }),
     []
   )
 
   const cerebellumMaterial = useMemo(
-    () => new THREE.MeshPhysicalMaterial({
-      color: '#dbe4ee',
-      metalness: 0.8,
-      roughness: 0.26,
-      clearcoat: 0.34,
-      clearcoatRoughness: 0.28,
-      reflectivity: 0.94,
-      envMapIntensity: 1.05,
+    () => new THREE.MeshStandardMaterial({
+      color: '#cfc8c1',
+      metalness: 0.02,
+      roughness: 0.86,
+      emissive: '#221d19',
+      emissiveIntensity: 0.04,
+      envMapIntensity: 0.14,
     }),
     []
   )
 
   const stemMaterial = useMemo(
-    () => new THREE.MeshPhysicalMaterial({
-      color: '#cbd5e1',
-      metalness: 0.78,
-      roughness: 0.3,
-      clearcoat: 0.28,
-      clearcoatRoughness: 0.3,
-      reflectivity: 0.9,
-      envMapIntensity: 1,
+    () => new THREE.MeshStandardMaterial({
+      color: '#bcb4ad',
+      metalness: 0.01,
+      roughness: 0.88,
+      emissive: '#1d1814',
+      emissiveIntensity: 0.03,
+      envMapIntensity: 0.1,
     }),
     []
   )
@@ -829,25 +826,8 @@ function WeeklyChart() {
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(true)
-  const [hasRealBrainModel, setHasRealBrainModel] = useState(false)
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false)
-  }, [])
-
-  useEffect(() => {
-    let active = true
-
-    fetch('/cerebro.glb', { method: 'HEAD' })
-      .then((response) => {
-        if (active) setHasRealBrainModel(response.ok)
-      })
-      .catch(() => {
-        if (active) setHasRealBrainModel(false)
-      })
-
-    return () => {
-      active = false
-    }
   }, [])
 
   useEffect(() => {
@@ -901,7 +881,7 @@ export default function HomePage() {
             <spotLight position={[0, 2.4, 4]} angle={0.44} penumbra={0.85} intensity={1.2} color="#ffffff" />
             <Suspense fallback={null}>
               <Float speed={1} rotationIntensity={0.1} floatIntensity={0.2}>
-                {hasRealBrainModel ? <RealBrainModel /> : <RealisticBrain />}
+                <RealisticBrain />
               </Float>
             </Suspense>
             <OrbitControls
