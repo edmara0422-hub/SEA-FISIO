@@ -3,11 +3,41 @@
 import { useEffect, useState, useRef, Suspense, useCallback, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Float } from '@react-three/drei'
+import { OrbitControls, Float, useGLTF } from '@react-three/drei'
 import { Bell, MessageSquare, Activity, Brain, Heart, Zap, TrendingUp } from 'lucide-react'
 import * as THREE from 'three'
 import { generateECGData } from '@/lib/ecgModel'
 import { generateVMPressureData } from '@/lib/vmModel'
+
+function RealBrainModel() {
+  const groupRef = useRef<THREE.Group>(null)
+  const { scene } = useGLTF('/cerebro.glb') as { scene: THREE.Group }
+
+  const model = useMemo(() => {
+    const cloned = scene.clone(true)
+    const box = new THREE.Box3().setFromObject(cloned)
+    const center = box.getCenter(new THREE.Vector3())
+    const size = box.getSize(new THREE.Vector3())
+    const maxDim = Math.max(size.x, size.y, size.z) || 1
+
+    cloned.position.sub(center)
+    cloned.scale.setScalar(2.0 / maxDim)
+    return cloned
+  }, [scene])
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.15
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.08) * 0.04
+    }
+  })
+
+  return (
+    <group ref={groupRef} scale={[0.62, 0.62, 0.62]}>
+      <primitive object={model} />
+    </group>
+  )
+}
 
 // Cerebro procedural mais anatomico (sem asset externo)
 function RealisticBrain() {
@@ -799,8 +829,25 @@ function WeeklyChart() {
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(true)
+  const [hasRealBrainModel, setHasRealBrainModel] = useState(false)
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false)
+  }, [])
+
+  useEffect(() => {
+    let active = true
+
+    fetch('/cerebro.glb', { method: 'HEAD' })
+      .then((response) => {
+        if (active) setHasRealBrainModel(response.ok)
+      })
+      .catch(() => {
+        if (active) setHasRealBrainModel(false)
+      })
+
+    return () => {
+      active = false
+    }
   }, [])
 
   useEffect(() => {
@@ -843,37 +890,25 @@ export default function HomePage() {
 
       {/* Hero Section com Cerebro 3D */}
       <div className="relative h-[55vh] w-full">
-        {/* Grid de fundo */}
-        <div
-          className="absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
-            backgroundSize: '40px 40px',
-          }}
-        />
-
         {/* Canvas 3D */}
         <div className="absolute inset-0">
           <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-            <ambientLight intensity={0.55} color="#f8fafc" />
-            <hemisphereLight intensity={0.85} color="#ffffff" groundColor="#1e293b" />
-            <directionalLight position={[3.8, 3.2, 4.6]} intensity={1.8} color="#ffffff" />
-            <directionalLight position={[-4, 1.4, 2.2]} intensity={0.9} color="#dbeafe" />
-            <pointLight position={[0, -3.6, 2.8]} intensity={1.1} color="#93c5fd" />
-            <pointLight position={[0, 0.5, -4]} intensity={1.2} color="#ffffff" />
-            <spotLight position={[0, 2.6, 4.2]} angle={0.46} penumbra={0.9} intensity={2.1} color="#f8fafc" />
+            <ambientLight intensity={0.62} color="#ffffff" />
+            <hemisphereLight intensity={0.75} color="#ffffff" groundColor="#374151" />
+            <directionalLight position={[3.2, 3, 4.4]} intensity={1.45} color="#ffffff" />
+            <directionalLight position={[-2.8, 1.8, 2.6]} intensity={0.65} color="#f8fafc" />
+            <pointLight position={[0, 0.2, -3.6]} intensity={0.9} color="#ffffff" />
+            <spotLight position={[0, 2.4, 4]} angle={0.44} penumbra={0.85} intensity={1.2} color="#ffffff" />
             <Suspense fallback={null}>
               <Float speed={1} rotationIntensity={0.1} floatIntensity={0.2}>
-                <RealisticBrain />
+                {hasRealBrainModel ? <RealBrainModel /> : <RealisticBrain />}
               </Float>
-              <EnergyRings />
-              <EnergyParticles />
             </Suspense>
             <OrbitControls
               enableZoom={false}
               enablePan={false}
               autoRotate
-              autoRotateSpeed={0.14}
+              autoRotateSpeed={0.08}
               maxPolarAngle={Math.PI / 1.5}
               minPolarAngle={Math.PI / 3}
             />
