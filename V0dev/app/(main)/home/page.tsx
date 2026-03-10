@@ -3,80 +3,11 @@
 import { useEffect, useState, useRef, Suspense, useCallback, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Float, useGLTF } from '@react-three/drei'
+import { OrbitControls, Float } from '@react-three/drei'
 import { Bell, MessageSquare, Activity, Brain, Heart, Zap, TrendingUp } from 'lucide-react'
 import * as THREE from 'three'
 import { generateECGData } from '@/lib/ecgModel'
 import { generateVMPressureData } from '@/lib/vmModel'
-
-function RealBrainModel() {
-  const groupRef = useRef<THREE.Group>(null)
-  const { scene } = useGLTF('/cerebro.glb') as { scene: THREE.Group }
-
-  const solidModel = useMemo(() => {
-    const model = scene.clone(true)
-    const box = new THREE.Box3().setFromObject(model)
-    const center = box.getCenter(new THREE.Vector3())
-    const size = box.getSize(new THREE.Vector3())
-    const maxDim = Math.max(size.x, size.y, size.z) || 1
-
-    model.position.sub(center)
-    model.scale.setScalar(2.0 / maxDim)
-
-    model.traverse((node) => {
-      if (node instanceof THREE.Mesh) {
-        node.material = new THREE.MeshStandardMaterial({
-          color: '#101113',
-          roughness: 0.94,
-          metalness: 0.01,
-          emissive: '#070809',
-          emissiveIntensity: 0.25,
-          envMapIntensity: 0.1,
-        })
-      }
-    })
-
-    return model
-  }, [scene])
-
-  const wireModel = useMemo(() => {
-    const model = scene.clone(true)
-    const box = new THREE.Box3().setFromObject(model)
-    const center = box.getCenter(new THREE.Vector3())
-    const size = box.getSize(new THREE.Vector3())
-    const maxDim = Math.max(size.x, size.y, size.z) || 1
-
-    model.position.sub(center)
-    model.scale.setScalar((2.0 / maxDim) * 1.0015)
-
-    model.traverse((node) => {
-      if (node instanceof THREE.Mesh) {
-        node.material = new THREE.MeshBasicMaterial({
-          color: '#f8fafc',
-          wireframe: true,
-          transparent: true,
-          opacity: 0.62,
-        })
-      }
-    })
-
-    return model
-  }, [scene])
-
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.15
-      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.08) * 0.04
-    }
-  })
-
-  return (
-    <group ref={groupRef} scale={[0.62, 0.62, 0.62]}>
-      <primitive object={solidModel} />
-      <primitive object={wireModel} />
-    </group>
-  )
-}
 
 // Cerebro procedural mais anatomico (sem asset externo)
 function RealisticBrain() {
@@ -151,6 +82,66 @@ function RealisticBrain() {
   const leftHemisphere = useMemo(() => createHemisphere(-1), [createHemisphere])
   const rightHemisphere = useMemo(() => createHemisphere(1), [createHemisphere])
   const cerebellum = useMemo(() => createCerebellum(), [createCerebellum])
+  const brainstem = useMemo(() => {
+    const geometry = new THREE.CylinderGeometry(0.09, 0.05, 0.42, 28, 18)
+    const pos = geometry.attributes.position
+    const v = new THREE.Vector3()
+
+    for (let i = 0; i < pos.count; i++) {
+      v.fromBufferAttribute(pos, i)
+
+      const taperWave = Math.sin(v.y * 8.5) * 0.012
+      const anteriorBulge = Math.max(0, v.z) * 0.06
+      const posteriorFlatten = v.z < 0 ? 1 - Math.min(0.18, Math.abs(v.z) * 0.4) : 1
+
+      v.x *= 1 + taperWave
+      v.z *= (1 + anteriorBulge) * posteriorFlatten
+
+      pos.setXYZ(i, v.x, v.y, v.z)
+    }
+
+    geometry.computeVertexNormals()
+    return geometry
+  }, [])
+
+  const cortexMaterial = useMemo(
+    () => new THREE.MeshPhysicalMaterial({
+      color: '#f1f5f9',
+      metalness: 0.82,
+      roughness: 0.22,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.24,
+      reflectivity: 0.98,
+      envMapIntensity: 1.15,
+    }),
+    []
+  )
+
+  const cerebellumMaterial = useMemo(
+    () => new THREE.MeshPhysicalMaterial({
+      color: '#dbe4ee',
+      metalness: 0.8,
+      roughness: 0.26,
+      clearcoat: 0.34,
+      clearcoatRoughness: 0.28,
+      reflectivity: 0.94,
+      envMapIntensity: 1.05,
+    }),
+    []
+  )
+
+  const stemMaterial = useMemo(
+    () => new THREE.MeshPhysicalMaterial({
+      color: '#cbd5e1',
+      metalness: 0.78,
+      roughness: 0.3,
+      clearcoat: 0.28,
+      clearcoatRoughness: 0.3,
+      reflectivity: 0.9,
+      envMapIntensity: 1,
+    }),
+    []
+  )
 
   useFrame((state) => {
     if (brainRef.current) {
@@ -162,29 +153,18 @@ function RealisticBrain() {
   return (
     <group ref={brainRef} scale={[0.62, 0.56, 0.64]}>
       <mesh geometry={leftHemisphere} position={[-0.4, 0.05, 0.03]}>
-        <meshStandardMaterial color="#101113" metalness={0.01} roughness={0.95} emissive="#08090b" emissiveIntensity={0.2} envMapIntensity={0.1} />
+        <primitive object={cortexMaterial} attach="material" />
       </mesh>
       <mesh geometry={rightHemisphere} position={[0.4, 0.05, 0.03]}>
-        <meshStandardMaterial color="#0f1012" metalness={0.01} roughness={0.95} emissive="#08090b" emissiveIntensity={0.2} envMapIntensity={0.1} />
-      </mesh>
-
-      <mesh geometry={leftHemisphere} position={[-0.4, 0.05, 0.03]} scale={1.0015}>
-        <meshBasicMaterial color="#ffffff" wireframe transparent opacity={0.9} />
-      </mesh>
-      <mesh geometry={rightHemisphere} position={[0.4, 0.05, 0.03]} scale={1.0015}>
-        <meshBasicMaterial color="#ffffff" wireframe transparent opacity={0.9} />
+        <primitive object={cortexMaterial.clone()} attach="material" />
       </mesh>
 
       <mesh geometry={cerebellum} position={[0, -0.64, -0.4]} scale={[0.62, 0.45, 0.48]}>
-        <meshStandardMaterial color="#111214" metalness={0.01} roughness={0.96} emissive="#090a0c" emissiveIntensity={0.2} />
-      </mesh>
-      <mesh geometry={cerebellum} position={[0, -0.64, -0.4]} scale={[0.621, 0.451, 0.481]}>
-        <meshBasicMaterial color="#ffffff" wireframe transparent opacity={0.8} />
+        <primitive object={cerebellumMaterial} attach="material" />
       </mesh>
 
-      <mesh position={[0, -0.88, -0.35]} rotation={[0.16, 0, 0]}>
-        <cylinderGeometry args={[0.08, 0.052, 0.34, 24]} />
-        <meshStandardMaterial color="#111317" metalness={0.01} roughness={0.97} />
+      <mesh geometry={brainstem} position={[0, -0.88, -0.3]} rotation={[0.22, 0, 0]}>
+        <primitive object={stemMaterial} attach="material" />
       </mesh>
     </group>
   )
@@ -819,25 +799,8 @@ function WeeklyChart() {
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(true)
-  const [hasRealBrainModel, setHasRealBrainModel] = useState(false)
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false)
-  }, [])
-
-  useEffect(() => {
-    let active = true
-
-    fetch('/cerebro.glb', { method: 'HEAD' })
-      .then((response) => {
-        if (active) setHasRealBrainModel(response.ok)
-      })
-      .catch(() => {
-        if (active) setHasRealBrainModel(false)
-      })
-
-    return () => {
-      active = false
-    }
   }, [])
 
   useEffect(() => {
@@ -892,13 +855,16 @@ export default function HomePage() {
         {/* Canvas 3D */}
         <div className="absolute inset-0">
           <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-            <ambientLight intensity={0.1} />
-            <pointLight position={[4, 4, 5]} intensity={0.5} color="#ffffff" />
-            <pointLight position={[0, -3.6, 2.8]} intensity={1.35} color="#4f6fff" />
-            <pointLight position={[-3.5, 1.8, -3]} intensity={0.25} color="#dbe4ff" />
+            <ambientLight intensity={0.55} color="#f8fafc" />
+            <hemisphereLight intensity={0.85} color="#ffffff" groundColor="#1e293b" />
+            <directionalLight position={[3.8, 3.2, 4.6]} intensity={1.8} color="#ffffff" />
+            <directionalLight position={[-4, 1.4, 2.2]} intensity={0.9} color="#dbeafe" />
+            <pointLight position={[0, -3.6, 2.8]} intensity={1.1} color="#93c5fd" />
+            <pointLight position={[0, 0.5, -4]} intensity={1.2} color="#ffffff" />
+            <spotLight position={[0, 2.6, 4.2]} angle={0.46} penumbra={0.9} intensity={2.1} color="#f8fafc" />
             <Suspense fallback={null}>
               <Float speed={1} rotationIntensity={0.1} floatIntensity={0.2}>
-                {hasRealBrainModel ? <RealBrainModel /> : <RealisticBrain />}
+                <RealisticBrain />
               </Float>
               <EnergyRings />
               <EnergyParticles />
