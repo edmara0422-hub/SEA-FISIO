@@ -14,7 +14,7 @@ function RealisticBrain() {
   const brainRef = useRef<THREE.Group>(null)
 
   const createHemisphere = useCallback((side: -1 | 1) => {
-    const geometry = new THREE.IcosahedronGeometry(1.04, 5)
+    const geometry = new THREE.IcosahedronGeometry(1.02, 6)
     const pos = geometry.attributes.position
     const v = new THREE.Vector3()
     const n = new THREE.Vector3()
@@ -28,26 +28,35 @@ function RealisticBrain() {
       const phi = Math.atan2(v.z, (v.x * side) + 0.001)
 
       // Sulcos com fluxo mais organico e menos aspecto de esfera.
-      const foldsA = Math.sin(phi * 10.2 + theta * 3.8) * 0.068
-      const foldsB = Math.sin(phi * 16.5 - theta * 4.8) * 0.04
-      const foldsC = Math.cos(v.y * 14.0 + v.z * 10.0) * 0.022
-      const macroWave = Math.sin((v.z * 2.7) + (v.y * 1.9)) * 0.028
+      const foldsA = Math.sin(phi * 11.4 + theta * 4.2) * 0.064
+      const foldsB = Math.sin(phi * 18.2 - theta * 5.1) * 0.034
+      const foldsC = Math.cos(v.y * 15.8 + v.z * 11.3) * 0.02
+      const foldsD = Math.sin((v.x * side) * 9.5 + v.y * 7.4) * 0.015
+      const macroWave = Math.sin((v.z * 2.9) + (v.y * 2.05)) * 0.026
 
-      const gyriDepth = foldsA + foldsB + foldsC + macroWave
+      const gyriDepth = foldsA + foldsB + foldsC + foldsD + macroWave
 
       // Silhueta cerebral: mais volume superior/frontal e achatamento inferior.
-      const superiorBulge = 1 + Math.max(0, v.y) * 0.1
-      const frontalBulge = 1 + Math.max(0, v.z) * 0.09
-      const temporalFullness = 1 + Math.max(0, side * v.x) * 0.06
-      const ventralFlatten = v.y < -0.08 ? 1 - Math.min(0.2, Math.abs(v.y + 0.08) * 0.2) : 1
+      const superiorBulge = 1 + Math.max(0, v.y) * 0.12
+      const frontalBulge = 1 + Math.max(0, v.z) * 0.11
+      const occipitalRound = 1 + Math.max(0, -v.z) * 0.05
+      const temporalDrop = 1 + Math.max(0, side * v.x) * 0.08
+      const ventralFlatten = v.y < -0.08 ? 1 - Math.min(0.24, Math.abs(v.y + 0.08) * 0.24) : 1
+      const lateralTaper = 1 - Math.max(0, Math.abs(v.x) - 0.82) * 0.08
+      const asymmetry = side === -1 ? 1.012 : 0.992
 
-      const localScale = (1 + gyriDepth) * superiorBulge * frontalBulge * temporalFullness * ventralFlatten
+      const localScale = (1 + gyriDepth) * superiorBulge * frontalBulge * occipitalRound * temporalDrop * ventralFlatten * lateralTaper * asymmetry
       v.multiplyScalar(localScale)
 
       // Fissura inter-hemisferica com leve recuo interno.
-      const midBand = Math.exp(-Math.pow((v.x + side * 0.05) * 8.6, 2))
-      v.x -= side * midBand * 0.085
-      v.z -= midBand * 0.018
+      const midBand = Math.exp(-Math.pow((v.x + side * 0.045) * 9.2, 2))
+      v.x -= side * midBand * 0.1
+      v.z -= midBand * 0.02
+      v.y -= midBand * 0.012
+
+      const sylvianHint = Math.exp(-Math.pow(v.y * 5.4, 2)) * Math.exp(-Math.pow((v.z - 0.08) * 6.5, 2))
+      v.y -= sylvianHint * 0.035
+      v.z += sylvianHint * 0.012
 
       v.addScaledVector(n, gyriDepth * 0.02)
 
@@ -59,17 +68,19 @@ function RealisticBrain() {
   }, [])
 
   const createCerebellum = useCallback(() => {
-    const geometry = new THREE.IcosahedronGeometry(0.68, 4)
+    const geometry = new THREE.IcosahedronGeometry(0.66, 5)
     const pos = geometry.attributes.position
     const v = new THREE.Vector3()
 
     for (let i = 0; i < pos.count; i++) {
       v.fromBufferAttribute(pos, i)
 
-      const foldsA = Math.sin(v.x * 10 + v.z * 7) * 0.045
-      const foldsB = Math.cos(v.y * 12 + v.x * 8) * 0.03
-      const flatten = v.y > 0.15 ? 1 - Math.min(0.24, (v.y - 0.15) * 0.3) : 1
-      const localScale = (1 + foldsA + foldsB) * flatten
+      const foldsA = Math.sin(v.x * 12 + v.z * 8.4) * 0.036
+      const foldsB = Math.cos(v.y * 14 + v.x * 8.8) * 0.024
+      const foldsC = Math.sin(v.z * 13.4 - v.y * 6.2) * 0.016
+      const flatten = v.y > 0.12 ? 1 - Math.min(0.26, (v.y - 0.12) * 0.34) : 1
+      const posteriorBulge = 1 + Math.max(0, -v.z) * 0.06
+      const localScale = (1 + foldsA + foldsB + foldsC) * flatten * posteriorBulge
 
       v.multiplyScalar(localScale)
       pos.setXYZ(i, v.x, v.y, v.z)
@@ -142,10 +153,10 @@ function RealisticBrain() {
 
   const wireframeMaterial = useMemo(
     () => new THREE.MeshBasicMaterial({
-      color: '#dfe6ee',
+      color: '#e7edf5',
       wireframe: true,
       transparent: true,
-      opacity: 0.9,
+      opacity: 0.82,
     }),
     []
   )
@@ -218,16 +229,16 @@ function EnergyRings() {
   return (
     <>
       <mesh ref={ring1}>
-        <torusGeometry args={[2, 0.007, 12, 100]} />
-        <meshBasicMaterial color="#e5e7eb" transparent opacity={0.46} />
+        <torusGeometry args={[1.82, 0.006, 12, 100]} />
+        <meshBasicMaterial color="#e5e7eb" transparent opacity={0.42} />
       </mesh>
       <mesh ref={ring2}>
-        <torusGeometry args={[2.3, 0.007, 12, 100]} />
-        <meshBasicMaterial color="#cbd5e1" transparent opacity={0.38} />
+        <torusGeometry args={[2.08, 0.006, 12, 100]} />
+        <meshBasicMaterial color="#cbd5e1" transparent opacity={0.34} />
       </mesh>
       <mesh ref={ring3}>
-        <torusGeometry args={[2.6, 0.007, 12, 100]} />
-        <meshBasicMaterial color="#94a3b8" transparent opacity={0.32} />
+        <torusGeometry args={[2.34, 0.006, 12, 100]} />
+        <meshBasicMaterial color="#94a3b8" transparent opacity={0.28} />
       </mesh>
     </>
   )
@@ -863,6 +874,21 @@ export default function HomePage() {
 
       {/* Hero Section com Cerebro 3D */}
       <div className="relative h-[55vh] w-full">
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
+            backgroundSize: '42px 42px',
+          }}
+        />
+
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute left-[8%] top-[12%] h-40 w-40 rounded-full bg-white/8 blur-3xl" />
+          <div className="absolute right-[12%] top-[18%] h-32 w-32 rounded-full bg-slate-300/10 blur-3xl" />
+          <div className="absolute left-[22%] bottom-[10%] h-28 w-28 rounded-full bg-slate-200/8 blur-[90px]" />
+          <div className="absolute right-[24%] bottom-[14%] h-36 w-36 rounded-full bg-white/6 blur-[110px]" />
+        </div>
+
         {/* Canvas 3D */}
         <div className="absolute inset-0">
           <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
@@ -877,6 +903,8 @@ export default function HomePage() {
               <Float speed={1} rotationIntensity={0.1} floatIntensity={0.2}>
                 <RealisticBrain />
               </Float>
+              <EnergyRings />
+              <EnergyParticles />
             </Suspense>
             <OrbitControls
               enableZoom={false}
