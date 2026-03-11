@@ -40,6 +40,37 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "TSC Check",
+			"type": "shell",
+			"command": "npx tsc --noEmit 2>&1 | head -300",
+			"isBackground": false,
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "TSC Full Check",
+			"type": "shell",
+			"command": "npx tsc --noEmit 2>&1",
+			"isBackground": false
+		},
+		{
+			"label": "TS Errors",
+			"type": "shell",
+			"command": "node node_modules/.bin/tsc --noEmit 2>&1 || true",
+			"isBackground": false
+		},
+		{
+			"label": "TSC Check",
+			"type": "shell",
+			"command": "cd \"/Users/edmararocha/Documents/SEA FISIO*\" && npx tsc --noEmit 2>&1 | tail -200"
+		},
+		{
+			"label": "TSC Errors",
+			"type": "shell",
+			"command": "npx tsc --noEmit 2>&1 | head -300"
 		}
 	]
 }
