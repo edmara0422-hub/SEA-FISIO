@@ -3,18 +3,85 @@
 import { useEffect, useState, useRef, Suspense, useCallback, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { OrbitControls, Float } from '@react-three/drei'
+import { OrbitControls, Float, useGLTF } from '@react-three/drei'
 import { Bell, MessageSquare, Activity, Brain, Heart, Zap, TrendingUp } from 'lucide-react'
 import * as THREE from 'three'
-import { generateECGData } from '@/lib/ecgModel'
-import { generateVMPressureData } from '@/lib/vmModel'
+
+function RealBrainModel() {
+  const groupRef = useRef<THREE.Group>(null)
+  const { scene } = useGLTF('/brain-real.glb') as { scene: THREE.Group }
+
+  const solidModel = useMemo(() => {
+    const model = scene.clone(true)
+    const box = new THREE.Box3().setFromObject(model)
+    const center = box.getCenter(new THREE.Vector3())
+    const size = box.getSize(new THREE.Vector3())
+    const maxDim = Math.max(size.x, size.y, size.z) || 1
+
+    model.position.sub(center)
+    model.scale.setScalar(2.0 / maxDim)
+
+    model.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        node.material = new THREE.MeshStandardMaterial({
+          color: '#101113',
+          roughness: 0.94,
+          metalness: 0.01,
+          emissive: '#070809',
+          emissiveIntensity: 0.25,
+          envMapIntensity: 0.1,
+        })
+      }
+    })
+
+    return model
+  }, [scene])
+
+  const wireModel = useMemo(() => {
+    const model = scene.clone(true)
+    const box = new THREE.Box3().setFromObject(model)
+    const center = box.getCenter(new THREE.Vector3())
+    const size = box.getSize(new THREE.Vector3())
+    const maxDim = Math.max(size.x, size.y, size.z) || 1
+
+    model.position.sub(center)
+    model.scale.setScalar((2.0 / maxDim) * 1.0015)
+
+    model.traverse((node) => {
+      if (node instanceof THREE.Mesh) {
+        node.material = new THREE.MeshBasicMaterial({
+          color: '#f8fafc',
+          wireframe: true,
+          transparent: true,
+          opacity: 0.62,
+        })
+      }
+    })
+
+    return model
+  }, [scene])
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.15
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.08) * 0.04
+    }
+  })
+
+  return (
+    <group ref={groupRef} scale={[0.62, 0.62, 0.62]}>
+      <primitive object={solidModel} />
+      <primitive object={wireModel} />
+    </group>
+  )
+}
 
 // Cerebro procedural mais anatomico (sem asset externo)
 function RealisticBrain() {
   const brainRef = useRef<THREE.Group>(null)
 
   const createHemisphere = useCallback((side: -1 | 1) => {
-    const geometry = new THREE.IcosahedronGeometry(1.02, 6)
+    const geometry = new THREE.IcosahedronGeometry(1.04, 5)
     const pos = geometry.attributes.position
     const v = new THREE.Vector3()
     const n = new THREE.Vector3()
@@ -28,35 +95,26 @@ function RealisticBrain() {
       const phi = Math.atan2(v.z, (v.x * side) + 0.001)
 
       // Sulcos com fluxo mais organico e menos aspecto de esfera.
-      const foldsA = Math.sin(phi * 11.4 + theta * 4.2) * 0.064
-      const foldsB = Math.sin(phi * 18.2 - theta * 5.1) * 0.034
-      const foldsC = Math.cos(v.y * 15.8 + v.z * 11.3) * 0.02
-      const foldsD = Math.sin((v.x * side) * 9.5 + v.y * 7.4) * 0.015
-      const macroWave = Math.sin((v.z * 2.9) + (v.y * 2.05)) * 0.026
+      const foldsA = Math.sin(phi * 10.2 + theta * 3.8) * 0.068
+      const foldsB = Math.sin(phi * 16.5 - theta * 4.8) * 0.04
+      const foldsC = Math.cos(v.y * 14.0 + v.z * 10.0) * 0.022
+      const macroWave = Math.sin((v.z * 2.7) + (v.y * 1.9)) * 0.028
 
-      const gyriDepth = foldsA + foldsB + foldsC + foldsD + macroWave
+      const gyriDepth = foldsA + foldsB + foldsC + macroWave
 
       // Silhueta cerebral: mais volume superior/frontal e achatamento inferior.
-      const superiorBulge = 1 + Math.max(0, v.y) * 0.12
-      const frontalBulge = 1 + Math.max(0, v.z) * 0.11
-      const occipitalRound = 1 + Math.max(0, -v.z) * 0.05
-      const temporalDrop = 1 + Math.max(0, side * v.x) * 0.08
-      const ventralFlatten = v.y < -0.08 ? 1 - Math.min(0.24, Math.abs(v.y + 0.08) * 0.24) : 1
-      const lateralTaper = 1 - Math.max(0, Math.abs(v.x) - 0.82) * 0.08
-      const asymmetry = side === -1 ? 1.012 : 0.992
+      const superiorBulge = 1 + Math.max(0, v.y) * 0.1
+      const frontalBulge = 1 + Math.max(0, v.z) * 0.09
+      const temporalFullness = 1 + Math.max(0, side * v.x) * 0.06
+      const ventralFlatten = v.y < -0.08 ? 1 - Math.min(0.2, Math.abs(v.y + 0.08) * 0.2) : 1
 
-      const localScale = (1 + gyriDepth) * superiorBulge * frontalBulge * occipitalRound * temporalDrop * ventralFlatten * lateralTaper * asymmetry
+      const localScale = (1 + gyriDepth) * superiorBulge * frontalBulge * temporalFullness * ventralFlatten
       v.multiplyScalar(localScale)
 
       // Fissura inter-hemisferica com leve recuo interno.
-      const midBand = Math.exp(-Math.pow((v.x + side * 0.045) * 9.2, 2))
-      v.x -= side * midBand * 0.1
-      v.z -= midBand * 0.02
-      v.y -= midBand * 0.012
-
-      const sylvianHint = Math.exp(-Math.pow(v.y * 5.4, 2)) * Math.exp(-Math.pow((v.z - 0.08) * 6.5, 2))
-      v.y -= sylvianHint * 0.035
-      v.z += sylvianHint * 0.012
+      const midBand = Math.exp(-Math.pow((v.x + side * 0.05) * 8.6, 2))
+      v.x -= side * midBand * 0.085
+      v.z -= midBand * 0.018
 
       v.addScaledVector(n, gyriDepth * 0.02)
 
@@ -68,19 +126,17 @@ function RealisticBrain() {
   }, [])
 
   const createCerebellum = useCallback(() => {
-    const geometry = new THREE.IcosahedronGeometry(0.66, 5)
+    const geometry = new THREE.IcosahedronGeometry(0.68, 4)
     const pos = geometry.attributes.position
     const v = new THREE.Vector3()
 
     for (let i = 0; i < pos.count; i++) {
       v.fromBufferAttribute(pos, i)
 
-      const foldsA = Math.sin(v.x * 12 + v.z * 8.4) * 0.036
-      const foldsB = Math.cos(v.y * 14 + v.x * 8.8) * 0.024
-      const foldsC = Math.sin(v.z * 13.4 - v.y * 6.2) * 0.016
-      const flatten = v.y > 0.12 ? 1 - Math.min(0.26, (v.y - 0.12) * 0.34) : 1
-      const posteriorBulge = 1 + Math.max(0, -v.z) * 0.06
-      const localScale = (1 + foldsA + foldsB + foldsC) * flatten * posteriorBulge
+      const foldsA = Math.sin(v.x * 10 + v.z * 7) * 0.045
+      const foldsB = Math.cos(v.y * 12 + v.x * 8) * 0.03
+      const flatten = v.y > 0.15 ? 1 - Math.min(0.24, (v.y - 0.15) * 0.3) : 1
+      const localScale = (1 + foldsA + foldsB) * flatten
 
       v.multiplyScalar(localScale)
       pos.setXYZ(i, v.x, v.y, v.z)
@@ -93,109 +149,40 @@ function RealisticBrain() {
   const leftHemisphere = useMemo(() => createHemisphere(-1), [createHemisphere])
   const rightHemisphere = useMemo(() => createHemisphere(1), [createHemisphere])
   const cerebellum = useMemo(() => createCerebellum(), [createCerebellum])
-  const brainstem = useMemo(() => {
-    const geometry = new THREE.CylinderGeometry(0.09, 0.05, 0.42, 28, 18)
-    const pos = geometry.attributes.position
-    const v = new THREE.Vector3()
-
-    for (let i = 0; i < pos.count; i++) {
-      v.fromBufferAttribute(pos, i)
-
-      const taperWave = Math.sin(v.y * 8.5) * 0.012
-      const anteriorBulge = Math.max(0, v.z) * 0.06
-      const posteriorFlatten = v.z < 0 ? 1 - Math.min(0.18, Math.abs(v.z) * 0.4) : 1
-
-      v.x *= 1 + taperWave
-      v.z *= (1 + anteriorBulge) * posteriorFlatten
-
-      pos.setXYZ(i, v.x, v.y, v.z)
-    }
-
-    geometry.computeVertexNormals()
-    return geometry
-  }, [])
-
-  const cortexMaterial = useMemo(
-    () => new THREE.MeshStandardMaterial({
-      color: '#0d1014',
-      metalness: 0,
-      roughness: 0.96,
-      emissive: '#05070a',
-      emissiveIntensity: 0.06,
-      envMapIntensity: 0,
-    }),
-    []
-  )
-
-  const cerebellumMaterial = useMemo(
-    () => new THREE.MeshStandardMaterial({
-      color: '#101318',
-      metalness: 0,
-      roughness: 0.97,
-      emissive: '#04060a',
-      emissiveIntensity: 0.05,
-      envMapIntensity: 0,
-    }),
-    []
-  )
-
-  const stemMaterial = useMemo(
-    () => new THREE.MeshStandardMaterial({
-      color: '#0b0e12',
-      metalness: 0,
-      roughness: 0.98,
-      emissive: '#030507',
-      emissiveIntensity: 0.04,
-      envMapIntensity: 0,
-    }),
-    []
-  )
-
-  const wireframeMaterial = useMemo(
-    () => new THREE.MeshBasicMaterial({
-      color: '#e7edf5',
-      wireframe: true,
-      transparent: true,
-      opacity: 0.82,
-    }),
-    []
-  )
 
   useFrame((state) => {
     if (brainRef.current) {
-      brainRef.current.rotation.y = state.clock.elapsedTime * 0.11
-      brainRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.08) * 0.022
+      brainRef.current.rotation.y = state.clock.elapsedTime * 0.15
+      brainRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.1) * 0.05
     }
   })
 
   return (
-    <group ref={brainRef} scale={[0.66, 0.6, 0.68]}>
+    <group ref={brainRef} scale={[0.62, 0.56, 0.64]}>
       <mesh geometry={leftHemisphere} position={[-0.4, 0.05, 0.03]}>
-        <primitive object={cortexMaterial} attach="material" />
+        <meshStandardMaterial color="#101113" metalness={0.01} roughness={0.95} emissive="#08090b" emissiveIntensity={0.2} envMapIntensity={0.1} />
       </mesh>
-      <mesh geometry={leftHemisphere} position={[-0.4, 0.05, 0.03]} scale={[1.012, 1.012, 1.012]}>
-        <primitive object={wireframeMaterial} attach="material" />
+      <mesh geometry={rightHemisphere} position={[0.4, 0.05, 0.03]}>
+        <meshStandardMaterial color="#0f1012" metalness={0.01} roughness={0.95} emissive="#08090b" emissiveIntensity={0.2} envMapIntensity={0.1} />
       </mesh>
 
-      <mesh geometry={rightHemisphere} position={[0.4, 0.05, 0.03]}>
-        <primitive object={cortexMaterial.clone()} attach="material" />
+      <mesh geometry={leftHemisphere} position={[-0.4, 0.05, 0.03]} scale={1.0015}>
+        <meshBasicMaterial color="#ffffff" wireframe transparent opacity={0.9} />
       </mesh>
-      <mesh geometry={rightHemisphere} position={[0.4, 0.05, 0.03]} scale={[1.012, 1.012, 1.012]}>
-        <primitive object={wireframeMaterial.clone()} attach="material" />
+      <mesh geometry={rightHemisphere} position={[0.4, 0.05, 0.03]} scale={1.0015}>
+        <meshBasicMaterial color="#ffffff" wireframe transparent opacity={0.9} />
       </mesh>
 
       <mesh geometry={cerebellum} position={[0, -0.64, -0.4]} scale={[0.62, 0.45, 0.48]}>
-        <primitive object={cerebellumMaterial} attach="material" />
+        <meshStandardMaterial color="#111214" metalness={0.01} roughness={0.96} emissive="#090a0c" emissiveIntensity={0.2} />
       </mesh>
-      <mesh geometry={cerebellum} position={[0, -0.64, -0.4]} scale={[0.628, 0.456, 0.486]}>
-        <primitive object={wireframeMaterial.clone()} attach="material" />
+      <mesh geometry={cerebellum} position={[0, -0.64, -0.4]} scale={[0.621, 0.451, 0.481]}>
+        <meshBasicMaterial color="#ffffff" wireframe transparent opacity={0.8} />
       </mesh>
 
-      <mesh geometry={brainstem} position={[0, -0.88, -0.3]} rotation={[0.22, 0, 0]}>
-        <primitive object={stemMaterial} attach="material" />
-      </mesh>
-      <mesh geometry={brainstem} position={[0, -0.88, -0.3]} rotation={[0.22, 0, 0]} scale={[1.01, 1.01, 1.01]}>
-        <primitive object={wireframeMaterial.clone()} attach="material" />
+      <mesh position={[0, -0.88, -0.35]} rotation={[0.16, 0, 0]}>
+        <cylinderGeometry args={[0.08, 0.052, 0.34, 24]} />
+        <meshStandardMaterial color="#111317" metalness={0.01} roughness={0.97} />
       </mesh>
     </group>
   )
@@ -229,16 +216,16 @@ function EnergyRings() {
   return (
     <>
       <mesh ref={ring1}>
-        <torusGeometry args={[1.82, 0.006, 12, 100]} />
-        <meshBasicMaterial color="#e5e7eb" transparent opacity={0.42} />
+        <torusGeometry args={[2, 0.007, 12, 100]} />
+        <meshBasicMaterial color="#e5e7eb" transparent opacity={0.46} />
       </mesh>
       <mesh ref={ring2}>
-        <torusGeometry args={[2.08, 0.006, 12, 100]} />
-        <meshBasicMaterial color="#cbd5e1" transparent opacity={0.34} />
+        <torusGeometry args={[2.3, 0.007, 12, 100]} />
+        <meshBasicMaterial color="#cbd5e1" transparent opacity={0.38} />
       </mesh>
       <mesh ref={ring3}>
-        <torusGeometry args={[2.34, 0.006, 12, 100]} />
-        <meshBasicMaterial color="#94a3b8" transparent opacity={0.28} />
+        <torusGeometry args={[2.6, 0.007, 12, 100]} />
+        <meshBasicMaterial color="#94a3b8" transparent opacity={0.32} />
       </mesh>
     </>
   )
@@ -295,35 +282,34 @@ function ECGMonitor() {
     const width = 150
     const height = 42
     const baseline = height / 2
-    const ecgPoints = generateECGData({ bpm: 72, sampleRate: 260, beats: 1 })
-    const samples = ecgPoints.map((point) => point.value)
-    const minV = Math.min(...samples)
-    const maxV = Math.max(...samples)
-    const range = Math.max(maxV - minV, 0.0001)
+    const cycle = 132
+    const qrsGain = 1.03
 
-    const sampleECG = (phase: number) => {
-      const idx = Math.floor(phase * samples.length) % samples.length
-      return samples[idx]
-    }
+    const ecgY = (x: number, offset: number) => {
+      const phase = (x + offset) % cycle
+      let y = baseline
+      y += Math.sin((x + offset) * 0.08) * 0.16
 
-    const ecgY = (xNorm: number, offset: number) => {
-      const phase = (xNorm + offset) % 1
-      const value = sampleECG(phase)
-      const normalized = (value - minV) / range
-      return baseline - (normalized - 0.5) * 34
+      if (phase > 13 && phase < 33) y -= Math.sin((phase - 13) / 20 * Math.PI) * 7
+      else if (phase > 58 && phase < 62) y += (phase - 58) * 2.8
+      else if (phase >= 62 && phase < 66) y = baseline - 36 * qrsGain + (phase - 62) * 12.8
+      else if (phase >= 66 && phase < 73) y = baseline + 26 - (phase - 66) * 6.1
+      else if (phase > 88 && phase < 118) y -= Math.sin((phase - 88) / 30 * Math.PI) * 8.2
+
+      return y
     }
 
     const draw = () => {
       const offset = phaseRef.current
       const pts: string[] = new Array(width)
       for (let x = 0; x < width; x++) {
-        const y = ecgY(x / width, offset)
+        const y = ecgY(x, offset)
         pts[x] = `${x},${y.toFixed(2)}`
       }
 
       setPathD(`M ${pts.join(' L ')}`)
-      setSweepX((offset * width) % (width + 40))
-      phaseRef.current = (phaseRef.current + 0.0065) % 1
+      setSweepX((offset * 1.5) % (width + 40))
+      phaseRef.current += 2.45
 
       rafRef.current = requestAnimationFrame(draw)
     }
@@ -364,45 +350,29 @@ function VMMonitor() {
     const height = 42
     const n = 170
 
-    const vmPoints = generateVMPressureData({
-      fr: 16,
-      ieRatio: 1 / 2,
-      peep: 5,
-      peakPressure: 25,
-      sampleRate: 220,
-      cycles: 1,
-    })
+    const vmValue = (kind: 'pressure' | 'flow' | 'volume', progress: number) => {
+      const t1 = 0.05
+      const t2 = 0.35
+      const t3 = 0.4
 
-    const pressureSeries = vmPoints.map((point) => point.pressure)
-    const dt = vmPoints.length > 1 ? vmPoints[1].t - vmPoints[0].t : 1 / 220
+      if (kind === 'pressure') {
+        if (progress < t1) return -0.1 * Math.sin((progress / t1) * Math.PI)
+        if (progress < t2) return (progress - t1) / (t2 - t1)
+        if (progress < t3) return 1
+        return 1 - Math.pow((progress - t3) / (1 - t3), 0.8)
+      }
 
-    const flowSeries = pressureSeries.map((value, index, arr) => {
-      const prev = index === 0 ? arr[arr.length - 1] : arr[index - 1]
-      return (value - prev) / dt
-    })
+      if (kind === 'flow') {
+        if (progress < t1) return 0.22 * (progress / t1)
+        if (progress < t2) return 1 - (((progress - t1) / (t2 - t1)) * 0.7)
+        if (progress < t3) return 0.3 * (1 - (progress - t2) / (t3 - t2))
+        return -Math.exp(-((progress - t3) / (1 - t3)) * 3)
+      }
 
-    const volumeSeries: number[] = []
-    let acc = 0
-    for (let i = 0; i < flowSeries.length; i++) {
-      acc += Math.max(flowSeries[i], 0) * dt
-      if (flowSeries[i] < 0) acc = Math.max(0, acc + flowSeries[i] * dt * 0.35)
-      volumeSeries.push(acc)
-    }
-
-    const normalize = (series: number[]) => {
-      const min = Math.min(...series)
-      const max = Math.max(...series)
-      const range = Math.max(max - min, 0.0001)
-      return series.map((v) => (v - min) / range)
-    }
-
-    const pressureNorm = normalize(pressureSeries)
-    const flowNorm = normalize(flowSeries)
-    const volumeNorm = normalize(volumeSeries)
-
-    const sampleSeries = (series: number[], progress: number) => {
-      const idx = Math.floor(progress * series.length) % series.length
-      return series[idx]
+      if (progress < t1) return 0
+      if (progress < t2) return (progress - t1) / (t2 - t1)
+      if (progress < t3) return 1
+      return 1 - Math.pow((progress - t3) / (1 - t3), 0.9)
     }
 
     const buildSeries = (phase: number, laneCenter: number, amp: number, kind: 'pressure' | 'flow' | 'volume') => {
@@ -411,14 +381,8 @@ function VMMonitor() {
       for (let i = 0; i < n; i++) {
         const xn = i / (n - 1)
         const p = (xn + phase) % 1
-        const value =
-          kind === 'pressure'
-            ? sampleSeries(pressureNorm, p)
-            : kind === 'flow'
-              ? sampleSeries(flowNorm, p)
-              : sampleSeries(volumeNorm, p)
         x.push(xn * width)
-        y.push(laneCenter - value * amp)
+        y.push(laneCenter - vmValue(kind, p) * amp)
       }
       return { x, y }
     }
@@ -830,8 +794,25 @@ function WeeklyChart() {
 
 export default function HomePage() {
   const [showSplash, setShowSplash] = useState(true)
+  const [hasRealBrainModel, setHasRealBrainModel] = useState(false)
   const handleSplashComplete = useCallback(() => {
     setShowSplash(false)
+  }, [])
+
+  useEffect(() => {
+    let active = true
+
+    fetch('/brain-real.glb', { method: 'HEAD' })
+      .then((response) => {
+        if (active) setHasRealBrainModel(response.ok)
+      })
+      .catch(() => {
+        if (active) setHasRealBrainModel(false)
+      })
+
+    return () => {
+      active = false
+    }
   }, [])
 
   useEffect(() => {
@@ -874,34 +855,25 @@ export default function HomePage() {
 
       {/* Hero Section com Cerebro 3D */}
       <div className="relative h-[55vh] w-full">
+        {/* Grid de fundo */}
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.05]"
           style={{
-            backgroundImage: 'linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px)',
-            backgroundSize: '42px 42px',
+            backgroundImage: 'linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
           }}
         />
-
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute left-[8%] top-[12%] h-40 w-40 rounded-full bg-white/8 blur-3xl" />
-          <div className="absolute right-[12%] top-[18%] h-32 w-32 rounded-full bg-slate-300/10 blur-3xl" />
-          <div className="absolute left-[22%] bottom-[10%] h-28 w-28 rounded-full bg-slate-200/8 blur-[90px]" />
-          <div className="absolute right-[24%] bottom-[14%] h-36 w-36 rounded-full bg-white/6 blur-[110px]" />
-        </div>
 
         {/* Canvas 3D */}
         <div className="absolute inset-0">
           <Canvas camera={{ position: [0, 0, 5], fov: 45 }}>
-            <ambientLight intensity={0.16} color="#ffffff" />
-            <hemisphereLight intensity={0.28} color="#dbe4ee" groundColor="#020407" />
-            <directionalLight position={[3.1, 2.8, 4.2]} intensity={1.05} color="#f8fafc" />
-            <directionalLight position={[-2.4, 1.2, 2.2]} intensity={0.36} color="#cbd5e1" />
-            <pointLight position={[0, 0.2, 3.5]} intensity={0.8} color="#ffffff" />
-            <pointLight position={[0.2, -0.3, -3.2]} intensity={0.22} color="#94a3b8" />
-            <spotLight position={[0, 2.1, 4]} angle={0.4} penumbra={0.95} intensity={0.92} color="#ffffff" />
+            <ambientLight intensity={0.1} />
+            <pointLight position={[4, 4, 5]} intensity={0.5} color="#ffffff" />
+            <pointLight position={[0, -3.6, 2.8]} intensity={1.35} color="#4f6fff" />
+            <pointLight position={[-3.5, 1.8, -3]} intensity={0.25} color="#dbe4ff" />
             <Suspense fallback={null}>
               <Float speed={1} rotationIntensity={0.1} floatIntensity={0.2}>
-                <RealisticBrain />
+                {hasRealBrainModel ? <RealBrainModel /> : <RealisticBrain />}
               </Float>
               <EnergyRings />
               <EnergyParticles />
@@ -910,7 +882,7 @@ export default function HomePage() {
               enableZoom={false}
               enablePan={false}
               autoRotate
-              autoRotateSpeed={0.08}
+              autoRotateSpeed={0.14}
               maxPolarAngle={Math.PI / 1.5}
               minPolarAngle={Math.PI / 3}
             />

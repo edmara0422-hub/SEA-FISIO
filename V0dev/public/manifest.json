@@ -10,67 +10,53 @@
   "scope": "/",
   "icons": [
     {
-      "src": "/icon.svg",
+      "src": "/icon-light-32x32.png",
       "sizes": "32x32",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/icon.svg",
+      "src": "/icon-dark-32x32.png",
       "sizes": "32x32",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/icon.svg",
+      "src": "/apple-icon.png",
       "sizes": "180x180",
-      "type": "image/svg+xml",
+      "type": "image/png",
       "purpose": "any"
     }
   ],
   "screenshots": [
     {
-      "src": "/placeholder.svg",
+      "src": "/placeholder.jpg",
       "sizes": "540x720",
-      "type": "image/svg+xml",
+      "type": "image/jpeg",
       "form_factor": "narrow"
     },
     {
-      "src": "/placeholder.svg",
+      "src": "/placeholder.jpg",
       "sizes": "1280x720",
-      "type": "image/svg+xml",
+      "type": "image/jpeg",
       "form_factor": "wide"
     }
   ],
-  "categories": [
-    "medical",
-    "education",
-    "health"
-  ],
+  "categories": ["medical", "education", "health"],
   "shortcuts": [
     {
       "name": "Calculadora de VM",
       "short_name": "VM",
       "description": "Acesse a calculadora de ventilação mecânica",
       "url": "/sistemas/calculadora-vm",
-      "icons": [
-        {
-          "src": "/icon.svg",
-          "sizes": "96x96"
-        }
-      ]
+      "icons": [{ "src": "/icon-light-32x32.png", "sizes": "96x96" }]
     },
     {
       "name": "Prontuário",
       "short_name": "Prontuário",
       "description": "Gerenciar prontuários eletrônicos",
       "url": "/sistemas/prontuario",
-      "icons": [
-        {
-          "src": "/icon.svg",
-          "sizes": "96x96"
-        }
-      ]
+      "icons": [{ "src": "/icon-light-32x32.png", "sizes": "96x96" }]
     }
   ],
   "preferences_related_applications": false
