@@ -32,6 +32,14 @@
 			"isBackground": false,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "TSC-Count",
+			"type": "shell",
+			"command": "npx tsc --noEmit 2>&1 | wc -l",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }
