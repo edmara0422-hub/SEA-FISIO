@@ -1,0 +1,5 @@
+{
+    "workbench.editor.showTabIndex": true,
+    "workbench.browser.enableChatTools": true,
+    "chat.checkpoints.showFileChanges": true
+}
