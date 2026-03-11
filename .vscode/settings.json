@@ -25,5 +25,6 @@
     "github.copilot.chat.alternateGptPrompt.enabled": true,
     "github.copilot.chat.anthropic.tools.websearch.enabled": true,
     "github.copilot.chat.newWorkspace.useContext7": true,
-    "github.copilot.chat.notebook.enhancedNextEditSuggestions.enabled": true
+    "github.copilot.chat.notebook.enhancedNextEditSuggestions.enabled": true,
+    "task.allowAutomaticTasks": "on"
 }

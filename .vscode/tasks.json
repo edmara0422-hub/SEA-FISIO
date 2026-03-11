@@ -2,75 +2,44 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Fix Dependencies",
-			"type": "shell",
-			"command": "rm -rf node_modules package-lock.json && npm install",
-			"isBackground": false,
-			"problemMatcher": [],
-			"group": "build"
-		},
-		{
-			"label": "Next Dev Server",
-			"type": "shell",
-			"command": "npm run dev",
-			"isBackground": true,
-			"problemMatcher": [],
-			"group": "build"
-		},
-		{
 			"label": "SEA Dev Server",
 			"type": "shell",
 			"command": "npm run dev",
 			"isBackground": true,
-			"problemMatcher": [],
-			"group": "build"
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"problemMatcher": {
+				"pattern": {
+					"regexp": "^(?!\\s*$)",
+					"file": 0,
+					"location": 1,
+					"message": 2
+				},
+				"background": {
+					"activeOnStart": true,
+					"beginsPattern": "▲ Next.js",
+					"endsPattern": "✓ Ready in"
+				}
+			},
+			"presentation": {
+				"reveal": "silent",
+				"panel": "dedicated"
+			}
+		},
+		{
+			"label": "Fix Dependencies",
+			"type": "shell",
+			"command": "rm -rf node_modules package-lock.json && npm install",
+			"problemMatcher": []
 		},
 		{
 			"label": "TypeCheck",
 			"type": "shell",
-			"command": "npx tsc --noEmit 2>&1 | head -200",
-			"isBackground": false,
-			"problemMatcher": [],
-			"group": "build"
-		},
-		{
-			"label": "TSC-Count",
-			"type": "shell",
-			"command": "npx tsc --noEmit 2>&1 | wc -l",
-			"isBackground": false,
-			"problemMatcher": [],
-			"group": "build"
-		},
-		{
-			"label": "TSC Check",
-			"type": "shell",
-			"command": "npx tsc --noEmit 2>&1 | head -300",
-			"isBackground": false,
+			"command": "npx tsc --noEmit --pretty false 2>&1 | grep 'error TS' | head -90",
 			"problemMatcher": [
 				"$tsc"
 			]
-		},
-		{
-			"label": "TSC Full Check",
-			"type": "shell",
-			"command": "npx tsc --noEmit 2>&1",
-			"isBackground": false
-		},
-		{
-			"label": "TS Errors",
-			"type": "shell",
-			"command": "node node_modules/.bin/tsc --noEmit 2>&1 || true",
-			"isBackground": false
-		},
-		{
-			"label": "TSC Check",
-			"type": "shell",
-			"command": "cd \"/Users/edmararocha/Documents/SEA FISIO*\" && npx tsc --noEmit 2>&1 | tail -200"
-		},
-		{
-			"label": "TSC Errors",
-			"type": "shell",
-			"command": "npx tsc --noEmit 2>&1 | head -300"
 		}
 	]
 }
