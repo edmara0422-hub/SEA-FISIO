@@ -24,6 +24,14 @@
 			"isBackground": true,
 			"problemMatcher": [],
 			"group": "build"
+		},
+		{
+			"label": "TypeCheck",
+			"type": "shell",
+			"command": "npx tsc --noEmit 2>&1 | head -200",
+			"isBackground": false,
+			"problemMatcher": [],
+			"group": "build"
 		}
 	]
 }
