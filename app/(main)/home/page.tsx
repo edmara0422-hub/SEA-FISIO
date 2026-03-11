@@ -14,7 +14,7 @@ function RealisticBrain() {
   const brainRef = useRef<THREE.Group>(null)
 
   const createHemisphere = useCallback((side: -1 | 1) => {
-    const geometry = new THREE.IcosahedronGeometry(1.02, 6)
+    const geometry = new THREE.IcosahedronGeometry(1.02, 4)
     const pos = geometry.attributes.position
     const v = new THREE.Vector3()
     const n = new THREE.Vector3()
@@ -68,7 +68,7 @@ function RealisticBrain() {
   }, [])
 
   const createCerebellum = useCallback(() => {
-    const geometry = new THREE.IcosahedronGeometry(0.66, 5)
+    const geometry = new THREE.IcosahedronGeometry(0.66, 3)
     const pos = geometry.attributes.position
     const v = new THREE.Vector3()
 
@@ -247,7 +247,7 @@ function EnergyRings() {
 // Particulas de energia flutuando
 function EnergyParticles() {
   const particlesRef = useRef<THREE.Points>(null)
-  const count = 300
+  const count = 80
 
   const positions = new Float32Array(count * 3)
   const colors = new Float32Array(count * 3)
@@ -351,36 +351,26 @@ function ECGMonitor() {
   )
 }
 
-// Ventilacao Mecanica Monitor
+// Ventilacao Mecanica Monitor (SVG leve — sem Plotly)
 function VMMonitor() {
-  const plotRef = useRef<HTMLDivElement>(null)
-  const rafRef = useRef<number | null>(null)
+  const [pathP, setPathP] = useState('')
+  const [pathF, setPathF] = useState('')
+  const [pathV, setPathV] = useState('')
   const phaseRef = useRef(0)
+  const rafRef = useRef<number | null>(null)
 
   useEffect(() => {
-    let mounted = true
-    let Plotly: any = null
     const width = 150
-    const height = 42
-    const n = 170
-
     const vmPoints = generateVMPressureData({
-      fr: 16,
-      ieRatio: 1 / 2,
-      peep: 5,
-      peakPressure: 25,
-      sampleRate: 220,
-      cycles: 1,
+      fr: 16, ieRatio: 1 / 2, peep: 5, peakPressure: 25, sampleRate: 220, cycles: 1,
     })
-
-    const pressureSeries = vmPoints.map((point) => point.pressure)
+    const pressureSeries = vmPoints.map((p) => p.pressure)
     const dt = vmPoints.length > 1 ? vmPoints[1].t - vmPoints[0].t : 1 / 220
 
-    const flowSeries = pressureSeries.map((value, index, arr) => {
-      const prev = index === 0 ? arr[arr.length - 1] : arr[index - 1]
-      return (value - prev) / dt
+    const flowSeries = pressureSeries.map((v, i, arr) => {
+      const prev = i === 0 ? arr[arr.length - 1] : arr[i - 1]
+      return (v - prev) / dt
     })
-
     const volumeSeries: number[] = []
     let acc = 0
     for (let i = 0; i < flowSeries.length; i++) {
@@ -389,113 +379,46 @@ function VMMonitor() {
       volumeSeries.push(acc)
     }
 
-    const normalize = (series: number[]) => {
-      const min = Math.min(...series)
-      const max = Math.max(...series)
-      const range = Math.max(max - min, 0.0001)
-      return series.map((v) => (v - min) / range)
+    const normalize = (s: number[]) => {
+      const min = Math.min(...s), max = Math.max(...s), r = Math.max(max - min, 0.0001)
+      return s.map((v) => (v - min) / r)
     }
+    const pN = normalize(pressureSeries), fN = normalize(flowSeries), vN = normalize(volumeSeries)
 
-    const pressureNorm = normalize(pressureSeries)
-    const flowNorm = normalize(flowSeries)
-    const volumeNorm = normalize(volumeSeries)
-
-    const sampleSeries = (series: number[], progress: number) => {
-      const idx = Math.floor(progress * series.length) % series.length
-      return series[idx]
-    }
-
-    const buildSeries = (phase: number, laneCenter: number, amp: number, kind: 'pressure' | 'flow' | 'volume') => {
-      const x: number[] = []
-      const y: number[] = []
-      for (let i = 0; i < n; i++) {
-        const xn = i / (n - 1)
-        const p = (xn + phase) % 1
-        const value =
-          kind === 'pressure'
-            ? sampleSeries(pressureNorm, p)
-            : kind === 'flow'
-              ? sampleSeries(flowNorm, p)
-              : sampleSeries(volumeNorm, p)
-        x.push(xn * width)
-        y.push(laneCenter - value * amp)
+    const buildPath = (series: number[], lane: number, amp: number, phase: number) => {
+      const pts: string[] = []
+      for (let i = 0; i < 80; i++) {
+        const xn = i / 79
+        const idx = Math.floor(((xn + phase) % 1) * series.length) % series.length
+        const x = xn * width
+        const y = lane - series[idx] * amp
+        pts.push(`${x.toFixed(1)},${y.toFixed(1)}`)
       }
-      return { x, y }
+      return `M ${pts.join(' L ')}`
     }
 
-    const layout = {
-      width,
-      height,
-      margin: { l: 0, r: 0, t: 0, b: 0 },
-      paper_bgcolor: 'rgba(0,0,0,0)',
-      plot_bgcolor: 'rgba(0,0,0,0)',
-      xaxis: { visible: false, range: [0, width], fixedrange: true },
-      yaxis: { visible: false, range: [42, 0], fixedrange: true },
-      shapes: [
-        { type: 'line', x0: 0, x1: width, y0: 14, y1: 14, line: { color: 'rgba(255,255,255,0.09)', width: 1 } },
-        { type: 'line', x0: 0, x1: width, y0: 28, y1: 28, line: { color: 'rgba(255,255,255,0.09)', width: 1 } },
-        { type: 'line', x0: 0, x1: width, y0: 9.2, y1: 9.2, line: { color: 'rgba(120,252,179,0.16)', width: 1, dash: 'dot' } },
-        { type: 'line', x0: 0, x1: width, y0: 21, y1: 21, line: { color: 'rgba(96,165,250,0.16)', width: 1, dash: 'dot' } },
-        { type: 'line', x0: 0, x1: width, y0: 36.2, y1: 36.2, line: { color: 'rgba(192,132,252,0.16)', width: 1, dash: 'dot' } },
-      ],
-      showlegend: false,
-    }
-
-    const config = { displayModeBar: false, staticPlot: true, responsive: false }
-
-    const render = () => {
-      if (!mounted || !Plotly || !plotRef.current) return
-
+    const draw = () => {
       const phase = phaseRef.current
-      const p = buildSeries(phase, 9.2, 4.1, 'pressure')
-      const f = buildSeries(phase, 21, 3.9, 'flow')
-      const v = buildSeries(phase, 36.2, 4.1, 'volume')
-
-      const traces = [
-        { type: 'scatter', mode: 'lines', x: p.x, y: p.y, line: { color: 'rgba(120,252,179,0.24)', width: 3 }, hoverinfo: 'skip' },
-        { type: 'scatter', mode: 'lines', x: p.x, y: p.y, line: { color: 'rgba(120,252,179,0.98)', width: 1.5 }, hoverinfo: 'skip' },
-        { type: 'scatter', mode: 'lines', x: f.x, y: f.y, line: { color: 'rgba(96,165,250,0.24)', width: 3 }, hoverinfo: 'skip' },
-        { type: 'scatter', mode: 'lines', x: f.x, y: f.y, line: { color: 'rgba(96,165,250,0.98)', width: 1.5 }, hoverinfo: 'skip' },
-        { type: 'scatter', mode: 'lines', x: v.x, y: v.y, line: { color: 'rgba(192,132,252,0.24)', width: 3 }, hoverinfo: 'skip' },
-        { type: 'scatter', mode: 'lines', x: v.x, y: v.y, line: { color: 'rgba(192,132,252,0.98)', width: 1.5 }, hoverinfo: 'skip' },
-      ]
-
-      Plotly.react(plotRef.current, traces, {
-        ...layout,
-        shapes: [
-          ...layout.shapes,
-          {
-            type: 'rect',
-            x0: (phase * width) - 12,
-            x1: (phase * width) + 12,
-            y0: 0,
-            y1: 42,
-            fillcolor: 'rgba(255,255,255,0.08)',
-            line: { width: 0 },
-            layer: 'below',
-          },
-        ],
-      }, config)
-
+      setPathP(buildPath(pN, 9.2, 4.1, phase))
+      setPathF(buildPath(fN, 21, 3.9, phase))
+      setPathV(buildPath(vN, 36.2, 4.1, phase))
       phaseRef.current = (phaseRef.current + 0.008) % 1
-      rafRef.current = requestAnimationFrame(render)
+      rafRef.current = requestAnimationFrame(draw)
     }
+    draw()
 
-    import('plotly.js-dist-min').then((mod) => {
-      if (!mounted || !plotRef.current) return
-      Plotly = (mod as any).default || mod
-      Plotly.newPlot(plotRef.current, [], layout, config)
-      render()
-    })
-
-    return () => {
-      mounted = false
-      if (rafRef.current) cancelAnimationFrame(rafRef.current)
-      if (Plotly && plotRef.current) Plotly.purge(plotRef.current)
-    }
+    return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current) }
   }, [])
 
-  return <div ref={plotRef} className="w-full h-[42px]" />
+  return (
+    <svg viewBox="0 0 150 42" className="w-full h-[42px]" preserveAspectRatio="none" aria-hidden="true">
+      <line x1="0" y1="14" x2="150" y2="14" stroke="rgba(255,255,255,0.09)" strokeWidth="1" />
+      <line x1="0" y1="28" x2="150" y2="28" stroke="rgba(255,255,255,0.09)" strokeWidth="1" />
+      <path d={pathP} fill="none" stroke="rgba(120,252,179,0.92)" strokeWidth="1.5" />
+      <path d={pathF} fill="none" stroke="rgba(96,165,250,0.92)" strokeWidth="1.5" />
+      <path d={pathV} fill="none" stroke="rgba(192,132,252,0.92)" strokeWidth="1.5" />
+    </svg>
+  )
 }
 
 // Animacao de modulo clinico (sem texto)
@@ -594,7 +517,7 @@ function MetricBubble({ x, y, delay, color, moduleType }: {
 
 function SplashNeuralMesh() {
   const groupRef = useRef<THREE.Group>(null)
-  const nodeCount = 90
+  const nodeCount = 40
 
   const nodes = useMemo(() => {
     const arr = new Float32Array(nodeCount * 3)
@@ -610,7 +533,7 @@ function SplashNeuralMesh() {
   }, [])
 
   const links = useMemo(() => {
-    const count = 130
+    const count = 50
     const arr = new Float32Array(count * 6)
     for (let i = 0; i < count; i++) {
       const a = Math.floor(Math.random() * nodeCount)
@@ -660,43 +583,18 @@ function NeuralSplash({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0)
   const completedRef = useRef(false)
   const backgroundGlitter = [
-    { top: '6%', left: '8%', size: 1.8, delay: 0.1, duration: 2.2, glow: 0.55 },
-    { top: '10%', left: '20%', size: 2.8, delay: 0.25, duration: 2.9, glow: 0.72 },
-    { top: '12%', left: '34%', size: 1.6, delay: 0.4, duration: 2.4, glow: 0.5 },
-    { top: '8%', left: '48%', size: 2.4, delay: 0.55, duration: 2.6, glow: 0.66 },
-    { top: '14%', left: '62%', size: 1.7, delay: 0.7, duration: 2.1, glow: 0.52 },
-    { top: '10%', left: '76%', size: 3, delay: 0.85, duration: 3, glow: 0.78 },
-    { top: '16%', left: '88%', size: 2, delay: 1, duration: 2.5, glow: 0.58 },
-    { top: '24%', left: '12%', size: 2.6, delay: 1.15, duration: 2.7, glow: 0.68 },
-    { top: '28%', left: '26%', size: 1.7, delay: 1.3, duration: 2.2, glow: 0.48 },
-    { top: '22%', left: '40%', size: 3.2, delay: 1.45, duration: 3.1, glow: 0.8 },
-    { top: '30%', left: '54%', size: 2, delay: 1.6, duration: 2.3, glow: 0.56 },
-    { top: '26%', left: '70%', size: 2.7, delay: 1.75, duration: 2.8, glow: 0.7 },
-    { top: '34%', left: '84%', size: 1.6, delay: 1.9, duration: 2.2, glow: 0.5 },
-    { top: '40%', left: '6%', size: 2.2, delay: 2.05, duration: 2.6, glow: 0.62 },
-    { top: '44%', left: '18%', size: 3, delay: 2.2, duration: 3, glow: 0.76 },
-    { top: '38%', left: '32%', size: 1.8, delay: 2.35, duration: 2.4, glow: 0.54 },
-    { top: '48%', left: '46%', size: 2.5, delay: 2.5, duration: 2.7, glow: 0.67 },
-    { top: '42%', left: '60%', size: 1.5, delay: 2.65, duration: 2.1, glow: 0.45 },
-    { top: '50%', left: '74%', size: 3.1, delay: 2.8, duration: 3.2, glow: 0.82 },
-    { top: '46%', left: '88%', size: 2, delay: 2.95, duration: 2.5, glow: 0.59 },
-    { top: '58%', left: '10%', size: 1.7, delay: 3.1, duration: 2.3, glow: 0.5 },
-    { top: '62%', left: '24%', size: 2.8, delay: 3.25, duration: 2.9, glow: 0.73 },
-    { top: '56%', left: '38%', size: 1.6, delay: 3.4, duration: 2.2, glow: 0.48 },
-    { top: '66%', left: '52%', size: 2.4, delay: 3.55, duration: 2.6, glow: 0.64 },
-    { top: '60%', left: '66%', size: 3.2, delay: 3.7, duration: 3.1, glow: 0.8 },
-    { top: '68%', left: '80%', size: 1.8, delay: 3.85, duration: 2.4, glow: 0.53 },
-    { top: '74%', left: '14%', size: 2.5, delay: 4, duration: 2.7, glow: 0.68 },
-    { top: '78%', left: '30%', size: 1.5, delay: 4.15, duration: 2.1, glow: 0.46 },
-    { top: '72%', left: '46%', size: 3, delay: 4.3, duration: 3, glow: 0.77 },
-    { top: '82%', left: '60%', size: 2, delay: 4.45, duration: 2.5, glow: 0.57 },
-    { top: '76%', left: '74%', size: 2.7, delay: 4.6, duration: 2.8, glow: 0.71 },
-    { top: '86%', left: '88%', size: 1.7, delay: 4.75, duration: 2.2, glow: 0.49 },
-    { top: '90%', left: '20%', size: 2.3, delay: 4.9, duration: 2.6, glow: 0.63 },
-    { top: '88%', left: '36%', size: 1.6, delay: 5.05, duration: 2.1, glow: 0.47 },
-    { top: '92%', left: '52%', size: 2.9, delay: 5.2, duration: 2.9, glow: 0.74 },
-    { top: '90%', left: '68%', size: 1.8, delay: 5.35, duration: 2.3, glow: 0.52 },
-    { top: '94%', left: '82%', size: 2.6, delay: 5.5, duration: 2.7, glow: 0.69 },
+    { top: '10%', left: '20%', size: 2.8, delay: 0.2, duration: 2.9, glow: 0.72 },
+    { top: '8%', left: '48%', size: 2.4, delay: 0.4, duration: 2.6, glow: 0.66 },
+    { top: '10%', left: '76%', size: 3, delay: 0.6, duration: 3, glow: 0.78 },
+    { top: '28%', left: '26%', size: 1.7, delay: 0.8, duration: 2.2, glow: 0.48 },
+    { top: '30%', left: '54%', size: 2, delay: 1.0, duration: 2.3, glow: 0.56 },
+    { top: '26%', left: '70%', size: 2.7, delay: 1.2, duration: 2.8, glow: 0.7 },
+    { top: '50%', left: '74%', size: 3.1, delay: 1.4, duration: 3.2, glow: 0.82 },
+    { top: '48%', left: '46%', size: 2.5, delay: 1.6, duration: 2.7, glow: 0.67 },
+    { top: '62%', left: '24%', size: 2.8, delay: 1.8, duration: 2.9, glow: 0.73 },
+    { top: '72%', left: '46%', size: 3, delay: 2.0, duration: 3, glow: 0.77 },
+    { top: '76%', left: '74%', size: 2.7, delay: 2.2, duration: 2.8, glow: 0.71 },
+    { top: '90%', left: '52%', size: 2.9, delay: 2.4, duration: 2.9, glow: 0.74 },
   ]
 
   const finishSplash = useCallback(() => {
@@ -707,8 +605,8 @@ function NeuralSplash({ onComplete }: { onComplete: () => void }) {
 
   useEffect(() => {
     const startedAt = Date.now()
-    const minDuration = 5600
-    const maxDuration = 7600
+    const minDuration = 2500
+    const maxDuration = 3500
 
     const progressInterval = setInterval(() => {
       const elapsed = Date.now() - startedAt
@@ -838,7 +736,7 @@ export default function HomePage() {
     // Failsafe absoluto no componente pai.
     const guard = window.setTimeout(() => {
       setShowSplash(false)
-    }, 8200)
+    }, 4000)
 
     return () => {
       window.clearTimeout(guard)
