@@ -19,6 +19,15 @@ export interface VMParams {
   cycles?: number
 }
 
+export interface VentilationLegacyParams {
+  respiratoryRate: number
+  inspiratoryTime?: number
+  peep?: number
+  peakPressure?: number
+  sampleRate?: number
+  cycles?: number
+}
+
 /**
  * Gera pontos { t (s), pressure (cmH2O) } para um ciclo de VM.
  * Inspiração: rampa linear até pico, platô curto. Expiração: queda exponencial até PEEP.
@@ -66,4 +75,32 @@ export function generateVMPressureData(params: VMParams): { t: number; pressure:
   }
 
   return points
+}
+
+/**
+ * Compatibilidade com chamadas legadas que esperam um array de pressão.
+ */
+export function generateVentilationData(params: VentilationLegacyParams): number[] {
+  const {
+    respiratoryRate,
+    inspiratoryTime,
+    peep = 5,
+    peakPressure = 20,
+    sampleRate = 50,
+    cycles = 4,
+  } = params
+
+  const ieRatio =
+    inspiratoryTime && inspiratoryTime > 0 && inspiratoryTime < 1
+      ? inspiratoryTime / (1 - inspiratoryTime)
+      : 1 / 2
+
+  return generateVMPressureData({
+    fr: respiratoryRate,
+    ieRatio,
+    peep,
+    peakPressure,
+    sampleRate,
+    cycles,
+  }).map((point) => point.pressure)
 }

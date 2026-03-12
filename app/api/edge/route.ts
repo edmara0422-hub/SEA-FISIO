@@ -48,7 +48,3 @@ export async function POST(request: NextRequest) {
     },
   })
 }
-
-export const config = {
-  matcher: '/api/edge/:path*',
-}

@@ -1,14 +1,99 @@
-import { createClient } from 'redis'
+type StoredValue = {
+  value: string
+  expiresAt: number | null
+}
 
-let redisClient: ReturnType<typeof createClient> | null = null
+class MemoryRedisClient {
+  private store = new Map<string, StoredValue>()
+
+  async connect() {
+    return this
+  }
+
+  on(_event: 'error', _listener: (error: unknown) => void) {
+    return this
+  }
+
+  private cleanup(key: string) {
+    const entry = this.store.get(key)
+    if (entry?.expiresAt && entry.expiresAt <= Date.now()) {
+      this.store.delete(key)
+    }
+  }
+
+  async get(key: string): Promise<string | null> {
+    this.cleanup(key)
+    return this.store.get(key)?.value ?? null
+  }
+
+  async setEx(key: string, ttl: number, value: string): Promise<void> {
+    this.store.set(key, {
+      value,
+      expiresAt: Date.now() + ttl * 1000,
+    })
+  }
+
+  async incr(key: string): Promise<number> {
+    this.cleanup(key)
+    const currentValue = Number(this.store.get(key)?.value ?? '0') + 1
+    const expiresAt = this.store.get(key)?.expiresAt ?? null
+    this.store.set(key, {
+      value: String(currentValue),
+      expiresAt,
+    })
+    return currentValue
+  }
+
+  async expire(key: string, seconds: number): Promise<void> {
+    const entry = this.store.get(key)
+    if (!entry) return
+    this.store.set(key, {
+      ...entry,
+      expiresAt: Date.now() + seconds * 1000,
+    })
+  }
+
+  async ttl(key: string): Promise<number> {
+    this.cleanup(key)
+    const entry = this.store.get(key)
+    if (!entry?.expiresAt) return -1
+    return Math.max(0, Math.ceil((entry.expiresAt - Date.now()) / 1000))
+  }
+
+  async keys(pattern: string): Promise<string[]> {
+    const matcher = new RegExp(
+      `^${pattern.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\\\*/g, '.*')}$`
+    )
+
+    return [...this.store.keys()].filter((key) => {
+      this.cleanup(key)
+      return this.store.has(key) && matcher.test(key)
+    })
+  }
+
+  async del(keys: string | string[]): Promise<number> {
+    const keyList = Array.isArray(keys) ? keys : [keys]
+    let removed = 0
+
+    for (const key of keyList) {
+      if (this.store.delete(key)) {
+        removed += 1
+      }
+    }
+
+    return removed
+  }
+
+  async quit(): Promise<void> {
+    this.store.clear()
+  }
+}
+
+let redisClient: MemoryRedisClient | null = null
 
 export async function getRedisClient() {
   if (!redisClient) {
-    redisClient = createClient({
-      url: process.env.REDIS_URL || 'redis://localhost:6379',
-    })
-
-    redisClient.on('error', (err) => console.error('Redis Error:', err))
+    redisClient = new MemoryRedisClient()
     await redisClient.connect()
   }
 
@@ -16,9 +101,9 @@ export async function getRedisClient() {
 }
 
 export interface RateLimitConfig {
-  windowMs: number // Janela de tempo em ms
-  maxRequests: number // Máximo de requisições
-  keyPrefix: string // Prefixo da chave Redis
+  windowMs: number
+  maxRequests: number
+  keyPrefix: string
 }
 
 export async function checkRateLimit(
@@ -36,12 +121,11 @@ export async function checkRateLimit(
     const current = await client.incr(key)
 
     if (current === 1) {
-      // Primera requisição - configurar expiração
       await client.expire(key, Math.ceil(config.windowMs / 1000))
     }
 
     const ttl = await client.ttl(key)
-    const resetTime = Date.now() + ttl * 1000
+    const resetTime = Date.now() + Math.max(ttl, 0) * 1000
 
     return {
       allowed: current <= config.maxRequests,
@@ -50,7 +134,6 @@ export async function checkRateLimit(
     }
   } catch (error) {
     console.error('Rate limit check error:', error)
-    // Em caso de erro, permitir a requisição
     return {
       allowed: true,
       remaining: config.maxRequests,
@@ -59,39 +142,36 @@ export async function checkRateLimit(
   }
 }
 
-// Configurações padrão
 export const RATE_LIMITS = {
   API: {
-    windowMs: 1000 * 60, // 1 minuto
+    windowMs: 1000 * 60,
     maxRequests: 60,
     keyPrefix: 'rl:api',
   },
   CALCULATION: {
-    windowMs: 1000 * 60, // 1 minuto
+    windowMs: 1000 * 60,
     maxRequests: 100,
     keyPrefix: 'rl:calc',
   },
   EXPORT: {
-    windowMs: 1000 * 60 * 5, // 5 minutos
+    windowMs: 1000 * 60 * 5,
     maxRequests: 10,
     keyPrefix: 'rl:export',
   },
   AUTH: {
-    windowMs: 1000 * 60 * 15, // 15 minutos
+    windowMs: 1000 * 60 * 15,
     maxRequests: 5,
     keyPrefix: 'rl:auth',
   },
   PUSH_NOTIFICATION: {
-    windowMs: 1000 * 60 * 60, // 1 hora
+    windowMs: 1000 * 60 * 60,
     maxRequests: 100,
     keyPrefix: 'rl:push',
   },
 }
 
-// Middleware para Next.js
 export async function rateLimitMiddleware(req: Request, limiter: RateLimitConfig) {
   const identifier = req.headers.get('x-forwarded-for') || 'unknown'
-
   const result = await checkRateLimit(identifier, limiter)
 
   if (!result.allowed) {
@@ -105,16 +185,15 @@ export async function rateLimitMiddleware(req: Request, limiter: RateLimitConfig
     })
   }
 
-  return null // Continuar com a requisição
+  return null
 }
 
-// Cache distribuído com Redis
-export async function getCachedData<T>(key: string, ttl: number = 300): Promise<T | null> {
+export async function getCachedData<T>(key: string): Promise<T | null> {
   const client = await getRedisClient()
 
   try {
     const data = await client.get(key)
-    return data ? JSON.parse(data) : null
+    return data ? (JSON.parse(data) as T) : null
   } catch (error) {
     console.error('Cache retrieval error:', error)
     return null

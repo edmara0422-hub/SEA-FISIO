@@ -6,9 +6,6 @@
 			"type": "shell",
 			"command": "npm run dev",
 			"isBackground": true,
-			"runOptions": {
-				"runOn": "folderOpen"
-			},
 			"problemMatcher": {
 				"pattern": {
 					"regexp": "^(?!\\s*$)",
@@ -30,13 +27,21 @@
 		{
 			"label": "Fix Dependencies",
 			"type": "shell",
-			"command": "rm -rf node_modules package-lock.json && npm install",
+			"command": "bash ./fix-deps.sh",
 			"problemMatcher": []
 		},
 		{
 			"label": "TypeCheck",
 			"type": "shell",
-			"command": "npx tsc --noEmit --pretty false 2>&1 | grep 'error TS' | head -90",
+			"command": "npm run typecheck",
+			"problemMatcher": [
+				"$tsc"
+			]
+		},
+		{
+			"label": "TS Errors Quick",
+			"type": "shell",
+			"command": "npm run typecheck",
 			"problemMatcher": [
 				"$tsc"
 			]

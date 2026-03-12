@@ -1,8 +1,67 @@
 'use server'
 
-import PDFDocument from 'pdfkit'
-import ExcelJS from 'exceljs'
-import { PatientRecord } from '@/lib/schemas/clinical'
+function normalizeText(value: string): string {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+}
+
+function escapePdfText(value: string): string {
+  return normalizeText(value)
+    .replace(/\\/g, '\\\\')
+    .replace(/\(/g, '\\(')
+    .replace(/\)/g, '\\)')
+}
+
+function createPdfBuffer(lines: string[]): Buffer {
+  let cursorY = 790
+  const content = lines
+    .map((line, index) => {
+      const fontSize = index === 0 ? 18 : index === 1 ? 12 : 10
+      const block = [
+        'BT',
+        `/F1 ${fontSize} Tf`,
+        `1 0 0 1 48 ${cursorY} Tm`,
+        `(${escapePdfText(line)}) Tj`,
+        'ET',
+      ].join('\n')
+
+      cursorY -= index === 0 ? 28 : 16
+      return block
+    })
+    .join('\n')
+
+  const streamObject = `5 0 obj\n<< /Length ${Buffer.byteLength(content, 'utf8')} >>\nstream\n${content}\nendstream\nendobj`
+  const objects = [
+    '1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj',
+    '2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj',
+    '3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>\nendobj',
+    '4 0 obj\n<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>\nendobj',
+    streamObject,
+  ]
+
+  let document = '%PDF-1.4\n'
+  const offsets: number[] = []
+
+  for (const object of objects) {
+    offsets.push(Buffer.byteLength(document, 'utf8'))
+    document += `${object}\n`
+  }
+
+  const xrefOffset = Buffer.byteLength(document, 'utf8')
+  document += `xref\n0 ${objects.length + 1}\n`
+  document += '0000000000 65535 f \n'
+  document += offsets.map((offset) => `${String(offset).padStart(10, '0')} 00000 n `).join('\n')
+  document += `\ntrailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${xrefOffset}\n%%EOF`
+
+  return Buffer.from(document, 'utf8')
+}
+
+function escapeCsvValue(value: string | number): string {
+  const text = String(value)
+  if (/[",\n]/.test(text)) {
+    return `"${text.replace(/"/g, '""')}"`
+  }
+  return text
+}
 
 export async function generatePatientPDF(patientData: {
   name: string
@@ -19,160 +78,100 @@ export async function generatePatientPDF(patientData: {
     pao2: number
     pH: number
   }
-  calculations?: Record<string, any>
+  calculations?: Record<string, number | string | null | undefined>
 }): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    try {
-      const doc = new PDFDocument()
-      const buffers: Buffer[] = []
+  const lines = [
+    'Sistema de Estudo Avancado (SEA)',
+    'Prontuario Eletronico',
+    `Nome: ${patientData.name}`,
+    `Idade: ${patientData.age} anos`,
+    `Diagnostico: ${patientData.diagnosis}`,
+    `Prontuario: ${patientData.recordNumber}`,
+    `Data: ${new Date().toLocaleDateString('pt-BR')}`,
+  ]
 
-      doc.on('data', (chunk) => buffers.push(chunk))
-      doc.on('end', () => resolve(Buffer.concat(buffers)))
-      doc.on('error', reject)
+  if (patientData.ventilation) {
+    lines.push('Parametros de Ventilacao')
+    lines.push(`FR: ${patientData.ventilation.fr} ciclos/min`)
+    lines.push(`PEEP: ${patientData.ventilation.peep} cmH2O`)
+    lines.push(`Pico: ${patientData.ventilation.peakPressure} cmH2O`)
+    lines.push(`VT: ${patientData.ventilation.tidalVolume} mL`)
+  }
 
-      // Header
-      doc.fontSize(24).font('Helvetica-Bold').text('Sistema de Estudo Avançado (SEA)', { align: 'center' })
-      doc.fontSize(14).text('Prontuário Eletrônico', { align: 'center' })
-      doc.moveDown()
+  if (patientData.gasometry) {
+    lines.push('Gasometria Arterial')
+    lines.push(`PaO2: ${patientData.gasometry.pao2} mmHg`)
+    lines.push(`pH: ${patientData.gasometry.pH.toFixed(2)}`)
+  }
 
-      // Patient Info
-      doc.fontSize(12).font('Helvetica-Bold').text('Informações do Paciente')
-      doc.fontSize(11).font('Helvetica')
-      doc.text(`Nome: ${patientData.name}`)
-      doc.text(`Idade: ${patientData.age} anos`)
-      doc.text(`Diagnóstico: ${patientData.diagnosis}`)
-      doc.text(`Nº Prontuário: ${patientData.recordNumber}`)
-      doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`)
-      doc.moveDown()
-
-      // Ventilation Parameters
-      if (patientData.ventilation) {
-        doc.fontSize(12).font('Helvetica-Bold').text('Parâmetros de Ventilação')
-        doc.fontSize(11).font('Helvetica')
-        doc.text(`FR: ${patientData.ventilation.fr} ciclos/min`)
-        doc.text(`PEEP: ${patientData.ventilation.peep} cmH₂O`)
-        doc.text(`Pressão de Pico: ${patientData.ventilation.peakPressure} cmH₂O`)
-        doc.text(`Volume Corrente: ${patientData.ventilation.tidalVolume} mL`)
-        doc.moveDown()
+  if (patientData.calculations) {
+    lines.push('Indices Calculados')
+    for (const [key, value] of Object.entries(patientData.calculations)) {
+      if (value != null) {
+        lines.push(`${key}: ${value}`)
       }
-
-      // Gasometry
-      if (patientData.gasometry) {
-        doc.fontSize(12).font('Helvetica-Bold').text('Gasometria Arterial')
-        doc.fontSize(11).font('Helvetica')
-        doc.text(`PaO₂: ${patientData.gasometry.pao2} mmHg`)
-        doc.text(`pH: ${patientData.gasometry.pH.toFixed(2)}`)
-        doc.moveDown()
-      }
-
-      // Calculations
-      if (patientData.calculations) {
-        doc.fontSize(12).font('Helvetica-Bold').text('Índices Calculados')
-        doc.fontSize(11).font('Helvetica')
-        Object.entries(patientData.calculations).forEach(([key, value]) => {
-          if (typeof value === 'number') {
-            doc.text(`${key}: ${value.toFixed(2)}`)
-          }
-        })
-      }
-
-      doc.end()
-    } catch (error) {
-      reject(error)
     }
-  })
+  }
+
+  return createPdfBuffer(lines)
 }
 
-export async function generatePatientExcel(patients: Array<{
-  name: string
-  age: number
-  diagnosis: string
-  recordNumber: string
-  ventilation?: Record<string, number>
-  gasometry?: Record<string, number>
-  calculations?: Record<string, number>
-}>) {
-  const workbook = new ExcelJS.Workbook()
-  const worksheet = workbook.addWorksheet('Prontuários')
-
-  // Headers
+export async function generatePatientExcel(
+  patients: Array<{
+    name: string
+    age: number
+    diagnosis: string
+    recordNumber: string
+    ventilation?: Record<string, number>
+    gasometry?: Record<string, number>
+    calculations?: Record<string, number>
+  }>
+) {
   const headers = [
-    'Prontuário',
+    'Prontuario',
     'Paciente',
     'Idade',
-    'Diagnóstico',
+    'Diagnostico',
     'FR',
     'PEEP',
-    'Pico (cmH₂O)',
+    'Pico (cmH2O)',
     'VT (mL)',
-    'PaO₂',
+    'PaO2',
     'pH',
     'P/F Ratio',
     'RSBI',
     'Compliance',
   ]
 
-  worksheet.addRow(headers)
+  const rows = patients.map((patient) => [
+    patient.recordNumber,
+    patient.name,
+    patient.age,
+    patient.diagnosis,
+    patient.ventilation?.fr ?? '-',
+    patient.ventilation?.peep ?? '-',
+    patient.ventilation?.peakPressure ?? '-',
+    patient.ventilation?.tidalVolume ?? '-',
+    patient.gasometry?.pao2 ?? '-',
+    patient.gasometry?.pH ?? '-',
+    patient.calculations?.pf ?? '-',
+    patient.calculations?.rsbi ?? '-',
+    patient.calculations?.cest ?? '-',
+  ])
 
-  // Style headers
-  worksheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } }
-  worksheet.getRow(1).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF0066CC' } }
+  const csv = [headers, ...rows]
+    .map((row) => row.map((value) => escapeCsvValue(value)).join(','))
+    .join('\n')
 
-  // Add data rows
-  patients.forEach((patient, index) => {
-    const row = [
-      patient.recordNumber,
-      patient.name,
-      patient.age,
-      patient.diagnosis,
-      patient.ventilation?.fr || '-',
-      patient.ventilation?.peep || '-',
-      patient.ventilation?.peakPressure || '-',
-      patient.ventilation?.tidalVolume || '-',
-      patient.gasometry?.pao2 || '-',
-      patient.gasometry?.pH || '-',
-      patient.calculations?.pf || '-',
-      patient.calculations?.rsbi || '-',
-      patient.calculations?.cest || '-',
-    ]
-
-    worksheet.addRow(row)
-
-    // Alternate row colors
-    if ((index + 2) % 2 === 0) {
-      worksheet.getRow(index + 2).fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FFF0F0F0' } }
-    }
-  })
-
-  // Auto-fit columns
-  worksheet.columns.forEach((col) => {
-    col.width = 15
-  })
-
-  // Convert to buffer
-  const buffer = await workbook.xlsx.writeBuffer()
-  return buffer as Buffer
+  return Buffer.from(csv, 'utf8')
 }
 
 export async function generatePDFReport(reportTitle: string, content: string): Promise<Buffer> {
-  return new Promise((resolve, reject) => {
-    try {
-      const doc = new PDFDocument()
-      const buffers: Buffer[] = []
+  const lines = [
+    reportTitle,
+    `Data: ${new Date().toLocaleDateString('pt-BR')}`,
+    ...content.split('\n').filter(Boolean),
+  ]
 
-      doc.on('data', (chunk) => buffers.push(chunk))
-      doc.on('end', () => resolve(Buffer.concat(buffers)))
-      doc.on('error', reject)
-
-      doc.fontSize(20).font('Helvetica-Bold').text(reportTitle, { align: 'center' })
-      doc.fontSize(10).text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, { align: 'right' })
-      doc.moveDown()
-
-      doc.fontSize(11).font('Helvetica').text(content, { align: 'left' })
-
-      doc.end()
-    } catch (error) {
-      reject(error)
-    }
-  })
+  return createPdfBuffer(lines)
 }

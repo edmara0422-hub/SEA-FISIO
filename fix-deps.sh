@@ -9,20 +9,25 @@ cd "$(dirname "$0")"
 
 echo "1. Removendo node_modules corrompido..."
 rm -rf node_modules
-rm -f package-lock.json
 
-echo "2. Limpando cache do npm..."
-npm cache clean --force
+echo "2. Validando cache do npm..."
+if ! npm cache verify >/dev/null 2>&1; then
+  npm cache clean --force
+fi
 
 echo "3. Instalando dependências..."
-npm install
+if [ -f package-lock.json ]; then
+  npm ci
+else
+  npm install
+fi
 
 if [ $? -eq 0 ]; then
   echo ""
   echo "✅ Dependências instaladas com sucesso!"
   echo ""
   echo "4. Iniciando servidor de desenvolvimento..."
-  npm run dev
+  PORT="${PORT:-3000}" npm run dev
 else
   echo ""
   echo "❌ Erro na instalação. Tente:"

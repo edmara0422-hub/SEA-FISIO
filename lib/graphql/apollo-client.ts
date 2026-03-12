@@ -1,39 +1,159 @@
-import { ApolloClient, InMemoryCache, HttpLink, split } from '@apollo/client'
-import { GraphQLWsLink } from '@apollo/client/link/subscriptions'
-import { createClient } from 'graphql-ws'
-import { getMainDefinition } from '@apollo/client/utilities'
+'use client'
 
-const httpLink = new HttpLink({
-  uri: process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:4000/graphql',
-  credentials: 'include',
-})
+type GraphQLVariables = Record<string, unknown>
 
-const wsLink = new GraphQLWsLink(
-  createClient({
-    url: process.env.NEXT_PUBLIC_GRAPHQL_WS_URL || 'ws://localhost:4000/graphql',
-    connectionParams: () => ({
-      authorization: `Bearer ${typeof window !== 'undefined' ? localStorage.getItem('token') : ''}`,
-    }),
-  })
-)
+type GraphQLError = {
+  message: string
+}
 
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query)
-    return definition.kind === 'OperationDefinition' && definition.operation === 'subscription'
-  },
-  wsLink,
-  httpLink
-)
+type GraphQLResponse<TData> = {
+  data: TData | null
+  errors?: GraphQLError[]
+}
 
-export const apolloClient = new ApolloClient({
-  link: splitLink,
-  cache: new InMemoryCache(),
-  defaultOptions: {
-    watchQuery: { fetchPolicy: 'cache-and-network' },
-    query: { fetchPolicy: 'network-only' },
-  },
-})
+type GraphQLRequest<TVariables extends GraphQLVariables> = {
+  query: string
+  variables?: TVariables
+}
+
+class SimpleGraphQLClient {
+  private readonly httpUrl =
+    process.env.NEXT_PUBLIC_GRAPHQL_URL || 'http://localhost:4000/graphql'
+
+  private readonly wsUrl =
+    process.env.NEXT_PUBLIC_GRAPHQL_WS_URL || 'ws://localhost:4000/graphql'
+
+  async query<TData, TVariables extends GraphQLVariables = GraphQLVariables>(
+    request: GraphQLRequest<TVariables>
+  ): Promise<GraphQLResponse<TData>> {
+    return this.request<TData, TVariables>(request)
+  }
+
+  async mutate<TData, TVariables extends GraphQLVariables = GraphQLVariables>(
+    request: GraphQLRequest<TVariables>
+  ): Promise<GraphQLResponse<TData>> {
+    return this.request<TData, TVariables>(request)
+  }
+
+  subscribe<TData, TVariables extends GraphQLVariables = GraphQLVariables>(
+    request: GraphQLRequest<TVariables>,
+    handlers: {
+      next: (data: TData) => void
+      error?: (error: unknown) => void
+      complete?: () => void
+    }
+  ) {
+    if (typeof WebSocket === 'undefined') {
+      handlers.complete?.()
+      return { unsubscribe() {} }
+    }
+
+    const socket = new WebSocket(this.wsUrl, 'graphql-transport-ws')
+    const operationId = `op-${Date.now()}`
+
+    socket.addEventListener('open', () => {
+      socket.send(
+        JSON.stringify({
+          type: 'connection_init',
+          payload: {
+            authorization:
+              typeof window !== 'undefined' ? `Bearer ${localStorage.getItem('token') || ''}` : '',
+          },
+        })
+      )
+    })
+
+    socket.addEventListener('message', (event) => {
+      try {
+        const payload = JSON.parse(String(event.data)) as {
+          type: string
+          payload?: { data?: TData; errors?: GraphQLError[] }
+        }
+
+        if (payload.type === 'connection_ack') {
+          socket.send(
+            JSON.stringify({
+              id: operationId,
+              type: 'subscribe',
+              payload: request,
+            })
+          )
+          return
+        }
+
+        if (payload.type === 'next' && payload.payload?.data) {
+          handlers.next(payload.payload.data)
+          return
+        }
+
+        if (payload.type === 'error') {
+          handlers.error?.(payload.payload?.errors || new Error('GraphQL subscription error'))
+          return
+        }
+
+        if (payload.type === 'complete') {
+          handlers.complete?.()
+          socket.close()
+        }
+      } catch (error) {
+        handlers.error?.(error)
+      }
+    })
+
+    socket.addEventListener('error', (event) => {
+      handlers.error?.(event)
+    })
+
+    socket.addEventListener('close', () => {
+      handlers.complete?.()
+    })
+
+    return {
+      unsubscribe() {
+        if (socket.readyState === WebSocket.OPEN) {
+          socket.send(JSON.stringify({ id: operationId, type: 'complete' }))
+        }
+        socket.close()
+      },
+    }
+  }
+
+  private async request<TData, TVariables extends GraphQLVariables = GraphQLVariables>(
+    request: GraphQLRequest<TVariables>
+  ): Promise<GraphQLResponse<TData>> {
+    try {
+      const response = await fetch(this.httpUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(request),
+      })
+
+      const payload = (await response.json()) as {
+        data?: TData
+        errors?: GraphQLError[]
+      }
+
+      return {
+        data: payload.data ?? null,
+        errors: payload.errors,
+      }
+    } catch (error) {
+      return {
+        data: null,
+        errors: [
+          {
+            message: error instanceof Error ? error.message : 'GraphQL request failed',
+          },
+        ],
+      }
+    }
+  }
+}
+
+export const apolloClient = new SimpleGraphQLClient()
 
 export interface PatientData {
   id: string
