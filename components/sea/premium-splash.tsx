@@ -112,23 +112,9 @@ export function PremiumSplash({
           />
 
           <div className="mx-auto flex w-fit items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
-            <SlicedLetter
-              value="S"
-              slices={[
-                { clipPath: 'polygon(0 0,100% 0,100% 32%,0 26%)', x: '-0.07em', y: '-0.01em' },
-                { clipPath: 'polygon(0 28%,100% 35%,100% 64%,0 58%)', x: '0.02em', y: '0em' },
-                { clipPath: 'polygon(0 61%,100% 68%,100% 100%,0 100%)', x: '0.08em', y: '0.01em' },
-              ]}
-            />
+            <Letter value="S" />
             <Letter value="E" />
-            <SlicedLetter
-              value="A"
-              slices={[
-                { clipPath: 'polygon(0 0,100% 0,100% 34%,0 40%)', x: '0.08em', y: '-0.01em' },
-                { clipPath: 'polygon(0 37%,100% 31%,100% 61%,0 55%)', x: '0em', y: '0em' },
-                { clipPath: 'polygon(0 58%,100% 65%,100% 100%,0 100%)', x: '-0.08em', y: '0.02em' },
-              ]}
-            />
+            <Letter value="A" />
           </div>
 
           <motion.div
@@ -163,32 +149,6 @@ function Letter({ value }: { value: string }) {
   return (
     <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.02em] text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]">
       {value}
-    </span>
-  )
-}
-
-function SlicedLetter({
-  value,
-  slices,
-}: {
-  value: string
-  slices: Array<{ clipPath: string; x: string; y: string }>
-}) {
-  return (
-    <span className="relative inline-flex px-[0.02em] leading-none">
-      <span className="select-none opacity-0">{value}</span>
-      {slices.map((slice, index) => (
-        <span
-          key={`${value}-${index}`}
-          className="absolute inset-0 inline-flex select-none bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]"
-          style={{
-            clipPath: slice.clipPath,
-            transform: `translate(${slice.x}, ${slice.y})`,
-          }}
-        >
-          {value}
-        </span>
-      ))}
     </span>
   )
 }
