@@ -1,60 +1,66 @@
 'use client'
 
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { Home, Search, User } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { motion } from 'framer-motion'
+import { Compass, Home } from 'lucide-react'
+import { usePathname, useRouter } from 'next/navigation'
 
-const navItems = [
-  { href: '/sea', label: 'Home', icon: Home },
-  { href: '/explore', label: 'Explorar', icon: Search },
-  { href: '/profile', label: 'Perfil', icon: User },
-]
+type Tab = 'home' | 'explorar'
 
-export function BottomNav() {
+export function BottomNav({
+  active,
+  onSwitch,
+}: {
+  active?: Tab
+  onSwitch?: (tab: Tab) => void
+}) {
   const pathname = usePathname()
+  const router = useRouter()
+  const resolvedActive: Tab =
+    active ?? (pathname === '/explore' || pathname.startsWith('/explore/') ? 'explorar' : 'home')
+
+  const handleSwitch = (tab: Tab) => {
+    onSwitch?.(tab)
+
+    if (!onSwitch) {
+      router.push(tab === 'home' ? '/sea' : '/explore')
+    }
+  }
 
   return (
-    <nav data-sea-bottom-nav="true" className="fixed bottom-0 left-0 right-0 z-50 transition-all duration-500">
-      {/* Glass background */}
-      <div className="absolute inset-0 bg-[#0a0a0a]/85 backdrop-blur-2xl border-t border-white/[0.08]" />
-      
-      {/* Safe area padding for iOS */}
-      <div className="relative flex items-center justify-around h-16 pb-safe">
-        {navItems.map((item) => {
-          const Icon = item.icon
-          const isActive = pathname === item.href || pathname.startsWith(item.href + '/')
-          
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                'flex flex-col items-center justify-center gap-1 px-6 py-2 rounded-xl transition-all duration-200',
-                isActive
-                  ? 'text-white'
-                  : 'text-white/50 hover:text-white/70'
-              )}
-            >
-              <div className="relative">
-                <Icon className={cn(
-                  'w-5 h-5 transition-all duration-200',
-                  isActive && 'drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]'
-                )} />
-                {isActive && (
-                  <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 bg-white rounded-full" />
-                )}
-              </div>
-              <span className={cn(
-                'text-[10px] tracking-wide transition-all duration-200',
-                isActive ? 'opacity-100' : 'opacity-60'
-              )}>
-                {item.label}
-              </span>
-            </Link>
-          )
-        })}
+    <motion.nav
+      data-sea-bottom-nav="true"
+      className="fixed bottom-6 left-1/2 z-40 w-[min(30rem,calc(100vw-1.5rem))] -translate-x-1/2"
+      initial={{ y: 70, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.8, delay: 0.14, ease: [0.16, 1, 0.3, 1] }}
+    >
+      <div className="chrome-pill grid grid-cols-2 gap-1.5 rounded-[1.8rem] p-1.5">
+        <button
+          type="button"
+          onClick={() => handleSwitch('home')}
+          className={`flex items-center justify-center gap-2 rounded-[1.3rem] px-6 py-4 text-sm font-semibold tracking-[0.16em] transition-all duration-300 ${
+            resolvedActive === 'home'
+              ? 'chrome-active text-[#050505]'
+              : 'text-white/78 hover:text-white'
+          }`}
+        >
+          <Home className="h-4 w-4" />
+          <span>HOME</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleSwitch('explorar')}
+          className={`flex items-center justify-center gap-2 rounded-[1.3rem] px-6 py-4 text-sm font-semibold tracking-[0.16em] transition-all duration-300 ${
+            resolvedActive === 'explorar'
+              ? 'chrome-active text-[#050505]'
+              : 'text-white/78 hover:text-white'
+          }`}
+        >
+          <Compass className="h-4 w-4" />
+          <span>EXPLORAR</span>
+        </button>
       </div>
-    </nav>
+    </motion.nav>
   )
 }

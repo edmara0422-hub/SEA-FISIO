@@ -192,6 +192,65 @@
   .bg-gradient-radial {
     background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
   }
+
+  .chrome-shell {
+    background:
+      radial-gradient(circle at 50% -32%, rgba(255, 255, 255, 0.22) 0%, transparent 34%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(233, 237, 243, 0.06) 24%, rgba(12, 14, 18, 0.22) 66%, rgba(7, 8, 10, 0.3) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+      0 26px 72px rgba(0, 0, 0, 0.28);
+    backdrop-filter: blur(24px) saturate(126%);
+    -webkit-backdrop-filter: blur(24px) saturate(126%);
+  }
+
+  .chrome-card {
+    background:
+      radial-gradient(circle at 50% -28%, rgba(255, 255, 255, 0.16) 0%, transparent 30%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, rgba(28, 31, 36, 0.88) 46%, rgba(8, 9, 11, 0.98) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+      0 24px 64px rgba(0, 0, 0, 0.34);
+    backdrop-filter: blur(24px) saturate(132%);
+    -webkit-backdrop-filter: blur(24px) saturate(132%);
+  }
+
+  .chrome-pill {
+    background:
+      radial-gradient(circle at 50% -80%, rgba(255, 255, 255, 0.22) 0%, transparent 45%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.14) 0%, rgba(32, 35, 40, 0.9) 46%, rgba(6, 7, 9, 0.98) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      inset 0 -1px 0 rgba(255, 255, 255, 0.03),
+      0 24px 48px rgba(0, 0, 0, 0.36);
+    backdrop-filter: blur(28px) saturate(130%);
+    -webkit-backdrop-filter: blur(28px) saturate(130%);
+  }
+
+  .chrome-active {
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.96) 0%, rgba(225,230,237,0.82) 22%, rgba(176,182,191,0.78) 62%, rgba(154,160,168,0.72) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.7),
+      inset 0 -1px 0 rgba(0,0,0,0.08),
+      0 12px 30px rgba(0,0,0,0.3);
+  }
+
+  .metal-text {
+    background: linear-gradient(135deg, #ffffff 0%, #d6d9df 48%, #8f949b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .floating-silver-strip {
+    animation: float-silver 7s ease-in-out infinite;
+  }
 }
 
 html.sea-splash-active [data-sea-bottom-nav='true'],
@@ -227,5 +286,16 @@ body.sea-splash-active [data-sea-bottom-nav='true'] {
   }
   50% {
     transform: translateY(-6px);
+  }
+}
+
+@keyframes float-silver {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
   }
 }
