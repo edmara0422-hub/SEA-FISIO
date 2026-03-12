@@ -15,21 +15,21 @@ export function TwoFacesShortcuts() {
       {/* Content Face */}
       <Link href="/explore?filter=conteudos">
         <motion.div
-          className="bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-lg p-6 hover:from-blue-500/30 hover:to-blue-600/20 transition-all cursor-pointer group h-full"
+          className="h-full cursor-pointer rounded-[1.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 transition-all group hover:border-white/20 hover:bg-white/[0.06]"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <div className="flex flex-col items-start justify-between h-full">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-blue-500/20 rounded-lg group-hover:bg-blue-500/30 transition-colors">
-                <BookOpen className="w-5 h-5 text-blue-300" />
+              <div className="rounded-xl border border-white/10 bg-black/20 p-3 transition-colors group-hover:bg-black/30">
+                <BookOpen className="w-5 h-5 text-silver-light" />
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-white">Conteúdo</h3>
-                <p className="text-xs text-blue-200/60">Cursos e Vídeos</p>
+                <p className="text-xs text-white/46">Cursos e Vídeos</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-blue-300 text-xs group-hover:translate-x-1 transition-transform">
+            <div className="flex items-center gap-2 text-xs text-white/62 transition-transform group-hover:translate-x-1">
               <span>Explorar</span>
               <ArrowRight className="w-3 h-3" />
             </div>
@@ -40,21 +40,21 @@ export function TwoFacesShortcuts() {
       {/* Systems Face */}
       <Link href="/explore?filter=sistemas">
         <motion.div
-          className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-lg p-6 hover:from-purple-500/30 hover:to-purple-600/20 transition-all cursor-pointer group h-full"
+          className="h-full cursor-pointer rounded-[1.25rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-6 transition-all group hover:border-white/20 hover:bg-white/[0.06]"
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
         >
           <div className="flex flex-col items-start justify-between h-full">
             <div className="flex items-center gap-3 mb-4">
-              <div className="p-3 bg-purple-500/20 rounded-lg group-hover:bg-purple-500/30 transition-colors">
-                <Cpu className="w-5 h-5 text-purple-300" />
+              <div className="rounded-xl border border-white/10 bg-black/20 p-3 transition-colors group-hover:bg-black/30">
+                <Cpu className="w-5 h-5 text-silver-light" />
               </div>
               <div>
                 <h3 className="text-sm font-semibold text-white">Sistemas</h3>
-                <p className="text-xs text-purple-200/60">Ferramentas e Simuladores</p>
+                <p className="text-xs text-white/46">Ferramentas e Simuladores</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-purple-300 text-xs group-hover:translate-x-1 transition-transform">
+            <div className="flex items-center gap-2 text-xs text-white/62 transition-transform group-hover:translate-x-1">
               <span>Explorar</span>
               <ArrowRight className="w-3 h-3" />
             </div>

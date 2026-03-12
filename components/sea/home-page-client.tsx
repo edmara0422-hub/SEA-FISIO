@@ -18,21 +18,18 @@ const labCards = [
     title: 'Neuro Lab',
     description: 'Cena cerebral e leitura de sinais em um ambiente imersivo.',
     icon: Brain,
-    accent: 'from-indigo-500/20 to-violet-500/10',
   },
   {
     href: '/lab/vmi-v2',
     title: 'VMI Lab',
     description: 'Loops, pulmao e mecanica ventilatoria em fluxo continuo.',
     icon: Wind,
-    accent: 'from-cyan-500/20 to-sky-500/10',
   },
   {
     href: '/lab/cardio-v2',
     title: 'Cardio Lab',
     description: 'ECG, ritmo e atividade cardiaca com leitura visual viva.',
     icon: HeartPulse,
-    accent: 'from-rose-500/20 to-red-500/10',
   },
 ]
 
@@ -42,7 +39,12 @@ export default function HomePageClient() {
   return (
     <>
       {showSplash ? (
-        <PremiumSplash redirectTo={null} durationMs={1500} onComplete={() => setShowSplash(false)} />
+        <PremiumSplash
+          redirectTo={null}
+          durationMs={4400}
+          exitHoldMs={900}
+          onComplete={() => setShowSplash(false)}
+        />
       ) : null}
 
       <div className="min-h-screen overflow-x-hidden bg-background pb-28 text-foreground">
@@ -51,11 +53,11 @@ export default function HomePageClient() {
 
         <div className="space-y-6 px-4 pb-8">
           <HomeSection label="SEA Home" delay={0.05}>
-            <GlassCard className="overflow-hidden p-0" glow>
+            <GlassCard className="overflow-hidden border border-white/10 p-0" glow>
               <div className="grid gap-6 border-b border-white/8 bg-[radial-gradient(circle_at_top,_rgba(255,255,255,0.08),_transparent_40%)] px-5 py-5 md:grid-cols-[1.25fr_0.75fr] md:px-6">
                 <div>
                   <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-medium uppercase tracking-[0.2em] text-silver-light/80">
-                    <FlaskConical className="h-3.5 w-3.5" />
+                    <FlaskConical className="h-3.5 w-3.5 text-white/80" />
                     Sistema de Estudo Avancado
                   </div>
 
@@ -134,12 +136,10 @@ export default function HomePageClient() {
 
                 return (
                   <Link key={card.href} href={card.href}>
-                    <GlassCard
-                      className={`h-full border border-white/10 bg-gradient-to-br ${card.accent} p-5 transition-all hover:border-white/20`}
-                    >
+                    <GlassCard className="h-full border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5 transition-all hover:border-white/20">
                       <div className="flex items-start justify-between gap-4">
-                        <div className="rounded-2xl border border-white/10 bg-black/20 p-3">
-                          <Icon className="h-5 w-5 text-white" />
+                        <div className="rounded-2xl border border-white/10 bg-black/30 p-3">
+                          <Icon className="h-5 w-5 text-silver-light" />
                         </div>
                         <ArrowRight className="mt-1 h-4 w-4 text-white/50" />
                       </div>

@@ -28,11 +28,13 @@ function SceneFallback({
   tone: 'brain' | 'cardio' | 'pneumo'
 }) {
   const gradient =
-    tone === 'cardio'
+    tone === 'brain'
+      ? 'from-white/16 via-white/6 to-transparent'
+      : tone === 'cardio'
       ? 'from-rose-500/18 via-red-300/8 to-transparent'
       : tone === 'pneumo'
         ? 'from-cyan-500/18 via-sky-300/8 to-transparent'
-        : 'from-violet-500/18 via-indigo-300/8 to-transparent'
+        : 'from-white/16 via-white/6 to-transparent'
 
   return (
     <div className={`flex h-full items-end rounded-2xl bg-gradient-to-br ${gradient} p-5`}>
@@ -67,7 +69,7 @@ export function SimulationsGrid() {
         <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-4">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/55">
-              <Brain className="h-3.5 w-3.5 text-violet-200" />
+              <Brain className="h-3.5 w-3.5 text-silver-light" />
               Neuro Core
             </div>
             <p className="text-sm leading-6 text-white/58">
