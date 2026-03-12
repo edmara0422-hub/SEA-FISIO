@@ -175,9 +175,9 @@ export function StudyRailBoard({
               <div className="chrome-subtle flex h-14 w-14 items-center justify-center rounded-full">
                 <Radar className="h-5 w-5 text-white/82" />
               </div>
-              <p className="text-[10px] uppercase tracking-[0.24em] text-white/34">Study pronta</p>
+              <p className="text-[10px] uppercase tracking-[0.24em] text-white/34">Trilha pronta</p>
               <h3 className="text-lg font-semibold text-white/86">
-                Selecione um {itemLabel} no trilho superior para abrir a pagina de estudo.
+                Selecione um {itemLabel} no trilho superior para abrir a pagina do {itemLabel}.
               </h3>
             </div>
           </motion.div>
