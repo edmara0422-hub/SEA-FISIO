@@ -121,8 +121,11 @@
     font-family: 'Poppins', 'Avenir Next', 'Segoe UI', sans-serif;
   }
 
+  html.sea-splash-active,
   body.sea-splash-active {
     overflow: hidden;
+    height: 100%;
+    overscroll-behavior: none;
   }
 
   a {
@@ -192,6 +195,7 @@
   }
 }
 
+html.sea-splash-active [data-sea-bottom-nav='true'],
 body.sea-splash-active [data-sea-bottom-nav='true'] {
   opacity: 0;
   pointer-events: none;

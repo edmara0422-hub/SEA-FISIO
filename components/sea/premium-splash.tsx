@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 type PremiumSplashProps = {
@@ -20,106 +20,101 @@ const PremiumSplashScene = dynamic(
   }
 )
 
-const statusMessages = ['Mapeando cortex', 'Sinapses online', 'Nucleo estavel', 'Abrindo SEA']
-
 export function PremiumSplash({
   redirectTo = '/sea',
-  durationMs = 9800,
+  durationMs = 12000,
   onComplete,
-  exitHoldMs = 1800,
+  exitHoldMs = 2200,
 }: PremiumSplashProps) {
   const router = useRouter()
   const [progress, setProgress] = useState(0)
-  const status = useMemo(
-    () => statusMessages[Math.min(Math.floor((progress / 100) * statusMessages.length), statusMessages.length - 1)],
-    [progress]
-  )
 
   useEffect(() => {
+    document.documentElement.classList.add('sea-splash-active')
     document.body.classList.add('sea-splash-active')
 
     return () => {
+      document.documentElement.classList.remove('sea-splash-active')
       document.body.classList.remove('sea-splash-active')
     }
   }, [])
 
   useEffect(() => {
-    const tickMs = 90
-    const totalSteps = Math.max(1, Math.ceil(durationMs / tickMs))
-    let completed = false
+    let frameId = 0
+    let exitTimer = 0
+    let startAt = 0
 
-    const interval = window.setInterval(() => {
-      setProgress((current) => {
-        const step =
-          current < 52 ? 100 / (totalSteps * 1.25) : current < 86 ? 100 / (totalSteps * 1.95) : 100 / (totalSteps * 3.4)
-        const next = Math.min(current + step, 100)
+    const easeOutQuart = (value: number) => 1 - Math.pow(1 - value, 4)
 
-        if (next >= 100 && !completed) {
-          completed = true
-          window.clearInterval(interval)
-          window.setTimeout(() => {
-            if (redirectTo) {
-              router.push(redirectTo)
-            }
-            onComplete?.()
-          }, exitHoldMs)
+    const animate = (timestamp: number) => {
+      if (!startAt) {
+        startAt = timestamp
+      }
+
+      const elapsed = timestamp - startAt
+      const ratio = Math.min(elapsed / durationMs, 1)
+      setProgress(easeOutQuart(ratio) * 100)
+
+      if (ratio < 1) {
+        frameId = window.requestAnimationFrame(animate)
+        return
+      }
+
+      exitTimer = window.setTimeout(() => {
+        if (redirectTo) {
+          router.push(redirectTo)
         }
+        onComplete?.()
+      }, exitHoldMs)
+    }
 
-        return next
-      })
-    }, tickMs)
+    frameId = window.requestAnimationFrame(animate)
 
-    return () => window.clearInterval(interval)
+    return () => {
+      window.cancelAnimationFrame(frameId)
+      window.clearTimeout(exitTimer)
+    }
   }, [durationMs, exitHoldMs, onComplete, redirectTo, router])
 
   return (
-    <div className="fixed inset-0 z-[90] overflow-hidden bg-[#020202]" suppressHydrationWarning>
+    <div
+      className="fixed inset-0 z-[90] h-[100dvh] w-screen overflow-hidden bg-[#020202] overscroll-none"
+      suppressHydrationWarning
+    >
       <PremiumSplashScene />
 
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02),transparent_28%,rgba(2,2,2,0.78)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_24%,rgba(2,2,2,0.64)_58%,rgba(2,2,2,0.92)_100%)]" />
 
-      <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-5 top-5 h-24 w-24 rounded-tl-[2.25rem] border-l border-t border-white/10 md:left-8 md:top-8 md:h-32 md:w-32" />
-        <div className="absolute right-5 top-5 h-24 w-24 rounded-tr-[2.25rem] border-r border-t border-white/10 md:right-8 md:top-8 md:h-32 md:w-32" />
-        <div className="absolute bottom-5 left-5 h-24 w-24 rounded-bl-[2.25rem] border-b border-l border-white/10 md:bottom-8 md:left-8 md:h-32 md:w-32" />
-        <div className="absolute bottom-5 right-5 h-24 w-24 rounded-br-[2.25rem] border-b border-r border-white/10 md:bottom-8 md:right-8 md:h-32 md:w-32" />
-      </div>
-
-      <div className="relative flex h-full flex-col items-center justify-between px-5 py-8 md:px-8 md:py-10">
-        <div className="h-12" />
-
+      <div className="relative flex h-full items-center justify-center px-6">
         <motion.div
-          className="flex flex-1 flex-col items-center justify-center text-center"
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1, delay: 0.2 }}
+          className="pointer-events-none relative text-center"
+          initial={{ opacity: 0, scale: 0.94, filter: 'blur(10px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 1.5, delay: 0.25, ease: 'easeOut' }}
         >
-          <p className="text-[11px] uppercase tracking-[0.42em] text-white/30">Sistema de Estudo Avancado</p>
-          <h1 className="mt-6 bg-gradient-to-b from-white via-[#e7e7e7] to-[#7a7a7a] bg-clip-text text-6xl font-semibold tracking-[-0.08em] text-transparent sm:text-7xl md:text-8xl">
+          <div className="absolute inset-0 -z-10 translate-y-4 bg-[radial-gradient(circle,rgba(255,255,255,0.18),transparent_60%)] blur-3xl" />
+          <h1 className="bg-[linear-gradient(180deg,#ffffff_0%,#d7d7d7_52%,#707070_100%)] bg-clip-text text-[4.8rem] font-semibold tracking-[-0.16em] text-transparent sm:text-[6.5rem] md:text-[8.5rem]">
             SEA
           </h1>
         </motion.div>
+      </div>
 
-        <motion.div
-          className="w-full max-w-xl"
-          initial={{ opacity: 0, y: 18 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, delay: 0.42 }}
-        >
-          <div className="flex items-center justify-between text-[11px] uppercase tracking-[0.28em] text-white/34">
-            <span>{status}</span>
-            <span>{Math.round(progress)}%</span>
-          </div>
-          <div className="mt-3 h-[3px] overflow-hidden rounded-full bg-white/7">
+      <motion.div
+        className="pointer-events-none absolute inset-x-6 bottom-8 md:bottom-10"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.9, delay: 0.55 }}
+      >
+        <div className="mx-auto w-full max-w-sm">
+          <div className="h-px overflow-hidden rounded-full bg-white/10">
             <motion.div
-              className="h-full rounded-full bg-[linear-gradient(90deg,#4f4f4f_0%,#ffffff_50%,#888888_100%)]"
-              initial={{ width: '0%' }}
+              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(120,120,120,0.15)_0%,rgba(255,255,255,0.95)_50%,rgba(120,120,120,0.25)_100%)]"
               animate={{ width: `${progress}%` }}
-              transition={{ type: 'spring', stiffness: 42, damping: 18 }}
+              transition={{ ease: 'easeOut', duration: 0.2 }}
             />
           </div>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
     </div>
   )
 }
