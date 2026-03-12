@@ -339,6 +339,54 @@ function NeuralCanvas() {
   return <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" aria-hidden="true" />
 }
 
+function FrameOverlay() {
+  return (
+    <div className="pointer-events-none absolute inset-0">
+      <div className="absolute left-5 top-5 h-24 w-24 rounded-tl-[2rem] border-l border-t border-white/10 md:left-8 md:top-8 md:h-32 md:w-32" />
+      <div className="absolute right-5 top-5 h-24 w-24 rounded-tr-[2rem] border-r border-t border-white/10 md:right-8 md:top-8 md:h-32 md:w-32" />
+      <div className="absolute bottom-5 left-5 h-24 w-24 rounded-bl-[2rem] border-b border-l border-white/10 md:bottom-8 md:left-8 md:h-32 md:w-32" />
+      <div className="absolute bottom-5 right-5 h-24 w-24 rounded-br-[2rem] border-b border-r border-white/10 md:bottom-8 md:right-8 md:h-32 md:w-32" />
+      <div className="absolute left-24 right-24 top-8 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+      <div className="absolute bottom-8 left-24 right-24 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent" />
+    </div>
+  )
+}
+
+function AmbientStructures() {
+  return (
+    <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <motion.div
+        className="absolute -left-16 top-[12%] h-56 w-56 rounded-full border border-white/10 bg-[radial-gradient(circle,rgba(255,255,255,0.06),transparent_68%)] blur-[1px] md:h-72 md:w-72"
+        animate={{ rotate: 360, scale: [1, 1.04, 1] }}
+        transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
+      />
+      <motion.div
+        className="absolute right-[-8rem] top-[18%] h-64 w-64 rounded-full border border-white/8 bg-[radial-gradient(circle,rgba(255,255,255,0.05),transparent_70%)] md:h-80 md:w-80"
+        animate={{ rotate: -360, scale: [1, 1.03, 1] }}
+        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+      />
+      <motion.div
+        className="absolute left-[10%] bottom-[16%] h-40 w-72 rounded-full border border-white/8"
+        style={{ transform: 'rotate(-14deg)' }}
+        animate={{ x: [0, 10, 0], opacity: [0.24, 0.4, 0.24] }}
+        transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute right-[8%] bottom-[18%] h-44 w-80 rounded-full border border-white/8"
+        style={{ transform: 'rotate(12deg)' }}
+        animate={{ x: [0, -12, 0], opacity: [0.22, 0.38, 0.22] }}
+        transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <div className="absolute left-[8%] top-[34%] h-px w-40 bg-gradient-to-r from-white/0 via-white/16 to-white/0" />
+      <div className="absolute right-[9%] top-[56%] h-px w-44 bg-gradient-to-r from-white/0 via-white/14 to-white/0" />
+      <div className="absolute left-[16%] top-[24%] h-2 w-2 rounded-full bg-white/85 shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
+      <div className="absolute right-[18%] top-[66%] h-2 w-2 rounded-full bg-white/75 shadow-[0_0_12px_rgba(255,255,255,0.72)]" />
+      <div className="absolute left-[22%] bottom-[24%] h-1.5 w-1.5 rounded-full bg-white/70 shadow-[0_0_10px_rgba(255,255,255,0.65)]" />
+      <div className="absolute right-[24%] top-[20%] h-1.5 w-1.5 rounded-full bg-white/70 shadow-[0_0_10px_rgba(255,255,255,0.65)]" />
+    </div>
+  )
+}
+
 export function PremiumSplash({
   redirectTo = '/sea',
   durationMs = 9200,
@@ -389,6 +437,8 @@ export function PremiumSplash({
   return (
     <div className="fixed inset-0 z-[90] overflow-hidden bg-[#020202]" suppressHydrationWarning>
       <NeuralCanvas />
+      <AmbientStructures />
+      <FrameOverlay />
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.015),transparent_34%,rgba(2,2,2,0.82)_100%)]" />
 
