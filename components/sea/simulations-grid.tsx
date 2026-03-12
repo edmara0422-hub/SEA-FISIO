@@ -59,8 +59,8 @@ export function SimulationsGrid() {
       transition={{ duration: 0.5, delay: 0.1 }}
     >
       <GlassPanel
-        title="Presenca Neural"
-        subtitle="Cortex vivo, atividade sensorial e resposta visual em tempo real"
+        title="Neuro"
+        subtitle="Core neural"
         className="md:col-span-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -68,40 +68,36 @@ export function SimulationsGrid() {
       >
         <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/55">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/18 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/55">
               <Brain className="h-3.5 w-3.5 text-silver-light" />
               Neuro Core
             </div>
-            <p className="text-sm leading-6 text-white/58">
-              O cerebro novo continua como ponto central da home, mas encaixado dentro da
-              estrutura SEA original.
-            </p>
             <div className="grid grid-cols-2 gap-3">
               <MetricCard label="Frequencia" value="10 Hz" />
               <MetricCard label="Modo" value="Imersivo" />
             </div>
           </div>
-          <div className="h-72 overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+          <div className="h-72 overflow-hidden rounded-2xl border border-white/10 bg-black/18">
             <BrainHeroScene compact />
           </div>
         </div>
       </GlassPanel>
 
       <GlassPanel
-        title="Ventilacao Mecanica"
-        subtitle="Pulmao dinamico e mecanica ventilatoria"
+        title="Pneumo"
+        subtitle="Pulmao e loops"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div className="space-y-4">
-          <div className="h-56 overflow-hidden rounded-2xl border border-cyan-400/20 bg-black/30">
+          <div className="h-56 overflow-hidden rounded-2xl border border-cyan-400/20 bg-black/18">
             <PneumoHeroScene />
           </div>
           <div className="flex items-center justify-between gap-3">
             <div className="inline-flex items-center gap-2 text-sm text-white/65">
               <Wind className="h-4 w-4 text-cyan-300" />
-              Pulmao e loops
+              Pneumo engine
             </div>
             <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cyan-200/80">
               PEEP 5
@@ -111,14 +107,14 @@ export function SimulationsGrid() {
       </GlassPanel>
 
       <GlassPanel
-        title="Simulacao Cardiaca"
-        subtitle="Atividade cardiaca como sistema visual vivo"
+        title="Cardio"
+        subtitle="Leitura cardiaca"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25 }}
       >
         <div className="space-y-4">
-          <div className="h-56 overflow-hidden rounded-2xl border border-rose-400/20 bg-black/30">
+          <div className="h-56 overflow-hidden rounded-2xl border border-rose-400/20 bg-black/18">
             <CardioHeroScene />
           </div>
           <div className="flex items-center justify-between gap-3">
@@ -138,7 +134,7 @@ export function SimulationsGrid() {
 
 function MetricCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+    <div className="rounded-2xl border border-white/10 bg-black/18 p-3">
       <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">{label}</p>
       <p className="mt-2 text-base font-semibold text-white">{value}</p>
     </div>
