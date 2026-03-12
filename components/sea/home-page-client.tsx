@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useState } from 'react'
+import { useLayoutEffect, useState } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { PerformanceBar } from '@/components/sea/performance-bar'
 import { PremiumSplash } from '@/components/sea/premium-splash'
@@ -17,11 +17,23 @@ const SimulationsGrid = dynamic(
 )
 
 export default function HomePageClient() {
-  const [showSplash, setShowSplash] = useState(true)
+  const [showSplash, setShowSplash] = useState<boolean | null>(null)
+
+  useLayoutEffect(() => {
+    const skipNextSplash = window.sessionStorage.getItem('sea-skip-next-splash')
+
+    if (skipNextSplash === '1') {
+      window.sessionStorage.removeItem('sea-skip-next-splash')
+      setShowSplash(false)
+      return
+    }
+
+    setShowSplash(true)
+  }, [])
 
   return (
     <>
-      {showSplash ? (
+      {showSplash === true ? (
         <PremiumSplash durationMs={8200} exitHoldMs={1200} onComplete={() => setShowSplash(false)} />
       ) : null}
 
