@@ -97,7 +97,7 @@ function buildLinks(): NeuralLink[] {
 }
 
 function buildDust(): DustParticle[] {
-  return Array.from({ length: 56 }, (_, index) => ({
+  return Array.from({ length: 96 }, (_, index) => ({
     x: ((index * 37) % 100) / 100,
     y: ((index * 23 + 17) % 100) / 100,
     radius: 0.7 + (index % 4) * 0.35,
@@ -159,17 +159,45 @@ function NeuralCanvas() {
       }
       context.restore()
 
-      const leftGlow = context.createRadialGradient(width * 0.16, height * 0.28, 0, width * 0.16, height * 0.28, width * 0.22)
-      leftGlow.addColorStop(0, 'rgba(255,255,255,0.08)')
+      const leftGlow = context.createRadialGradient(
+        width * 0.16,
+        height * 0.28,
+        0,
+        width * 0.16,
+        height * 0.28,
+        width * 0.22
+      )
+      leftGlow.addColorStop(0, 'rgba(255,255,255,0.11)')
       leftGlow.addColorStop(1, 'rgba(255,255,255,0)')
       context.fillStyle = leftGlow
       context.fillRect(0, 0, width, height)
 
-      const rightGlow = context.createRadialGradient(width * 0.82, height * 0.66, 0, width * 0.82, height * 0.66, width * 0.24)
-      rightGlow.addColorStop(0, 'rgba(255,255,255,0.06)')
+      const rightGlow = context.createRadialGradient(
+        width * 0.82,
+        height * 0.66,
+        0,
+        width * 0.82,
+        height * 0.66,
+        width * 0.24
+      )
+      rightGlow.addColorStop(0, 'rgba(255,255,255,0.1)')
       rightGlow.addColorStop(1, 'rgba(255,255,255,0)')
       context.fillStyle = rightGlow
       context.fillRect(0, 0, width, height)
+
+      const beamLeft = context.createLinearGradient(0, height * 0.12, width * 0.48, height * 0.46)
+      beamLeft.addColorStop(0, 'rgba(255,255,255,0.08)')
+      beamLeft.addColorStop(0.5, 'rgba(255,255,255,0.02)')
+      beamLeft.addColorStop(1, 'rgba(255,255,255,0)')
+      context.fillStyle = beamLeft
+      context.fillRect(0, 0, width * 0.54, height * 0.58)
+
+      const beamRight = context.createLinearGradient(width, height * 0.84, width * 0.52, height * 0.48)
+      beamRight.addColorStop(0, 'rgba(255,255,255,0.07)')
+      beamRight.addColorStop(0.5, 'rgba(255,255,255,0.02)')
+      beamRight.addColorStop(1, 'rgba(255,255,255,0)')
+      context.fillStyle = beamRight
+      context.fillRect(width * 0.46, height * 0.34, width * 0.54, height * 0.66)
 
       dust.forEach((particle, index) => {
         const driftX = Math.sin(t * 0.18 + particle.phase) * particle.drift
@@ -211,6 +239,17 @@ function NeuralCanvas() {
       context.beginPath()
       context.arc(0, 0, pulseRadius, 0, Math.PI * 2)
       context.fill()
+      context.restore()
+
+      context.save()
+      context.strokeStyle = 'rgba(255,255,255,0.11)'
+      context.lineWidth = 1
+      context.beginPath()
+      context.ellipse(width * 0.14, height * 0.22, width * 0.16, width * 0.06, t * 0.08, 0, Math.PI * 2)
+      context.stroke()
+      context.beginPath()
+      context.ellipse(width * 0.84, height * 0.72, width * 0.19, width * 0.08, -t * 0.07, 0, Math.PI * 2)
+      context.stroke()
       context.restore()
 
       const points = nodes.map((node) => ({
