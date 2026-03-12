@@ -68,7 +68,7 @@ export function SimulationsGrid() {
       >
         <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
           <div className="space-y-4">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-black/18 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/55">
+            <div className="sea-dark-glass inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/55">
               <Brain className="h-3.5 w-3.5 text-silver-light" />
               Neuro Core
             </div>
@@ -77,7 +77,7 @@ export function SimulationsGrid() {
               <MetricCard label="Modo" value="Imersivo" />
             </div>
           </div>
-          <div className="h-72 overflow-hidden rounded-2xl border border-white/10 bg-black/18">
+          <div className="sea-dark-glass h-72 overflow-hidden rounded-2xl border border-white/10">
             <BrainHeroScene compact />
           </div>
         </div>
@@ -91,7 +91,7 @@ export function SimulationsGrid() {
         transition={{ duration: 0.5, delay: 0.2 }}
       >
         <div className="space-y-4">
-          <div className="h-56 overflow-hidden rounded-2xl border border-cyan-400/20 bg-black/18">
+          <div className="sea-dark-glass h-56 overflow-hidden rounded-2xl border border-cyan-400/18">
             <PneumoHeroScene />
           </div>
           <div className="flex items-center justify-between gap-3">
@@ -114,7 +114,7 @@ export function SimulationsGrid() {
         transition={{ duration: 0.5, delay: 0.25 }}
       >
         <div className="space-y-4">
-          <div className="h-56 overflow-hidden rounded-2xl border border-rose-400/20 bg-black/18">
+          <div className="sea-dark-glass h-56 overflow-hidden rounded-2xl border border-rose-400/18">
             <CardioHeroScene />
           </div>
           <div className="flex items-center justify-between gap-3">
@@ -134,7 +134,7 @@ export function SimulationsGrid() {
 
 function MetricCard({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/18 p-3">
+    <div className="sea-dark-glass rounded-2xl border border-white/10 p-3">
       <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">{label}</p>
       <p className="mt-2 text-base font-semibold text-white">{value}</p>
     </div>

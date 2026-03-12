@@ -20,15 +20,14 @@ export default function HomePageClient() {
   const [showSplash, setShowSplash] = useState<boolean | null>(null)
 
   useLayoutEffect(() => {
-    const skipNextSplash = window.sessionStorage.getItem('sea-skip-next-splash')
+    const hasEnteredApp = window.sessionStorage.getItem('sea-app-entered') === '1'
+    const navigationEntry = window.performance.getEntriesByType('navigation')[0] as
+      | PerformanceNavigationTiming
+      | undefined
+    const shouldShowSplash = !hasEnteredApp || navigationEntry?.type === 'reload'
 
-    if (skipNextSplash === '1') {
-      window.sessionStorage.removeItem('sea-skip-next-splash')
-      setShowSplash(false)
-      return
-    }
-
-    setShowSplash(true)
+    window.sessionStorage.setItem('sea-app-entered', '1')
+    setShowSplash(shouldShowSplash)
   }, [])
 
   return (
@@ -37,7 +36,7 @@ export default function HomePageClient() {
         <PremiumSplash durationMs={8200} exitHoldMs={1200} onComplete={() => setShowSplash(false)} />
       ) : null}
 
-      <div className="relative min-h-screen overflow-hidden bg-[#050505] text-white">
+      <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
         <SeaBackdrop />
         <TopBarSEA />
 
@@ -59,15 +58,15 @@ function SimulationsFallback() {
       <div className="sea-dark-glass md:col-span-2 rounded-[1.75rem] p-5">
         <div className="h-5 w-40 rounded-full bg-white/10" />
         <div className="mt-3 h-3 w-72 max-w-full rounded-full bg-white/6" />
-        <div className="mt-5 h-72 rounded-[1.4rem] border border-white/8 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_58%)]" />
+        <div className="sea-dark-glass mt-5 h-72 rounded-[1.4rem] border border-white/8" />
       </div>
       <div className="sea-dark-glass rounded-[1.75rem] p-5">
         <div className="h-5 w-32 rounded-full bg-white/10" />
-        <div className="mt-4 h-56 rounded-[1.4rem] border border-white/8 bg-black/18" />
+        <div className="sea-dark-glass mt-4 h-56 rounded-[1.4rem] border border-white/8" />
       </div>
       <div className="sea-dark-glass rounded-[1.75rem] p-5">
         <div className="h-5 w-32 rounded-full bg-white/10" />
-        <div className="mt-4 h-56 rounded-[1.4rem] border border-white/8 bg-black/18" />
+        <div className="sea-dark-glass mt-4 h-56 rounded-[1.4rem] border border-white/8" />
       </div>
     </div>
   )

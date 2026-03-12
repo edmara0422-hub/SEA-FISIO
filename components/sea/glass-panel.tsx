@@ -22,20 +22,20 @@ export function GlassPanel({ children, className = '', title, subtitle, ...motio
       whileTap={{ scale: 0.98 }}
       {...motionProps}
     >
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_-20%,rgba(255,255,255,0.08),transparent_34%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_22%)] pointer-events-none" />
 
       <div className="relative z-10 p-6">
         {title && (
           <div className="mb-4">
-            <h3 className="text-lg font-semibold text-white mb-1">{title}</h3>
+            <h3 className="mb-1 text-lg font-semibold text-white">{title}</h3>
             {subtitle && <p className="text-sm text-white/46">{subtitle}</p>}
           </div>
         )}
         {children}
       </div>
 
-      <div className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/10 via-transparent to-white/10" />
+      <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 hover:opacity-100">
+        <div className="absolute inset-0 rounded-2xl bg-[linear-gradient(180deg,rgba(255,255,255,0.05),transparent_30%)]" />
       </div>
     </motion.div>
   )

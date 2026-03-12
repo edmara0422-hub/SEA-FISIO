@@ -4,6 +4,9 @@ import { motion } from 'framer-motion'
 import { Bell, User } from 'lucide-react'
 
 export function TopBarSEA() {
+  const shellBackground =
+    'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(10,10,12,0.92) 52%, rgba(3,3,4,0.985) 100%)'
+
   return (
     <motion.header
       className="fixed left-0 right-0 top-0 z-40 px-3 pt-3 md:px-6"
@@ -16,10 +19,9 @@ export function TopBarSEA() {
           <div
             className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[1.05rem] border border-white/16"
             style={{
-              background:
-                'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(18,18,20,0.84) 60%, rgba(8,8,10,0.98) 100%)',
+              background: shellBackground,
               boxShadow:
-                'inset 0 1px 0 rgba(255,255,255,0.14), 0 16px 32px rgba(0,0,0,0.36)',
+                'inset 0 1px 0 rgba(255,255,255,0.12), 0 16px 32px rgba(0,0,0,0.38)',
             }}
           >
             <span
@@ -49,8 +51,7 @@ export function TopBarSEA() {
             aria-label="Notificacoes"
             className="flex h-11 w-11 items-center justify-center rounded-[1rem] border border-white/12 text-white/70 transition hover:text-white"
             style={{
-              background:
-                'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(18,18,20,0.84) 60%, rgba(8,8,10,0.98) 100%)',
+              background: shellBackground,
             }}
           >
             <Bell className="h-4 w-4" />
@@ -60,8 +61,7 @@ export function TopBarSEA() {
             aria-label="Perfil"
             className="flex h-11 w-11 items-center justify-center rounded-[1rem] border border-white/12 text-white/70 transition hover:text-white"
             style={{
-              background:
-                'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(18,18,20,0.84) 60%, rgba(8,8,10,0.98) 100%)',
+              background: shellBackground,
             }}
           >
             <User className="h-4 w-4" />

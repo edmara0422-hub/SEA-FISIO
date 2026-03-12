@@ -112,7 +112,7 @@
   body {
     min-height: 100%;
     margin: 0;
-    background: #0a0a0a;
+    background: #020202;
   }
 
   body {
@@ -254,11 +254,12 @@
 
   .sea-dark-glass {
     background:
-      linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(18,18,20,0.84) 60%, rgba(8,8,10,0.98) 100%);
+      linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(10,10,12,0.92) 52%, rgba(3,3,4,0.985) 100%);
     border: 1px solid rgba(255, 255, 255, 0.12);
     box-shadow:
       inset 0 1px 0 rgba(255,255,255,0.12),
-      0 18px 40px rgba(0,0,0,0.32);
+      inset 0 -1px 0 rgba(255,255,255,0.02),
+      0 18px 40px rgba(0,0,0,0.36);
     backdrop-filter: blur(20px) saturate(120%);
     -webkit-backdrop-filter: blur(20px) saturate(120%);
   }

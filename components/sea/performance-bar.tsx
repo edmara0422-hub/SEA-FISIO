@@ -40,15 +40,24 @@ const cleanSeed: DemoState = {
 export function PerformanceBar() {
   const [state, setState] = useState<DemoState>(demoSeed)
   const totalBars = Math.max(state.promoters + state.neutral + state.detractors, 1)
+  const finalPulseY = 58 - (state.mode === 'clean' ? 8 : state.fidelity) * 0.08
 
   const bars = useMemo(
     () => [
-      { label: 'Detratores', value: state.detractors, tone: 'bg-white/[0.08]' },
-      { label: 'Neutros', value: state.neutral, tone: 'bg-white/[0.16]' },
+      {
+        label: 'Detratores',
+        value: state.detractors,
+        fill: 'linear-gradient(180deg, rgba(255,255,255,0.26) 0%, rgba(173,178,186,0.1) 38%, rgba(71,75,82,0.08) 100%)',
+      },
+      {
+        label: 'Neutros',
+        value: state.neutral,
+        fill: 'linear-gradient(180deg, rgba(255,255,255,0.52) 0%, rgba(207,212,219,0.18) 42%, rgba(86,90,98,0.1) 100%)',
+      },
       {
         label: 'Promotores',
         value: state.promoters,
-        tone: 'bg-[linear-gradient(180deg,rgba(255,255,255,0.22),rgba(255,255,255,0.08))]',
+        fill: 'linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(225,229,235,0.34) 42%, rgba(104,109,116,0.14) 100%)',
       },
     ],
     [state.detractors, state.neutral, state.promoters]
@@ -124,26 +133,23 @@ export function PerformanceBar() {
     >
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-white/12 bg-black/24">
+          <div className="flex flex-wrap items-center gap-3 md:gap-4">
+            <div className="sea-dark-glass flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-white/12">
               <Activity className="h-5 w-5 text-white/76" />
             </div>
-            <div>
-              <h3 className="text-xl font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
-                DASH
-              </h3>
+            <h3 className="text-xl font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
+              DASH
+            </h3>
+            <div className="flex flex-wrap gap-2">
+              <ActionButton icon={Sparkles} label="Modo demo" onClick={activateDemo} />
+              <ActionButton icon={BarChart3} label="Calcular" onClick={calculateMetrics} />
+              <ActionButton icon={RotateCcw} label="Atualizar" onClick={refreshDemo} />
+              <ActionButton icon={Trash2} label="Apagar" onClick={clearDashboard} />
             </div>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            <ActionButton icon={Sparkles} label="Modo demo" onClick={activateDemo} />
-            <ActionButton icon={BarChart3} label="Calcular" onClick={calculateMetrics} />
-            <ActionButton icon={RotateCcw} label="Atualizar" onClick={refreshDemo} />
-            <ActionButton icon={Trash2} label="Apagar" onClick={clearDashboard} />
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-4 gap-2 md:gap-3">
           <MetricCard label="NPS" value={state.nps} suffix={state.mode === 'clean' ? '' : ''} />
           <MetricCard label="Fidelidade" value={state.fidelity} suffix={state.mode === 'clean' ? '' : '%'} />
           <MetricCard label="Respostas" value={state.responses} />
@@ -156,17 +162,19 @@ export function PerformanceBar() {
               Distribuicao NPS
             </p>
             <p className="text-xs text-white/52">
-              {state.mode === 'clean' ? 'Sem base' : 'Simulacao ativa'}
+              {state.mode === 'clean' ? 'Standby' : 'Demo'}
             </p>
           </div>
 
           <div className="grid gap-4 xl:grid-cols-[0.76fr_1.24fr]">
             <div className="grid grid-cols-3 gap-3 items-end">
               {bars.map((bar) => (
-                <div key={bar.label} className="rounded-[1.25rem] border border-white/10 bg-black/18 px-3 py-3">
-                  <div className="flex h-36 items-end justify-center">
+                <div key={bar.label} className="sea-dark-glass rounded-[1.25rem] border border-white/10 px-3 py-3">
+                  <div className="relative flex h-36 items-end justify-center overflow-hidden rounded-[0.95rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(10,10,12,0.92)_26%,rgba(2,2,3,0.98)_100%)] px-2 py-2">
+                    <div className="absolute inset-x-2 bottom-2 top-2 rounded-[0.8rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_30%,rgba(255,255,255,0.02)_100%)]" />
                     <motion.div
-                      className={`w-full rounded-[1rem] ${bar.tone}`}
+                      className="relative z-10 w-full rounded-[1rem] shadow-[0_0_26px_rgba(255,255,255,0.18)]"
+                      style={{ background: bar.fill }}
                       initial={{ height: 0 }}
                       animate={{ height: `${state.mode === 'clean' ? 10 : (bar.value / totalBars) * 100}%` }}
                       transition={{ duration: 0.6, ease: 'easeOut' }}
@@ -180,13 +188,14 @@ export function PerformanceBar() {
               ))}
             </div>
 
-            <div className="rounded-[1.3rem] border border-white/10 bg-black/18 p-4">
+            <div className="sea-dark-glass relative overflow-hidden rounded-[1.3rem] border border-white/10 p-4">
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.08),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(214,220,228,0.06),transparent_30%)]" />
               <div className="mb-3 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-                <span>Pulso de fidelidade</span>
-                <span>{state.mode === 'clean' ? 'Standby' : 'Demo realtime'}</span>
+                <span>Pulso NPS</span>
+                <span>{state.mode === 'clean' ? 'Standby' : 'Realtime'}</span>
               </div>
 
-              <svg viewBox="0 0 420 140" className="h-40 w-full">
+              <svg viewBox="0 0 420 140" className="relative h-40 w-full">
                 <defs>
                   <linearGradient id="dashStroke" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%" stopColor="rgba(255,255,255,0.28)" />
@@ -211,6 +220,16 @@ export function PerformanceBar() {
                   strokeWidth="4"
                   strokeLinecap="round"
                   strokeLinejoin="round"
+                />
+                <motion.circle
+                  cx="420"
+                  cy={finalPulseY}
+                  r="5.5"
+                  fill="#ffffff"
+                  initial={{ opacity: 0.45, scale: 0.9 }}
+                  animate={{ opacity: [0.42, 1, 0.42], scale: [0.9, 1.18, 0.9] }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+                  style={{ transformOrigin: `420px ${finalPulseY}px` }}
                 />
                 {[72, 164, 256, 348].map((x) => (
                   <line
@@ -245,13 +264,13 @@ function ActionButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center justify-center gap-2 rounded-[1.1rem] border border-white/12 px-4 py-3 text-sm font-semibold text-white/84 transition hover:text-white"
+      className="inline-flex items-center justify-center gap-1.5 rounded-[0.95rem] border border-white/12 px-3 py-2 text-[11px] font-semibold text-white/84 transition hover:text-white md:text-xs"
       style={{
         background:
-          'linear-gradient(180deg, rgba(255,255,255,0.14) 0%, rgba(18,18,20,0.84) 60%, rgba(8,8,10,0.98) 100%)',
+          'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(10,10,12,0.92) 52%, rgba(3,3,4,0.985) 100%)',
       }}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="h-3.5 w-3.5" />
       <span>{label}</span>
     </button>
   )
@@ -268,10 +287,12 @@ function MetricCard({
 }) {
   return (
     <div className="sea-dark-glass rounded-[1.25rem] px-3 py-3">
-      <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/42">{label}</p>
-      <p className="mt-2 text-xl font-semibold text-white md:text-2xl">
+      <p className="whitespace-nowrap text-[8px] font-semibold uppercase tracking-[0.14em] text-white/42 md:text-[9px]">
+        {label}
+      </p>
+      <p className="mt-2 text-lg font-semibold text-white md:text-xl">
         {value}
-        <span className="text-sm text-white/54">{suffix}</span>
+        <span className="ml-0.5 text-[11px] text-white/54 md:text-xs">{suffix}</span>
       </p>
     </div>
   )

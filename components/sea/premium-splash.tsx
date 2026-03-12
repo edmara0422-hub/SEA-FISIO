@@ -84,10 +84,10 @@ export function PremiumSplash({
   }, [durationMs, exitHoldMs, onComplete])
 
   return (
-    <div className="fixed inset-0 z-[90] h-[100dvh] w-screen overflow-hidden bg-[#020202]" suppressHydrationWarning>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_16%,rgba(2,2,2,0.92)_56%,rgba(2,2,2,1)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_26%),radial-gradient(circle_at_80%_18%,rgba(205,205,205,0.05),transparent_28%),radial-gradient(circle_at_18%_82%,rgba(255,255,255,0.05),transparent_26%),radial-gradient(circle_at_82%_80%,rgba(170,170,170,0.05),transparent_30%)]" />
-      <div className="absolute inset-0 opacity-[0.14] [background-image:repeating-linear-gradient(180deg,rgba(255,255,255,0.02)_0px,rgba(255,255,255,0.02)_1px,transparent_1px,transparent_11px)]" />
+    <div className="fixed inset-0 z-[90] h-[100dvh] w-screen overflow-hidden bg-[#010101]" suppressHydrationWarning>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_16%,rgba(1,1,1,0.94)_56%,rgba(1,1,1,1)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.06),transparent_26%),radial-gradient(circle_at_80%_18%,rgba(205,205,205,0.04),transparent_28%),radial-gradient(circle_at_18%_82%,rgba(255,255,255,0.04),transparent_26%),radial-gradient(circle_at_82%_80%,rgba(170,170,170,0.035),transparent_30%)]" />
+      <div className="absolute inset-0 opacity-[0.12] [background-image:repeating-linear-gradient(180deg,rgba(255,255,255,0.018)_0px,rgba(255,255,255,0.018)_1px,transparent_1px,transparent_11px)]" />
 
       <motion.div
         className="absolute left-1/2 top-1/2 h-[22rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,255,255,0.16),rgba(255,255,255,0.03)_46%,transparent_76%)] blur-3xl"
@@ -111,10 +111,22 @@ export function PremiumSplash({
             transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          <div className="relative flex items-center justify-center -space-x-[0.08em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
-            <CutLetter value="S" cuts={[{ top: '30%', left: '-8%', right: '26%' }, { top: '63%', left: '34%', right: '-8%' }]} />
+          <div className="mx-auto flex w-fit items-center justify-center -space-x-[0.05em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
+            <CutLetter
+              value="S"
+              cuts={[
+                { top: '30%', left: '-6%', right: '24%' },
+                { top: '63%', left: '34%', right: '-6%' },
+              ]}
+            />
             <Letter value="E" />
-            <CutLetter value="A" cuts={[{ top: '34%', left: '38%', right: '-8%' }, { top: '69%', left: '-8%', right: '44%' }]} />
+            <CutLetter
+              value="A"
+              cuts={[
+                { top: '34%', left: '38%', right: '-6%' },
+                { top: '69%', left: '-6%', right: '42%' },
+              ]}
+            />
           </div>
 
           <motion.div
@@ -134,7 +146,7 @@ export function PremiumSplash({
         <div className="mx-auto w-full max-w-md">
           <div className="h-px overflow-hidden rounded-full bg-white/10">
             <motion.div
-              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(120,120,120,0.12)_0%,rgba(255,255,255,0.98)_50%,rgba(120,120,120,0.18)_100%)]"
+              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(120,120,120,0.08)_0%,rgba(255,255,255,0.98)_50%,rgba(120,120,120,0.12)_100%)]"
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
             />
@@ -147,7 +159,7 @@ export function PremiumSplash({
 
 function Letter({ value }: { value: string }) {
   return (
-    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.02em] text-transparent">
+    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.03em] text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]">
       {value}
     </span>
   )
@@ -161,12 +173,12 @@ function CutLetter({
   cuts: Array<{ top: string; left: string; right: string }>
 }) {
   return (
-    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.02em] text-transparent">
+    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.03em] text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]">
       {value}
       {cuts.map((cut, index) => (
         <span
           key={`${value}-${index}`}
-          className="absolute h-[6%] rounded-full bg-[#020202]/96 shadow-[0_0_10px_rgba(2,2,2,0.9)]"
+          className="absolute h-[6%] rounded-full bg-[#010101]/96 shadow-[0_0_10px_rgba(1,1,1,0.92)]"
           style={{ top: cut.top, left: cut.left, right: cut.right }}
         />
       ))}
