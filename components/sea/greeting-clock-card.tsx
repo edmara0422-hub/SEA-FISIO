@@ -9,11 +9,30 @@ interface GreetingClockCardProps {
 
 export function GreetingClockCard({ className = '' }: GreetingClockCardProps) {
   const [now, setNow] = useState(() => new Date())
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
+    setMounted(true)
     const interval = window.setInterval(() => setNow(new Date()), 1000)
     return () => window.clearInterval(interval)
   }, [])
+
+  if (!mounted) {
+    return (
+      <div
+        className={`relative w-full overflow-hidden rounded-[1.85rem] border border-white/16 px-5 py-4 text-white shadow-[0_24px_48px_rgba(0,0,0,0.36)] backdrop-blur-xl md:px-6 ${className}`}
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
+        }}
+      >
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div className="h-6 w-52 rounded-full bg-white/14" />
+          <div className="h-10 w-36 rounded-full bg-white/16" />
+        </div>
+      </div>
+    )
+  }
 
   const hour = now.getHours()
   const isDay = hour >= 6 && hour < 18
