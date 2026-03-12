@@ -9,26 +9,26 @@ type PremiumSplashProps = {
   exitHoldMs?: number
 }
 
-type FieldNode = {
-  id: string
-  x: number
-  y: number
-  r: number
-  bright: boolean
-  delay: number
-}
-
-type FieldLink = {
+type Trace = {
   id: string
   d: string
+  width: number
   opacity: number
   delay: number
 }
 
-type NeuralField = {
-  links: FieldLink[]
-  traces: FieldLink[]
-  nodes: FieldNode[]
+type Spark = {
+  id: string
+  x: number
+  y: number
+  r: number
+  opacity: number
+  delay: number
+}
+
+type NeuralVeilData = {
+  traces: Trace[]
+  sparks: Spark[]
 }
 
 export function PremiumSplash({
@@ -37,7 +37,7 @@ export function PremiumSplash({
   exitHoldMs = 1200,
 }: PremiumSplashProps) {
   const [progress, setProgress] = useState(0)
-  const field = useMemo(() => buildNeuralField(), [])
+  const veil = useMemo(() => buildNeuralVeil(), [])
 
   useEffect(() => {
     document.documentElement.classList.add('sea-splash-active')
@@ -85,17 +85,17 @@ export function PremiumSplash({
 
   return (
     <div className="fixed inset-0 z-[90] h-[100dvh] w-screen overflow-hidden bg-[#020202]" suppressHydrationWarning>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,255,255,0.08),transparent_18%,rgba(2,2,2,0.9)_58%,rgba(2,2,2,1)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_18%_26%,rgba(255,255,255,0.09),transparent_28%),radial-gradient(circle_at_82%_22%,rgba(201,201,201,0.07),transparent_30%),radial-gradient(circle_at_14%_84%,rgba(181,181,181,0.05),transparent_26%),radial-gradient(circle_at_86%_78%,rgba(255,255,255,0.06),transparent_30%)]" />
-      <div className="absolute inset-0 opacity-20 [background-image:repeating-linear-gradient(180deg,rgba(255,255,255,0.025)_0px,rgba(255,255,255,0.025)_1px,transparent_1px,transparent_8px)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08),transparent_16%,rgba(2,2,2,0.92)_56%,rgba(2,2,2,1)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.08),transparent_26%),radial-gradient(circle_at_80%_18%,rgba(205,205,205,0.05),transparent_28%),radial-gradient(circle_at_18%_82%,rgba(255,255,255,0.05),transparent_26%),radial-gradient(circle_at_82%_80%,rgba(170,170,170,0.05),transparent_30%)]" />
+      <div className="absolute inset-0 opacity-[0.14] [background-image:repeating-linear-gradient(180deg,rgba(255,255,255,0.02)_0px,rgba(255,255,255,0.02)_1px,transparent_1px,transparent_11px)]" />
 
       <motion.div
-        className="absolute left-1/2 top-1/2 h-[24rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,255,255,0.16),rgba(255,255,255,0.04)_42%,transparent_72%)] blur-3xl"
-        animate={{ opacity: [0.2, 0.34, 0.22], scale: [0.96, 1.04, 0.98] }}
-        transition={{ duration: 6.8, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute left-1/2 top-1/2 h-[22rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,255,255,0.16),rgba(255,255,255,0.03)_46%,transparent_76%)] blur-3xl"
+        animate={{ opacity: [0.22, 0.34, 0.24], scale: [0.98, 1.03, 0.99] }}
+        transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      <NeuralMesh field={field} />
+      <NeuralVeil veil={veil} />
       <CentralPulseColumn />
 
       <div className="relative flex h-full items-center justify-center px-6">
@@ -103,20 +103,20 @@ export function PremiumSplash({
           className="pointer-events-none relative text-center"
           initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
           animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1.4, delay: 0.2, ease: 'easeOut' }}
+          transition={{ duration: 1.3, delay: 0.2, ease: 'easeOut' }}
         >
           <motion.div
-            className="absolute left-1/2 top-1/2 h-28 w-[20rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,255,255,0.22),transparent_74%)] blur-3xl"
-            animate={{ opacity: [0.35, 0.52, 0.38] }}
-            transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="absolute left-1/2 top-1/2 h-24 w-[18rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,255,255,0.2),transparent_72%)] blur-3xl"
+            animate={{ opacity: [0.34, 0.54, 0.38] }}
+            transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <h1 className="relative bg-[linear-gradient(180deg,#ffffff_0%,#dedede_46%,#8b8b8b_100%)] bg-clip-text text-[4.8rem] font-semibold tracking-[-0.18em] text-transparent sm:text-[6.4rem] md:text-[8.6rem]">
+          <h1 className="relative bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text text-[4.8rem] font-semibold tracking-[-0.18em] text-transparent sm:text-[6.4rem] md:text-[8.5rem]">
             SEA
           </h1>
           <motion.div
-            className="mx-auto mt-5 h-px w-28 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.75),transparent)]"
-            animate={{ opacity: [0.35, 0.8, 0.35], scaleX: [0.92, 1.08, 0.92] }}
-            transition={{ duration: 3.8, repeat: Infinity, ease: 'easeInOut' }}
+            className="mx-auto mt-5 h-px w-24 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.78),transparent)]"
+            animate={{ opacity: [0.3, 0.82, 0.3], scaleX: [0.95, 1.1, 0.95] }}
+            transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
           />
         </motion.div>
       </div>
@@ -130,7 +130,7 @@ export function PremiumSplash({
         <div className="mx-auto w-full max-w-md">
           <div className="h-px overflow-hidden rounded-full bg-white/10">
             <motion.div
-              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(130,130,130,0.14)_0%,rgba(255,255,255,0.98)_50%,rgba(130,130,130,0.2)_100%)]"
+              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(120,120,120,0.12)_0%,rgba(255,255,255,0.98)_50%,rgba(120,120,120,0.18)_100%)]"
               animate={{ width: `${progress}%` }}
               transition={{ duration: 0.2, ease: 'easeOut' }}
             />
@@ -141,7 +141,7 @@ export function PremiumSplash({
   )
 }
 
-function NeuralMesh({ field }: { field: NeuralField }) {
+function NeuralVeil({ veil }: { veil: NeuralVeilData }) {
   return (
     <svg
       aria-hidden
@@ -150,31 +150,26 @@ function NeuralMesh({ field }: { field: NeuralField }) {
       preserveAspectRatio="xMidYMid slice"
     >
       <defs>
-        <linearGradient id="sea-silver-link" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="rgba(130,130,130,0.1)" />
-          <stop offset="50%" stopColor="rgba(255,255,255,0.95)" />
-          <stop offset="100%" stopColor="rgba(130,130,130,0.12)" />
-        </linearGradient>
-        <linearGradient id="sea-silver-trace" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="rgba(255,255,255,0.02)" />
-          <stop offset="45%" stopColor="rgba(255,255,255,0.32)" />
-          <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
+        <linearGradient id="sea-trace" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="rgba(120,120,120,0.04)" />
+          <stop offset="48%" stopColor="rgba(255,255,255,0.75)" />
+          <stop offset="100%" stopColor="rgba(120,120,120,0.05)" />
         </linearGradient>
       </defs>
 
-      {field.links.map((link) => (
+      {veil.traces.map((trace) => (
         <motion.path
-          key={link.id}
-          d={link.d}
+          key={trace.id}
+          d={trace.d}
           fill="none"
-          stroke="url(#sea-silver-link)"
-          strokeWidth="1.15"
+          stroke="url(#sea-trace)"
+          strokeWidth={trace.width}
           strokeLinecap="round"
           initial={{ opacity: 0, pathLength: 0.2 }}
-          animate={{ opacity: [link.opacity * 0.55, link.opacity, link.opacity * 0.6], pathLength: 1 }}
+          animate={{ opacity: [trace.opacity * 0.55, trace.opacity, trace.opacity * 0.6], pathLength: 1 }}
           transition={{
-            duration: 5.8,
-            delay: link.delay,
+            duration: 5.5,
+            delay: trace.delay,
             repeat: Infinity,
             repeatType: 'mirror',
             ease: 'easeInOut',
@@ -182,45 +177,22 @@ function NeuralMesh({ field }: { field: NeuralField }) {
         />
       ))}
 
-      {field.traces.map((trace) => (
-        <motion.path
-          key={trace.id}
-          d={trace.d}
-          fill="none"
-          stroke="url(#sea-silver-trace)"
-          strokeWidth="1.35"
-          strokeLinecap="round"
-          initial={{ opacity: 0, pathLength: 0 }}
-          animate={{ opacity: [trace.opacity * 0.35, trace.opacity, trace.opacity * 0.25], pathLength: 1 }}
-          transition={{
-            duration: 4.6,
-            delay: trace.delay,
-            repeat: Infinity,
-            repeatDelay: 0.2,
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-
-      {field.nodes.map((node) => (
+      {veil.sparks.map((spark) => (
         <motion.circle
-          key={node.id}
-          cx={node.x}
-          cy={node.y}
-          r={node.r}
-          fill={node.bright ? '#ffffff' : '#cfcfcf'}
+          key={spark.id}
+          cx={spark.x}
+          cy={spark.y}
+          r={spark.r}
+          fill="#ffffff"
           initial={{ opacity: 0 }}
-          animate={{
-            opacity: node.bright ? [0.45, 1, 0.5] : [0.12, 0.42, 0.16],
-            scale: node.bright ? [0.92, 1.18, 0.96] : [1, 1.06, 1],
-          }}
+          animate={{ opacity: [spark.opacity * 0.35, spark.opacity, spark.opacity * 0.4], scale: [0.96, 1.12, 1] }}
           transition={{
-            duration: node.bright ? 3.6 : 4.8,
-            delay: node.delay,
+            duration: 4.2,
+            delay: spark.delay,
             repeat: Infinity,
             ease: 'easeInOut',
           }}
-          style={{ transformOrigin: `${node.x}px ${node.y}px` }}
+          style={{ transformOrigin: `${spark.x}px ${spark.y}px` }}
         />
       ))}
     </svg>
@@ -241,18 +213,18 @@ function CentralPulseColumn() {
       {rails.map((offset, index) => (
         <motion.span
           key={`rail-${offset}`}
-          className="absolute left-1/2 top-1/2 h-[52vh] w-px -translate-y-1/2 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.48),transparent)]"
+          className="absolute left-1/2 top-1/2 h-[52vh] w-px -translate-y-1/2 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.5),transparent)]"
           style={{ marginLeft: `${offset}px` }}
-          animate={{ opacity: [0.14, index % 2 === 0 ? 0.46 : 0.32, 0.16] }}
-          transition={{ duration: 4.5 + index * 0.6, repeat: Infinity, ease: 'easeInOut' }}
+          animate={{ opacity: [0.12, index % 2 === 0 ? 0.45 : 0.3, 0.14] }}
+          transition={{ duration: 4.4 + index * 0.55, repeat: Infinity, ease: 'easeInOut' }}
         />
       ))}
 
       {pulses.map((pulse) => (
         <motion.span
           key={`pulse-${pulse.x}`}
-          className="absolute left-1/2 top-1/2 h-2.5 w-2.5 rounded-full bg-white shadow-[0_0_18px_rgba(255,255,255,0.42)]"
-          style={{ marginLeft: `${pulse.x - 5}px` }}
+          className="absolute left-1/2 top-1/2 h-2 w-2 rounded-full bg-white shadow-[0_0_16px_rgba(255,255,255,0.42)]"
+          style={{ marginLeft: `${pulse.x - 4}px` }}
           initial={{ y: '18vh', opacity: 0 }}
           animate={{ y: ['18vh', '0vh', '-18vh'], opacity: [0, 1, 0] }}
           transition={{ duration: pulse.duration, delay: pulse.delay, repeat: Infinity, ease: 'easeInOut' }}
@@ -262,88 +234,90 @@ function CentralPulseColumn() {
   )
 }
 
-function buildNeuralField(): NeuralField {
-  const nodes: FieldNode[] = []
-  const links: FieldLink[] = []
-  const traces: FieldLink[] = []
-  const rowTemplate = [4, 5, 6, 6, 5, 4]
+function buildNeuralVeil(): NeuralVeilData {
+  const traces: Trace[] = []
+  const sparks: Spark[] = []
+  const anchors = [150, 245, 340, 470, 600, 715]
 
-  ;[
-    { prefix: 'left', centerX: 428, direction: -1 },
-    { prefix: 'right', centerX: 1012, direction: 1 },
-  ].forEach((hemisphere, hemisphereIndex) => {
-    const rows: FieldNode[][] = []
+  anchors.forEach((y, index) => {
+    const leftStartX = 70 + index * 18
+    const leftEndX = 520 + index * 10
+    const rightStartX = 1370 - index * 18
+    const rightEndX = 920 - index * 10
+    const bend = 70 + index * 8
+    const drift = (index % 2 === 0 ? -1 : 1) * (18 + index * 2)
 
-    for (let row = 0; row < rowTemplate.length; row += 1) {
-      const cols = rowTemplate[row]
-      const rowNodes: FieldNode[] = []
-      const t = row / (rowTemplate.length - 1)
-      const wave = Math.sin(t * Math.PI)
-      const span = 148 + wave * 156
-      const baseY = 178 + row * 108 + Math.sin((row + 1) * 0.65) * 8
-
-      for (let col = 0; col < cols; col += 1) {
-        const u = cols === 1 ? 0.5 : col / (cols - 1)
-        const offset = (u - 0.5) * span
-        const jitterX = Math.sin((row + 2) * (col + 1) * 1.18) * 12 + hemisphere.direction * Math.cos((col + 3) * 0.92) * 8
-        const jitterY = Math.cos((row + 1) * (col + 2) * 0.54) * 11
-        const node: FieldNode = {
-          id: `${hemisphere.prefix}-${row}-${col}`,
-          x: hemisphere.centerX + offset + jitterX,
-          y: baseY + jitterY,
-          r: row === 2 || row === 3 ? (col % 2 === 0 ? 4.8 : 3.4) : col % 2 === 0 ? 3.4 : 2.8,
-          bright: (row === 2 || row === 3) && (col === 1 || col === cols - 2 || col === Math.floor(cols / 2)),
-          delay: hemisphereIndex * 0.12 + row * 0.1 + col * 0.05,
-        }
-
-        rowNodes.push(node)
-        nodes.push(node)
-      }
-
-      rows.push(rowNodes)
-    }
-
-    rows.forEach((rowNodes, rowIndex) => {
-      rowNodes.forEach((node, colIndex) => {
-        const next = rowNodes[colIndex + 1]
-        if (next) {
-          const curveY = (rowIndex < 3 ? -1 : 1) * (12 + Math.abs(colIndex - rowNodes.length / 2) * 3)
-          links.push({
-            id: `${node.id}-h-${next.id}`,
-            d: `M ${node.x} ${node.y} Q ${(node.x + next.x) / 2} ${(node.y + next.y) / 2 + curveY} ${next.x} ${next.y}`,
-            opacity: 0.16,
-            delay: node.delay,
-          })
-        }
-
-        const nextRow = rows[rowIndex + 1]
-        if (nextRow) {
-          const targetIndex = Math.round((colIndex / Math.max(rowNodes.length - 1, 1)) * (nextRow.length - 1))
-          const target = nextRow[targetIndex]
-          const curveX = hemisphere.direction * (18 + rowIndex * 3)
-          links.push({
-            id: `${node.id}-v-${target.id}`,
-            d: `M ${node.x} ${node.y} Q ${(node.x + target.x) / 2 + curveX} ${(node.y + target.y) / 2} ${target.x} ${target.y}`,
-            opacity: 0.12,
-            delay: node.delay + 0.08,
-          })
-        }
-      })
+    traces.push({
+      id: `left-${index}`,
+      d: `M ${leftStartX} ${y} C ${220 + index * 24} ${y - bend}, ${350 + index * 18} ${y + drift}, ${leftEndX} ${y + drift}`,
+      width: index % 2 === 0 ? 1.1 : 0.9,
+      opacity: index < 2 || index > 4 ? 0.14 : 0.22,
+      delay: 0.08 + index * 0.12,
     })
 
-    ;[1, 2, 3, 4].forEach((rowIndex, traceIndex) => {
-      const rowNodes = rows[rowIndex]
-      const innerNode = hemisphere.direction === -1 ? rowNodes[rowNodes.length - 1] : rowNodes[0]
-      const targetX = hemisphere.direction === -1 ? 620 : 820
-      const targetY = 292 + traceIndex * 82
-      traces.push({
-        id: `${hemisphere.prefix}-trace-${rowIndex}`,
-        d: `M ${innerNode.x} ${innerNode.y} Q ${hemisphere.direction === -1 ? 594 : 846} ${(innerNode.y + targetY) / 2 - 26} ${targetX} ${targetY}`,
-        opacity: 0.22,
-        delay: 0.25 + rowIndex * 0.12,
-      })
+    traces.push({
+      id: `right-${index}`,
+      d: `M ${rightStartX} ${y} C ${1220 - index * 24} ${y - bend}, ${1090 - index * 18} ${y + drift}, ${rightEndX} ${y + drift}`,
+      width: index % 2 === 0 ? 1.1 : 0.9,
+      opacity: index < 2 || index > 4 ? 0.14 : 0.22,
+      delay: 0.14 + index * 0.12,
+    })
+
+    sparks.push(
+      {
+        id: `ls-${index}`,
+        x: leftEndX,
+        y: y + drift,
+        r: index % 2 === 0 ? 1.8 : 1.2,
+        opacity: index < 2 || index > 4 ? 0.16 : 0.3,
+        delay: 0.1 + index * 0.12,
+      },
+      {
+        id: `rs-${index}`,
+        x: rightEndX,
+        y: y + drift,
+        r: index % 2 === 0 ? 1.8 : 1.2,
+        opacity: index < 2 || index > 4 ? 0.16 : 0.3,
+        delay: 0.16 + index * 0.12,
+      }
+    )
+  })
+
+  ;[
+    { id: 'bridge-top', d: 'M 610 312 C 670 284, 770 284, 830 312', delay: 0.25 },
+    { id: 'bridge-mid', d: 'M 590 450 C 670 420, 770 420, 850 450', delay: 0.5 },
+    { id: 'bridge-low', d: 'M 620 590 C 690 566, 750 566, 820 590', delay: 0.75 },
+    { id: 'crest-top', d: 'M 430 128 C 600 90, 840 90, 1010 128', delay: 0.35 },
+    { id: 'crest-bottom', d: 'M 430 770 C 600 808, 840 808, 1010 770', delay: 0.65 },
+  ].forEach((trace, index) => {
+    traces.push({
+      id: trace.id,
+      d: trace.d,
+      width: index < 3 ? 1.2 : 0.8,
+      opacity: index < 3 ? 0.18 : 0.1,
+      delay: trace.delay,
     })
   })
 
-  return { links, traces, nodes }
+  ;[
+    [614, 312],
+    [826, 312],
+    [596, 450],
+    [844, 450],
+    [624, 590],
+    [816, 590],
+    [720, 128],
+    [720, 770],
+  ].forEach(([x, y], index) => {
+    sparks.push({
+      id: `core-${index}`,
+      x,
+      y,
+      r: index < 6 ? 1.6 : 1.2,
+      opacity: index < 6 ? 0.28 : 0.18,
+      delay: 0.28 + index * 0.08,
+    })
+  })
+
+  return { traces, sparks }
 }

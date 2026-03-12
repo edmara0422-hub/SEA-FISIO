@@ -1,5 +1,6 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useState } from 'react'
 import { ArrowRight, Brain, FlaskConical, HeartPulse, Wind } from 'lucide-react'
@@ -9,8 +10,15 @@ import { HomeSection } from '@/components/sea/home-section'
 import { PerformanceBar } from '@/components/sea/performance-bar'
 import { PremiumSplash } from '@/components/sea/premium-splash'
 import { QuickAccessPills } from '@/components/sea/quick-access-pills'
-import { SimulationsGrid } from '@/components/sea/simulations-grid'
 import { TwoFacesShortcuts } from '@/components/sea/two-faces-shortcuts'
+
+const SimulationsGrid = dynamic(
+  () => import('@/components/sea/simulations-grid').then((mod) => mod.SimulationsGrid),
+  {
+    ssr: false,
+    loading: () => <SimulationsFallback />,
+  }
+)
 
 const labCards = [
   {
@@ -149,5 +157,25 @@ export default function HomePageClient() {
         </div>
       </div>
     </>
+  )
+}
+
+function SimulationsFallback() {
+  return (
+    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="md:col-span-2 rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5">
+        <div className="h-5 w-40 rounded-full bg-white/10" />
+        <div className="mt-3 h-3 w-72 max-w-full rounded-full bg-white/6" />
+        <div className="mt-5 h-72 rounded-[1.4rem] border border-white/8 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_58%)]" />
+      </div>
+      <div className="rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5">
+        <div className="h-5 w-32 rounded-full bg-white/10" />
+        <div className="mt-4 h-56 rounded-[1.4rem] border border-white/8 bg-white/[0.03]" />
+      </div>
+      <div className="rounded-[1.75rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] p-5">
+        <div className="h-5 w-32 rounded-full bg-white/10" />
+        <div className="mt-4 h-56 rounded-[1.4rem] border border-white/8 bg-white/[0.03]" />
+      </div>
+    </div>
   )
 }

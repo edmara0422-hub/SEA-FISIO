@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { Menu } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Avatar, AvatarFallback } from '@/components/ui/avatar'
 
 function getGreeting(hour: number): string {
   if (hour >= 5 && hour < 12) return 'Bom dia'
@@ -68,7 +68,6 @@ export function GreetingHeader({ userName = 'Usuario' }: GreetingHeaderProps) {
             </p>
           </div>
           <Avatar className="w-9 h-9 border-2 border-white/20 shadow-lg shadow-white/10">
-            <AvatarImage src="/placeholder-user.jpg" alt={userName} />
             <AvatarFallback className="bg-gradient-to-br from-white/20 to-white/10 text-white text-xs font-semibold">
               {userName.charAt(0).toUpperCase()}
             </AvatarFallback>
