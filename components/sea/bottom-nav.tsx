@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Compass, Home } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -17,6 +18,11 @@ export function BottomNav({
   const router = useRouter()
   const resolvedActive: Tab =
     active ?? (pathname === '/explore' || pathname.startsWith('/explore/') ? 'explorar' : 'home')
+
+  useEffect(() => {
+    router.prefetch('/sea')
+    router.prefetch('/explore')
+  }, [router])
 
   const handleSwitch = (tab: Tab) => {
     onSwitch?.(tab)
