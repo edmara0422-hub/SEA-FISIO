@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { BookOpen, ChevronRight, Cpu, HeartPulse, Brain, Wind } from 'lucide-react'
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { TopBarSEA } from '@/components/sea/top-bar-sea'
@@ -161,7 +162,7 @@ function SimulationViewport({
   label,
   icon: Icon,
 }: {
-  children: React.ReactNode
+  children: ReactNode
   label: string
   icon: typeof Brain
 }) {
