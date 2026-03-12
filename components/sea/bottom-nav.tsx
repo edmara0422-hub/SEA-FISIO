@@ -22,22 +22,12 @@ export function BottomNav({
     onSwitch?.(tab)
 
     if (!onSwitch) {
-      if (tab === 'home') {
-        window.sessionStorage.setItem('sea-skip-splash', '1')
-
-        if (resolvedActive === 'home') {
-          return
-        }
-
-        router.push('/sea')
+      if (tab === resolvedActive) {
         return
       }
 
-      if (resolvedActive === 'explorar') {
-        return
-      }
-
-      router.push('/explore')
+      window.sessionStorage.setItem('sea-nav-transition', '1')
+      router.push(tab === 'home' ? '/sea' : '/explore')
     }
   }
 
