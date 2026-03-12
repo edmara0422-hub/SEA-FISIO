@@ -26,7 +26,6 @@ export function BottomNav({
         return
       }
 
-      window.sessionStorage.setItem('sea-nav-transition', '1')
       router.push(tab === 'home' ? '/sea' : '/explore')
     }
   }

@@ -1,4 +1,4 @@
-import { BottomNav } from '@/components/sea/bottom-nav'
+import { MainShell } from '@/components/sea/main-shell'
 
 export default function MainLayout({
   children,
@@ -6,11 +6,6 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="min-h-screen bg-[#020202] text-white">
-      <main className="pb-28">
-        {children}
-      </main>
-      <BottomNav />
-    </div>
+    <MainShell>{children}</MainShell>
   )
 }

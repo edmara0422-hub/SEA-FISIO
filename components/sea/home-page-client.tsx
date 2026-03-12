@@ -1,10 +1,8 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useLayoutEffect, useState } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { PerformanceBar } from '@/components/sea/performance-bar'
-import { PremiumSplash } from '@/components/sea/premium-splash'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { TopBarSEA } from '@/components/sea/top-bar-sea'
 
@@ -17,47 +15,19 @@ const SimulationsGrid = dynamic(
 )
 
 export default function HomePageClient() {
-  const [showSplash, setShowSplash] = useState<boolean | null>(null)
-
-  useLayoutEffect(() => {
-    const fromBottomNav = window.sessionStorage.getItem('sea-nav-transition') === '1'
-    const hasEnteredApp = window.sessionStorage.getItem('sea-app-entered') === '1'
-    const navigationEntry = window.performance.getEntriesByType('navigation')[0] as
-      | PerformanceNavigationTiming
-      | undefined
-
-    if (fromBottomNav) {
-      window.sessionStorage.removeItem('sea-nav-transition')
-      window.sessionStorage.setItem('sea-app-entered', '1')
-      setShowSplash(false)
-      return
-    }
-
-    const shouldShowSplash = !hasEnteredApp || navigationEntry?.type === 'reload'
-
-    window.sessionStorage.setItem('sea-app-entered', '1')
-    setShowSplash(shouldShowSplash)
-  }, [])
-
   return (
-    <>
-      {showSplash === true ? (
-        <PremiumSplash durationMs={8200} exitHoldMs={1200} onComplete={() => setShowSplash(false)} />
-      ) : null}
+    <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
+      <SeaBackdrop />
+      <TopBarSEA />
 
-      <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
-        <SeaBackdrop />
-        <TopBarSEA />
-
-        <main className="relative z-10 px-4 pb-32 pt-24 md:px-8 md:pt-28">
-          <div className="mx-auto max-w-7xl space-y-5">
-            <GreetingClockCard />
-            <SimulationsGrid />
-            <PerformanceBar />
-          </div>
-        </main>
-      </div>
-    </>
+      <main className="relative z-10 px-4 pb-32 pt-24 md:px-8 md:pt-28">
+        <div className="mx-auto max-w-7xl space-y-5">
+          <GreetingClockCard />
+          <SimulationsGrid />
+          <PerformanceBar />
+        </div>
+      </main>
+    </div>
   )
 }
 
