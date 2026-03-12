@@ -213,32 +213,51 @@ function NeuralCanvas() {
         context.restore()
       })
 
-      context.save()
-      context.translate(centerX, centerY)
-      context.strokeStyle = 'rgba(255,255,255,0.16)'
-      context.lineWidth = 1
-      context.beginPath()
-      context.ellipse(0, 0, width * 0.16, width * 0.055, t * 0.16, 0, Math.PI * 2)
-      context.stroke()
-      context.beginPath()
-      context.ellipse(0, 0, width * 0.11, width * 0.16, -t * 0.11, 0, Math.PI * 2)
-      context.stroke()
-      context.beginPath()
-      context.ellipse(0, 0, width * 0.22, width * 0.22, t * 0.04, 0, Math.PI * 2)
-      context.stroke()
+      const centerMist = context.createLinearGradient(centerX, height * 0.16, centerX, height * 0.86)
+      centerMist.addColorStop(0, 'rgba(255,255,255,0)')
+      centerMist.addColorStop(0.24, 'rgba(255,255,255,0.05)')
+      centerMist.addColorStop(0.5, 'rgba(255,255,255,0.1)')
+      centerMist.addColorStop(0.76, 'rgba(255,255,255,0.05)')
+      centerMist.addColorStop(1, 'rgba(255,255,255,0)')
+      context.fillStyle = centerMist
+      context.fillRect(centerX - width * 0.12, height * 0.14, width * 0.24, height * 0.74)
 
-      context.shadowBlur = 36
-      context.shadowColor = 'rgba(255,255,255,0.48)'
-      const pulseRadius = 22 + Math.sin(t * 2.1) * 7
-      const core = context.createRadialGradient(0, 0, 0, 0, 0, pulseRadius)
-      core.addColorStop(0, 'rgba(255,255,255,0.98)')
-      core.addColorStop(0.24, 'rgba(222,222,222,0.72)')
-      core.addColorStop(0.62, 'rgba(135,135,135,0.18)')
-      core.addColorStop(1, 'rgba(255,255,255,0)')
-      context.fillStyle = core
-      context.beginPath()
-      context.arc(0, 0, pulseRadius, 0, Math.PI * 2)
-      context.fill()
+      context.save()
+      context.strokeStyle = 'rgba(255,255,255,0.12)'
+      context.lineWidth = 1
+      for (let i = -3; i <= 3; i += 1) {
+        const offset = i * width * 0.035
+        const swing = Math.sin(t * 0.8 + i) * height * 0.02
+        context.beginPath()
+        context.moveTo(centerX + offset, height * 0.2)
+        context.bezierCurveTo(
+          centerX + offset * 1.2,
+          height * 0.34 + swing,
+          centerX + offset * 0.7,
+          height * 0.62 - swing,
+          centerX + offset * 0.25,
+          height * 0.8
+        )
+        context.stroke()
+      }
+      context.restore()
+
+      context.save()
+      context.strokeStyle = 'rgba(255,255,255,0.08)'
+      context.lineWidth = 1
+      for (let i = 0; i < 18; i += 1) {
+        const x = centerX - width * 0.16 + i * (width * 0.018)
+        const dashHeight = 12 + (i % 4) * 5
+        const top = height * 0.28 + Math.sin(t * 1.2 + i * 0.6) * 10
+        context.beginPath()
+        context.moveTo(x, top)
+        context.lineTo(x, top + dashHeight)
+        context.stroke()
+        context.beginPath()
+        context.moveTo(x, height * 0.72 - dashHeight)
+        context.lineTo(x, height * 0.72)
+        context.stroke()
+      }
       context.restore()
 
       context.save()
@@ -356,27 +375,33 @@ function AmbientStructures() {
   return (
     <div className="pointer-events-none absolute inset-0 overflow-hidden">
       <motion.div
-        className="absolute -left-16 top-[12%] h-56 w-56 rounded-full border border-white/10 bg-[radial-gradient(circle,rgba(255,255,255,0.06),transparent_68%)] blur-[1px] md:h-72 md:w-72"
-        animate={{ rotate: 360, scale: [1, 1.04, 1] }}
-        transition={{ duration: 26, repeat: Infinity, ease: 'linear' }}
+        className="absolute -left-20 top-[10%] h-56 w-[22rem] rounded-[3rem] border border-white/8 bg-[linear-gradient(135deg,rgba(255,255,255,0.06),transparent_70%)] blur-[1px] md:h-72 md:w-[30rem]"
+        style={{ transform: 'rotate(-18deg)' }}
+        animate={{ x: [0, 12, 0], opacity: [0.26, 0.42, 0.26] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute right-[-8rem] top-[18%] h-64 w-64 rounded-full border border-white/8 bg-[radial-gradient(circle,rgba(255,255,255,0.05),transparent_70%)] md:h-80 md:w-80"
-        animate={{ rotate: -360, scale: [1, 1.03, 1] }}
-        transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+        className="absolute right-[-10rem] top-[16%] h-64 w-[24rem] rounded-[3rem] border border-white/8 bg-[linear-gradient(225deg,rgba(255,255,255,0.05),transparent_72%)] md:h-80 md:w-[32rem]"
+        style={{ transform: 'rotate(16deg)' }}
+        animate={{ x: [0, -14, 0], opacity: [0.22, 0.38, 0.22] }}
+        transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute left-[10%] bottom-[16%] h-40 w-72 rounded-full border border-white/8"
+        className="absolute left-[10%] bottom-[16%] h-40 w-72 rounded-[3rem] border border-white/8"
         style={{ transform: 'rotate(-14deg)' }}
         animate={{ x: [0, 10, 0], opacity: [0.24, 0.4, 0.24] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
       />
       <motion.div
-        className="absolute right-[8%] bottom-[18%] h-44 w-80 rounded-full border border-white/8"
+        className="absolute right-[8%] bottom-[18%] h-44 w-80 rounded-[3rem] border border-white/8"
         style={{ transform: 'rotate(12deg)' }}
         animate={{ x: [0, -12, 0], opacity: [0.22, 0.38, 0.22] }}
         transition={{ duration: 9, repeat: Infinity, ease: 'easeInOut' }}
       />
+      <div className="absolute left-[12%] top-[18%] h-14 w-px bg-gradient-to-b from-white/0 via-white/20 to-white/0" />
+      <div className="absolute right-[14%] top-[22%] h-20 w-px bg-gradient-to-b from-white/0 via-white/16 to-white/0" />
+      <div className="absolute left-[18%] bottom-[18%] h-16 w-px bg-gradient-to-b from-white/0 via-white/14 to-white/0" />
+      <div className="absolute right-[20%] bottom-[22%] h-12 w-px bg-gradient-to-b from-white/0 via-white/18 to-white/0" />
       <div className="absolute left-[8%] top-[34%] h-px w-40 bg-gradient-to-r from-white/0 via-white/16 to-white/0" />
       <div className="absolute right-[9%] top-[56%] h-px w-44 bg-gradient-to-r from-white/0 via-white/14 to-white/0" />
       <div className="absolute left-[16%] top-[24%] h-2 w-2 rounded-full bg-white/85 shadow-[0_0_12px_rgba(255,255,255,0.8)]" />
