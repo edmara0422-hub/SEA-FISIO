@@ -10,27 +10,25 @@ let splashShownForRuntime = false
 
 export function MainShell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const [showSplash, setShowSplash] = useState(false)
-
-  useEffect(() => {
+  const [showSplash, setShowSplash] = useState(() => {
     if (runtimeEntryPath === null) {
       runtimeEntryPath = pathname
     }
 
+    const shouldShowOnBoot = pathname === '/sea' && runtimeEntryPath === '/sea' && !splashShownForRuntime
+
+    if (shouldShowOnBoot) {
+      splashShownForRuntime = true
+      return true
+    }
+
+    return false
+  })
+
+  useEffect(() => {
     if (pathname !== '/sea') {
       setShowSplash(false)
-      return
     }
-
-    const shouldShowOnEntry = runtimeEntryPath === '/sea' && !splashShownForRuntime
-
-    if (shouldShowOnEntry) {
-      splashShownForRuntime = true
-      setShowSplash(true)
-      return
-    }
-
-    setShowSplash(false)
   }, [pathname])
 
   return (
