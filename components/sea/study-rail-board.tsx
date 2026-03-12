@@ -19,10 +19,16 @@ export function StudyRailBoard({
   badge,
   modules,
   icon: HeaderIcon,
+  itemLabel = 'modulo',
+  actionLabel = 'Marcar como lido',
+  readingLabel = 'em leitura',
 }: {
   badge: string
   modules: StudyModule[]
   icon: LucideIcon
+  itemLabel?: string
+  actionLabel?: string
+  readingLabel?: string
 }) {
   const [activeModuleIndex, setActiveModuleIndex] = useState<number | null>(null)
   const [moduleStatuses, setModuleStatuses] = useState<Record<string, ModuleStatus>>(() =>
@@ -34,6 +40,7 @@ export function StudyRailBoard({
 
   const completedCount = modules.filter((module) => moduleStatuses[module.id] === 'completed').length
   const journeyProgress = Math.round((completedCount / modules.length) * 100)
+  const railIds = modules.map((module) => module.id).join(', ')
 
   const selectModule = (index: number) => {
     const selectedModule = modules[index]
@@ -76,6 +83,8 @@ export function StudyRailBoard({
             onSelect={selectModule}
             progress={journeyProgress}
             completedCount={completedCount}
+            itemLabel={itemLabel}
+            railIds={railIds}
           />
         </div>
       </div>
@@ -93,7 +102,9 @@ export function StudyRailBoard({
             <div className="chrome-panel rounded-[1.8rem] p-5">
               <div className="mb-5 flex items-center justify-between gap-3">
                 <div>
-                  <p className="text-[10px] uppercase tracking-[0.24em] text-white/34">Pagina do modulo</p>
+                  <p className="text-[10px] uppercase tracking-[0.24em] text-white/34">
+                    Pagina do {itemLabel}
+                  </p>
                   <h3 className="text-sm font-semibold text-white/86">{current.title}</h3>
                 </div>
                 <div className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/52">
@@ -102,7 +113,7 @@ export function StudyRailBoard({
                     {moduleStatuses[current.id] === 'completed'
                       ? `${current.id} concluido`
                       : moduleStatuses[current.id] === 'reading'
-                        ? `${current.id} em leitura`
+                        ? `${current.id} ${readingLabel}`
                         : current.id}
                   </span>
                 </div>
@@ -139,7 +150,7 @@ export function StudyRailBoard({
                     >
                       <span className="inline-flex items-center gap-2">
                         <Check className="h-3.5 w-3.5" />
-                        Marcar como lido
+                        {actionLabel}
                       </span>
                     </button>
                   </div>
@@ -166,7 +177,7 @@ export function StudyRailBoard({
               </div>
               <p className="text-[10px] uppercase tracking-[0.24em] text-white/34">Study pronta</p>
               <h3 className="text-lg font-semibold text-white/86">
-                Selecione um modulo no trilho superior para abrir a pagina de estudo.
+                Selecione um {itemLabel} no trilho superior para abrir a pagina de estudo.
               </h3>
             </div>
           </motion.div>
@@ -183,6 +194,8 @@ function StudyProgressRail({
   onSelect,
   progress,
   completedCount,
+  itemLabel,
+  railIds,
 }: {
   modules: StudyModule[]
   activeIndex: number | null
@@ -190,6 +203,8 @@ function StudyProgressRail({
   onSelect: (index: number) => void
   progress: number
   completedCount: number
+  itemLabel: string
+  railIds: string
 }) {
   return (
     <div className="chrome-panel overflow-hidden rounded-[1.65rem] p-5 md:p-6">
@@ -197,7 +212,7 @@ function StudyProgressRail({
         <div>
           <p className="text-[10px] uppercase tracking-[0.24em] text-white/34">Rail sincronizado</p>
           <h3 className="mt-2 text-sm font-semibold text-white/84">
-            Clique em M1, M2, M3... para abrir o modulo.
+            Clique em {railIds} para abrir o {itemLabel}.
           </h3>
         </div>
         <div className="chrome-subtle rounded-full px-3 py-1.5 text-[10px] uppercase tracking-[0.18em] text-white/58">
@@ -218,6 +233,7 @@ function StudyProgressRail({
           {modules.map((module, index) => {
             const active = index === activeIndex
             const status = statuses[module.id]
+            const ModuleIcon = module.icon
 
             return (
               <button
@@ -227,28 +243,47 @@ function StudyProgressRail({
                 title={module.title}
               >
                 <motion.div
-                  className={`relative flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 md:h-12 md:w-12 ${
-                    active
-                      ? 'border-white/24 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(218,224,231,0.34)_20%,rgba(22,24,28,0.96)_100%)]'
-                      : 'border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.16)_0%,rgba(14,16,20,0.92)_100%)]'
-                  }`}
-                  whileHover={{ y: -2, scale: 1.04 }}
-                  whileTap={{ scale: 0.98 }}
+                  className="flex flex-col items-center gap-2.5"
+                  animate={{ y: [0, -7, 0] }}
+                  transition={{
+                    duration: 4.2,
+                    repeat: Number.POSITIVE_INFINITY,
+                    ease: 'easeInOut',
+                    delay: index * 0.28,
+                  }}
                 >
                   <div
-                    className={`absolute inset-[5px] rounded-full ${
-                      active
-                        ? 'bg-[radial-gradient(circle,rgba(255,255,255,0.42)_0%,rgba(186,194,203,0.16)_45%,transparent_78%)]'
-                        : 'bg-[radial-gradient(circle,rgba(255,255,255,0.16)_0%,transparent_72%)]'
-                    }`}
-                  />
-                  <span
-                    className={`relative text-[10px] font-semibold uppercase tracking-[0.16em] ${
-                      active ? 'text-white' : 'text-white/54'
+                    className={`chrome-subtle flex h-9 w-9 items-center justify-center rounded-full border transition-all duration-300 md:h-10 md:w-10 ${
+                      active ? 'border-white/18 text-white' : 'border-white/8 text-white/62'
                     }`}
                   >
-                    {module.id}
-                  </span>
+                    <ModuleIcon className="h-4 w-4" />
+                  </div>
+
+                  <motion.div
+                    className={`relative flex h-11 w-11 items-center justify-center rounded-full border transition-all duration-300 md:h-12 md:w-12 ${
+                      active
+                        ? 'border-white/24 bg-[linear-gradient(180deg,rgba(255,255,255,0.94)_0%,rgba(218,224,231,0.34)_20%,rgba(22,24,28,0.96)_100%)]'
+                        : 'border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.16)_0%,rgba(14,16,20,0.92)_100%)]'
+                    }`}
+                    whileHover={{ y: -2, scale: 1.04 }}
+                    whileTap={{ scale: 0.98 }}
+                  >
+                    <div
+                      className={`absolute inset-[5px] rounded-full ${
+                        active
+                          ? 'bg-[radial-gradient(circle,rgba(255,255,255,0.42)_0%,rgba(186,194,203,0.16)_45%,transparent_78%)]'
+                          : 'bg-[radial-gradient(circle,rgba(255,255,255,0.16)_0%,transparent_72%)]'
+                      }`}
+                    />
+                    <span
+                      className={`relative text-[10px] font-semibold uppercase tracking-[0.16em] ${
+                        active ? 'text-white' : 'text-white/54'
+                      }`}
+                    >
+                      {module.id}
+                    </span>
+                  </motion.div>
                 </motion.div>
 
                 <div

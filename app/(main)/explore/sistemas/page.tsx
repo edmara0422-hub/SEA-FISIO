@@ -1,51 +1,27 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Activity, ArrowLeft, Brain, FileText, Heart, TrendingUp } from 'lucide-react'
+import { Activity, ArrowLeft, FileText } from 'lucide-react'
 import Link from 'next/link'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { StudyRailBoard } from '@/components/sea/study-rail-board'
 
 const systemModules = [
   {
-    id: 'M1',
-    title: 'Calculadora VM',
-    icon: Activity,
-    description: 'Base do trilho ventilatorio.',
-    content:
-      'Modulo direcionado a calculos respiratorios, parametros de ventilacao, leitura de indices e organizacao progressiva da ferramenta dentro do fluxo de estudo.',
-  },
-  {
-    id: 'M2',
-    title: 'Analise Cardiaca',
-    icon: Heart,
-    description: 'Leitura cardiaca e interpretacao.',
-    content:
-      'Modulo voltado a leitura de ritmo, entendimento de intervalos, interpretacao de sinais e relacao entre comportamento do sistema e decisao clinica.',
-  },
-  {
-    id: 'M3',
-    title: 'Prontuario Eletronico',
+    id: 'S1',
+    title: 'Prontuario',
     icon: FileText,
-    description: 'Estrutura de registro e acompanhamento.',
+    description: 'Sistema base de registro e acompanhamento.',
     content:
-      'Modulo pensado para uso organizado de historico, evolucao, registro de conduta e consolidacao dos dados ao longo da jornada do aluno.',
+      'Sistema de prontuario para organizar historico, evolucao, condutas e consolidacao dos dados clinicos dentro da mesma experiencia de estudo.',
   },
   {
-    id: 'M4',
-    title: 'Analise Bioneural',
-    icon: Brain,
-    description: 'Leitura neural em camada avancada.',
+    id: 'S2',
+    title: 'Calculadoras VM',
+    icon: Activity,
+    description: 'Sistema de calculo ventilatorio.',
     content:
-      'Espaco para mapear a camada neuro, organizar correlacoes com plasticidade e entender a progressao de uma experiencia mais imersiva de estudo.',
-  },
-  {
-    id: 'M5',
-    title: 'MKT Vortex',
-    icon: TrendingUp,
-    description: 'Sistema de estrategia e crescimento.',
-    content:
-      'Modulo que estrutura visao de jornada, performance, posicionamento e camada de expansao do ecossistema sem sair da mesma experiencia de produto.',
+      'Sistema dedicado a calculos de ventilacao mecanica, parametros, indices e apoio rapido a tomada de decisao no fluxo respiratorio.',
   },
 ]
 
@@ -70,7 +46,14 @@ export default function SistemasPage() {
             </h1>
           </div>
 
-          <StudyRailBoard badge="Sistemas" modules={systemModules} icon={Activity} />
+          <StudyRailBoard
+            badge="Sistemas"
+            modules={systemModules}
+            icon={Activity}
+            itemLabel="sistema"
+            actionLabel="Marcar como visto"
+            readingLabel="em uso"
+          />
         </div>
       </main>
     </div>

@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { ArrowLeft, BookOpen, Brain, FileText, GraduationCap, Wind } from 'lucide-react'
+import { ArrowLeft, BookOpen, Brain, Heart, Wind } from 'lucide-react'
 import Link from 'next/link'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { StudyRailBoard } from '@/components/sea/study-rail-board'
@@ -9,35 +9,27 @@ import { StudyRailBoard } from '@/components/sea/study-rail-board'
 const contentModules = [
   {
     id: 'M1',
-    title: 'Ventilacao Mecanica',
-    icon: Wind,
-    description: 'Fundamentos iniciais do trilho respiratorio.',
+    title: 'Neuro',
+    icon: Brain,
+    description: 'Base do trilho neuro com leitura inicial do sistema nervoso.',
     content:
-      'Modulo dedicado a base de ventilacao mecanica, leitura inicial de curvas, parametros de ajuste e interpretacao clinica essencial para estudo progressivo.',
+      'Trilho inicial de neuro com foco em plasticidade, mapas funcionais, correlacoes clinicas e leitura estruturada da experiencia neural dentro do SEA.',
   },
   {
     id: 'M2',
-    title: 'Neuroplasticidade Avancada',
-    icon: Brain,
-    description: 'Fundamentos de reorganizacao neural.',
+    title: 'Pneumo / VM',
+    icon: Wind,
+    description: 'Base do trilho respiratorio e ventilatorio.',
     content:
-      'Modulo focado em neuroplasticidade, resposta adaptativa do sistema nervoso, estrategias de reabilitacao e leitura integrada de estimulos e funcao.',
+      'Trilho de pneumo e ventilacao mecanica com abertura para curvas, parametros, logica de ajuste e interpretacao aplicada ao estudo clinico.',
   },
   {
     id: 'M3',
-    title: 'Artigos e Sinteses',
-    icon: FileText,
-    description: 'Leitura guiada de artigos e resumos.',
+    title: 'Cardio',
+    icon: Heart,
+    description: 'Base do trilho cardiaco com leitura progressiva.',
     content:
-      'Espaco para leitura estruturada, sintese de conceitos, anotacao de pontos-chave e consolidacao do raciocinio antes de avancar no trilho.',
-  },
-  {
-    id: 'M4',
-    title: 'Trilha de Certificacao',
-    icon: GraduationCap,
-    description: 'Organizacao do progresso educacional.',
-    content:
-      'Modulo pensado para organizar progresso por blocos de estudo, checkpoints de dominio e consolidacao de conhecimento aplicado ao produto.',
+      'Trilho cardio para estudo de sinais, comportamento hemodinamico, leitura de resposta e consolidacao de raciocinio clinico dentro da plataforma.',
   },
 ]
 
