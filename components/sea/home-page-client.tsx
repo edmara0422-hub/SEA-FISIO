@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { ArrowRight, Brain, FlaskConical, HeartPulse, Wind } from 'lucide-react'
 import { GreetingHeader } from '@/components/sea/greeting-header'
 import { GlassCard } from '@/components/sea/glass-card'
@@ -34,24 +34,12 @@ const labCards = [
 ]
 
 export default function HomePageClient() {
-  const [checkedSplash, setCheckedSplash] = useState(false)
-  const [showSplash, setShowSplash] = useState(false)
-
-  useEffect(() => {
-    const hasSeenSplash = window.sessionStorage.getItem('sea-splash-seen') === '1'
-    setShowSplash(!hasSeenSplash)
-    setCheckedSplash(true)
-  }, [])
+  const [showSplash, setShowSplash] = useState(true)
 
   return (
     <>
-      {checkedSplash && showSplash ? (
-        <PremiumSplash
-          redirectTo={null}
-          durationMs={8200}
-          exitHoldMs={1200}
-          onComplete={() => setShowSplash(false)}
-        />
+      {showSplash ? (
+        <PremiumSplash durationMs={8200} exitHoldMs={1200} onComplete={() => setShowSplash(false)} />
       ) : null}
 
       <div className="min-h-screen overflow-x-hidden bg-background pb-28 text-foreground">

@@ -1,5 +1,5 @@
-import { PremiumSplash } from '@/components/sea/premium-splash'
+import { redirect } from 'next/navigation'
 
 export default function RootPage() {
-  return <PremiumSplash />
+  redirect('/sea')
 }
