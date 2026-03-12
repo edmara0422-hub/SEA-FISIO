@@ -121,6 +121,10 @@
     font-family: 'Poppins', 'Avenir Next', 'Segoe UI', sans-serif;
   }
 
+  body.sea-splash-active {
+    overflow: hidden;
+  }
+
   a {
     color: inherit;
     text-decoration: none;
@@ -186,6 +190,12 @@
   .bg-gradient-radial {
     background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
   }
+}
+
+body.sea-splash-active [data-sea-bottom-nav='true'] {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(120%);
 }
 
 @keyframes pulse-glow {

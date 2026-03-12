@@ -41,8 +41,8 @@ export default function HomePageClient() {
       {showSplash ? (
         <PremiumSplash
           redirectTo={null}
-          durationMs={5600}
-          exitHoldMs={1100}
+          durationMs={7800}
+          exitHoldMs={1500}
           onComplete={() => setShowSplash(false)}
         />
       ) : null}
