@@ -20,10 +20,19 @@ export default function HomePageClient() {
   const [showSplash, setShowSplash] = useState<boolean | null>(null)
 
   useLayoutEffect(() => {
+    const skipSplash = window.sessionStorage.getItem('sea-skip-splash') === '1'
     const hasEnteredApp = window.sessionStorage.getItem('sea-app-entered') === '1'
     const navigationEntry = window.performance.getEntriesByType('navigation')[0] as
       | PerformanceNavigationTiming
       | undefined
+
+    if (skipSplash) {
+      window.sessionStorage.removeItem('sea-skip-splash')
+      window.sessionStorage.setItem('sea-app-entered', '1')
+      setShowSplash(false)
+      return
+    }
+
     const shouldShowSplash = !hasEnteredApp || navigationEntry?.type === 'reload'
 
     window.sessionStorage.setItem('sea-app-entered', '1')

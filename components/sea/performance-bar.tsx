@@ -137,15 +137,15 @@ export function PerformanceBar() {
             <div className="sea-dark-glass flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-white/12">
               <Activity className="h-5 w-5 text-white/76" />
             </div>
-            <h3 className="text-xl font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
-              DASH
-            </h3>
             <div className="flex flex-wrap gap-2">
               <ActionButton icon={Sparkles} label="Modo demo" onClick={activateDemo} />
               <ActionButton icon={BarChart3} label="Calcular" onClick={calculateMetrics} />
               <ActionButton icon={RotateCcw} label="Atualizar" onClick={refreshDemo} />
               <ActionButton icon={Trash2} label="Apagar" onClick={clearDashboard} />
             </div>
+            <h3 className="text-xl font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
+              DASH
+            </h3>
           </div>
         </div>
 
@@ -156,7 +156,8 @@ export function PerformanceBar() {
           <MetricCard label="Feedbacks lidos" value={state.structured} />
         </div>
 
-        <div className="sea-dark-glass rounded-[1.7rem] p-4">
+        <div className="sea-dark-glass relative overflow-hidden rounded-[1.7rem] p-4">
+          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,255,255,0.08),transparent_24%),radial-gradient(circle_at_86%_22%,rgba(226,231,238,0.08),transparent_28%)]" />
           <div className="mb-4 flex items-center justify-between">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
               Distribuicao NPS
@@ -169,7 +170,8 @@ export function PerformanceBar() {
           <div className="grid gap-4 xl:grid-cols-[0.76fr_1.24fr]">
             <div className="grid grid-cols-3 gap-3 items-end">
               {bars.map((bar) => (
-                <div key={bar.label} className="sea-dark-glass rounded-[1.25rem] border border-white/10 px-3 py-3">
+                <div key={bar.label} className="sea-dark-glass relative overflow-hidden rounded-[1.25rem] border border-white/10 px-3 py-3">
+                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_-10%,rgba(255,255,255,0.08),transparent_34%)]" />
                   <div className="relative flex h-36 items-end justify-center overflow-hidden rounded-[0.95rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(10,10,12,0.92)_26%,rgba(2,2,3,0.98)_100%)] px-2 py-2">
                     <div className="absolute inset-x-2 bottom-2 top-2 rounded-[0.8rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_30%,rgba(255,255,255,0.02)_100%)]" />
                     <motion.div
@@ -264,13 +266,13 @@ function ActionButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center justify-center gap-1.5 rounded-[0.95rem] border border-white/12 px-3 py-2 text-[11px] font-semibold text-white/84 transition hover:text-white md:text-xs"
+      className="inline-flex items-center justify-center gap-1.5 rounded-[0.9rem] border border-white/12 px-2.5 py-1.5 text-[10px] font-semibold text-white/84 transition hover:text-white md:text-[11px]"
       style={{
         background:
           'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(10,10,12,0.92) 52%, rgba(3,3,4,0.985) 100%)',
       }}
     >
-      <Icon className="h-3.5 w-3.5" />
+      <Icon className="h-3 w-3" />
       <span>{label}</span>
     </button>
   )

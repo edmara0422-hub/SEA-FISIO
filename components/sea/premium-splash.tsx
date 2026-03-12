@@ -111,20 +111,22 @@ export function PremiumSplash({
             transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          <div className="mx-auto flex w-fit items-center justify-center -space-x-[0.05em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
-            <CutLetter
+          <div className="mx-auto flex w-fit items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
+            <SlicedLetter
               value="S"
-              cuts={[
-                { top: '30%', left: '-6%', right: '24%' },
-                { top: '63%', left: '34%', right: '-6%' },
+              slices={[
+                { clipPath: 'polygon(0 0,100% 0,100% 32%,0 26%)', x: '-0.07em', y: '-0.01em' },
+                { clipPath: 'polygon(0 28%,100% 35%,100% 64%,0 58%)', x: '0.02em', y: '0em' },
+                { clipPath: 'polygon(0 61%,100% 68%,100% 100%,0 100%)', x: '0.08em', y: '0.01em' },
               ]}
             />
             <Letter value="E" />
-            <CutLetter
+            <SlicedLetter
               value="A"
-              cuts={[
-                { top: '34%', left: '38%', right: '-6%' },
-                { top: '69%', left: '-6%', right: '42%' },
+              slices={[
+                { clipPath: 'polygon(0 0,100% 0,100% 34%,0 40%)', x: '0.08em', y: '-0.01em' },
+                { clipPath: 'polygon(0 37%,100% 31%,100% 61%,0 55%)', x: '0em', y: '0em' },
+                { clipPath: 'polygon(0 58%,100% 65%,100% 100%,0 100%)', x: '-0.08em', y: '0.02em' },
               ]}
             />
           </div>
@@ -159,28 +161,33 @@ export function PremiumSplash({
 
 function Letter({ value }: { value: string }) {
   return (
-    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.03em] text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]">
+    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.02em] text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]">
       {value}
     </span>
   )
 }
 
-function CutLetter({
+function SlicedLetter({
   value,
-  cuts,
+  slices,
 }: {
   value: string
-  cuts: Array<{ top: string; left: string; right: string }>
+  slices: Array<{ clipPath: string; x: string; y: string }>
 }) {
   return (
-    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.03em] text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]">
-      {value}
-      {cuts.map((cut, index) => (
+    <span className="relative inline-flex px-[0.02em] leading-none">
+      <span className="select-none opacity-0">{value}</span>
+      {slices.map((slice, index) => (
         <span
           key={`${value}-${index}`}
-          className="absolute h-[6%] rounded-full bg-[#010101]/96 shadow-[0_0_10px_rgba(1,1,1,0.92)]"
-          style={{ top: cut.top, left: cut.left, right: cut.right }}
-        />
+          className="absolute inset-0 inline-flex select-none bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text text-transparent drop-shadow-[0_0_18px_rgba(255,255,255,0.08)]"
+          style={{
+            clipPath: slice.clipPath,
+            transform: `translate(${slice.x}, ${slice.y})`,
+          }}
+        >
+          {value}
+        </span>
       ))}
     </span>
   )
