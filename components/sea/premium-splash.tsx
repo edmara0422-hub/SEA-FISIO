@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 // Deterministic seeded random - sempre retorna os mesmos valores
@@ -102,7 +102,17 @@ function AnimatedText({ text, delay }: { text: string; delay: number }) {
   )
 }
 
-export function PremiumSplash() {
+type PremiumSplashProps = {
+  redirectTo?: string | null
+  durationMs?: number
+  onComplete?: () => void
+}
+
+export function PremiumSplash({
+  redirectTo = '/home',
+  durationMs = 2200,
+  onComplete,
+}: PremiumSplashProps) {
   const router = useRouter()
   const [progress, setProgress] = useState(0)
   const [isMounted, setIsMounted] = useState(false)
@@ -115,19 +125,32 @@ export function PremiumSplash() {
   }, [])
 
   useEffect(() => {
+    const tickMs = 80
+    const totalSteps = Math.max(1, Math.ceil(durationMs / tickMs))
+    const increment = 100 / totalSteps
+    let completed = false
+
     const interval = setInterval(() => {
-      setProgress((p) => {
-        if (p >= 100) {
+      setProgress((current) => {
+        const next = Math.min(current + increment, 100)
+
+        if (next >= 100 && !completed) {
+          completed = true
           clearInterval(interval)
-          setTimeout(() => router.push('/home'), 500)
-          return 100
+          window.setTimeout(() => {
+            if (redirectTo) {
+              router.push(redirectTo)
+            }
+            onComplete?.()
+          }, 220)
         }
-        return p + Math.random() * 30
+
+        return next
       })
-    }, 200)
+    }, tickMs)
 
     return () => clearInterval(interval)
-  }, [router])
+  }, [durationMs, onComplete, redirectTo, router])
 
   return (
     <div className="fixed inset-0 z-50 bg-[#0a0a0a] overflow-hidden" suppressHydrationWarning>

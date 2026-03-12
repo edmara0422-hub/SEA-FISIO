@@ -1,108 +1,170 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { ArrowRight, Brain, Activity, FlaskConical, Sparkles } from 'lucide-react'
+import { ArrowRight, Brain, HeartPulse, Wind } from 'lucide-react'
 import { GreetingHeader } from '@/components/sea/greeting-header'
+import { PremiumSplash } from '@/components/sea/premium-splash'
+import { HomeSection } from '@/components/sea/home-section'
+import { QuickAccessPills } from '@/components/sea/quick-access-pills'
+import { PerformanceBar } from '@/components/sea/performance-bar'
+import { TwoFacesShortcuts } from '@/components/sea/two-faces-shortcuts'
+import { SimulationsGrid } from '@/components/sea/simulations-grid'
+import { BioneuralPanel } from '@/components/sea/bioneural-panel'
+import { AlertsPanel } from '@/components/sea/alerts-panel'
+import { BrainHeroScene } from '@/components/experience/brain-hero-scene'
+import { CardioHeroScene } from '@/components/experience/cardio-hero-scene'
+import { PneumoHeroScene } from '@/components/experience/pneumo-hero-scene'
 
-const quickLinks = [
-  {
-    href: '/explore',
-    title: 'Explorar trilhas',
-    description: 'Acesse conteudos, sistemas e modulos interativos.',
-    icon: Sparkles,
-  },
-  {
-    href: '/lab/home-v2',
-    title: 'Abrir laboratorio',
-    description: 'Entrar nas simulacoes visuais e experiencias imersivas.',
-    icon: FlaskConical,
-  },
-  {
-    href: '/sistemas/calculadora-vm',
-    title: 'Simulacao VM',
-    description: 'Ir direto para a calculadora e monitor ventilatorio.',
-    icon: Activity,
-  },
-]
+function HeroSceneFallback({
+  label,
+  tone,
+}: {
+  label: string
+  tone: 'brain' | 'cardio' | 'pneumo'
+}) {
+  const gradient =
+    tone === 'cardio'
+      ? 'from-red-500/16 via-red-300/6 to-transparent'
+      : tone === 'pneumo'
+        ? 'from-cyan-500/16 via-cyan-300/6 to-transparent'
+        : 'from-violet-500/16 via-indigo-300/6 to-transparent'
+
+  return (
+    <div className={`flex h-full items-end rounded-[1.75rem] bg-gradient-to-br ${gradient} p-5`}>
+      <div>
+        <p className="text-[11px] uppercase tracking-[0.28em] text-white/40">{label}</p>
+        <div className="mt-3 flex gap-2">
+          <span className="h-2 w-2 rounded-full bg-white/40" />
+          <span className="h-2 w-2 rounded-full bg-white/25" />
+          <span className="h-2 w-2 rounded-full bg-white/15" />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function HomePageClient() {
+  const [showSplash, setShowSplash] = useState(true)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
+
   return (
-    <div className="min-h-screen bg-[#050607] pb-28 text-white">
-      <GreetingHeader userName="Usuario" />
+    <>
+      {showSplash ? (
+        <PremiumSplash
+          redirectTo={null}
+          durationMs={1800}
+          onComplete={() => setShowSplash(false)}
+        />
+      ) : null}
 
-      <section className="px-4 pb-6 pt-4">
-        <motion.div
-          className="relative overflow-hidden rounded-[28px] border border-white/10 bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.14),transparent_42%),linear-gradient(180deg,rgba(255,255,255,0.07),rgba(255,255,255,0.02))] p-6 shadow-[0_30px_120px_rgba(0,0,0,0.45)]"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
-        >
-          <div className="absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/8 blur-3xl" />
-          <div className="absolute bottom-0 left-0 h-32 w-32 rounded-full bg-slate-300/8 blur-3xl" />
+      <div className="min-h-screen bg-[#050607] pb-28 text-white">
+        <GreetingHeader userName="Usuario" />
+        <QuickAccessPills />
 
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/6 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/60">
-              <Brain className="h-3.5 w-3.5" />
-              SEA
-            </div>
-
-            <h1 className="mt-5 max-w-xl text-3xl font-semibold leading-tight sm:text-4xl">
-              Plataforma de estudo com simulacao, calculo e laboratorio clinico.
-            </h1>
-
-            <p className="mt-3 max-w-2xl text-sm text-white/65 sm:text-base">
-              A entrada ficou leve para abrir rapido. As experiencias mais pesadas continuam
-              acessiveis sob demanda, sem travar a tela inicial.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link
-                href="/explore"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-white/90"
+        <div className="space-y-6 px-4 pb-8">
+          <HomeSection label="SEA HOME" delay={0.05}>
+            <div className="grid gap-6 lg:grid-cols-[1.35fr_0.85fr]">
+              <motion.div
+                className="overflow-hidden rounded-[2rem] border border-white/10 bg-[radial-gradient(circle_at_top,_rgba(110,132,255,0.18),_transparent_35%),linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.01))]"
+                initial={{ opacity: 0, y: 18 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.45, delay: 0.08 }}
               >
-                Entrar no app
-                <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                href="/lab/home-v2"
-                className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
-              >
-                Abrir laboratorio
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-      </section>
+                <div className="border-b border-white/10 px-6 py-5">
+                  <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.28em] text-white/60">
+                    <Brain className="h-3.5 w-3.5" />
+                    Sistema de Estudo Avancado
+                  </div>
 
-      <section className="grid gap-4 px-4">
-        {quickLinks.map((item, index) => {
-          const Icon = item.icon
+                  <h1 className="mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-white sm:text-5xl">
+                    Home SEA com splash, presenca clinica e simulacoes visiveis logo na entrada.
+                  </h1>
 
-          return (
-            <motion.div
-              key={item.href}
-              initial={{ opacity: 0, y: 14 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.08 + index * 0.08 }}
-            >
-              <Link
-                href={item.href}
-                className="group flex items-center gap-4 rounded-2xl border border-white/8 bg-white/5 p-4 transition hover:border-white/16 hover:bg-white/[0.07]"
-              >
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/7">
-                  <Icon className="h-5 w-5 text-white/80" />
+                  <p className="mt-4 max-w-2xl text-sm leading-6 text-white/62 sm:text-base">
+                    A estrutura voltou ao padrao do V0dev, mas com as cenas novas de cerebro e
+                    pulmao sustentando a linguagem tecnologica da plataforma.
+                  </p>
+
+                  <div className="mt-6 flex flex-wrap gap-3">
+                    <Link
+                      href="/explore"
+                      className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-medium text-black transition hover:bg-white/90"
+                    >
+                      Explorar o SEA
+                      <ArrowRight className="h-4 w-4" />
+                    </Link>
+                    <Link
+                      href="/sistemas/calculadora-vm"
+                      className="inline-flex items-center gap-2 rounded-full border border-white/12 bg-white/5 px-5 py-3 text-sm font-medium text-white transition hover:bg-white/10"
+                    >
+                      Abrir simulacao VM
+                    </Link>
+                  </div>
                 </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-base font-medium text-white">{item.title}</p>
-                  <p className="mt-1 text-sm text-white/55">{item.description}</p>
+
+                <div className="h-[30rem]">
+                  {isMounted ? <BrainHeroScene /> : <HeroSceneFallback label="Neuro core" tone="brain" />}
                 </div>
-                <ArrowRight className="h-4 w-4 text-white/35 transition group-hover:translate-x-0.5 group-hover:text-white/70" />
-              </Link>
-            </motion.div>
-          )
-        })}
-      </section>
-    </div>
+              </motion.div>
+
+              <div className="grid gap-6">
+                <motion.div
+                  className="overflow-hidden rounded-[2rem] border border-cyan-400/20 bg-[linear-gradient(180deg,rgba(14,165,233,0.12),rgba(255,255,255,0.03))]"
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.14 }}
+                >
+                  <div className="border-b border-white/10 px-5 py-4">
+                    <p className="text-xs uppercase tracking-[0.28em] text-cyan-200/60">Pneumo Presence</p>
+                    <h2 className="mt-2 text-xl font-semibold">Pulmao e mecanica respiratoria em foco</h2>
+                  </div>
+                  <div className="h-56">
+                    {isMounted ? <PneumoHeroScene /> : <HeroSceneFallback label="Pneumo engine" tone="pneumo" />}
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  className="overflow-hidden rounded-[2rem] border border-red-400/20 bg-[linear-gradient(180deg,rgba(255,94,94,0.12),rgba(255,255,255,0.03))]"
+                  initial={{ opacity: 0, y: 18 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.45, delay: 0.2 }}
+                >
+                  <div className="border-b border-white/10 px-5 py-4">
+                    <p className="text-xs uppercase tracking-[0.28em] text-red-200/60">Cardio Presence</p>
+                    <h2 className="mt-2 text-xl font-semibold">Atividade cardiaca como camada de sistema vivo</h2>
+                  </div>
+                  <div className="h-56">
+                    {isMounted ? <CardioHeroScene /> : <HeroSceneFallback label="Cardio engine" tone="cardio" />}
+                  </div>
+                </motion.div>
+              </div>
+            </div>
+          </HomeSection>
+
+          <PerformanceBar />
+
+          <HomeSection label="DOIS CAMINHOS" delay={0.12}>
+            <TwoFacesShortcuts />
+          </HomeSection>
+
+          <HomeSection label="SIMULACOES CLINICAS" delay={0.18}>
+            <SimulationsGrid />
+          </HomeSection>
+
+          <HomeSection label="PAINEL E ALERTAS" delay={0.24}>
+            <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
+              <BioneuralPanel />
+              <AlertsPanel />
+            </div>
+          </HomeSection>
+        </div>
+      </div>
+    </>
   )
 }
