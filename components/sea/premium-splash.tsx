@@ -308,6 +308,7 @@ export function PremiumSplash({
 }: PremiumSplashProps) {
   const router = useRouter()
   const [progress, setProgress] = useState(0)
+  const statusMessages = ['Mapeando cortex', 'Sinapses online', 'Nucleo estavel', 'Abrindo SEA']
 
   useEffect(() => {
     document.body.classList.add('sea-splash-active')
