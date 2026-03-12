@@ -5,10 +5,10 @@ import { Float } from '@react-three/drei'
 import { useRef } from 'react'
 import * as THREE from 'three'
 
-export function PneumoHeroScene() {
+export function PneumoHeroScene({ transparent = false }: { transparent?: boolean }) {
   return (
-    <Canvas camera={{ position: [0, 0, 4.6], fov: 34 }}>
-      <color attach="background" args={['#040607']} />
+    <Canvas camera={{ position: [0, 0, 4.6], fov: 34 }} gl={{ alpha: transparent, antialias: true }}>
+      {!transparent ? <color attach="background" args={['#040607']} /> : null}
       <ambientLight intensity={0.7} />
       <directionalLight position={[3, 5, 4]} intensity={1.8} color="#dffaff" />
       <pointLight position={[-2, 0, 4]} intensity={11} color="#38bdf8" distance={12} />

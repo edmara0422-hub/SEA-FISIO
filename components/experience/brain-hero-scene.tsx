@@ -1,20 +1,31 @@
 'use client'
 
+import { Suspense, useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float, Line, OrbitControls } from '@react-three/drei'
-import { useMemo, useRef } from 'react'
+import { Float, Line, OrbitControls, useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
-export function BrainHeroScene({ compact = false }: { compact?: boolean }) {
+export function BrainHeroScene({
+  compact = false,
+  transparent = false,
+}: {
+  compact?: boolean
+  transparent?: boolean
+}) {
   return (
-    <Canvas camera={{ position: [0, 0, compact ? 5.2 : 6.5], fov: compact ? 34 : 30 }}>
-      <color attach="background" args={['#040506']} />
+    <Canvas
+      camera={{ position: [0, 0, compact ? 5 : 6.2], fov: compact ? 34 : 30 }}
+      gl={{ alpha: transparent, antialias: true }}
+    >
+      {!transparent ? <color attach="background" args={['#040506']} /> : null}
       <fog attach="fog" args={['#040506', 8, 14]} />
-      <ambientLight intensity={0.55} />
+      <ambientLight intensity={0.7} />
       <directionalLight position={[3, 4, 5]} intensity={2.2} color="#eef4ff" />
-      <pointLight position={[-4, 0, 4]} intensity={18} color="#6ea5ff" distance={12} />
-      <pointLight position={[4, -2, 4]} intensity={14} color="#9f7aea" distance={12} />
-      <HeroBrain compact={compact} />
+      <pointLight position={[-4, 0, 4]} intensity={14} color="#dfe9f7" distance={12} />
+      <pointLight position={[4, -2, 4]} intensity={10} color="#bfc9d9" distance={12} />
+      <Suspense fallback={<FallbackBrain compact={compact} />}>
+        <HeroBrain compact={compact} />
+      </Suspense>
       <OrbitControls enablePan={false} enableZoom={false} autoRotate autoRotateSpeed={compact ? 0.6 : 0.4} />
     </Canvas>
   )
@@ -23,6 +34,26 @@ export function BrainHeroScene({ compact = false }: { compact?: boolean }) {
 function HeroBrain({ compact }: { compact: boolean }) {
   const groupRef = useRef<THREE.Group>(null)
   const ringRef = useRef<THREE.Group>(null)
+  const { scene } = useGLTF('/cerebro.glb')
+  const brainScene = useMemo(() => {
+    const clone = scene.clone(true)
+
+    clone.traverse((child) => {
+      if (child instanceof THREE.Mesh) {
+        child.material = new THREE.MeshPhysicalMaterial({
+          color: '#ccd2dc',
+          roughness: 0.42,
+          metalness: 0.05,
+          clearcoat: 0.38,
+          clearcoatRoughness: 0.35,
+          emissive: '#1a1f29',
+          emissiveIntensity: 0.12,
+        })
+      }
+    })
+
+    return clone
+  }, [scene])
 
   const arcs = useMemo(
     () => [
@@ -62,52 +93,8 @@ function HeroBrain({ compact }: { compact: boolean }) {
   return (
     <group ref={groupRef} scale={compact ? 0.88 : 1}>
       <Float speed={1.4} rotationIntensity={0.2} floatIntensity={0.35}>
-        <group>
-          <mesh position={[-1.0, 0.15, 0]}>
-            <sphereGeometry args={[1.35, 64, 64]} />
-            <meshPhysicalMaterial
-              color="#161a23"
-              roughness={0.46}
-              metalness={0.02}
-              transmission={0.04}
-              thickness={0.4}
-              clearcoat={0.3}
-              clearcoatRoughness={0.5}
-              sheen={0.5}
-              sheenColor="#dce7ff"
-              emissive="#0a1020"
-              emissiveIntensity={0.18}
-            />
-          </mesh>
-          <mesh position={[1.0, 0.15, 0]}>
-            <sphereGeometry args={[1.35, 64, 64]} />
-            <meshPhysicalMaterial
-              color="#151922"
-              roughness={0.48}
-              metalness={0.02}
-              transmission={0.04}
-              thickness={0.4}
-              clearcoat={0.3}
-              clearcoatRoughness={0.5}
-              sheen={0.45}
-              sheenColor="#e9edff"
-              emissive="#110a1f"
-              emissiveIntensity={0.18}
-            />
-          </mesh>
-          <mesh position={[0, -1.05, -0.28]} rotation={[0.14, 0, 0]}>
-            <cylinderGeometry args={[0.12, 0.08, 0.85, 22]} />
-            <meshStandardMaterial color="#151821" roughness={0.7} metalness={0.03} />
-          </mesh>
-
-          <mesh position={[-1.0, 0.15, 0]} scale={[1.01, 1.02, 1.01]}>
-            <sphereGeometry args={[1.35, 32, 32]} />
-            <meshBasicMaterial color="#cfdcff" wireframe transparent opacity={0.16} />
-          </mesh>
-          <mesh position={[1.0, 0.15, 0]} scale={[1.01, 1.02, 1.01]}>
-            <sphereGeometry args={[1.35, 32, 32]} />
-            <meshBasicMaterial color="#f3f5ff" wireframe transparent opacity={0.15} />
-          </mesh>
+        <group position={[0, 0.1, 0]} rotation={[0.08, Math.PI, 0]} scale={compact ? 1.45 : 1.8}>
+          <primitive object={brainScene} />
         </group>
       </Float>
 
@@ -135,3 +122,24 @@ function HeroBrain({ compact }: { compact: boolean }) {
     </group>
   )
 }
+
+function FallbackBrain({ compact }: { compact: boolean }) {
+  return (
+    <group scale={compact ? 0.88 : 1}>
+      <mesh position={[-1.0, 0.15, 0]}>
+        <sphereGeometry args={[1.35, 64, 64]} />
+        <meshPhysicalMaterial color="#161a23" roughness={0.46} clearcoat={0.3} emissive="#10141c" emissiveIntensity={0.16} />
+      </mesh>
+      <mesh position={[1.0, 0.15, 0]}>
+        <sphereGeometry args={[1.35, 64, 64]} />
+        <meshPhysicalMaterial color="#151922" roughness={0.46} clearcoat={0.3} emissive="#10141c" emissiveIntensity={0.16} />
+      </mesh>
+      <mesh position={[0, -1.05, -0.28]} rotation={[0.14, 0, 0]}>
+        <cylinderGeometry args={[0.12, 0.08, 0.85, 22]} />
+        <meshStandardMaterial color="#151821" roughness={0.7} metalness={0.03} />
+      </mesh>
+    </group>
+  )
+}
+
+useGLTF.preload('/cerebro.glb')
