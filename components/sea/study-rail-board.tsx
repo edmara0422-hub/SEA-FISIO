@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { ReactNode, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Check, Radar } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -12,7 +12,8 @@ export type StudyModule = {
   title: string
   icon: LucideIcon
   description: string
-  content: string
+  content?: string
+  panel?: ReactNode
 }
 
 export function StudyRailBoard({
@@ -27,7 +28,7 @@ export function StudyRailBoard({
   modules: StudyModule[]
   icon: LucideIcon
   itemLabel?: string
-  actionLabel?: string
+  actionLabel?: string | null
   readingLabel?: string
 }) {
   const [activeModuleIndex, setActiveModuleIndex] = useState<number | null>(null)
@@ -144,20 +145,26 @@ export function StudyRailBoard({
                       </div>
                     </div>
 
-                    <button
-                      onClick={completeCurrentModule}
-                      className="chrome-subtle rounded-[1.1rem] border border-white/12 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72 transition-all duration-300 hover:text-white"
-                    >
-                      <span className="inline-flex items-center gap-2">
-                        <Check className="h-3.5 w-3.5" />
-                        {actionLabel}
-                      </span>
-                    </button>
+                    {actionLabel ? (
+                      <button
+                        onClick={completeCurrentModule}
+                        className="chrome-subtle rounded-[1.1rem] border border-white/12 px-4 py-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72 transition-all duration-300 hover:text-white"
+                      >
+                        <span className="inline-flex items-center gap-2">
+                          <Check className="h-3.5 w-3.5" />
+                          {actionLabel}
+                        </span>
+                      </button>
+                    ) : null}
                   </div>
 
-                  <div className="chrome-panel rounded-[1.45rem] p-5">
-                    <p className="text-sm leading-relaxed text-white/72">{current.content}</p>
-                  </div>
+                  {current.panel ? (
+                    current.panel
+                  ) : (
+                    <div className="chrome-panel rounded-[1.45rem] p-5">
+                      <p className="text-sm leading-relaxed text-white/72">{current.content}</p>
+                    </div>
+                  )}
                 </div>
               </motion.div>
             </div>
