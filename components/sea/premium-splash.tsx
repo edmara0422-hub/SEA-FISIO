@@ -9,7 +9,7 @@ type PremiumSplashProps = {
   exitHoldMs?: number
 }
 
-type Trace = {
+type CoreTrace = {
   id: string
   d: string
   width: number
@@ -17,7 +17,7 @@ type Trace = {
   delay: number
 }
 
-type Spark = {
+type CoreSpark = {
   id: string
   x: number
   y: number
@@ -26,9 +26,9 @@ type Spark = {
   delay: number
 }
 
-type NeuralVeilData = {
-  traces: Trace[]
-  sparks: Spark[]
+type CoreField = {
+  traces: CoreTrace[]
+  sparks: CoreSpark[]
 }
 
 export function PremiumSplash({
@@ -37,7 +37,7 @@ export function PremiumSplash({
   exitHoldMs = 1200,
 }: PremiumSplashProps) {
   const [progress, setProgress] = useState(0)
-  const veil = useMemo(() => buildNeuralVeil(), [])
+  const field = useMemo(() => buildCoreField(), [])
 
   useEffect(() => {
     document.documentElement.classList.add('sea-splash-active')
@@ -95,7 +95,7 @@ export function PremiumSplash({
         transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
       />
 
-      <NeuralVeil veil={veil} />
+      <CoreAura field={field} />
       <CentralPulseColumn />
 
       <div className="relative flex h-full items-center justify-center px-6">
@@ -141,7 +141,7 @@ export function PremiumSplash({
   )
 }
 
-function NeuralVeil({ veil }: { veil: NeuralVeilData }) {
+function CoreAura({ field }: { field: CoreField }) {
   return (
     <svg
       aria-hidden
@@ -150,22 +150,22 @@ function NeuralVeil({ veil }: { veil: NeuralVeilData }) {
       preserveAspectRatio="xMidYMid slice"
     >
       <defs>
-        <linearGradient id="sea-trace" x1="0%" y1="0%" x2="100%" y2="0%">
+        <linearGradient id="sea-core-trace" x1="0%" y1="0%" x2="100%" y2="0%">
           <stop offset="0%" stopColor="rgba(120,120,120,0.04)" />
-          <stop offset="48%" stopColor="rgba(255,255,255,0.75)" />
-          <stop offset="100%" stopColor="rgba(120,120,120,0.05)" />
+          <stop offset="50%" stopColor="rgba(255,255,255,0.76)" />
+          <stop offset="100%" stopColor="rgba(120,120,120,0.04)" />
         </linearGradient>
       </defs>
 
-      {veil.traces.map((trace) => (
+      {field.traces.map((trace) => (
         <motion.path
           key={trace.id}
           d={trace.d}
           fill="none"
-          stroke="url(#sea-trace)"
+          stroke="url(#sea-core-trace)"
           strokeWidth={trace.width}
           strokeLinecap="round"
-          initial={{ opacity: 0, pathLength: 0.2 }}
+          initial={{ opacity: 0, pathLength: 0.35 }}
           animate={{ opacity: [trace.opacity * 0.55, trace.opacity, trace.opacity * 0.6], pathLength: 1 }}
           transition={{
             duration: 5.5,
@@ -177,7 +177,7 @@ function NeuralVeil({ veil }: { veil: NeuralVeilData }) {
         />
       ))}
 
-      {veil.sparks.map((spark) => (
+      {field.sparks.map((spark) => (
         <motion.circle
           key={spark.id}
           cx={spark.x}
@@ -185,7 +185,7 @@ function NeuralVeil({ veil }: { veil: NeuralVeilData }) {
           r={spark.r}
           fill="#ffffff"
           initial={{ opacity: 0 }}
-          animate={{ opacity: [spark.opacity * 0.35, spark.opacity, spark.opacity * 0.4], scale: [0.96, 1.12, 1] }}
+          animate={{ opacity: [spark.opacity * 0.35, spark.opacity, spark.opacity * 0.42], scale: [0.94, 1.14, 1] }}
           transition={{
             duration: 4.2,
             delay: spark.delay,
@@ -234,90 +234,28 @@ function CentralPulseColumn() {
   )
 }
 
-function buildNeuralVeil(): NeuralVeilData {
-  const traces: Trace[] = []
-  const sparks: Spark[] = []
-  const anchors = [150, 245, 340, 470, 600, 715]
+function buildCoreField(): CoreField {
+  const traces: CoreTrace[] = [
+    { id: 'bridge-top', d: 'M 610 312 C 670 284, 770 284, 830 312', width: 1.2, opacity: 0.18, delay: 0.25 },
+    { id: 'bridge-mid', d: 'M 590 450 C 670 420, 770 420, 850 450', width: 1.2, opacity: 0.2, delay: 0.5 },
+    { id: 'bridge-low', d: 'M 620 590 C 690 566, 750 566, 820 590', width: 1.2, opacity: 0.18, delay: 0.75 },
+    { id: 'crest-top', d: 'M 470 168 C 620 122, 820 122, 970 168', width: 0.9, opacity: 0.1, delay: 0.35 },
+    { id: 'crest-bottom', d: 'M 470 732 C 620 778, 820 778, 970 732', width: 0.9, opacity: 0.1, delay: 0.65 },
+    { id: 'inner-top', d: 'M 650 246 C 690 226, 750 226, 790 246', width: 0.8, opacity: 0.14, delay: 0.2 },
+    { id: 'inner-bottom', d: 'M 650 654 C 690 674, 750 674, 790 654', width: 0.8, opacity: 0.14, delay: 0.55 },
+  ]
 
-  anchors.forEach((y, index) => {
-    const leftStartX = 70 + index * 18
-    const leftEndX = 520 + index * 10
-    const rightStartX = 1370 - index * 18
-    const rightEndX = 920 - index * 10
-    const bend = 70 + index * 8
-    const drift = (index % 2 === 0 ? -1 : 1) * (18 + index * 2)
-
-    traces.push({
-      id: `left-${index}`,
-      d: `M ${leftStartX} ${y} C ${220 + index * 24} ${y - bend}, ${350 + index * 18} ${y + drift}, ${leftEndX} ${y + drift}`,
-      width: index % 2 === 0 ? 1.1 : 0.9,
-      opacity: index < 2 || index > 4 ? 0.14 : 0.22,
-      delay: 0.08 + index * 0.12,
-    })
-
-    traces.push({
-      id: `right-${index}`,
-      d: `M ${rightStartX} ${y} C ${1220 - index * 24} ${y - bend}, ${1090 - index * 18} ${y + drift}, ${rightEndX} ${y + drift}`,
-      width: index % 2 === 0 ? 1.1 : 0.9,
-      opacity: index < 2 || index > 4 ? 0.14 : 0.22,
-      delay: 0.14 + index * 0.12,
-    })
-
-    sparks.push(
-      {
-        id: `ls-${index}`,
-        x: leftEndX,
-        y: y + drift,
-        r: index % 2 === 0 ? 1.8 : 1.2,
-        opacity: index < 2 || index > 4 ? 0.16 : 0.3,
-        delay: 0.1 + index * 0.12,
-      },
-      {
-        id: `rs-${index}`,
-        x: rightEndX,
-        y: y + drift,
-        r: index % 2 === 0 ? 1.8 : 1.2,
-        opacity: index < 2 || index > 4 ? 0.16 : 0.3,
-        delay: 0.16 + index * 0.12,
-      }
-    )
-  })
-
-  ;[
-    { id: 'bridge-top', d: 'M 610 312 C 670 284, 770 284, 830 312', delay: 0.25 },
-    { id: 'bridge-mid', d: 'M 590 450 C 670 420, 770 420, 850 450', delay: 0.5 },
-    { id: 'bridge-low', d: 'M 620 590 C 690 566, 750 566, 820 590', delay: 0.75 },
-    { id: 'crest-top', d: 'M 430 128 C 600 90, 840 90, 1010 128', delay: 0.35 },
-    { id: 'crest-bottom', d: 'M 430 770 C 600 808, 840 808, 1010 770', delay: 0.65 },
-  ].forEach((trace, index) => {
-    traces.push({
-      id: trace.id,
-      d: trace.d,
-      width: index < 3 ? 1.2 : 0.8,
-      opacity: index < 3 ? 0.18 : 0.1,
-      delay: trace.delay,
-    })
-  })
-
-  ;[
-    [614, 312],
-    [826, 312],
-    [596, 450],
-    [844, 450],
-    [624, 590],
-    [816, 590],
-    [720, 128],
-    [720, 770],
-  ].forEach(([x, y], index) => {
-    sparks.push({
-      id: `core-${index}`,
-      x,
-      y,
-      r: index < 6 ? 1.6 : 1.2,
-      opacity: index < 6 ? 0.28 : 0.18,
-      delay: 0.28 + index * 0.08,
-    })
-  })
+  const sparks: CoreSpark[] = [
+    { id: 'core-1', x: 614, y: 312, r: 1.6, opacity: 0.28, delay: 0.28 },
+    { id: 'core-2', x: 826, y: 312, r: 1.6, opacity: 0.28, delay: 0.36 },
+    { id: 'core-3', x: 596, y: 450, r: 1.8, opacity: 0.3, delay: 0.44 },
+    { id: 'core-4', x: 844, y: 450, r: 1.8, opacity: 0.3, delay: 0.52 },
+    { id: 'core-5', x: 624, y: 590, r: 1.6, opacity: 0.28, delay: 0.6 },
+    { id: 'core-6', x: 816, y: 590, r: 1.6, opacity: 0.28, delay: 0.68 },
+    { id: 'core-7', x: 720, y: 168, r: 1.2, opacity: 0.18, delay: 0.76 },
+    { id: 'core-8', x: 720, y: 732, r: 1.2, opacity: 0.18, delay: 0.84 },
+    { id: 'core-9', x: 720, y: 450, r: 2.2, opacity: 0.36, delay: 0.3 },
+  ]
 
   return { traces, sparks }
 }
