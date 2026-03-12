@@ -98,7 +98,7 @@ export function PremiumSplash({
       <CoreAura field={field} />
       <CentralPulseColumn />
 
-      <div className="relative flex h-full items-center justify-center px-6">
+      <div className="relative flex h-full items-center justify-center px-4">
         <motion.div
           className="pointer-events-none relative text-center"
           initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
@@ -110,9 +110,13 @@ export function PremiumSplash({
             animate={{ opacity: [0.34, 0.54, 0.38] }}
             transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
           />
-          <h1 className="relative bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text text-[4.8rem] font-semibold tracking-[-0.18em] text-transparent sm:text-[6.4rem] md:text-[8.5rem]">
-            SEA
-          </h1>
+
+          <div className="relative flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
+            <CutLetter value="S" cuts={[{ top: '30%', left: '-8%', right: '26%' }, { top: '63%', left: '34%', right: '-8%' }]} />
+            <Letter value="E" />
+            <CutLetter value="A" cuts={[{ top: '34%', left: '38%', right: '-8%' }, { top: '69%', left: '-8%', right: '44%' }]} />
+          </div>
+
           <motion.div
             className="mx-auto mt-5 h-px w-24 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.78),transparent)]"
             animate={{ opacity: [0.3, 0.82, 0.3], scaleX: [0.95, 1.1, 0.95] }}
@@ -138,6 +142,35 @@ export function PremiumSplash({
         </div>
       </motion.div>
     </div>
+  )
+}
+
+function Letter({ value }: { value: string }) {
+  return (
+    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.02em] text-transparent">
+      {value}
+    </span>
+  )
+}
+
+function CutLetter({
+  value,
+  cuts,
+}: {
+  value: string
+  cuts: Array<{ top: string; left: string; right: string }>
+}) {
+  return (
+    <span className="relative inline-flex bg-[linear-gradient(180deg,#ffffff_0%,#dddddd_45%,#848484_100%)] bg-clip-text px-[0.02em] text-transparent">
+      {value}
+      {cuts.map((cut, index) => (
+        <span
+          key={`${value}-${index}`}
+          className="absolute h-[6%] rounded-full bg-[#020202]/96 shadow-[0_0_10px_rgba(2,2,2,0.9)]"
+          style={{ top: cut.top, left: cut.left, right: cut.right }}
+        />
+      ))}
+    </span>
   )
 }
 
