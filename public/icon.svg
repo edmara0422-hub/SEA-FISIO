@@ -11,7 +11,7 @@
     </linearGradient>
   </defs>
   <rect width="180" height="180" rx="40" fill="url(#sea-bg)" />
-  <rect x="10" y="10" width="160" height="160" rx="32" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" />
+  <rect x="10" y="10" width="160" height="160" rx="32" stroke="#FFFFFF" stroke-opacity="0.12" stroke-width="1.5" />
   <text
     x="90"
     y="106"

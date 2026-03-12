@@ -111,7 +111,7 @@ export function PremiumSplash({
             transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
           />
 
-          <div className="relative flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
+          <div className="relative flex items-center justify-center -space-x-[0.08em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
             <CutLetter value="S" cuts={[{ top: '30%', left: '-8%', right: '26%' }, { top: '63%', left: '34%', right: '-8%' }]} />
             <Letter value="E" />
             <CutLetter value="A" cuts={[{ top: '34%', left: '38%', right: '-8%' }, { top: '69%', left: '-8%', right: '44%' }]} />
