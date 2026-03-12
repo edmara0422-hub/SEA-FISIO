@@ -1,52 +1,144 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
-import { CardioExperience } from '@/components/sea/cardio-experience'
-import { PneumoExperience } from '@/components/sea/pneumo-experience'
-import { NeuroExperience } from '@/components/sea/neuro-experience'
+import { Brain, HeartPulse, Wind } from 'lucide-react'
 import { GlassPanel } from '@/components/sea/glass-panel'
+
+const BrainHeroScene = dynamic(
+  () => import('@/components/experience/brain-hero-scene').then((mod) => mod.BrainHeroScene),
+  { ssr: false, loading: () => <SceneFallback label="Neuro core" tone="brain" /> }
+)
+
+const CardioHeroScene = dynamic(
+  () => import('@/components/experience/cardio-hero-scene').then((mod) => mod.CardioHeroScene),
+  { ssr: false, loading: () => <SceneFallback label="Cardio engine" tone="cardio" /> }
+)
+
+const PneumoHeroScene = dynamic(
+  () => import('@/components/experience/pneumo-hero-scene').then((mod) => mod.PneumoHeroScene),
+  { ssr: false, loading: () => <SceneFallback label="Pneumo engine" tone="pneumo" /> }
+)
+
+function SceneFallback({
+  label,
+  tone,
+}: {
+  label: string
+  tone: 'brain' | 'cardio' | 'pneumo'
+}) {
+  const gradient =
+    tone === 'cardio'
+      ? 'from-rose-500/18 via-red-300/8 to-transparent'
+      : tone === 'pneumo'
+        ? 'from-cyan-500/18 via-sky-300/8 to-transparent'
+        : 'from-violet-500/18 via-indigo-300/8 to-transparent'
+
+  return (
+    <div className={`flex h-full items-end rounded-2xl bg-gradient-to-br ${gradient} p-5`}>
+      <div>
+        <p className="text-[11px] uppercase tracking-[0.28em] text-white/40">{label}</p>
+        <div className="mt-3 flex gap-2">
+          <span className="h-2 w-2 rounded-full bg-white/40" />
+          <span className="h-2 w-2 rounded-full bg-white/25" />
+          <span className="h-2 w-2 rounded-full bg-white/15" />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function SimulationsGrid() {
   return (
     <motion.div
-      className="grid grid-cols-1 md:grid-cols-2 gap-4"
+      className="grid grid-cols-1 gap-4 md:grid-cols-2"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.1 }}
     >
-      {/* ECG Simulation */}
       <GlassPanel
-        title="Simulação Cardíaca"
-        subtitle="ECG em Tempo Real"
+        title="Presenca Neural"
+        subtitle="Cortex vivo, atividade sensorial e resposta visual em tempo real"
+        className="md:col-span-2"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.15 }}
       >
-        <CardioExperience bpm={72} isActive={true} />
+        <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-4">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/55">
+              <Brain className="h-3.5 w-3.5 text-violet-200" />
+              Neuro Core
+            </div>
+            <p className="text-sm leading-6 text-white/58">
+              O cerebro novo continua como ponto central da home, mas encaixado dentro da
+              estrutura SEA original.
+            </p>
+            <div className="grid grid-cols-2 gap-3">
+              <MetricCard label="Frequencia" value="10 Hz" />
+              <MetricCard label="Modo" value="Imersivo" />
+            </div>
+          </div>
+          <div className="h-72 overflow-hidden rounded-2xl border border-white/10 bg-black/30">
+            <BrainHeroScene compact />
+          </div>
+        </div>
       </GlassPanel>
 
-      {/* Ventilation Simulation */}
       <GlassPanel
-        title="Ventilação Mecânica"
-        subtitle="Pressão das Vias Aéreas"
+        title="Ventilacao Mecanica"
+        subtitle="Pulmao dinamico e mecanica ventilatoria"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
       >
-        <PneumoExperience respiratoryRate={16} peep={5} peakPressure={25} isActive={true} />
+        <div className="space-y-4">
+          <div className="h-56 overflow-hidden rounded-2xl border border-cyan-400/20 bg-black/30">
+            <PneumoHeroScene />
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="inline-flex items-center gap-2 text-sm text-white/65">
+              <Wind className="h-4 w-4 text-cyan-300" />
+              Pulmao e loops
+            </div>
+            <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cyan-200/80">
+              PEEP 5
+            </span>
+          </div>
+        </div>
       </GlassPanel>
 
-      {/* Neural Activity */}
       <GlassPanel
-        title="Atividade Neural"
-        subtitle="Ritmo Alfa (10 Hz)"
-        className="md:col-span-2"
+        title="Simulacao Cardiaca"
+        subtitle="Atividade cardiaca como sistema visual vivo"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.25 }}
       >
-        <NeuroExperience frequency={10} duration={3} isActive={true} />
+        <div className="space-y-4">
+          <div className="h-56 overflow-hidden rounded-2xl border border-rose-400/20 bg-black/30">
+            <CardioHeroScene />
+          </div>
+          <div className="flex items-center justify-between gap-3">
+            <div className="inline-flex items-center gap-2 text-sm text-white/65">
+              <HeartPulse className="h-4 w-4 text-rose-300" />
+              Cardio engine
+            </div>
+            <span className="rounded-full border border-rose-400/20 bg-rose-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-rose-200/80">
+              72 BPM
+            </span>
+          </div>
+        </div>
       </GlassPanel>
     </motion.div>
+  )
+}
+
+function MetricCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-3">
+      <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">{label}</p>
+      <p className="mt-2 text-base font-semibold text-white">{value}</p>
+    </div>
   )
 }

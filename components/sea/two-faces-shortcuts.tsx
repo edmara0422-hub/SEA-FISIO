@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { BookOpen, Cpu, ArrowRight } from 'lucide-react'
 
 export function TwoFacesShortcuts() {
