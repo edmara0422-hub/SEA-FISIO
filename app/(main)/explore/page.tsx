@@ -1,9 +1,10 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, ChevronRight, Cpu, HeartPulse, Brain, Wind } from 'lucide-react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
@@ -26,6 +27,13 @@ const PneumoHeroScene = dynamic(
 const railTransition = { duration: 0.55, ease: [0.16, 1, 0.3, 1] as const }
 
 export default function ExplorePage() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.prefetch('/explore/conteudos')
+    router.prefetch('/explore/sistemas')
+  }, [router])
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
@@ -79,20 +87,24 @@ function FeatureCard({
   tone: 'conteudos' | 'sistemas'
   delay: number
 }) {
+  const router = useRouter()
+
   const accent =
     tone === 'conteudos'
       ? 'from-white/14 via-white/4 to-transparent'
       : 'from-white/12 via-slate-200/5 to-transparent'
 
   return (
-    <Link href={href} className="block min-w-[86%] snap-center md:min-w-[48%] xl:min-w-[32%]">
-      <motion.article
-        className="sea-dark-glass group relative h-[26rem] overflow-hidden rounded-[2rem] border border-white/12 p-6"
-        initial={{ opacity: 0, x: 36 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ ...railTransition, delay }}
-        whileTap={{ scale: 0.985 }}
-      >
+    <motion.button
+      type="button"
+      onClick={() => router.push(href)}
+      className="block min-w-[86%] snap-center text-left md:min-w-[48%] xl:min-w-[32%]"
+      initial={{ opacity: 0, x: 36 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ ...railTransition, delay }}
+      whileTap={{ scale: 0.985 }}
+    >
+      <article className="sea-dark-glass group relative h-[26rem] overflow-hidden rounded-[2rem] border border-white/12 p-6">
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(255,255,255,0.08),transparent_26%)]" />
         <div className={`pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b ${accent}`} />
         <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12)_0%,transparent_68%)] blur-3xl" />
@@ -113,8 +125,8 @@ function FeatureCard({
             </h2>
           </div>
         </div>
-      </motion.article>
-    </Link>
+      </article>
+    </motion.button>
   )
 }
 
