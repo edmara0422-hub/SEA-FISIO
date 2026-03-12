@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 type PremiumSplashProps = {
@@ -27,6 +27,7 @@ export function PremiumSplash({
 }: PremiumSplashProps) {
   const router = useRouter()
   const [progress, setProgress] = useState(0)
+  const completedRef = useRef(false)
 
   const halos = useMemo<PositionedElement[]>(
     () => [
@@ -110,6 +111,11 @@ export function PremiumSplash({
       }
 
       exitTimer = window.setTimeout(() => {
+        if (!completedRef.current) {
+          completedRef.current = true
+          window.sessionStorage.setItem('sea-splash-seen', '1')
+        }
+
         if (redirectTo) {
           router.push(redirectTo)
         }

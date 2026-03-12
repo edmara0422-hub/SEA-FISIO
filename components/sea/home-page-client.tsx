@@ -1,14 +1,16 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { ArrowRight, Brain, FlaskConical, HeartPulse, Wind } from 'lucide-react'
 import { GreetingHeader } from '@/components/sea/greeting-header'
+import { GlassCard } from '@/components/sea/glass-card'
 import { HomeSection } from '@/components/sea/home-section'
 import { PerformanceBar } from '@/components/sea/performance-bar'
+import { PremiumSplash } from '@/components/sea/premium-splash'
 import { QuickAccessPills } from '@/components/sea/quick-access-pills'
 import { SimulationsGrid } from '@/components/sea/simulations-grid'
 import { TwoFacesShortcuts } from '@/components/sea/two-faces-shortcuts'
-import { GlassCard } from '@/components/sea/glass-card'
 
 const labCards = [
   {
@@ -32,8 +34,27 @@ const labCards = [
 ]
 
 export default function HomePageClient() {
+  const [checkedSplash, setCheckedSplash] = useState(false)
+  const [showSplash, setShowSplash] = useState(false)
+
+  useEffect(() => {
+    const hasSeenSplash = window.sessionStorage.getItem('sea-splash-seen') === '1'
+    setShowSplash(!hasSeenSplash)
+    setCheckedSplash(true)
+  }, [])
+
   return (
-    <div className="min-h-screen overflow-x-hidden bg-background pb-28 text-foreground">
+    <>
+      {checkedSplash && showSplash ? (
+        <PremiumSplash
+          redirectTo={null}
+          durationMs={8200}
+          exitHoldMs={1200}
+          onComplete={() => setShowSplash(false)}
+        />
+      ) : null}
+
+      <div className="min-h-screen overflow-x-hidden bg-background pb-28 text-foreground">
         <GreetingHeader userName="Edmar" />
         <QuickAccessPills />
 
@@ -139,5 +160,6 @@ export default function HomePageClient() {
           </HomeSection>
         </div>
       </div>
+    </>
   )
 }
