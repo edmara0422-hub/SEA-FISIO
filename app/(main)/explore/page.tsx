@@ -7,7 +7,6 @@ import Link from 'next/link'
 import type { ReactNode } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
-import { TopBarSEA } from '@/components/sea/top-bar-sea'
 
 const BrainHeroScene = dynamic(
   () => import('@/components/experience/brain-hero-scene').then((mod) => mod.BrainHeroScene),
@@ -30,9 +29,8 @@ export default function ExplorePage() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
-      <TopBarSEA />
 
-      <main className="relative z-10 px-4 pb-32 pt-24 md:px-8 md:pt-28">
+      <main className="relative z-10 px-4 pb-32 pt-8 md:px-8 md:pt-10">
         <div className="mx-auto max-w-7xl space-y-5">
           <GreetingClockCard />
 
