@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import { motion } from 'framer-motion'
-import { BarChart3, MessageSquareQuote, RotateCcw, Sparkles, Trash2 } from 'lucide-react'
+import { Activity, BarChart3, RotateCcw, Sparkles, Trash2 } from 'lucide-react'
 
 type DemoState = {
   mode: 'demo' | 'clean'
@@ -102,6 +102,19 @@ export function PerformanceBar() {
     })
   }
 
+  const pulsePath = useMemo(() => {
+    const fidelity = state.mode === 'clean' ? 8 : state.fidelity
+    const nps = state.mode === 'clean' ? 4 : state.nps
+    const responses = state.mode === 'clean' ? 6 : Math.min(state.responses, 90)
+    const structured = state.mode === 'clean' ? 5 : Math.min(state.structured, 80)
+
+    return `M 0 108
+      C 34 ${110 - fidelity * 0.4}, 58 ${102 - nps * 0.35}, 88 ${100 - fidelity * 0.25}
+      S 150 ${88 - responses * 0.18}, 188 ${82 - structured * 0.16}
+      S 250 ${76 - fidelity * 0.14}, 290 ${66 - nps * 0.12}
+      S 354 ${70 - responses * 0.1}, 420 ${58 - fidelity * 0.08}`
+  }, [state.fidelity, state.mode, state.nps, state.responses, state.structured])
+
   return (
     <motion.section
       className="sea-dark-glass rounded-[2rem] p-5 md:p-6"
@@ -113,14 +126,11 @@ export function PerformanceBar() {
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex items-center gap-4">
             <div className="flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-white/12 bg-black/24">
-              <MessageSquareQuote className="h-5 w-5 text-white/76" />
+              <Activity className="h-5 w-5 text-white/76" />
             </div>
             <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/46">
-                Feedback estruturado + NPS
-              </p>
-              <h3 className="mt-1 text-xl font-semibold text-white md:text-[1.6rem]">
-                Dashboard demo de fidelidade
+              <h3 className="text-xl font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
+                DASH
               </h3>
             </div>
           </div>
@@ -133,66 +143,87 @@ export function PerformanceBar() {
           </div>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-4 gap-2">
           <MetricCard label="NPS" value={state.nps} suffix={state.mode === 'clean' ? '' : ''} />
           <MetricCard label="Fidelidade" value={state.fidelity} suffix={state.mode === 'clean' ? '' : '%'} />
           <MetricCard label="Respostas" value={state.responses} />
           <MetricCard label="Feedbacks lidos" value={state.structured} />
         </div>
 
-        <div className="grid gap-4 xl:grid-cols-[1.05fr_0.95fr]">
-          <div className="rounded-[1.6rem] border border-white/10 bg-black/18 p-4">
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-                Distribuicao NPS
-              </p>
-              <p className="text-xs text-white/52">
-                {state.mode === 'clean' ? 'Sem base' : `${totalBars} respostas classificadas`}
-              </p>
-            </div>
-
-            <div className="grid gap-3">
-              {bars.map((bar) => (
-                <div key={bar.label}>
-                  <div className="mb-1 flex items-center justify-between text-xs text-white/58">
-                    <span>{bar.label}</span>
-                    <span>{bar.value}</span>
-                  </div>
-                  <div className="h-3 overflow-hidden rounded-full bg-white/[0.05]">
-                    <div
-                      className={`h-full rounded-full ${bar.tone}`}
-                      style={{ width: `${(bar.value / totalBars) * 100}%` }}
-                    />
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="sea-dark-glass rounded-[1.7rem] p-4">
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
+              Distribuicao NPS
+            </p>
+            <p className="text-xs text-white/52">
+              {state.mode === 'clean' ? 'Sem base' : 'Simulacao ativa'}
+            </p>
           </div>
 
-          <div className="rounded-[1.6rem] border border-white/10 bg-black/18 p-4">
-            <div className="mb-4 flex items-center justify-between">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-                Leitura de feedback
-              </p>
-              <p className="text-xs text-white/52">
-                {state.mode === 'clean' ? 'Vazio' : 'Modo demo ativo'}
-              </p>
-            </div>
-
-            <div className="grid gap-3 sm:grid-cols-2">
-              {[
-                state.mode === 'clean' ? 'Sem retorno clinico' : 'Clareza alta no neuro core',
-                state.mode === 'clean' ? 'Sem retorno de UX' : 'Pneumo com boa leitura visual',
-                state.mode === 'clean' ? 'Sem retorno de valor' : 'Cardio com resposta imediata',
-                state.mode === 'clean' ? 'Sem retorno de fluxo' : 'Shell cromada com boa percepcao',
-              ].map((item) => (
-                <div
-                  key={item}
-                  className="rounded-[1.2rem] border border-white/10 bg-white/[0.04] px-4 py-3 text-sm text-white/72"
-                >
-                  {item}
+          <div className="grid gap-4 xl:grid-cols-[0.76fr_1.24fr]">
+            <div className="grid grid-cols-3 gap-3 items-end">
+              {bars.map((bar) => (
+                <div key={bar.label} className="rounded-[1.25rem] border border-white/10 bg-black/18 px-3 py-3">
+                  <div className="flex h-36 items-end justify-center">
+                    <motion.div
+                      className={`w-full rounded-[1rem] ${bar.tone}`}
+                      initial={{ height: 0 }}
+                      animate={{ height: `${state.mode === 'clean' ? 10 : (bar.value / totalBars) * 100}%` }}
+                      transition={{ duration: 0.6, ease: 'easeOut' }}
+                    />
+                  </div>
+                  <div className="mt-3 text-center">
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-white/40">{bar.label}</p>
+                    <p className="mt-1 text-lg font-semibold text-white">{bar.value}</p>
+                  </div>
                 </div>
               ))}
+            </div>
+
+            <div className="rounded-[1.3rem] border border-white/10 bg-black/18 p-4">
+              <div className="mb-3 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
+                <span>Pulso de fidelidade</span>
+                <span>{state.mode === 'clean' ? 'Standby' : 'Demo realtime'}</span>
+              </div>
+
+              <svg viewBox="0 0 420 140" className="h-40 w-full">
+                <defs>
+                  <linearGradient id="dashStroke" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.28)" />
+                    <stop offset="50%" stopColor="rgba(255,255,255,0.92)" />
+                    <stop offset="100%" stopColor="rgba(255,255,255,0.22)" />
+                  </linearGradient>
+                  <linearGradient id="dashFill" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.24)" />
+                    <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                  </linearGradient>
+                </defs>
+
+                <path
+                  d={`${pulsePath} L 420 140 L 0 140 Z`}
+                  fill="url(#dashFill)"
+                  opacity="0.7"
+                />
+                <path
+                  d={pulsePath}
+                  fill="none"
+                  stroke="url(#dashStroke)"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+                {[72, 164, 256, 348].map((x) => (
+                  <line
+                    key={x}
+                    x1={x}
+                    x2={x}
+                    y1="12"
+                    y2="132"
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeDasharray="6 10"
+                  />
+                ))}
+              </svg>
             </div>
           </div>
         </div>
@@ -236,11 +267,11 @@ function MetricCard({
   suffix?: string
 }) {
   return (
-    <div className="rounded-[1.45rem] border border-white/10 bg-black/18 p-4">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">{label}</p>
-      <p className="mt-3 text-3xl font-semibold text-white">
+    <div className="sea-dark-glass rounded-[1.25rem] px-3 py-3">
+      <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/42">{label}</p>
+      <p className="mt-2 text-xl font-semibold text-white md:text-2xl">
         {value}
-        <span className="text-base text-white/54">{suffix}</span>
+        <span className="text-sm text-white/54">{suffix}</span>
       </p>
     </div>
   )
