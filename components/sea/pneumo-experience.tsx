@@ -19,6 +19,11 @@ export function PneumoExperience({
 }: PneumoExperienceProps) {
   const [vmData, setVmData] = useState<Array<{ time: number; pressure: number }>>([])
 
+  const formatTooltipValue = (value: string | number) => {
+    const numericValue = typeof value === 'number' ? value : Number(value)
+    return Number.isFinite(numericValue) ? numericValue.toFixed(2) : String(value)
+  }
+
   useEffect(() => {
     if (!isActive) return
 
@@ -72,7 +77,7 @@ export function PneumoExperience({
                 backgroundColor: 'rgba(10, 10, 10, 0.9)',
                 border: '1px solid rgba(255,255,255,0.2)',
               }}
-              formatter={(value: number) => value.toFixed(2)}
+              formatter={(value) => formatTooltipValue(value)}
             />
             <Line
               type="monotone"

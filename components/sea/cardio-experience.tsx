@@ -12,6 +12,11 @@ interface CardioExperienceProps {
 export function CardioExperience({ bpm = 72, isActive = true }: CardioExperienceProps) {
   const [ecgData, setEcgData] = useState<Array<{ time: number; ecg: number }>>([])
 
+  const formatTooltipValue = (value: string | number) => {
+    const numericValue = typeof value === 'number' ? value : Number(value)
+    return Number.isFinite(numericValue) ? numericValue.toFixed(3) : String(value)
+  }
+
   useEffect(() => {
     if (!isActive) return
 
@@ -63,7 +68,7 @@ export function CardioExperience({ bpm = 72, isActive = true }: CardioExperience
                 backgroundColor: 'rgba(10, 10, 10, 0.9)',
                 border: '1px solid rgba(255,255,255,0.2)',
               }}
-              formatter={(value: number) => value.toFixed(3)}
+              formatter={(value) => formatTooltipValue(value)}
             />
             <Line
               type="monotone"

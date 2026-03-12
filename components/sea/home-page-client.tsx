@@ -1,7 +1,8 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Brain, HeartPulse, Wind } from 'lucide-react'
 import { GreetingHeader } from '@/components/sea/greeting-header'
@@ -10,12 +11,6 @@ import { HomeSection } from '@/components/sea/home-section'
 import { QuickAccessPills } from '@/components/sea/quick-access-pills'
 import { PerformanceBar } from '@/components/sea/performance-bar'
 import { TwoFacesShortcuts } from '@/components/sea/two-faces-shortcuts'
-import { SimulationsGrid } from '@/components/sea/simulations-grid'
-import { BioneuralPanel } from '@/components/sea/bioneural-panel'
-import { AlertsPanel } from '@/components/sea/alerts-panel'
-import { BrainHeroScene } from '@/components/experience/brain-hero-scene'
-import { CardioHeroScene } from '@/components/experience/cardio-hero-scene'
-import { PneumoHeroScene } from '@/components/experience/pneumo-hero-scene'
 
 function HeroSceneFallback({
   label,
@@ -45,13 +40,44 @@ function HeroSceneFallback({
   )
 }
 
+const BrainHeroScene = dynamic(
+  () => import('@/components/experience/brain-hero-scene').then((mod) => mod.BrainHeroScene),
+  { ssr: false, loading: () => <HeroSceneFallback label="Neuro core" tone="brain" /> }
+)
+
+const CardioHeroScene = dynamic(
+  () => import('@/components/experience/cardio-hero-scene').then((mod) => mod.CardioHeroScene),
+  { ssr: false, loading: () => <HeroSceneFallback label="Cardio engine" tone="cardio" /> }
+)
+
+const PneumoHeroScene = dynamic(
+  () => import('@/components/experience/pneumo-hero-scene').then((mod) => mod.PneumoHeroScene),
+  { ssr: false, loading: () => <HeroSceneFallback label="Pneumo engine" tone="pneumo" /> }
+)
+
+const systemCards = [
+  {
+    href: '/lab/neuro-v2',
+    title: 'Neuro Lab',
+    description: 'Cena cerebral e leitura de sinais em ambiente imersivo.',
+    icon: Brain,
+  },
+  {
+    href: '/lab/vmi-v2',
+    title: 'VMI Lab',
+    description: 'Pulmao, loops e mecanica ventilatoria em fluxo continuo.',
+    icon: Wind,
+  },
+  {
+    href: '/lab/cardio-v2',
+    title: 'Cardio Lab',
+    description: 'Ritmo, ECG e atividade cardiaca com camada visual viva.',
+    icon: HeartPulse,
+  },
+]
+
 export default function HomePageClient() {
   const [showSplash, setShowSplash] = useState(true)
-  const [isMounted, setIsMounted] = useState(false)
-
-  useEffect(() => {
-    setIsMounted(true)
-  }, [])
 
   return (
     <>
@@ -109,7 +135,7 @@ export default function HomePageClient() {
                 </div>
 
                 <div className="h-[30rem]">
-                  {isMounted ? <BrainHeroScene /> : <HeroSceneFallback label="Neuro core" tone="brain" />}
+                  <BrainHeroScene />
                 </div>
               </motion.div>
 
@@ -125,7 +151,7 @@ export default function HomePageClient() {
                     <h2 className="mt-2 text-xl font-semibold">Pulmao e mecanica respiratoria em foco</h2>
                   </div>
                   <div className="h-56">
-                    {isMounted ? <PneumoHeroScene /> : <HeroSceneFallback label="Pneumo engine" tone="pneumo" />}
+                    <PneumoHeroScene />
                   </div>
                 </motion.div>
 
@@ -140,7 +166,7 @@ export default function HomePageClient() {
                     <h2 className="mt-2 text-xl font-semibold">Atividade cardiaca como camada de sistema vivo</h2>
                   </div>
                   <div className="h-56">
-                    {isMounted ? <CardioHeroScene /> : <HeroSceneFallback label="Cardio engine" tone="cardio" />}
+                    <CardioHeroScene />
                   </div>
                 </motion.div>
               </div>
@@ -153,14 +179,34 @@ export default function HomePageClient() {
             <TwoFacesShortcuts />
           </HomeSection>
 
-          <HomeSection label="SIMULACOES CLINICAS" delay={0.18}>
-            <SimulationsGrid />
-          </HomeSection>
+          <HomeSection label="LABS E SISTEMAS" delay={0.18}>
+            <div className="grid gap-4 lg:grid-cols-3">
+              {systemCards.map((card, index) => {
+                const Icon = card.icon
 
-          <HomeSection label="PAINEL E ALERTAS" delay={0.24}>
-            <div className="grid gap-4 lg:grid-cols-[1.15fr_0.85fr]">
-              <BioneuralPanel />
-              <AlertsPanel />
+                return (
+                  <motion.div
+                    key={card.href}
+                    initial={{ opacity: 0, y: 16 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.35, delay: 0.22 + index * 0.06 }}
+                  >
+                    <Link
+                      href={card.href}
+                      className="group flex h-full items-center gap-4 rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-5 transition hover:border-white/20 hover:bg-white/[0.07]"
+                    >
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/6">
+                        <Icon className="h-5 w-5 text-white/80" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-base font-medium text-white">{card.title}</p>
+                        <p className="mt-1 text-sm text-white/55">{card.description}</p>
+                      </div>
+                      <ArrowRight className="h-4 w-4 text-white/35 transition group-hover:translate-x-0.5 group-hover:text-white/70" />
+                    </Link>
+                  </motion.div>
+                )
+              })}
             </div>
           </HomeSection>
         </div>
