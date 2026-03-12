@@ -31,7 +31,7 @@ export function AuthForm() {
       }))
     }
     
-    router.push('/home')
+    router.push('/sea')
   }
 
   return (

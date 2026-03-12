@@ -17,7 +17,7 @@ export default function LabLayout({
       <div className="border-b border-white/10 bg-black/30 backdrop-blur-xl">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-3 px-4 py-4">
           <Link
-            href="/home"
+            href="/sea"
             className="rounded-full border border-white/10 px-4 py-2 text-xs uppercase tracking-[0.28em] text-white/60 transition hover:border-white/20 hover:text-white"
           >
             SEA

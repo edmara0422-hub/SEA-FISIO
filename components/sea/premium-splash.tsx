@@ -109,7 +109,7 @@ type PremiumSplashProps = {
 }
 
 export function PremiumSplash({
-  redirectTo = '/home',
+  redirectTo = '/sea',
   durationMs = 2200,
   onComplete,
 }: PremiumSplashProps) {
