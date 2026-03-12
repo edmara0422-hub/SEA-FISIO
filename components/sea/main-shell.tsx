@@ -13,10 +13,6 @@ export function MainShell({ children }: { children: ReactNode }) {
   const [showSplash, setShowSplash] = useState(false)
 
   useEffect(() => {
-    const navigationEntry = window.performance.getEntriesByType('navigation')[0] as
-      | PerformanceNavigationTiming
-      | undefined
-
     if (runtimeEntryPath === null) {
       runtimeEntryPath = pathname
     }
@@ -26,11 +22,7 @@ export function MainShell({ children }: { children: ReactNode }) {
       return
     }
 
-    const isHardLoad =
-      navigationEntry?.type === 'reload' ||
-      (navigationEntry?.type === 'navigate' && runtimeEntryPath === '/sea')
-
-    const shouldShowOnEntry = isHardLoad && !splashShownForRuntime
+    const shouldShowOnEntry = runtimeEntryPath === '/sea' && !splashShownForRuntime
 
     if (shouldShowOnEntry) {
       splashShownForRuntime = true
