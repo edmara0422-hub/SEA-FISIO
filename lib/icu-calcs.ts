@@ -61,6 +61,96 @@ export function interpRSBI(v: number): { t: string; c: string } | null {
   return { t: "Alto risco de falha", c: "#f87171" };
 }
 
+export function analisarGaso(params: {
+  gasoPH: number
+  gasoPaCO2: number
+  gasoHCO3: number
+}): { tipo: string; origem: string; comp: string; cor: string; full: string } | null {
+  const pH = Number(params.gasoPH)
+  const co2 = Number(params.gasoPaCO2)
+  const hco3 = Number(params.gasoHCO3)
+
+  if ([pH, co2, hco3].some((value) => Number.isNaN(value))) {
+    return null
+  }
+
+  let tipo = "Normal"
+  let origem = ""
+  let comp = ""
+
+  if (pH < 7.35) {
+    tipo = "Acidose"
+    if (co2 > 45 && hco3 < 22) {
+      origem = "Mista"
+      comp = "Nao compensada"
+    } else if (co2 > 45) {
+      origem = "Respiratoria"
+      comp = hco3 > 26 ? "Parcial" : "Nao compensada"
+    } else if (hco3 < 22) {
+      origem = "Metabolica"
+      comp = co2 < 35 ? "Parcial" : "Nao compensada"
+    }
+  } else if (pH > 7.45) {
+    tipo = "Alcalose"
+    if (co2 < 35 && hco3 > 26) {
+      origem = "Mista"
+      comp = "Nao compensada"
+    } else if (co2 < 35) {
+      origem = "Respiratoria"
+      comp = hco3 < 22 ? "Parcial" : "Nao compensada"
+    } else if (hco3 > 26) {
+      origem = "Metabolica"
+      comp = co2 > 45 ? "Parcial" : "Nao compensada"
+    }
+  }
+
+  let cor = "#4ade80"
+  if (tipo !== "Normal") cor = "#facc15"
+  if (origem === "Mista" || comp === "Nao compensada") cor = "#fb923c"
+  if (pH < 7.2 || pH > 7.6) cor = "#f87171"
+
+  return {
+    tipo,
+    origem,
+    comp,
+    cor,
+    full: `${tipo}${origem ? ` ${origem}` : ""}${comp ? ` - ${comp}` : ""}`,
+  }
+}
+
+export function interpP01(v: number): { t: string; c: string } | null {
+  const value = Number(v)
+  if (Number.isNaN(value)) return null
+  if (value >= 1.5 && value <= 3.5) return { t: "Drive normal (1.5-3.5)", c: "#4ade80" }
+  if (value < 1.0) return { t: "Drive hipo (<1.0)", c: "#f87171" }
+  if (value < 1.5) return { t: "Drive baixo-normal", c: "#facc15" }
+  if (value <= 4.0) return { t: "Drive levemente elevado", c: "#facc15" }
+  return { t: "Drive hiper (>4.0)", c: "#f87171" }
+}
+
+export function interpPocc(v: number): { t: string; c: string } | null {
+  const value = Number(v)
+  if (Number.isNaN(value)) return null
+  if (value >= 5 && value <= 10) return { t: "Normal (5-10)", c: "#4ade80" }
+  if (value < 5) return { t: "Baixo (<5)", c: "#facc15" }
+  return { t: "Elevado (>10)", c: "#fb923c" }
+}
+
+export function calcPmusc(pocc: number): number | null {
+  const value = Number(pocc)
+  if (Number.isNaN(value)) return null
+  return Math.abs(0.75 * value)
+}
+
+export function interpPmusc(v: number): { t: string; c: string } | null {
+  const value = Number(v)
+  if (Number.isNaN(value)) return null
+  if (value < 5) return { t: "Superassistencia (<5)", c: "#60a5fa" }
+  if (value <= 10) return { t: "Protecao diafragmatica (5-10)", c: "#4ade80" }
+  if (value <= 13) return { t: "Esforco moderado (10-13)", c: "#facc15" }
+  return { t: "Esforco excessivo (>13)", c: "#f87171" }
+}
+
 export type PatientData = {
   id?: string;
   leito?: string;

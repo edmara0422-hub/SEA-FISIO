@@ -3,7 +3,7 @@ import path from 'node:path'
 import vm from 'node:vm'
 
 const root = process.cwd()
-const files = [
+const sideEffectFiles = [
   'icu-cardiovascular.js',
   'icu-functional.js',
   'icu-infections-sepsis.js',
@@ -12,7 +12,6 @@ const files = [
   'icu-populations.js',
   'icu-respiratory.js',
   'icu-trauma.js',
-  'icu.js',
 ]
 
 const noop = () => {}
@@ -49,10 +48,19 @@ const sandbox = {
 sandbox.window = sandbox
 vm.createContext(sandbox)
 
-for (const file of files) {
+for (const file of sideEffectFiles) {
   const source = fs.readFileSync(path.join(root, file), 'utf8')
   vm.runInContext(source, sandbox, { filename: file })
 }
+
+const icuSource = fs.readFileSync(path.join(root, 'icu.js'), 'utf8')
+const match = icuSource.match(/var clinicalSystems=(\[[\s\S]*?\]);\n\nvar refExpSys=/)
+
+if (!match) {
+  throw new Error('clinicalSystems block not found in icu.js')
+}
+
+vm.runInContext(`clinicalSystems = ${match[1]}`, sandbox, { filename: 'icu-clinical-systems.js' })
 
 const systems = Array.isArray(sandbox.clinicalSystems) ? sandbox.clinicalSystems : []
 const output = `export const ICU_REFERENCE_SYSTEMS = ${JSON.stringify(systems, null, 2)} as const\n`
