@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useLayoutEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { BottomNav } from '@/components/sea/bottom-nav'
 import { PremiumSplash } from '@/components/sea/premium-splash'
@@ -10,29 +10,35 @@ let splashShownForRuntime = false
 
 export function MainShell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
-  const [showSplash, setShowSplash] = useState(() => {
+  const [showSplash, setShowSplash] = useState<boolean | null>(pathname === '/sea' ? null : false)
+
+  useLayoutEffect(() => {
     if (runtimeEntryPath === null) {
       runtimeEntryPath = pathname
     }
 
-    const shouldShowOnBoot = pathname === '/sea' && runtimeEntryPath === '/sea' && !splashShownForRuntime
+    if (pathname !== '/sea') {
+      setShowSplash(false)
+      return
+    }
+
+    const shouldShowOnBoot = runtimeEntryPath === '/sea' && !splashShownForRuntime
 
     if (shouldShowOnBoot) {
       splashShownForRuntime = true
-      return true
+      setShowSplash(true)
+      return
     }
 
-    return false
-  })
-
-  useEffect(() => {
-    if (pathname !== '/sea') {
-      setShowSplash(false)
-    }
+    setShowSplash(false)
   }, [pathname])
 
   return (
     <>
+      {pathname === '/sea' && showSplash === null ? (
+        <div className="fixed inset-0 z-[89] bg-[#010101]" />
+      ) : null}
+
       {pathname === '/sea' && showSplash ? (
         <PremiumSplash durationMs={8200} exitHoldMs={1200} onComplete={() => setShowSplash(false)} />
       ) : null}
