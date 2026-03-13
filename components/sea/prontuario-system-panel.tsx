@@ -37,10 +37,12 @@ import {
   interpRSBI,
   type BNMEntry,
   type DVAEntry,
+  type GasometryHistoryEntry,
   type ImageExamEntry,
   type LabExamEntry,
   type PatientData,
   type SedativeEntry,
+  type VMHistoryEntry,
 } from '@/lib/icu-calcs'
 
 type PanelView = 'records' | 'reference' | 'archive'
@@ -73,12 +75,11 @@ const STATUS_OPTIONS = [
 
 const VIA_OPTIONS = [
   ['', '--'],
+  ['O2', 'O2 / Cateter'],
   ['TOT', 'TOT'],
-  ['TQT-VM', 'TQT em VM'],
-  ['TQT-ESP', 'TQT em espontanea'],
+  ['TQT', 'TQT'],
   ['VNI', 'VNI'],
   ['CNAF', 'CNAF'],
-  ['Cateter', 'Cateter'],
 ] as const
 
 const VM_OPTIONS = [
@@ -325,6 +326,15 @@ function calcSF(spo2: string, fio2: string) {
   return sat / (fi / 100)
 }
 
+function calcResist(pico: string, plato: string, fluxo: string) {
+  const pi = parseNumber(pico)
+  const pl = parseNumber(plato)
+  const fl = parseNumber(fluxo)
+  if (!pi || !pl) return null
+  if (fl > 0) return (pi - pl) / (fl / 60)
+  return pi - pl
+}
+
 function ActionButton({
   icon: Icon,
   label,
@@ -455,6 +465,7 @@ export function ProntuarioSystemPanel() {
     )
     const rsbi = calcRSBI(parseNumber(currentRecord.fr), parseNumber(currentRecord.vc))
     const rsbiInterp = rsbi ? interpRSBI(rsbi) : null
+    const raw = calcResist(currentRecord.ppico, currentRecord.pplato, currentRecord.fluxo)
     const gaso = analisarGaso({
       gasoPH: parseNumber(currentRecord.gasoPH),
       gasoPaCO2: parseNumber(currentRecord.gasoPaCO2),
@@ -485,6 +496,7 @@ export function ProntuarioSystemPanel() {
       glasgow,
       rsbi,
       rsbiInterp,
+      raw,
       gaso,
       p01Interp,
       poccInterp,
@@ -561,6 +573,143 @@ export function ProntuarioSystemPanel() {
     updateCurrentRecord((record) => ({
       ...record,
       [key]: (record[key] as Array<Record<string, string>>).filter((_, itemIndex) => itemIndex !== index),
+    }))
+  }
+
+  const clearRespFields = () => {
+    updateCurrentRecord((record) => ({
+      ...record,
+      tipoVia: '',
+      dataTOT: '',
+      dataTQT: '',
+      dataExtubacao: '',
+      horaExtubacao: '',
+      dataReIOT: '',
+      horaReIOT: '',
+      dataDecanulacao: '',
+      horaDecanulacao: '',
+      dataDescVM: '',
+      horaDescVM: '',
+      modoVM: '',
+      vt: '',
+      vc: '',
+      ve: '',
+      fr: '',
+      peep: '',
+      fio2: '',
+      fluxo: '',
+      trigger: '',
+      ti: '',
+      ie: '',
+      ppico: '',
+      pplato: '',
+      pmean: '',
+      ps: '',
+      ciclagem: '',
+      p01: '',
+      pocc: '',
+      pmusc: '',
+      ipap: '',
+      epap: '',
+      interfaceVNI: 'facial',
+    }))
+  }
+
+  const clearGaso = () => {
+    updateCurrentRecord((record) => ({
+      ...record,
+      gasoData: '',
+      gasoHora: '',
+      gasoPH: '',
+      gasoPaCO2: '',
+      gasoPaO2: '',
+      gasoHCO3: '',
+      gasoBE: '',
+      gasoSaO2: '',
+      gasoLactato: '',
+      gasoFiO2: '',
+      gasoObs: '',
+      sfSpO2: '',
+      sfFiO2: '',
+    }))
+  }
+
+  const saveGaso = () => {
+    if (!currentRecord) return
+
+    const entry: GasometryHistoryEntry = {
+      ts: nowIso(),
+      data: currentRecord.gasoData,
+      hora: currentRecord.gasoHora,
+      pH: currentRecord.gasoPH,
+      paCO2: currentRecord.gasoPaCO2,
+      paO2: currentRecord.gasoPaO2,
+      hco3: currentRecord.gasoHCO3,
+      be: currentRecord.gasoBE,
+      sao2: currentRecord.gasoSaO2,
+      lactato: currentRecord.gasoLactato,
+      fio2: currentRecord.gasoFiO2,
+      sf: calculations?.sf ? calculations.sf.toFixed(0) : '',
+      pf: calculations?.pf ? calculations.pf.toFixed(0) : '',
+      analise: calculations?.gaso?.full || '',
+      obs: currentRecord.gasoObs,
+    }
+
+    if (!entry.pH && !entry.paCO2 && !entry.paO2) return
+
+    updateCurrentRecord((record) => ({
+      ...record,
+      gasometrias: [entry, ...record.gasometrias],
+    }))
+  }
+
+  const deleteGaso = (index: number) => {
+    updateCurrentRecord((record) => ({
+      ...record,
+      gasometrias: record.gasometrias.filter((_, itemIndex) => itemIndex !== index),
+    }))
+  }
+
+  const saveVM = () => {
+    if (!currentRecord) return
+
+    const entry: VMHistoryEntry = {
+      ts: nowIso(),
+      modo: currentRecord.modoVM,
+      vt: currentRecord.vt,
+      vc: currentRecord.vc,
+      fr: currentRecord.fr,
+      peep: currentRecord.peep,
+      fio2: currentRecord.fio2,
+      fluxo: currentRecord.fluxo,
+      trigger: currentRecord.trigger,
+      ti: currentRecord.ti,
+      ie: currentRecord.ie,
+      ppico: currentRecord.ppico,
+      pplato: currentRecord.pplato,
+      pmean: currentRecord.pmean,
+      ps: currentRecord.ps,
+      p01: currentRecord.p01,
+      pocc: currentRecord.pocc,
+      pmusc: calculations?.pmusc ? calculations.pmusc.toFixed(1) : currentRecord.pmusc,
+      dp: calculations?.dp ? calculations.dp.toFixed(1) : '',
+      cest: calculations?.cest ? calculations.cest.toFixed(1) : '',
+      raw: calculations?.raw ? calculations.raw.toFixed(1) : '',
+    }
+
+    if (!entry.modo && !entry.vt && !entry.ps) return
+
+    updateCurrentRecord((record) => ({
+      ...record,
+      pmusc: entry.pmusc,
+      vmHist: [entry, ...record.vmHist],
+    }))
+  }
+
+  const deleteVM = (index: number) => {
+    updateCurrentRecord((record) => ({
+      ...record,
+      vmHist: record.vmHist.filter((_, itemIndex) => itemIndex !== index),
     }))
   }
 
@@ -1424,7 +1573,7 @@ export function ProntuarioSystemPanel() {
                     Eventos de via aerea
                   </p>
                   <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
-                    {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
+                    {currentRecord.tipoVia === 'TOT' && (
                       <>
                         <FieldShell label="Data IOT" span="xl:col-span-2">
                           <input
@@ -1469,7 +1618,7 @@ export function ProntuarioSystemPanel() {
                       </>
                     )}
 
-                    {currentRecord.tipoVia.startsWith('TQT') && (
+                    {currentRecord.tipoVia === 'TQT' && (
                       <>
                         <FieldShell label="Data TQT" span="xl:col-span-2">
                           <input
@@ -1495,33 +1644,31 @@ export function ProntuarioSystemPanel() {
                             onChange={(event) => setField('horaDecanulacao', event.target.value)}
                           />
                         </FieldShell>
-                        {currentRecord.tipoVia === 'TQT-VM' ? (
-                          <>
-                            <FieldShell label="Desconexao VM">
-                              <input
-                                className={INPUT_CLASS}
-                                type="date"
-                                value={currentRecord.dataDescVM}
-                                onChange={(event) => setField('dataDescVM', event.target.value)}
-                              />
-                            </FieldShell>
-                            <FieldShell label="Hora desc. VM">
-                              <input
-                                className={INPUT_CLASS}
-                                type="time"
-                                value={currentRecord.horaDescVM}
-                                onChange={(event) => setField('horaDescVM', event.target.value)}
-                              />
-                            </FieldShell>
-                          </>
-                        ) : null}
+                        <>
+                          <FieldShell label="Desconexao VM">
+                            <input
+                              className={INPUT_CLASS}
+                              type="date"
+                              value={currentRecord.dataDescVM}
+                              onChange={(event) => setField('dataDescVM', event.target.value)}
+                            />
+                          </FieldShell>
+                          <FieldShell label="Hora desc. VM">
+                            <input
+                              className={INPUT_CLASS}
+                              type="time"
+                              value={currentRecord.horaDescVM}
+                              onChange={(event) => setField('horaDescVM', event.target.value)}
+                            />
+                          </FieldShell>
+                        </>
                       </>
                     )}
                   </div>
 
-                  {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia.startsWith('TQT')) && (
+                  {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TQT') && (
                     <div className="mt-4 grid gap-3 md:grid-cols-3">
-                      {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
+                      {currentRecord.tipoVia === 'TOT' && (
                         <MetricChip
                           label="Dias TOT"
                           value={calculations?.daysTOT !== null && calculations?.daysTOT !== undefined ? `D${calculations.daysTOT}` : '--'}
@@ -1529,7 +1676,7 @@ export function ProntuarioSystemPanel() {
                           color={calculations?.daysTOT && calculations.daysTOT >= 7 ? '#f87171' : '#60a5fa'}
                         />
                       )}
-                      {currentRecord.tipoVia.startsWith('TQT') && (
+                      {currentRecord.tipoVia === 'TQT' && (
                         <MetricChip
                           label="Dias TQT"
                           value={calculations?.daysTQT !== null && calculations?.daysTQT !== undefined ? `D${calculations.daysTQT}` : '--'}
@@ -1560,6 +1707,9 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                     <FieldShell label="FiO2">
                       <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                    </FieldShell>
+                    <FieldShell label="Fluxo">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.fluxo} onChange={(event) => setField('fluxo', event.target.value)} placeholder="60" />
                     </FieldShell>
                     <FieldShell label="Trigger">
                       <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2 / 2L" />
@@ -1611,6 +1761,97 @@ export function ProntuarioSystemPanel() {
                       </FieldShell>
                     </div>
                   )}
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      onClick={saveVM}
+                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                    >
+                      <Save className="h-4 w-4" />
+                      Salvar parametros
+                    </button>
+                    <button
+                      onClick={clearRespFields}
+                      className="inline-flex items-center gap-2 rounded-[1rem] border border-[#f8717130] bg-[#f8717110] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fca5a5]"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Limpar VM
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                  <MetricChip
+                    label="Driving pressure"
+                    value={calculations?.dp ? `${calculations.dp.toFixed(1)} cmH2O` : '--'}
+                    hint={calculations?.cest ? `Cest ${calculations.cest.toFixed(1)} mL/cmH2O` : null}
+                  />
+                  <MetricChip
+                    label="Raw"
+                    value={calculations?.raw ? calculations.raw.toFixed(1) : '--'}
+                    hint={currentRecord.fluxo ? 'Resistencia de VA' : 'Informe fluxo'}
+                  />
+                  <MetricChip
+                    label="RSBI"
+                    value={calculations?.rsbi ? calculations.rsbi.toFixed(1) : '--'}
+                    hint={calculations?.rsbiInterp?.t}
+                    color={calculations?.rsbiInterp?.c}
+                  />
+                  <MetricChip
+                    label="P0.1"
+                    value={currentRecord.p01 || '--'}
+                    hint={calculations?.p01Interp?.t}
+                    color={calculations?.p01Interp?.c}
+                  />
+                  <MetricChip
+                    label="Pocc"
+                    value={currentRecord.pocc || '--'}
+                    hint={calculations?.poccInterp?.t}
+                    color={calculations?.poccInterp?.c}
+                  />
+                  <MetricChip
+                    label="Pmusc"
+                    value={calculations?.pmusc ? calculations.pmusc.toFixed(1) : '--'}
+                    hint={calculations?.pmuscInterp?.t}
+                    color={calculations?.pmuscInterp?.c}
+                  />
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Historico de parametros VM
+                  </p>
+                  <div className="space-y-3">
+                    {currentRecord.vmHist.length ? (
+                      currentRecord.vmHist.map((entry, index) => (
+                        <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
+                          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-white/86">
+                                {entry.modo || 'Sem modo'} • {formatDateTime(entry.ts)}
+                              </p>
+                              <p className="mt-1 text-xs text-white/46">
+                                VT {entry.vt || '--'} • FR {entry.fr || '--'} • PEEP {entry.peep || '--'} • FiO2 {entry.fio2 || '--'}
+                              </p>
+                              <p className="mt-1 text-xs text-white/46">
+                                DP {entry.dp || '--'} • Cest {entry.cest || '--'} • Raw {entry.raw || '--'} • Pmusc {entry.pmusc || '--'}
+                              </p>
+                            </div>
+                            <button
+                              onClick={() => deleteVM(index)}
+                              className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                        Nenhum parametro salvo.
+                      </div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
@@ -1666,6 +1907,23 @@ export function ProntuarioSystemPanel() {
                       />
                     </FieldShell>
                   </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      onClick={saveGaso}
+                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                    >
+                      <Save className="h-4 w-4" />
+                      Salvar gaso
+                    </button>
+                    <button
+                      onClick={clearGaso}
+                      className="inline-flex items-center gap-2 rounded-[1rem] border border-[#f8717130] bg-[#f8717110] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fca5a5]"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Limpar gaso
+                    </button>
+                  </div>
                 </div>
 
                 <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
@@ -1681,40 +1939,49 @@ export function ProntuarioSystemPanel() {
                     hint="Oxigenacao nao invasiva"
                   />
                   <MetricChip
-                    label="Driving pressure"
-                    value={calculations?.dp ? `${calculations.dp.toFixed(1)} cmH2O` : '--'}
-                    hint={calculations?.cest ? `Cest ${calculations.cest.toFixed(1)} mL/cmH2O` : null}
-                  />
-                  <MetricChip
-                    label="RSBI"
-                    value={calculations?.rsbi ? calculations.rsbi.toFixed(1) : '--'}
-                    hint={calculations?.rsbiInterp?.t}
-                    color={calculations?.rsbiInterp?.c}
-                  />
-                  <MetricChip
                     label="Gasometria"
                     value={calculations?.gaso?.tipo || '--'}
                     hint={calculations?.gaso?.full}
                     color={calculations?.gaso?.cor}
                   />
-                  <MetricChip
-                    label="P0.1"
-                    value={currentRecord.p01 || '--'}
-                    hint={calculations?.p01Interp?.t}
-                    color={calculations?.p01Interp?.c}
-                  />
-                  <MetricChip
-                    label="Pocc"
-                    value={currentRecord.pocc || '--'}
-                    hint={calculations?.poccInterp?.t}
-                    color={calculations?.poccInterp?.c}
-                  />
-                  <MetricChip
-                    label="Pmusc"
-                    value={calculations?.pmusc ? calculations.pmusc.toFixed(1) : '--'}
-                    hint={calculations?.pmuscInterp?.t}
-                    color={calculations?.pmuscInterp?.c}
-                  />
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Historico de gasometria
+                  </p>
+                  <div className="space-y-3">
+                    {currentRecord.gasometrias.length ? (
+                      currentRecord.gasometrias.map((entry, index) => (
+                        <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
+                          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-white/86">
+                                {entry.data || '--'} {entry.hora || ''} • {entry.analise || 'Gasometria'}
+                              </p>
+                              <p className="mt-1 text-xs text-white/46">
+                                pH {entry.pH || '--'} • PaCO2 {entry.paCO2 || '--'} • PaO2 {entry.paO2 || '--'} • HCO3 {entry.hco3 || '--'}
+                              </p>
+                              <p className="mt-1 text-xs text-white/46">
+                                P/F {entry.pf || '--'} • S/F {entry.sf || '--'} • FiO2 {entry.fio2 || '--'} • Lactato {entry.lactato || '--'}
+                              </p>
+                              {entry.obs ? <p className="mt-2 text-xs leading-relaxed text-white/54">{entry.obs}</p> : null}
+                            </div>
+                            <button
+                              onClick={() => deleteGaso(index)}
+                              className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                        Nenhuma gasometria salva.
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             ) : null}

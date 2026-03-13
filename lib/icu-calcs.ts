@@ -34,6 +34,48 @@ export type ImageExamEntry = {
   laudo: string
 }
 
+export type GasometryHistoryEntry = {
+  ts: string
+  data: string
+  hora: string
+  pH: string
+  paCO2: string
+  paO2: string
+  hco3: string
+  be: string
+  sao2: string
+  lactato: string
+  fio2: string
+  sf: string
+  pf: string
+  analise: string
+  obs: string
+}
+
+export type VMHistoryEntry = {
+  ts: string
+  modo: string
+  vt: string
+  vc: string
+  fr: string
+  peep: string
+  fio2: string
+  fluxo: string
+  trigger: string
+  ti: string
+  ie: string
+  ppico: string
+  pplato: string
+  pmean: string
+  ps: string
+  p01: string
+  pocc: string
+  pmusc: string
+  dp: string
+  cest: string
+  raw: string
+}
+
 export function calcPesoIdeal(alt: number, sexo: string): number {
   if (!alt || alt < 100 || alt > 250) return 0
   if (sexo === 'M') return 50 + 0.91 * (alt - 152.4)
@@ -236,9 +278,11 @@ export type PatientData = {
   modoVM: string
   vt: string
   vc: string
+  ve: string
   fr: string
   peep: string
   fio2: string
+  fluxo: string
   trigger: string
   ti: string
   ie: string
@@ -266,6 +310,8 @@ export type PatientData = {
   gasoObs: string
   sfSpO2: string
   sfFiO2: string
+  gasometrias: GasometryHistoryEntry[]
+  vmHist: VMHistoryEntry[]
   motora: string
   mrcOmbroD: string
   mrcOmbroE: string
@@ -344,9 +390,11 @@ export function emptyPatient(): PatientData {
     modoVM: '',
     vt: '',
     vc: '',
+    ve: '',
     fr: '',
     peep: '',
     fio2: '',
+    fluxo: '',
     trigger: '',
     ti: '',
     ie: '',
@@ -374,6 +422,8 @@ export function emptyPatient(): PatientData {
     gasoObs: '',
     sfSpO2: '',
     sfFiO2: '',
+    gasometrias: [],
+    vmHist: [],
     motora: '',
     mrcOmbroD: '',
     mrcOmbroE: '',
