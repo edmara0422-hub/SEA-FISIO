@@ -74,22 +74,49 @@ const STATUS_OPTIONS = [
 ] as const
 
 const VIA_OPTIONS = [
-  ['', '--'],
-  ['O2', 'O2 / Cateter'],
-  ['TOT', 'TOT'],
-  ['TQT', 'TQT'],
+  ['', 'Selecionar'],
+  ['RE-AA', 'RE - Ar Ambiente'],
+  ['RE-O2', 'RE - O2 Cateter'],
+  ['RE-MFS', 'RE - Masc. Facial Simples'],
+  ['RE-MFR', 'RE - Masc. c/ Reservatorio'],
+  ['RE-MFV', 'RE - Masc. Venturi'],
   ['VNI', 'VNI'],
-  ['CNAF', 'CNAF'],
+  ['HFNC', 'HFNC (Cateter Alto Fluxo)'],
+  ['RPPI', 'RPPI'],
+  ['TOT', 'TOT (Tubo Orotraqueal)'],
+  ['TNT', 'TNT (Tubo Nasotraqueal)'],
+  ['ML', 'ML (Mascara Laringea)'],
+  ['TQT-AA', 'TQT - Ar Ambiente'],
+  ['TQT-O2', 'TQT - com O2'],
+  ['TQT-VM', 'TQT - em VM'],
+  ['TQT-P', 'TQT - Prolong. / Desmame'],
 ] as const
 
 const VM_OPTIONS = [
-  ['', '--'],
-  ['VCV', 'VCV'],
-  ['PCV', 'PCV'],
-  ['PSV', 'PSV'],
-  ['CPAP', 'CPAP'],
-  ['SIMV', 'SIMV'],
-  ['BIPAP', 'BIPAP'],
+  { value: '', label: 'Selecionar', disabled: false },
+  { value: '---', label: '-- BASICO CONTROLADO --', disabled: true },
+  { value: 'VCV', label: 'VCV (Vol. Controlado)', disabled: false },
+  { value: 'PCV', label: 'PCV (Pressao Controlada)', disabled: false },
+  { value: '---2', label: '-- BASICO ESPONTANEO --', disabled: true },
+  { value: 'PSV', label: 'PSV (Pressao Suporte)', disabled: false },
+  { value: 'TuboT', label: 'Tubo-T', disabled: false },
+  { value: '---3', label: '-- BASICO VNI --', disabled: true },
+  { value: 'CPAP', label: 'CPAP', disabled: false },
+  { value: 'BIPAP', label: 'BiPAP / Bilevel', disabled: false },
+  { value: '---4', label: '-- AVANCADO CONTROLADO --', disabled: true },
+  { value: 'PRVC', label: 'PRVC (VC+)', disabled: false },
+  { value: 'HFOV', label: 'HFOV (Alta Frequencia)', disabled: false },
+  { value: 'MMV', label: 'MMV (Vol. Minuto Mandatorio)', disabled: false },
+  { value: '---5', label: '-- AVANCADO ESPONTANEO --', disabled: true },
+  { value: 'APRV', label: 'APRV', disabled: false },
+  { value: 'VS', label: 'VS (Vol. Suporte)', disabled: false },
+  { value: 'ASV', label: 'ASV (Hamilton)', disabled: false },
+  { value: 'IntelliVENT', label: 'IntelliVENT-ASV', disabled: false },
+  { value: 'SmartCare', label: 'SmartCare/PS (Drager)', disabled: false },
+  { value: '---6', label: '-- ASSIST. PROPORCIONAL --', disabled: true },
+  { value: 'PAV', label: 'PAV+ (Proporcional)', disabled: false },
+  { value: 'NAVA', label: 'NAVA (Edi)', disabled: false },
+  { value: 'ATC', label: 'ATC (Compensacao Tubo)', disabled: false },
 ] as const
 
 const SEDATIVE_OPTIONS = [
@@ -1565,26 +1592,15 @@ export function ProntuarioSystemPanel() {
                         placeholder="Volume, aspecto, necessidade de aspiracao..."
                       />
                     </FieldShell>
-                    <div className="space-y-4">
-                      <FieldShell label="Via aerea atual">
-                        <select className={INPUT_CLASS} value={currentRecord.tipoVia} onChange={(event) => setField('tipoVia', event.target.value)}>
-                          {VIA_OPTIONS.map(([value, label]) => (
-                            <option key={value} value={value}>
-                              {label}
-                            </option>
-                          ))}
-                        </select>
-                      </FieldShell>
-                      <FieldShell label="Modo ventilatorio">
-                        <select className={INPUT_CLASS} value={currentRecord.modoVM} onChange={(event) => setField('modoVM', event.target.value)}>
-                          {VM_OPTIONS.map(([value, label]) => (
-                            <option key={value} value={value}>
-                              {label}
-                            </option>
-                          ))}
-                        </select>
-                      </FieldShell>
-                    </div>
+                    <FieldShell label="Via aerea atual">
+                      <select className={INPUT_CLASS} value={currentRecord.tipoVia} onChange={(event) => setField('tipoVia', event.target.value)}>
+                        {VIA_OPTIONS.map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                    </FieldShell>
                   </div>
                 </div>
 
@@ -1593,7 +1609,7 @@ export function ProntuarioSystemPanel() {
                     Eventos de via aerea
                   </p>
                   <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
-                    {currentRecord.tipoVia === 'TOT' && (
+                    {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
                       <>
                         <FieldShell label="Data IOT" span="xl:col-span-2">
                           <input
@@ -1638,7 +1654,7 @@ export function ProntuarioSystemPanel() {
                       </>
                     )}
 
-                    {currentRecord.tipoVia === 'TQT' && (
+                    {currentRecord.tipoVia.startsWith('TQT') && (
                       <>
                         <FieldShell label="Data TQT" span="xl:col-span-2">
                           <input
@@ -1686,9 +1702,9 @@ export function ProntuarioSystemPanel() {
                     )}
                   </div>
 
-                  {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TQT') && (
+                  {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia.startsWith('TQT')) && (
                     <div className="mt-4 grid gap-3 md:grid-cols-3">
-                      {currentRecord.tipoVia === 'TOT' && (
+                      {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
                         <MetricChip
                           label="Dias TOT"
                           value={calculations?.daysTOT !== null && calculations?.daysTOT !== undefined ? `D${calculations.daysTOT}` : '--'}
@@ -1696,7 +1712,7 @@ export function ProntuarioSystemPanel() {
                           color={calculations?.daysTOT && calculations.daysTOT >= 7 ? '#f87171' : '#60a5fa'}
                         />
                       )}
-                      {currentRecord.tipoVia === 'TQT' && (
+                      {currentRecord.tipoVia.startsWith('TQT') && (
                         <MetricChip
                           label="Dias TQT"
                           value={calculations?.daysTQT !== null && calculations?.daysTQT !== undefined ? `D${calculations.daysTQT}` : '--'}
@@ -1710,9 +1726,148 @@ export function ProntuarioSystemPanel() {
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Gasometria
+                  </p>
+                  <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                    <FieldShell label="Data">
+                      <input className={INPUT_CLASS} type="date" value={currentRecord.gasoData} onChange={(event) => setField('gasoData', event.target.value)} />
+                    </FieldShell>
+                    <FieldShell label="Hora">
+                      <input className={INPUT_CLASS} type="time" value={currentRecord.gasoHora} onChange={(event) => setField('gasoHora', event.target.value)} />
+                    </FieldShell>
+                    <FieldShell label="SpO2 / S-F">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.sfSpO2} onChange={(event) => setField('sfSpO2', event.target.value)} placeholder="96" />
+                    </FieldShell>
+                    <FieldShell label="FiO2 / S-F">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.sfFiO2} onChange={(event) => setField('sfFiO2', event.target.value)} placeholder="40" />
+                    </FieldShell>
+                    <FieldShell label="pH">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPH} onChange={(event) => setField('gasoPH', event.target.value)} placeholder="7.36" />
+                    </FieldShell>
+                    <FieldShell label="PaCO2">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPaCO2} onChange={(event) => setField('gasoPaCO2', event.target.value)} placeholder="45" />
+                    </FieldShell>
+                    <FieldShell label="PaO2">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPaO2} onChange={(event) => setField('gasoPaO2', event.target.value)} placeholder="80" />
+                    </FieldShell>
+                    <FieldShell label="HCO3">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoHCO3} onChange={(event) => setField('gasoHCO3', event.target.value)} placeholder="24" />
+                    </FieldShell>
+                    <FieldShell label="BE">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoBE} onChange={(event) => setField('gasoBE', event.target.value)} placeholder="0" />
+                    </FieldShell>
+                    <FieldShell label="SaO2">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoSaO2} onChange={(event) => setField('gasoSaO2', event.target.value)} placeholder="96" />
+                    </FieldShell>
+                    <FieldShell label="Lactato">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoLactato} onChange={(event) => setField('gasoLactato', event.target.value)} placeholder="1.5" />
+                    </FieldShell>
+                    <FieldShell label="FiO2 gaso">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoFiO2} onChange={(event) => setField('gasoFiO2', event.target.value)} placeholder="40" />
+                    </FieldShell>
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldShell label="Obs. gasometricas">
+                      <textarea
+                        className={TEXTAREA_CLASS}
+                        value={currentRecord.gasoObs}
+                        onChange={(event) => setField('gasoObs', event.target.value)}
+                        placeholder="Interpretacao clinica, correlacao com leito, coleta..."
+                      />
+                    </FieldShell>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      onClick={saveGaso}
+                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                    >
+                      <Save className="h-4 w-4" />
+                      Salvar gaso
+                    </button>
+                    <button
+                      onClick={clearGaso}
+                      className="inline-flex items-center gap-2 rounded-[1rem] border border-[#f8717130] bg-[#f8717110] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fca5a5]"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      Limpar gaso
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                  <MetricChip
+                    label="P/F"
+                    value={calculations?.pf ? calculations.pf.toFixed(0) : '--'}
+                    hint={calculations?.pfInterp?.t}
+                    color={calculations?.pfInterp?.c}
+                  />
+                  <MetricChip
+                    label="S/F"
+                    value={calculations?.sf ? calculations.sf.toFixed(0) : '--'}
+                    hint="Oxigenacao nao invasiva"
+                  />
+                  <MetricChip
+                    label="Gasometria"
+                    value={calculations?.gaso?.tipo || '--'}
+                    hint={calculations?.gaso?.full}
+                    color={calculations?.gaso?.cor}
+                  />
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Historico de gasometria
+                  </p>
+                  <div className="space-y-3">
+                    {currentRecord.gasometrias?.length ? (
+                      currentRecord.gasometrias.map((entry, index) => (
+                        <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
+                          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+                            <div>
+                              <p className="text-sm font-semibold text-white/86">
+                                {entry.data || '--'} {entry.hora || ''} • {entry.analise || 'Gasometria'}
+                              </p>
+                              <p className="mt-1 text-xs text-white/46">
+                                pH {entry.pH || '--'} • PaCO2 {entry.paCO2 || '--'} • PaO2 {entry.paO2 || '--'} • HCO3 {entry.hco3 || '--'}
+                              </p>
+                              <p className="mt-1 text-xs text-white/46">
+                                P/F {entry.pf || '--'} • S/F {entry.sf || '--'} • FiO2 {entry.fio2 || '--'} • Lactato {entry.lactato || '--'}
+                              </p>
+                              {entry.obs ? <p className="mt-2 text-xs leading-relaxed text-white/54">{entry.obs}</p> : null}
+                            </div>
+                            <button
+                              onClick={() => deleteGaso(index)}
+                              className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                        Nenhuma gasometria salva.
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Ventilacao mecanica
                   </p>
                   <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                    <FieldShell label="Modo ventilatorio">
+                      <select className={INPUT_CLASS} value={currentRecord.modoVM} onChange={(event) => setField('modoVM', event.target.value)}>
+                        {VM_OPTIONS.map((option) => (
+                          <option key={option.value} value={option.value} disabled={option.disabled}>
+                            {option.label}
+                          </option>
+                        ))}
+                      </select>
+                    </FieldShell>
                     <FieldShell label="VT">
                       <input className={INPUT_CLASS} type="number" value={currentRecord.vt} onChange={(event) => setField('vt', event.target.value)} placeholder="420" />
                     </FieldShell>
@@ -1869,136 +2024,6 @@ export function ProntuarioSystemPanel() {
                     ) : (
                       <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
                         Nenhum parametro salvo.
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Gasometria
-                  </p>
-                  <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
-                    <FieldShell label="Data">
-                      <input className={INPUT_CLASS} type="date" value={currentRecord.gasoData} onChange={(event) => setField('gasoData', event.target.value)} />
-                    </FieldShell>
-                    <FieldShell label="Hora">
-                      <input className={INPUT_CLASS} type="time" value={currentRecord.gasoHora} onChange={(event) => setField('gasoHora', event.target.value)} />
-                    </FieldShell>
-                    <FieldShell label="SpO2 / S-F">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.sfSpO2} onChange={(event) => setField('sfSpO2', event.target.value)} placeholder="96" />
-                    </FieldShell>
-                    <FieldShell label="FiO2 / S-F">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.sfFiO2} onChange={(event) => setField('sfFiO2', event.target.value)} placeholder="40" />
-                    </FieldShell>
-                    <FieldShell label="pH">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPH} onChange={(event) => setField('gasoPH', event.target.value)} placeholder="7.36" />
-                    </FieldShell>
-                    <FieldShell label="PaCO2">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPaCO2} onChange={(event) => setField('gasoPaCO2', event.target.value)} placeholder="45" />
-                    </FieldShell>
-                    <FieldShell label="PaO2">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPaO2} onChange={(event) => setField('gasoPaO2', event.target.value)} placeholder="80" />
-                    </FieldShell>
-                    <FieldShell label="HCO3">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoHCO3} onChange={(event) => setField('gasoHCO3', event.target.value)} placeholder="24" />
-                    </FieldShell>
-                    <FieldShell label="BE">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoBE} onChange={(event) => setField('gasoBE', event.target.value)} placeholder="0" />
-                    </FieldShell>
-                    <FieldShell label="SaO2">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoSaO2} onChange={(event) => setField('gasoSaO2', event.target.value)} placeholder="96" />
-                    </FieldShell>
-                    <FieldShell label="Lactato">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoLactato} onChange={(event) => setField('gasoLactato', event.target.value)} placeholder="1.5" />
-                    </FieldShell>
-                    <FieldShell label="FiO2 gaso">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoFiO2} onChange={(event) => setField('gasoFiO2', event.target.value)} placeholder="40" />
-                    </FieldShell>
-                  </div>
-
-                  <div className="mt-4">
-                    <FieldShell label="Obs. gasometricas">
-                      <textarea
-                        className={TEXTAREA_CLASS}
-                        value={currentRecord.gasoObs}
-                        onChange={(event) => setField('gasoObs', event.target.value)}
-                        placeholder="Interpretacao clinica, correlacao com leito, coleta..."
-                      />
-                    </FieldShell>
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <button
-                      onClick={saveGaso}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
-                    >
-                      <Save className="h-4 w-4" />
-                      Salvar gaso
-                    </button>
-                    <button
-                      onClick={clearGaso}
-                      className="inline-flex items-center gap-2 rounded-[1rem] border border-[#f8717130] bg-[#f8717110] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fca5a5]"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                      Limpar gaso
-                    </button>
-                  </div>
-                </div>
-
-                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-                  <MetricChip
-                    label="P/F"
-                    value={calculations?.pf ? calculations.pf.toFixed(0) : '--'}
-                    hint={calculations?.pfInterp?.t}
-                    color={calculations?.pfInterp?.c}
-                  />
-                  <MetricChip
-                    label="S/F"
-                    value={calculations?.sf ? calculations.sf.toFixed(0) : '--'}
-                    hint="Oxigenacao nao invasiva"
-                  />
-                  <MetricChip
-                    label="Gasometria"
-                    value={calculations?.gaso?.tipo || '--'}
-                    hint={calculations?.gaso?.full}
-                    color={calculations?.gaso?.cor}
-                  />
-                </div>
-
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Historico de gasometria
-                  </p>
-                  <div className="space-y-3">
-                    {currentRecord.gasometrias?.length ? (
-                      currentRecord.gasometrias.map((entry, index) => (
-                        <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                            <div>
-                              <p className="text-sm font-semibold text-white/86">
-                                {entry.data || '--'} {entry.hora || ''} • {entry.analise || 'Gasometria'}
-                              </p>
-                              <p className="mt-1 text-xs text-white/46">
-                                pH {entry.pH || '--'} • PaCO2 {entry.paCO2 || '--'} • PaO2 {entry.paO2 || '--'} • HCO3 {entry.hco3 || '--'}
-                              </p>
-                              <p className="mt-1 text-xs text-white/46">
-                                P/F {entry.pf || '--'} • S/F {entry.sf || '--'} • FiO2 {entry.fio2 || '--'} • Lactato {entry.lactato || '--'}
-                              </p>
-                              {entry.obs ? <p className="mt-2 text-xs leading-relaxed text-white/54">{entry.obs}</p> : null}
-                            </div>
-                            <button
-                              onClick={() => deleteGaso(index)}
-                              className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
-                            >
-                              <Trash2 className="h-4 w-4" />
-                            </button>
-                          </div>
-                        </div>
-                      ))
-                    ) : (
-                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
-                        Nenhuma gasometria salva.
                       </div>
                     )}
                   </div>
