@@ -11,6 +11,7 @@ import {
   Layers3,
   Orbit,
   Radar,
+  RotateCcw,
   ShieldAlert,
   Stethoscope,
   Waves,
@@ -326,6 +327,81 @@ const IMS_OPTIONS = [
   { value: '10', label: '10 - Deambulacao independente' },
 ]
 
+const INITIAL_COMPLIANCE = { mode: 'VCV', pico: '', plato: '', peep: '', vt: '', fluxo: '' }
+const createInitialPeepLevels = () => [
+  { peep: '', plato: '', si: '' },
+  { peep: '', plato: '', si: '' },
+  { peep: '', plato: '', si: '' },
+]
+const INITIAL_RECRUIT = { recVolInsp: '', recVolExp: '', lip: '', uip: '', volLip: '', volUip: '' }
+const INITIAL_RSBI = { fr: '', vc: '' }
+const INITIAL_HACOR: HacorState = {
+  fc: '',
+  ph: '',
+  gcs: '',
+  oxig: '',
+  fr: '',
+  dx: '',
+  sofaResp: '',
+  sofaCns: '',
+  sofaCardio: '',
+  sofaCoag: '',
+  sofaLiver: '',
+  sofaRenal: '',
+}
+const INITIAL_ROX = { spo2: '', fio2: '', fr: '' }
+const INITIAL_ASYNCHRONY = { events: '', total: '' }
+const INITIAL_MECHANICAL_POWER = { vc: '', dp: '', f: '' }
+const INITIAL_VC_WEIGHT = { weight: '' }
+const INITIAL_GLASGOW = { o: '', v: '', m: '' }
+const INITIAL_GASO = {
+  ph: '',
+  paCO2: '',
+  hco3: '',
+  paO2: '',
+  fio2: '',
+  spO2: '',
+  be: '',
+  sfMonSpO2: '',
+  sfVmFiO2: '',
+}
+const createInitialMrc = (): Record<MrcKey, string> => ({
+  ombroD: '',
+  ombroE: '',
+  cotoveloD: '',
+  cotoveloE: '',
+  punhoD: '',
+  punhoE: '',
+  quadrilD: '',
+  quadrilE: '',
+  joelhoD: '',
+  joelhoE: '',
+  tornozeloD: '',
+  tornozeloE: '',
+})
+const createInitialPerme = (): Record<PermeKey, string> => ({
+  estado: '',
+  barreira: '',
+  forcaMs: '',
+  forcaMi: '',
+  leito: '',
+  transf: '',
+  marcha: '',
+})
+const INITIAL_IMS = { score: '' }
+const INITIAL_DRIVE = { p01: '', pocc: '' }
+const INITIAL_WEAN = {
+  vdvtPaCO2: '',
+  vdvtPetCO2: '',
+  vrVe: '',
+  vrPaCO2: '',
+  gapPaCO2: '',
+  gapEtCO2: '',
+  piMax: '',
+  peMax: '',
+  cvMlKg: '',
+}
+
 function toneClass(color?: string) {
   if (color === '#4ade80') return 'border-[#4ade8030] bg-[#4ade8010] text-[#86efac]'
   if (color === '#facc15') return 'border-[#facc1530] bg-[#facc150f] text-[#fde68a]'
@@ -377,7 +453,7 @@ function InputField({
   step?: string
 }) {
   return (
-    <label className="space-y-2">
+    <label className="space-y-1.5">
       <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">{label}</span>
       <input
         type={type}
@@ -385,7 +461,7 @@ function InputField({
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2.5 text-sm text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18"
+        className="h-11 w-full rounded-[0.95rem] border border-white/10 bg-black/18 px-3 text-[13px] text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18"
       />
     </label>
   )
@@ -403,12 +479,12 @@ function SelectField({
   onChange: (value: string) => void
 }) {
   return (
-    <label className="space-y-2">
+    <label className="space-y-1.5">
       <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="w-full rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2.5 text-sm text-white outline-none transition-all focus:border-white/18"
+        className="h-11 w-full rounded-[0.95rem] border border-white/10 bg-black/18 px-3 text-[13px] text-white outline-none transition-all focus:border-white/18"
       >
         <option value="">Selecionar</option>
         {options.map((option) => (
@@ -433,10 +509,10 @@ function ResultBadge({
   color?: string
 }) {
   return (
-    <div className={`rounded-[1.05rem] border p-3 ${toneClass(color)}`}>
+    <div className={`rounded-[0.95rem] border p-2.5 ${toneClass(color)}`}>
       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] opacity-72">{label}</p>
-      <p className="mt-2 text-sm font-semibold">{value}</p>
-      {hint ? <p className="mt-1 text-xs opacity-72">{hint}</p> : null}
+      <p className="mt-1.5 text-[13px] font-semibold md:text-sm">{value}</p>
+      {hint ? <p className="mt-1 text-[11px] opacity-72">{hint}</p> : null}
     </div>
   )
 }
@@ -452,6 +528,7 @@ function CalcCard({
   subtitle,
   open,
   onToggle,
+  onClear,
   children,
 }: {
   id: CardId
@@ -460,6 +537,7 @@ function CalcCard({
   subtitle: string
   open: boolean
   onToggle: (id: CardId) => void
+  onClear: () => void
   children: ReactNode
 }) {
   return (
@@ -467,7 +545,7 @@ function CalcCard({
       <button
         type="button"
         onClick={() => onToggle(id)}
-        className="flex w-full items-center justify-between gap-4 px-5 py-4 text-left"
+        className="flex w-full items-center justify-between gap-4 px-4 py-3.5 text-left md:px-5 md:py-4"
       >
         <div className="flex min-w-0 items-center gap-4">
           <div className="chrome-subtle flex h-11 w-11 shrink-0 items-center justify-center rounded-[1rem]">
@@ -493,7 +571,17 @@ function CalcCard({
             transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
             className="overflow-hidden"
           >
-            <div className="border-t border-white/8 px-5 py-5">
+            <div className="border-t border-white/8 px-4 py-4 md:px-5 md:py-5">
+              <div className="mb-4 flex justify-end">
+                <button
+                  type="button"
+                  onClick={onClear}
+                  className="chrome-subtle inline-flex h-9 items-center gap-2 rounded-[0.95rem] px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/72 transition hover:text-white"
+                >
+                  <RotateCcw className="h-3.5 w-3.5" />
+                  Limpar
+                </button>
+              </div>
               <div className="space-y-5">{children}</div>
             </div>
           </motion.div>
@@ -504,81 +592,23 @@ function CalcCard({
 }
 
 export function VMSystemPanel() {
-  const [openCardId, setOpenCardId] = useState<CardId | null>('hacor')
-  const [compliance, setCompliance] = useState({ mode: 'VCV', pico: '', plato: '', peep: '', vt: '', fluxo: '' })
-  const [peepLevels, setPeepLevels] = useState([
-    { peep: '', plato: '', si: '' },
-    { peep: '', plato: '', si: '' },
-    { peep: '', plato: '', si: '' },
-  ])
-  const [recruit, setRecruit] = useState({ recVolInsp: '', recVolExp: '', lip: '', uip: '', volLip: '', volUip: '' })
-  const [rsbi, setRsbi] = useState({ fr: '', vc: '' })
-  const [hacor, setHacor] = useState<HacorState>({
-    fc: '',
-    ph: '',
-    gcs: '',
-    oxig: '',
-    fr: '',
-    dx: '',
-    sofaResp: '',
-    sofaCns: '',
-    sofaCardio: '',
-    sofaCoag: '',
-    sofaLiver: '',
-    sofaRenal: '',
-  })
-  const [rox, setRox] = useState({ spo2: '', fio2: '', fr: '' })
-  const [asynchrony, setAsynchrony] = useState({ events: '', total: '' })
-  const [mechanicalPower, setMechanicalPower] = useState({ vc: '', dp: '', f: '' })
-  const [vcWeight, setVcWeight] = useState({ weight: '' })
-  const [glasgow, setGlasgow] = useState({ o: '', v: '', m: '' })
-  const [gaso, setGaso] = useState({
-    ph: '',
-    paCO2: '',
-    hco3: '',
-    paO2: '',
-    fio2: '',
-    spO2: '',
-    be: '',
-    sfMonSpO2: '',
-    sfVmFiO2: '',
-  })
-  const [mrc, setMrc] = useState<Record<MrcKey, string>>({
-    ombroD: '',
-    ombroE: '',
-    cotoveloD: '',
-    cotoveloE: '',
-    punhoD: '',
-    punhoE: '',
-    quadrilD: '',
-    quadrilE: '',
-    joelhoD: '',
-    joelhoE: '',
-    tornozeloD: '',
-    tornozeloE: '',
-  })
-  const [perme, setPerme] = useState<Record<PermeKey, string>>({
-    estado: '',
-    barreira: '',
-    forcaMs: '',
-    forcaMi: '',
-    leito: '',
-    transf: '',
-    marcha: '',
-  })
-  const [ims, setIms] = useState({ score: '' })
-  const [drive, setDrive] = useState({ p01: '', pocc: '' })
-  const [wean, setWean] = useState({
-    vdvtPaCO2: '',
-    vdvtPetCO2: '',
-    vrVe: '',
-    vrPaCO2: '',
-    gapPaCO2: '',
-    gapEtCO2: '',
-    piMax: '',
-    peMax: '',
-    cvMlKg: '',
-  })
+  const [openCardId, setOpenCardId] = useState<CardId | null>(null)
+  const [compliance, setCompliance] = useState(INITIAL_COMPLIANCE)
+  const [peepLevels, setPeepLevels] = useState(createInitialPeepLevels)
+  const [recruit, setRecruit] = useState(INITIAL_RECRUIT)
+  const [rsbi, setRsbi] = useState(INITIAL_RSBI)
+  const [hacor, setHacor] = useState<HacorState>(INITIAL_HACOR)
+  const [rox, setRox] = useState(INITIAL_ROX)
+  const [asynchrony, setAsynchrony] = useState(INITIAL_ASYNCHRONY)
+  const [mechanicalPower, setMechanicalPower] = useState(INITIAL_MECHANICAL_POWER)
+  const [vcWeight, setVcWeight] = useState(INITIAL_VC_WEIGHT)
+  const [glasgow, setGlasgow] = useState(INITIAL_GLASGOW)
+  const [gaso, setGaso] = useState(INITIAL_GASO)
+  const [mrc, setMrc] = useState<Record<MrcKey, string>>(createInitialMrc)
+  const [perme, setPerme] = useState<Record<PermeKey, string>>(createInitialPerme)
+  const [ims, setIms] = useState(INITIAL_IMS)
+  const [drive, setDrive] = useState(INITIAL_DRIVE)
+  const [wean, setWean] = useState(INITIAL_WEAN)
 
   const complianceMetrics = useMemo(() => {
     const pico = toNumber(compliance.pico)
@@ -780,7 +810,7 @@ export function VMSystemPanel() {
       </div>
 
       <div className="space-y-4">
-        <SectionDivider icon={ShieldAlert} eyebrow="VNI" title="Calculadoras VNI / CNAF" />
+        <SectionDivider icon={ShieldAlert} eyebrow="VNI" title="VNI / CNAF" />
 
         <CalcCard
           id="hacor"
@@ -789,17 +819,15 @@ export function VMSystemPanel() {
           subtitle="Falha de VNI em 1-2 horas"
           open={openCardId === 'hacor'}
           onToggle={toggleCard}
+          onClear={() => setHacor(INITIAL_HACOR)}
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
             <SelectField label="FC" value={hacor.fc} options={HACOR_SELECTS.fc} onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))} />
             <SelectField label="pH" value={hacor.ph} options={HACOR_SELECTS.ph} onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))} />
             <SelectField label="GCS" value={hacor.gcs} options={HACOR_SELECTS.gcs} onChange={(value) => setHacor((prev) => ({ ...prev, gcs: value }))} />
             <SelectField label="PaO2/FiO2" value={hacor.oxig} options={HACOR_SELECTS.oxig} onChange={(value) => setHacor((prev) => ({ ...prev, oxig: value }))} />
             <SelectField label="FR" value={hacor.fr} options={HACOR_SELECTS.fr} onChange={(value) => setHacor((prev) => ({ ...prev, fr: value }))} />
             <SelectField label="Diagnostico" value={hacor.dx} options={HACOR_SELECTS.dx} onChange={(value) => setHacor((prev) => ({ ...prev, dx: value }))} />
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             {SOFA_SELECTS.map((item) => (
               <SelectField
                 key={item.key}
@@ -830,8 +858,9 @@ export function VMSystemPanel() {
           subtitle="CNAF e risco de intubacao"
           open={openCardId === 'rox'}
           onToggle={toggleCard}
+          onClear={() => setRox(INITIAL_ROX)}
         >
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
             <InputField label="SpO2 (%)" value={rox.spo2} placeholder="95" onChange={(value) => setRox((prev) => ({ ...prev, spo2: value }))} type="number" />
             <InputField label="FiO2 (%)" value={rox.fio2} placeholder="50" onChange={(value) => setRox((prev) => ({ ...prev, fio2: value }))} type="number" />
             <InputField label="FR (rpm)" value={rox.fr} placeholder="24" onChange={(value) => setRox((prev) => ({ ...prev, fr: value }))} type="number" />
@@ -845,7 +874,7 @@ export function VMSystemPanel() {
       </div>
 
       <div className="space-y-4">
-        <SectionDivider icon={Radar} eyebrow="VMI" title="Calculadoras VMI" />
+        <SectionDivider icon={Radar} eyebrow="VMI" title="VMI" />
 
         <CalcCard
           id="compliance"
@@ -854,8 +883,9 @@ export function VMSystemPanel() {
           subtitle="VCV e PCV"
           open={openCardId === 'compliance'}
           onToggle={toggleCard}
+          onClear={() => setCompliance(INITIAL_COMPLIANCE)}
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-5">
+          <div className="grid gap-3 grid-cols-2 lg:grid-cols-3">
             <SelectField
               label="Modo"
               value={compliance.mode}
@@ -876,7 +906,7 @@ export function VMSystemPanel() {
             ) : null}
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
             <ResultBadge label="Delta P" value={complianceMetrics.dp !== null ? `${complianceMetrics.dp.toFixed(1)} cmH2O` : '-'} hint={complianceMetrics.dpTone?.t ?? 'Pplat - PEEP'} color={complianceMetrics.dpTone?.c} />
             <ResultBadge label="Cest" value={complianceMetrics.cest !== null ? `${complianceMetrics.cest.toFixed(1)} mL/cmH2O` : '-'} hint="Complacencia estatica" />
             <ResultBadge label="Cdyn" value={complianceMetrics.cdyn !== null ? `${complianceMetrics.cdyn.toFixed(1)} mL/cmH2O` : '-'} hint="VCV" />
@@ -891,12 +921,13 @@ export function VMSystemPanel() {
           subtitle="3 niveis e escolha automatica"
           open={openCardId === 'peep'}
           onToggle={toggleCard}
+          onClear={() => setPeepLevels(createInitialPeepLevels())}
         >
-          <div className="grid gap-4 xl:grid-cols-3">
+          <div className="grid gap-3 xl:grid-cols-3">
             {peepLevels.map((level, index) => (
               <div key={`level-${index}`} className="chrome-panel rounded-[1.25rem] p-4">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Nivel {index + 1}</p>
-                <div className="mt-3 space-y-3">
+                <div className="mt-3 grid gap-3 sm:grid-cols-3">
                   <InputField label="PEEP" value={level.peep} placeholder="5" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, peep: value } : item)))} type="number" />
                   <InputField label="Plato" value={level.plato} placeholder="22" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, plato: value } : item)))} type="number" />
                   <InputField label="SI" value={level.si} placeholder="=1, <1, >1" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, si: value } : item)))} />
@@ -929,6 +960,7 @@ export function VMSystemPanel() {
           subtitle="Volumes e loop P-V"
           open={openCardId === 'recruit'}
           onToggle={toggleCard}
+          onClear={() => setRecruit(INITIAL_RECRUIT)}
         >
           <div className="grid gap-4 xl:grid-cols-2">
             <div className="chrome-panel rounded-[1.25rem] p-4">
@@ -970,6 +1002,7 @@ export function VMSystemPanel() {
           subtitle="Indice de respiracao rapida superficial"
           open={openCardId === 'rsbi'}
           onToggle={toggleCard}
+          onClear={() => setRsbi(INITIAL_RSBI)}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <InputField label="FR (rpm)" value={rsbi.fr} placeholder="25" onChange={(value) => setRsbi((prev) => ({ ...prev, fr: value }))} type="number" />
@@ -988,8 +1021,9 @@ export function VMSystemPanel() {
           subtitle="Energia transmitida ao pulmao"
           open={openCardId === 'mpower'}
           onToggle={toggleCard}
+          onClear={() => setMechanicalPower(INITIAL_MECHANICAL_POWER)}
         >
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
             <InputField label="VC (mL)" value={mechanicalPower.vc} placeholder="450" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, vc: value }))} type="number" />
             <InputField label="Delta P" value={mechanicalPower.dp} placeholder="12" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, dp: value }))} type="number" />
             <InputField label="FR" value={mechanicalPower.f} placeholder="20" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, f: value }))} type="number" />
@@ -1007,6 +1041,7 @@ export function VMSystemPanel() {
           subtitle="Faixas protetora e convencional"
           open={openCardId === 'vcweight'}
           onToggle={toggleCard}
+          onClear={() => setVcWeight(INITIAL_VC_WEIGHT)}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <InputField label="Peso (kg)" value={vcWeight.weight} placeholder="70" onChange={(value) => setVcWeight({ weight: value })} type="number" />
@@ -1034,6 +1069,7 @@ export function VMSystemPanel() {
           subtitle="Drive e esforco"
           open={openCardId === 'drive'}
           onToggle={toggleCard}
+          onClear={() => setDrive(INITIAL_DRIVE)}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <InputField label="P0.1 (cmH2O)" value={drive.p01} placeholder="2.0" onChange={(value) => setDrive((prev) => ({ ...prev, p01: value }))} type="number" step="0.1" />
@@ -1053,54 +1089,57 @@ export function VMSystemPanel() {
           subtitle="VD/VT, VR, gap CO2, PImax, PEmax, CV"
           open={openCardId === 'wean'}
           onToggle={toggleCard}
+          onClear={() => setWean(INITIAL_WEAN)}
         >
-          <div className="chrome-panel rounded-[1.25rem] p-4">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">VD/VT</p>
-            <div className="mt-3 grid gap-3 md:grid-cols-2">
-              <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
-              <InputField label="PetCO2" value={wean.vdvtPetCO2} placeholder="35" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPetCO2: value }))} type="number" />
+          <div className="grid gap-3 xl:grid-cols-2">
+            <div className="chrome-panel rounded-[1.25rem] p-4">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">VD/VT</p>
+              <div className="mt-3 grid gap-3 md:grid-cols-2">
+                <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
+                <InputField label="PetCO2" value={wean.vdvtPetCO2} placeholder="35" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPetCO2: value }))} type="number" />
+              </div>
+              <div className="mt-4">
+                <ResultBadge label="VD/VT" value={vdvtValue !== null ? vdvtValue.toFixed(2) : '-'} hint={vdvtTone?.t ?? 'Normal 0,25-0,40'} color={vdvtTone?.c} />
+              </div>
             </div>
-            <div className="mt-4">
-              <ResultBadge label="VD/VT" value={vdvtValue !== null ? vdvtValue.toFixed(2) : '-'} hint={vdvtTone?.t ?? 'Normal 0,25-0,40'} color={vdvtTone?.c} />
-            </div>
-          </div>
 
-          <div className="chrome-panel rounded-[1.25rem] p-4">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Ventilatory ratio</p>
-            <div className="mt-3 grid gap-3 md:grid-cols-2">
-              <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
-              <InputField label="PaCO2 atual" value={wean.vrPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vrPaCO2: value }))} type="number" />
+            <div className="chrome-panel rounded-[1.25rem] p-4">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Ventilatory ratio</p>
+              <div className="mt-3 grid gap-3 md:grid-cols-2">
+                <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
+                <InputField label="PaCO2 atual" value={wean.vrPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vrPaCO2: value }))} type="number" />
+              </div>
+              <div className="mt-4">
+                <ResultBadge
+                  label="VR"
+                  value={vrValue !== null ? vrValue.toFixed(2) : '-'}
+                  hint={vrTone?.t ?? 'Usa o peso do card volume por peso'}
+                  color={vrTone?.c}
+                />
+              </div>
             </div>
-            <div className="mt-4">
-              <ResultBadge
-                label="VR"
-                value={vrValue !== null ? vrValue.toFixed(2) : '-'}
-                hint={vrTone?.t ?? 'Usa o peso do card volume por peso'}
-                color={vrTone?.c}
-              />
-            </div>
-          </div>
 
-          <div className="chrome-panel rounded-[1.25rem] p-4">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Gap CO2</p>
-            <div className="mt-3 grid gap-3 md:grid-cols-2">
-              <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
-              <InputField label="EtCO2" value={wean.gapEtCO2} placeholder="37" onChange={(value) => setWean((prev) => ({ ...prev, gapEtCO2: value }))} type="number" />
+            <div className="chrome-panel rounded-[1.25rem] p-4">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Gap CO2</p>
+              <div className="mt-3 grid gap-3 md:grid-cols-2">
+                <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
+                <InputField label="EtCO2" value={wean.gapEtCO2} placeholder="37" onChange={(value) => setWean((prev) => ({ ...prev, gapEtCO2: value }))} type="number" />
+              </div>
+              <div className="mt-4">
+                <ResultBadge label="Gap" value={gapValue !== null ? `${gapValue.toFixed(0)} mmHg` : '-'} hint={gapTone?.t ?? 'PaCO2 - EtCO2'} color={gapTone?.c} />
+              </div>
             </div>
-            <div className="mt-4">
-              <ResultBadge label="Gap" value={gapValue !== null ? `${gapValue.toFixed(0)} mmHg` : '-'} hint={gapTone?.t ?? 'PaCO2 - EtCO2'} color={gapTone?.c} />
-            </div>
-          </div>
 
-          <div className="chrome-panel rounded-[1.25rem] p-4">
-            <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Criterios de desmame</p>
-            <div className="mt-3 grid gap-3 md:grid-cols-3">
-              <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
-              <InputField label="PEmax" value={wean.peMax} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, peMax: value }))} type="number" />
-              <InputField label="CV (mL/kg)" value={wean.cvMlKg} placeholder="12" onChange={(value) => setWean((prev) => ({ ...prev, cvMlKg: value }))} type="number" step="0.1" />
-            </div>
-            <div className="mt-4">
-              <ResultBadge label="Resumo" value={weanSummary ? weanSummary.t : '-'} hint="PImax >=30 • PEmax >=40 • CV >=10" color={weanSummary?.c} />
+            <div className="chrome-panel rounded-[1.25rem] p-4">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Criterios de desmame</p>
+              <div className="mt-3 grid gap-3 md:grid-cols-3">
+                <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
+                <InputField label="PEmax" value={wean.peMax} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, peMax: value }))} type="number" />
+                <InputField label="CV (mL/kg)" value={wean.cvMlKg} placeholder="12" onChange={(value) => setWean((prev) => ({ ...prev, cvMlKg: value }))} type="number" step="0.1" />
+              </div>
+              <div className="mt-4">
+                <ResultBadge label="Resumo" value={weanSummary ? weanSummary.t : '-'} hint="PImax >=30 • PEmax >=40 • CV >=10" color={weanSummary?.c} />
+              </div>
             </div>
           </div>
         </CalcCard>
@@ -1116,8 +1155,9 @@ export function VMSystemPanel() {
           subtitle="P/F, S/F, BE e leitura acido-base"
           open={openCardId === 'gaso'}
           onToggle={toggleCard}
+          onClear={() => setGaso(INITIAL_GASO)}
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
             <InputField label="pH" value={gaso.ph} placeholder="7.40" onChange={(value) => setGaso((prev) => ({ ...prev, ph: value }))} type="number" step="0.01" />
             <InputField label="PaCO2" value={gaso.paCO2} placeholder="40" onChange={(value) => setGaso((prev) => ({ ...prev, paCO2: value }))} type="number" />
             <InputField label="HCO3" value={gaso.hco3} placeholder="24" onChange={(value) => setGaso((prev) => ({ ...prev, hco3: value }))} type="number" />
@@ -1144,6 +1184,7 @@ export function VMSystemPanel() {
           subtitle="Eventos assincronicos / ciclos totais"
           open={openCardId === 'asynchrony'}
           onToggle={toggleCard}
+          onClear={() => setAsynchrony(INITIAL_ASYNCHRONY)}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <InputField label="Eventos" value={asynchrony.events} placeholder="5" onChange={(value) => setAsynchrony((prev) => ({ ...prev, events: value }))} type="number" />
@@ -1162,6 +1203,7 @@ export function VMSystemPanel() {
           subtitle="O + V + M"
           open={openCardId === 'glasgow'}
           onToggle={toggleCard}
+          onClear={() => setGlasgow(INITIAL_GLASGOW)}
         >
           <div className="grid gap-4 md:grid-cols-3">
             <SelectField label="Ocular" value={glasgow.o} options={[{ value: '4', label: '4' }, { value: '3', label: '3' }, { value: '2', label: '2' }, { value: '1', label: '1' }]} onChange={(value) => setGlasgow((prev) => ({ ...prev, o: value }))} />
@@ -1180,8 +1222,9 @@ export function VMSystemPanel() {
           subtitle="Forca muscular global"
           open={openCardId === 'mrc'}
           onToggle={toggleCard}
+          onClear={() => setMrc(createInitialMrc())}
         >
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
             {MRC_GROUPS.map((group) => (
               <div key={group.label} className="chrome-panel rounded-[1.15rem] p-3">
                 <p className="text-[10px] uppercase tracking-[0.16em] text-white/42">{group.label}</p>
@@ -1192,7 +1235,9 @@ export function VMSystemPanel() {
               </div>
             ))}
           </div>
-          <ResultBadge label="MRC total" value={mrcTotal !== null ? `${mrcTotal}/60` : '-'} hint={mrcTone?.t ?? 'Preencha os 12 grupos'} color={mrcTone?.c} />
+          <div className="grid gap-3 md:grid-cols-2">
+            <ResultBadge label="MRC total" value={mrcTotal !== null ? `${mrcTotal}/60` : '-'} hint={mrcTone?.t ?? 'Preencha os 12 grupos'} color={mrcTone?.c} />
+          </div>
         </CalcCard>
 
         <CalcCard
@@ -1202,13 +1247,16 @@ export function VMSystemPanel() {
           subtitle="Mobilidade 0-21"
           open={openCardId === 'perme'}
           onToggle={toggleCard}
+          onClear={() => setPerme(createInitialPerme())}
         >
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
             {PERME_ITEMS.map((item) => (
               <SelectField key={item.key} label={item.label} value={perme[item.key]} options={item.options} onChange={(value) => setPerme((prev) => ({ ...prev, [item.key]: value }))} />
             ))}
           </div>
-          <ResultBadge label="PERME" value={permeTotal !== null ? `${permeTotal}/21` : '-'} hint={permeTone?.t ?? 'Preencha os 7 itens'} color={permeTone?.c} />
+          <div className="grid gap-3 md:grid-cols-2">
+            <ResultBadge label="PERME" value={permeTotal !== null ? `${permeTotal}/21` : '-'} hint={permeTone?.t ?? 'Preencha os 7 itens'} color={permeTone?.c} />
+          </div>
         </CalcCard>
 
         <CalcCard
@@ -1218,11 +1266,14 @@ export function VMSystemPanel() {
           subtitle="ICU Mobility Scale"
           open={openCardId === 'ims'}
           onToggle={toggleCard}
+          onClear={() => setIms(INITIAL_IMS)}
         >
           <div className="grid gap-4 md:grid-cols-2">
             <SelectField label="IMS" value={ims.score} options={IMS_OPTIONS} onChange={(value) => setIms({ score: value })} />
           </div>
-          <ResultBadge label="IMS" value={imsValue !== null ? `${imsValue}/10` : '-'} hint={imsTone?.t ?? 'Escala de mobilidade'} color={imsTone?.c} />
+          <div className="grid gap-3 md:grid-cols-2">
+            <ResultBadge label="IMS" value={imsValue !== null ? `${imsValue}/10` : '-'} hint={imsTone?.t ?? 'Escala de mobilidade'} color={imsTone?.c} />
+          </div>
         </CalcCard>
       </div>
     </div>
