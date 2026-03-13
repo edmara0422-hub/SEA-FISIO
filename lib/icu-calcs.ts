@@ -223,25 +223,49 @@ export type PatientData = {
   pulmonar: string
   secrecao: string
   tipoVia: string
+  dataTOT: string
+  dataTQT: string
+  dataExtubacao: string
+  horaExtubacao: string
+  dataReIOT: string
+  horaReIOT: string
+  dataDecanulacao: string
+  horaDecanulacao: string
+  dataDescVM: string
+  horaDescVM: string
   modoVM: string
   vt: string
   vc: string
   fr: string
   peep: string
   fio2: string
+  trigger: string
+  ti: string
+  ie: string
   ppico: string
   pplato: string
   pmean: string
   ps: string
+  ciclagem: string
   p01: string
   pocc: string
   pmusc: string
+  ipap: string
+  epap: string
+  interfaceVNI: string
+  gasoData: string
+  gasoHora: string
   gasoPH: string
   gasoPaCO2: string
   gasoPaO2: string
   gasoHCO3: string
   gasoBE: string
+  gasoSaO2: string
+  gasoLactato: string
   gasoFiO2: string
+  gasoObs: string
+  sfSpO2: string
+  sfFiO2: string
   motora: string
   mrcOmbroD: string
   mrcOmbroE: string
@@ -307,25 +331,49 @@ export function emptyPatient(): PatientData {
     pulmonar: '',
     secrecao: '',
     tipoVia: '',
+    dataTOT: '',
+    dataTQT: '',
+    dataExtubacao: '',
+    horaExtubacao: '',
+    dataReIOT: '',
+    horaReIOT: '',
+    dataDecanulacao: '',
+    horaDecanulacao: '',
+    dataDescVM: '',
+    horaDescVM: '',
     modoVM: '',
     vt: '',
     vc: '',
     fr: '',
     peep: '',
     fio2: '',
+    trigger: '',
+    ti: '',
+    ie: '',
     ppico: '',
     pplato: '',
     pmean: '',
     ps: '',
+    ciclagem: '',
     p01: '',
     pocc: '',
     pmusc: '',
+    ipap: '',
+    epap: '',
+    interfaceVNI: 'facial',
+    gasoData: '',
+    gasoHora: '',
     gasoPH: '',
     gasoPaCO2: '',
     gasoPaO2: '',
     gasoHCO3: '',
     gasoBE: '',
+    gasoSaO2: '',
+    gasoLactato: '',
     gasoFiO2: '',
+    gasoObs: '',
+    sfSpO2: '',
+    sfFiO2: '',
     motora: '',
     mrcOmbroD: '',
     mrcOmbroE: '',
