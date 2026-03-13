@@ -1133,51 +1133,44 @@ export function VMSystemPanel() {
           <div className="grid gap-3 xl:grid-cols-2">
             <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">VD/VT</p>
-              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
-                <div className="grid min-w-[34rem] grid-cols-3 gap-3">
-                  <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
-                  <InputField label="PetCO2" value={wean.vdvtPetCO2} placeholder="35" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPetCO2: value }))} type="number" />
-                  <ResultBadge label="VD/VT" value={vdvtValue !== null ? vdvtValue.toFixed(2) : '-'} hint={vdvtTone?.t ?? 'Normal 0,25-0,40'} color={vdvtTone?.c} />
-                </div>
+              <div className="mt-2 grid grid-cols-3 gap-2">
+                <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
+                <InputField label="PetCO2" value={wean.vdvtPetCO2} placeholder="35" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPetCO2: value }))} type="number" />
+                <ResultBadge compact label="VD/VT" value={vdvtValue !== null ? vdvtValue.toFixed(2) : '-'} hint={vdvtTone?.t ?? '0,25-0,40'} color={vdvtTone?.c} />
               </div>
             </div>
 
             <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Ventilatory ratio</p>
-              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
-                <div className="grid min-w-[34rem] grid-cols-3 gap-3">
-                  <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
-                  <InputField label="PaCO2 atual" value={wean.vrPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vrPaCO2: value }))} type="number" />
-                  <ResultBadge
-                    label="VR"
-                    value={vrValue !== null ? vrValue.toFixed(2) : '-'}
-                    hint={vrTone?.t ?? 'Usa o peso do card volume por peso'}
-                    color={vrTone?.c}
-                  />
-                </div>
+              <div className="mt-2 grid grid-cols-3 gap-2">
+                <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
+                <InputField label="PaCO2 atual" value={wean.vrPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vrPaCO2: value }))} type="number" />
+                <ResultBadge
+                  compact
+                  label="VR"
+                  value={vrValue !== null ? vrValue.toFixed(2) : '-'}
+                  hint={vrTone?.t ?? 'Peso do VC'}
+                  color={vrTone?.c}
+                />
               </div>
             </div>
 
             <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Gap CO2</p>
-              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
-                <div className="grid min-w-[34rem] grid-cols-3 gap-3">
-                  <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
-                  <InputField label="EtCO2" value={wean.gapEtCO2} placeholder="37" onChange={(value) => setWean((prev) => ({ ...prev, gapEtCO2: value }))} type="number" />
-                  <ResultBadge label="Gap" value={gapValue !== null ? `${gapValue.toFixed(0)} mmHg` : '-'} hint={gapTone?.t ?? 'PaCO2 - EtCO2'} color={gapTone?.c} />
-                </div>
+              <div className="mt-2 grid grid-cols-3 gap-2">
+                <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
+                <InputField label="EtCO2" value={wean.gapEtCO2} placeholder="37" onChange={(value) => setWean((prev) => ({ ...prev, gapEtCO2: value }))} type="number" />
+                <ResultBadge compact label="Gap" value={gapValue !== null ? `${gapValue.toFixed(0)} mmHg` : '-'} hint={gapTone?.t ?? 'Pa-Et'} color={gapTone?.c} />
               </div>
             </div>
 
             <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Criterios de desmame</p>
-              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
-                <div className="grid min-w-[46rem] grid-cols-4 gap-3">
-                  <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
-                  <InputField label="PEmax" value={wean.peMax} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, peMax: value }))} type="number" />
-                  <InputField label="CV (mL/kg)" value={wean.cvMlKg} placeholder="12" onChange={(value) => setWean((prev) => ({ ...prev, cvMlKg: value }))} type="number" step="0.1" />
-                  <ResultBadge label="Resumo" value={weanSummary ? weanSummary.t : '-'} hint="PImax >=30 • PEmax >=40 • CV >=10" color={weanSummary?.c} />
-                </div>
+              <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
+                <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
+                <InputField label="PEmax" value={wean.peMax} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, peMax: value }))} type="number" />
+                <InputField label="CV (mL/kg)" value={wean.cvMlKg} placeholder="12" onChange={(value) => setWean((prev) => ({ ...prev, cvMlKg: value }))} type="number" step="0.1" />
+                <ResultBadge compact label="Resumo" value={weanSummary ? weanSummary.t : '-'} hint="PI30 • PE40 • CV10" color={weanSummary?.c} />
               </div>
             </div>
           </div>
