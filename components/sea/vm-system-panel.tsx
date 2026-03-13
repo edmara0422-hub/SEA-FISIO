@@ -1,19 +1,9 @@
 'use client'
 
 import { useMemo, useState } from 'react'
-import {
-  Activity,
-  Brain,
-  Gauge,
-  HeartPulse,
-  Layers3,
-  Orbit,
-  Waves,
-  Wind,
-} from 'lucide-react'
+import { Activity, Gauge, HeartPulse, Layers3, Wind } from 'lucide-react'
 import {
   analisarGaso,
-  calcGlasgow,
   calcPesoIdeal,
   calcPmusc,
   interpP01,
@@ -57,8 +47,6 @@ type SofaState = {
   renal: string
 }
 
-type MrcState = Record<string, string>
-
 const INITIAL_PEEP_LEVELS: PeepLevel[] = [
   { peep: '', plato: '', si: '' },
   { peep: '', plato: '', si: '' },
@@ -83,21 +71,6 @@ const INITIAL_SOFA: SofaState = {
   renal: '',
 }
 
-const INITIAL_MRC: MrcState = {
-  ombroD: '',
-  ombroE: '',
-  cotoveloD: '',
-  cotoveloE: '',
-  punhoD: '',
-  punhoE: '',
-  quadrilD: '',
-  quadrilE: '',
-  joelhoD: '',
-  joelhoE: '',
-  tornozeloD: '',
-  tornozeloE: '',
-}
-
 const HACOR_SCORE = {
   fc: { leq120: 0, ge121: 1 },
   ph: { ge735: 0, '730_734': 2, '725_729': 3, lt725: 4 },
@@ -112,35 +85,6 @@ const HACOR_DX = {
   ards: 3,
   edema_cardiogenico: -4,
 } as const
-
-const IMS_OPTIONS = [
-  { value: '0', label: '0 - Imobilidade' },
-  { value: '1', label: '1 - Exercicio no leito' },
-  { value: '2', label: '2 - Passivo para cadeira' },
-  { value: '3', label: '3 - Sentado beira-leito' },
-  { value: '4', label: '4 - Ortostatismo' },
-  { value: '5', label: '5 - Transferencia leito-cadeira' },
-  { value: '6', label: '6 - Marcha estacionaria' },
-  { value: '7', label: '7 - Deambulacao assistida 2+' },
-  { value: '8', label: '8 - Deambulacao assistida 1' },
-  { value: '9', label: '9 - Deambulacao com dispositivo' },
-  { value: '10', label: '10 - Deambulacao independente' },
-]
-
-const MRC_FIELDS = [
-  { key: 'ombroD', label: 'Ombro D' },
-  { key: 'ombroE', label: 'Ombro E' },
-  { key: 'cotoveloD', label: 'Cotovelo D' },
-  { key: 'cotoveloE', label: 'Cotovelo E' },
-  { key: 'punhoD', label: 'Punho D' },
-  { key: 'punhoE', label: 'Punho E' },
-  { key: 'quadrilD', label: 'Quadril D' },
-  { key: 'quadrilE', label: 'Quadril E' },
-  { key: 'joelhoD', label: 'Joelho D' },
-  { key: 'joelhoE', label: 'Joelho E' },
-  { key: 'tornozeloD', label: 'Tornozelo D' },
-  { key: 'tornozeloE', label: 'Tornozelo E' },
-] as const
 
 function parseNumber(value: string) {
   if (!value.trim()) {
@@ -159,15 +103,15 @@ function parseStressIndex(value: string) {
   }
 
   if (normalized === '=1' || normalized === '1' || normalized === '1.0') {
-    return { value: 1, label: '=1 (ideal)', ok: true }
+    return { value: 1, label: '=1', ok: true }
   }
 
   if (normalized === '>1') {
-    return { value: 1.2, label: '>1 (hiperdistensao)', ok: false }
+    return { value: 1.2, label: '>1', ok: false }
   }
 
   if (normalized === '<1') {
-    return { value: 0.8, label: '<1 (colapso)', ok: false }
+    return { value: 0.8, label: '<1', ok: false }
   }
 
   const parsed = parseNumber(normalized)
@@ -182,11 +126,13 @@ function parseStressIndex(value: string) {
   }
 }
 
-function metricBoxStyle(color: string) {
-  return {
-    borderColor: `${color}30`,
-    background: `${color}10`,
-  }
+function toneClass(color?: string) {
+  if (color === '#4ade80') return 'border-[#4ade8030] bg-[#4ade8010] text-[#86efac]'
+  if (color === '#facc15') return 'border-[#facc1530] bg-[#facc150f] text-[#fde68a]'
+  if (color === '#fb923c') return 'border-[#fb923c30] bg-[#fb923c10] text-[#fdba74]'
+  if (color === '#f87171') return 'border-[#f8717130] bg-[#f8717110] text-[#fca5a5]'
+  if (color === '#60a5fa') return 'border-[#60a5fa30] bg-[#60a5fa10] text-[#93c5fd]'
+  return 'border-white/10 bg-white/[0.04] text-white/84'
 }
 
 function InputField({
@@ -243,27 +189,44 @@ function SelectField({
   )
 }
 
-function MetricCard({
-  icon: Icon,
+function CompactMetric({
   label,
   value,
-  caption,
+  hint,
   color,
 }: {
-  icon: typeof Activity
   label: string
   value: string
-  caption: string
-  color: string
+  hint?: string
+  color?: string
 }) {
   return (
-    <div className="chrome-panel rounded-[1.35rem] p-4">
-      <div className="mb-3 flex items-center gap-2 text-white/48">
-        <Icon className="h-4 w-4" style={{ color }} />
-        <span className="text-[10px] uppercase tracking-[0.18em]">{label}</span>
+    <div className={`rounded-[1.1rem] border p-3 ${toneClass(color)}`}>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] opacity-70">{label}</p>
+      <p className="mt-2 text-sm font-semibold">{value}</p>
+      {hint ? <p className="mt-1 text-xs opacity-70">{hint}</p> : null}
+    </div>
+  )
+}
+
+function SectionHeader({
+  icon: Icon,
+  eyebrow,
+  title,
+}: {
+  icon: typeof Activity
+  eyebrow: string
+  title: string
+}) {
+  return (
+    <div className="mb-5 flex items-center gap-3">
+      <div className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]">
+        <Icon className="h-5 w-5 text-white" />
       </div>
-      <p className="text-xl font-semibold text-white/92">{value}</p>
-      <p className="mt-2 text-xs leading-relaxed text-white/48">{caption}</p>
+      <div>
+        <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">{eyebrow}</p>
+        <h4 className="text-sm font-semibold text-white/88">{title}</h4>
+      </div>
     </div>
   )
 }
@@ -287,14 +250,30 @@ export function VMSystemPanel() {
   const [gasoHCO3, setGasoHCO3] = useState('27')
   const [p01, setP01] = useState('2.4')
   const [pocc, setPocc] = useState('8')
-  const [glasgowO, setGlasgowO] = useState('4')
-  const [glasgowV, setGlasgowV] = useState('T')
-  const [glasgowM, setGlasgowM] = useState('6')
-  const [imsScore, setImsScore] = useState('4')
   const [peepLevels, setPeepLevels] = useState<PeepLevel[]>(INITIAL_PEEP_LEVELS)
   const [hacor, setHacor] = useState<HacorState>(INITIAL_HACOR)
   const [sofa, setSofa] = useState<SofaState>(INITIAL_SOFA)
-  const [mrc, setMrc] = useState<MrcState>(INITIAL_MRC)
+
+  const idealWeight = useMemo(() => {
+    const parsedHeight = parseNumber(height)
+    if (parsedHeight === null) {
+      return null
+    }
+
+    return calcPesoIdeal(parsedHeight, sex)
+  }, [height, sex])
+
+  const vtWindow = useMemo(() => {
+    if (!idealWeight) {
+      return null
+    }
+
+    return {
+      low: Math.round(idealWeight * 4),
+      high: Math.round(idealWeight * 6),
+      pbw: idealWeight.toFixed(1),
+    }
+  }, [idealWeight])
 
   const metrics = useMemo(() => {
     const parsedFr = parseNumber(fr)
@@ -353,7 +332,7 @@ export function VMSystemPanel() {
     })
   }, [gasoHCO3, gasoPaCO2, gasoPh])
 
-  const neuroDrive = useMemo(() => {
+  const driveMetrics = useMemo(() => {
     const parsedP01 = parseNumber(p01)
     const parsedPocc = parseNumber(pocc)
     const pmusc = parsedPocc !== null ? calcPmusc(parsedPocc) : null
@@ -363,12 +342,8 @@ export function VMSystemPanel() {
       poccInterp: parsedPocc !== null ? interpPocc(parsedPocc) : null,
       pmusc,
       pmuscInterp: pmusc !== null ? interpPmusc(pmusc) : null,
-      glasgow:
-        glasgowO || glasgowV || glasgowM
-          ? calcGlasgow(Number(glasgowO || 0), glasgowV || 'T', Number(glasgowM || 0))
-          : null,
     }
-  }, [glasgowM, glasgowO, glasgowV, p01, pocc])
+  }, [p01, pocc])
 
   const peepOptimization = useMemo(() => {
     const results = peepLevels
@@ -390,7 +365,6 @@ export function VMSystemPanel() {
           plato: currentPlato,
           dp,
           siLabel: si.label,
-          siOk: si.ok,
           score,
         }
       })
@@ -400,7 +374,6 @@ export function VMSystemPanel() {
       plato: number
       dp: number
       siLabel: string
-      siOk: boolean
       score: number
     }[]
 
@@ -444,269 +417,140 @@ export function VMSystemPanel() {
     }
 
     return {
-      base,
-      sofaTotal,
       total,
       risk,
       color,
       probability,
+      sofaTotal,
     }
   }, [hacor, sofa])
 
-  const mrcResult = useMemo(() => {
-    const values = Object.values(mrc).filter((value) => value !== '')
-    const total = values.reduce((sum, value) => sum + (parseInt(value, 10) || 0), 0)
-
-    if (values.length !== MRC_FIELDS.length) {
-      return null
-    }
-
-    if (total >= 48) return { total, text: 'Normal (>=48)', color: '#4ade80' }
-    if (total >= 36) return { total, text: 'Fraqueza leve (36-47)', color: '#facc15' }
-    if (total >= 24) return { total, text: 'Fraqueza moderada (24-35)', color: '#fb923c' }
-    return { total, text: 'Grave (<24) ICU-AW', color: '#f87171' }
-  }, [mrc])
-
-  const imsResult = useMemo(() => {
-    const value = parseInt(imsScore, 10)
-    if (Number.isNaN(value)) {
-      return null
-    }
-
-    if (value >= 7) return { value, text: 'Alta (7-10)', color: '#4ade80' }
-    if (value >= 4) return { value, text: 'Moderada (4-6)', color: '#facc15' }
-    if (value >= 1) return { value, text: 'Baixa (1-3)', color: '#fb923c' }
-    return { value, text: 'Imobilidade (0)', color: '#f87171' }
-  }, [imsScore])
-
-  const idealWeight = useMemo(() => {
-    const parsedHeight = parseNumber(height)
-    if (parsedHeight === null) {
-      return null
-    }
-
-    return calcPesoIdeal(parsedHeight, sex)
-  }, [height, sex])
-
-  const vcRange = useMemo(() => {
-    const weight = parseNumber(bodyWeight) ?? idealWeight
-    if (weight === null || weight <= 0) {
-      return null
-    }
-
-    return {
-      protetor: `${Math.round(weight * 4)}-${Math.round(weight * 6)} mL`,
-      convencional: `${Math.round(weight * 6)}-${Math.round(weight * 8)} mL`,
-    }
-  }, [bodyWeight, idealWeight])
-
   return (
     <div className="space-y-5">
-      <div className="grid gap-5 xl:grid-cols-[1.35fr,1fr]">
-        <div className="chrome-panel rounded-[1.6rem] p-5">
-          <div className="mb-5 flex items-center gap-3">
-              <div className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]">
-              <Wind className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">Base ventilatoria</p>
-              <h4 className="text-sm font-semibold text-white/88">Parametros principais da VM</h4>
-            </div>
-          </div>
+      <div className="chrome-panel rounded-[1.6rem] p-5">
+        <SectionHeader icon={Wind} eyebrow="S2" title="Base ventilatoria" />
 
-          <div className="grid gap-4 md:grid-cols-3">
-            <InputField label="FR (rpm)" value={fr} onChange={setFr} placeholder="16" />
-            <InputField label="PEEP (cmH2O)" value={peep} onChange={setPeep} placeholder="8" />
-            <InputField label="P. pico" value={peakPressure} onChange={setPeakPressure} placeholder="26" />
-            <InputField label="P. plato" value={platoPressure} onChange={setPlatoPressure} placeholder="20" />
-            <InputField label="VT (mL)" value={tidalVolume} onChange={setTidalVolume} placeholder="420" />
-            <InputField label="Fluxo (L/min)" value={flow} onChange={setFlow} placeholder="60" />
-            <InputField label="FiO2 (%)" value={fio2} onChange={setFio2} placeholder="40" />
-            <InputField label="PaO2 (mmHg)" value={pao2} onChange={setPao2} placeholder="92" />
-            <InputField label="SpO2 (%)" value={spo2} onChange={setSpo2} placeholder="96" />
-            <InputField label="VC (mL)" value={vc} onChange={setVc} placeholder="380" />
-            <InputField label="Peso (kg)" value={bodyWeight} onChange={setBodyWeight} placeholder="70" />
-            <InputField label="Altura (cm)" value={height} onChange={setHeight} placeholder="170" />
-          </div>
-
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
-            <SelectField
-              label="Sexo"
-              value={sex}
-              onChange={setSex}
-              options={[
-                { value: 'M', label: 'Masculino' },
-                { value: 'F', label: 'Feminino' },
-              ]}
-            />
-            <div className="chrome-subtle rounded-[1rem] p-4">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/36">VT por peso</p>
-              {vcRange ? (
-                <div className="mt-3 space-y-2 text-sm text-white/74">
-                  <p>
-                    Protetor: <span className="font-semibold text-white">{vcRange.protetor}</span>
-                  </p>
-                  <p>
-                    Convencional: <span className="font-semibold text-white">{vcRange.convencional}</span>
-                  </p>
-                  {idealWeight ? (
-                    <p className="text-xs text-white/46">PBW estimado: {idealWeight.toFixed(1)} kg</p>
-                  ) : null}
-                </div>
-              ) : (
-                <p className="mt-3 text-sm text-white/46">Informe peso ou altura para abrir a faixa ventilatoria.</p>
-              )}
-            </div>
-          </div>
+        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-4">
+          <InputField label="FR (rpm)" value={fr} onChange={setFr} placeholder="16" />
+          <InputField label="PEEP" value={peep} onChange={setPeep} placeholder="8" />
+          <InputField label="P. pico" value={peakPressure} onChange={setPeakPressure} placeholder="26" />
+          <InputField label="P. plato" value={platoPressure} onChange={setPlatoPressure} placeholder="20" />
+          <InputField label="VT (mL)" value={tidalVolume} onChange={setTidalVolume} placeholder="420" />
+          <InputField label="Fluxo (L/min)" value={flow} onChange={setFlow} placeholder="60" />
+          <InputField label="FiO2 (%)" value={fio2} onChange={setFio2} placeholder="40" />
+          <InputField label="PaO2" value={pao2} onChange={setPao2} placeholder="92" />
+          <InputField label="SpO2 (%)" value={spo2} onChange={setSpo2} placeholder="96" />
+          <InputField label="VC espont. (mL)" value={vc} onChange={setVc} placeholder="380" />
+          <InputField label="Peso (kg)" value={bodyWeight} onChange={setBodyWeight} placeholder="70" />
+          <InputField label="Altura (cm)" value={height} onChange={setHeight} placeholder="170" />
         </div>
 
-        <div className="chrome-panel rounded-[1.6rem] p-5">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]">
-              <Gauge className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">Gaso e drive</p>
-              <h4 className="text-sm font-semibold text-white/88">Acido-base, p0.1, pocc e Glasgow</h4>
-            </div>
-          </div>
+        <div className="mt-4 grid gap-4 md:grid-cols-3 xl:grid-cols-4">
+          <SelectField
+            label="Sexo"
+            value={sex}
+            onChange={setSex}
+            options={[
+              { value: 'M', label: 'Masculino' },
+              { value: 'F', label: 'Feminino' },
+            ]}
+          />
+          <CompactMetric
+            label="VT por peso"
+            value={vtWindow ? `${vtWindow.low}-${vtWindow.high} mL` : 'Informe altura'}
+            hint={vtWindow ? `PBW ${vtWindow.pbw} kg` : undefined}
+            color="#60a5fa"
+          />
+          <CompactMetric
+            label="Delta P"
+            value={metrics.dp !== null ? `${metrics.dp.toFixed(1)} cmH2O` : '—'}
+            color={metrics.dp !== null ? (metrics.dp < 12 ? '#4ade80' : metrics.dp <= 15 ? '#facc15' : '#f87171') : undefined}
+          />
+          <CompactMetric
+            label="Cest"
+            value={metrics.cest !== null ? `${metrics.cest.toFixed(1)} mL/cmH2O` : '—'}
+            color="#60a5fa"
+          />
+          <CompactMetric
+            label="P/F"
+            value={metrics.pf !== null ? metrics.pf.toFixed(0) : '—'}
+            hint={metrics.pfInterp?.t}
+            color={metrics.pfInterp?.c}
+          />
+          <CompactMetric
+            label="ROX"
+            value={metrics.rox !== null ? metrics.rox.toFixed(2) : '—'}
+            color="#a78bfa"
+          />
+          <CompactMetric
+            label="RSBI"
+            value={metrics.rsbi !== null ? metrics.rsbi.toFixed(1) : '—'}
+            hint={metrics.rsbiInterp?.t}
+            color={metrics.rsbiInterp?.c}
+          />
+          <CompactMetric
+            label="Cdyn / Raw"
+            value={metrics.cdyn !== null && metrics.raw !== null ? `${metrics.cdyn.toFixed(1)} / ${metrics.raw.toFixed(2)}` : '—'}
+            color="#facc15"
+          />
+          <CompactMetric
+            label="Mechanical power"
+            value={metrics.mechanicalPower !== null ? `${metrics.mechanicalPower.toFixed(1)} J/min` : '—'}
+            color="#f87171"
+          />
+        </div>
+      </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-5 xl:grid-cols-2">
+        <div className="chrome-panel rounded-[1.6rem] p-5">
+          <SectionHeader icon={Gauge} eyebrow="S2" title="Gaso e drive" />
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
             <InputField label="pH" value={gasoPh} onChange={setGasoPh} placeholder="7.36" />
             <InputField label="PaCO2" value={gasoPaCO2} onChange={setGasoPaCO2} placeholder="49" />
             <InputField label="HCO3" value={gasoHCO3} onChange={setGasoHCO3} placeholder="27" />
             <InputField label="P0.1" value={p01} onChange={setP01} placeholder="2.4" />
             <InputField label="Pocc" value={pocc} onChange={setPocc} placeholder="8" />
-            <SelectField
-              label="Glasgow verbal"
-              value={glasgowV}
-              onChange={setGlasgowV}
-              options={[
-                { value: '5', label: '5' },
-                { value: '4', label: '4' },
-                { value: '3', label: '3' },
-                { value: '2', label: '2' },
-                { value: '1', label: '1' },
-                { value: 'T', label: 'T - Intubado' },
-              ]}
+          </div>
+
+          <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+            <CompactMetric
+              label="Analise"
+              value={gasAnalysis ? gasAnalysis.full : 'Preencha pH, PaCO2 e HCO3'}
+              color={gasAnalysis?.cor}
             />
-            <SelectField
-              label="Glasgow ocular"
-              value={glasgowO}
-              onChange={setGlasgowO}
-              options={[
-                { value: '4', label: '4' },
-                { value: '3', label: '3' },
-                { value: '2', label: '2' },
-                { value: '1', label: '1' },
-              ]}
+            <CompactMetric
+              label="P0.1"
+              value={driveMetrics.p01Interp ? driveMetrics.p01Interp.t : '—'}
+              color={driveMetrics.p01Interp?.c}
             />
-            <SelectField
-              label="Glasgow motor"
-              value={glasgowM}
-              onChange={setGlasgowM}
-              options={[
-                { value: '6', label: '6' },
-                { value: '5', label: '5' },
-                { value: '4', label: '4' },
-                { value: '3', label: '3' },
-                { value: '2', label: '2' },
-                { value: '1', label: '1' },
-              ]}
+            <CompactMetric
+              label="Pocc"
+              value={driveMetrics.poccInterp ? driveMetrics.poccInterp.t : '—'}
+              color={driveMetrics.poccInterp?.c}
+            />
+            <CompactMetric
+              label="Pmusc"
+              value={driveMetrics.pmusc !== null && driveMetrics.pmuscInterp ? `${driveMetrics.pmusc.toFixed(1)}` : '—'}
+              hint={driveMetrics.pmuscInterp?.t}
+              color={driveMetrics.pmuscInterp?.c}
             />
           </div>
         </div>
-      </div>
 
-      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
-          icon={Activity}
-          label="Driving pressure"
-          value={metrics.dp !== null ? `${metrics.dp.toFixed(1)} cmH2O` : '—'}
-          caption="Pplato - PEEP"
-          color="#e5e7eb"
-        />
-        <MetricCard
-          icon={Waves}
-          label="Compliance estatica"
-          value={metrics.cest !== null ? `${metrics.cest.toFixed(1)} mL/cmH2O` : '—'}
-          caption="Vt / delta P"
-          color="#38bdf8"
-        />
-        <MetricCard
-          icon={Orbit}
-          label="ROX"
-          value={metrics.rox !== null ? metrics.rox.toFixed(2) : '—'}
-          caption="CNAF e risco de intubacao"
-          color="#a78bfa"
-        />
-        <MetricCard
-          icon={HeartPulse}
-          label="Mechanical power"
-          value={metrics.mechanicalPower !== null ? `${metrics.mechanicalPower.toFixed(1)} J/min` : '—'}
-          caption="Energia transmitida ao pulmao"
-          color="#f87171"
-        />
-        <MetricCard
-          icon={Wind}
-          label="P/F"
-          value={metrics.pf !== null ? metrics.pf.toFixed(0) : '—'}
-          caption={metrics.pfInterp?.t ?? 'Oxigenacao'}
-          color={metrics.pfInterp?.c ?? '#e5e7eb'}
-        />
-        <MetricCard
-          icon={Layers3}
-          label="RSBI"
-          value={metrics.rsbi !== null ? metrics.rsbi.toFixed(1) : '—'}
-          caption={metrics.rsbiInterp?.t ?? 'Desmame'}
-          color={metrics.rsbiInterp?.c ?? '#e5e7eb'}
-        />
-        <MetricCard
-          icon={Gauge}
-          label="Cdyn / Raw"
-          value={
-            metrics.cdyn !== null && metrics.raw !== null
-              ? `${metrics.cdyn.toFixed(1)} / ${metrics.raw.toFixed(2)}`
-              : '—'
-          }
-          caption="Complacencia dinamica e resistencia"
-          color="#facc15"
-        />
-        <MetricCard
-          icon={Brain}
-          label="Glasgow"
-          value={neuroDrive.glasgow?.total ? String(neuroDrive.glasgow.total) : '—'}
-          caption={neuroDrive.glasgow?.interp ?? 'Estado neurologico'}
-          color={neuroDrive.glasgow?.cor ?? '#e5e7eb'}
-        />
-      </div>
-
-      <div className="grid gap-5 xl:grid-cols-2">
         <div className="chrome-panel rounded-[1.6rem] p-5">
-          <div className="mb-5 flex items-center gap-3">
-              <div className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]">
-              <Wind className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">vm-calcs.js</p>
-              <h4 className="text-sm font-semibold text-white/88">Otimizacao de PEEP e stress index</h4>
-            </div>
-          </div>
+          <SectionHeader icon={Layers3} eyebrow="vm-calcs.js" title="PEEP + stress index" />
 
           <div className="grid gap-3 md:grid-cols-3">
             {peepLevels.map((level, index) => (
               <div key={`peep-${index}`} className="rounded-[1.2rem] border border-white/8 bg-black/14 p-4">
-                <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
-                  Nivel {index + 1}
-                </p>
+                <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">Nivel {index + 1}</p>
                 <div className="space-y-3">
                   <InputField
                     label="PEEP"
                     value={level.peep}
                     onChange={(value) =>
-                      setPeepLevels((prev) =>
-                        prev.map((item, itemIndex) => (itemIndex === index ? { ...item, peep: value } : item))
-                      )
+                      setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, peep: value } : item)))
                     }
                     placeholder="8"
                   />
@@ -714,9 +558,7 @@ export function VMSystemPanel() {
                     label="Plato"
                     value={level.plato}
                     onChange={(value) =>
-                      setPeepLevels((prev) =>
-                        prev.map((item, itemIndex) => (itemIndex === index ? { ...item, plato: value } : item))
-                      )
+                      setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, plato: value } : item)))
                     }
                     placeholder="20"
                   />
@@ -724,9 +566,7 @@ export function VMSystemPanel() {
                     label="Stress index"
                     value={level.si}
                     onChange={(value) =>
-                      setPeepLevels((prev) =>
-                        prev.map((item, itemIndex) => (itemIndex === index ? { ...item, si: value } : item))
-                      )
+                      setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, si: value } : item)))
                     }
                     placeholder="=1"
                   />
@@ -735,254 +575,119 @@ export function VMSystemPanel() {
             ))}
           </div>
 
-          {peepOptimization ? (
-            <div className="mt-4 rounded-[1.2rem] border p-4" style={metricBoxStyle('#4ade80')}>
-              <p className="text-sm font-semibold text-white/92">
-                Melhor resposta: nivel {peepOptimization.index + 1}
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-white/70">
-                PEEP {peepOptimization.peep} | Plato {peepOptimization.plato} | Delta P {peepOptimization.dp.toFixed(1)} | SI {peepOptimization.siLabel}
-              </p>
-            </div>
-          ) : (
-            <p className="mt-4 text-sm text-white/46">
-              Informe ao menos um nivel completo para calcular a melhor combinacao PEEP / SI.
-            </p>
-          )}
-        </div>
-
-        <div className="chrome-panel rounded-[1.6rem] p-5">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]">
-              <HeartPulse className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">vm-calcs.js</p>
-              <h4 className="text-sm font-semibold text-white/88">Updated HACOR + SOFA</h4>
-            </div>
+          <div className="mt-4">
+            {peepOptimization ? (
+              <CompactMetric
+                label={`Melhor nivel ${peepOptimization.index + 1}`}
+                value={`PEEP ${peepOptimization.peep} | Plato ${peepOptimization.plato}`}
+                hint={`Delta P ${peepOptimization.dp.toFixed(1)} | SI ${peepOptimization.siLabel}`}
+                color="#4ade80"
+              />
+            ) : (
+              <CompactMetric
+                label="PEEP"
+                value="Preencha um nivel completo"
+                hint="PEEP + Plato + Stress Index"
+              />
+            )}
           </div>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <SelectField
-              label="FC"
-              value={hacor.fc}
-              onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))}
-              options={[
-                { value: 'leq120', label: '<=120 -> 0' },
-                { value: 'ge121', label: '>=121 -> +1' },
-              ]}
-            />
-            <SelectField
-              label="pH"
-              value={hacor.ph}
-              onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))}
-              options={[
-                { value: 'ge735', label: '>=7.35 -> 0' },
-                { value: '730_734', label: '7.30-7.34 -> +2' },
-                { value: '725_729', label: '7.25-7.29 -> +3' },
-                { value: 'lt725', label: '<7.25 -> +4' },
-              ]}
-            />
-            <SelectField
-              label="GCS"
-              value={hacor.gcs}
-              onChange={(value) => setHacor((prev) => ({ ...prev, gcs: value }))}
-              options={[
-                { value: '15', label: '15 -> 0' },
-                { value: '13_14', label: '13-14 -> +2' },
-                { value: '11_12', label: '11-12 -> +5' },
-                { value: 'le10', label: '<=10 -> +10' },
-              ]}
-            />
-            <SelectField
-              label="PaO2/FiO2"
-              value={hacor.oxig}
-              onChange={(value) => setHacor((prev) => ({ ...prev, oxig: value }))}
-              options={[
-                { value: 'ge201', label: '>=201 -> 0' },
-                { value: '176_200', label: '176-200 -> +2' },
-                { value: '151_175', label: '151-175 -> +3' },
-                { value: '126_150', label: '126-150 -> +4' },
-                { value: '101_125', label: '101-125 -> +5' },
-                { value: 'le100', label: '<=100 -> +6' },
-              ]}
-            />
-            <SelectField
-              label="FR"
-              value={hacor.fr}
-              onChange={(value) => setHacor((prev) => ({ ...prev, fr: value }))}
-              options={[
-                { value: 'le30', label: '<=30 -> 0' },
-                { value: '31_35', label: '31-35 -> +1' },
-                { value: '36_40', label: '36-40 -> +2' },
-                { value: '41_45', label: '41-45 -> +3' },
-                { value: 'ge46', label: '>=46 -> +4' },
-              ]}
-            />
-            <SelectField
-              label="Diagnostico"
-              value={hacor.dx}
-              onChange={(value) => setHacor((prev) => ({ ...prev, dx: value }))}
-              options={[
-                { value: 'pneumonia', label: 'Pneumonia +2.5' },
-                { value: 'choque_septico', label: 'Choque septico +2.5' },
-                { value: 'ards', label: 'ARDS +3.0' },
-                { value: 'edema_cardiogenico', label: 'Edema cardiogenico -4.0' },
-              ]}
-            />
-          </div>
-
-          <div className="mt-4 grid gap-3 md:grid-cols-3">
-            <SelectField
-              label="SOFA resp"
-              value={sofa.resp}
-              onChange={(value) => setSofa((prev) => ({ ...prev, resp: value }))}
-              options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))}
-            />
-            <SelectField
-              label="SOFA cns"
-              value={sofa.cns}
-              onChange={(value) => setSofa((prev) => ({ ...prev, cns: value }))}
-              options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))}
-            />
-            <SelectField
-              label="SOFA cardio"
-              value={sofa.cardio}
-              onChange={(value) => setSofa((prev) => ({ ...prev, cardio: value }))}
-              options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))}
-            />
-            <SelectField
-              label="SOFA coag"
-              value={sofa.coag}
-              onChange={(value) => setSofa((prev) => ({ ...prev, coag: value }))}
-              options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))}
-            />
-            <SelectField
-              label="SOFA liver"
-              value={sofa.liver}
-              onChange={(value) => setSofa((prev) => ({ ...prev, liver: value }))}
-              options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))}
-            />
-            <SelectField
-              label="SOFA renal"
-              value={sofa.renal}
-              onChange={(value) => setSofa((prev) => ({ ...prev, renal: value }))}
-              options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))}
-            />
-          </div>
-
-          {hacorResult ? (
-            <div className="mt-4 rounded-[1.2rem] border p-4" style={metricBoxStyle(hacorResult.color)}>
-              <p className="text-sm font-semibold text-white/92">
-                Updated HACOR {hacorResult.total.toFixed(1)} - {hacorResult.risk}
-              </p>
-              <p className="mt-2 text-sm text-white/70">
-                Probabilidade estimada: {hacorResult.probability} | Base {hacorResult.base} | SOFA {hacorResult.sofaTotal}
-              </p>
-            </div>
-          ) : (
-            <p className="mt-4 text-sm text-white/46">
-              Preencha os campos do HACOR e do SOFA para abrir o risco de falha da VNI.
-            </p>
-          )}
         </div>
       </div>
 
-      <div className="grid gap-5 xl:grid-cols-2">
-        <div className="chrome-panel rounded-[1.6rem] p-5">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]">
-              <Gauge className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">Gaso e drive</p>
-              <h4 className="text-sm font-semibold text-white/88">Acido-base, p0.1, pocc e pmusc</h4>
-            </div>
-          </div>
+      <div className="chrome-panel rounded-[1.6rem] p-5">
+        <SectionHeader icon={HeartPulse} eyebrow="vm-calcs.js" title="Updated HACOR + SOFA" />
 
-          <div className="space-y-4">
-            {gasAnalysis ? (
-              <div className="rounded-[1.2rem] border p-4" style={metricBoxStyle(gasAnalysis.cor)}>
-                <p className="text-sm font-semibold text-white/92">{gasAnalysis.full}</p>
-                <p className="mt-2 text-xs leading-relaxed text-white/66">
-                  Analise automatica baseada no bloco clinico do ICU legado.
-                </p>
-              </div>
-            ) : null}
-
-            <div className="grid gap-3 md:grid-cols-3">
-              {neuroDrive.p01Interp ? (
-                <div className="rounded-[1.15rem] border p-4" style={metricBoxStyle(neuroDrive.p01Interp.c)}>
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/40">P0.1</p>
-                  <p className="mt-2 text-sm font-semibold text-white/88">{neuroDrive.p01Interp.t}</p>
-                </div>
-              ) : null}
-
-              {neuroDrive.poccInterp ? (
-                <div className="rounded-[1.15rem] border p-4" style={metricBoxStyle(neuroDrive.poccInterp.c)}>
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/40">Pocc</p>
-                  <p className="mt-2 text-sm font-semibold text-white/88">{neuroDrive.poccInterp.t}</p>
-                </div>
-              ) : null}
-
-              {neuroDrive.pmusc !== null && neuroDrive.pmuscInterp ? (
-                <div className="rounded-[1.15rem] border p-4" style={metricBoxStyle(neuroDrive.pmuscInterp.c)}>
-                  <p className="text-[10px] uppercase tracking-[0.18em] text-white/40">Pmusc</p>
-                  <p className="mt-2 text-sm font-semibold text-white/88">
-                    {neuroDrive.pmusc.toFixed(1)} | {neuroDrive.pmuscInterp.t}
-                  </p>
-                </div>
-              ) : null}
-            </div>
-          </div>
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          <SelectField
+            label="FC"
+            value={hacor.fc}
+            onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))}
+            options={[
+              { value: 'leq120', label: '<=120 -> 0' },
+              { value: 'ge121', label: '>=121 -> +1' },
+            ]}
+          />
+          <SelectField
+            label="pH"
+            value={hacor.ph}
+            onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))}
+            options={[
+              { value: 'ge735', label: '>=7.35 -> 0' },
+              { value: '730_734', label: '7.30-7.34 -> +2' },
+              { value: '725_729', label: '7.25-7.29 -> +3' },
+              { value: 'lt725', label: '<7.25 -> +4' },
+            ]}
+          />
+          <SelectField
+            label="GCS"
+            value={hacor.gcs}
+            onChange={(value) => setHacor((prev) => ({ ...prev, gcs: value }))}
+            options={[
+              { value: '15', label: '15 -> 0' },
+              { value: '13_14', label: '13-14 -> +2' },
+              { value: '11_12', label: '11-12 -> +5' },
+              { value: 'le10', label: '<=10 -> +10' },
+            ]}
+          />
+          <SelectField
+            label="PaO2/FiO2"
+            value={hacor.oxig}
+            onChange={(value) => setHacor((prev) => ({ ...prev, oxig: value }))}
+            options={[
+              { value: 'ge201', label: '>=201 -> 0' },
+              { value: '176_200', label: '176-200 -> +2' },
+              { value: '151_175', label: '151-175 -> +3' },
+              { value: '126_150', label: '126-150 -> +4' },
+              { value: '101_125', label: '101-125 -> +5' },
+              { value: 'le100', label: '<=100 -> +6' },
+            ]}
+          />
+          <SelectField
+            label="FR"
+            value={hacor.fr}
+            onChange={(value) => setHacor((prev) => ({ ...prev, fr: value }))}
+            options={[
+              { value: 'le30', label: '<=30 -> 0' },
+              { value: '31_35', label: '31-35 -> +1' },
+              { value: '36_40', label: '36-40 -> +2' },
+              { value: '41_45', label: '41-45 -> +3' },
+              { value: 'ge46', label: '>=46 -> +4' },
+            ]}
+          />
+          <SelectField
+            label="Diagnostico"
+            value={hacor.dx}
+            onChange={(value) => setHacor((prev) => ({ ...prev, dx: value }))}
+            options={[
+              { value: 'pneumonia', label: 'Pneumonia +2.5' },
+              { value: 'choque_septico', label: 'Choque septico +2.5' },
+              { value: 'ards', label: 'ARDS +3.0' },
+              { value: 'edema_cardiogenico', label: 'Edema cardiogenico -4.0' },
+            ]}
+          />
+          <SelectField label="SOFA resp" value={sofa.resp} onChange={(value) => setSofa((prev) => ({ ...prev, resp: value }))} options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))} />
+          <SelectField label="SOFA cns" value={sofa.cns} onChange={(value) => setSofa((prev) => ({ ...prev, cns: value }))} options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))} />
+          <SelectField label="SOFA cardio" value={sofa.cardio} onChange={(value) => setSofa((prev) => ({ ...prev, cardio: value }))} options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))} />
+          <SelectField label="SOFA coag" value={sofa.coag} onChange={(value) => setSofa((prev) => ({ ...prev, coag: value }))} options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))} />
+          <SelectField label="SOFA liver" value={sofa.liver} onChange={(value) => setSofa((prev) => ({ ...prev, liver: value }))} options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))} />
+          <SelectField label="SOFA renal" value={sofa.renal} onChange={(value) => setSofa((prev) => ({ ...prev, renal: value }))} options={['0', '1', '2', '3', '4'].map((value) => ({ value, label: value }))} />
         </div>
 
-        <div className="chrome-panel rounded-[1.6rem] p-5">
-          <div className="mb-5 flex items-center gap-3">
-            <div className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]">
-              <Brain className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">Mobilidade ICU</p>
-              <h4 className="text-sm font-semibold text-white/88">MRC global e escala IMS</h4>
-            </div>
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-2">
-            {MRC_FIELDS.map((field) => (
-              <SelectField
-                key={field.key}
-                label={field.label}
-                value={mrc[field.key]}
-                onChange={(value) => setMrc((prev) => ({ ...prev, [field.key]: value }))}
-                options={['0', '1', '2', '3', '4', '5'].map((value) => ({ value, label: value }))}
-              />
-            ))}
-          </div>
-
-          <div className="mt-4">
-            <SelectField label="IMS" value={imsScore} onChange={setImsScore} options={IMS_OPTIONS} />
-          </div>
-
-          <div className="mt-4 grid gap-3 md:grid-cols-2">
-            {mrcResult ? (
-              <div className="rounded-[1.15rem] border p-4" style={metricBoxStyle(mrcResult.color)}>
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/40">MRC</p>
-                <p className="mt-2 text-sm font-semibold text-white/88">
-                  {mrcResult.total}/60 - {mrcResult.text}
-                </p>
-              </div>
-            ) : null}
-
-            {imsResult ? (
-              <div className="rounded-[1.15rem] border p-4" style={metricBoxStyle(imsResult.color)}>
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/40">IMS</p>
-                <p className="mt-2 text-sm font-semibold text-white/88">
-                  {imsResult.value}/10 - {imsResult.text}
-                </p>
-              </div>
-            ) : null}
-          </div>
+        <div className="mt-4">
+          {hacorResult ? (
+            <CompactMetric
+              label="Updated HACOR"
+              value={`${hacorResult.total.toFixed(1)} | ${hacorResult.risk}`}
+              hint={`Prob. ${hacorResult.probability} | SOFA ${hacorResult.sofaTotal}`}
+              color={hacorResult.color}
+            />
+          ) : (
+            <CompactMetric
+              label="Updated HACOR"
+              value="Preencha HACOR e SOFA"
+              hint="Abre o risco de falha da VNI"
+            />
+          )}
         </div>
       </div>
     </div>

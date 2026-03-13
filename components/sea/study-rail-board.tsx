@@ -141,7 +141,9 @@ export function StudyRailBoard({
                           </span>
                         </div>
                         <h3 className="text-[1.55rem] font-semibold text-white/94">{current.title}</h3>
-                        <p className="mt-3 text-sm leading-relaxed text-white/64">{current.description}</p>
+                        {current.description ? (
+                          <p className="mt-3 text-sm leading-relaxed text-white/64">{current.description}</p>
+                        ) : null}
                       </div>
                     </div>
 

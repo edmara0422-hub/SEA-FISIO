@@ -2,47 +2,28 @@
 
 import { motion } from 'framer-motion'
 import { Activity, ArrowLeft, FileText } from 'lucide-react'
-import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { StudyRailBoard } from '@/components/sea/study-rail-board'
 
-const ProntuarioSystemPanel = dynamic(
-  () => import('@/components/sea/prontuario-system-panel').then((module) => module.ProntuarioSystemPanel),
-  {
-    loading: () => (
-      <div className="chrome-panel rounded-[1.45rem] p-5">
-        <p className="text-sm text-white/56">Carregando prontuario ICU...</p>
-      </div>
-    ),
-  }
-)
-
-const VMSystemPanel = dynamic(
-  () => import('@/components/sea/vm-system-panel').then((module) => module.VMSystemPanel),
-  {
-    loading: () => (
-      <div className="chrome-panel rounded-[1.45rem] p-5">
-        <p className="text-sm text-white/56">Carregando calculadoras VM...</p>
-      </div>
-    ),
-  }
-)
+function EmptySystemPanel() {
+  return <div className="chrome-panel min-h-[16rem] rounded-[1.45rem]" />
+}
 
 const systemModules = [
   {
     id: 'S1',
     title: 'Prontuario ICU',
     icon: FileText,
-    description: 'Prontuario com lixeira, calculadora ICU e acesso separado a referencia clinica dos arquivos icu*.js.',
-    panel: <ProntuarioSystemPanel />,
+    description: '',
+    panel: <EmptySystemPanel />,
   },
   {
     id: 'S2',
     title: 'Calculadoras VM',
     icon: Activity,
-    description: 'Calculadoras ventilatorias em React, derivadas da logica do vm-calcs.js e unificadas ao shell do app.',
-    panel: <VMSystemPanel />,
+    description: '',
+    panel: <EmptySystemPanel />,
   },
 ]
 
