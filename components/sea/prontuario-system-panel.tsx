@@ -1915,10 +1915,10 @@ export function ProntuarioSystemPanel() {
               <div className="space-y-5">
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Avaliacao pulmonar / via aerea
+                    Avaliacao pulmonar / secrecao / via aerea
                   </p>
-                  <div className="grid gap-4 md:grid-cols-3">
-                    <FieldShell label="Aval. pulmonar">
+                  <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <FieldShell label="Avaliacao pulmonar" span="xl:col-span-2">
                       <textarea
                         className={TEXTAREA_CLASS}
                         value={currentRecord.pulmonar}
@@ -2022,24 +2022,26 @@ export function ProntuarioSystemPanel() {
                             onChange={(event) => setField('horaDecanulacao', event.target.value)}
                           />
                         </FieldShell>
-                        <>
-                          <FieldShell label="Desconexao VM">
-                            <input
-                              className={INPUT_CLASS}
-                              type="date"
-                              value={currentRecord.dataDescVM}
-                              onChange={(event) => setField('dataDescVM', event.target.value)}
-                            />
-                          </FieldShell>
-                          <FieldShell label="Hora desc. VM">
-                            <input
-                              className={INPUT_CLASS}
-                              type="time"
-                              value={currentRecord.horaDescVM}
-                              onChange={(event) => setField('horaDescVM', event.target.value)}
-                            />
-                          </FieldShell>
-                        </>
+                        {currentRecord.tipoVia === 'TQT-VM' ? (
+                          <>
+                            <FieldShell label="Desconexao VM">
+                              <input
+                                className={INPUT_CLASS}
+                                type="date"
+                                value={currentRecord.dataDescVM}
+                                onChange={(event) => setField('dataDescVM', event.target.value)}
+                              />
+                            </FieldShell>
+                            <FieldShell label="Hora desc. VM">
+                              <input
+                                className={INPUT_CLASS}
+                                type="time"
+                                value={currentRecord.horaDescVM}
+                                onChange={(event) => setField('horaDescVM', event.target.value)}
+                              />
+                            </FieldShell>
+                          </>
+                        ) : null}
                       </>
                     )}
                   </div>
@@ -2201,7 +2203,7 @@ export function ProntuarioSystemPanel() {
                     Ventilacao mecanica
                   </p>
                   <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
-                    <FieldShell label="Modo ventilatorio">
+                    <FieldShell label="Modo ventilatorio" span="xl:col-span-2">
                       <select className={INPUT_CLASS} value={currentRecord.modoVM} onChange={(event) => setField('modoVM', event.target.value)}>
                         {VM_OPTIONS.map((option) => (
                           <option key={option.value} value={option.value} disabled={option.disabled}>
@@ -2210,71 +2212,238 @@ export function ProntuarioSystemPanel() {
                         ))}
                       </select>
                     </FieldShell>
-                    <FieldShell label="VT">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.vt} onChange={(event) => setField('vt', event.target.value)} placeholder="420" />
-                    </FieldShell>
-                    <FieldShell label="VC">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="380" />
-                    </FieldShell>
-                    <FieldShell label="FR">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
-                    </FieldShell>
-                    <FieldShell label="PEEP">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
-                    </FieldShell>
-                    <FieldShell label="FiO2">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
-                    </FieldShell>
-                    <FieldShell label="Fluxo">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.fluxo} onChange={(event) => setField('fluxo', event.target.value)} placeholder="60" />
-                    </FieldShell>
-                    <FieldShell label="Trigger">
-                      <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2 / 2L" />
-                    </FieldShell>
-                    <FieldShell label="TI">
-                      <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="0.9" />
-                    </FieldShell>
-                    <FieldShell label="I:E">
-                      <input className={INPUT_CLASS} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
-                    </FieldShell>
-                    <FieldShell label="P. pico">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="28" />
-                    </FieldShell>
-                    <FieldShell label="P. plato">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.pplato} onChange={(event) => setField('pplato', event.target.value)} placeholder="22" />
-                    </FieldShell>
-                    <FieldShell label="Pmean">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.pmean} onChange={(event) => setField('pmean', event.target.value)} placeholder="12" />
-                    </FieldShell>
-                    <FieldShell label="PS">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.ps} onChange={(event) => setField('ps', event.target.value)} placeholder="10" />
-                    </FieldShell>
-                    <FieldShell label="Ciclagem">
-                      <input className={INPUT_CLASS} value={currentRecord.ciclagem} onChange={(event) => setField('ciclagem', event.target.value)} placeholder="25%" />
-                    </FieldShell>
-                    <FieldShell label="P0.1">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.p01} onChange={(event) => setField('p01', event.target.value)} placeholder="2.2" />
-                    </FieldShell>
-                    <FieldShell label="Pocc">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.pocc} onChange={(event) => setField('pocc', event.target.value)} placeholder="8" />
-                    </FieldShell>
                   </div>
 
-                  {(currentRecord.tipoVia === 'VNI' || currentRecord.tipoVia === 'CNAF') && (
-                    <div className="mt-5 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-                      <FieldShell label="IPAP">
-                        <input className={INPUT_CLASS} type="number" value={currentRecord.ipap} onChange={(event) => setField('ipap', event.target.value)} placeholder="14" />
+                  {respModeType === 'volume' ? (
+                    <div className="mt-4 space-y-4">
+                      <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                        <FieldShell label="VT (mL)">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.vt} onChange={(event) => setField('vt', event.target.value)} placeholder="450" />
+                        </FieldShell>
+                        <FieldShell label="VC (mL)">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                        </FieldShell>
+                        <FieldShell label="VE (L/min)">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7.2" />
+                        </FieldShell>
+                        <FieldShell label="FR">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                        </FieldShell>
+                        <FieldShell label="PEEP">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="10" />
+                        </FieldShell>
+                        <FieldShell label="FiO2">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                        </FieldShell>
+                      </div>
+                      <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                        <FieldShell label="Fluxo (L/min)">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.fluxo} onChange={(event) => setField('fluxo', event.target.value)} placeholder="60" />
+                        </FieldShell>
+                        <FieldShell label="Trigger">
+                          <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
+                        </FieldShell>
+                        <FieldShell label="TI (s)">
+                          <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="1.0" />
+                        </FieldShell>
+                        <FieldShell label="I:E">
+                          <input className={INPUT_CLASS} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
+                        </FieldShell>
+                        <FieldShell label="P. pico">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="28" />
+                        </FieldShell>
+                        <FieldShell label="P. plato">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.pplato} onChange={(event) => setField('pplato', event.target.value)} placeholder="25" />
+                        </FieldShell>
+                      </div>
+                    </div>
+                  ) : respModeType === 'pressure' ? (
+                    <div className="mt-4 space-y-4">
+                      <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                        <FieldShell label="PC (cmH2O)">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="27" />
+                        </FieldShell>
+                        <FieldShell label="VC (mL)">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                        </FieldShell>
+                        <FieldShell label="VE (L/min)">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7.2" />
+                        </FieldShell>
+                        <FieldShell label="FR">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                        </FieldShell>
+                        <FieldShell label="PEEP">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="10" />
+                        </FieldShell>
+                        <FieldShell label="FiO2">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                        </FieldShell>
+                      </div>
+                      <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-5">
+                        <FieldShell label="Trigger">
+                          <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
+                        </FieldShell>
+                        <FieldShell label="TI (s)">
+                          <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="0.8" />
+                        </FieldShell>
+                        <FieldShell label="I:E">
+                          <input className={INPUT_CLASS} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
+                        </FieldShell>
+                        <FieldShell label="P. plato">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.pplato} onChange={(event) => setField('pplato', event.target.value)} placeholder="22" />
+                        </FieldShell>
+                        <FieldShell label="Pmean">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.pmean} onChange={(event) => setField('pmean', event.target.value)} placeholder="12" />
+                        </FieldShell>
+                      </div>
+                    </div>
+                  ) : respModeType === 'spontaneous' ? (
+                    <div className="mt-4 space-y-4">
+                      {currentRecord.modoVM === 'BIPAP' ? (
+                        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                          <FieldShell label="IPAP">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ipap} onChange={(event) => setField('ipap', event.target.value)} placeholder="15" />
+                          </FieldShell>
+                          <FieldShell label="EPAP">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.epap} onChange={(event) => setField('epap', event.target.value)} placeholder="8" />
+                          </FieldShell>
+                          <FieldShell label="VC (mL)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                          </FieldShell>
+                          <FieldShell label="VE (L/min)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                          </FieldShell>
+                          <FieldShell label="FR">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                          </FieldShell>
+                          <FieldShell label="Interface">
+                            <select className={INPUT_CLASS} value={currentRecord.interfaceVNI} onChange={(event) => setField('interfaceVNI', event.target.value)}>
+                              <option value="facial">Facial</option>
+                              <option value="oronasal">Oronasal</option>
+                              <option value="nasal">Nasal</option>
+                              <option value="helmet">Helmet</option>
+                            </select>
+                          </FieldShell>
+                        </div>
+                      ) : currentRecord.modoVM === 'CPAP' ? (
+                        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                          <FieldShell label="CPAP / PEEP">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
+                          </FieldShell>
+                          <FieldShell label="VC (mL)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                          </FieldShell>
+                          <FieldShell label="VE (L/min)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                          </FieldShell>
+                          <FieldShell label="FR">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                          </FieldShell>
+                          <FieldShell label="FiO2">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                          </FieldShell>
+                          <FieldShell label="Interface">
+                            <select className={INPUT_CLASS} value={currentRecord.interfaceVNI} onChange={(event) => setField('interfaceVNI', event.target.value)}>
+                              <option value="facial">Facial</option>
+                              <option value="oronasal">Oronasal</option>
+                              <option value="nasal">Nasal</option>
+                              <option value="helmet">Helmet</option>
+                            </select>
+                          </FieldShell>
+                        </div>
+                      ) : currentRecord.modoVM === 'APRV' ? (
+                        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                          <FieldShell label="P-Alta">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="28" />
+                          </FieldShell>
+                          <FieldShell label="P-Baixa">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="0" />
+                          </FieldShell>
+                          <FieldShell label="T-Alta (s)">
+                            <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="4.5" />
+                          </FieldShell>
+                          <FieldShell label="T-Baixa (s)">
+                            <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="0.5" />
+                          </FieldShell>
+                          <FieldShell label="FiO2">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="60" />
+                          </FieldShell>
+                          <FieldShell label="VC (mL)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                          </FieldShell>
+                        </div>
+                      ) : currentRecord.modoVM === 'PAV' || currentRecord.modoVM === 'NAVA' ? (
+                        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                          <FieldShell label="% Assist">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ps} onChange={(event) => setField('ps', event.target.value)} placeholder="70" />
+                          </FieldShell>
+                          <FieldShell label="VC (mL)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                          </FieldShell>
+                          <FieldShell label="VE (L/min)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                          </FieldShell>
+                          <FieldShell label="FR">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                          </FieldShell>
+                          <FieldShell label="PEEP">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
+                          </FieldShell>
+                          <FieldShell label="FiO2">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                          </FieldShell>
+                        </div>
+                      ) : (
+                        <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                          <FieldShell label="PS (cmH2O)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ps} onChange={(event) => setField('ps', event.target.value)} placeholder="10" />
+                          </FieldShell>
+                          <FieldShell label="VC (mL)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                          </FieldShell>
+                          <FieldShell label="VE (L/min)">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                          </FieldShell>
+                          <FieldShell label="FR">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                          </FieldShell>
+                          <FieldShell label="PEEP">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
+                          </FieldShell>
+                          <FieldShell label="FiO2">
+                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                          </FieldShell>
+                        </div>
+                      )}
+
+                      <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
+                        <FieldShell label="Trigger">
+                          <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
+                        </FieldShell>
+                        <FieldShell label="TI (s)">
+                          <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="0.8" />
+                        </FieldShell>
+                        <FieldShell label="I:E">
+                          <input className={INPUT_CLASS} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
+                        </FieldShell>
+                        <FieldShell label="Pmean">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.pmean} onChange={(event) => setField('pmean', event.target.value)} placeholder="12" />
+                        </FieldShell>
+                        <FieldShell label="P0.1">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.p01} onChange={(event) => setField('p01', event.target.value)} placeholder="2.2" />
+                        </FieldShell>
+                        <FieldShell label="Pocc">
+                          <input className={INPUT_CLASS} type="number" value={currentRecord.pocc} onChange={(event) => setField('pocc', event.target.value)} placeholder="8" />
+                        </FieldShell>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                      <FieldShell label="PEEP">
+                        <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
                       </FieldShell>
-                      <FieldShell label="EPAP">
-                        <input className={INPUT_CLASS} type="number" value={currentRecord.epap} onChange={(event) => setField('epap', event.target.value)} placeholder="8" />
-                      </FieldShell>
-                      <FieldShell label="Interface">
-                        <select className={INPUT_CLASS} value={currentRecord.interfaceVNI} onChange={(event) => setField('interfaceVNI', event.target.value)}>
-                          <option value="facial">Facial</option>
-                          <option value="oronasal">Oronasal</option>
-                          <option value="nasal">Nasal</option>
-                          <option value="helmet">Helmet</option>
-                        </select>
+                      <FieldShell label="FiO2">
+                        <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
                       </FieldShell>
                     </div>
                   )}
@@ -2297,7 +2466,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+                <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-6">
                   <MetricChip
                     label="Driving pressure"
                     value={calculations?.dp ? `${calculations.dp.toFixed(1)} cmH2O` : '--'}
@@ -2309,22 +2478,21 @@ export function ProntuarioSystemPanel() {
                     hint={currentRecord.fluxo ? 'Resistencia de VA' : 'Informe fluxo'}
                   />
                   <MetricChip
+                    label="VE"
+                    value={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} L/min` : '--'}
+                    hint="Volume minuto"
+                  />
+                  <MetricChip
                     label="RSBI"
                     value={calculations?.rsbi ? calculations.rsbi.toFixed(1) : '--'}
                     hint={calculations?.rsbiInterp?.t}
                     color={calculations?.rsbiInterp?.c}
                   />
                   <MetricChip
-                    label="P0.1"
-                    value={currentRecord.p01 || '--'}
-                    hint={calculations?.p01Interp?.t}
-                    color={calculations?.p01Interp?.c}
-                  />
-                  <MetricChip
-                    label="Pocc"
-                    value={currentRecord.pocc || '--'}
-                    hint={calculations?.poccInterp?.t}
-                    color={calculations?.poccInterp?.c}
+                    label="P0.1 / Pocc"
+                    value={`${currentRecord.p01 || '--'} / ${currentRecord.pocc || '--'}`}
+                    hint={calculations?.p01Interp?.t || calculations?.poccInterp?.t}
+                    color={calculations?.p01Interp?.c || calculations?.poccInterp?.c}
                   />
                   <MetricChip
                     label="Pmusc"
