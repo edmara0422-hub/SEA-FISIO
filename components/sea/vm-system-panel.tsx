@@ -821,22 +821,33 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setHacor(INITIAL_HACOR)}
         >
-          <div className="grid gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-            <SelectField label="FC" value={hacor.fc} options={HACOR_SELECTS.fc} onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))} />
-            <SelectField label="pH" value={hacor.ph} options={HACOR_SELECTS.ph} onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))} />
-            <SelectField label="GCS" value={hacor.gcs} options={HACOR_SELECTS.gcs} onChange={(value) => setHacor((prev) => ({ ...prev, gcs: value }))} />
-            <SelectField label="PaO2/FiO2" value={hacor.oxig} options={HACOR_SELECTS.oxig} onChange={(value) => setHacor((prev) => ({ ...prev, oxig: value }))} />
-            <SelectField label="FR" value={hacor.fr} options={HACOR_SELECTS.fr} onChange={(value) => setHacor((prev) => ({ ...prev, fr: value }))} />
-            <SelectField label="Diagnostico" value={hacor.dx} options={HACOR_SELECTS.dx} onChange={(value) => setHacor((prev) => ({ ...prev, dx: value }))} />
-            {SOFA_SELECTS.map((item) => (
-              <SelectField
-                key={item.key}
-                label={item.label}
-                value={hacor[item.key as keyof HacorState]}
-                options={item.options}
-                onChange={(value) => setHacor((prev) => ({ ...prev, [item.key]: value }))}
-              />
-            ))}
+          <div className="grid gap-3 xl:grid-cols-2">
+            <div className="chrome-panel rounded-[1.25rem] p-4">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">HACOR</p>
+              <div className="mt-3 grid gap-3">
+                <SelectField label="FC" value={hacor.fc} options={HACOR_SELECTS.fc} onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))} />
+                <SelectField label="pH" value={hacor.ph} options={HACOR_SELECTS.ph} onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))} />
+                <SelectField label="GCS" value={hacor.gcs} options={HACOR_SELECTS.gcs} onChange={(value) => setHacor((prev) => ({ ...prev, gcs: value }))} />
+                <SelectField label="PaO2/FiO2" value={hacor.oxig} options={HACOR_SELECTS.oxig} onChange={(value) => setHacor((prev) => ({ ...prev, oxig: value }))} />
+                <SelectField label="FR" value={hacor.fr} options={HACOR_SELECTS.fr} onChange={(value) => setHacor((prev) => ({ ...prev, fr: value }))} />
+                <SelectField label="Diagnostico" value={hacor.dx} options={HACOR_SELECTS.dx} onChange={(value) => setHacor((prev) => ({ ...prev, dx: value }))} />
+              </div>
+            </div>
+
+            <div className="chrome-panel rounded-[1.25rem] p-4">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">SOFA</p>
+              <div className="mt-3 grid gap-3">
+                {SOFA_SELECTS.map((item) => (
+                  <SelectField
+                    key={item.key}
+                    label={item.label}
+                    value={hacor[item.key as keyof HacorState]}
+                    options={item.options}
+                    onChange={(value) => setHacor((prev) => ({ ...prev, [item.key]: value }))}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
 
           <div className="grid gap-3 md:grid-cols-3">
@@ -860,13 +871,10 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setRox(INITIAL_ROX)}
         >
-          <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
+          <div className="grid gap-3 grid-cols-2 md:grid-cols-5">
             <InputField label="SpO2 (%)" value={rox.spo2} placeholder="95" onChange={(value) => setRox((prev) => ({ ...prev, spo2: value }))} type="number" />
             <InputField label="FiO2 (%)" value={rox.fio2} placeholder="50" onChange={(value) => setRox((prev) => ({ ...prev, fio2: value }))} type="number" />
             <InputField label="FR (rpm)" value={rox.fr} placeholder="24" onChange={(value) => setRox((prev) => ({ ...prev, fr: value }))} type="number" />
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-2">
             <ResultBadge label="ROX" value={roxValue !== null ? roxValue.toFixed(2) : '-'} hint={roxTone?.t ?? 'Preencha os 3 campos'} color={roxTone?.c} />
             <ResultBadge label="Leitura" value={roxTone ? (roxTone.c === '#4ade80' ? 'Estavel' : roxTone.c === '#f87171' ? 'Falha provavel' : 'Reavaliar') : '-'} hint="<3,85 alto risco • >=4,88 menor risco" color={roxTone?.c} />
           </div>
