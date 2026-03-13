@@ -824,7 +824,7 @@ export function VMSystemPanel() {
           <div className="space-y-3">
             <div className="chrome-panel rounded-[1.25rem] p-4">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">HACOR</p>
-              <div className="mt-3 overflow-x-auto pb-2">
+              <div className="scrollbar-hide mt-3 overflow-x-auto overscroll-x-contain pb-2">
                 <div className="grid min-w-[58rem] grid-cols-6 gap-3">
                   <SelectField label="FC" value={hacor.fc} options={HACOR_SELECTS.fc} onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))} />
                   <SelectField label="pH" value={hacor.ph} options={HACOR_SELECTS.ph} onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))} />
@@ -838,7 +838,7 @@ export function VMSystemPanel() {
 
             <div className="chrome-panel rounded-[1.25rem] p-4">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">SOFA</p>
-              <div className="mt-3 overflow-x-auto pb-2">
+              <div className="scrollbar-hide mt-3 overflow-x-auto overscroll-x-contain pb-2">
                 <div className="grid min-w-[58rem] grid-cols-6 gap-3">
                   {SOFA_SELECTS.map((item) => (
                     <SelectField
