@@ -2,63 +2,97 @@
  * Cálculos do Prontuário ICU (referência do projeto antigo)
  */
 
+export type SedativeEntry = {
+  droga: string
+  inicio: string
+  atual: string
+  unidade: string
+}
+
+export type BNMEntry = {
+  droga: string
+  inicio: string
+  atual: string
+  unidade: string
+}
+
+export type DVAEntry = {
+  droga: string
+  dose: string
+  unidade: string
+}
+
+export type LabExamEntry = {
+  data: string
+  titulo: string
+  resumo: string
+}
+
+export type ImageExamEntry = {
+  data: string
+  tipo: string
+  laudo: string
+}
+
 export function calcPesoIdeal(alt: number, sexo: string): number {
-  if (!alt || alt < 100 || alt > 250) return 0;
-  if (sexo === "M") return 50 + 0.91 * (alt - 152.4);
-  if (sexo === "F") return 45.5 + 0.91 * (alt - 152.4);
-  return 47.75 + 0.91 * (alt - 152.4);
+  if (!alt || alt < 100 || alt > 250) return 0
+  if (sexo === 'M') return 50 + 0.91 * (alt - 152.4)
+  if (sexo === 'F') return 45.5 + 0.91 * (alt - 152.4)
+  return 47.75 + 0.91 * (alt - 152.4)
 }
 
 export function calcPF(pao2: number, fio2: number): number | null {
-  if (fio2 === 0) return null;
-  return pao2 / (fio2 / 100);
+  if (fio2 === 0) return null
+  return pao2 / (fio2 / 100)
 }
 
 export function interpPF(v: number): { t: string; c: string } | null {
-  if (v >= 400) return { t: "Normal", c: "#4ade80" };
-  if (v >= 300) return { t: "Preservado", c: "#4ade80" };
-  if (v >= 200) return { t: "SDRA Leve", c: "#facc15" };
-  if (v >= 100) return { t: "SDRA Moderada", c: "#fb923c" };
-  return { t: "SDRA Grave", c: "#f87171" };
+  if (v >= 400) return { t: 'Normal', c: '#4ade80' }
+  if (v >= 300) return { t: 'Preservado', c: '#4ade80' }
+  if (v >= 200) return { t: 'SDRA Leve', c: '#facc15' }
+  if (v >= 100) return { t: 'SDRA Moderada', c: '#fb923c' }
+  return { t: 'SDRA Grave', c: '#f87171' }
 }
 
 export function calcDP(plato: number, peep: number): number | null {
-  if (plato == null || peep == null) return null;
-  return plato - peep;
+  if (plato == null || peep == null) return null
+  return plato - peep
 }
 
 export function calcCest(vt: number, dp: number): number | null {
-  if (!dp || dp === 0) return null;
-  return vt / dp;
+  if (!dp || dp === 0) return null
+  return vt / dp
 }
 
 export function calcGlasgow(
   o: number,
   v: number | string,
-  m: number
+  m: number,
 ): { total: number | string; interp: string; cor: string } | null {
-  if (v === "T" || v === "t")
+  if (v === 'T' || v === 't') {
     return {
       total: `${(o || 0) + (m || 0)}T`,
-      interp: "Intubado",
-      cor: "#60a5fa",
-    };
-  const t = (o || 0) + Number(v) + (m || 0);
-  if (t >= 15) return { total: 15, interp: "Consciente e Orientado", cor: "#4ade80" };
-  if (t >= 13) return { total: t, interp: "Disfunção Leve", cor: "#facc15" };
-  if (t >= 9) return { total: t, interp: "Disfunção Moderada", cor: "#fb923c" };
-  return { total: t, interp: "Coma (VA definitiva)", cor: "#f87171" };
+      interp: 'Intubado',
+      cor: '#60a5fa',
+    }
+  }
+
+  const t = (o || 0) + Number(v) + (m || 0)
+  if (t >= 15) return { total: 15, interp: 'Consciente e orientado', cor: '#4ade80' }
+  if (t >= 13) return { total: t, interp: 'Disfuncao leve', cor: '#facc15' }
+  if (t >= 9) return { total: t, interp: 'Disfuncao moderada', cor: '#fb923c' }
+  return { total: t, interp: 'Coma / VA definitiva', cor: '#f87171' }
 }
 
 export function calcRSBI(fr: number, vc: number): number | null {
-  if (!vc || vc === 0) return null;
-  return fr / (vc / 1000);
+  if (!vc || vc === 0) return null
+  return fr / (vc / 1000)
 }
 
 export function interpRSBI(v: number): { t: string; c: string } | null {
-  if (v < 80) return { t: "Favorável ao desmame", c: "#4ade80" };
-  if (v <= 105) return { t: "Risco moderado", c: "#facc15" };
-  return { t: "Alto risco de falha", c: "#f87171" };
+  if (v < 80) return { t: 'Favoravel ao desmame', c: '#4ade80' }
+  if (v <= 105) return { t: 'Risco moderado', c: '#facc15' }
+  return { t: 'Alto risco de falha', c: '#f87171' }
 }
 
 export function analisarGaso(params: {
@@ -74,66 +108,66 @@ export function analisarGaso(params: {
     return null
   }
 
-  let tipo = "Normal"
-  let origem = ""
-  let comp = ""
+  let tipo = 'Normal'
+  let origem = ''
+  let comp = ''
 
   if (pH < 7.35) {
-    tipo = "Acidose"
+    tipo = 'Acidose'
     if (co2 > 45 && hco3 < 22) {
-      origem = "Mista"
-      comp = "Nao compensada"
+      origem = 'Mista'
+      comp = 'Nao compensada'
     } else if (co2 > 45) {
-      origem = "Respiratoria"
-      comp = hco3 > 26 ? "Parcial" : "Nao compensada"
+      origem = 'Respiratoria'
+      comp = hco3 > 26 ? 'Parcial' : 'Nao compensada'
     } else if (hco3 < 22) {
-      origem = "Metabolica"
-      comp = co2 < 35 ? "Parcial" : "Nao compensada"
+      origem = 'Metabolica'
+      comp = co2 < 35 ? 'Parcial' : 'Nao compensada'
     }
   } else if (pH > 7.45) {
-    tipo = "Alcalose"
+    tipo = 'Alcalose'
     if (co2 < 35 && hco3 > 26) {
-      origem = "Mista"
-      comp = "Nao compensada"
+      origem = 'Mista'
+      comp = 'Nao compensada'
     } else if (co2 < 35) {
-      origem = "Respiratoria"
-      comp = hco3 < 22 ? "Parcial" : "Nao compensada"
+      origem = 'Respiratoria'
+      comp = hco3 < 22 ? 'Parcial' : 'Nao compensada'
     } else if (hco3 > 26) {
-      origem = "Metabolica"
-      comp = co2 > 45 ? "Parcial" : "Nao compensada"
+      origem = 'Metabolica'
+      comp = co2 > 45 ? 'Parcial' : 'Nao compensada'
     }
   }
 
-  let cor = "#4ade80"
-  if (tipo !== "Normal") cor = "#facc15"
-  if (origem === "Mista" || comp === "Nao compensada") cor = "#fb923c"
-  if (pH < 7.2 || pH > 7.6) cor = "#f87171"
+  let cor = '#4ade80'
+  if (tipo !== 'Normal') cor = '#facc15'
+  if (origem === 'Mista' || comp === 'Nao compensada') cor = '#fb923c'
+  if (pH < 7.2 || pH > 7.6) cor = '#f87171'
 
   return {
     tipo,
     origem,
     comp,
     cor,
-    full: `${tipo}${origem ? ` ${origem}` : ""}${comp ? ` - ${comp}` : ""}`,
+    full: `${tipo}${origem ? ` ${origem}` : ''}${comp ? ` - ${comp}` : ''}`,
   }
 }
 
 export function interpP01(v: number): { t: string; c: string } | null {
   const value = Number(v)
   if (Number.isNaN(value)) return null
-  if (value >= 1.5 && value <= 3.5) return { t: "Drive normal (1.5-3.5)", c: "#4ade80" }
-  if (value < 1.0) return { t: "Drive hipo (<1.0)", c: "#f87171" }
-  if (value < 1.5) return { t: "Drive baixo-normal", c: "#facc15" }
-  if (value <= 4.0) return { t: "Drive levemente elevado", c: "#facc15" }
-  return { t: "Drive hiper (>4.0)", c: "#f87171" }
+  if (value >= 1.5 && value <= 3.5) return { t: 'Drive normal (1.5-3.5)', c: '#4ade80' }
+  if (value < 1.0) return { t: 'Drive hipo (<1.0)', c: '#f87171' }
+  if (value < 1.5) return { t: 'Drive baixo-normal', c: '#facc15' }
+  if (value <= 4.0) return { t: 'Drive levemente elevado', c: '#facc15' }
+  return { t: 'Drive hiper (>4.0)', c: '#f87171' }
 }
 
 export function interpPocc(v: number): { t: string; c: string } | null {
   const value = Number(v)
   if (Number.isNaN(value)) return null
-  if (value >= 5 && value <= 10) return { t: "Normal (5-10)", c: "#4ade80" }
-  if (value < 5) return { t: "Baixo (<5)", c: "#facc15" }
-  return { t: "Elevado (>10)", c: "#fb923c" }
+  if (value >= 5 && value <= 10) return { t: 'Normal (5-10)', c: '#4ade80' }
+  if (value < 5) return { t: 'Baixo (<5)', c: '#facc15' }
+  return { t: 'Elevado (>10)', c: '#fb923c' }
 }
 
 export function calcPmusc(pocc: number): number | null {
@@ -145,90 +179,176 @@ export function calcPmusc(pocc: number): number | null {
 export function interpPmusc(v: number): { t: string; c: string } | null {
   const value = Number(v)
   if (Number.isNaN(value)) return null
-  if (value < 5) return { t: "Superassistencia (<5)", c: "#60a5fa" }
-  if (value <= 10) return { t: "Protecao diafragmatica (5-10)", c: "#4ade80" }
-  if (value <= 13) return { t: "Esforco moderado (10-13)", c: "#facc15" }
-  return { t: "Esforco excessivo (>13)", c: "#f87171" }
+  if (value < 5) return { t: 'Superassistencia (<5)', c: '#60a5fa' }
+  if (value <= 10) return { t: 'Protecao diafragmatica (5-10)', c: '#4ade80' }
+  if (value <= 13) return { t: 'Esforco moderado (10-13)', c: '#facc15' }
+  return { t: 'Esforco excessivo (>13)', c: '#f87171' }
 }
 
 export type PatientData = {
-  id?: string;
-  leito?: string;
-  nome?: string;
-  idade?: string;
-  sexo?: string;
-  altura?: string;
-  peso?: string;
-  pesoIdeal?: string;
-  pesoAtual?: string;
-  statusClinico?: string;
-  historia?: string;
-  diagnostico?: string;
-  glasgowO?: string;
-  glasgowV?: string;
-  glasgowM?: string;
-  rass?: string;
-  cardiovascular?: string;
-  pas?: string;
-  pad?: string;
-  pam?: string;
-  fc?: string;
-  pulmonar?: string;
-  tipoVia?: string;
-  modoVM?: string;
-  vt?: string;
-  fr?: string;
-  peep?: string;
-  fio2?: string;
-  ppico?: string;
-  pplato?: string;
-  pmean?: string;
-  gasoPH?: string;
-  gasoPaCO2?: string;
-  gasoPaO2?: string;
-  gasoHCO3?: string;
-  gasoBE?: string;
-  gasoFiO2?: string;
-  [key: string]: unknown;
-};
+  id?: string
+  leito: string
+  nome: string
+  idade: string
+  sexo: string
+  altura: string
+  peso: string
+  pesoIdeal: string
+  pesoAtual: string
+  statusClinico: string
+  balanco24h: string
+  balancoAcumulado: string
+  historia: string
+  diagnostico: string
+  examesLabList: LabExamEntry[]
+  examesImagemList: ImageExamEntry[]
+  glasgowO: string
+  glasgowV: string
+  glasgowM: string
+  rass: string
+  neurologico: string
+  metaRASS: string
+  metaTOF: string
+  ultimoTOF: string
+  sedativos: SedativeEntry[]
+  bnmList: BNMEntry[]
+  cardiovascular: string
+  cardiovascularMudanca: string
+  pas: string
+  pad: string
+  pam: string
+  fc: string
+  lactatoCardio: string
+  dvaList: DVAEntry[]
+  pulmonar: string
+  secrecao: string
+  tipoVia: string
+  modoVM: string
+  vt: string
+  vc: string
+  fr: string
+  peep: string
+  fio2: string
+  ppico: string
+  pplato: string
+  pmean: string
+  ps: string
+  p01: string
+  pocc: string
+  pmusc: string
+  gasoPH: string
+  gasoPaCO2: string
+  gasoPaO2: string
+  gasoHCO3: string
+  gasoBE: string
+  gasoFiO2: string
+  motora: string
+  mrcOmbroD: string
+  mrcOmbroE: string
+  mrcCotoveloD: string
+  mrcCotoveloE: string
+  mrcPunhoD: string
+  mrcPunhoE: string
+  mrcQuadrilD: string
+  mrcQuadrilE: string
+  mrcJoelhoD: string
+  mrcJoelhoE: string
+  mrcTornozeloD: string
+  mrcTornozeloE: string
+  permeEstado: string
+  permeBarreira: string
+  permeForcaMS: string
+  permeForcaMI: string
+  permeLeito: string
+  permeTransf: string
+  permeMarcha: string
+  imsScore: string
+  percepcao: string
+  pendencias: string
+  condutas: string
+  [key: string]: unknown
+}
 
 export function emptyPatient(): PatientData {
   return {
-    leito: "",
-    nome: "",
-    idade: "",
-    sexo: "",
-    altura: "",
-    peso: "",
-    pesoIdeal: "",
-    pesoAtual: "",
-    statusClinico: "",
-    historia: "",
-    diagnostico: "",
-    glasgowO: "",
-    glasgowV: "",
-    glasgowM: "",
-    rass: "",
-    cardiovascular: "",
-    pas: "",
-    pad: "",
-    pam: "",
-    fc: "",
-    pulmonar: "",
-    tipoVia: "",
-    modoVM: "",
-    vt: "",
-    fr: "",
-    peep: "",
-    fio2: "",
-    ppico: "",
-    pplato: "",
-    pmean: "",
-    gasoPH: "",
-    gasoPaCO2: "",
-    gasoPaO2: "",
-    gasoHCO3: "",
-    gasoBE: "",
-    gasoFiO2: "",
-  };
+    leito: '',
+    nome: '',
+    idade: '',
+    sexo: '',
+    altura: '',
+    peso: '',
+    pesoIdeal: '',
+    pesoAtual: '',
+    statusClinico: '',
+    balanco24h: '',
+    balancoAcumulado: '',
+    historia: '',
+    diagnostico: '',
+    examesLabList: [],
+    examesImagemList: [],
+    glasgowO: '',
+    glasgowV: '',
+    glasgowM: '',
+    rass: '',
+    neurologico: '',
+    metaRASS: '',
+    metaTOF: '',
+    ultimoTOF: '',
+    sedativos: [],
+    bnmList: [],
+    cardiovascular: '',
+    cardiovascularMudanca: '',
+    pas: '',
+    pad: '',
+    pam: '',
+    fc: '',
+    lactatoCardio: '',
+    dvaList: [],
+    pulmonar: '',
+    secrecao: '',
+    tipoVia: '',
+    modoVM: '',
+    vt: '',
+    vc: '',
+    fr: '',
+    peep: '',
+    fio2: '',
+    ppico: '',
+    pplato: '',
+    pmean: '',
+    ps: '',
+    p01: '',
+    pocc: '',
+    pmusc: '',
+    gasoPH: '',
+    gasoPaCO2: '',
+    gasoPaO2: '',
+    gasoHCO3: '',
+    gasoBE: '',
+    gasoFiO2: '',
+    motora: '',
+    mrcOmbroD: '',
+    mrcOmbroE: '',
+    mrcCotoveloD: '',
+    mrcCotoveloE: '',
+    mrcPunhoD: '',
+    mrcPunhoE: '',
+    mrcQuadrilD: '',
+    mrcQuadrilE: '',
+    mrcJoelhoD: '',
+    mrcJoelhoE: '',
+    mrcTornozeloD: '',
+    mrcTornozeloE: '',
+    permeEstado: '',
+    permeBarreira: '',
+    permeForcaMS: '',
+    permeForcaMI: '',
+    permeLeito: '',
+    permeTransf: '',
+    permeMarcha: '',
+    imsScore: '',
+    percepcao: '',
+    pendencias: '',
+    condutas: '',
+  }
 }
