@@ -1,7 +1,8 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Activity, ArrowLeft, FileText } from 'lucide-react'
+import { ArrowLeft, Calculator, FileText } from 'lucide-react'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { StudyRailBoard } from '@/components/sea/study-rail-board'
@@ -9,6 +10,15 @@ import { StudyRailBoard } from '@/components/sea/study-rail-board'
 function EmptySystemPanel() {
   return <div className="chrome-panel min-h-[16rem] rounded-[1.45rem]" />
 }
+
+const VMSystemPanel = dynamic(() => import('@/components/sea/vm-system-panel').then((module) => module.VMSystemPanel), {
+  ssr: false,
+  loading: () => (
+    <div className="chrome-panel min-h-[16rem] rounded-[1.45rem] p-5">
+      <p className="text-sm text-white/56">Carregando calculadoras VNI e VMI...</p>
+    </div>
+  ),
+})
 
 const systemModules = [
   {
@@ -20,10 +30,10 @@ const systemModules = [
   },
   {
     id: 'S2',
-    title: 'Calculadoras VNI e VMI',
-    icon: Activity,
+    title: 'Calculadoras VNI e VMI +',
+    icon: Calculator,
     description: '',
-    panel: <EmptySystemPanel />,
+    panel: <VMSystemPanel />,
   },
 ]
 
@@ -51,7 +61,7 @@ export default function SistemasPageClient() {
           <StudyRailBoard
             badge="Sistemas"
             modules={systemModules}
-            icon={Activity}
+            icon={Calculator}
             itemLabel="sistema"
             actionLabel={null}
             readingLabel="em uso"

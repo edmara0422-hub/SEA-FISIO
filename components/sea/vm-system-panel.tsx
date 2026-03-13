@@ -8,7 +8,7 @@ import {
   ChevronDown,
   Gauge,
   HeartPulse,
-  LucideIcon,
+  Layers3,
   Orbit,
   Radar,
   ShieldAlert,
@@ -16,7 +16,8 @@ import {
   Waves,
   Wind,
 } from 'lucide-react'
-import { useMemo, useState } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { useMemo, useState, type ReactNode } from 'react'
 import {
   analyzeGaso,
   calcAsynchronyIndex,
@@ -41,7 +42,7 @@ import {
   calcSofaTotal,
   calcSuggestedPeepFromLip,
   calcUpdatedHacor,
-  calcVCByWeight,
+  calcVcByWeight,
   calcVDVT,
   calcVentilatoryRatio,
   interpAsynchronyIndex,
@@ -440,7 +441,7 @@ function ResultBadge({
   )
 }
 
-function InlineNote({ children }: { children: React.ReactNode }) {
+function InlineNote({ children }: { children: ReactNode }) {
   return <p className="text-xs leading-relaxed text-white/52">{children}</p>
 }
 
@@ -459,7 +460,7 @@ function CalcCard({
   subtitle: string
   open: boolean
   onToggle: (id: CardId) => void
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
     <div className="chrome-card overflow-hidden rounded-[1.6rem]">
@@ -672,7 +673,7 @@ export function VMSystemPanel() {
   const vcWeightValue = useMemo(() => {
     const weight = toNumber(vcWeight.weight)
     if (weight === null) return null
-    return calcVCByWeight(weight)
+    return calcVcByWeight(weight)
   }, [vcWeight.weight])
 
   const glasgowValue = useMemo(() => {
