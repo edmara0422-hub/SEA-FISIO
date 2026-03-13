@@ -821,31 +821,35 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setHacor(INITIAL_HACOR)}
         >
-          <div className="grid gap-3 xl:grid-cols-2">
+          <div className="space-y-3">
             <div className="chrome-panel rounded-[1.25rem] p-4">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">HACOR</p>
-              <div className="mt-3 grid gap-3 grid-cols-2 xl:grid-cols-3">
-                <SelectField label="FC" value={hacor.fc} options={HACOR_SELECTS.fc} onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))} />
-                <SelectField label="pH" value={hacor.ph} options={HACOR_SELECTS.ph} onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))} />
-                <SelectField label="GCS" value={hacor.gcs} options={HACOR_SELECTS.gcs} onChange={(value) => setHacor((prev) => ({ ...prev, gcs: value }))} />
-                <SelectField label="PaO2/FiO2" value={hacor.oxig} options={HACOR_SELECTS.oxig} onChange={(value) => setHacor((prev) => ({ ...prev, oxig: value }))} />
-                <SelectField label="FR" value={hacor.fr} options={HACOR_SELECTS.fr} onChange={(value) => setHacor((prev) => ({ ...prev, fr: value }))} />
-                <SelectField label="Diagnostico" value={hacor.dx} options={HACOR_SELECTS.dx} onChange={(value) => setHacor((prev) => ({ ...prev, dx: value }))} />
+              <div className="mt-3 overflow-x-auto pb-2">
+                <div className="grid min-w-[58rem] grid-cols-6 gap-3">
+                  <SelectField label="FC" value={hacor.fc} options={HACOR_SELECTS.fc} onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))} />
+                  <SelectField label="pH" value={hacor.ph} options={HACOR_SELECTS.ph} onChange={(value) => setHacor((prev) => ({ ...prev, ph: value }))} />
+                  <SelectField label="GCS" value={hacor.gcs} options={HACOR_SELECTS.gcs} onChange={(value) => setHacor((prev) => ({ ...prev, gcs: value }))} />
+                  <SelectField label="PaO2/FiO2" value={hacor.oxig} options={HACOR_SELECTS.oxig} onChange={(value) => setHacor((prev) => ({ ...prev, oxig: value }))} />
+                  <SelectField label="FR" value={hacor.fr} options={HACOR_SELECTS.fr} onChange={(value) => setHacor((prev) => ({ ...prev, fr: value }))} />
+                  <SelectField label="Diagnostico" value={hacor.dx} options={HACOR_SELECTS.dx} onChange={(value) => setHacor((prev) => ({ ...prev, dx: value }))} />
+                </div>
               </div>
             </div>
 
             <div className="chrome-panel rounded-[1.25rem] p-4">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">SOFA</p>
-              <div className="mt-3 grid gap-3 grid-cols-2 xl:grid-cols-3">
-                {SOFA_SELECTS.map((item) => (
-                  <SelectField
-                    key={item.key}
-                    label={item.label}
-                    value={hacor[item.key as keyof HacorState]}
-                    options={item.options}
-                    onChange={(value) => setHacor((prev) => ({ ...prev, [item.key]: value }))}
-                  />
-                ))}
+              <div className="mt-3 overflow-x-auto pb-2">
+                <div className="grid min-w-[58rem] grid-cols-6 gap-3">
+                  {SOFA_SELECTS.map((item) => (
+                    <SelectField
+                      key={item.key}
+                      label={item.label}
+                      value={hacor[item.key as keyof HacorState]}
+                      options={item.options}
+                      onChange={(value) => setHacor((prev) => ({ ...prev, [item.key]: value }))}
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           </div>
