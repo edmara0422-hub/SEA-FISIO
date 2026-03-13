@@ -1189,23 +1189,22 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setGaso(INITIAL_GASO)}
         >
-          <div className="grid gap-3 grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
-            <InputField label="pH" value={gaso.ph} placeholder="7.40" onChange={(value) => setGaso((prev) => ({ ...prev, ph: value }))} type="number" step="0.01" />
-            <InputField label="PaCO2" value={gaso.paCO2} placeholder="40" onChange={(value) => setGaso((prev) => ({ ...prev, paCO2: value }))} type="number" />
-            <InputField label="HCO3" value={gaso.hco3} placeholder="24" onChange={(value) => setGaso((prev) => ({ ...prev, hco3: value }))} type="number" />
-            <InputField label="PaO2" value={gaso.paO2} placeholder="85" onChange={(value) => setGaso((prev) => ({ ...prev, paO2: value }))} type="number" />
-            <InputField label="FiO2 gaso" value={gaso.fio2} placeholder="40" onChange={(value) => setGaso((prev) => ({ ...prev, fio2: value }))} type="number" />
-            <InputField label="SpO2 gaso" value={gaso.spO2} placeholder="96" onChange={(value) => setGaso((prev) => ({ ...prev, spO2: value }))} type="number" />
-            <InputField label="Sat monitor" value={gaso.sfMonSpO2} placeholder="96" onChange={(value) => setGaso((prev) => ({ ...prev, sfMonSpO2: value }))} type="number" />
-            <InputField label="FiO2 VM" value={gaso.sfVmFiO2} placeholder="40" onChange={(value) => setGaso((prev) => ({ ...prev, sfVmFiO2: value }))} type="number" />
-            <InputField label="BE" value={gaso.be} placeholder="-1" onChange={(value) => setGaso((prev) => ({ ...prev, be: value }))} type="number" />
-          </div>
-
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-            <ResultBadge label="Analise" value={gasoAnalysis?.full ?? '-'} hint="Acido-base" color={gasoAnalysis?.cor} />
-            <ResultBadge label="P/F" value={pfValue !== null ? pfValue.toFixed(0) : '-'} hint={pfTone?.t ?? 'PaO2 / FiO2'} color={pfTone?.c} />
-            <ResultBadge label="S/F" value={sfValue !== null ? sfValue.toFixed(0) : '-'} hint="Sat monitor / FiO2 VM" color="#60a5fa" />
-            <ResultBadge label="BE" value={toNumber(gaso.be) !== null ? `${Number(toNumber(gaso.be)).toFixed(1)}` : '-'} hint={beTone?.t ?? 'Base excess'} color={beTone?.c} />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[96rem] grid-cols-[repeat(13,minmax(0,1fr))] gap-2">
+              <InputField label="pH" value={gaso.ph} placeholder="7.40" onChange={(value) => setGaso((prev) => ({ ...prev, ph: value }))} type="number" step="0.01" />
+              <InputField label="PaCO2" value={gaso.paCO2} placeholder="40" onChange={(value) => setGaso((prev) => ({ ...prev, paCO2: value }))} type="number" />
+              <InputField label="HCO3" value={gaso.hco3} placeholder="24" onChange={(value) => setGaso((prev) => ({ ...prev, hco3: value }))} type="number" />
+              <InputField label="PaO2" value={gaso.paO2} placeholder="85" onChange={(value) => setGaso((prev) => ({ ...prev, paO2: value }))} type="number" />
+              <InputField label="FiO2 gaso" value={gaso.fio2} placeholder="40" onChange={(value) => setGaso((prev) => ({ ...prev, fio2: value }))} type="number" />
+              <InputField label="SpO2 gaso" value={gaso.spO2} placeholder="96" onChange={(value) => setGaso((prev) => ({ ...prev, spO2: value }))} type="number" />
+              <InputField label="Sat monitor" value={gaso.sfMonSpO2} placeholder="96" onChange={(value) => setGaso((prev) => ({ ...prev, sfMonSpO2: value }))} type="number" />
+              <InputField label="FiO2 VM" value={gaso.sfVmFiO2} placeholder="40" onChange={(value) => setGaso((prev) => ({ ...prev, sfVmFiO2: value }))} type="number" />
+              <InputField label="BE" value={gaso.be} placeholder="-1" onChange={(value) => setGaso((prev) => ({ ...prev, be: value }))} type="number" />
+              <ResultBadge compact label="Analise" value={gasoAnalysis?.full ?? '-'} hint="Acido-base" color={gasoAnalysis?.cor} />
+              <ResultBadge compact label="P/F" value={pfValue !== null ? pfValue.toFixed(0) : '-'} hint={pfTone?.t ?? 'PaO2/FiO2'} color={pfTone?.c} />
+              <ResultBadge compact label="S/F" value={sfValue !== null ? sfValue.toFixed(0) : '-'} hint="Sat/FiO2" color="#60a5fa" />
+              <ResultBadge compact label="BE" value={toNumber(gaso.be) !== null ? `${Number(toNumber(gaso.be)).toFixed(1)}` : '-'} hint={beTone?.t ?? 'Base excess'} color={beTone?.c} />
+            </div>
           </div>
         </CalcCard>
 
@@ -1218,13 +1217,13 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setAsynchrony(INITIAL_ASYNCHRONY)}
         >
-          <div className="grid gap-4 md:grid-cols-2">
-            <InputField label="Eventos" value={asynchrony.events} placeholder="5" onChange={(value) => setAsynchrony((prev) => ({ ...prev, events: value }))} type="number" />
-            <InputField label="Ciclos totais" value={asynchrony.total} placeholder="50" onChange={(value) => setAsynchrony((prev) => ({ ...prev, total: value }))} type="number" />
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge label="IA" value={asynchronyValue !== null ? `${asynchronyValue.toFixed(1)}%` : '-'} hint={asynchronyTone?.t ?? '(eventos / ciclos) x 100'} color={asynchronyTone?.c} />
-            <ResultBadge label="Gravidade" value={asynchronyTone?.t ?? '-'} hint=">10% grave" color={asynchronyTone?.c} />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[44rem] grid-cols-4 gap-2">
+              <InputField label="Eventos" value={asynchrony.events} placeholder="5" onChange={(value) => setAsynchrony((prev) => ({ ...prev, events: value }))} type="number" />
+              <InputField label="Ciclos totais" value={asynchrony.total} placeholder="50" onChange={(value) => setAsynchrony((prev) => ({ ...prev, total: value }))} type="number" />
+              <ResultBadge compact label="IA" value={asynchronyValue !== null ? `${asynchronyValue.toFixed(1)}%` : '-'} hint={asynchronyTone?.t ?? '(eventos/ciclos)'} color={asynchronyTone?.c} />
+              <ResultBadge compact label="Gravidade" value={asynchronyTone?.t ?? '-'} hint=">10% grave" color={asynchronyTone?.c} />
+            </div>
           </div>
         </CalcCard>
 
@@ -1237,13 +1236,11 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setGlasgow(INITIAL_GLASGOW)}
         >
-          <div className="grid gap-4 md:grid-cols-3">
-            <SelectField label="Ocular" value={glasgow.o} options={[{ value: '4', label: '4' }, { value: '3', label: '3' }, { value: '2', label: '2' }, { value: '1', label: '1' }]} onChange={(value) => setGlasgow((prev) => ({ ...prev, o: value }))} />
-            <SelectField label="Verbal" value={glasgow.v} options={[{ value: '5', label: '5' }, { value: '4', label: '4' }, { value: '3', label: '3' }, { value: '2', label: '2' }, { value: '1', label: '1' }, { value: 'T', label: 'T - Intubado' }]} onChange={(value) => setGlasgow((prev) => ({ ...prev, v: value }))} />
-            <SelectField label="Motora" value={glasgow.m} options={[{ value: '6', label: '6' }, { value: '5', label: '5' }, { value: '4', label: '4' }, { value: '3', label: '3' }, { value: '2', label: '2' }, { value: '1', label: '1' }]} onChange={(value) => setGlasgow((prev) => ({ ...prev, m: value }))} />
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge label="Glasgow" value={glasgowValue ? String(glasgowValue.total) : '-'} hint={glasgowValue?.interp ?? 'Selecione O, V e M'} color={glasgowValue?.cor} />
+          <div className="grid grid-cols-4 gap-2">
+              <SelectField label="Ocular" value={glasgow.o} options={[{ value: '4', label: '4' }, { value: '3', label: '3' }, { value: '2', label: '2' }, { value: '1', label: '1' }]} onChange={(value) => setGlasgow((prev) => ({ ...prev, o: value }))} />
+              <SelectField label="Verbal" value={glasgow.v} options={[{ value: '5', label: '5' }, { value: '4', label: '4' }, { value: '3', label: '3' }, { value: '2', label: '2' }, { value: '1', label: '1' }, { value: 'T', label: 'T - Intubado' }]} onChange={(value) => setGlasgow((prev) => ({ ...prev, v: value }))} />
+              <SelectField label="Motora" value={glasgow.m} options={[{ value: '6', label: '6' }, { value: '5', label: '5' }, { value: '4', label: '4' }, { value: '3', label: '3' }, { value: '2', label: '2' }, { value: '1', label: '1' }]} onChange={(value) => setGlasgow((prev) => ({ ...prev, m: value }))} />
+              <ResultBadge compact label="Glasgow" value={glasgowValue ? String(glasgowValue.total) : '-'} hint={glasgowValue?.interp ?? 'Selecione O, V e M'} color={glasgowValue?.cor} />
           </div>
         </CalcCard>
 
@@ -1256,19 +1253,19 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setMrc(createInitialMrc())}
         >
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-2 grid-cols-2 md:grid-cols-3">
             {MRC_GROUPS.map((group) => (
-              <div key={group.label} className="chrome-panel rounded-[1.15rem] p-3">
+              <div key={group.label} className="chrome-panel rounded-[1rem] p-2.5">
                 <p className="text-[10px] uppercase tracking-[0.16em] text-white/42">{group.label}</p>
-                <div className="mt-3 grid gap-3 grid-cols-2">
+                <div className="mt-2 grid grid-cols-2 gap-2">
                   <SelectField label="D" value={mrc[group.keyD]} options={[0,1,2,3,4,5].map((value)=>({ value: String(value), label: String(value) }))} onChange={(value) => setMrc((prev) => ({ ...prev, [group.keyD]: value }))} />
                   <SelectField label="E" value={mrc[group.keyE]} options={[0,1,2,3,4,5].map((value)=>({ value: String(value), label: String(value) }))} onChange={(value) => setMrc((prev) => ({ ...prev, [group.keyE]: value }))} />
                 </div>
               </div>
             ))}
           </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge label="MRC total" value={mrcTotal !== null ? `${mrcTotal}/60` : '-'} hint={mrcTone?.t ?? 'Preencha os 12 grupos'} color={mrcTone?.c} />
+          <div className="grid gap-2 md:grid-cols-2">
+            <ResultBadge compact label="MRC total" value={mrcTotal !== null ? `${mrcTotal}/60` : '-'} hint={mrcTone?.t ?? 'Preencha os 12 grupos'} color={mrcTone?.c} />
           </div>
         </CalcCard>
 
@@ -1281,13 +1278,17 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setPerme(createInitialPerme())}
         >
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          <div className="grid gap-2 grid-cols-2 md:grid-cols-4">
             {PERME_ITEMS.map((item) => (
               <SelectField key={item.key} label={item.label} value={perme[item.key]} options={item.options} onChange={(value) => setPerme((prev) => ({ ...prev, [item.key]: value }))} />
             ))}
+            <ResultBadge compact label="PERME" value={permeTotal !== null ? `${permeTotal}/21` : '-'} hint={permeTone?.t ?? 'Preencha os 7 itens'} color={permeTone?.c} />
           </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge label="PERME" value={permeTotal !== null ? `${permeTotal}/21` : '-'} hint={permeTone?.t ?? 'Preencha os 7 itens'} color={permeTone?.c} />
+          <div className="hidden md:grid md:grid-cols-4 md:gap-2">
+            <div />
+            <div />
+            <div />
+            <div />
           </div>
         </CalcCard>
 
@@ -1300,11 +1301,11 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setIms(INITIAL_IMS)}
         >
-          <div className="grid gap-4 md:grid-cols-2">
-            <SelectField label="IMS" value={ims.score} options={IMS_OPTIONS} onChange={(value) => setIms({ score: value })} />
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge label="IMS" value={imsValue !== null ? `${imsValue}/10` : '-'} hint={imsTone?.t ?? 'Escala de mobilidade'} color={imsTone?.c} />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[28rem] grid-cols-2 gap-2">
+              <SelectField label="IMS" value={ims.score} options={IMS_OPTIONS} onChange={(value) => setIms({ score: value })} />
+              <ResultBadge compact label="IMS" value={imsValue !== null ? `${imsValue}/10` : '-'} hint={imsTone?.t ?? 'Escala de mobilidade'} color={imsTone?.c} />
+            </div>
           </div>
         </CalcCard>
       </div>

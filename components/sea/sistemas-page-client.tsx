@@ -7,9 +7,17 @@ import Link from 'next/link'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { StudyRailBoard } from '@/components/sea/study-rail-board'
 
-function EmptySystemPanel() {
-  return <div className="chrome-panel min-h-[16rem] rounded-[1.45rem]" />
-}
+const ProntuarioSystemPanel = dynamic(
+  () => import('@/components/sea/prontuario-system-panel').then((module) => module.ProntuarioSystemPanel),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="chrome-panel min-h-[16rem] rounded-[1.45rem] p-5">
+        <p className="text-sm text-white/56">Carregando prontuario ICU...</p>
+      </div>
+    ),
+  }
+)
 
 const VMSystemPanel = dynamic(() => import('@/components/sea/vm-system-panel').then((module) => module.VMSystemPanel), {
   ssr: false,
@@ -26,7 +34,7 @@ const systemModules = [
     title: 'Prontuario ICU',
     icon: FileText,
     description: '',
-    panel: <EmptySystemPanel />,
+    panel: <ProntuarioSystemPanel />,
   },
   {
     id: 'S2',
