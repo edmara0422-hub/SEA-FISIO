@@ -502,17 +502,19 @@ function ResultBadge({
   value,
   hint,
   color,
+  compact = false,
 }: {
   label: string
   value: string
   hint?: string
   color?: string
+  compact?: boolean
 }) {
   return (
-    <div className={`rounded-[0.95rem] border p-2.5 ${toneClass(color)}`}>
+    <div className={`rounded-[0.95rem] border ${compact ? 'p-2' : 'p-2.5'} ${toneClass(color)}`}>
       <p className="text-[10px] font-semibold uppercase tracking-[0.16em] opacity-72">{label}</p>
-      <p className="mt-1.5 text-[13px] font-semibold md:text-sm">{value}</p>
-      {hint ? <p className="mt-1 text-[11px] opacity-72">{hint}</p> : null}
+      <p className={`mt-1.5 font-semibold ${compact ? 'text-[12px] md:text-[13px]' : 'text-[13px] md:text-sm'}`}>{value}</p>
+      {hint ? <p className={`mt-1 opacity-72 ${compact ? 'text-[10px]' : 'text-[11px]'}`}>{hint}</p> : null}
     </div>
   )
 }
@@ -897,8 +899,7 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setCompliance(INITIAL_COMPLIANCE)}
         >
-          <div className="scrollbar-hide overflow-x-auto pb-2">
-            <div className="grid min-w-[42rem] grid-cols-3 gap-3">
+          <div className="grid grid-cols-3 gap-3">
               <SelectField
                 label="Modo"
                 value={compliance.mode}
@@ -921,16 +922,34 @@ export function VMSystemPanel() {
               ) : (
                 <div />
               )}
-            </div>
           </div>
 
-          <div className="scrollbar-hide overflow-x-auto pb-2">
-            <div className="grid min-w-[48rem] grid-cols-4 gap-3">
-              <ResultBadge label="Delta P" value={complianceMetrics.dp !== null ? `${complianceMetrics.dp.toFixed(1)} cmH2O` : '-'} hint={complianceMetrics.dpTone?.t ?? 'Pplat - PEEP'} color={complianceMetrics.dpTone?.c} />
-              <ResultBadge label="Cest" value={complianceMetrics.cest !== null ? `${complianceMetrics.cest.toFixed(1)} mL/cmH2O` : '-'} hint="Complacencia estatica" />
-              <ResultBadge label="Cdyn" value={complianceMetrics.cdyn !== null ? `${complianceMetrics.cdyn.toFixed(1)} mL/cmH2O` : '-'} hint="VCV" />
-              <ResultBadge label="Raw" value={complianceMetrics.raw !== null ? `${complianceMetrics.raw.toFixed(2)} cmH2O/L/s` : '-'} hint="VCV" />
-            </div>
+          <div className="grid grid-cols-4 gap-2">
+            <ResultBadge
+              compact
+              label="Delta P"
+              value={complianceMetrics.dp !== null ? complianceMetrics.dp.toFixed(1) : '-'}
+              hint={complianceMetrics.dpTone ? `${complianceMetrics.dpTone.t} • cmH2O` : 'Pplat - PEEP'}
+              color={complianceMetrics.dpTone?.c}
+            />
+            <ResultBadge
+              compact
+              label="Cest"
+              value={complianceMetrics.cest !== null ? complianceMetrics.cest.toFixed(1) : '-'}
+              hint="mL/cmH2O"
+            />
+            <ResultBadge
+              compact
+              label="Cdyn"
+              value={complianceMetrics.cdyn !== null ? complianceMetrics.cdyn.toFixed(1) : '-'}
+              hint="VCV • mL/cmH2O"
+            />
+            <ResultBadge
+              compact
+              label="Raw"
+              value={complianceMetrics.raw !== null ? complianceMetrics.raw.toFixed(2) : '-'}
+              hint="VCV • cmH2O/L/s"
+            />
           </div>
         </CalcCard>
 
