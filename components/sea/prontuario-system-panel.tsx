@@ -2538,6 +2538,276 @@ export function ProntuarioSystemPanel() {
                     )}
                   </div>
                 </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Otimizacao de PEEP / stress index
+                  </p>
+                  <div className="grid gap-3 xl:grid-cols-3">
+                    {peepRows.map((row, index) => (
+                      <div key={`peep-row-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
+                        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/44">Nivel {index + 1}</p>
+                        <div className="grid gap-3 md:grid-cols-3">
+                          <FieldShell label="PEEP">
+                            <input
+                              className={INPUT_CLASS}
+                              type="number"
+                              value={row.peep}
+                              onChange={(event) => setPeepOptField(index, 'peep', event.target.value)}
+                              placeholder="10"
+                            />
+                          </FieldShell>
+                          <FieldShell label="Plato">
+                            <input
+                              className={INPUT_CLASS}
+                              type="number"
+                              value={row.plato}
+                              onChange={(event) => setPeepOptField(index, 'plato', event.target.value)}
+                              placeholder="22"
+                            />
+                          </FieldShell>
+                          <FieldShell label="Stress index">
+                            <input
+                              className={INPUT_CLASS}
+                              value={row.si}
+                              onChange={(event) => setPeepOptField(index, 'si', event.target.value)}
+                              placeholder="=1"
+                            />
+                          </FieldShell>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-4 grid gap-3 md:grid-cols-2">
+                    <MetricChip
+                      label="Melhor combinacao"
+                      value={calculations?.peepOptBest ? `Nivel ${calculations.peepOptBest.index + 1}` : '--'}
+                      hint={
+                        calculations?.peepOptBest
+                          ? `PEEP ${calculations.peepOptBest.peep} • ΔP ${calculations.peepOptBest.dp.toFixed(1)} • SI ${calculations.peepOptBest.stressIndex.toFixed(2)}`
+                          : 'Preencha ao menos um nivel completo'
+                      }
+                      color={calculations?.peepOptBest ? '#60a5fa' : undefined}
+                    />
+                    <MetricChip
+                      label="Leitura"
+                      value={calculations?.peepOptBest ? 'Configuracao sugerida' : '--'}
+                      hint="Prioridade: stress index proximo de 1.0 com menor driving pressure"
+                    />
+                  </div>
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Analise de curvas e loops
+                  </p>
+                  <div className="grid gap-4 xl:grid-cols-3">
+                    {renderRespSelectionField('Pressao x Tempo', 'curvaPxT', CURVE_PXT_OPTIONS, 'PXT')}
+                    {renderRespSelectionField('Fluxo x Tempo', 'curvaFxT', CURVE_FXT_OPTIONS, 'FXT')}
+                    {renderRespSelectionField('Volume x Tempo', 'curvaVxT', CURVE_VXT_OPTIONS, 'VXT')}
+                    {renderRespSelectionField('Loop P-V', 'loopPV', LOOP_PV_OPTIONS, 'LPV')}
+                    {renderRespSelectionField('Loop F-V', 'loopFV', LOOP_FV_OPTIONS, 'LFV')}
+                    {renderRespSelectionField('Assincronias', 'assincronia', ASSINCRONIA_OPTIONS, 'ASY')}
+                  </div>
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Calculadora de desmame
+                  </p>
+                  <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-7">
+                    <FieldShell label="PImax">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.dPimax} onChange={(event) => setField('dPimax', event.target.value)} placeholder="-40" />
+                    </FieldShell>
+                    <FieldShell label="PEmax">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.dPemax} onChange={(event) => setField('dPemax', event.target.value)} placeholder="60" />
+                    </FieldShell>
+                    <FieldShell label="VC (mL)">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.dVcDesm} onChange={(event) => setField('dVcDesm', event.target.value)} placeholder="450" />
+                    </FieldShell>
+                    <FieldShell label="FR">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.dFrDesm} onChange={(event) => setField('dFrDesm', event.target.value)} placeholder="18" />
+                    </FieldShell>
+                    <FieldShell label="CV (mL/kg)">
+                      <input className={INPUT_CLASS} type="number" value={currentRecord.dCv} onChange={(event) => setField('dCv', event.target.value)} placeholder="15" />
+                    </FieldShell>
+                    <FieldShell label="TRE">
+                      <select className={INPUT_CLASS} value={currentRecord.weanTRETipo} onChange={(event) => setField('weanTRETipo', event.target.value)}>
+                        {TRE_TYPE_OPTIONS.map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Resultado TRE">
+                      <select className={INPUT_CLASS} value={currentRecord.weanTREResult} onChange={(event) => setField('weanTREResult', event.target.value)}>
+                        {TRE_RESULT_OPTIONS.map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                    </FieldShell>
+                  </div>
+
+                  <div className="mt-4">
+                    <FieldShell label="Obs. desmame">
+                      <textarea
+                        className={TEXTAREA_CLASS}
+                        value={currentRecord.weanObs}
+                        onChange={(event) => setField('weanObs', event.target.value)}
+                        placeholder="TRE, tolerancia, fadiga, tosse, secrecao..."
+                      />
+                    </FieldShell>
+                  </div>
+
+                  <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-6">
+                    <MetricChip
+                      label="VM"
+                      value={calculations?.weanMinuteVentilation ? `${calculations.weanMinuteVentilation.toFixed(1)} L/min` : '--'}
+                      hint="VC x FR"
+                    />
+                    <MetricChip
+                      label="RSBI"
+                      value={calculations?.weanRsbi ? calculations.weanRsbi.toFixed(1) : '--'}
+                      hint={calculations?.weanSummary?.text}
+                      color={calculations?.weanSummary?.color}
+                    />
+                    <MetricChip
+                      label="PImax"
+                      value={currentRecord.dPimax || '--'}
+                      hint={calculations?.pimaxAdequate ? 'Adequado (<= -30)' : 'Vigiar forca inspiratoria'}
+                      color={calculations?.pimaxAdequate ? '#4ade80' : '#facc15'}
+                    />
+                    <MetricChip
+                      label="PEmax"
+                      value={currentRecord.dPemax || '--'}
+                      hint={calculations?.pemaxAdequate ? 'Adequado (>= 60)' : 'Tosse pode ser limitada'}
+                      color={calculations?.pemaxAdequate ? '#4ade80' : '#facc15'}
+                    />
+                    <MetricChip
+                      label="CV"
+                      value={currentRecord.dCv || '--'}
+                      hint={calculations?.cvAdequate ? 'Reserva ventilatoria adequada' : 'Reserva ventilatoria em vigilancia'}
+                      color={calculations?.cvAdequate ? '#4ade80' : '#facc15'}
+                    />
+                    <MetricChip
+                      label="Leitura"
+                      value={calculations?.weanSummary?.text || '--'}
+                      hint="PImax, PEmax, CV e RSBI"
+                      color={calculations?.weanSummary?.color}
+                    />
+                  </div>
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Protocolo VM especifico
+                  </p>
+                  <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+                    {PROTOCOL_OPTIONS.map((protocol) => {
+                      const selected = currentRecord.protocoloVM.includes(protocol.id)
+                      return (
+                        <button
+                          key={protocol.id}
+                          type="button"
+                          onClick={() => toggleStringArrayField('protocoloVM', protocol.id)}
+                          className="flex items-center gap-3 rounded-[1rem] border px-4 py-3 text-left transition-all"
+                          style={{
+                            borderColor: selected ? `${protocol.color}55` : 'rgba(255,255,255,0.08)',
+                            background: selected ? `${protocol.color}12` : 'rgba(255,255,255,0.03)',
+                          }}
+                        >
+                          <div
+                            className="flex h-4 w-4 items-center justify-center rounded-[0.3rem] border"
+                            style={{ borderColor: selected ? protocol.color : 'rgba(255,255,255,0.18)' }}
+                          >
+                            {selected ? <div className="h-2 w-2 rounded-[0.15rem]" style={{ background: protocol.color }} /> : null}
+                          </div>
+                          <span className="text-sm font-medium text-white/76">{protocol.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                    Prona / recrutabilidade
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setField('pronaAtiva', proneActive ? '' : '1')}
+                      className="rounded-[1rem] border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em]"
+                      style={{
+                        borderColor: proneActive ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.12)',
+                        background: proneActive ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
+                        color: proneActive ? '#86efac' : 'rgba(255,255,255,0.72)',
+                      }}
+                    >
+                      {proneActive ? 'Prona ativa' : 'Iniciar prona'}
+                    </button>
+                  </div>
+
+                  {proneActive ? (
+                    <div className="mt-4 grid gap-4 md:grid-cols-3">
+                      <FieldShell label="Tempo prona">
+                        <select className={INPUT_CLASS} value={currentRecord.pronaTempo} onChange={(event) => setField('pronaTempo', event.target.value)}>
+                          {PRONA_TIME_OPTIONS.map((value) => (
+                            <option key={value} value={value}>
+                              {value}
+                            </option>
+                          ))}
+                        </select>
+                      </FieldShell>
+                      <FieldShell label="Data inicio">
+                        <input className={INPUT_CLASS} type="date" value={currentRecord.pronaData} onChange={(event) => setField('pronaData', event.target.value)} />
+                      </FieldShell>
+                      <FieldShell label="Hora inicio">
+                        <input className={INPUT_CLASS} type="time" value={currentRecord.pronaHora} onChange={(event) => setField('pronaHora', event.target.value)} />
+                      </FieldShell>
+                    </div>
+                  ) : null}
+
+                  {calculations?.proneSupineAt ? (
+                    <div className="mt-4">
+                      <MetricChip
+                        label="Supinar em"
+                        value={formatDateTime(calculations.proneSupineAt.toISOString())}
+                        hint="Previsao automatica da prona"
+                        color="#a78bfa"
+                      />
+                    </div>
+                  ) : null}
+
+                  <div className="mt-5 border-t border-white/8 pt-5">
+                    <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                      Recrutabilidade pulmonar
+                    </p>
+                    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                      <FieldShell label="Volume insp. (mL)">
+                        <input className={INPUT_CLASS} type="number" value={currentRecord.recVolInsp} onChange={(event) => setField('recVolInsp', event.target.value)} placeholder="1200" />
+                      </FieldShell>
+                      <FieldShell label="Volume exp. (mL)">
+                        <input className={INPUT_CLASS} type="number" value={currentRecord.recVolExp} onChange={(event) => setField('recVolExp', event.target.value)} placeholder="600" />
+                      </FieldShell>
+                      <MetricChip
+                        label="Diferenca"
+                        value={calculations?.recruitDiff !== null && calculations?.recruitDiff !== undefined ? `${calculations.recruitDiff.toFixed(0)} mL` : '--'}
+                        hint="Volume inspiratorio - expiratorio"
+                      />
+                      <MetricChip
+                        label="Leitura"
+                        value={calculations?.recruitSummary?.text || '--'}
+                        hint="Limiar classico > 500 mL"
+                        color={calculations?.recruitSummary?.color}
+                      />
+                    </div>
+                  </div>
+                </div>
               </div>
             ) : null}
 
