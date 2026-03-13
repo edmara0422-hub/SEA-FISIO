@@ -234,6 +234,26 @@ function createRecord(): ICURecord {
   }
 }
 
+function normalizeRecord(raw: Partial<ICURecord> | null | undefined): ICURecord {
+  const timestamp = nowIso()
+  const base = emptyPatient()
+
+  return {
+    ...base,
+    ...(raw ?? {}),
+    id: raw?.id || globalThis.crypto?.randomUUID?.() || `icu-${Date.now()}`,
+    createdAt: raw?.createdAt || timestamp,
+    updatedAt: raw?.updatedAt || raw?.createdAt || timestamp,
+    examesLabList: Array.isArray(raw?.examesLabList) ? raw.examesLabList : [],
+    examesImagemList: Array.isArray(raw?.examesImagemList) ? raw.examesImagemList : [],
+    sedativos: Array.isArray(raw?.sedativos) ? raw.sedativos : [],
+    bnmList: Array.isArray(raw?.bnmList) ? raw.bnmList : [],
+    dvaList: Array.isArray(raw?.dvaList) ? raw.dvaList : [],
+    gasometrias: Array.isArray(raw?.gasometrias) ? raw.gasometrias : [],
+    vmHist: Array.isArray(raw?.vmHist) ? raw.vmHist : [],
+  }
+}
+
 function parseNumber(value: unknown): number {
   const parsed = Number.parseFloat(String(value ?? ''))
   return Number.isFinite(parsed) ? parsed : 0
@@ -421,10 +441,10 @@ export function ProntuarioSystemPanel() {
       const storedArchive = localStorage.getItem(STORAGE_KEYS.archive)
 
       if (storedRecords) {
-        setRecords(JSON.parse(storedRecords) as ICURecord[])
+        setRecords((JSON.parse(storedRecords) as Array<Partial<ICURecord>>).map((record) => normalizeRecord(record)))
       }
       if (storedArchive) {
-        setArchive(JSON.parse(storedArchive) as ICURecord[])
+        setArchive((JSON.parse(storedArchive) as Array<Partial<ICURecord>>).map((record) => normalizeRecord(record)))
       }
     } catch {
       setRecords([])
@@ -1074,7 +1094,7 @@ export function ProntuarioSystemPanel() {
                       </div>
 
                       <div className="space-y-3">
-                        {currentRecord.examesLabList.length ? (
+                        {currentRecord.examesLabList?.length ? (
                           currentRecord.examesLabList.map((exam, index) => (
                             <div key={`lab-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
                               <div className="grid gap-3 md:grid-cols-[11rem_1fr_auto]">
@@ -1144,7 +1164,7 @@ export function ProntuarioSystemPanel() {
                       </div>
 
                       <div className="space-y-3">
-                        {currentRecord.examesImagemList.length ? (
+                        {currentRecord.examesImagemList?.length ? (
                           currentRecord.examesImagemList.map((exam, index) => (
                             <div key={`img-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
                               <div className="grid gap-3 md:grid-cols-[11rem_1fr_auto]">
@@ -1306,7 +1326,7 @@ export function ProntuarioSystemPanel() {
                     </div>
 
                     <div className="space-y-3">
-                      {currentRecord.sedativos.length ? (
+                      {currentRecord.sedativos?.length ? (
                         currentRecord.sedativos.map((item, index) => (
                           <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
                             <div className="grid gap-3 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
@@ -1360,7 +1380,7 @@ export function ProntuarioSystemPanel() {
                     </div>
 
                     <div className="space-y-3">
-                      {currentRecord.bnmList.length ? (
+                      {currentRecord.bnmList?.length ? (
                         currentRecord.bnmList.map((item, index) => (
                           <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
                             <div className="grid gap-3 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
@@ -1471,7 +1491,7 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   <div className="space-y-3">
-                    {currentRecord.dvaList.length ? (
+                    {currentRecord.dvaList?.length ? (
                       currentRecord.dvaList.map((item, index) => (
                         <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
                           <div className="grid gap-3 md:grid-cols-[1.3fr_1fr_1fr_auto]">
@@ -1822,7 +1842,7 @@ export function ProntuarioSystemPanel() {
                     Historico de parametros VM
                   </p>
                   <div className="space-y-3">
-                    {currentRecord.vmHist.length ? (
+                    {currentRecord.vmHist?.length ? (
                       currentRecord.vmHist.map((entry, index) => (
                         <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
                           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
@@ -1951,7 +1971,7 @@ export function ProntuarioSystemPanel() {
                     Historico de gasometria
                   </p>
                   <div className="space-y-3">
-                    {currentRecord.gasometrias.length ? (
+                    {currentRecord.gasometrias?.length ? (
                       currentRecord.gasometrias.map((entry, index) => (
                         <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
                           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
