@@ -1,5 +1,5 @@
-import HomePageClient from '@/components/sea/home-page-client'
+import { SeaPageEntry } from '@/components/sea/sea-page-entry'
 
 export default function SeaPage() {
-  return <HomePageClient />
+  return <SeaPageEntry />
 }
