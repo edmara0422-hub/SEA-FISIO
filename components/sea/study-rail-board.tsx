@@ -23,6 +23,7 @@ export function StudyRailBoard({
   itemLabel = 'modulo',
   actionLabel = 'Marcar como lido',
   readingLabel = 'em leitura',
+  hideDetailHeader = false,
 }: {
   badge: string
   modules: StudyModule[]
@@ -30,6 +31,7 @@ export function StudyRailBoard({
   itemLabel?: string
   actionLabel?: string | null
   readingLabel?: string
+  hideDetailHeader?: boolean
 }) {
   const [activeModuleIndex, setActiveModuleIndex] = useState<number | null>(null)
   const [moduleStatuses, setModuleStatuses] = useState<Record<string, ModuleStatus>>(() =>
@@ -100,6 +102,9 @@ export function StudyRailBoard({
             transition={{ duration: 0.28 }}
             className="space-y-5"
           >
+            {hideDetailHeader && current.panel ? (
+              current.panel
+            ) : (
             <div className="chrome-panel rounded-[1.8rem] p-5">
               <div className="mb-5 flex items-center justify-between gap-3">
                 <div>
@@ -170,6 +175,7 @@ export function StudyRailBoard({
                 </div>
               </motion.div>
             </div>
+            )}
           </motion.div>
         ) : (
           <motion.div

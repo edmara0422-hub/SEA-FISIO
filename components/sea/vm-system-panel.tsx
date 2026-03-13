@@ -771,20 +771,9 @@ export function VMSystemPanel() {
               <Calculator className="h-6 w-6 text-white" />
             </div>
             <div>
-              <div className="mb-2 flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-white/52">
-                  vm-calcs.js
-                </span>
-                <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] uppercase tracking-[0.18em] text-white/52">
-                  S2
-                </span>
-              </div>
               <h2 className="metal-text text-[1.45rem] font-semibold uppercase tracking-[0.18em] md:text-[1.7rem]">
-                Calculadoras VNI e VMI +
+                Calculadoras
               </h2>
-              <p className="mt-2 text-sm text-white/56">
-                Cards finos em pagina unica, portados somente do vm-calcs.js legado.
-              </p>
             </div>
           </div>
         </div>

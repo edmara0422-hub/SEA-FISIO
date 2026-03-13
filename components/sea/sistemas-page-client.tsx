@@ -15,7 +15,7 @@ const VMSystemPanel = dynamic(() => import('@/components/sea/vm-system-panel').t
   ssr: false,
   loading: () => (
     <div className="chrome-panel min-h-[16rem] rounded-[1.45rem] p-5">
-      <p className="text-sm text-white/56">Carregando calculadoras VNI e VMI...</p>
+      <p className="text-sm text-white/56">Carregando calculadoras...</p>
     </div>
   ),
 })
@@ -30,7 +30,7 @@ const systemModules = [
   },
   {
     id: 'S2',
-    title: 'Calculadoras VNI e VMI +',
+    title: 'Calculadoras',
     icon: Calculator,
     description: '',
     panel: <VMSystemPanel />,
@@ -65,6 +65,7 @@ export default function SistemasPageClient() {
             itemLabel="sistema"
             actionLabel={null}
             readingLabel="em uso"
+            hideDetailHeader
           />
         </div>
       </main>
