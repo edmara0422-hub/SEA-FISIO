@@ -76,6 +76,12 @@ export type VMHistoryEntry = {
   raw: string
 }
 
+export type PeepOptEntry = {
+  peep: string
+  plato: string
+  si: string
+}
+
 export function calcPesoIdeal(alt: number, sexo: string): number {
   if (!alt || alt < 100 || alt > 250) return 0
   if (sexo === 'M') return 50 + 0.91 * (alt - 152.4)
@@ -312,6 +318,28 @@ export type PatientData = {
   sfFiO2: string
   gasometrias: GasometryHistoryEntry[]
   vmHist: VMHistoryEntry[]
+  peepOpt: PeepOptEntry[]
+  curvaPxT: string[]
+  curvaFxT: string[]
+  curvaVxT: string[]
+  loopPV: string[]
+  loopFV: string[]
+  assincronia: string[]
+  protocoloVM: string[]
+  dPimax: string
+  dPemax: string
+  dVcDesm: string
+  dFrDesm: string
+  dCv: string
+  weanTRETipo: string
+  weanTREResult: string
+  weanObs: string
+  pronaAtiva: string
+  pronaTempo: string
+  pronaData: string
+  pronaHora: string
+  recVolInsp: string
+  recVolExp: string
   motora: string
   mrcOmbroD: string
   mrcOmbroE: string
@@ -424,6 +452,32 @@ export function emptyPatient(): PatientData {
     sfFiO2: '',
     gasometrias: [],
     vmHist: [],
+    peepOpt: [
+      { peep: '', plato: '', si: '' },
+      { peep: '', plato: '', si: '' },
+      { peep: '', plato: '', si: '' },
+    ],
+    curvaPxT: [],
+    curvaFxT: [],
+    curvaVxT: [],
+    loopPV: [],
+    loopFV: [],
+    assincronia: [],
+    protocoloVM: [],
+    dPimax: '',
+    dPemax: '',
+    dVcDesm: '',
+    dFrDesm: '',
+    dCv: '',
+    weanTRETipo: '',
+    weanTREResult: '',
+    weanObs: '',
+    pronaAtiva: '',
+    pronaTempo: '16h',
+    pronaData: '',
+    pronaHora: '',
+    recVolInsp: '',
+    recVolExp: '',
     motora: '',
     mrcOmbroD: '',
     mrcOmbroE: '',

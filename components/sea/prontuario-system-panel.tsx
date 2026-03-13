@@ -40,6 +40,7 @@ import {
   type GasometryHistoryEntry,
   type ImageExamEntry,
   type LabExamEntry,
+  type PeepOptEntry,
   type PatientData,
   type SedativeEntry,
   type VMHistoryEntry,
@@ -118,6 +119,119 @@ const VM_OPTIONS = [
   { value: 'NAVA', label: 'NAVA (Edi)', disabled: false },
   { value: 'ATC', label: 'ATC (Compensacao Tubo)', disabled: false },
 ] as const
+
+const VM_MODE_GROUPS = {
+  volume: ['VCV', 'PRVC', 'HFOV', 'MMV'],
+  pressure: ['PCV'],
+  spontaneous: ['PSV', 'TuboT', 'CPAP', 'BIPAP', 'VS', 'ASV', 'IntelliVENT', 'SmartCare', 'APRV', 'PAV', 'NAVA', 'ATC'],
+} as const
+
+const CURVE_PXT_OPTIONS = [
+  'Normal - Sincronico Controlado',
+  'Normal - Sincronico A/C',
+  'Normal - Sincronico Espontaneo',
+  'Pico elevado (resistencia aumentada)',
+  'Plato elevado (complacencia reduzida)',
+  'Pico e Plato elevados',
+  'Auto-PEEP (pressao expiratoria final elevada)',
+  'Curva concava (obstrutiva)',
+  'Pressao negativa excessiva (esforco aumentado)',
+  'Overshoot (excesso de pressao inicial)',
+  'Undershoot (pressao insuficiente)',
+  'Duplo disparo',
+  'Esforco ineficaz (trigger nao detectado)',
+  'Ciclagem precoce',
+  'Ciclagem tardia',
+] as const
+
+const CURVE_FXT_OPTIONS = [
+  'Normal - Sincronico Controlado',
+  'Normal - Sincronico A/C',
+  'Normal - Sincronico Espontaneo',
+  'Fluxo desacelerado (PCV normal)',
+  'Fluxo quadrado (VCV normal)',
+  'Fluxo expiratorio nao retorna a zero (auto-PEEP)',
+  'Pico de fluxo expiratorio reduzido (obstrucao)',
+  'Fluxo inspiratorio insuficiente (assincronia de fluxo)',
+  'Duplo pico inspiratorio',
+  'Fluxo reverso (ciclagem tardia)',
+  'Esforco ineficaz visivel no fluxo',
+] as const
+
+const CURVE_VXT_OPTIONS = [
+  'Normal - Sincronico Controlado',
+  'Normal - Sincronico A/C',
+  'Normal - Sincronico Espontaneo',
+  'Volume nao retorna a zero (vazamento)',
+  'Volume reduzido (obstrucao ou restricao)',
+  'Volume excessivo (auto-trigger)',
+  'Curva em degrau (duplo disparo)',
+  'Volume instavel ciclo a ciclo',
+] as const
+
+const LOOP_PV_OPTIONS = [
+  'Normal - Padrao sigmoide',
+  'Histerese aumentada (recrutamento)',
+  'Histerese reduzida (pulmao rigido)',
+  'Ponto de inflexao inferior evidente',
+  'Ponto de inflexao superior evidente (hiperdistensao)',
+  'Beak sign (hiperdistensao)',
+  'Deslocamento para direita (reducao complacencia)',
+  'Deslocamento para esquerda (melhora complacencia)',
+] as const
+
+const LOOP_FV_OPTIONS = [
+  'Normal - Formato sigmoide',
+  'Loop achatado (restricao)',
+  'Concavidade expiratoria (obstrucao)',
+  'Volume reduzido (restricao grave)',
+  'Fluxo expiratorio limitado',
+  'Loop irregular (assincronia)',
+  'Alargamento do loop (resistencia aumentada)',
+] as const
+
+const ASSINCRONIA_OPTIONS = [
+  'Sem assincronias',
+  'Esforco ineficaz (Ineffective Effort)',
+  'Duplo disparo (Double Triggering)',
+  'Auto-trigger',
+  'Assincronia de fluxo (Flow Starvation)',
+  'Ciclagem precoce (Premature Cycling)',
+  'Ciclagem tardia (Delayed Cycling)',
+  'Disparo reverso (Reverse Triggering)',
+  'Breath Stacking',
+  'Assincronia de PEEP (PEEP insuficiente)',
+] as const
+
+const PROTOCOL_OPTIONS = [
+  { id: 'sdra', label: 'SDRA (ARDSnet)', color: '#f87171' },
+  { id: 'pav', label: 'PAV (Pneumonia VM)', color: '#fb923c' },
+  { id: 'asma', label: 'Asma / Broncoespasmo', color: '#facc15' },
+  { id: 'dpoc', label: 'DPOC Exacerbado', color: '#4ade80' },
+  { id: 'covid', label: 'COVID-19 (SDRA Viral)', color: '#f87171' },
+  { id: 'neuro', label: 'Neuroprotecao (TCE / AVC)', color: '#a78bfa' },
+  { id: 'trauma', label: 'Trauma Toracico', color: '#fb923c' },
+  { id: 'intraop', label: 'Intra-Operatorio', color: '#60a5fa' },
+  { id: 'cardio', label: 'Cardiopatas (ICC / IAM)', color: '#f87171' },
+  { id: 'tep', label: 'TEP', color: '#a78bfa' },
+  { id: 'obeso', label: 'Obeso (IMC > 30)', color: '#facc15' },
+  { id: 'me', label: 'Morte Encefalica (Doador)', color: '#94a3b8' },
+] as const
+
+const TRE_TYPE_OPTIONS = [
+  ['', 'Selecionar'],
+  ['simples', 'Simples'],
+  ['dificil', 'Dificil'],
+  ['prolongado', 'Prolongado'],
+] as const
+
+const TRE_RESULT_OPTIONS = [
+  ['', 'Selecionar'],
+  ['sucesso', 'Sucesso'],
+  ['falha', 'Falha'],
+] as const
+
+const PRONA_TIME_OPTIONS = ['16h', '18h', '20h', '24h'] as const
 
 const SEDATIVE_OPTIONS = [
   '',
@@ -278,6 +392,14 @@ function normalizeRecord(raw: Partial<ICURecord> | null | undefined): ICURecord 
     dvaList: Array.isArray(raw?.dvaList) ? raw.dvaList : [],
     gasometrias: Array.isArray(raw?.gasometrias) ? raw.gasometrias : [],
     vmHist: Array.isArray(raw?.vmHist) ? raw.vmHist : [],
+    peepOpt: ensurePeepOptRows(raw?.peepOpt as PeepOptEntry[] | undefined),
+    curvaPxT: Array.isArray(raw?.curvaPxT) ? raw.curvaPxT : [],
+    curvaFxT: Array.isArray(raw?.curvaFxT) ? raw.curvaFxT : [],
+    curvaVxT: Array.isArray(raw?.curvaVxT) ? raw.curvaVxT : [],
+    loopPV: Array.isArray(raw?.loopPV) ? raw.loopPV : [],
+    loopFV: Array.isArray(raw?.loopFV) ? raw.loopFV : [],
+    assincronia: Array.isArray(raw?.assincronia) ? raw.assincronia : [],
+    protocoloVM: Array.isArray(raw?.protocoloVM) ? raw.protocoloVM : [],
   }
 }
 
@@ -380,6 +502,35 @@ function calcResist(pico: string, plato: string, fluxo: string) {
   if (!pi || !pl) return null
   if (fl > 0) return (pi - pl) / (fl / 60)
   return pi - pl
+}
+
+function getModeType(mode: string) {
+  if (VM_MODE_GROUPS.volume.includes(mode as (typeof VM_MODE_GROUPS.volume)[number])) return 'volume'
+  if (VM_MODE_GROUPS.pressure.includes(mode as (typeof VM_MODE_GROUPS.pressure)[number])) return 'pressure'
+  if (VM_MODE_GROUPS.spontaneous.includes(mode as (typeof VM_MODE_GROUPS.spontaneous)[number])) return 'spontaneous'
+  return 'other'
+}
+
+function ensurePeepOptRows(rows: PeepOptEntry[] | null | undefined): PeepOptEntry[] {
+  const base = Array.isArray(rows) ? rows.slice(0, 3) : []
+  while (base.length < 3) {
+    base.push({ peep: '', plato: '', si: '' })
+  }
+  return base.map((row) => ({
+    peep: row?.peep ?? '',
+    plato: row?.plato ?? '',
+    si: row?.si ?? '',
+  }))
+}
+
+function parseStressIndexInput(value: string) {
+  const normalized = String(value || '').trim().replace(',', '.')
+  if (!normalized) return null
+  if (normalized.includes('=')) return 1
+  if (normalized.includes('<')) return 0.85
+  if (normalized.includes('>')) return 1.15
+  const numeric = Number.parseFloat(normalized)
+  return Number.isFinite(numeric) ? numeric : null
 }
 
 function ActionButton({
@@ -498,6 +649,7 @@ export function ProntuarioSystemPanel() {
   const calculations = useMemo(() => {
     if (!currentRecord) return null
 
+    const modeType = getModeType(currentRecord.modoVM)
     const pesoIdeal = currentRecord.altura
       ? calcPesoIdeal(parseNumber(currentRecord.altura), currentRecord.sexo || 'M')
       : 0
@@ -533,8 +685,76 @@ export function ProntuarioSystemPanel() {
     const daysTOT = calcDays(currentRecord.dataTOT)
     const daysTQT = calcDays(currentRecord.dataTQT)
     const sf = calcSF(currentRecord.sfSpO2, currentRecord.sfFiO2)
+    const minuteVentilation =
+      parseNumber(currentRecord.ve) || (parseNumber(currentRecord.fr) && (parseNumber(currentRecord.vc) || parseNumber(currentRecord.vt))
+        ? (parseNumber(currentRecord.fr) * (parseNumber(currentRecord.vc) || parseNumber(currentRecord.vt))) / 1000
+        : null)
+
+    const weanMinuteVentilation =
+      parseNumber(currentRecord.dFrDesm) && parseNumber(currentRecord.dVcDesm)
+        ? (parseNumber(currentRecord.dFrDesm) * parseNumber(currentRecord.dVcDesm)) / 1000
+        : null
+    const weanRsbi = calcRSBI(parseNumber(currentRecord.dFrDesm), parseNumber(currentRecord.dVcDesm))
+    const pimaxAdequate = currentRecord.dPimax ? parseNumber(currentRecord.dPimax) <= -30 : false
+    const pemaxAdequate = currentRecord.dPemax ? parseNumber(currentRecord.dPemax) >= 60 : false
+    const cvAdequate = currentRecord.dCv ? parseNumber(currentRecord.dCv) >= 15 : false
+    const rsbiAdequate = typeof weanRsbi === 'number' ? weanRsbi < 80 : false
+    const weanCriteriaMet = [pimaxAdequate, pemaxAdequate, cvAdequate, rsbiAdequate].filter(Boolean).length
+    const weanSummary =
+      weanCriteriaMet === 4
+        ? { text: 'Favoravel ao desmame', color: '#4ade80' }
+        : weanCriteriaMet >= 2
+          ? { text: 'Zona intermediaria', color: '#facc15' }
+          : { text: 'Alta vigilancia', color: '#f87171' }
+
+    const peepOptRows = ensurePeepOptRows(currentRecord.peepOpt)
+    const peepOptCandidates = peepOptRows
+      .map((row, index) => {
+        const peep = parseNumber(row.peep)
+        const plato = parseNumber(row.plato)
+        const stressIndex = parseStressIndexInput(row.si)
+        if (!peep || !plato || stressIndex === null) return null
+        const dpRow = plato - peep
+        const dpScore = dpRow < 12 ? 3 : dpRow <= 15 ? 2 : 0
+        const siDelta = Math.abs(stressIndex - 1)
+        const siScore = siDelta <= 0.1 ? 4 : siDelta <= 0.2 ? 2 : 0
+        return {
+          index,
+          peep,
+          plato,
+          stressIndex,
+          dp: dpRow,
+          score: dpScore + siScore,
+        }
+      })
+      .filter((candidate): candidate is NonNullable<typeof candidate> => Boolean(candidate))
+      .sort((a, b) => b.score - a.score || Math.abs(a.stressIndex - 1) - Math.abs(b.stressIndex - 1) || a.dp - b.dp)
+    const peepOptBest = peepOptCandidates[0] ?? null
+
+    const recruitDiff =
+      parseNumber(currentRecord.recVolInsp) && parseNumber(currentRecord.recVolExp)
+        ? parseNumber(currentRecord.recVolInsp) - parseNumber(currentRecord.recVolExp)
+        : null
+    const recruitSummary =
+      recruitDiff === null
+        ? null
+        : recruitDiff > 500
+          ? { text: 'Pulmao recrutavel', color: '#4ade80' }
+          : { text: 'Pouco recrutavel', color: '#f87171' }
+
+    const pronaAtiva = currentRecord.pronaAtiva === '1'
+    const proneSupineAt =
+      pronaAtiva && currentRecord.pronaData && currentRecord.pronaHora && currentRecord.pronaTempo
+        ? (() => {
+            const start = new Date(`${currentRecord.pronaData}T${currentRecord.pronaHora}`)
+            const hours = Number.parseInt(currentRecord.pronaTempo.replace('h', ''), 10)
+            if (Number.isNaN(start.getTime()) || Number.isNaN(hours)) return null
+            return new Date(start.getTime() + hours * 3600000)
+          })()
+        : null
 
     return {
+      modeType,
       pesoIdeal,
       pf,
       pfInterp,
@@ -557,6 +777,20 @@ export function ProntuarioSystemPanel() {
       daysTOT,
       daysTQT,
       sf,
+      minuteVentilation,
+      weanMinuteVentilation,
+      weanRsbi,
+      weanSummary,
+      pimaxAdequate,
+      pemaxAdequate,
+      cvAdequate,
+      rsbiAdequate,
+      peepOptRows,
+      peepOptBest,
+      recruitDiff,
+      recruitSummary,
+      proneSupineAt,
+      pronaAtiva,
     }
   }, [currentRecord])
 
@@ -580,6 +814,97 @@ export function ProntuarioSystemPanel() {
       [field]: value,
     }))
   }
+
+  const toggleStringArrayField = (
+    field: 'curvaPxT' | 'curvaFxT' | 'curvaVxT' | 'loopPV' | 'loopFV' | 'assincronia' | 'protocoloVM',
+    value: string,
+  ) => {
+    if (!value) return
+
+    updateCurrentRecord((record) => {
+      const current = Array.isArray(record[field]) ? [...record[field]] : []
+      return {
+        ...record,
+        [field]: current.includes(value) ? current.filter((item) => item !== value) : [...current, value],
+      }
+    })
+  }
+
+  const removeStringArrayItem = (
+    field: 'curvaPxT' | 'curvaFxT' | 'curvaVxT' | 'loopPV' | 'loopFV' | 'assincronia' | 'protocoloVM',
+    value: string,
+  ) => {
+    updateCurrentRecord((record) => ({
+      ...record,
+      [field]: (Array.isArray(record[field]) ? record[field] : []).filter((item) => item !== value),
+    }))
+  }
+
+  const setPeepOptField = (index: number, field: keyof PeepOptEntry, value: string) => {
+    updateCurrentRecord((record) => {
+      const next = ensurePeepOptRows(record.peepOpt)
+      next[index] = { ...next[index], [field]: value }
+      return {
+        ...record,
+        peepOpt: next,
+      }
+    })
+  }
+
+  const renderRespSelectionField = (
+    label: string,
+    field: 'curvaPxT' | 'curvaFxT' | 'curvaVxT' | 'loopPV' | 'loopFV' | 'assincronia',
+    options: readonly string[],
+    icon: string,
+  ) => (
+    <div className="rounded-[1.2rem] border border-white/10 bg-black/16 p-4">
+      <FieldShell label={`${icon} ${label}`}>
+        <select
+          className={INPUT_CLASS}
+          defaultValue=""
+          onChange={(event) => {
+            toggleStringArrayField(field, event.target.value)
+            event.target.selectedIndex = 0
+          }}
+        >
+          <option value="">Selecione alteracoes...</option>
+          {options.map((option) => (
+            <option key={option} value={option}>
+              {option}
+            </option>
+          ))}
+        </select>
+      </FieldShell>
+
+      {(currentRecord?.[field] as string[])?.length ? (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {(currentRecord?.[field] as string[]).map((item) => {
+            const ok = item.startsWith('Normal') || item === 'Sem assincronias'
+            return (
+              <div
+                key={`${field}-${item}`}
+                className="flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px]"
+                style={{
+                  borderColor: ok ? 'rgba(74,222,128,0.28)' : 'rgba(251,146,60,0.28)',
+                  background: ok ? 'rgba(74,222,128,0.08)' : 'rgba(251,146,60,0.08)',
+                  color: ok ? '#86efac' : '#fdba74',
+                }}
+              >
+                <span>{item}</span>
+                <button
+                  type="button"
+                  onClick={() => removeStringArrayItem(field, item)}
+                  className="text-[12px] leading-none text-[#fca5a5]"
+                >
+                  ×
+                </button>
+              </div>
+            )
+          })}
+        </div>
+      ) : null}
+    </div>
+  )
 
   const addListItem = (key: ListFieldKey) => {
     updateCurrentRecord((record) => {
@@ -626,17 +951,6 @@ export function ProntuarioSystemPanel() {
   const clearRespFields = () => {
     updateCurrentRecord((record) => ({
       ...record,
-      tipoVia: '',
-      dataTOT: '',
-      dataTQT: '',
-      dataExtubacao: '',
-      horaExtubacao: '',
-      dataReIOT: '',
-      horaReIOT: '',
-      dataDecanulacao: '',
-      horaDecanulacao: '',
-      dataDescVM: '',
-      horaDescVM: '',
       modoVM: '',
       vt: '',
       vc: '',
@@ -659,6 +973,28 @@ export function ProntuarioSystemPanel() {
       ipap: '',
       epap: '',
       interfaceVNI: 'facial',
+      peepOpt: ensurePeepOptRows([]),
+      curvaPxT: [],
+      curvaFxT: [],
+      curvaVxT: [],
+      loopPV: [],
+      loopFV: [],
+      assincronia: [],
+      protocoloVM: [],
+      dPimax: '',
+      dPemax: '',
+      dVcDesm: '',
+      dFrDesm: '',
+      dCv: '',
+      weanTRETipo: '',
+      weanTREResult: '',
+      weanObs: '',
+      pronaAtiva: '',
+      pronaTempo: '16h',
+      pronaData: '',
+      pronaHora: '',
+      recVolInsp: '',
+      recVolExp: '',
     }))
   }
 
@@ -725,6 +1061,7 @@ export function ProntuarioSystemPanel() {
       modo: currentRecord.modoVM,
       vt: currentRecord.vt,
       vc: currentRecord.vc,
+      ve: currentRecord.ve || (calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : ''),
       fr: currentRecord.fr,
       peep: currentRecord.peep,
       fio2: currentRecord.fio2,
@@ -736,6 +1073,8 @@ export function ProntuarioSystemPanel() {
       pplato: currentRecord.pplato,
       pmean: currentRecord.pmean,
       ps: currentRecord.ps,
+      ipap: currentRecord.ipap,
+      epap: currentRecord.epap,
       p01: currentRecord.p01,
       pocc: currentRecord.pocc,
       pmusc: calculations?.pmusc ? calculations.pmusc.toFixed(1) : currentRecord.pmusc,
@@ -808,6 +1147,9 @@ export function ProntuarioSystemPanel() {
   }
 
   const tabIndex = TAB_ITEMS.findIndex((tab) => tab.id === activeTab)
+  const respModeType = calculations?.modeType ?? 'other'
+  const peepRows = calculations?.peepOptRows ?? ensurePeepOptRows([])
+  const proneActive = calculations?.pronaAtiva ?? false
 
   return (
     <div className="space-y-5">
