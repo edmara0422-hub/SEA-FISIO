@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 import { motion } from 'framer-motion'
 import { Compass, Home } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation'
@@ -16,24 +16,39 @@ export function BottomNav({
 }) {
   const pathname = usePathname()
   const router = useRouter()
-  const resolvedActive: Tab =
-    active ?? (pathname === '/explore' || pathname.startsWith('/explore/') ? 'explorar' : 'home')
+  const [isPending, startTransition] = useTransition()
+  const [pendingTab, setPendingTab] = useState<Tab | null>(null)
+
+  const sectionActive: Tab = pathname === '/explore' || pathname.startsWith('/explore/') ? 'explorar' : 'home'
+  const resolvedActive: Tab = pendingTab ?? active ?? sectionActive
 
   useEffect(() => {
     router.prefetch('/sea')
     router.prefetch('/explore')
   }, [router])
 
+  useEffect(() => {
+    setPendingTab(null)
+  }, [pathname])
+
   const handleSwitch = (tab: Tab) => {
     onSwitch?.(tab)
 
-    if (!onSwitch) {
-      if (tab === resolvedActive) {
-        return
-      }
+    const targetPath = tab === 'home' ? '/sea' : '/explore'
+    const alreadyAtTargetRoot = pathname === targetPath
 
-      router.push(tab === 'home' ? '/sea' : '/explore')
+    if (alreadyAtTargetRoot) {
+      return
     }
+
+    if (onSwitch) {
+      return
+    }
+
+    setPendingTab(tab)
+    startTransition(() => {
+      router.push(targetPath)
+    })
   }
 
   return (
@@ -54,11 +69,10 @@ export function BottomNav({
         <button
           type="button"
           onClick={() => handleSwitch('home')}
+          aria-busy={isPending && pendingTab === 'home'}
           className={`flex items-center justify-center gap-2 rounded-[1.3rem] px-6 py-4 text-sm font-semibold tracking-[0.16em] transition-all duration-300 ${
-            resolvedActive === 'home'
-              ? 'chrome-active text-[#050505]'
-              : 'text-white/82 hover:text-white'
-          }`}
+            resolvedActive === 'home' ? 'chrome-active text-[#050505]' : 'text-white/82 hover:text-white'
+          } ${isPending && pendingTab === 'home' ? 'opacity-90' : ''}`}
         >
           <Home className="h-4 w-4" />
           <span>HOME</span>
@@ -67,11 +81,10 @@ export function BottomNav({
         <button
           type="button"
           onClick={() => handleSwitch('explorar')}
+          aria-busy={isPending && pendingTab === 'explorar'}
           className={`flex items-center justify-center gap-2 rounded-[1.3rem] px-6 py-4 text-sm font-semibold tracking-[0.16em] transition-all duration-300 ${
-            resolvedActive === 'explorar'
-              ? 'chrome-active text-[#050505]'
-              : 'text-white/82 hover:text-white'
-          }`}
+            resolvedActive === 'explorar' ? 'chrome-active text-[#050505]' : 'text-white/82 hover:text-white'
+          } ${isPending && pendingTab === 'explorar' ? 'opacity-90' : ''}`}
         >
           <Compass className="h-4 w-4" />
           <span>EXPLORAR</span>
