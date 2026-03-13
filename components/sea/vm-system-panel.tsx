@@ -897,32 +897,40 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setCompliance(INITIAL_COMPLIANCE)}
         >
-          <div className="grid gap-3 grid-cols-2 lg:grid-cols-3">
-            <SelectField
-              label="Modo"
-              value={compliance.mode}
-              options={[
-                { value: 'VCV', label: 'VCV' },
-                { value: 'PCV', label: 'PCV' },
-              ]}
-              onChange={(value) => setCompliance((prev) => ({ ...prev, mode: value }))}
-            />
-            {compliance.mode === 'VCV' ? (
-              <InputField label="P. pico" value={compliance.pico} placeholder="28" onChange={(value) => setCompliance((prev) => ({ ...prev, pico: value }))} type="number" />
-            ) : null}
-            <InputField label="P. plato" value={compliance.plato} placeholder="22" onChange={(value) => setCompliance((prev) => ({ ...prev, plato: value }))} type="number" />
-            <InputField label="PEEP" value={compliance.peep} placeholder="8" onChange={(value) => setCompliance((prev) => ({ ...prev, peep: value }))} type="number" />
-            <InputField label="VT (mL)" value={compliance.vt} placeholder="450" onChange={(value) => setCompliance((prev) => ({ ...prev, vt: value }))} type="number" />
-            {compliance.mode === 'VCV' ? (
-              <InputField label="Fluxo (L/min)" value={compliance.fluxo} placeholder="60" onChange={(value) => setCompliance((prev) => ({ ...prev, fluxo: value }))} type="number" />
-            ) : null}
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[42rem] grid-cols-3 gap-3">
+              <SelectField
+                label="Modo"
+                value={compliance.mode}
+                options={[
+                  { value: 'VCV', label: 'VCV' },
+                  { value: 'PCV', label: 'PCV' },
+                ]}
+                onChange={(value) => setCompliance((prev) => ({ ...prev, mode: value }))}
+              />
+              {compliance.mode === 'VCV' ? (
+                <InputField label="P. pico" value={compliance.pico} placeholder="28" onChange={(value) => setCompliance((prev) => ({ ...prev, pico: value }))} type="number" />
+              ) : (
+                <div />
+              )}
+              <InputField label="P. plato" value={compliance.plato} placeholder="22" onChange={(value) => setCompliance((prev) => ({ ...prev, plato: value }))} type="number" />
+              <InputField label="PEEP" value={compliance.peep} placeholder="8" onChange={(value) => setCompliance((prev) => ({ ...prev, peep: value }))} type="number" />
+              <InputField label="VT (mL)" value={compliance.vt} placeholder="450" onChange={(value) => setCompliance((prev) => ({ ...prev, vt: value }))} type="number" />
+              {compliance.mode === 'VCV' ? (
+                <InputField label="Fluxo (L/min)" value={compliance.fluxo} placeholder="60" onChange={(value) => setCompliance((prev) => ({ ...prev, fluxo: value }))} type="number" />
+              ) : (
+                <div />
+              )}
+            </div>
           </div>
 
-          <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
-            <ResultBadge label="Delta P" value={complianceMetrics.dp !== null ? `${complianceMetrics.dp.toFixed(1)} cmH2O` : '-'} hint={complianceMetrics.dpTone?.t ?? 'Pplat - PEEP'} color={complianceMetrics.dpTone?.c} />
-            <ResultBadge label="Cest" value={complianceMetrics.cest !== null ? `${complianceMetrics.cest.toFixed(1)} mL/cmH2O` : '-'} hint="Complacencia estatica" />
-            <ResultBadge label="Cdyn" value={complianceMetrics.cdyn !== null ? `${complianceMetrics.cdyn.toFixed(1)} mL/cmH2O` : '-'} hint="VCV" />
-            <ResultBadge label="Raw" value={complianceMetrics.raw !== null ? `${complianceMetrics.raw.toFixed(2)} cmH2O/L/s` : '-'} hint="VCV" />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[48rem] grid-cols-4 gap-3">
+              <ResultBadge label="Delta P" value={complianceMetrics.dp !== null ? `${complianceMetrics.dp.toFixed(1)} cmH2O` : '-'} hint={complianceMetrics.dpTone?.t ?? 'Pplat - PEEP'} color={complianceMetrics.dpTone?.c} />
+              <ResultBadge label="Cest" value={complianceMetrics.cest !== null ? `${complianceMetrics.cest.toFixed(1)} mL/cmH2O` : '-'} hint="Complacencia estatica" />
+              <ResultBadge label="Cdyn" value={complianceMetrics.cdyn !== null ? `${complianceMetrics.cdyn.toFixed(1)} mL/cmH2O` : '-'} hint="VCV" />
+              <ResultBadge label="Raw" value={complianceMetrics.raw !== null ? `${complianceMetrics.raw.toFixed(2)} cmH2O/L/s` : '-'} hint="VCV" />
+            </div>
           </div>
         </CalcCard>
 
@@ -935,11 +943,11 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setPeepLevels(createInitialPeepLevels())}
         >
-          <div className="grid gap-3 xl:grid-cols-3">
+          <div className="grid gap-2 xl:grid-cols-3">
             {peepLevels.map((level, index) => (
-              <div key={`level-${index}`} className="chrome-panel rounded-[1.25rem] p-4">
+              <div key={`level-${index}`} className="chrome-panel rounded-[1.15rem] p-3">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Nivel {index + 1}</p>
-                <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                <div className="mt-2 grid gap-2 sm:grid-cols-3">
                   <InputField label="PEEP" value={level.peep} placeholder="5" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, peep: value } : item)))} type="number" />
                   <InputField label="Plato" value={level.plato} placeholder="22" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, plato: value } : item)))} type="number" />
                   <InputField label="SI" value={level.si} placeholder="=1, <1, >1" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, si: value } : item)))} />
@@ -974,34 +982,34 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setRecruit(INITIAL_RECRUIT)}
         >
-          <div className="grid gap-4 xl:grid-cols-2">
-            <div className="chrome-panel rounded-[1.25rem] p-4">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Diferenca de volume</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
-                <InputField label="Vol. insp." value={recruit.recVolInsp} placeholder="1200" onChange={(value) => setRecruit((prev) => ({ ...prev, recVolInsp: value }))} type="number" />
-                <InputField label="Vol. exp." value={recruit.recVolExp} placeholder="600" onChange={(value) => setRecruit((prev) => ({ ...prev, recVolExp: value }))} type="number" />
-              </div>
-              <div className="mt-4">
-                <ResultBadge
-                  label="Diferenca"
-                  value={recruitByVolume ? `${recruitByVolume.difference.toFixed(0)} mL` : '-'}
-                  hint={recruitByVolume ? (recruitByVolume.recruitable ? 'Recrutavel' : 'Pouco recrutavel') : '>500 mL sugere recrutabilidade'}
-                  color={recruitByVolume ? (recruitByVolume.recruitable ? '#4ade80' : '#f87171') : undefined}
-                />
+          <div className="space-y-3">
+            <div className="chrome-panel rounded-[1.15rem] p-3">
+              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Recrutabilidade</p>
+              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
+                <div className="grid min-w-[34rem] grid-cols-3 gap-3">
+                  <InputField label="Vol. insp." value={recruit.recVolInsp} placeholder="1200" onChange={(value) => setRecruit((prev) => ({ ...prev, recVolInsp: value }))} type="number" />
+                  <InputField label="Vol. exp." value={recruit.recVolExp} placeholder="600" onChange={(value) => setRecruit((prev) => ({ ...prev, recVolExp: value }))} type="number" />
+                  <ResultBadge
+                    label="Diferenca"
+                    value={recruitByVolume ? `${recruitByVolume.difference.toFixed(0)} mL` : '-'}
+                    hint={recruitByVolume ? (recruitByVolume.recruitable ? 'Recrutavel' : 'Pouco recrutavel') : '>500 mL sugere recrutabilidade'}
+                    color={recruitByVolume ? (recruitByVolume.recruitable ? '#4ade80' : '#f87171') : undefined}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.25rem] p-4">
+            <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Loop P-V</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
-                <InputField label="LIP" value={recruit.lip} placeholder="10" onChange={(value) => setRecruit((prev) => ({ ...prev, lip: value }))} type="number" />
-                <InputField label="UIP" value={recruit.uip} placeholder="28" onChange={(value) => setRecruit((prev) => ({ ...prev, uip: value }))} type="number" />
-                <InputField label="Vol LIP" value={recruit.volLip} placeholder="200" onChange={(value) => setRecruit((prev) => ({ ...prev, volLip: value }))} type="number" />
-                <InputField label="Vol UIP" value={recruit.volUip} placeholder="800" onChange={(value) => setRecruit((prev) => ({ ...prev, volUip: value }))} type="number" />
-              </div>
-              <div className="mt-4 grid gap-3 md:grid-cols-2">
-                <ResultBadge label="Complacencia P-V" value={recruitByPV.compliancePv !== null ? `${recruitByPV.compliancePv.toFixed(1)} mL/cmH2O` : '-'} hint="Slope entre LIP e UIP" />
-                <ResultBadge label="PEEP sugerida" value={recruitByPV.suggestedPeep !== null ? `${recruitByPV.suggestedPeep.toFixed(1)} cmH2O` : '-'} hint="LIP + 2" color="#60a5fa" />
+              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
+                <div className="grid min-w-[68rem] grid-cols-6 gap-3">
+                  <InputField label="LIP" value={recruit.lip} placeholder="10" onChange={(value) => setRecruit((prev) => ({ ...prev, lip: value }))} type="number" />
+                  <InputField label="UIP" value={recruit.uip} placeholder="28" onChange={(value) => setRecruit((prev) => ({ ...prev, uip: value }))} type="number" />
+                  <InputField label="Vol LIP" value={recruit.volLip} placeholder="200" onChange={(value) => setRecruit((prev) => ({ ...prev, volLip: value }))} type="number" />
+                  <InputField label="Vol UIP" value={recruit.volUip} placeholder="800" onChange={(value) => setRecruit((prev) => ({ ...prev, volUip: value }))} type="number" />
+                  <ResultBadge label="Complacencia P-V" value={recruitByPV.compliancePv !== null ? `${recruitByPV.compliancePv.toFixed(1)} mL/cmH2O` : '-'} hint="Slope" />
+                  <ResultBadge label="PEEP sugerida" value={recruitByPV.suggestedPeep !== null ? `${recruitByPV.suggestedPeep.toFixed(1)} cmH2O` : '-'} hint="LIP + 2" color="#60a5fa" />
+                </div>
               </div>
             </div>
           </div>
@@ -1016,13 +1024,13 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setRsbi(INITIAL_RSBI)}
         >
-          <div className="grid gap-4 md:grid-cols-2">
-            <InputField label="FR (rpm)" value={rsbi.fr} placeholder="25" onChange={(value) => setRsbi((prev) => ({ ...prev, fr: value }))} type="number" />
-            <InputField label="VC (mL)" value={rsbi.vc} placeholder="350" onChange={(value) => setRsbi((prev) => ({ ...prev, vc: value }))} type="number" />
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge label="RSBI" value={rsbiValue !== null ? rsbiValue.toFixed(0) : '-'} hint={rsbiTone?.t ?? 'FR / VC em litros'} color={rsbiTone?.c} />
-            <ResultBadge label="Critico" value={rsbiTone ? (rsbiTone.c === '#4ade80' ? '< 80' : rsbiTone.c === '#f87171' ? '> 105' : '80-105') : '-'} hint="Yang & Tobin" color={rsbiTone?.c} />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[44rem] grid-cols-4 gap-3">
+              <InputField label="FR (rpm)" value={rsbi.fr} placeholder="25" onChange={(value) => setRsbi((prev) => ({ ...prev, fr: value }))} type="number" />
+              <InputField label="VC (mL)" value={rsbi.vc} placeholder="350" onChange={(value) => setRsbi((prev) => ({ ...prev, vc: value }))} type="number" />
+              <ResultBadge label="RSBI" value={rsbiValue !== null ? rsbiValue.toFixed(0) : '-'} hint={rsbiTone?.t ?? 'FR / VC em litros'} color={rsbiTone?.c} />
+              <ResultBadge label="Critico" value={rsbiTone ? (rsbiTone.c === '#4ade80' ? '< 80' : rsbiTone.c === '#f87171' ? '> 105' : '80-105') : '-'} hint="Yang & Tobin" color={rsbiTone?.c} />
+            </div>
           </div>
         </CalcCard>
 
@@ -1035,14 +1043,14 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setMechanicalPower(INITIAL_MECHANICAL_POWER)}
         >
-          <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
-            <InputField label="VC (mL)" value={mechanicalPower.vc} placeholder="450" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, vc: value }))} type="number" />
-            <InputField label="Delta P" value={mechanicalPower.dp} placeholder="12" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, dp: value }))} type="number" />
-            <InputField label="FR" value={mechanicalPower.f} placeholder="20" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, f: value }))} type="number" />
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge label="Mechanical power" value={mpValue !== null ? `${mpValue.toFixed(1)} J/min` : '-'} hint={mpTone?.t ?? '0,098 x VC x dP x FR'} color={mpTone?.c} />
-            <ResultBadge label="Leitura" value={mpTone?.t ?? '-'} hint="Risco energetico sobre o pulmao" color={mpTone?.c} />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[54rem] grid-cols-5 gap-3">
+              <InputField label="VC (mL)" value={mechanicalPower.vc} placeholder="450" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, vc: value }))} type="number" />
+              <InputField label="Delta P" value={mechanicalPower.dp} placeholder="12" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, dp: value }))} type="number" />
+              <InputField label="FR" value={mechanicalPower.f} placeholder="20" onChange={(value) => setMechanicalPower((prev) => ({ ...prev, f: value }))} type="number" />
+              <ResultBadge label="Mechanical power" value={mpValue !== null ? `${mpValue.toFixed(1)} J/min` : '-'} hint={mpTone?.t ?? '0,098 x VC x dP x FR'} color={mpTone?.c} />
+              <ResultBadge label="Leitura" value={mpTone?.t ?? '-'} hint="Risco energetico" color={mpTone?.c} />
+            </div>
           </div>
         </CalcCard>
 
@@ -1055,22 +1063,22 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setVcWeight(INITIAL_VC_WEIGHT)}
         >
-          <div className="grid gap-4 md:grid-cols-2">
-            <InputField label="Peso (kg)" value={vcWeight.weight} placeholder="70" onChange={(value) => setVcWeight({ weight: value })} type="number" />
-          </div>
-          <div className="grid gap-3 md:grid-cols-2">
-            <ResultBadge
-              label="VC protetor"
-              value={vcWeightValue ? `${vcWeightValue.protective[0]}-${vcWeightValue.protective[1]} mL` : '-'}
-              hint="4-6 mL/kg"
-              color="#4ade80"
-            />
-            <ResultBadge
-              label="VC convencional"
-              value={vcWeightValue ? `${vcWeightValue.conventional[0]}-${vcWeightValue.conventional[1]} mL` : '-'}
-              hint="6-8 mL/kg"
-              color="#60a5fa"
-            />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[40rem] grid-cols-3 gap-3">
+              <InputField label="Peso (kg)" value={vcWeight.weight} placeholder="70" onChange={(value) => setVcWeight({ weight: value })} type="number" />
+              <ResultBadge
+                label="VC protetor"
+                value={vcWeightValue ? `${vcWeightValue.protective[0]}-${vcWeightValue.protective[1]} mL` : '-'}
+                hint="4-6 mL/kg"
+                color="#4ade80"
+              />
+              <ResultBadge
+                label="VC convencional"
+                value={vcWeightValue ? `${vcWeightValue.conventional[0]}-${vcWeightValue.conventional[1]} mL` : '-'}
+                hint="6-8 mL/kg"
+                color="#60a5fa"
+              />
+            </div>
           </div>
         </CalcCard>
 
@@ -1083,14 +1091,14 @@ export function VMSystemPanel() {
           onToggle={toggleCard}
           onClear={() => setDrive(INITIAL_DRIVE)}
         >
-          <div className="grid gap-4 md:grid-cols-2">
-            <InputField label="P0.1 (cmH2O)" value={drive.p01} placeholder="2.0" onChange={(value) => setDrive((prev) => ({ ...prev, p01: value }))} type="number" step="0.1" />
-            <InputField label="Pocc (cmH2O)" value={drive.pocc} placeholder="8" onChange={(value) => setDrive((prev) => ({ ...prev, pocc: value }))} type="number" step="0.1" />
-          </div>
-          <div className="grid gap-3 md:grid-cols-3">
-            <ResultBadge label="P0.1" value={p01Value !== null ? p01Value.toFixed(1) : '-'} hint={p01Tone?.t ?? 'Drive'} color={p01Tone?.c} />
-            <ResultBadge label="Pocc" value={poccValue !== null ? poccValue.toFixed(1) : '-'} hint={poccTone?.t ?? 'Esforco oclusao'} color={poccTone?.c} />
-            <ResultBadge label="Pmusc" value={pmuscValue !== null ? pmuscValue.toFixed(1) : '-'} hint={pmuscTone?.t ?? '0,75 x Pocc'} color={pmuscTone?.c} />
+          <div className="scrollbar-hide overflow-x-auto pb-2">
+            <div className="grid min-w-[56rem] grid-cols-5 gap-3">
+              <InputField label="P0.1 (cmH2O)" value={drive.p01} placeholder="2.0" onChange={(value) => setDrive((prev) => ({ ...prev, p01: value }))} type="number" step="0.1" />
+              <InputField label="Pocc (cmH2O)" value={drive.pocc} placeholder="8" onChange={(value) => setDrive((prev) => ({ ...prev, pocc: value }))} type="number" step="0.1" />
+              <ResultBadge label="P0.1" value={p01Value !== null ? p01Value.toFixed(1) : '-'} hint={p01Tone?.t ?? 'Drive'} color={p01Tone?.c} />
+              <ResultBadge label="Pocc" value={poccValue !== null ? poccValue.toFixed(1) : '-'} hint={poccTone?.t ?? 'Esforco'} color={poccTone?.c} />
+              <ResultBadge label="Pmusc" value={pmuscValue !== null ? pmuscValue.toFixed(1) : '-'} hint={pmuscTone?.t ?? '0,75 x Pocc'} color={pmuscTone?.c} />
+            </div>
           </div>
         </CalcCard>
 
@@ -1104,53 +1112,53 @@ export function VMSystemPanel() {
           onClear={() => setWean(INITIAL_WEAN)}
         >
           <div className="grid gap-3 xl:grid-cols-2">
-            <div className="chrome-panel rounded-[1.25rem] p-4">
+            <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">VD/VT</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
-                <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
-                <InputField label="PetCO2" value={wean.vdvtPetCO2} placeholder="35" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPetCO2: value }))} type="number" />
-              </div>
-              <div className="mt-4">
-                <ResultBadge label="VD/VT" value={vdvtValue !== null ? vdvtValue.toFixed(2) : '-'} hint={vdvtTone?.t ?? 'Normal 0,25-0,40'} color={vdvtTone?.c} />
+              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
+                <div className="grid min-w-[34rem] grid-cols-3 gap-3">
+                  <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
+                  <InputField label="PetCO2" value={wean.vdvtPetCO2} placeholder="35" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPetCO2: value }))} type="number" />
+                  <ResultBadge label="VD/VT" value={vdvtValue !== null ? vdvtValue.toFixed(2) : '-'} hint={vdvtTone?.t ?? 'Normal 0,25-0,40'} color={vdvtTone?.c} />
+                </div>
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.25rem] p-4">
+            <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Ventilatory ratio</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
-                <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
-                <InputField label="PaCO2 atual" value={wean.vrPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vrPaCO2: value }))} type="number" />
-              </div>
-              <div className="mt-4">
-                <ResultBadge
-                  label="VR"
-                  value={vrValue !== null ? vrValue.toFixed(2) : '-'}
-                  hint={vrTone?.t ?? 'Usa o peso do card volume por peso'}
-                  color={vrTone?.c}
-                />
+              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
+                <div className="grid min-w-[34rem] grid-cols-3 gap-3">
+                  <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
+                  <InputField label="PaCO2 atual" value={wean.vrPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vrPaCO2: value }))} type="number" />
+                  <ResultBadge
+                    label="VR"
+                    value={vrValue !== null ? vrValue.toFixed(2) : '-'}
+                    hint={vrTone?.t ?? 'Usa o peso do card volume por peso'}
+                    color={vrTone?.c}
+                  />
+                </div>
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.25rem] p-4">
+            <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Gap CO2</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-2">
-                <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
-                <InputField label="EtCO2" value={wean.gapEtCO2} placeholder="37" onChange={(value) => setWean((prev) => ({ ...prev, gapEtCO2: value }))} type="number" />
-              </div>
-              <div className="mt-4">
-                <ResultBadge label="Gap" value={gapValue !== null ? `${gapValue.toFixed(0)} mmHg` : '-'} hint={gapTone?.t ?? 'PaCO2 - EtCO2'} color={gapTone?.c} />
+              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
+                <div className="grid min-w-[34rem] grid-cols-3 gap-3">
+                  <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
+                  <InputField label="EtCO2" value={wean.gapEtCO2} placeholder="37" onChange={(value) => setWean((prev) => ({ ...prev, gapEtCO2: value }))} type="number" />
+                  <ResultBadge label="Gap" value={gapValue !== null ? `${gapValue.toFixed(0)} mmHg` : '-'} hint={gapTone?.t ?? 'PaCO2 - EtCO2'} color={gapTone?.c} />
+                </div>
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.25rem] p-4">
+            <div className="chrome-panel rounded-[1.15rem] p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Criterios de desmame</p>
-              <div className="mt-3 grid gap-3 md:grid-cols-3">
-                <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
-                <InputField label="PEmax" value={wean.peMax} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, peMax: value }))} type="number" />
-                <InputField label="CV (mL/kg)" value={wean.cvMlKg} placeholder="12" onChange={(value) => setWean((prev) => ({ ...prev, cvMlKg: value }))} type="number" step="0.1" />
-              </div>
-              <div className="mt-4">
-                <ResultBadge label="Resumo" value={weanSummary ? weanSummary.t : '-'} hint="PImax >=30 • PEmax >=40 • CV >=10" color={weanSummary?.c} />
+              <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
+                <div className="grid min-w-[46rem] grid-cols-4 gap-3">
+                  <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
+                  <InputField label="PEmax" value={wean.peMax} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, peMax: value }))} type="number" />
+                  <InputField label="CV (mL/kg)" value={wean.cvMlKg} placeholder="12" onChange={(value) => setWean((prev) => ({ ...prev, cvMlKg: value }))} type="number" step="0.1" />
+                  <ResultBadge label="Resumo" value={weanSummary ? weanSummary.t : '-'} hint="PImax >=30 • PEmax >=40 • CV >=10" color={weanSummary?.c} />
+                </div>
               </div>
             </div>
           </div>
