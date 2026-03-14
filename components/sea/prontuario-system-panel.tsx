@@ -1862,42 +1862,36 @@ export function ProntuarioSystemPanel() {
                         </button>
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {currentRecord.examesLabList?.length ? (
                           currentRecord.examesLabList.map((exam, index) => (
-                            <div key={`lab-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                              <div className="mb-3 flex items-center justify-between gap-3">
-                                <FieldShell label="Data">
-                                  <input
-                                    className={INPUT_CLASS}
-                                    type="date"
-                                    value={exam.data}
-                                    onChange={(event) =>
-                                      updateListItem('examesLabList', index, 'data', event.target.value)
-                                    }
-                                  />
-                                </FieldShell>
-                                <div className="flex items-end">
-                                  <button
-                                    onClick={() => removeListItem('examesLabList', index)}
-                                    className="inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </button>
-                                </div>
+                            <div key={`lab-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                              <div className="mb-2 flex items-center gap-2">
+                                <input
+                                  className={`${INPUT_CLASS_SM} w-36`}
+                                  type="date"
+                                  value={exam.data}
+                                  onChange={(event) => updateListItem('examesLabList', index, 'data', event.target.value)}
+                                />
+                                <button
+                                  onClick={() => removeListItem('examesLabList', index)}
+                                  className="ml-auto flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
                               </div>
-                              <div className="grid gap-3 grid-cols-3 xl:grid-cols-5">
+                              <div className="grid grid-cols-8 gap-1.5">
                                 {LAB_FIELDS.map((field) => (
                                   <FieldShell key={field.key} label={field.label}>
                                     <div className="relative">
                                       <input
-                                        className={`${INPUT_CLASS} pr-14`}
+                                        className={`${INPUT_CLASS_SM} pr-8`}
                                         value={String(exam[field.key] ?? '')}
                                         onChange={(event) => updateListItem('examesLabList', index, field.key, event.target.value)}
                                         placeholder={field.ref}
                                       />
                                       {field.unit ? (
-                                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-[0.16em] text-white/34">
+                                        <span className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] text-white/30">
                                           {field.unit}
                                         </span>
                                       ) : null}
@@ -1966,41 +1960,29 @@ export function ProntuarioSystemPanel() {
                       <div className="space-y-3">
                         {currentRecord.examesImagemList?.length ? (
                           currentRecord.examesImagemList.map((exam, index) => (
-                            <div key={`img-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                              <div className="grid gap-3 md:grid-cols-[11rem_1fr_auto]">
-                                <FieldShell label="Data">
-                                  <input
-                                    className={INPUT_CLASS}
-                                    type="date"
-                                    value={exam.data}
-                                    onChange={(event) =>
-                                      updateListItem('examesImagemList', index, 'data', event.target.value)
-                                    }
-                                  />
-                                </FieldShell>
-                                <FieldShell label="Tipo">
-                                  <select
-                                    className={INPUT_CLASS}
-                                    value={exam.tipo}
-                                    onChange={(event) =>
-                                      updateListItem('examesImagemList', index, 'tipo', event.target.value)
-                                    }
-                                  >
-                                    {IMAGE_TYPE_OPTIONS.map(([value, label]) => (
-                                      <option key={value} value={value}>
-                                        {label}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </FieldShell>
-                                <div className="flex items-end">
-                                  <button
-                                    onClick={() => removeListItem('examesImagemList', index)}
-                                    className="inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
-                                  >
-                                    <Trash2 className="h-4 w-4" />
-                                  </button>
-                                </div>
+                            <div key={`img-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                              <div className="flex items-center gap-2">
+                                <input
+                                  className={`${INPUT_CLASS_SM} w-32 shrink-0`}
+                                  type="date"
+                                  value={exam.data}
+                                  onChange={(event) => updateListItem('examesImagemList', index, 'data', event.target.value)}
+                                />
+                                <select
+                                  className={`${INPUT_CLASS_SM} flex-1`}
+                                  value={exam.tipo}
+                                  onChange={(event) => updateListItem('examesImagemList', index, 'tipo', event.target.value)}
+                                >
+                                  {IMAGE_TYPE_OPTIONS.map(([value, label]) => (
+                                    <option key={value} value={value}>{label}</option>
+                                  ))}
+                                </select>
+                                <button
+                                  onClick={() => removeListItem('examesImagemList', index)}
+                                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
                               </div>
                               <div className="mt-3 space-y-3">
                                 <FieldShell label="Achados">
