@@ -750,7 +750,7 @@ function FieldShell({
 }) {
   return (
     <div className={`space-y-2 ${span}`}>
-      <p className="h-4 truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">{label}</p>
+      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">{label}</p>
       {children}
     </div>
   )
