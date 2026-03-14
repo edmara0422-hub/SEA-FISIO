@@ -2112,75 +2112,47 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Avaliacao neurologica
                   </p>
-                  <div className="grid gap-3 grid-cols-4 md:grid-cols-7">
+                  <div className="grid gap-2 grid-cols-7">
                     <FieldShell label="O">
-                      <select className={INPUT_CLASS} value={currentRecord.glasgowO} onChange={(event) => setField('glasgowO', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.glasgowO} onChange={(e) => setField('glasgowO', e.target.value)}>
                         <option value="">--</option>
-                        {['4', '3', '2', '1'].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {['4','3','2','1'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                     <FieldShell label="V">
-                      <select className={INPUT_CLASS} value={currentRecord.glasgowV} onChange={(event) => setField('glasgowV', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.glasgowV} onChange={(e) => setField('glasgowV', e.target.value)}>
                         <option value="">--</option>
-                        {['5', '4', '3', '2', '1', 'T'].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {['5','4','3','2','1','T'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                     <FieldShell label="M">
-                      <select className={INPUT_CLASS} value={currentRecord.glasgowM} onChange={(event) => setField('glasgowM', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.glasgowM} onChange={(e) => setField('glasgowM', e.target.value)}>
                         <option value="">--</option>
-                        {['6', '5', '4', '3', '2', '1'].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {['6','5','4','3','2','1'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                     <FieldShell label="RASS">
-                      <select className={INPUT_CLASS} value={currentRecord.rass} onChange={(event) => setField('rass', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.rass} onChange={(e) => setField('rass', e.target.value)}>
                         <option value="">--</option>
-                        {['+4', '+3', '+2', '+1', '0', '-1', '-2', '-3', '-4', '-5'].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {['+4','+3','+2','+1','0','-1','-2','-3','-4','-5'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                     <FieldShell label="Meta RASS">
-                      <select className={INPUT_CLASS} value={currentRecord.metaRASS} onChange={(event) => setField('metaRASS', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.metaRASS} onChange={(e) => setField('metaRASS', e.target.value)}>
                         <option value="">--</option>
-                        {['0', '-1', '-2', '-3', '-4', '-5'].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {['0','-1','-2','-3','-4','-5'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                     <FieldShell label="Meta TOF">
-                      <select className={INPUT_CLASS} value={currentRecord.metaTOF} onChange={(event) => setField('metaTOF', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.metaTOF} onChange={(e) => setField('metaTOF', e.target.value)}>
                         <option value="">--</option>
-                        {['0/4', '1/4', '2/4', '3/4', '4/4'].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {['0/4','1/4','2/4','3/4','4/4'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                     <FieldShell label="Ult. TOF">
-                      <select className={INPUT_CLASS} value={currentRecord.ultimoTOF} onChange={(event) => setField('ultimoTOF', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.ultimoTOF} onChange={(e) => setField('ultimoTOF', e.target.value)}>
                         <option value="">--</option>
-                        {['0/4', '1/4', '2/4', '3/4', '4/4'].map((value) => (
-                          <option key={value} value={value}>
-                            {value}
-                          </option>
-                        ))}
+                        {['0/4','1/4','2/4','3/4','4/4'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                   </div>
