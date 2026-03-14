@@ -1960,75 +1960,66 @@ export function ProntuarioSystemPanel() {
                       <div className="space-y-3">
                         {currentRecord.examesImagemList?.length ? (
                           currentRecord.examesImagemList.map((exam, index) => (
-                            <div key={`img-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
-                              <div className="flex w-full items-center gap-2">
+                            <div key={`img-${index}`} className="space-y-2 rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                              {/* linha 1: data · tipo · apagar */}
+                              <div className="flex items-center gap-2">
                                 <input
-                                  className={`${INPUT_CLASS_SM} w-[4.5rem] shrink-0`}
+                                  className={`${INPUT_CLASS_SM} w-[5.5rem] shrink-0`}
                                   type="text"
-                                  placeholder="DD/MM"
+                                  placeholder="DD/MM/AA"
                                   value={exam.data}
-                                  onChange={(event) => updateListItem('examesImagemList', index, 'data', event.target.value)}
+                                  onChange={(e) => updateListItem('examesImagemList', index, 'data', e.target.value)}
                                 />
                                 <select
-                                  className={`${INPUT_CLASS_SM} min-w-0 flex-1`}
+                                  className={`${INPUT_CLASS_SM} flex-1`}
                                   value={exam.tipo}
-                                  onChange={(event) => updateListItem('examesImagemList', index, 'tipo', event.target.value)}
+                                  onChange={(e) => updateListItem('examesImagemList', index, 'tipo', e.target.value)}
                                 >
-                                  {IMAGE_TYPE_OPTIONS.map(([value, label]) => (
-                                    <option key={value} value={value}>{label}</option>
+                                  {IMAGE_TYPE_OPTIONS.map(([v, l]) => (
+                                    <option key={v} value={v}>{l}</option>
                                   ))}
                                 </select>
                                 <button
                                   onClick={() => removeListItem('examesImagemList', index)}
-                                  className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                                  className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
                                 >
-                                  <Trash2 className="h-3.5 w-3.5" />
+                                  <Trash2 className="h-3 w-3" />
                                 </button>
                               </div>
-                              <div className="mt-3 space-y-3">
-                                <FieldShell label="Achados">
-                                  <select
-                                    className={INPUT_CLASS}
-                                    defaultValue=""
-                                    onChange={(event) => {
-                                      toggleImageFinding(index, event.target.value)
-                                      event.currentTarget.selectedIndex = 0
-                                    }}
-                                  >
-                                    <option value="">Selecionar achado...</option>
-                                    {IMAGE_FINDING_OPTIONS.map((option) => (
-                                      <option key={option} value={option}>
-                                        {option}
-                                      </option>
-                                    ))}
-                                  </select>
-                                </FieldShell>
-                                {exam.achados?.length ? (
-                                  <div className="flex flex-wrap gap-2">
-                                    {exam.achados.map((item) => (
-                                      <button
-                                        key={`${index}-${item}`}
-                                        type="button"
-                                        onClick={() => removeImageFinding(index, item)}
-                                        className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/72"
-                                      >
-                                        {item} ×
-                                      </button>
-                                    ))}
-                                  </div>
-                                ) : null}
-                              </div>
-                              <div className="mt-3">
-                                <FieldShell label="Laudo / observacoes">
-                                  <AutoGrowTextarea
-                                    value={exam.laudo}
-                                    onChange={(value) =>
-                                      updateListItem('examesImagemList', index, 'laudo', value)
-                                    }
-                                    placeholder="Achados complementares e correlacao clinica..."
-                                  />
-                                </FieldShell>
-                              </div>
+                              {/* linha 2: achados */}
+                              <select
+                                className={INPUT_CLASS_SM}
+                                defaultValue=""
+                                onChange={(e) => {
+                                  toggleImageFinding(index, e.target.value)
+                                  e.currentTarget.selectedIndex = 0
+                                }}
+                              >
+                                <option value="">+ Achado...</option>
+                                {IMAGE_FINDING_OPTIONS.map((o) => (
+                                  <option key={o} value={o}>{o}</option>
+                                ))}
+                              </select>
+                              {exam.achados?.length ? (
+                                <div className="flex flex-wrap gap-1.5">
+                                  {exam.achados.map((item) => (
+                                    <button
+                                      key={`${index}-${item}`}
+                                      type="button"
+                                      onClick={() => removeImageFinding(index, item)}
+                                      className="rounded-full border border-white/10 bg-white/[0.05] px-2.5 py-1 text-[10px] text-white/72"
+                                    >
+                                      {item} ×
+                                    </button>
+                                  ))}
+                                </div>
+                              ) : null}
+                              {/* linha 3: laudo */}
+                              <AutoGrowTextarea
+                                value={exam.laudo}
+                                onChange={(value) => updateListItem('examesImagemList', index, 'laudo', value)}
+                                placeholder="Laudo / observacoes..."
+                              />
                             </div>
                           ))
                         ) : (
