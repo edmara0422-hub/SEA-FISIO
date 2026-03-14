@@ -376,6 +376,32 @@ type DrugAnalysis = {
   evolucao: string
 }
 
+function analiseDVA(inicio: string, atual: string): DrugAnalysis | null {
+  const trend = calcDrugTrend(inicio, atual)
+  if (!trend) return null
+  const map: Record<DrugTrend, Omit<DrugAnalysis, 'trend'>> = {
+    manteve: {
+      label: 'DVA mantida',
+      color: '#60a5fa',
+      indica: 'Suporte vasoativo estavel. Paciente com resposta pressórica mantida. Avaliar tolerancia a reducao e metas de PAM (65-70 mmHg). Monitorar perfusao periferica e lactato.',
+      evolucao: 'Melhora: reducao progressiva guiada por PAM e lactato → desmame → suspensao. Piora: escalonamento de dose, adicao de segunda DVA ou refratariedade vasoativa.',
+    },
+    reduziu: {
+      label: 'Desmame DVA',
+      color: '#4ade80',
+      indica: 'Reducao de vasoativo. Melhora hemodinamica, menor dependencia vasopressora. Monitorar PAM, FC, lactato e sinais de hipoperfusao durante reducao.',
+      evolucao: 'Melhora: suspensao da DVA com PAM estavel, normalizacao do lactato, boa perfusao. Piora: hipotensao com reducao → retitulacao ou troca de agente.',
+    },
+    aumentou: {
+      label: 'DVA aumentada',
+      color: '#f87171',
+      indica: 'Escalonamento vasoativo. Indica instabilidade hemodinamica progressiva. Investigar: hipovolemia, sepse nao controlada, disfuncao miocardica, TEP ou tamponamento.',
+      evolucao: 'Melhora: identificar e tratar causa, estabilizar PAM, considerar corticoide em choque refratario. Piora: choque refratario, disfuncao multiorganica, necessidade de suporte mecanico circulatorio.',
+    },
+  }
+  return { trend, ...map[trend] }
+}
+
 function analiseSedativo(inicio: string, atual: string): DrugAnalysis | null {
   const trend = calcDrugTrend(inicio, atual)
   if (!trend) return null
@@ -1265,7 +1291,7 @@ export function ProntuarioSystemPanel() {
       } else if (key === 'bnmList') {
         next.push({ droga: '', inicio: '', atual: '', unidade: 'ml/h' } satisfies BNMEntry)
       } else if (key === 'dvaList') {
-        next.push({ droga: '', dose: '', unidade: 'mcg/kg/min' } satisfies DVAEntry)
+        next.push({ droga: '', inicio: '', dose: '', unidade: 'mcg/kg/min' } satisfies DVAEntry)
       } else if (key === 'examesLabList') {
         next.push({
           data: '',
@@ -2364,9 +2390,11 @@ export function ProntuarioSystemPanel() {
 
                   <div className="space-y-3">
                     {currentRecord.dvaList?.length ? (
-                      currentRecord.dvaList.map((item, index) => (
+                      currentRecord.dvaList.map((item, index) => {
+                        const analise = analiseDVA(item.inicio, item.dose)
+                        return (
                         <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
-                          <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_auto]">
+                          <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                             <FieldShell label="Droga">
                               <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('dvaList', index, 'droga', event.target.value)}>
                                 {DVA_OPTIONS.map((option) => (
@@ -2374,8 +2402,11 @@ export function ProntuarioSystemPanel() {
                                 ))}
                               </select>
                             </FieldShell>
-                            <FieldShell label="Dose">
-                              <input className={INPUT_CLASS_SM} value={item.dose} onChange={(event) => updateListItem('dvaList', index, 'dose', event.target.value)} placeholder="0.12" />
+                            <FieldShell label="Inicio">
+                              <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('dvaList', index, 'inicio', event.target.value)} placeholder="0.12" />
+                            </FieldShell>
+                            <FieldShell label="Dose atual">
+                              <input className={INPUT_CLASS_SM} value={item.dose} onChange={(event) => updateListItem('dvaList', index, 'dose', event.target.value)} placeholder="0.08" />
                             </FieldShell>
                             <FieldShell label="Unidade">
                               <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('dvaList', index, 'unidade', event.target.value)} />
@@ -2389,8 +2420,16 @@ export function ProntuarioSystemPanel() {
                               </button>
                             </div>
                           </div>
+                          {analise ? (
+                            <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                              <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
+                              <p className="mb-1 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
+                              <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
+                            </div>
+                          ) : null}
                         </div>
-                      ))
+                        )
+                      })
                     ) : (
                       <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
                         Nenhuma DVA registrada.

@@ -18,6 +18,7 @@ export type BNMEntry = {
 
 export type DVAEntry = {
   droga: string
+  inicio: string
   dose: string
   unidade: string
 }
