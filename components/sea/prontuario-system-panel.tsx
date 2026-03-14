@@ -2017,15 +2017,17 @@ export function ProntuarioSystemPanel() {
                                   </div>
                                 ) : null}
                               </div>
-                              <FieldShell label="Laudo / observacoes">
-                                <AutoGrowTextarea
-                                  value={exam.laudo}
-                                  onChange={(value) =>
-                                    updateListItem('examesImagemList', index, 'laudo', value)
-                                  }
-                                  placeholder="Achados complementares e correlacao clinica..."
-                                />
-                              </FieldShell>
+                              <div className="mt-3">
+                                <FieldShell label="Laudo / observacoes">
+                                  <AutoGrowTextarea
+                                    value={exam.laudo}
+                                    onChange={(value) =>
+                                      updateListItem('examesImagemList', index, 'laudo', value)
+                                    }
+                                    placeholder="Achados complementares e correlacao clinica..."
+                                  />
+                                </FieldShell>
+                              </div>
                             </div>
                           ))
                         ) : (
