@@ -2187,32 +2187,30 @@ export function ProntuarioSystemPanel() {
                         currentRecord.sedativos.map((item, index) => {
                           const analise = analiseSedativo(item.inicio, item.atual)
                           return (
-                          <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                            <div className="grid gap-3 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                          <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
+                            <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
-                                <select className={INPUT_CLASS} value={item.droga} onChange={(event) => updateListItem('sedativos', index, 'droga', event.target.value)}>
+                                <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('sedativos', index, 'droga', event.target.value)}>
                                   {SEDATIVE_OPTIONS.map((option) => (
-                                    <option key={option} value={option}>
-                                      {option || 'Selecionar'}
-                                    </option>
+                                    <option key={option} value={option}>{option || 'Selecionar'}</option>
                                   ))}
                                 </select>
                               </FieldShell>
                               <FieldShell label="Inicio">
-                                <input className={INPUT_CLASS} value={item.inicio} onChange={(event) => updateListItem('sedativos', index, 'inicio', event.target.value)} placeholder="ml/h" />
+                                <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('sedativos', index, 'inicio', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
                               <FieldShell label="Atual">
-                                <input className={INPUT_CLASS} value={item.atual} onChange={(event) => updateListItem('sedativos', index, 'atual', event.target.value)} placeholder="ml/h" />
+                                <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('sedativos', index, 'atual', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
                               <FieldShell label="Unidade">
-                                <input className={INPUT_CLASS} value={item.unidade} onChange={(event) => updateListItem('sedativos', index, 'unidade', event.target.value)} />
+                                <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('sedativos', index, 'unidade', event.target.value)} />
                               </FieldShell>
-                              <div className="flex items-end">
+                              <div className="flex items-end pb-1">
                                 <button
                                   onClick={() => removeListItem('sedativos', index)}
-                                  className="inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                                  className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
                                 >
-                                  <Trash2 className="h-4 w-4" />
+                                  <Trash2 className="h-3 w-3" />
                                 </button>
                               </div>
                             </div>
@@ -2251,32 +2249,30 @@ export function ProntuarioSystemPanel() {
                         currentRecord.bnmList.map((item, index) => {
                           const analise = analiseBNM(item.inicio, item.atual)
                           return (
-                          <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                            <div className="grid gap-3 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                          <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
+                            <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
-                                <select className={INPUT_CLASS} value={item.droga} onChange={(event) => updateListItem('bnmList', index, 'droga', event.target.value)}>
+                                <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('bnmList', index, 'droga', event.target.value)}>
                                   {BNM_OPTIONS.map((option) => (
-                                    <option key={option} value={option}>
-                                      {option || 'Selecionar'}
-                                    </option>
+                                    <option key={option} value={option}>{option || 'Selecionar'}</option>
                                   ))}
                                 </select>
                               </FieldShell>
                               <FieldShell label="Inicio">
-                                <input className={INPUT_CLASS} value={item.inicio} onChange={(event) => updateListItem('bnmList', index, 'inicio', event.target.value)} placeholder="ml/h" />
+                                <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('bnmList', index, 'inicio', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
                               <FieldShell label="Atual">
-                                <input className={INPUT_CLASS} value={item.atual} onChange={(event) => updateListItem('bnmList', index, 'atual', event.target.value)} placeholder="ml/h" />
+                                <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('bnmList', index, 'atual', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
                               <FieldShell label="Unidade">
-                                <input className={INPUT_CLASS} value={item.unidade} onChange={(event) => updateListItem('bnmList', index, 'unidade', event.target.value)} />
+                                <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('bnmList', index, 'unidade', event.target.value)} />
                               </FieldShell>
-                              <div className="flex items-end">
+                              <div className="flex items-end pb-1">
                                 <button
                                   onClick={() => removeListItem('bnmList', index)}
-                                  className="inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                                  className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
                                 >
-                                  <Trash2 className="h-4 w-4" />
+                                  <Trash2 className="h-3 w-3" />
                                 </button>
                               </div>
                             </div>
@@ -2301,10 +2297,9 @@ export function ProntuarioSystemPanel() {
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <FieldShell label="Observacoes neurologicas">
-                    <textarea
-                      className={TEXTAREA_CLASS}
+                    <AutoGrowTextarea
                       value={currentRecord.neurologico}
-                      onChange={(event) => setField('neurologico', event.target.value)}
+                      onChange={(value) => setField('neurologico', value)}
                       placeholder="Leitura neuro, sedacao, delirium, BNM..."
                     />
                   </FieldShell>
