@@ -64,6 +64,9 @@ const STORAGE_KEYS = {
 const INPUT_CLASS =
   'w-full rounded-[1rem] border border-white/10 bg-black/22 px-3 py-2.5 text-sm text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
 
+const INPUT_CLASS_SM =
+  'w-full rounded-[0.7rem] border border-white/10 bg-black/22 px-2 py-1.5 text-xs text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
+
 const TEXTAREA_CLASS = `${INPUT_CLASS} min-h-[5.5rem] resize-none`
 const AUTO_TEXTAREA_CLASS =
   'w-full rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2 text-sm text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18 resize-none overflow-hidden min-h-[2.75rem]'
@@ -1668,8 +1671,9 @@ export function ProntuarioSystemPanel() {
                     </span>
                   </div>
 
-                  <div className="grid gap-3 grid-cols-2 md:grid-cols-12">
-                    <FieldShell label="Nome" span="col-span-4">
+                  {/* Nome — linha própria */}
+                  <div className="mb-3">
+                    <FieldShell label="Nome">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.nome}
@@ -1677,17 +1681,21 @@ export function ProntuarioSystemPanel() {
                         placeholder="Nome do paciente"
                       />
                     </FieldShell>
-                    <FieldShell label="Leito" span="col-span-2">
+                  </div>
+
+                  {/* Linha única compacta */}
+                  <div className="grid grid-cols-10 gap-2">
+                    <FieldShell label="Leito">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.leito}
                         onChange={(event) => setField('leito', event.target.value)}
                         placeholder="01"
                       />
                     </FieldShell>
-                    <FieldShell label="Clinica" span="col-span-2">
+                    <FieldShell label="Clinica">
                       <select
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.statusClinico}
                         onChange={(event) => setField('statusClinico', event.target.value)}
                         style={currentRecord.statusClinico && STATUS_STYLES[currentRecord.statusClinico] ? {
@@ -1700,18 +1708,18 @@ export function ProntuarioSystemPanel() {
                         ))}
                       </select>
                     </FieldShell>
-                    <FieldShell label="Idade" span="col-span-2">
+                    <FieldShell label="Idade">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.idade}
                         onChange={(event) => setField('idade', event.target.value)}
                         placeholder="45"
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Sexo" span="col-span-2">
+                    <FieldShell label="Sexo">
                       <select
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.sexo}
                         onChange={(event) => setField('sexo', event.target.value)}
                       >
@@ -1720,50 +1728,50 @@ export function ProntuarioSystemPanel() {
                         <option value="F">F</option>
                       </select>
                     </FieldShell>
-                    <FieldShell label="Peso" span="col-span-2">
+                    <FieldShell label="Peso">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.peso}
                         onChange={(event) => setField('peso', event.target.value)}
                         placeholder="70"
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Altura" span="col-span-2">
+                    <FieldShell label="Altura">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.altura}
                         onChange={(event) => setField('altura', event.target.value)}
                         placeholder="170"
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Peso atual" span="col-span-2">
+                    <FieldShell label="Ps. atual">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.pesoAtual}
                         onChange={(event) => setField('pesoAtual', event.target.value)}
                         placeholder="68"
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="PBW" span="col-span-2">
-                      <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white/88">
-                        {calculations?.pesoIdeal ? `${calculations.pesoIdeal.toFixed(1)} kg` : 'sexo + altura'}
+                    <FieldShell label="PBW">
+                      <div className="w-full rounded-[0.7rem] border border-white/10 bg-white/[0.04] px-2 py-1.5 text-xs text-white/88">
+                        {calculations?.pesoIdeal ? `${calculations.pesoIdeal.toFixed(1)} kg` : '--'}
                       </div>
                     </FieldShell>
-                    <FieldShell label="Balanco 24h" span="col-span-2">
+                    <FieldShell label="Bal. 24h">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.balanco24h}
                         onChange={(event) => setField('balanco24h', event.target.value)}
                         placeholder="+500"
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Bal. acumulado" span="col-span-2">
+                    <FieldShell label="Bal. acum.">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.balancoAcumulado}
                         onChange={(event) => setField('balancoAcumulado', event.target.value)}
                         placeholder="+2500"
