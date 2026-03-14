@@ -74,6 +74,7 @@ const STATUS_OPTIONS = [
   ['grave', 'Grave'],
   ['critico', 'Critico'],
   ['instavel', 'Instavel'],
+  ['watcher', 'Watcher'],
 ] as const
 
 const STATUS_STYLES: Record<string, { label: string; border: string; background: string; color: string }> = {
@@ -100,6 +101,12 @@ const STATUS_STYLES: Record<string, { label: string; border: string; background:
     border: 'rgba(96,165,250,0.28)',
     background: 'rgba(96,165,250,0.10)',
     color: '#93c5fd',
+  },
+  watcher: {
+    label: 'Watcher',
+    border: 'rgba(168,85,247,0.28)',
+    background: 'rgba(168,85,247,0.10)',
+    color: '#c084fc',
   },
 }
 
@@ -549,8 +556,7 @@ function recordTitle(record: ICURecord) {
 }
 
 function recordSubtitle(record: ICURecord) {
-  const parts = [record.leito ? `Leito ${record.leito}` : '', record.diagnostico || 'Sem diagnostico informado']
-  return parts.filter(Boolean).join(' • ')
+  return record.diagnostico || 'Sem diagnostico informado'
 }
 
 function compactTone(text?: string | null) {
@@ -744,7 +750,7 @@ function FieldShell({
 }) {
   return (
     <div className={`space-y-2 ${span}`}>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">{label}</p>
+      <p className="h-4 truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">{label}</p>
       {children}
     </div>
   )
@@ -1464,6 +1470,19 @@ export function ProntuarioSystemPanel() {
     }
   }
 
+  const moveRecord = (id: string, direction: 'up' | 'down') => {
+    setRecords((prev) => {
+      const index = prev.findIndex((r) => r.id === id)
+      if (index === -1) return prev
+      if (direction === 'up' && index === 0) return prev
+      if (direction === 'down' && index === prev.length - 1) return prev
+      const next = [...prev]
+      const swap = direction === 'up' ? index - 1 : index + 1
+      ;[next[index], next[swap]] = [next[swap], next[index]]
+      return next
+    })
+  }
+
   const saveAndClose = () => {
     if (!currentRecord) return
     updateCurrentRecord((record) => record)
@@ -1742,7 +1761,7 @@ export function ProntuarioSystemPanel() {
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Balanco acumulado" span="md:col-span-2">
+                    <FieldShell label="Bal. acumulado" span="md:col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.balancoAcumulado}
@@ -3446,48 +3465,124 @@ export function ProntuarioSystemPanel() {
         ) : (
           <div className="space-y-4">
             {records.length ? (
-              records.map((record) => (
-                <div
-                  key={record.id}
-                  className="chrome-panel flex flex-col gap-4 rounded-[1.35rem] p-4 md:flex-row md:items-start md:justify-between"
-                >
-                  <div className="flex min-w-0 gap-4">
-                    <div className="chrome-subtle flex h-12 w-12 items-center justify-center rounded-[1rem]">
-                      <FileText className="h-5 w-5 text-white/72" />
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-base font-semibold text-white/88">{recordTitle(record)}</p>
-                      <p className="mt-1 text-sm text-white/58">{recordSubtitle(record)}</p>
-                      <p className="mt-2 text-xs text-white/38">Criado em {formatDateTime(record.createdAt)}</p>
-                    </div>
-                  </div>
+              records.map((record, idx) => {
+                const cardStatus = record.statusClinico && STATUS_STYLES[record.statusClinico]
+                  ? STATUS_STYLES[record.statusClinico]
+                  : null
+                const viaKey = record.tipoVia === 'TNT' || record.tipoVia === 'ML' ? 'TOT' : record.tipoVia
+                const cardVia = viaKey && VIA_BADGE_STYLES[viaKey] ? VIA_BADGE_STYLES[viaKey] : null
+                const daysTOT = record.dataTOT ? calcDays(record.dataTOT) : null
+                const daysTQT = record.dataTQT ? calcDays(record.dataTQT) : null
+                const showDays = (record.tipoVia === 'TOT' || record.tipoVia === 'TNT') && daysTOT
+                  ? { label: `D${daysTOT} TOT`, color: '#60a5fa' }
+                  : record.tipoVia?.startsWith('TQT') && daysTQT
+                  ? { label: `D${daysTQT} TQT`, color: '#fb923c' }
+                  : null
+                return (
+                  <div
+                    key={record.id}
+                    className="chrome-panel rounded-[1.35rem] p-4"
+                  >
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex min-w-0 gap-3">
+                        <div className="chrome-subtle flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-[0.9rem]">
+                          {record.leito ? (
+                            <>
+                              <span className="text-[8px] uppercase tracking-[0.14em] text-white/40">Leito</span>
+                              <span className="text-[11px] font-bold text-white/82">{record.leito}</span>
+                            </>
+                          ) : (
+                            <FileText className="h-4 w-4 text-white/52" />
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-sm font-semibold text-white/90">{recordTitle(record)}</p>
+                          <p className="mt-0.5 text-xs text-white/52">{recordSubtitle(record)}</p>
+                          <div className="mt-2 flex flex-wrap gap-1.5">
+                            {cardStatus ? (
+                              <span
+                                className="rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
+                                style={{
+                                  borderColor: cardStatus.border,
+                                  background: cardStatus.background,
+                                  color: cardStatus.color,
+                                }}
+                              >
+                                {cardStatus.label}
+                              </span>
+                            ) : null}
+                            {cardVia ? (
+                              <span
+                                className="rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
+                                style={{
+                                  borderColor: cardVia.border,
+                                  background: cardVia.background,
+                                  color: cardVia.color,
+                                }}
+                              >
+                                {cardVia.label}
+                              </span>
+                            ) : null}
+                            {showDays ? (
+                              <span
+                                className="rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
+                                style={{
+                                  borderColor: `${showDays.color}40`,
+                                  background: `${showDays.color}14`,
+                                  color: showDays.color,
+                                }}
+                              >
+                                {showDays.label}
+                              </span>
+                            ) : null}
+                          </div>
+                        </div>
+                      </div>
 
-                  <div className="flex flex-wrap gap-2">
-                    {/* Botões reduzidos: apenas Visualizar, Editar e Arquivo, sem Apagar */}
-                    <button
-                      onClick={() => openRecord(record.id)}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
-                    >
-                      <Eye className="h-4 w-4" />
-                      Visualizar
-                    </button>
-                    <button
-                      onClick={() => openRecord(record.id)}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
-                    >
-                      <PencilLine className="h-4 w-4" />
-                      Editar
-                    </button>
-                    <button
-                      onClick={() => archiveRecord(record.id)}
-                      className="inline-flex items-center gap-2 rounded-[1rem] border border-[#facc1530] bg-[#facc150d] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fde68a]"
-                    >
-                      <Archive className="h-4 w-4" />
-                      Arquivo
-                    </button>
+                      <div className="flex shrink-0 flex-col gap-1.5">
+                        <button
+                          onClick={() => moveRecord(record.id, 'up')}
+                          disabled={idx === 0}
+                          className="flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-white/10 bg-black/18 text-white/40 disabled:opacity-20 hover:text-white/70"
+                        >
+                          <span className="text-[10px] leading-none">↑</span>
+                        </button>
+                        <button
+                          onClick={() => moveRecord(record.id, 'down')}
+                          disabled={idx === records.length - 1}
+                          className="flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-white/10 bg-black/18 text-white/40 disabled:opacity-20 hover:text-white/70"
+                        >
+                          <span className="text-[10px] leading-none">↓</span>
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      <button
+                        onClick={() => openRecord(record.id)}
+                        className="chrome-subtle inline-flex items-center gap-1.5 rounded-[0.8rem] border border-white/12 px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/72"
+                      >
+                        <Eye className="h-3.5 w-3.5" />
+                        Visualizar
+                      </button>
+                      <button
+                        onClick={() => openRecord(record.id)}
+                        className="chrome-subtle inline-flex items-center gap-1.5 rounded-[0.8rem] border border-white/12 px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/72"
+                      >
+                        <PencilLine className="h-3.5 w-3.5" />
+                        Editar
+                      </button>
+                      <button
+                        onClick={() => archiveRecord(record.id)}
+                        className="inline-flex items-center gap-1.5 rounded-[0.8rem] border border-[#facc1530] bg-[#facc150d] px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#fde68a]"
+                      >
+                        <Archive className="h-3.5 w-3.5" />
+                        Arquivo
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))
+                )
+              })
             ) : (
               <div className="chrome-panel rounded-[1.5rem] p-8 text-center">
                 <p className="text-sm text-white/58">Nenhum paciente ativo.</p>
