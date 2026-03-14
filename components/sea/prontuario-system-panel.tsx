@@ -577,11 +577,11 @@ function summarizeBalance(record: ICURecord) {
 function summarizeBalanceDetailed(record: ICURecord) {
   const bal24 = parseNumber(record.balanco24h)
   const balAcc = parseNumber(record.balancoAcumulado)
-  if (!record.balanco24h && !record.balancoAcumulado) return 'Balanco hidrico sem dados'
-  if (bal24 > 2000 || balAcc > 5000) return 'Positivo importante, revisar aporte, diurese e estrategia de fluidos'
-  if (bal24 > 500 || balAcc > 3000) return 'Positivo moderado, manter vigilancia de congestao e resposta renal'
-  if (bal24 < -1000 || balAcc < -2000) return 'Negativo importante, correlacionar com perfusao, diurese e volemia'
-  return 'Balanco em faixa monitorada, manter correlacao clinica com hemodinamica e perfusao'
+  if (!record.balanco24h && !record.balancoAcumulado) return null
+  if (bal24 > 2000 || balAcc > 5000) return 'Balanco fortemente positivo — risco de sobrecarga hidrica, edema pulmonar e comprometimento ventilatório. Revisar aporte, estimular diurese e considerar restricao de fluidos.'
+  if (bal24 > 500 || balAcc > 3000) return 'Balanco moderadamente positivo — monitorar sinais de congestao pulmonar, resposta renal e saturacao. Avaliar necessidade de restricao hidrica e diuretico.'
+  if (bal24 < -1000 || balAcc < -2000) return 'Balanco negativo significativo — avaliar perfusao tecidual, pressao arterial, diurese e necessidade de reposicao volemica. Correlacionar com status hemodinamico.'
+  return 'Balanco em faixa monitorada — manter correlacao clinica com hemodinamica, perfusao periferica e diurese.'
 }
 
 function analyzeLabExam(exam: LabExamEntry) {
@@ -716,12 +716,12 @@ function ActionButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-2 rounded-[1rem] border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] transition-all ${active
+      className={`inline-flex items-center gap-1.5 rounded-[0.8rem] border px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] transition-all ${active
           ? 'border-white/18 bg-white/12 text-white'
           : 'border-white/10 bg-black/18 text-white/62 hover:border-white/16 hover:text-white'
         }`}
     >
-      <Icon className="h-4 w-4" />
+      <Icon className="h-3.5 w-3.5" />
       <span>{label}</span>
       {typeof badge === 'number' && badge > 0 ? (
         <span className="rounded-full border border-white/12 px-1.5 py-0.5 text-[9px] text-white/74">
@@ -1492,21 +1492,6 @@ export function ProntuarioSystemPanel() {
               </div>
               <h3 className="text-[1.45rem] font-semibold text-white/92">Pacientes e referencia clinica</h3>
               <div className="mt-3 flex flex-wrap gap-2">
-                {Object.entries(recordBadges.statusCounts).map(([key, count]) =>
-                  count > 0 ? (
-                    <span
-                      key={key}
-                      className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]"
-                      style={{
-                        borderColor: STATUS_STYLES[key]?.border ?? 'rgba(255,255,255,0.12)',
-                        background: STATUS_STYLES[key]?.background ?? 'rgba(255,255,255,0.05)',
-                        color: STATUS_STYLES[key]?.color ?? 'rgba(255,255,255,0.72)',
-                      }}
-                    >
-                      {STATUS_STYLES[key]?.label ?? key}: {count}
-                    </span>
-                  ) : null,
-                )}
                 {Object.entries(recordBadges.viaCounts).map(([key, count]) =>
                   count > 0 ? (
                     <span
@@ -1679,17 +1664,20 @@ export function ProntuarioSystemPanel() {
                         placeholder="01"
                       />
                     </FieldShell>
-                    <FieldShell label="Clinica" span="md:col-span-4">
-                      <div className="flex flex-wrap gap-2">
-                        {(Object.keys(STATUS_STYLES) as Array<keyof typeof STATUS_STYLES>).map((status) => (
-                          <StatusChoice
-                            key={status}
-                            value={status}
-                            active={currentRecord.statusClinico === status}
-                            onClick={() => setField('statusClinico', status)}
-                          />
+                    <FieldShell label="Clinica" span="md:col-span-2">
+                      <select
+                        className={INPUT_CLASS}
+                        value={currentRecord.statusClinico}
+                        onChange={(event) => setField('statusClinico', event.target.value)}
+                        style={currentRecord.statusClinico && STATUS_STYLES[currentRecord.statusClinico] ? {
+                          borderColor: STATUS_STYLES[currentRecord.statusClinico].border,
+                          color: STATUS_STYLES[currentRecord.statusClinico].color,
+                        } : undefined}
+                      >
+                        {STATUS_OPTIONS.map(([value, label]) => (
+                          <option key={value} value={value}>{label}</option>
                         ))}
-                      </div>
+                      </select>
                     </FieldShell>
                     <FieldShell label="Idade" span="md:col-span-2">
                       <input
@@ -1764,40 +1752,51 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   <div className="mt-4 space-y-3">
-                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3">
-                      <div className="flex flex-wrap items-center gap-2">
+                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2.5">
+                      <div className="flex flex-wrap justify-center items-center gap-1.5">
                         {calculations?.vtTargets?.length ? (
                           calculations.vtTargets.map((target) => (
                             <span
                               key={target.multiplier}
-                              className="rounded-full border border-white/10 bg-black/16 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/74"
+                              className="rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.14em]"
+                              style={target.multiplier === 6 ? {
+                                borderColor: 'rgba(34,211,238,0.40)',
+                                background: 'rgba(34,211,238,0.14)',
+                                color: '#22d3ee',
+                              } : {
+                                borderColor: 'rgba(255,255,255,0.10)',
+                                background: 'rgba(0,0,0,0.16)',
+                                color: 'rgba(255,255,255,0.62)',
+                              }}
                             >
-                              VC {target.multiplier} mL/kg: {target.value} mL
+                              {target.multiplier === 6 ? '★ ' : ''}VC {target.multiplier} mL/kg: {target.value} mL
                             </span>
                           ))
                         ) : (
-                          <span className="text-[11px] text-white/46">Informe sexo e altura para calcular PBW e VC alvo.</span>
+                          <span className="text-[10px] text-white/46">Informe sexo e altura para calcular PBW e VC alvo.</span>
                         )}
                       </div>
                     </div>
 
-                    <div
-                      className="rounded-[1rem] border px-3 py-3"
-                      style={{
-                        borderColor: `${calculations?.balance?.color ?? '#4ade80'}30`,
-                        background: `${calculations?.balance?.color ?? '#4ade80'}10`,
-                      }}
-                    >
-                      <p
-                        className="text-sm font-semibold"
-                        style={{ color: calculations?.balance?.color ?? '#4ade80' }}
+                    {calculations?.balance ? (
+                      <div
+                        className="rounded-[1rem] border px-3 py-3"
+                        style={{
+                          borderColor: `${calculations.balance.color}30`,
+                          background: `${calculations.balance.color}10`,
+                        }}
                       >
-                        {calculations?.balance?.text ?? 'Balanco hidrico sem dados'}
-                      </p>
-                      <p className="mt-1 text-[11px] leading-relaxed text-white/62">
-                        {calculations?.balanceDetailed}
-                      </p>
-                    </div>
+                        <p
+                          className="text-sm font-semibold"
+                          style={{ color: calculations.balance.color }}
+                        >
+                          {calculations.balance.text}
+                        </p>
+                        <p className="mt-1 text-[11px] leading-relaxed text-white/62">
+                          {calculations.balanceDetailed}
+                        </p>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
 
