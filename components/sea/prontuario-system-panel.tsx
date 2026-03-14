@@ -1963,8 +1963,9 @@ export function ProntuarioSystemPanel() {
                             <div key={`img-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
                               <div className="flex w-full items-center gap-2">
                                 <input
-                                  className={`${INPUT_CLASS_SM} w-[6rem] shrink-0`}
-                                  type="date"
+                                  className={`${INPUT_CLASS_SM} w-[4.5rem] shrink-0`}
+                                  type="text"
+                                  placeholder="DD/MM"
                                   value={exam.data}
                                   onChange={(event) => updateListItem('examesImagemList', index, 'data', event.target.value)}
                                 />
