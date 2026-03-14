@@ -66,6 +66,8 @@ const INPUT_CLASS =
 
 const INPUT_CLASS_SM =
   'w-full rounded-[0.7rem] border border-white/10 bg-black/22 px-2 py-1.5 text-xs text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
+const INPUT_FLEX =
+  'rounded-[0.7rem] border border-white/10 bg-black/22 px-2 py-1.5 text-xs text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
 
 const TEXTAREA_CLASS = `${INPUT_CLASS} min-h-[5.5rem] resize-none`
 const AUTO_TEXTAREA_CLASS =
@@ -1964,14 +1966,13 @@ export function ProntuarioSystemPanel() {
                               {/* linha 1: data · tipo · apagar */}
                               <div className="flex items-center gap-2">
                                 <input
-                                  className={`${INPUT_CLASS_SM} w-[5.5rem] shrink-0`}
-                                  type="text"
-                                  placeholder="DD/MM/AA"
+                                  className={`${INPUT_FLEX} w-[7rem] shrink-0`}
+                                  type="date"
                                   value={exam.data}
                                   onChange={(e) => updateListItem('examesImagemList', index, 'data', e.target.value)}
                                 />
                                 <select
-                                  className={`${INPUT_CLASS_SM} flex-1`}
+                                  className={`${INPUT_FLEX} min-w-0 flex-1`}
                                   value={exam.tipo}
                                   onChange={(e) => updateListItem('examesImagemList', index, 'tipo', e.target.value)}
                                 >
