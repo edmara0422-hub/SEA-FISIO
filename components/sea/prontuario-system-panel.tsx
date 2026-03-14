@@ -3481,104 +3481,92 @@ export function ProntuarioSystemPanel() {
                 return (
                   <div
                     key={record.id}
-                    className="chrome-panel rounded-[1.35rem] p-4"
+                    className="chrome-panel rounded-[1.2rem] px-3 py-2.5"
                   >
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="flex min-w-0 gap-3">
-                        <div className="chrome-subtle flex h-10 w-10 shrink-0 flex-col items-center justify-center rounded-[0.9rem]">
-                          {record.leito ? (
-                            <>
-                              <span className="text-[8px] uppercase tracking-[0.14em] text-white/40">Leito</span>
-                              <span className="text-[11px] font-bold text-white/82">{record.leito}</span>
-                            </>
-                          ) : (
-                            <FileText className="h-4 w-4 text-white/52" />
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-sm font-semibold text-white/90">{recordTitle(record)}</p>
-                          <p className="mt-0.5 text-xs text-white/52">{recordSubtitle(record)}</p>
-                          <div className="mt-2 flex flex-wrap gap-1.5">
-                            {cardStatus ? (
-                              <span
-                                className="rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
-                                style={{
-                                  borderColor: cardStatus.border,
-                                  background: cardStatus.background,
-                                  color: cardStatus.color,
-                                }}
-                              >
-                                {cardStatus.label}
-                              </span>
-                            ) : null}
-                            {cardVia ? (
-                              <span
-                                className="rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
-                                style={{
-                                  borderColor: cardVia.border,
-                                  background: cardVia.background,
-                                  color: cardVia.color,
-                                }}
-                              >
-                                {cardVia.label}
-                              </span>
-                            ) : null}
-                            {showDays ? (
-                              <span
-                                className="rounded-full border px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.14em]"
-                                style={{
-                                  borderColor: `${showDays.color}40`,
-                                  background: `${showDays.color}14`,
-                                  color: showDays.color,
-                                }}
-                              >
-                                {showDays.label}
-                              </span>
-                            ) : null}
-                          </div>
-                        </div>
+                    {/* Linha 1: ícone + nome + badges */}
+                    <div className="flex items-center gap-3">
+                      <div className="chrome-subtle flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-[0.8rem]">
+                        {record.leito ? (
+                          <>
+                            <span className="text-[7px] uppercase tracking-[0.12em] text-white/38">Lt</span>
+                            <span className="text-[11px] font-bold leading-none text-white/82">{record.leito}</span>
+                          </>
+                        ) : (
+                          <FileText className="h-3.5 w-3.5 text-white/52" />
+                        )}
                       </div>
+                      <span className="flex-1 truncate text-sm font-semibold text-white/90">{recordTitle(record)}</span>
+                      <div className="flex shrink-0 items-center gap-1.5">
+                        {cardStatus ? (
+                          <span
+                            className="rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em]"
+                            style={{ borderColor: cardStatus.border, background: cardStatus.background, color: cardStatus.color }}
+                          >
+                            {cardStatus.label}
+                          </span>
+                        ) : null}
+                        {cardVia ? (
+                          <span
+                            className="rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em]"
+                            style={{ borderColor: cardVia.border, background: cardVia.background, color: cardVia.color }}
+                          >
+                            {cardVia.label}
+                          </span>
+                        ) : null}
+                        {showDays ? (
+                          <span
+                            className="rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em]"
+                            style={{ borderColor: `${showDays.color}40`, background: `${showDays.color}14`, color: showDays.color }}
+                          >
+                            {showDays.label}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
 
-                      <div className="flex shrink-0 flex-col gap-1.5">
+                    {/* Linha 2: diagnóstico + botões + setas */}
+                    <div className="mt-1.5 flex items-center gap-3">
+                      <div className="w-9 shrink-0" />
+                      <p className="flex-1 truncate text-[11px] text-white/48">{recordSubtitle(record)}</p>
+                      <div className="flex shrink-0 items-center gap-2.5">
+                        <button
+                          onClick={() => openRecord(record.id)}
+                          className="chrome-subtle flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/62 hover:text-white"
+                          title="Visualizar"
+                        >
+                          <Eye className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => openRecord(record.id)}
+                          className="chrome-subtle flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/62 hover:text-white"
+                          title="Editar"
+                        >
+                          <PencilLine className="h-3.5 w-3.5" />
+                        </button>
+                        <button
+                          onClick={() => archiveRecord(record.id)}
+                          className="flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#facc1530] bg-[#facc150d] text-[#fde68a] hover:bg-[#facc1520]"
+                          title="Arquivo"
+                        >
+                          <Archive className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+                      <div className="flex shrink-0 flex-col gap-1 ml-1">
                         <button
                           onClick={() => moveRecord(record.id, 'up')}
                           disabled={idx === 0}
-                          className="flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-white/10 bg-black/18 text-white/40 disabled:opacity-20 hover:text-white/70"
+                          className="flex h-5 w-7 items-center justify-center rounded-[0.4rem] border border-white/10 bg-black/18 text-white/42 disabled:opacity-20 hover:text-white/70"
                         >
-                          <span className="text-[10px] leading-none">↑</span>
+                          <span className="text-[11px] leading-none">↑</span>
                         </button>
                         <button
                           onClick={() => moveRecord(record.id, 'down')}
                           disabled={idx === records.length - 1}
-                          className="flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-white/10 bg-black/18 text-white/40 disabled:opacity-20 hover:text-white/70"
+                          className="flex h-5 w-7 items-center justify-center rounded-[0.4rem] border border-white/10 bg-black/18 text-white/42 disabled:opacity-20 hover:text-white/70"
                         >
-                          <span className="text-[10px] leading-none">↓</span>
+                          <span className="text-[11px] leading-none">↓</span>
                         </button>
                       </div>
-                    </div>
-
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      <button
-                        onClick={() => openRecord(record.id)}
-                        className="chrome-subtle inline-flex items-center gap-1.5 rounded-[0.8rem] border border-white/12 px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/72"
-                      >
-                        <Eye className="h-3.5 w-3.5" />
-                        Visualizar
-                      </button>
-                      <button
-                        onClick={() => openRecord(record.id)}
-                        className="chrome-subtle inline-flex items-center gap-1.5 rounded-[0.8rem] border border-white/12 px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/72"
-                      >
-                        <PencilLine className="h-3.5 w-3.5" />
-                        Editar
-                      </button>
-                      <button
-                        onClick={() => archiveRecord(record.id)}
-                        className="inline-flex items-center gap-1.5 rounded-[0.8rem] border border-[#facc1530] bg-[#facc150d] px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#fde68a]"
-                      >
-                        <Archive className="h-3.5 w-3.5" />
-                        Arquivo
-                      </button>
                     </div>
                   </div>
                 )
