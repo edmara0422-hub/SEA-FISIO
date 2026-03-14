@@ -1210,7 +1210,7 @@ export function ProntuarioSystemPanel() {
     <div className="rounded-[1.2rem] border border-white/10 bg-black/16 p-4">
       <FieldShell label={`${icon} ${label}`}>
         <select
-          className={INPUT_CLASS}
+          className={INPUT_CLASS_SM}
           defaultValue=""
           onChange={(event) => {
             toggleStringArrayField(field, event.target.value)
@@ -1748,7 +1748,7 @@ export function ProntuarioSystemPanel() {
                   <div className="mb-3">
                     <FieldShell label="Nome">
                       <input
-                        className={INPUT_CLASS}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.nome}
                         onChange={(event) => setField('nome', event.target.value)}
                         placeholder="Nome do paciente"
@@ -2313,24 +2313,24 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Hemodinamica / DVA
                   </p>
-                  <div className="grid gap-3 grid-cols-4 md:grid-cols-7">
+                  <div className="grid gap-2 grid-cols-7">
                     <FieldShell label="PAS">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.pas} onChange={(event) => setField('pas', event.target.value)} placeholder="120" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pas} onChange={(event) => setField('pas', event.target.value)} placeholder="120" />
                     </FieldShell>
                     <FieldShell label="PAD">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.pad} onChange={(event) => setField('pad', event.target.value)} placeholder="80" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pad} onChange={(event) => setField('pad', event.target.value)} placeholder="80" />
                     </FieldShell>
                     <FieldShell label="PAM">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.pam} onChange={(event) => setField('pam', event.target.value)} placeholder="85" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pam} onChange={(event) => setField('pam', event.target.value)} placeholder="85" />
                     </FieldShell>
                     <FieldShell label="FC">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.fc} onChange={(event) => setField('fc', event.target.value)} placeholder="88" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fc} onChange={(event) => setField('fc', event.target.value)} placeholder="88" />
                     </FieldShell>
                     <FieldShell label="Lactato">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.lactatoCardio} onChange={(event) => setField('lactatoCardio', event.target.value)} placeholder="1.2" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.lactatoCardio} onChange={(event) => setField('lactatoCardio', event.target.value)} placeholder="1.2" />
                     </FieldShell>
                     <FieldShell label="Mudanca hemodinamica" span="col-span-2">
-                      <select className={INPUT_CLASS} value={currentRecord.cardiovascularMudanca} onChange={(event) => setField('cardiovascularMudanca', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.cardiovascularMudanca} onChange={(event) => setField('cardiovascularMudanca', event.target.value)}>
                         <option value="">--</option>
                         <option value="estavel">Estavel</option>
                         <option value="reducao_dva">Reducao DVA</option>
@@ -2365,29 +2365,27 @@ export function ProntuarioSystemPanel() {
                   <div className="space-y-3">
                     {currentRecord.dvaList?.length ? (
                       currentRecord.dvaList.map((item, index) => (
-                        <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                          <div className="grid gap-3 md:grid-cols-[1.3fr_1fr_1fr_auto]">
+                        <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
+                          <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_auto]">
                             <FieldShell label="Droga">
-                              <select className={INPUT_CLASS} value={item.droga} onChange={(event) => updateListItem('dvaList', index, 'droga', event.target.value)}>
+                              <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('dvaList', index, 'droga', event.target.value)}>
                                 {DVA_OPTIONS.map((option) => (
-                                  <option key={option} value={option}>
-                                    {option || 'Selecionar'}
-                                  </option>
+                                  <option key={option} value={option}>{option || 'Selecionar'}</option>
                                 ))}
                               </select>
                             </FieldShell>
                             <FieldShell label="Dose">
-                              <input className={INPUT_CLASS} value={item.dose} onChange={(event) => updateListItem('dvaList', index, 'dose', event.target.value)} placeholder="0.12" />
+                              <input className={INPUT_CLASS_SM} value={item.dose} onChange={(event) => updateListItem('dvaList', index, 'dose', event.target.value)} placeholder="0.12" />
                             </FieldShell>
                             <FieldShell label="Unidade">
-                              <input className={INPUT_CLASS} value={item.unidade} onChange={(event) => updateListItem('dvaList', index, 'unidade', event.target.value)} />
+                              <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('dvaList', index, 'unidade', event.target.value)} />
                             </FieldShell>
-                            <div className="flex items-end">
+                            <div className="flex items-end pb-1">
                               <button
                                 onClick={() => removeListItem('dvaList', index)}
-                                className="inline-flex h-11 w-11 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                                className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
                               >
-                                <Trash2 className="h-4 w-4" />
+                                <Trash2 className="h-3 w-3" />
                               </button>
                             </div>
                           </div>
@@ -2403,10 +2401,9 @@ export function ProntuarioSystemPanel() {
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <FieldShell label="Avaliacao cardiovascular">
-                    <textarea
-                      className={TEXTAREA_CLASS}
+                    <AutoGrowTextarea
                       value={currentRecord.cardiovascular}
-                      onChange={(event) => setField('cardiovascular', event.target.value)}
+                      onChange={(value) => setField('cardiovascular', value)}
                       placeholder="Perfusao, edema, resposta vasoativa, ritmos, metas..."
                     />
                   </FieldShell>
@@ -2422,7 +2419,7 @@ export function ProntuarioSystemPanel() {
                   </p>
                   <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
                     <FieldShell label="Via aerea atual">
-                      <select className={INPUT_CLASS} value={currentRecord.tipoVia} onChange={(event) => setField('tipoVia', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.tipoVia} onChange={(event) => setField('tipoVia', event.target.value)}>
                         {VIA_OPTIONS.map(([value, label]) => (
                           <option key={value} value={value}>
                             {label}
@@ -2431,18 +2428,16 @@ export function ProntuarioSystemPanel() {
                       </select>
                     </FieldShell>
                     <FieldShell label="Avaliacao pulmonar" span="xl:col-span-2">
-                      <textarea
-                        className={TEXTAREA_CLASS}
+                      <AutoGrowTextarea
                         value={currentRecord.pulmonar}
-                        onChange={(event) => setField('pulmonar', event.target.value)}
+                        onChange={(value) => setField('pulmonar', value)}
                         placeholder="Ausculta, complacencia, infiltrado, expansao..."
                       />
                     </FieldShell>
                     <FieldShell label="Secrecao">
-                      <textarea
-                        className={TEXTAREA_CLASS}
+                      <AutoGrowTextarea
                         value={currentRecord.secrecao}
-                        onChange={(event) => setField('secrecao', event.target.value)}
+                        onChange={(value) => setField('secrecao', value)}
                         placeholder="Volume, aspecto, necessidade de aspiracao..."
                       />
                     </FieldShell>
@@ -2483,7 +2478,7 @@ export function ProntuarioSystemPanel() {
                       <>
                         <FieldShell label="Data e hora IOT" span="xl:col-span-2">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="datetime-local"
                             value={currentRecord.dataTOT}
                             onChange={(event) => setField('dataTOT', event.target.value)}
@@ -2491,7 +2486,7 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Extubacao">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="date"
                             value={currentRecord.dataExtubacao}
                             onChange={(event) => setField('dataExtubacao', event.target.value)}
@@ -2499,7 +2494,7 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Hora extubacao">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="time"
                             value={currentRecord.horaExtubacao}
                             onChange={(event) => setField('horaExtubacao', event.target.value)}
@@ -2507,7 +2502,7 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Re-IOT">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="date"
                             value={currentRecord.dataReIOT}
                             onChange={(event) => setField('dataReIOT', event.target.value)}
@@ -2515,7 +2510,7 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Hora Re-IOT">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="time"
                             value={currentRecord.horaReIOT}
                             onChange={(event) => setField('horaReIOT', event.target.value)}
@@ -2528,7 +2523,7 @@ export function ProntuarioSystemPanel() {
                       <>
                         <FieldShell label="Data e hora TQT" span="xl:col-span-2">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="datetime-local"
                             value={currentRecord.dataTQT}
                             onChange={(event) => setField('dataTQT', event.target.value)}
@@ -2536,7 +2531,7 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Decanulacao">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="date"
                             value={currentRecord.dataDecanulacao}
                             onChange={(event) => setField('dataDecanulacao', event.target.value)}
@@ -2544,7 +2539,7 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Hora decanulacao">
                           <input
-                            className={INPUT_CLASS}
+                            className={INPUT_CLASS_SM}
                             type="time"
                             value={currentRecord.horaDecanulacao}
                             onChange={(event) => setField('horaDecanulacao', event.target.value)}
@@ -2554,7 +2549,7 @@ export function ProntuarioSystemPanel() {
                           <>
                             <FieldShell label="Desconexao VM">
                               <input
-                                className={INPUT_CLASS}
+                                className={INPUT_CLASS_SM}
                                 type="date"
                                 value={currentRecord.dataDescVM}
                                 onChange={(event) => setField('dataDescVM', event.target.value)}
@@ -2562,7 +2557,7 @@ export function ProntuarioSystemPanel() {
                             </FieldShell>
                             <FieldShell label="Hora desc. VM">
                               <input
-                                className={INPUT_CLASS}
+                                className={INPUT_CLASS_SM}
                                 type="time"
                                 value={currentRecord.horaDescVM}
                                 onChange={(event) => setField('horaDescVM', event.target.value)}
@@ -2602,49 +2597,48 @@ export function ProntuarioSystemPanel() {
                   </p>
                   <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                     <FieldShell label="Data">
-                      <input className={INPUT_CLASS} type="date" value={currentRecord.gasoData} onChange={(event) => setField('gasoData', event.target.value)} />
+                      <input className={INPUT_CLASS_SM} type="date" value={currentRecord.gasoData} onChange={(event) => setField('gasoData', event.target.value)} />
                     </FieldShell>
                     <FieldShell label="Hora">
-                      <input className={INPUT_CLASS} type="time" value={currentRecord.gasoHora} onChange={(event) => setField('gasoHora', event.target.value)} />
+                      <input className={INPUT_CLASS_SM} type="time" value={currentRecord.gasoHora} onChange={(event) => setField('gasoHora', event.target.value)} />
                     </FieldShell>
                     <FieldShell label="SpO2 / S-F">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.sfSpO2} onChange={(event) => setField('sfSpO2', event.target.value)} placeholder="96" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.sfSpO2} onChange={(event) => setField('sfSpO2', event.target.value)} placeholder="96" />
                     </FieldShell>
                     <FieldShell label="FiO2 / S-F">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.sfFiO2} onChange={(event) => setField('sfFiO2', event.target.value)} placeholder="40" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.sfFiO2} onChange={(event) => setField('sfFiO2', event.target.value)} placeholder="40" />
                     </FieldShell>
                     <FieldShell label="pH">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPH} onChange={(event) => setField('gasoPH', event.target.value)} placeholder="7.36" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoPH} onChange={(event) => setField('gasoPH', event.target.value)} placeholder="7.36" />
                     </FieldShell>
                     <FieldShell label="PaCO2">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPaCO2} onChange={(event) => setField('gasoPaCO2', event.target.value)} placeholder="45" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoPaCO2} onChange={(event) => setField('gasoPaCO2', event.target.value)} placeholder="45" />
                     </FieldShell>
                     <FieldShell label="PaO2">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoPaO2} onChange={(event) => setField('gasoPaO2', event.target.value)} placeholder="80" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoPaO2} onChange={(event) => setField('gasoPaO2', event.target.value)} placeholder="80" />
                     </FieldShell>
                     <FieldShell label="HCO3">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoHCO3} onChange={(event) => setField('gasoHCO3', event.target.value)} placeholder="24" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoHCO3} onChange={(event) => setField('gasoHCO3', event.target.value)} placeholder="24" />
                     </FieldShell>
                     <FieldShell label="BE">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoBE} onChange={(event) => setField('gasoBE', event.target.value)} placeholder="0" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoBE} onChange={(event) => setField('gasoBE', event.target.value)} placeholder="0" />
                     </FieldShell>
                     <FieldShell label="SaO2">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoSaO2} onChange={(event) => setField('gasoSaO2', event.target.value)} placeholder="96" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoSaO2} onChange={(event) => setField('gasoSaO2', event.target.value)} placeholder="96" />
                     </FieldShell>
                     <FieldShell label="Lactato">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoLactato} onChange={(event) => setField('gasoLactato', event.target.value)} placeholder="1.5" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoLactato} onChange={(event) => setField('gasoLactato', event.target.value)} placeholder="1.5" />
                     </FieldShell>
                     <FieldShell label="FiO2 gaso">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.gasoFiO2} onChange={(event) => setField('gasoFiO2', event.target.value)} placeholder="40" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoFiO2} onChange={(event) => setField('gasoFiO2', event.target.value)} placeholder="40" />
                     </FieldShell>
                   </div>
 
                   <div className="mt-4">
                     <FieldShell label="Obs. gasometricas">
-                      <textarea
-                        className={TEXTAREA_CLASS}
+                      <AutoGrowTextarea
                         value={currentRecord.gasoObs}
-                        onChange={(event) => setField('gasoObs', event.target.value)}
+                        onChange={(value) => setField('gasoObs', value)}
                         placeholder="Interpretacao clinica, correlacao com leito, coleta..."
                       />
                     </FieldShell>
@@ -2732,7 +2726,7 @@ export function ProntuarioSystemPanel() {
                   </p>
                   <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                     <FieldShell label="Modo ventilatorio" span="xl:col-span-2">
-                      <select className={INPUT_CLASS} value={currentRecord.modoVM} onChange={(event) => setField('modoVM', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.modoVM} onChange={(event) => setField('modoVM', event.target.value)}>
                         {VM_OPTIONS.map((option) => (
                           <option key={option.value} value={option.value} disabled={option.disabled}>
                             {option.label}
@@ -2746,42 +2740,42 @@ export function ProntuarioSystemPanel() {
                     <div className="mt-4 space-y-4">
                       <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="VT (mL)">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.vt} onChange={(event) => setField('vt', event.target.value)} placeholder="450" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vt} onChange={(event) => setField('vt', event.target.value)} placeholder="450" />
                         </FieldShell>
                         <FieldShell label="VC (mL)">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7.2" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7.2" />
                         </FieldShell>
                         <FieldShell label="FR">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
                         </FieldShell>
                         <FieldShell label="PEEP">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="10" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="10" />
                         </FieldShell>
                         <FieldShell label="FiO2">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
                         </FieldShell>
                       </div>
                       <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="Fluxo (L/min)">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.fluxo} onChange={(event) => setField('fluxo', event.target.value)} placeholder="60" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fluxo} onChange={(event) => setField('fluxo', event.target.value)} placeholder="60" />
                         </FieldShell>
                         <FieldShell label="Trigger">
-                          <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
                         </FieldShell>
                         <FieldShell label="TI (s)">
-                          <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="1.0" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="1.0" />
                         </FieldShell>
                         <FieldShell label="I:E">
-                          <input className={INPUT_CLASS} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
                         </FieldShell>
                         <FieldShell label="P. pico">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="28" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="28" />
                         </FieldShell>
                         <FieldShell label="P. plato">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.pplato} onChange={(event) => setField('pplato', event.target.value)} placeholder="25" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pplato} onChange={(event) => setField('pplato', event.target.value)} placeholder="25" />
                         </FieldShell>
                       </div>
                     </div>
@@ -2789,39 +2783,39 @@ export function ProntuarioSystemPanel() {
                     <div className="mt-4 space-y-4">
                       <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="PC (cmH2O)">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="27" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="27" />
                         </FieldShell>
                         <FieldShell label="VC (mL)">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7.2" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7.2" />
                         </FieldShell>
                         <FieldShell label="FR">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
                         </FieldShell>
                         <FieldShell label="PEEP">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="10" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="10" />
                         </FieldShell>
                         <FieldShell label="FiO2">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
                         </FieldShell>
                       </div>
                       <div className="grid gap-3 grid-cols-3 xl:grid-cols-5">
                         <FieldShell label="Trigger">
-                          <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
                         </FieldShell>
                         <FieldShell label="TI (s)">
-                          <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="0.8" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="0.8" />
                         </FieldShell>
                         <FieldShell label="I:E">
-                          <input className={INPUT_CLASS} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
                         </FieldShell>
                         <FieldShell label="P. plato">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.pplato} onChange={(event) => setField('pplato', event.target.value)} placeholder="22" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pplato} onChange={(event) => setField('pplato', event.target.value)} placeholder="22" />
                         </FieldShell>
                         <FieldShell label="Pmean">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.pmean} onChange={(event) => setField('pmean', event.target.value)} placeholder="12" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pmean} onChange={(event) => setField('pmean', event.target.value)} placeholder="12" />
                         </FieldShell>
                       </div>
                     </div>
@@ -2830,22 +2824,22 @@ export function ProntuarioSystemPanel() {
                       {currentRecord.modoVM === 'BIPAP' ? (
                         <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                           <FieldShell label="IPAP">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ipap} onChange={(event) => setField('ipap', event.target.value)} placeholder="15" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ipap} onChange={(event) => setField('ipap', event.target.value)} placeholder="15" />
                           </FieldShell>
                           <FieldShell label="EPAP">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.epap} onChange={(event) => setField('epap', event.target.value)} placeholder="8" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.epap} onChange={(event) => setField('epap', event.target.value)} placeholder="8" />
                           </FieldShell>
                           <FieldShell label="VC (mL)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
                           </FieldShell>
                           <FieldShell label="VE (L/min)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
                           </FieldShell>
                           <FieldShell label="FR">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
                           </FieldShell>
                           <FieldShell label="Interface">
-                            <select className={INPUT_CLASS} value={currentRecord.interfaceVNI} onChange={(event) => setField('interfaceVNI', event.target.value)}>
+                            <select className={INPUT_CLASS_SM} value={currentRecord.interfaceVNI} onChange={(event) => setField('interfaceVNI', event.target.value)}>
                               <option value="facial">Facial</option>
                               <option value="oronasal">Oronasal</option>
                               <option value="nasal">Nasal</option>
@@ -2856,22 +2850,22 @@ export function ProntuarioSystemPanel() {
                       ) : currentRecord.modoVM === 'CPAP' ? (
                         <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                           <FieldShell label="CPAP / PEEP">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
                           </FieldShell>
                           <FieldShell label="VC (mL)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
                           </FieldShell>
                           <FieldShell label="VE (L/min)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
                           </FieldShell>
                           <FieldShell label="FR">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
                           </FieldShell>
                           <FieldShell label="FiO2">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
                           </FieldShell>
                           <FieldShell label="Interface">
-                            <select className={INPUT_CLASS} value={currentRecord.interfaceVNI} onChange={(event) => setField('interfaceVNI', event.target.value)}>
+                            <select className={INPUT_CLASS_SM} value={currentRecord.interfaceVNI} onChange={(event) => setField('interfaceVNI', event.target.value)}>
                               <option value="facial">Facial</option>
                               <option value="oronasal">Oronasal</option>
                               <option value="nasal">Nasal</option>
@@ -2882,96 +2876,96 @@ export function ProntuarioSystemPanel() {
                       ) : currentRecord.modoVM === 'APRV' ? (
                         <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                           <FieldShell label="P-Alta">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="28" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ppico} onChange={(event) => setField('ppico', event.target.value)} placeholder="28" />
                           </FieldShell>
                           <FieldShell label="P-Baixa">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="0" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="0" />
                           </FieldShell>
                           <FieldShell label="T-Alta (s)">
-                            <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="4.5" />
+                            <input className={INPUT_CLASS_SM} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="4.5" />
                           </FieldShell>
                           <FieldShell label="T-Baixa (s)">
-                            <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="0.5" />
+                            <input className={INPUT_CLASS_SM} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="0.5" />
                           </FieldShell>
                           <FieldShell label="FiO2">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="60" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="60" />
                           </FieldShell>
                           <FieldShell label="VC (mL)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
                           </FieldShell>
                         </div>
                       ) : currentRecord.modoVM === 'PAV' || currentRecord.modoVM === 'NAVA' ? (
                         <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                           <FieldShell label="% Assist">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ps} onChange={(event) => setField('ps', event.target.value)} placeholder="70" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ps} onChange={(event) => setField('ps', event.target.value)} placeholder="70" />
                           </FieldShell>
                           <FieldShell label="VC (mL)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
                           </FieldShell>
                           <FieldShell label="VE (L/min)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
                           </FieldShell>
                           <FieldShell label="FR">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
                           </FieldShell>
                           <FieldShell label="PEEP">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
                           </FieldShell>
                           <FieldShell label="FiO2">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
                           </FieldShell>
                         </div>
                       ) : (
                         <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                           <FieldShell label="PS (cmH2O)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ps} onChange={(event) => setField('ps', event.target.value)} placeholder="10" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ps} onChange={(event) => setField('ps', event.target.value)} placeholder="10" />
                           </FieldShell>
                           <FieldShell label="VC (mL)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.vc} onChange={(event) => setField('vc', event.target.value)} placeholder="420" />
                           </FieldShell>
                           <FieldShell label="VE (L/min)">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.ve} onChange={(event) => setField('ve', event.target.value)} placeholder="7" />
                           </FieldShell>
                           <FieldShell label="FR">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fr} onChange={(event) => setField('fr', event.target.value)} placeholder="18" />
                           </FieldShell>
                           <FieldShell label="PEEP">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
                           </FieldShell>
                           <FieldShell label="FiO2">
-                            <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
                           </FieldShell>
                         </div>
                       )}
 
                       <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="Trigger">
-                          <input className={INPUT_CLASS} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.trigger} onChange={(event) => setField('trigger', event.target.value)} placeholder="-2" />
                         </FieldShell>
                         <FieldShell label="TI (s)">
-                          <input className={INPUT_CLASS} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="0.8" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ti} onChange={(event) => setField('ti', event.target.value)} placeholder="0.8" />
                         </FieldShell>
                         <FieldShell label="I:E">
-                          <input className={INPUT_CLASS} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ie} onChange={(event) => setField('ie', event.target.value)} placeholder="1:2" />
                         </FieldShell>
                         <FieldShell label="Pmean">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.pmean} onChange={(event) => setField('pmean', event.target.value)} placeholder="12" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pmean} onChange={(event) => setField('pmean', event.target.value)} placeholder="12" />
                         </FieldShell>
                         <FieldShell label="P0.1">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.p01} onChange={(event) => setField('p01', event.target.value)} placeholder="2.2" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.p01} onChange={(event) => setField('p01', event.target.value)} placeholder="2.2" />
                         </FieldShell>
                         <FieldShell label="Pocc">
-                          <input className={INPUT_CLASS} type="number" value={currentRecord.pocc} onChange={(event) => setField('pocc', event.target.value)} placeholder="8" />
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pocc} onChange={(event) => setField('pocc', event.target.value)} placeholder="8" />
                         </FieldShell>
                       </div>
                     </div>
                   ) : (
                     <div className="mt-4 grid gap-3 grid-cols-2 xl:grid-cols-4">
                       <FieldShell label="PEEP">
-                        <input className={INPUT_CLASS} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
+                        <input className={INPUT_CLASS_SM} type="number" value={currentRecord.peep} onChange={(event) => setField('peep', event.target.value)} placeholder="8" />
                       </FieldShell>
                       <FieldShell label="FiO2">
-                        <input className={INPUT_CLASS} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
+                        <input className={INPUT_CLASS_SM} type="number" value={currentRecord.fio2} onChange={(event) => setField('fio2', event.target.value)} placeholder="40" />
                       </FieldShell>
                     </div>
                   )}
@@ -3078,7 +3072,7 @@ export function ProntuarioSystemPanel() {
                         <div className="grid gap-3 grid-cols-3">
                           <FieldShell label="PEEP">
                             <input
-                              className={INPUT_CLASS}
+                              className={INPUT_CLASS_SM}
                               type="number"
                               value={row.peep}
                               onChange={(event) => setPeepOptField(index, 'peep', event.target.value)}
@@ -3087,7 +3081,7 @@ export function ProntuarioSystemPanel() {
                           </FieldShell>
                           <FieldShell label="Plato">
                             <input
-                              className={INPUT_CLASS}
+                              className={INPUT_CLASS_SM}
                               type="number"
                               value={row.plato}
                               onChange={(event) => setPeepOptField(index, 'plato', event.target.value)}
@@ -3096,7 +3090,7 @@ export function ProntuarioSystemPanel() {
                           </FieldShell>
                           <FieldShell label="Stress index">
                             <input
-                              className={INPUT_CLASS}
+                              className={INPUT_CLASS_SM}
                               value={row.si}
                               onChange={(event) => setPeepOptField(index, 'si', event.target.value)}
                               placeholder="=1"
@@ -3146,22 +3140,22 @@ export function ProntuarioSystemPanel() {
                   </p>
                   <div className="grid gap-3 grid-cols-3 xl:grid-cols-7">
                     <FieldShell label="PImax">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.dPimax} onChange={(event) => setField('dPimax', event.target.value)} placeholder="-40" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dPimax} onChange={(event) => setField('dPimax', event.target.value)} placeholder="-40" />
                     </FieldShell>
                     <FieldShell label="PEmax">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.dPemax} onChange={(event) => setField('dPemax', event.target.value)} placeholder="60" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dPemax} onChange={(event) => setField('dPemax', event.target.value)} placeholder="60" />
                     </FieldShell>
                     <FieldShell label="VC (mL)">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.dVcDesm} onChange={(event) => setField('dVcDesm', event.target.value)} placeholder="450" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dVcDesm} onChange={(event) => setField('dVcDesm', event.target.value)} placeholder="450" />
                     </FieldShell>
                     <FieldShell label="FR">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.dFrDesm} onChange={(event) => setField('dFrDesm', event.target.value)} placeholder="18" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dFrDesm} onChange={(event) => setField('dFrDesm', event.target.value)} placeholder="18" />
                     </FieldShell>
                     <FieldShell label="CV (mL/kg)">
-                      <input className={INPUT_CLASS} type="number" value={currentRecord.dCv} onChange={(event) => setField('dCv', event.target.value)} placeholder="15" />
+                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dCv} onChange={(event) => setField('dCv', event.target.value)} placeholder="15" />
                     </FieldShell>
                     <FieldShell label="TRE">
-                      <select className={INPUT_CLASS} value={currentRecord.weanTRETipo} onChange={(event) => setField('weanTRETipo', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.weanTRETipo} onChange={(event) => setField('weanTRETipo', event.target.value)}>
                         {TRE_TYPE_OPTIONS.map(([value, label]) => (
                           <option key={value} value={value}>
                             {label}
@@ -3170,7 +3164,7 @@ export function ProntuarioSystemPanel() {
                       </select>
                     </FieldShell>
                     <FieldShell label="Resultado TRE">
-                      <select className={INPUT_CLASS} value={currentRecord.weanTREResult} onChange={(event) => setField('weanTREResult', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.weanTREResult} onChange={(event) => setField('weanTREResult', event.target.value)}>
                         {TRE_RESULT_OPTIONS.map(([value, label]) => (
                           <option key={value} value={value}>
                             {label}
@@ -3182,10 +3176,9 @@ export function ProntuarioSystemPanel() {
 
                   <div className="mt-4">
                     <FieldShell label="Obs. desmame">
-                      <textarea
-                        className={TEXTAREA_CLASS}
+                      <AutoGrowTextarea
                         value={currentRecord.weanObs}
-                        onChange={(event) => setField('weanObs', event.target.value)}
+                        onChange={(value) => setField('weanObs', value)}
                         placeholder="TRE, tolerancia, fadiga, tosse, secrecao..."
                       />
                     </FieldShell>
@@ -3283,7 +3276,7 @@ export function ProntuarioSystemPanel() {
                   {proneActive ? (
                     <div className="mt-4 grid gap-3 grid-cols-3">
                       <FieldShell label="Tempo prona">
-                        <select className={INPUT_CLASS} value={currentRecord.pronaTempo} onChange={(event) => setField('pronaTempo', event.target.value)}>
+                        <select className={INPUT_CLASS_SM} value={currentRecord.pronaTempo} onChange={(event) => setField('pronaTempo', event.target.value)}>
                           {PRONA_TIME_OPTIONS.map((value) => (
                             <option key={value} value={value}>
                               {value}
@@ -3292,10 +3285,10 @@ export function ProntuarioSystemPanel() {
                         </select>
                       </FieldShell>
                       <FieldShell label="Data inicio">
-                        <input className={INPUT_CLASS} type="date" value={currentRecord.pronaData} onChange={(event) => setField('pronaData', event.target.value)} />
+                        <input className={INPUT_CLASS_SM} type="date" value={currentRecord.pronaData} onChange={(event) => setField('pronaData', event.target.value)} />
                       </FieldShell>
                       <FieldShell label="Hora inicio">
-                        <input className={INPUT_CLASS} type="time" value={currentRecord.pronaHora} onChange={(event) => setField('pronaHora', event.target.value)} />
+                        <input className={INPUT_CLASS_SM} type="time" value={currentRecord.pronaHora} onChange={(event) => setField('pronaHora', event.target.value)} />
                       </FieldShell>
                     </div>
                   ) : null}
@@ -3317,10 +3310,10 @@ export function ProntuarioSystemPanel() {
                     </p>
                     <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
                       <FieldShell label="Volume insp. (mL)">
-                        <input className={INPUT_CLASS} type="number" value={currentRecord.recVolInsp} onChange={(event) => setField('recVolInsp', event.target.value)} placeholder="1200" />
+                        <input className={INPUT_CLASS_SM} type="number" value={currentRecord.recVolInsp} onChange={(event) => setField('recVolInsp', event.target.value)} placeholder="1200" />
                       </FieldShell>
                       <FieldShell label="Volume exp. (mL)">
-                        <input className={INPUT_CLASS} type="number" value={currentRecord.recVolExp} onChange={(event) => setField('recVolExp', event.target.value)} placeholder="600" />
+                        <input className={INPUT_CLASS_SM} type="number" value={currentRecord.recVolExp} onChange={(event) => setField('recVolExp', event.target.value)} placeholder="600" />
                       </FieldShell>
                       <MetricChip
                         label="Diferenca"
@@ -3343,10 +3336,9 @@ export function ProntuarioSystemPanel() {
               <div className="space-y-5">
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <FieldShell label="Avaliacao motora / funcional">
-                    <textarea
-                      className={TEXTAREA_CLASS}
+                    <AutoGrowTextarea
                       value={currentRecord.motora}
-                      onChange={(event) => setField('motora', event.target.value)}
+                      onChange={(value) => setField('motora', value)}
                       placeholder="Forca, mobilidade, barreiras, evolucao funcional..."
                     />
                   </FieldShell>
@@ -3356,10 +3348,10 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">MRC</p>
                   <div className="space-y-3">
                     {MRC_GROUPS.map((group) => (
-                      <div key={group.label} className="grid items-end gap-3 md:grid-cols-[1.3fr_1fr_1fr]">
+                      <div key={group.label} className="grid items-end gap-2 grid-cols-[1.3fr_1fr_1fr]">
                         <p className="text-sm text-white/74">{group.label}</p>
                         <FieldShell label="D">
-                          <select className={INPUT_CLASS} value={currentRecord[group.right]} onChange={(event) => setField(group.right, event.target.value)}>
+                          <select className={INPUT_CLASS_SM} value={currentRecord[group.right]} onChange={(event) => setField(group.right, event.target.value)}>
                             <option value="">--</option>
                             {['0', '1', '2', '3', '4', '5'].map((value) => (
                               <option key={value} value={value}>
@@ -3369,7 +3361,7 @@ export function ProntuarioSystemPanel() {
                           </select>
                         </FieldShell>
                         <FieldShell label="E">
-                          <select className={INPUT_CLASS} value={currentRecord[group.left]} onChange={(event) => setField(group.left, event.target.value)}>
+                          <select className={INPUT_CLASS_SM} value={currentRecord[group.left]} onChange={(event) => setField(group.left, event.target.value)}>
                             <option value="">--</option>
                             {['0', '1', '2', '3', '4', '5'].map((value) => (
                               <option key={value} value={value}>
@@ -3397,7 +3389,7 @@ export function ProntuarioSystemPanel() {
                   <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
                     {PERME_ITEMS.map((item) => (
                       <FieldShell key={item.key} label={item.label}>
-                        <select className={INPUT_CLASS} value={currentRecord[item.key]} onChange={(event) => setField(item.key, event.target.value)}>
+                        <select className={INPUT_CLASS_SM} value={currentRecord[item.key]} onChange={(event) => setField(item.key, event.target.value)}>
                           {item.options.map(([value, label]) => (
                             <option key={value} value={value}>
                               {label}
@@ -3419,9 +3411,9 @@ export function ProntuarioSystemPanel() {
                 </div>
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <div className="grid gap-4 md:grid-cols-[minmax(0,20rem)_minmax(0,1fr)] md:items-end">
+                  <div className="grid gap-3 grid-cols-[minmax(0,20rem)_minmax(0,1fr)] items-end">
                     <FieldShell label="IMS">
-                      <select className={INPUT_CLASS} value={currentRecord.imsScore} onChange={(event) => setField('imsScore', event.target.value)}>
+                      <select className={INPUT_CLASS_SM} value={currentRecord.imsScore} onChange={(event) => setField('imsScore', event.target.value)}>
                         {IMS_OPTIONS.map(([value, label]) => (
                           <option key={value} value={value}>
                             {label}
@@ -3445,26 +3437,23 @@ export function ProntuarioSystemPanel() {
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <div className="space-y-4">
                     <FieldShell label="Percepcao do plantao">
-                      <textarea
-                        className={TEXTAREA_CLASS}
+                      <AutoGrowTextarea
                         value={currentRecord.percepcao}
-                        onChange={(event) => setField('percepcao', event.target.value)}
+                        onChange={(value) => setField('percepcao', value)}
                         placeholder="Leitura global do turno..."
                       />
                     </FieldShell>
                     <FieldShell label="Pendencias">
-                      <textarea
-                        className={TEXTAREA_CLASS}
+                      <AutoGrowTextarea
                         value={currentRecord.pendencias}
-                        onChange={(event) => setField('pendencias', event.target.value)}
+                        onChange={(value) => setField('pendencias', value)}
                         placeholder="Pendencias, prioridades, exames..."
                       />
                     </FieldShell>
                     <FieldShell label="Condutas">
-                      <textarea
-                        className={TEXTAREA_CLASS}
+                      <AutoGrowTextarea
                         value={currentRecord.condutas}
-                        onChange={(event) => setField('condutas', event.target.value)}
+                        onChange={(value) => setField('condutas', value)}
                         placeholder="Plano e condutas do plantao..."
                       />
                     </FieldShell>
