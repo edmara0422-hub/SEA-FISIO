@@ -1669,7 +1669,7 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   <div className="grid gap-3 grid-cols-2 md:grid-cols-12">
-                    <FieldShell label="Nome" span="md:col-span-4">
+                    <FieldShell label="Nome" span="col-span-4">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.nome}
@@ -1677,7 +1677,7 @@ export function ProntuarioSystemPanel() {
                         placeholder="Nome do paciente"
                       />
                     </FieldShell>
-                    <FieldShell label="Leito" span="md:col-span-2">
+                    <FieldShell label="Leito" span="col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.leito}
@@ -1685,7 +1685,7 @@ export function ProntuarioSystemPanel() {
                         placeholder="01"
                       />
                     </FieldShell>
-                    <FieldShell label="Clinica" span="md:col-span-2">
+                    <FieldShell label="Clinica" span="col-span-2">
                       <select
                         className={INPUT_CLASS}
                         value={currentRecord.statusClinico}
@@ -1700,7 +1700,7 @@ export function ProntuarioSystemPanel() {
                         ))}
                       </select>
                     </FieldShell>
-                    <FieldShell label="Idade" span="md:col-span-2">
+                    <FieldShell label="Idade" span="col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.idade}
@@ -1709,7 +1709,7 @@ export function ProntuarioSystemPanel() {
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Sexo" span="md:col-span-2">
+                    <FieldShell label="Sexo" span="col-span-2">
                       <select
                         className={INPUT_CLASS}
                         value={currentRecord.sexo}
@@ -1720,7 +1720,7 @@ export function ProntuarioSystemPanel() {
                         <option value="F">F</option>
                       </select>
                     </FieldShell>
-                    <FieldShell label="Peso" span="md:col-span-2">
+                    <FieldShell label="Peso" span="col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.peso}
@@ -1729,7 +1729,7 @@ export function ProntuarioSystemPanel() {
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Altura" span="md:col-span-2">
+                    <FieldShell label="Altura" span="col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.altura}
@@ -1738,7 +1738,7 @@ export function ProntuarioSystemPanel() {
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Peso atual" span="md:col-span-2">
+                    <FieldShell label="Peso atual" span="col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.pesoAtual}
@@ -1747,12 +1747,12 @@ export function ProntuarioSystemPanel() {
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="PBW" span="md:col-span-2">
+                    <FieldShell label="PBW" span="col-span-2">
                       <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white/88">
                         {calculations?.pesoIdeal ? `${calculations.pesoIdeal.toFixed(1)} kg` : 'sexo + altura'}
                       </div>
                     </FieldShell>
-                    <FieldShell label="Balanco 24h" span="md:col-span-2">
+                    <FieldShell label="Balanco 24h" span="col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.balanco24h}
@@ -1761,7 +1761,7 @@ export function ProntuarioSystemPanel() {
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Bal. acumulado" span="md:col-span-2">
+                    <FieldShell label="Bal. acumulado" span="col-span-2">
                       <input
                         className={INPUT_CLASS}
                         value={currentRecord.balancoAcumulado}
@@ -2286,7 +2286,7 @@ export function ProntuarioSystemPanel() {
                     <FieldShell label="Lactato">
                       <input className={INPUT_CLASS} type="number" value={currentRecord.lactatoCardio} onChange={(event) => setField('lactatoCardio', event.target.value)} placeholder="1.2" />
                     </FieldShell>
-                    <FieldShell label="Mudanca hemodinamica" span="md:col-span-2">
+                    <FieldShell label="Mudanca hemodinamica" span="col-span-2">
                       <select className={INPUT_CLASS} value={currentRecord.cardiovascularMudanca} onChange={(event) => setField('cardiovascularMudanca', event.target.value)}>
                         <option value="">--</option>
                         <option value="estavel">Estavel</option>
