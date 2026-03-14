@@ -1960,16 +1960,16 @@ export function ProntuarioSystemPanel() {
                       <div className="space-y-3">
                         {currentRecord.examesImagemList?.length ? (
                           currentRecord.examesImagemList.map((exam, index) => (
-                            <div key={`img-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
-                              <div className="flex items-center gap-2">
+                            <div key={`img-${index}`} className="overflow-hidden rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                              <div className="flex min-w-0 items-center gap-2">
                                 <input
-                                  className={`${INPUT_CLASS_SM} w-32 shrink-0`}
+                                  className={`${INPUT_CLASS_SM} w-28 shrink-0`}
                                   type="date"
                                   value={exam.data}
                                   onChange={(event) => updateListItem('examesImagemList', index, 'data', event.target.value)}
                                 />
                                 <select
-                                  className={`${INPUT_CLASS_SM} flex-1`}
+                                  className={`${INPUT_CLASS_SM} min-w-0 flex-1`}
                                   value={exam.tipo}
                                   onChange={(event) => updateListItem('examesImagemList', index, 'tipo', event.target.value)}
                                 >
