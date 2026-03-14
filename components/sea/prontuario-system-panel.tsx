@@ -357,6 +357,77 @@ const SEDATIVE_OPTIONS = [
 
 const BNM_OPTIONS = ['', 'Cisatracurio', 'Rocuronio', 'Pancuronio', 'Atracurio', 'Vecuronio']
 
+type DrugTrend = 'manteve' | 'reduziu' | 'aumentou'
+
+function calcDrugTrend(inicio: string, atual: string): DrugTrend | null {
+  const i = parseFloat(inicio)
+  const a = parseFloat(atual)
+  if (isNaN(i) || isNaN(a)) return null
+  if (a < i) return 'reduziu'
+  if (a > i) return 'aumentou'
+  return 'manteve'
+}
+
+type DrugAnalysis = {
+  trend: DrugTrend
+  label: string
+  color: string
+  indica: string
+  evolucao: string
+}
+
+function analiseSedativo(inicio: string, atual: string): DrugAnalysis | null {
+  const trend = calcDrugTrend(inicio, atual)
+  if (!trend) return null
+  const map: Record<DrugTrend, Omit<DrugAnalysis, 'trend'>> = {
+    manteve: {
+      label: 'Dose mantida',
+      color: '#60a5fa',
+      indica: 'Sedacao estavel. Paciente controlado, sem progressao de desmame. Avaliar abertura de janela de sedacao e RASS-alvo.',
+      evolucao: 'Melhora: reducao gradual → janela diaria → suspensao. Piora: aumento de dose, risco de delirium de abstinencia ou tolerancia.',
+    },
+    reduziu: {
+      label: 'Desmame em curso',
+      color: '#4ade80',
+      indica: 'Reducao de sedativo. Paciente mais reativo, monitorar RASS. Risco de agitacao, dor nao tratada e delirium hiperativo.',
+      evolucao: 'Melhora: suspensao progressiva, extubacao ou desmame VM. Piora: retitulacao por agitacao, delirium ou instabilidade.',
+    },
+    aumentou: {
+      label: 'Dose aumentada',
+      color: '#f87171',
+      indica: 'Escalonamento de sedacao. Indicar agitacao, dor inadequadamente tratada, delirium hiperativo ou desconforto ventilatório.',
+      evolucao: 'Melhora: identificar e tratar causa (dor, delirium, assincronia) para permitir reducao. Piora: sedacao profunda, imobilidade, piora da funcao pulmonar.',
+    },
+  }
+  return { trend, ...map[trend] }
+}
+
+function analiseBNM(inicio: string, atual: string): DrugAnalysis | null {
+  const trend = calcDrugTrend(inicio, atual)
+  if (!trend) return null
+  const map: Record<DrugTrend, Omit<DrugAnalysis, 'trend'>> = {
+    manteve: {
+      label: 'BNM mantido',
+      color: '#60a5fa',
+      indica: 'Bloqueio neuromuscular estavel. Monitorar TOF (meta 0-2/4). Risco de fraqueza adquirida na UTI (ICUAW) e atrofia muscular.',
+      evolucao: 'Melhora: reducao progressiva com TOF 2-3/4, retorno de drive (P0.1/Pocc), desmame. Piora: manutencao prolongada → fraqueza grave, dificuldade de desmame.',
+    },
+    reduziu: {
+      label: 'Desmame BNM',
+      color: '#4ade80',
+      indica: 'Reducao de BNM. Retorno de esforco muscular. Monitorar P0.1, Pocc, drive respiratorio e assincronia. TOF pode estar 2-3/4.',
+      evolucao: 'Melhora: suspensao do BNM, transicao para modo assistido, desmame VM. Piora: assincronia grave, SDRA nao controlada → retitulacao.',
+    },
+    aumentou: {
+      label: 'BNM aumentado',
+      color: '#f87171',
+      indica: 'Escalonamento de BNM. Avaliar: assincronia grave, SDRA grave (P/F <150), hipertensao intracraniana ou instabilidade hemodinamica.',
+      evolucao: 'Melhora: controle da causa base, reduzir para menor dose efetiva. Piora: bloqueio profundo prolongado → ICUAW, desmame prolongado.',
+    },
+  }
+  return { trend, ...map[trend] }
+}
+
 const DVA_OPTIONS = ['', 'Noradrenalina', 'Adrenalina', 'Dobutamina', 'Vasopressina', 'Milrinona']
 
 const MRC_GROUPS = [
@@ -2141,9 +2212,11 @@ export function ProntuarioSystemPanel() {
 
                     <div className="space-y-3">
                       {currentRecord.sedativos?.length ? (
-                        currentRecord.sedativos.map((item, index) => (
+                        currentRecord.sedativos.map((item, index) => {
+                          const analise = analiseSedativo(item.inicio, item.atual)
+                          return (
                           <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                            <div className="grid gap-3 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                            <div className="grid gap-3 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS} value={item.droga} onChange={(event) => updateListItem('sedativos', index, 'droga', event.target.value)}>
                                   {SEDATIVE_OPTIONS.map((option) => (
@@ -2171,8 +2244,16 @@ export function ProntuarioSystemPanel() {
                                 </button>
                               </div>
                             </div>
+                            {analise ? (
+                              <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                                <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
+                                <p className="mb-1 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
+                                <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
+                              </div>
+                            ) : null}
                           </div>
-                        ))
+                          )
+                        })
                       ) : (
                         <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
                           Nenhum sedativo em uso.
@@ -2195,9 +2276,11 @@ export function ProntuarioSystemPanel() {
 
                     <div className="space-y-3">
                       {currentRecord.bnmList?.length ? (
-                        currentRecord.bnmList.map((item, index) => (
+                        currentRecord.bnmList.map((item, index) => {
+                          const analise = analiseBNM(item.inicio, item.atual)
+                          return (
                           <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                            <div className="grid gap-3 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                            <div className="grid gap-3 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS} value={item.droga} onChange={(event) => updateListItem('bnmList', index, 'droga', event.target.value)}>
                                   {BNM_OPTIONS.map((option) => (
@@ -2225,8 +2308,16 @@ export function ProntuarioSystemPanel() {
                                 </button>
                               </div>
                             </div>
+                            {analise ? (
+                              <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                                <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
+                                <p className="mb-1 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
+                                <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
+                              </div>
+                            ) : null}
                           </div>
-                        ))
+                          )
+                        })
                       ) : (
                         <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
                           Nenhum BNM em uso.
