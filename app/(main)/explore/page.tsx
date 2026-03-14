@@ -1,5 +1,5 @@
-import { ExplorePageEntry } from '@/components/sea/explore-page-entry'
+import ExplorePageClient from '@/components/sea/explore-page-client'
 
 export default function ExplorePage() {
-  return <ExplorePageEntry />
+  return <ExplorePageClient />
 }

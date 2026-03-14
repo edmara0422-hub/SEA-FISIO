@@ -1,5 +1,5 @@
-import { ConteudosPageEntry } from '@/components/sea/conteudos-page-entry'
+import ConteudosPageClient from '@/components/sea/conteudos-page-client'
 
 export default function ConteudosPage() {
-  return <ConteudosPageEntry />
+  return <ConteudosPageClient />
 }

@@ -1,4 +1,28 @@
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
+@source '../app/layout.tsx';
+@source '../app/page.tsx';
+@source '../app/(main)/layout.tsx';
+@source '../app/(main)/loading.tsx';
+@source '../app/(main)/sea/page.tsx';
+@source '../app/(main)/explore/page.tsx';
+@source '../app/(main)/explore/conteudos/page.tsx';
+@source '../components/experience';
+@source '../components/sea/bottom-nav.tsx';
+@source '../components/sea/conteudos-page-client.tsx';
+@source '../components/sea/conteudos-page-entry.tsx';
+@source '../components/sea/explore-page-client.tsx';
+@source '../components/sea/explore-page-entry.tsx';
+@source '../components/sea/glass-panel.tsx';
+@source '../components/sea/greeting-clock-card.tsx';
+@source '../components/sea/home-page-client.tsx';
+@source '../components/sea/main-shell.tsx';
+@source '../components/sea/performance-bar.tsx';
+@source '../components/sea/premium-splash.tsx';
+@source '../components/sea/route-screen-fallback.tsx';
+@source '../components/sea/sea-backdrop.tsx';
+@source '../components/sea/sea-page-entry.tsx';
+@source '../components/sea/simulations-grid.tsx';
+@source '../components/sea/top-bar-sea.tsx';
 
 @custom-variant dark (&:is(.dark *));
 

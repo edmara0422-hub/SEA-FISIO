@@ -1,11 +1,10 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { BookOpen, ChevronRight, Cpu, HeartPulse, Brain, Wind } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import type { ReactNode } from 'react'
+import Link from 'next/link'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 
@@ -27,13 +26,6 @@ const PneumoHeroScene = dynamic(
 const railTransition = { duration: 0.55, ease: [0.16, 1, 0.3, 1] as const }
 
 export default function ExplorePageClient() {
-  const router = useRouter()
-
-  useEffect(() => {
-    router.prefetch('/explore/conteudos')
-    router.prefetch('/explore/sistemas')
-  }, [router])
-
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
@@ -87,46 +79,44 @@ function FeatureCard({
   tone: 'conteudos' | 'sistemas'
   delay: number
 }) {
-  const router = useRouter()
-
   const accent =
     tone === 'conteudos'
       ? 'from-white/14 via-white/4 to-transparent'
       : 'from-white/12 via-slate-200/5 to-transparent'
 
   return (
-    <motion.button
-      type="button"
-      onClick={() => router.push(href)}
+    <motion.div
       className="block min-w-[86%] snap-center text-left md:min-w-[48%] xl:min-w-[32%]"
       initial={{ opacity: 0, x: 36 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ ...railTransition, delay }}
       whileTap={{ scale: 0.985 }}
     >
-      <article className="sea-dark-glass group relative h-[26rem] overflow-hidden rounded-[2rem] border border-white/12 p-6">
-        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(255,255,255,0.08),transparent_26%)]" />
-        <div className={`pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b ${accent}`} />
-        <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12)_0%,transparent_68%)] blur-3xl" />
-        <div className="pointer-events-none absolute inset-x-6 top-6 h-px bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.34)_50%,transparent_100%)]" />
+      <Link href={href} prefetch className="block">
+        <article className="sea-dark-glass group relative h-[26rem] overflow-hidden rounded-[2rem] border border-white/12 p-6">
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(145deg,rgba(255,255,255,0.04),transparent_28%),radial-gradient(circle_at_84%_18%,rgba(255,255,255,0.08),transparent_26%)]" />
+          <div className={`pointer-events-none absolute inset-x-0 top-0 h-40 bg-gradient-to-b ${accent}`} />
+          <div className="pointer-events-none absolute right-[-2rem] top-[-2rem] h-36 w-36 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.12)_0%,transparent_68%)] blur-3xl" />
+          <div className="pointer-events-none absolute inset-x-6 top-6 h-px bg-[linear-gradient(90deg,transparent_0%,rgba(255,255,255,0.34)_50%,transparent_100%)]" />
 
-        <div className="relative z-10 flex h-full flex-col justify-between">
-          <div className="flex items-start justify-between">
-            <div className="sea-dark-glass flex h-14 w-14 items-center justify-center rounded-[1.2rem] border border-white/12">
-              <Icon className="h-6 w-6 text-white/78" />
+          <div className="relative z-10 flex h-full flex-col justify-between">
+            <div className="flex items-start justify-between">
+              <div className="sea-dark-glass flex h-14 w-14 items-center justify-center rounded-[1.2rem] border border-white/12">
+                <Icon className="h-6 w-6 text-white/78" />
+              </div>
+              <ChevronRight className="h-5 w-5 text-white/28 transition group-hover:text-white/56" />
             </div>
-            <ChevronRight className="h-5 w-5 text-white/28 transition group-hover:text-white/56" />
-          </div>
 
-          <div className="space-y-4">
-            <div className="h-px w-16 bg-[linear-gradient(90deg,rgba(255,255,255,0.72),transparent)]" />
-            <h2 className="metal-text text-[2.2rem] font-semibold leading-none tracking-[0.14em] md:text-[2.7rem]">
-              {title}
-            </h2>
+            <div className="space-y-4">
+              <div className="h-px w-16 bg-[linear-gradient(90deg,rgba(255,255,255,0.72),transparent)]" />
+              <h2 className="metal-text text-[2.2rem] font-semibold leading-none tracking-[0.14em] md:text-[2.7rem]">
+                {title}
+              </h2>
+            </div>
           </div>
-        </div>
-      </article>
-    </motion.button>
+        </article>
+      </Link>
+    </motion.div>
   )
 }
 

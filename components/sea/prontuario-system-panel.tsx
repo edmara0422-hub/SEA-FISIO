@@ -65,6 +65,8 @@ const INPUT_CLASS =
   'w-full rounded-[1rem] border border-white/10 bg-black/22 px-3 py-2.5 text-sm text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
 
 const TEXTAREA_CLASS = `${INPUT_CLASS} min-h-[5.5rem] resize-none`
+const AUTO_TEXTAREA_CLASS =
+  'w-full rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2 text-sm text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18 resize-none overflow-hidden min-h-[2.75rem]'
 
 const STATUS_OPTIONS = [
   ['', '--'],
@@ -73,6 +75,33 @@ const STATUS_OPTIONS = [
   ['critico', 'Critico'],
   ['instavel', 'Instavel'],
 ] as const
+
+const STATUS_STYLES: Record<string, { label: string; border: string; background: string; color: string }> = {
+  estavel: {
+    label: 'Estavel',
+    border: 'rgba(74,222,128,0.28)',
+    background: 'rgba(74,222,128,0.10)',
+    color: '#86efac',
+  },
+  grave: {
+    label: 'Grave',
+    border: 'rgba(251,191,36,0.28)',
+    background: 'rgba(251,191,36,0.10)',
+    color: '#fde68a',
+  },
+  critico: {
+    label: 'Critico',
+    border: 'rgba(248,113,113,0.28)',
+    background: 'rgba(248,113,113,0.10)',
+    color: '#fca5a5',
+  },
+  instavel: {
+    label: 'Instavel',
+    border: 'rgba(96,165,250,0.28)',
+    background: 'rgba(96,165,250,0.10)',
+    color: '#93c5fd',
+  },
+}
 
 const VIA_OPTIONS = [
   ['', 'Selecionar'],
@@ -91,6 +120,74 @@ const VIA_OPTIONS = [
   ['TQT-O2', 'TQT - com O2'],
   ['TQT-VM', 'TQT - em VM'],
   ['TQT-P', 'TQT - Prolong. / Desmame'],
+] as const
+
+const VIA_BADGE_STYLES: Record<string, { label: string; border: string; background: string; color: string }> = {
+  TOT: { label: 'TOT', border: 'rgba(248,113,113,0.30)', background: 'rgba(248,113,113,0.12)', color: '#f87171' },
+  'TQT-AA': { label: 'TQT-AA', border: 'rgba(192,132,252,0.30)', background: 'rgba(192,132,252,0.12)', color: '#c084fc' },
+  'TQT-O2': { label: 'TQT-O2', border: 'rgba(147,197,253,0.30)', background: 'rgba(147,197,253,0.12)', color: '#93c5fd' },
+  'TQT-VM': { label: 'TQT-VM', border: 'rgba(192,132,252,0.40)', background: 'rgba(192,132,252,0.18)', color: '#c084fc' },
+  'TQT-P': { label: 'TQT-P', border: 'rgba(251,191,36,0.30)', background: 'rgba(251,191,36,0.12)', color: '#fbbf24' },
+  'RE-AA': { label: 'RE-AA', border: 'rgba(74,222,128,0.30)', background: 'rgba(74,222,128,0.12)', color: '#4ade80' },
+  'RE-O2': { label: 'RE-O2', border: 'rgba(96,165,250,0.30)', background: 'rgba(96,165,250,0.12)', color: '#60a5fa' },
+  'RE-MFR': { label: 'MFR', border: 'rgba(74,222,128,0.30)', background: 'rgba(74,222,128,0.12)', color: '#4ade80' },
+  'RE-MFV': { label: 'Venturi', border: 'rgba(96,165,250,0.30)', background: 'rgba(96,165,250,0.12)', color: '#60a5fa' },
+  VNI: { label: 'VNI', border: 'rgba(250,204,21,0.30)', background: 'rgba(250,204,21,0.12)', color: '#facc15' },
+  HFNC: { label: 'HFNC', border: 'rgba(34,211,238,0.30)', background: 'rgba(34,211,238,0.12)', color: '#22d3ee' },
+  RPPI: { label: 'RPPI', border: 'rgba(251,146,60,0.30)', background: 'rgba(251,146,60,0.12)', color: '#fb923c' },
+}
+
+const LAB_FIELDS = [
+  { key: 'hb', label: 'HB', unit: 'g/dL', ref: '12-17' },
+  { key: 'ht', label: 'HT', unit: '%', ref: '36-50' },
+  { key: 'leuco', label: 'Leuco', unit: '/mm3', ref: '4k-11k' },
+  { key: 'plaq', label: 'Plaq', unit: 'x10³', ref: '150-400' },
+  { key: 'creat', label: 'Creat', unit: 'mg/dL', ref: '0.6-1.2' },
+  { key: 'ureia', label: 'Ureia', unit: 'mg/dL', ref: '15-40' },
+  { key: 'k', label: 'K+', unit: 'mEq/L', ref: '3.5-5.0' },
+  { key: 'na', label: 'Na+', unit: 'mEq/L', ref: '135-145' },
+  { key: 'lac', label: 'Lac', unit: 'mmol/L', ref: '<2.0' },
+  { key: 'pcr', label: 'PCR', unit: 'mg/L', ref: '<5' },
+  { key: 'bt', label: 'BT', unit: 'mg/dL', ref: '<1.2' },
+  { key: 'alb', label: 'Alb', unit: 'g/dL', ref: '3.5-5.0' },
+  { key: 'tgo', label: 'TGO', unit: 'U/L', ref: '<40' },
+  { key: 'tgp', label: 'TGP', unit: 'U/L', ref: '<41' },
+  { key: 'inr', label: 'INR', unit: '', ref: '0.8-1.2' },
+] as const
+
+const IMAGE_TYPE_OPTIONS = [
+  ['', 'Selecionar'],
+  ['RX Torax', 'RX Tórax'],
+  ['RX Abdome', 'RX Abdome'],
+  ['TC Cranio', 'TC Crânio'],
+  ['TC Torax', 'TC Tórax'],
+  ['TC Abdome', 'TC Abdome'],
+  ['RM Cranio', 'RM Crânio'],
+  ['RM Coluna', 'RM Coluna'],
+  ['USG Abdome', 'USG Abdome'],
+  ['USG Venosa', 'USG Venosa'],
+  ['ECO', 'Eco'],
+  ['Ecodoppler', 'Ecodoppler'],
+  ['Cintilografia', 'Cintilografia'],
+  ['AngioTC', 'AngioTC'],
+  ['Outro', 'Outro'],
+] as const
+
+const IMAGE_FINDING_OPTIONS = [
+  'Sem alteracoes agudas',
+  'Consolidacao',
+  'Infiltrado bilateral',
+  'Atelectasia',
+  'Edema pulmonar',
+  'Derrame pleural',
+  'Pneumotorax',
+  'Broncograma aereo',
+  'Cardiomegalia',
+  'Congestao vascular',
+  'Desvio de linha media',
+  'Hemorragia',
+  'Fratura',
+  'Trombo / TEP',
 ] as const
 
 const VM_OPTIONS = [
@@ -385,8 +482,35 @@ function normalizeRecord(raw: Partial<ICURecord> | null | undefined): ICURecord 
     id: raw?.id || globalThis.crypto?.randomUUID?.() || `icu-${Date.now()}`,
     createdAt: raw?.createdAt || timestamp,
     updatedAt: raw?.updatedAt || raw?.createdAt || timestamp,
-    examesLabList: Array.isArray(raw?.examesLabList) ? raw.examesLabList : [],
-    examesImagemList: Array.isArray(raw?.examesImagemList) ? raw.examesImagemList : [],
+    examesLabList: Array.isArray(raw?.examesLabList)
+      ? raw.examesLabList.map((exam) => ({
+        hb: '',
+        ht: '',
+        leuco: '',
+        plaq: '',
+        creat: '',
+        ureia: '',
+        k: '',
+        na: '',
+        lac: '',
+        pcr: '',
+        bt: '',
+        alb: '',
+        tgo: '',
+        tgp: '',
+        inr: '',
+        ...(exam ?? {}),
+      }))
+      : [],
+    examesImagemList: Array.isArray(raw?.examesImagemList)
+      ? raw.examesImagemList.map((exam) => ({
+        data: '',
+        tipo: '',
+        laudo: '',
+        achados: Array.isArray(exam?.achados) ? exam.achados : [],
+        ...(exam ?? {}),
+      }))
+      : [],
     sedativos: Array.isArray(raw?.sedativos) ? raw.sedativos : [],
     bnmList: Array.isArray(raw?.bnmList) ? raw.bnmList : [],
     dvaList: Array.isArray(raw?.dvaList) ? raw.dvaList : [],
@@ -450,6 +574,49 @@ function summarizeBalance(record: ICURecord) {
   return { text: 'Balanco sob monitorizacao', color: '#4ade80' }
 }
 
+function summarizeBalanceDetailed(record: ICURecord) {
+  const bal24 = parseNumber(record.balanco24h)
+  const balAcc = parseNumber(record.balancoAcumulado)
+  if (!record.balanco24h && !record.balancoAcumulado) return 'Balanco hidrico sem dados'
+  if (bal24 > 2000 || balAcc > 5000) return 'Positivo importante, revisar aporte, diurese e estrategia de fluidos'
+  if (bal24 > 500 || balAcc > 3000) return 'Positivo moderado, manter vigilancia de congestao e resposta renal'
+  if (bal24 < -1000 || balAcc < -2000) return 'Negativo importante, correlacionar com perfusao, diurese e volemia'
+  return 'Balanco em faixa monitorada, manter correlacao clinica com hemodinamica e perfusao'
+}
+
+function analyzeLabExam(exam: LabExamEntry) {
+  const items: Array<{ label: string; interp: string; color: string }> = []
+  const alerts: Array<{ text: string; color: string }> = []
+  const pushItem = (label: string, interp: string, color: string) => items.push({ label, interp, color })
+
+  const hb = parseNumber(exam.hb)
+  if (exam.hb) pushItem('HB', hb < 7 ? 'Anemia grave' : hb < 10 ? 'Anemia' : 'Faixa aceitavel', hb < 7 ? '#f87171' : hb < 10 ? '#facc15' : '#4ade80')
+  const leuco = parseNumber(exam.leuco)
+  if (exam.leuco) pushItem('Leuco', leuco > 11000 ? 'Leucocitose' : leuco < 4000 ? 'Leucopenia' : 'Faixa esperada', leuco > 11000 || leuco < 4000 ? '#fb923c' : '#4ade80')
+  const plaq = parseNumber(exam.plaq)
+  if (exam.plaq) pushItem('Plaq', plaq < 50000 ? 'Plaquetopenia grave' : plaq < 150000 ? 'Plaquetopenia' : 'Faixa esperada', plaq < 50000 ? '#f87171' : plaq < 150000 ? '#facc15' : '#4ade80')
+  const creat = parseNumber(exam.creat)
+  if (exam.creat) pushItem('Creat', creat > 2 ? 'Lesao renal importante' : creat > 1.2 ? 'Creat elevada' : 'Faixa esperada', creat > 2 ? '#f87171' : creat > 1.2 ? '#facc15' : '#4ade80')
+  const ureia = parseNumber(exam.ureia)
+  if (exam.ureia) pushItem('Ureia', ureia > 80 ? 'Elevada' : 'Faixa esperada', ureia > 80 ? '#fb923c' : '#4ade80')
+  const potassium = parseNumber(exam.k)
+  if (exam.k) pushItem('K+', potassium > 5.5 ? 'Hipercalemia' : potassium < 3.5 ? 'Hipocalemia' : 'Faixa esperada', potassium > 5.5 || potassium < 3.5 ? '#f87171' : '#4ade80')
+  const sodium = parseNumber(exam.na)
+  if (exam.na) pushItem('Na+', sodium > 145 ? 'Hipernatremia' : sodium < 135 ? 'Hiponatremia' : 'Faixa esperada', sodium > 145 || sodium < 135 ? '#fb923c' : '#4ade80')
+  const lactate = parseNumber(exam.lac)
+  if (exam.lac) pushItem('Lactato', lactate >= 4 ? 'Hipoperfusao importante' : lactate >= 2 ? 'Elevado' : 'Faixa esperada', lactate >= 4 ? '#f87171' : lactate >= 2 ? '#facc15' : '#4ade80')
+  const pcr = parseNumber(exam.pcr)
+  if (exam.pcr) pushItem('PCR', pcr > 100 ? 'Inflamacao intensa' : pcr > 5 ? 'Inflamacao ativa' : 'Faixa esperada', pcr > 100 ? '#f87171' : pcr > 5 ? '#facc15' : '#4ade80')
+  const inr = parseNumber(exam.inr)
+  if (exam.inr) pushItem('INR', inr > 1.5 ? 'Coagulopatia' : 'Faixa esperada', inr > 1.5 ? '#fb923c' : '#4ade80')
+
+  if (hb && hb < 7) alerts.push({ text: 'Considerar estrategia transfusional conforme contexto clinico', color: '#f87171' })
+  if (lactate && lactate >= 4) alerts.push({ text: 'Lactato elevado, correlacionar com perfusao e choque', color: '#fb923c' })
+  if (potassium && (potassium > 5.5 || potassium < 3.0)) alerts.push({ text: 'Potassio critico, revisar ECG e correcao imediata', color: '#f87171' })
+
+  return { items, alerts }
+}
+
 function summarizeMrc(record: ICURecord) {
   const scores = MRC_GROUPS.flatMap((group) => [record[group.right], record[group.left]])
   if (scores.some((score) => score === '')) return null
@@ -485,7 +652,7 @@ function calcDays(value: string) {
   const start = new Date(value)
   if (Number.isNaN(start.getTime())) return null
   const diff = Date.now() - start.getTime()
-  return Math.max(0, Math.floor(diff / 86400000))
+  return Math.max(1, Math.floor(diff / 86400000) + 1)
 }
 
 function calcSF(spo2: string, fio2: string) {
@@ -549,11 +716,10 @@ function ActionButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-2 rounded-[1rem] border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] transition-all ${
-        active
+      className={`inline-flex items-center gap-2 rounded-[1rem] border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] transition-all ${active
           ? 'border-white/18 bg-white/12 text-white'
           : 'border-white/10 bg-black/18 text-white/62 hover:border-white/16 hover:text-white'
-      }`}
+        }`}
     >
       <Icon className="h-4 w-4" />
       <span>{label}</span>
@@ -605,6 +771,57 @@ function MetricChip({
   )
 }
 
+function AutoGrowTextarea({
+  value,
+  onChange,
+  placeholder,
+}: {
+  value: string
+  onChange: (value: string) => void
+  placeholder?: string
+}) {
+  return (
+    <textarea
+      rows={1}
+      className={AUTO_TEXTAREA_CLASS}
+      value={value}
+      onChange={(event) => onChange(event.target.value)}
+      onInput={(event) => {
+        const target = event.currentTarget
+        target.style.height = 'auto'
+        target.style.height = `${target.scrollHeight}px`
+      }}
+      placeholder={placeholder}
+    />
+  )
+}
+
+function StatusChoice({
+  value,
+  active,
+  onClick,
+}: {
+  value: keyof typeof STATUS_STYLES
+  active: boolean
+  onClick: () => void
+}) {
+  const meta = STATUS_STYLES[value]
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="rounded-full border px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.16em] transition-all"
+      style={{
+        borderColor: active ? meta.border : 'rgba(255,255,255,0.12)',
+        background: active ? meta.background : 'rgba(255,255,255,0.03)',
+        color: active ? meta.color : 'rgba(255,255,255,0.62)',
+      }}
+    >
+      {meta.label}
+    </button>
+  )
+}
+
 export function ProntuarioSystemPanel() {
   const [view, setView] = useState<PanelView>('records')
   const [records, setRecords] = useState<ICURecord[]>([])
@@ -644,7 +861,47 @@ export function ProntuarioSystemPanel() {
     }
   }, [records, selectedId])
 
+  useEffect(() => {
+    if (!selectedId) return
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }, [activeTab, selectedId])
+
   const currentRecord = records.find((record) => record.id === selectedId) ?? null
+
+  const recordBadges = useMemo(() => {
+    const viaCounts = {
+      TOT: 0,
+      'TQT-AA': 0,
+      'TQT-O2': 0,
+      'TQT-VM': 0,
+      'TQT-P': 0,
+      'RE-AA': 0,
+      'RE-O2': 0,
+      'RE-MFR': 0,
+      'RE-MFV': 0,
+      VNI: 0,
+      HFNC: 0,
+      RPPI: 0,
+    } as Record<string, number>
+    const statusCounts = {
+      estavel: 0,
+      grave: 0,
+      critico: 0,
+      instavel: 0,
+    } as Record<string, number>
+
+    records.forEach((record) => {
+      const via = record.tipoVia
+      if (via === 'TOT' || via === 'TNT' || via === 'ML') viaCounts.TOT += 1
+      else if (via in viaCounts) viaCounts[via] += 1
+
+      if (record.statusClinico && record.statusClinico in statusCounts) {
+        statusCounts[record.statusClinico] += 1
+      }
+    })
+
+    return { viaCounts, statusCounts }
+  }, [records])
 
   const calculations = useMemo(() => {
     if (!currentRecord) return null
@@ -679,11 +936,18 @@ export function ProntuarioSystemPanel() {
         ? Math.round((parseNumber(currentRecord.pad) * 2 + parseNumber(currentRecord.pas)) / 3)
         : null
     const balance = summarizeBalance(currentRecord)
+    const balanceDetailed = summarizeBalanceDetailed(currentRecord)
     const mrc = summarizeMrc(currentRecord)
     const perme = summarizePerme(currentRecord)
     const ims = summarizeIms(currentRecord.imsScore)
     const daysTOT = calcDays(currentRecord.dataTOT)
     const daysTQT = calcDays(currentRecord.dataTQT)
+    const vtTargets = pesoIdeal
+      ? [4, 5, 6, 7, 8].map((multiplier) => ({
+        multiplier,
+        value: Math.round(pesoIdeal * multiplier),
+      }))
+      : []
     const sf = calcSF(currentRecord.sfSpO2, currentRecord.sfFiO2)
     const minuteVentilation =
       parseNumber(currentRecord.ve) || (parseNumber(currentRecord.fr) && (parseNumber(currentRecord.vc) || parseNumber(currentRecord.vt))
@@ -746,11 +1010,11 @@ export function ProntuarioSystemPanel() {
     const proneSupineAt =
       pronaAtiva && currentRecord.pronaData && currentRecord.pronaHora && currentRecord.pronaTempo
         ? (() => {
-            const start = new Date(`${currentRecord.pronaData}T${currentRecord.pronaHora}`)
-            const hours = Number.parseInt(currentRecord.pronaTempo.replace('h', ''), 10)
-            if (Number.isNaN(start.getTime()) || Number.isNaN(hours)) return null
-            return new Date(start.getTime() + hours * 3600000)
-          })()
+          const start = new Date(`${currentRecord.pronaData}T${currentRecord.pronaHora}`)
+          const hours = Number.parseInt(currentRecord.pronaTempo.replace('h', ''), 10)
+          if (Number.isNaN(start.getTime()) || Number.isNaN(hours)) return null
+          return new Date(start.getTime() + hours * 3600000)
+        })()
         : null
 
     return {
@@ -771,11 +1035,13 @@ export function ProntuarioSystemPanel() {
       pmuscInterp,
       pamAuto,
       balance,
+      balanceDetailed,
       mrc,
       perme,
       ims,
       daysTOT,
       daysTQT,
+      vtTargets,
       sf,
       minuteVentilation,
       weanMinuteVentilation,
@@ -917,9 +1183,26 @@ export function ProntuarioSystemPanel() {
       } else if (key === 'dvaList') {
         next.push({ droga: '', dose: '', unidade: 'mcg/kg/min' } satisfies DVAEntry)
       } else if (key === 'examesLabList') {
-        next.push({ data: '', titulo: '', resumo: '' } satisfies LabExamEntry)
+        next.push({
+          data: '',
+          hb: '',
+          ht: '',
+          leuco: '',
+          plaq: '',
+          creat: '',
+          ureia: '',
+          k: '',
+          na: '',
+          lac: '',
+          pcr: '',
+          bt: '',
+          alb: '',
+          tgo: '',
+          tgp: '',
+          inr: '',
+        } satisfies LabExamEntry)
       } else if (key === 'examesImagemList') {
-        next.push({ data: '', tipo: '', laudo: '' } satisfies ImageExamEntry)
+        next.push({ data: '', tipo: '', laudo: '', achados: [] } satisfies ImageExamEntry)
       }
 
       return {
@@ -946,6 +1229,36 @@ export function ProntuarioSystemPanel() {
       ...record,
       [key]: (record[key] as Array<Record<string, string>>).filter((_, itemIndex) => itemIndex !== index),
     }))
+  }
+
+  const toggleImageFinding = (index: number, value: string) => {
+    if (!value) return
+    updateCurrentRecord((record) => {
+      const next = [...record.examesImagemList]
+      const current = Array.isArray(next[index]?.achados) ? next[index].achados : []
+      next[index] = {
+        ...next[index],
+        achados: current.includes(value) ? current : [...current, value],
+      }
+      return {
+        ...record,
+        examesImagemList: next,
+      }
+    })
+  }
+
+  const removeImageFinding = (index: number, value: string) => {
+    updateCurrentRecord((record) => {
+      const next = [...record.examesImagemList]
+      next[index] = {
+        ...next[index],
+        achados: (next[index]?.achados || []).filter((item) => item !== value),
+      }
+      return {
+        ...record,
+        examesImagemList: next,
+      }
+    })
   }
 
   const clearRespFields = () => {
@@ -1105,12 +1418,14 @@ export function ProntuarioSystemPanel() {
     setSelectedId(record.id)
     setActiveTab('dados')
     setView('records')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const openRecord = (id: string) => {
     setSelectedId(id)
     setActiveTab('dados')
     setView('records')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   const archiveRecord = (id: string) => {
@@ -1138,6 +1453,13 @@ export function ProntuarioSystemPanel() {
 
   const deletePermanently = (id: string) => {
     setArchive((prev) => prev.filter((record) => record.id !== id))
+  }
+
+  const deleteActiveRecord = (id: string) => {
+    setRecords((prev) => prev.filter((record) => record.id !== id))
+    if (selectedId === id) {
+      setSelectedId(null)
+    }
   }
 
   const saveAndClose = () => {
@@ -1169,9 +1491,38 @@ export function ProntuarioSystemPanel() {
                 </span>
               </div>
               <h3 className="text-[1.45rem] font-semibold text-white/92">Pacientes e referencia clinica</h3>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-white/60">
-                O fluxo segue o ICU original: lista de pacientes, abertura do prontuario em abas clinicas e referencias separadas por botao.
-              </p>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {Object.entries(recordBadges.statusCounts).map(([key, count]) =>
+                  count > 0 ? (
+                    <span
+                      key={key}
+                      className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]"
+                      style={{
+                        borderColor: STATUS_STYLES[key]?.border ?? 'rgba(255,255,255,0.12)',
+                        background: STATUS_STYLES[key]?.background ?? 'rgba(255,255,255,0.05)',
+                        color: STATUS_STYLES[key]?.color ?? 'rgba(255,255,255,0.72)',
+                      }}
+                    >
+                      {STATUS_STYLES[key]?.label ?? key}: {count}
+                    </span>
+                  ) : null,
+                )}
+                {Object.entries(recordBadges.viaCounts).map(([key, count]) =>
+                  count > 0 ? (
+                    <span
+                      key={key}
+                      className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]"
+                      style={{
+                        borderColor: VIA_BADGE_STYLES[key]?.border ?? 'rgba(255,255,255,0.12)',
+                        background: VIA_BADGE_STYLES[key]?.background ?? 'rgba(255,255,255,0.05)',
+                        color: VIA_BADGE_STYLES[key]?.color ?? 'rgba(255,255,255,0.72)',
+                      }}
+                    >
+                      {VIA_BADGE_STYLES[key]?.label ?? key}: {count}
+                    </span>
+                  ) : null,
+                )}
+              </div>
             </div>
           </div>
 
@@ -1271,6 +1622,13 @@ export function ProntuarioSystemPanel() {
                     <Archive className="h-4 w-4" />
                     Arquivar
                   </button>
+                  <button
+                    onClick={() => deleteActiveRecord(currentRecord.id)}
+                    className="inline-flex items-center gap-2 rounded-[1rem] border border-[#f8717130] bg-[#f8717110] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fca5a5]"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    Apagar
+                  </button>
                 </div>
               </div>
 
@@ -1281,9 +1639,8 @@ export function ProntuarioSystemPanel() {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`inline-flex min-w-fit items-center gap-2 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] transition-all ${
-                        activeTab === tab.id ? 'bg-white/10 text-white' : 'text-white/48 hover:text-white/76'
-                      }`}
+                      className={`inline-flex min-w-fit items-center gap-2 rounded-full px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] transition-all ${activeTab === tab.id ? 'bg-white/10 text-white' : 'text-white/48 hover:text-white/76'
+                        }`}
                     >
                       <Icon className="h-4 w-4" />
                       {tab.label}
@@ -1322,18 +1679,17 @@ export function ProntuarioSystemPanel() {
                         placeholder="01"
                       />
                     </FieldShell>
-                    <FieldShell label="Status" span="md:col-span-2">
-                      <select
-                        className={INPUT_CLASS}
-                        value={currentRecord.statusClinico}
-                        onChange={(event) => setField('statusClinico', event.target.value)}
-                      >
-                        {STATUS_OPTIONS.map(([value, label]) => (
-                          <option key={value} value={value}>
-                            {label}
-                          </option>
+                    <FieldShell label="Clinica" span="md:col-span-4">
+                      <div className="flex flex-wrap gap-2">
+                        {(Object.keys(STATUS_STYLES) as Array<keyof typeof STATUS_STYLES>).map((status) => (
+                          <StatusChoice
+                            key={status}
+                            value={status}
+                            active={currentRecord.statusClinico === status}
+                            onClick={() => setField('statusClinico', status)}
+                          />
                         ))}
-                      </select>
+                      </div>
                     </FieldShell>
                     <FieldShell label="Idade" span="md:col-span-2">
                       <input
@@ -1382,7 +1738,7 @@ export function ProntuarioSystemPanel() {
                         type="number"
                       />
                     </FieldShell>
-                    <FieldShell label="Peso predito" span="md:col-span-2">
+                    <FieldShell label="PBW" span="md:col-span-2">
                       <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2.5 text-sm text-white/88">
                         {calculations?.pesoIdeal ? `${calculations.pesoIdeal.toFixed(1)} kg` : 'sexo + altura'}
                       </div>
@@ -1407,41 +1763,59 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                   </div>
 
-                  {calculations?.balance ? (
+                  <div className="mt-4 space-y-3">
+                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3">
+                      <div className="flex flex-wrap items-center gap-2">
+                        {calculations?.vtTargets?.length ? (
+                          calculations.vtTargets.map((target) => (
+                            <span
+                              key={target.multiplier}
+                              className="rounded-full border border-white/10 bg-black/16 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/74"
+                            >
+                              VC {target.multiplier} mL/kg: {target.value} mL
+                            </span>
+                          ))
+                        ) : (
+                          <span className="text-[11px] text-white/46">Informe sexo e altura para calcular PBW e VC alvo.</span>
+                        )}
+                      </div>
+                    </div>
+
                     <div
-                      className="mt-4 rounded-[1rem] border px-3 py-3"
+                      className="rounded-[1rem] border px-3 py-3"
                       style={{
-                        borderColor: `${calculations.balance.color}30`,
-                        background: `${calculations.balance.color}10`,
+                        borderColor: `${calculations?.balance?.color ?? '#4ade80'}30`,
+                        background: `${calculations?.balance?.color ?? '#4ade80'}10`,
                       }}
                     >
-                      <p className="text-sm font-semibold" style={{ color: calculations.balance.color }}>
-                        {calculations.balance.text}
+                      <p
+                        className="text-sm font-semibold"
+                        style={{ color: calculations?.balance?.color ?? '#4ade80' }}
+                      >
+                        {calculations?.balance?.text ?? 'Balanco hidrico sem dados'}
+                      </p>
+                      <p className="mt-1 text-[11px] leading-relaxed text-white/62">
+                        {calculations?.balanceDetailed}
                       </p>
                     </div>
-                  ) : null}
+                  </div>
                 </div>
 
                 <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
                   <div className="space-y-5">
                     <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                      <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                        Historia / Diagnostico
-                      </p>
                       <div className="space-y-4">
                         <FieldShell label="Historia clinica">
-                          <textarea
-                            className={TEXTAREA_CLASS}
+                          <AutoGrowTextarea
                             value={currentRecord.historia}
-                            onChange={(event) => setField('historia', event.target.value)}
+                            onChange={(value) => setField('historia', value)}
                             placeholder="Resumo clinico..."
                           />
                         </FieldShell>
                         <FieldShell label="Diagnostico">
-                          <textarea
-                            className={TEXTAREA_CLASS}
+                          <AutoGrowTextarea
                             value={currentRecord.diagnostico}
-                            onChange={(event) => setField('diagnostico', event.target.value)}
+                            onChange={(value) => setField('diagnostico', value)}
                             placeholder="Diagnostico e foco atual..."
                           />
                         </FieldShell>
@@ -1450,9 +1824,7 @@ export function ProntuarioSystemPanel() {
 
                     <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                       <div className="mb-4 flex items-center justify-between gap-3">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                          Exames laboratoriais
-                        </p>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">Laboratorio</p>
                         <button
                           onClick={() => addListItem('examesLabList')}
                           className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
@@ -1466,7 +1838,7 @@ export function ProntuarioSystemPanel() {
                         {currentRecord.examesLabList?.length ? (
                           currentRecord.examesLabList.map((exam, index) => (
                             <div key={`lab-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                              <div className="grid gap-3 md:grid-cols-[11rem_1fr_auto]">
+                              <div className="mb-3 flex items-center justify-between gap-3">
                                 <FieldShell label="Data">
                                   <input
                                     className={INPUT_CLASS}
@@ -1475,16 +1847,6 @@ export function ProntuarioSystemPanel() {
                                     onChange={(event) =>
                                       updateListItem('examesLabList', index, 'data', event.target.value)
                                     }
-                                  />
-                                </FieldShell>
-                                <FieldShell label="Titulo">
-                                  <input
-                                    className={INPUT_CLASS}
-                                    value={exam.titulo}
-                                    onChange={(event) =>
-                                      updateListItem('examesLabList', index, 'titulo', event.target.value)
-                                    }
-                                    placeholder="Gasometria, hemograma, bioquimica..."
                                   />
                                 </FieldShell>
                                 <div className="flex items-end">
@@ -1496,16 +1858,59 @@ export function ProntuarioSystemPanel() {
                                   </button>
                                 </div>
                               </div>
-                              <FieldShell label="Resumo">
-                                <textarea
-                                  className={TEXTAREA_CLASS}
-                                  value={exam.resumo}
-                                  onChange={(event) =>
-                                    updateListItem('examesLabList', index, 'resumo', event.target.value)
-                                  }
-                                  placeholder="Resultado principal e leitura clinica..."
-                                />
-                              </FieldShell>
+                              <div className="grid gap-3 md:grid-cols-3 xl:grid-cols-5">
+                                {LAB_FIELDS.map((field) => (
+                                  <FieldShell key={field.key} label={field.label}>
+                                    <div className="relative">
+                                      <input
+                                        className={`${INPUT_CLASS} pr-14`}
+                                        value={String(exam[field.key] ?? '')}
+                                        onChange={(event) => updateListItem('examesLabList', index, field.key, event.target.value)}
+                                        placeholder={field.ref}
+                                      />
+                                      {field.unit ? (
+                                        <span className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-[10px] uppercase tracking-[0.16em] text-white/34">
+                                          {field.unit}
+                                        </span>
+                                      ) : null}
+                                    </div>
+                                  </FieldShell>
+                                ))}
+                              </div>
+                              {(() => {
+                                const labAnalysis = analyzeLabExam(exam)
+                                return labAnalysis.items.length ? (
+                                  <div className="mt-4 rounded-[1rem] border border-white/10 bg-white/[0.04] p-3">
+                                    <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                                      Analise automatica
+                                    </p>
+                                    <div className="flex flex-wrap gap-2">
+                                      {labAnalysis.items.map((item) => (
+                                        <span
+                                          key={`${index}-${item.label}`}
+                                          className="rounded-full border px-2.5 py-1 text-[10px] font-semibold"
+                                          style={{
+                                            borderColor: `${item.color}30`,
+                                            background: `${item.color}10`,
+                                            color: item.color,
+                                          }}
+                                        >
+                                          {item.label}: {item.interp}
+                                        </span>
+                                      ))}
+                                    </div>
+                                    {labAnalysis.alerts.length ? (
+                                      <div className="mt-3 space-y-1">
+                                        {labAnalysis.alerts.map((alert) => (
+                                          <p key={alert.text} className="text-[11px] font-medium" style={{ color: alert.color }}>
+                                            {alert.text}
+                                          </p>
+                                        ))}
+                                      </div>
+                                    ) : null}
+                                  </div>
+                                ) : null
+                              })()}
                             </div>
                           ))
                         ) : (
@@ -1520,9 +1925,7 @@ export function ProntuarioSystemPanel() {
                   <div className="space-y-5">
                     <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                       <div className="mb-4 flex items-center justify-between gap-3">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                          Exames de imagem
-                        </p>
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">Exames de imagem</p>
                         <button
                           onClick={() => addListItem('examesImagemList')}
                           className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
@@ -1548,14 +1951,19 @@ export function ProntuarioSystemPanel() {
                                   />
                                 </FieldShell>
                                 <FieldShell label="Tipo">
-                                  <input
+                                  <select
                                     className={INPUT_CLASS}
                                     value={exam.tipo}
                                     onChange={(event) =>
                                       updateListItem('examesImagemList', index, 'tipo', event.target.value)
                                     }
-                                    placeholder="RX Torax, TC Cranio, ECO..."
-                                  />
+                                  >
+                                    {IMAGE_TYPE_OPTIONS.map(([value, label]) => (
+                                      <option key={value} value={value}>
+                                        {label}
+                                      </option>
+                                    ))}
+                                  </select>
                                 </FieldShell>
                                 <div className="flex items-end">
                                   <button
@@ -1566,14 +1974,46 @@ export function ProntuarioSystemPanel() {
                                   </button>
                                 </div>
                               </div>
-                              <FieldShell label="Laudo / Achados">
-                                <textarea
-                                  className={TEXTAREA_CLASS}
+                              <div className="mt-3 space-y-3">
+                                <FieldShell label="Achados">
+                                  <select
+                                    className={INPUT_CLASS}
+                                    defaultValue=""
+                                    onChange={(event) => {
+                                      toggleImageFinding(index, event.target.value)
+                                      event.currentTarget.selectedIndex = 0
+                                    }}
+                                  >
+                                    <option value="">Selecionar achado...</option>
+                                    {IMAGE_FINDING_OPTIONS.map((option) => (
+                                      <option key={option} value={option}>
+                                        {option}
+                                      </option>
+                                    ))}
+                                  </select>
+                                </FieldShell>
+                                {exam.achados?.length ? (
+                                  <div className="flex flex-wrap gap-2">
+                                    {exam.achados.map((item) => (
+                                      <button
+                                        key={`${index}-${item}`}
+                                        type="button"
+                                        onClick={() => removeImageFinding(index, item)}
+                                        className="rounded-full border border-white/10 bg-white/[0.05] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/72"
+                                      >
+                                        {item} ×
+                                      </button>
+                                    ))}
+                                  </div>
+                                ) : null}
+                              </div>
+                              <FieldShell label="Laudo / observacoes">
+                                <AutoGrowTextarea
                                   value={exam.laudo}
-                                  onChange={(event) =>
-                                    updateListItem('examesImagemList', index, 'laudo', event.target.value)
+                                  onChange={(value) =>
+                                    updateListItem('examesImagemList', index, 'laudo', value)
                                   }
-                                  placeholder="Achados relevantes..."
+                                  placeholder="Achados complementares e correlacao clinica..."
                                 />
                               </FieldShell>
                             </div>
@@ -1915,9 +2355,18 @@ export function ProntuarioSystemPanel() {
               <div className="space-y-5">
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Avaliacao pulmonar / secrecao / via aerea
+                    Via aerea / avaliacao pulmonar / secrecao
                   </p>
                   <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+                    <FieldShell label="Via aerea atual">
+                      <select className={INPUT_CLASS} value={currentRecord.tipoVia} onChange={(event) => setField('tipoVia', event.target.value)}>
+                        {VIA_OPTIONS.map(([value, label]) => (
+                          <option key={value} value={value}>
+                            {label}
+                          </option>
+                        ))}
+                      </select>
+                    </FieldShell>
                     <FieldShell label="Avaliacao pulmonar" span="xl:col-span-2">
                       <textarea
                         className={TEXTAREA_CLASS}
@@ -1934,15 +2383,31 @@ export function ProntuarioSystemPanel() {
                         placeholder="Volume, aspecto, necessidade de aspiracao..."
                       />
                     </FieldShell>
-                    <FieldShell label="Via aerea atual">
-                      <select className={INPUT_CLASS} value={currentRecord.tipoVia} onChange={(event) => setField('tipoVia', event.target.value)}>
-                        {VIA_OPTIONS.map(([value, label]) => (
-                          <option key={value} value={value}>
-                            {label}
-                          </option>
-                        ))}
-                      </select>
-                    </FieldShell>
+                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">Badge via aerea</p>
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {currentRecord.tipoVia ? (
+                          <span
+                            className="rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em]"
+                            style={{
+                              borderColor:
+                                VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.border ??
+                                'rgba(255,255,255,0.12)',
+                              background:
+                                VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.background ??
+                                'rgba(255,255,255,0.04)',
+                              color:
+                                VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.color ??
+                                'rgba(255,255,255,0.72)',
+                            }}
+                          >
+                            {VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.label ?? currentRecord.tipoVia}
+                          </span>
+                        ) : (
+                          <span className="text-[11px] text-white/46">Selecionar via aerea</span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
 
@@ -1953,7 +2418,7 @@ export function ProntuarioSystemPanel() {
                   <div className="grid gap-4 md:grid-cols-3 xl:grid-cols-6">
                     {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
                       <>
-                        <FieldShell label="Data IOT" span="xl:col-span-2">
+                        <FieldShell label="Data e hora IOT" span="xl:col-span-2">
                           <input
                             className={INPUT_CLASS}
                             type="datetime-local"
@@ -1998,7 +2463,7 @@ export function ProntuarioSystemPanel() {
 
                     {currentRecord.tipoVia.startsWith('TQT') && (
                       <>
-                        <FieldShell label="Data TQT" span="xl:col-span-2">
+                        <FieldShell label="Data e hora TQT" span="xl:col-span-2">
                           <input
                             className={INPUT_CLASS}
                             type="datetime-local"
@@ -2048,11 +2513,11 @@ export function ProntuarioSystemPanel() {
 
                   {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia.startsWith('TQT')) && (
                     <div className="mt-4 grid gap-3 md:grid-cols-3">
-                      {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
+                      {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || (currentRecord.tipoVia.startsWith('TQT') && currentRecord.dataTOT)) && (
                         <MetricChip
                           label="Dias TOT"
                           value={calculations?.daysTOT !== null && calculations?.daysTOT !== undefined ? `D${calculations.daysTOT}` : '--'}
-                          hint={calculations?.daysTOT && calculations.daysTOT >= 7 ? 'Tempo prolongado' : 'Monitorizacao de VA'}
+                          hint={calculations?.daysTOT && calculations.daysTOT >= 7 ? 'Tempo prolongado' : 'Contagem automatica'}
                           color={calculations?.daysTOT && calculations.daysTOT >= 7 ? '#f87171' : '#60a5fa'}
                         />
                       )}
@@ -2060,7 +2525,7 @@ export function ProntuarioSystemPanel() {
                         <MetricChip
                           label="Dias TQT"
                           value={calculations?.daysTQT !== null && calculations?.daysTQT !== undefined ? `D${calculations.daysTQT}` : '--'}
-                          hint="Tempo de traqueostomia"
+                          hint="Contagem automatica"
                           color="#fb923c"
                         />
                       )}
@@ -2997,6 +3462,7 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   <div className="flex flex-wrap gap-2">
+                    {/* Botões reduzidos: apenas Visualizar, Editar e Arquivo, sem Apagar */}
                     <button
                       onClick={() => openRecord(record.id)}
                       className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"

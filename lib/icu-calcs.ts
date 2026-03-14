@@ -24,14 +24,28 @@ export type DVAEntry = {
 
 export type LabExamEntry = {
   data: string
-  titulo: string
-  resumo: string
+  hb: string
+  ht: string
+  leuco: string
+  plaq: string
+  creat: string
+  ureia: string
+  k: string
+  na: string
+  lac: string
+  pcr: string
+  bt: string
+  alb: string
+  tgo: string
+  tgp: string
+  inr: string
 }
 
 export type ImageExamEntry = {
   data: string
   tipo: string
   laudo: string
+  achados: string[]
 }
 
 export type GasometryHistoryEntry = {

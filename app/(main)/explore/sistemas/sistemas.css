@@ -1,0 +1,5 @@
+@import 'tailwindcss' source(none);
+@source '../../../../components/sea/sistemas-page-client.tsx';
+@source '../../../../components/sea/study-rail-board.tsx';
+@source '../../../../components/sea/prontuario-system-panel.tsx';
+@source '../../../../components/sea/vm-system-panel.tsx';
