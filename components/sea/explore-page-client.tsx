@@ -2,7 +2,6 @@
 
 import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion'
 import { BookOpen, ChevronRight, Cpu } from 'lucide-react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
@@ -50,6 +49,7 @@ function Carousel3D() {
   const dragX = useMotionValue(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const didDrag = useRef(false)
+  const router = useRouter()
 
   const handleDragStart = () => { didDrag.current = false }
 
@@ -60,6 +60,12 @@ function Carousel3D() {
       else if (info.offset.x > 50 && active > 0) setActive((v) => v - 1)
     }
     animate(dragX, 0, { type: 'spring', stiffness: 400, damping: 40 })
+  }
+
+  const handleCardClick = (i: number) => {
+    if (didDrag.current) { didDrag.current = false; return }
+    if (i === active) router.push(CARDS[i].href)
+    else setActive(i)
   }
 
   return (
@@ -100,10 +106,10 @@ function Carousel3D() {
               transition={spring}
               onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
-              onClick={() => { if (!isActive) setActive(i) }}
+              onClick={() => handleCardClick(i)}
               className={isActive ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}
             >
-              <Card3D card={card} isActive={isActive} didDrag={didDrag} />
+              <Card3D card={card} isActive={isActive} />
             </motion.div>
           )
         })}
@@ -135,13 +141,10 @@ function Carousel3D() {
 function Card3D({
   card,
   isActive,
-  didDrag,
 }: {
   card: (typeof CARDS)[number]
   isActive: boolean
-  didDrag: React.MutableRefObject<boolean>
 }) {
-  const router = useRouter()
   const ref = useRef<HTMLDivElement>(null)
   const mx = useMotionValue(0.5)
   const my = useMotionValue(0.5)
@@ -172,9 +175,6 @@ function Card3D({
     >
       <div
         className={`relative h-full w-full overflow-hidden rounded-[2rem] border border-white/10`}
-        onClick={() => {
-          if (isActive && !didDrag.current) router.push(card.href)
-        }}
         style={{
           background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
           boxShadow: isActive
