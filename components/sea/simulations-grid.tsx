@@ -50,6 +50,31 @@ export function SimulationsGrid() {
           <BrainHeroScene compact transparent />
         </div>
 
+        {/* Scanner sweep line */}
+        <div className="pointer-events-none absolute inset-0 overflow-hidden">
+          <div style={{
+            position: 'absolute',
+            left: 0, right: 0,
+            height: '60px',
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(45,212,191,0.10) 40%, rgba(45,212,191,0.22) 50%, rgba(45,212,191,0.10) 60%, transparent 100%)',
+            animation: 'scanline 4s linear infinite',
+          }} />
+          <div style={{
+            position: 'absolute',
+            left: 0, right: 0,
+            height: '2px',
+            background: 'linear-gradient(90deg, transparent 0%, rgba(45,212,191,0.0) 10%, rgba(45,212,191,0.55) 30%, rgba(180,255,248,0.90) 50%, rgba(45,212,191,0.55) 70%, rgba(45,212,191,0.0) 90%, transparent 100%)',
+            boxShadow: '0 0 8px 2px rgba(45,212,191,0.30)',
+            animation: 'scanline 4s linear infinite',
+          }} />
+        </div>
+        <style>{`
+          @keyframes scanline {
+            0%   { top: -60px; }
+            100% { top: 100%; }
+          }
+        `}</style>
+
         {/* Top shimmer */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.18) 50%, transparent)' }} />
@@ -183,13 +208,13 @@ function NeuroVitals() {
 function VitalRow({ label, value, unit }: { label: string; value: number; unit: string }) {
   return (
     <div className="flex items-baseline justify-end gap-1.5">
-      <span className="text-[7px] uppercase tracking-[0.22em]" style={{ color: 'rgba(0,200,220,0.45)' }}>
+      <span className="text-[7px] uppercase tracking-[0.22em]" style={{ color: 'rgba(45,212,191,0.45)' }}>
         {label}
       </span>
-      <span className="text-base font-bold leading-none" style={{ color: 'rgba(0,220,240,0.85)' }}>
+      <span className="text-base font-bold leading-none" style={{ color: 'rgba(45,212,191,0.90)' }}>
         {value}
       </span>
-      <span className="text-[7px]" style={{ color: 'rgba(0,180,200,0.40)' }}>
+      <span className="text-[7px]" style={{ color: 'rgba(45,212,191,0.40)' }}>
         {unit}
       </span>
     </div>
@@ -211,7 +236,7 @@ function EEGWave() {
       const w = canvas.width, h = canvas.height
       // Two overlapping waves
       for (let pass = 0; pass < 2; pass++) {
-        ctx.strokeStyle = pass === 0 ? 'rgba(0,210,200,0.70)' : 'rgba(0,160,180,0.30)'
+        ctx.strokeStyle = pass === 0 ? 'rgba(45,212,191,0.75)' : 'rgba(45,212,191,0.28)'
         ctx.lineWidth = pass === 0 ? 1.5 : 1
         ctx.beginPath()
         for (let x = 0; x <= w; x++) {

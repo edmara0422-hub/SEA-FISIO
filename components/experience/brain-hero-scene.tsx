@@ -1,9 +1,12 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
+import { useRef, useMemo, useEffect } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
+
+// Clip plane: hide everything below y = -1.40 in world space (shows cerebellum, cuts long brainstem)
+const CLIP_PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), 1.40)
 
 export function BrainHeroScene({
   compact = false,
@@ -37,22 +40,26 @@ function BrainModel({ compact }: { compact: boolean }) {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/brain.glb')
 
+  const { gl } = useThree()
+  useEffect(() => { gl.localClippingEnabled = true }, [gl])
+
   // Build flat-shaded solid + edge overlay materials once
   const solidMat = useMemo(() => new THREE.MeshStandardMaterial({
     color:             '#060810',
     roughness:         1.0,
     metalness:         0.0,
-    flatShading:       true,      // KEY: shows individual triangle faces
+    flatShading:       true,
     emissive:          new THREE.Color('#030510'),
     emissiveIntensity: 1.0,
+    clippingPlanes:    [CLIP_PLANE],
   }), [])
 
-  const whiteMat = useMemo(() => new THREE.LineBasicMaterial({
-    color: '#e8f0ff', transparent: true, opacity: 0.95,
-  }), [])
-
-  const blueMat = useMemo(() => new THREE.LineBasicMaterial({
-    color: '#2244cc', transparent: true, opacity: 0.52,
+  // Single edge material with vertex colors: white on top → blue on bottom
+  const edgeMat = useMemo(() => new THREE.LineBasicMaterial({
+    vertexColors:   true,
+    transparent:    true,
+    opacity:        0.92,
+    clippingPlanes: [CLIP_PLANE],
   }), [])
 
   // Normalize scene scale+center, then build flat meshes + edge overlays
@@ -66,9 +73,9 @@ function BrainModel({ compact }: { compact: boolean }) {
     box.getSize(size)
     box.getCenter(center)
 
-    // Scale so largest dimension = 3.0 units
+    // Scale so largest dimension = 3.2 units
     const maxDim = Math.max(size.x, size.y, size.z)
-    const scale = 3.0 / maxDim
+    const scale = 3.2 / maxDim
     root.scale.setScalar(scale)
     root.position.sub(center.multiplyScalar(scale))
 
@@ -86,21 +93,37 @@ function BrainModel({ compact }: { compact: boolean }) {
       child.material = solidMat
 
       const edges = new THREE.EdgesGeometry(geo, 15)
-      const white = new THREE.LineSegments(edges, whiteMat)
-      const blue  = new THREE.LineSegments(edges, blueMat)
-      child.add(white)
-      child.add(blue)
-      edgeSegs.push(white, blue)
+      // Vertex colors: top=white, bottom=blue
+      const pos = edges.attributes.position
+      let minY = Infinity, maxY = -Infinity
+      for (let v = 0; v < pos.count; v++) {
+        const y = pos.getY(v)
+        if (y < minY) minY = y
+        if (y > maxY) maxY = y
+      }
+      const rangeY = maxY - minY || 1
+      const colors = new Float32Array(pos.count * 3)
+      for (let v = 0; v < pos.count; v++) {
+        const t = Math.pow((pos.getY(v) - minY) / rangeY, 0.55) // bias toward white
+        colors[v*3]   = t * 0.90 + 0.10   // R: 0.10 (blue) → 1.0 (white)
+        colors[v*3+1] = t * 0.90 + 0.10   // G
+        colors[v*3+2] = 1.0                // B: always full blue
+      }
+      edges.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+      const seg = new THREE.LineSegments(edges, edgeMat)
+      child.add(seg)
+      edgeSegs.push(seg)
     })
 
     return { normScene: root, edgeSegs }
-  }, [scene, solidMat, whiteMat, blueMat])
+  }, [scene, solidMat, edgeMat])
 
   // Slow rotation — matching the reference video speed
   useFrame((state) => {
     if (groupRef.current) {
       const t = state.clock.elapsedTime
-      groupRef.current.rotation.y = t * 0.22
+      // Side-view: 1.57 rad = 90° lateral view
+      groupRef.current.rotation.y = 1.57 + t * 0.18
       groupRef.current.rotation.x = Math.sin(t * 0.14) * 0.04
     }
   })
@@ -108,7 +131,7 @@ function BrainModel({ compact }: { compact: boolean }) {
   const s = compact ? 0.85 : 1.00
 
   return (
-    <group ref={groupRef} scale={s} rotation={[0.10, 1.20, 0]} position={[0, 0.05, 0]}>
+    <group ref={groupRef} scale={s} rotation={[0.10, 1.20, 0]} position={[0, -0.10, 0]}>
       <primitive object={normScene} />
     </group>
   )
