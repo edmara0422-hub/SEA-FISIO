@@ -97,6 +97,57 @@ export type PeepOptEntry = {
   si: string
 }
 
+export type MraRow = {
+  plato: string
+  peep: string
+  cest: string
+  sat: string
+  pam: string
+  best: boolean
+}
+
+export type TitRow = {
+  pico: string
+  plato: string
+  peep: string
+  cest: string
+  si: string
+  sat: string
+  pam: string
+  best: boolean
+}
+
+export type DesmHistEntry = {
+  ts: string
+  pimax: string
+  pemax: string
+  vc: string
+  fr: string
+  cv: string
+  vm: string
+  rsbi: string
+  analise: string
+}
+
+export type DesmEtapaEntry = {
+  ts: string
+  treOK: boolean
+  treDt: string
+  treTm: string
+  extOK: boolean
+  extResult: string
+  descVMOK: boolean
+  descResult: string
+  tipo: string
+}
+
+export type PronaHistEntry = {
+  ts: string
+  tempo: string
+  dataInicio: string
+  horaInicio: string
+}
+
 export function calcPesoIdeal(alt: number, sexo: string): number {
   if (!alt || alt < 100 || alt > 250) return 0
   if (sexo === 'M') return 50 + 0.91 * (alt - 152.4)
@@ -378,6 +429,18 @@ export type PatientData = {
   pronaHora: string
   recVolInsp: string
   recVolExp: string
+  treOK: string
+  treDt: string
+  treTm: string
+  extOK: string
+  extResult: string
+  descVMOK: string
+  descResult: string
+  desmHist: DesmHistEntry[]
+  desmEtapasHist: DesmEtapaEntry[]
+  mraTab: MraRow[]
+  titTab: TitRow[]
+  pronaHist: PronaHistEntry[]
   motora: string
   mrcOmbroD: string
   mrcOmbroE: string
@@ -516,6 +579,18 @@ export function emptyPatient(): PatientData {
     pronaHora: '',
     recVolInsp: '',
     recVolExp: '',
+    treOK: '',
+    treDt: '',
+    treTm: '',
+    extOK: '',
+    extResult: '',
+    descVMOK: '',
+    descResult: '',
+    desmHist: [],
+    desmEtapasHist: [],
+    mraTab: [],
+    titTab: [],
+    pronaHist: [],
     motora: '',
     mrcOmbroD: '',
     mrcOmbroE: '',

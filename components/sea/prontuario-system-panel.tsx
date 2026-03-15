@@ -36,13 +36,18 @@ import {
   interpPocc,
   interpRSBI,
   type BNMEntry,
+  type DesmEtapaEntry,
+  type DesmHistEntry,
   type DVAEntry,
   type GasometryHistoryEntry,
   type ImageExamEntry,
   type LabExamEntry,
-  type PeepOptEntry,
+  type MraRow,
   type PatientData,
+  type PeepOptEntry,
+  type PronaHistEntry,
   type SedativeEntry,
+  type TitRow,
   type VMHistoryEntry,
 } from '@/lib/icu-calcs'
 
@@ -1030,6 +1035,271 @@ function StatusChoice({
   )
 }
 
+function ProtoRow({ label, value, obs }: { label: string; value: string; obs?: string }) {
+  return (
+    <div className="flex justify-between gap-2 border-b border-white/6 py-1 text-[10px]">
+      <span className="flex-1 text-white/40">{label}</span>
+      <span className="flex-1 text-center font-semibold text-white/86">{value}</span>
+      {obs ? <span className="flex-1 text-right text-[9px] text-white/30">{obs}</span> : null}
+    </div>
+  )
+}
+
+function ProtoSection({ title, color }: { title: string; color?: string }) {
+  return (
+    <p className="mb-1.5 mt-3 border-b border-white/8 pb-1 text-[10px] font-bold" style={{ color: color || 'rgba(255,255,255,0.86)' }}>
+      {title}
+    </p>
+  )
+}
+
+function ProtoNote({ text }: { text: string }) {
+  return <p className="py-0.5 text-[10px] leading-snug text-white/50">{text}</p>
+}
+
+function ProtoBox({ text }: { text: string }) {
+  return (
+    <div className="my-1.5 rounded-[0.6rem] border border-white/8 bg-white/3 px-3 py-2 text-[10px] leading-relaxed text-white/50">
+      {text}
+    </div>
+  )
+}
+
+function getProtocolContent(id: string) {
+  if (id === 'sdra') return (
+    <div>
+      <ProtoSection title="SDRA - ARDSnet (Ventilacao Protetora)" color="#f87171" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV ou PCV (A/C)" obs="Sem dif. mortalidade entre modos" />
+      <ProtoRow label="Volume Corrente (VC)" value="6 ml/kg peso predito" obs="NUNCA peso real! Grave: 4-6ml/kg" />
+      <ProtoRow label="Pressao Plato" value="≤ 30 cmH₂O" obs="Tolerar ate 40 se PEEP>15 e ΔP≤15" />
+      <ProtoRow label="PEEP" value="Tabela ARDSNet (FiO₂/PEEP)" obs="Individualizar" />
+      <ProtoRow label="Driving Pressure (ΔP)" value="≤ 15 cmH₂O" obs="Pplato-PEEP. Melhor preditor mortalidade" />
+      <ProtoRow label="Frequencia Respiratoria" value="< 45 ipm" obs="Iniciar 20-30 ipm (AMIB 2024)" />
+      <ProtoRow label="I:E" value="1:1 ate 1:3" obs="Evitar auto-PEEP" />
+      <ProtoRow label="FiO₂" value="Menor possivel" obs="SpO₂ 88-95% ou PaO₂ 55-80 mmHg" />
+      <ProtoRow label="PaCO₂ Alvo" value="≤ 80 mmHg" obs="Hipercapnia permissiva" />
+      <ProtoRow label="pH Alvo" value="7.30-7.45" obs="Aceitar ate 7.15-7.20" />
+      <ProtoSection title="Peso Predito:" />
+      <ProtoBox text="Homem: 50 + 0,91 × (altura cm - 152,4) | Mulher: 45,5 + 0,91 × (altura cm - 152,4)" />
+      <ProtoSection title="CONDUTAS ESPECIFICAS:" />
+      <ProtoSection title="Bloqueio Neuromuscular:" />
+      <ProtoNote text="• ACURASYS: Favoravel (48h continuo se P/F < 150)" />
+      <ProtoNote text="• ROSE: Nao mostrou beneficio (uso liberal)" />
+      <ProtoNote text="• Recomendacao: Individualizar conforme assincronia e oxigenacao" />
+      <ProtoSection title="Posicao Prona:" />
+      <ProtoNote text="• PROSEVA: P/F < 150 → Prona precoce ≥ 16h/dia" />
+      <ProtoNote text="• Implementar nas primeiras 48h" />
+      <ProtoSection title="Ventilacao Ultraprotetora (SDRA grave):" />
+      <ProtoBox text="FiO₂ < 60% | PEEP 10 | PC 10 cmH₂O | VC < 4 ml/kg | FR 10 rpm | Geralmente requer ECMO" />
+    </div>
+  )
+  if (id === 'asma') return (
+    <div>
+      <ProtoSection title="Asma / Broncoespasmo Grave" color="#facc15" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV" obs="Controlar volume minuto" />
+      <ProtoRow label="VC" value="6-8 ml/kg" obs="Minimizar hiperinsuflacao" />
+      <ProtoRow label="FR" value="10-14 ipm" obs="Aumentar tempo expiratorio" />
+      <ProtoRow label="I:E" value="1:3 a 1:4" obs="Permitir esvaziamento pulmonar" />
+      <ProtoRow label="Pplato" value="< 30 cmH₂O" obs="Evitar barotrauma" />
+      <ProtoRow label="PEEP" value="0-5 cmH₂O (baixo)" obs="Evitar perpetuar auto-PEEP" />
+      <ProtoRow label="Fluxo Inspiratorio" value="80-100 L/min" obs="Encurtar Ti, aumentar Te" />
+      <ProtoRow label="PaCO₂" value="Aceitar ate 90 mmHg" obs="pH ≥ 7.20 (hipercapnia permissiva)" />
+      <ProtoSection title="Tratamento Farmacologico:" />
+      <ProtoNote text="• Broncodilatadores: Salbutamol 2,5-5 mg nebulizado 4/4h" />
+      <ProtoNote text="• Corticoides: Metilprednisolona 40-60 mg IV 6/6h" />
+      <ProtoNote text="• Sulfato de Magnesio 2g IV em 20min" />
+      <ProtoSection title="Monitorizar:" />
+      <ProtoNote text="• PaCO₂, pH | Pplato < 30 | Auto-PEEP (pausa expiratoria)" />
+    </div>
+  )
+  if (id === 'covid') return (
+    <div>
+      <ProtoSection title="COVID-19 / SDRA Viral" color="#f87171" />
+      <ProtoBox text="COVID-19 apresenta 2 FENOTIPOS: Fenotipo L (Low) = complacencia normal/alta | Fenotipo H (High) = complacencia baixa" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Parametro" value="Fenotipo L" obs="Fenotipo H" />
+      <ProtoRow label="Complacencia" value="Normal/Alta >50" obs="Baixa <40 mL/cmH₂O" />
+      <ProtoRow label="Volume Corrente" value="6 mL/kg" obs="4-6 mL/kg (ultraprotecao)" />
+      <ProtoRow label="PEEP" value="8-10 cmH₂O" obs="12-16 cmH₂O (alta, titular)" />
+      <ProtoRow label="Recrutabilidade" value="Baixa" obs="Alta" />
+      <ProtoRow label="Posicao Prona" value="Considerar se P/F<150" obs="Indicada precocemente" />
+      <ProtoSection title="Protocolo Prona COVID-19:" />
+      <ProtoNote text="• Indicacao: PaO₂/FiO₂ < 150 com FiO₂ ≥ 60% + PEEP ≥ 5" />
+      <ProtoNote text="• Duracao: 12-16h/dia em prona (minimo 12h)" />
+      <ProtoNote text="• Suspender se P/F > 150 com PEEP ≤ 10 e FiO₂ ≤ 60% por > 4h em supino" />
+      <ProtoSection title="Tratamento Farmacologico:" />
+      <ProtoNote text="• Dexametasona 6 mg/dia IV por 10 dias: ↓ mortalidade 30%" />
+      <ProtoNote text="• Anticoagulacao: Enoxaparina (monitorar D-dimero)" />
+    </div>
+  )
+  if (id === 'dpoc') return (
+    <div>
+      <ProtoSection title="DPOC Exacerbado" color="#4ade80" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV, PCV ou PSV" />
+      <ProtoRow label="VC" value="6-8 ml/kg" />
+      <ProtoRow label="FR" value="10-15 ipm (baixa!)" />
+      <ProtoRow label="I:E" value="1:3 a 1:5" obs="Aumentar tempo expiratorio" />
+      <ProtoRow label="PEEP" value="50-85% da PEEPi" obs="4-8 cmH₂O tipico" />
+      <ProtoRow label="FiO₂" value="SpO₂ 88-92%" obs="Evitar hiperoxemia!" />
+      <ProtoSection title="Auto-PEEP (PEEPi):" />
+      <ProtoNote text="• Causas: Tempo expiratorio insuficiente + Obstrucao ao fluxo" />
+      <ProtoNote text="• Consequencias: Hiperinsuflacao, ↑ trabalho resp, hipotensao, barotrauma" />
+      <ProtoNote text="• Estrategias: ↓ FR, ↓ Volume Minuto, ↑ I:E, PEEP extrinseca 50-85% da PEEPi" />
+      <ProtoSection title="Cuidados Especiais:" />
+      <ProtoNote text="• DPOC retém CO₂: Aceitar PaCO₂ 50-65 mmHg (habitual)" />
+      <ProtoNote text="• Meta SpO₂: 88-92% (NAO > 96%, risco retencao CO₂)" />
+      <ProtoNote text="• Despertar e desmame PRECOCE (VNI assim que possivel)" />
+    </div>
+  )
+  if (id === 'neuro') return (
+    <div>
+      <ProtoSection title="Neuroprotecao (TCE/AVC)" color="#a78bfa" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV" obs="Melhor controle de PaCO₂" />
+      <ProtoRow label="Vt" value="6-8 ml/kg peso predito" />
+      <ProtoRow label="FR" value="12-16 ipm" obs="PaCO₂ 35-40 mmHg" />
+      <ProtoRow label="PEEP" value="5-8 cmH₂O" obs="Evitar > 10 cmH₂O" />
+      <ProtoRow label="FiO₂" value="SpO₂ 94-98%" obs="Evitar hiperoxia e hipoxia" />
+      <ProtoRow label="I:E" value="1:2" obs="Evitar inversao" />
+      <ProtoSection title="Fisiopatologia:" />
+      <ProtoNote text="• Hipercapnia (>45): Vasodilatacao cerebral → ↑ FSC → ↑ PIC" />
+      <ProtoNote text="• Hipocapnia (<30): Vasoconstricao excessiva → isquemia cerebral" />
+      <ProtoNote text="• PEEP >10: ↑ pressao intratoracica → ↓ retorno venoso → ↑ PIC" />
+      <ProtoSection title="Condutas:" />
+      <ProtoNote text="• Sedacao profunda RASS -4 a -5 | Cabeceira 30-45° | PAM 80-100 mmHg" />
+      <ProtoNote text="• Osmoterapia: Manitol 0,25-1 g/kg IV se PIC > 20 mmHg" />
+      <ProtoNote text="• PPC: PAM - PIC (alvo > 60 mmHg)" />
+    </div>
+  )
+  if (id === 'trauma') return (
+    <div>
+      <ProtoSection title="Trauma Toracico" color="#fb923c" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV ou PCV (A/C)" />
+      <ProtoRow label="VC" value="6 ml/kg peso predito" />
+      <ProtoRow label="FR" value="16-20 rpm" />
+      <ProtoRow label="FiO₂" value="SpO₂ > 92%" />
+      <ProtoRow label="PEEP" value="5-10 cmH₂O" />
+      <ProtoRow label="Pplato" value="< 30 cmH₂O" />
+      <ProtoBox text="PCV em Fistula Pleural: modalidade mais adequada pois o vazamento e compensado. PEEP elevada pode perpetuar trajeto fistuloso." />
+      <ProtoSection title="Condutas Especificas:" />
+      <ProtoNote text="• Investigar: Pneumotorax, hemotorax, contusao pulmonar" />
+      <ProtoNote text="• Drenagem toracica: se pneumo > 2cm ou hemotorax" />
+      <ProtoNote text="• RX torax DIARIO | Analgesia RIGOROSA | Fluidoterapia RESTRITIVA" />
+    </div>
+  )
+  if (id === 'intraop') return (
+    <div>
+      <ProtoSection title="VM Intra-Operatorio (Ventilacao Protetora)" color="#60a5fa" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV ou PCV" />
+      <ProtoRow label="Vt" value="6-8 ml/kg peso predito" obs="Ventilacao protetora" />
+      <ProtoRow label="PEEP" value="5-8 cmH₂O" obs="Prevenir atelectasia" />
+      <ProtoRow label="Driving Pressure" value="≤ 15 cmH₂O" />
+      <ProtoRow label="FiO₂" value="30-50%" obs="Evitar 100% prolongada" />
+      <ProtoRow label="FR" value="10-14 rpm" obs="EtCO₂ 35-40 mmHg" />
+      <ProtoSection title="Tipos de Cirurgia:" />
+      <ProtoNote text="• Laparotomia: Vt 6-8ml/kg | PEEP 5-8" />
+      <ProtoNote text="• Laparoscopia: PEEP 8-10 | FR aumentar (EtCO₂ sobe)" />
+      <ProtoNote text="• Toracica (monopulmonar): Vt 4-6ml/kg | FiO₂ 80-100% inicial" />
+      <ProtoNote text="• Cardiaca (pos-CEC): MRA OBRIGATORIA apos CEC" />
+    </div>
+  )
+  if (id === 'cardio') return (
+    <div>
+      <ProtoSection title="Cardiopatas (ICC, IAM, Valvopatias)" color="#f87171" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="A/C (VCV ou PCV) ou PSV" />
+      <ProtoRow label="Vt" value="6-8 ml/kg peso predito" />
+      <ProtoRow label="PEEP" value="8-12 (ICC) / 5-8 (valvopatias)" />
+      <ProtoRow label="FiO₂" value="SpO₂ 92-96%" obs="Evitar 100%" />
+      <ProtoRow label="FR" value="12-20 ipm" obs="PaCO₂ 35-45" />
+      <ProtoRow label="Driving Pressure" value="< 15 cmH₂O" />
+      <ProtoSection title="PEEP individualizada:" />
+      <ProtoNote text="• ICC descompensada: PEEP 8-12 (↓ pos-carga VE)" />
+      <ProtoNote text="• Cor pulmonale/TEP: PEEP baixa 5-8 (evitar sobrecarga VD)" />
+      <ProtoNote text="• Estenose aortica: PEEP baixa 5-8 (manter pre-carga)" />
+      <ProtoSection title="VNI - 1a Linha em Edema Pulmonar Cardiogenico:" />
+      <ProtoNote text="• CPAP: 8-12 cmH₂O | BiPAP: IPAP 15-20, EPAP 8-10" />
+      <ProtoNote text="• Reduz intubacao 50-60%, mortalidade 40%" />
+      <ProtoSection title="Desmame em Cardiopatas:" />
+      <ProtoBox text="EPID (Edema Pulmonar Induzido por Desmame): 10-20% durante TRE. VNI pos-extubacao profilatica: CPAP 8 cmH₂O por 24-48h." />
+    </div>
+  )
+  if (id === 'tep') return (
+    <div>
+      <ProtoSection title="TEP (Tromboembolismo Pulmonar)" color="#a78bfa" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="A/C (VCV ou PCV)" />
+      <ProtoRow label="Vt" value="6 ml/kg peso predito" />
+      <ProtoRow label="PEEP" value="0-5 cmH₂O" obs="MINIMA possivel!" />
+      <ProtoRow label="FiO₂" value="SpO₂ 88-92%" />
+      <ProtoRow label="FR" value="PaCO₂ 35-40" obs="Evitar hipercapnia: ↑ RVP" />
+      <ProtoRow label="Driving Pressure" value="< 15 cmH₂O" />
+      <ProtoBox text="VM DELETERIA: PEEP comprime capilares → ↑ RVP → sobrecarga VD → colapso hemodinamico. VNI NAO indicada no TEP." />
+      <ProtoSection title="Tratamento Especifico:" />
+      <ProtoNote text="• HNF IV: 80 U/kg bolus → 18 U/kg/h | Enoxaparina 1 mg/kg 12/12h" />
+      <ProtoNote text="• Trombolitico (alto risco): rtPA 100 mg IV em 2h OU 50 mg bolus se PCR" />
+      <ProtoSection title="Evitar:" />
+      <ProtoNote text="• PEEP > 8 | Hipercapnia (PaCO₂ > 50) | Hiperinsuflacao" />
+    </div>
+  )
+  if (id === 'obeso') return (
+    <div>
+      <ProtoSection title="Obeso (IMC ≥ 30 kg/m²)" color="#facc15" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV ou PCV" />
+      <ProtoRow label="Vt" value="6-8 ml/kg PESO PREDITO" obs="NAO peso real!" />
+      <ProtoRow label="PEEP (por IMC)" value="30-35: 8-10 | 35-40: 10-12" obs="IMC>40: 12-18 | >50: 15-20" />
+      <ProtoRow label="Driving Pressure" value="< 15 cmH₂O" obs="MAIS IMPORTANTE que Pplato!" />
+      <ProtoRow label="Posicao" value="Cabeceira 30-45°" obs="OBRIGATORIA!" />
+      <ProtoBox text="PBW: Homem: 50 + 0,91 × [altura(cm) - 152,4] | Mulher: 45,5 + 0,91 × [altura(cm) - 152,4]" />
+      <ProtoSection title="Desmame e Extubacao:" />
+      <ProtoNote text="• VNI profilatica pos-extubacao: BiPAP IPAP 10-12, EPAP 8-10 por 24-48h (↓ reintubacao 50%)" />
+      <ProtoNote text="• Posicao 45°, fisioterapia agressiva" />
+    </div>
+  )
+  if (id === 'pav') return (
+    <div>
+      <ProtoSection title="PAV (Pneumonia Associada a Ventilacao)" color="#fb923c" />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV ou PSV conforme tolerancia" />
+      <ProtoRow label="Vt" value="6-8 ml/kg peso predito" obs="Ventilacao protetora" />
+      <ProtoRow label="PEEP" value="5-10 cmH₂O" />
+      <ProtoRow label="Driving Pressure" value="< 15 cmH₂O" />
+      <ProtoSection title="Antibioticoterapia:" />
+      <ProtoNote text="• EMPIRICA precoce (1a hora). Colher culturas ANTES de iniciar ATB." />
+      <ProtoNote text="• ATB empirico: Pip-Tazo 4,5g IV 6/6h OU Meropenem 1g 8/8h" />
+      <ProtoNote text="• MRSA: Vancomicina 15 mg/kg 12/12h (se fatores de risco)" />
+      <ProtoNote text="• Duracao: 7-8 dias (se boa resposta clinica)" />
+      <ProtoSection title="Bundle de Prevencao:" />
+      <ProtoNote text="• Cabeceira 30-45° | Higiene oral clorexidina 0,12% 2x/dia" />
+      <ProtoNote text="• Aspiracao subglotica 2-4h | Despertar diario" />
+    </div>
+  )
+  if (id === 'me') return (
+    <div>
+      <ProtoSection title="Morte Encefalica - Protocolo do Doador" color="#94a3b8" />
+      <ProtoBox text="Objetivo: Manter OXIGENACAO e PERFUSAO tecidual para preservar orgaos para doacao, minimizando VILI." />
+      <ProtoSection title="PARAMETROS VENTILATORIOS:" />
+      <ProtoRow label="Modo" value="VCV" obs="Volume minuto estavel" />
+      <ProtoRow label="VC" value="6-8 ml/kg peso predito" obs="NUNCA peso real!" />
+      <ProtoRow label="FR" value="12-16 ipm" obs="PaCO₂ 35-45 mmHg" />
+      <ProtoRow label="PEEP" value="5-8 cmH₂O" obs="Evitar >10 (hipotensao)" />
+      <ProtoRow label="FiO₂" value="≤ 40% (menor possivel)" obs="SpO₂ ≥ 95%" />
+      <ProtoRow label="Pplato" value="≤ 30 cmH₂O" />
+      <ProtoRow label="Driving Pressure" value="≤ 15 cmH₂O" />
+      <ProtoSection title="Pre-requisitos ME (CFM 2.173/2017):" />
+      <ProtoNote text="• Causa conhecida e irreversivel | Temp ≥ 35°C | PAS ≥ 100 mmHg" />
+      <ProtoNote text="• Ausencia de drogas depressoras SNC | Observacao ≥ 6 horas" />
+    </div>
+  )
+  return null
+}
+
 export function ProntuarioSystemPanel() {
   const [view, setView] = useState<PanelView>('records')
   const [records, setRecords] = useState<ICURecord[]>([])
@@ -1037,6 +1307,7 @@ export function ProntuarioSystemPanel() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState<FormTab>('dados')
   const [hydrated, setHydrated] = useState(false)
+  const [expandedProtocols, setExpandedProtocols] = useState<Set<string>>(new Set())
 
   useEffect(() => {
     try {
@@ -1619,6 +1890,117 @@ export function ProntuarioSystemPanel() {
       ...record,
       vmHist: record.vmHist.filter((_, itemIndex) => itemIndex !== index),
     }))
+  }
+
+  const ensureMraRows = (rows: MraRow[]): MraRow[] => {
+    const result = [...rows]
+    while (result.length < 8) result.push({ plato: '', peep: '', cest: '', sat: '', pam: '', best: false })
+    return result
+  }
+
+  const ensureTitRows = (rows: TitRow[]): TitRow[] => {
+    const result = [...rows]
+    while (result.length < 10) result.push({ pico: '', plato: '', peep: '', cest: '', si: '', sat: '', pam: '', best: false })
+    return result
+  }
+
+  const setMraField = (index: number, field: keyof MraRow, value: string) => {
+    updateCurrentRecord((record) => {
+      const next = ensureMraRows(record.mraTab || [])
+      next[index] = { ...next[index], [field]: value }
+      return { ...record, mraTab: next }
+    })
+  }
+
+  const toggleMraBest = (index: number) => {
+    updateCurrentRecord((record) => {
+      const next = ensureMraRows(record.mraTab || [])
+      next[index] = { ...next[index], best: !next[index].best }
+      return { ...record, mraTab: next }
+    })
+  }
+
+  const setTitField = (index: number, field: keyof TitRow, value: string) => {
+    updateCurrentRecord((record) => {
+      const next = ensureTitRows(record.titTab || [])
+      next[index] = { ...next[index], [field]: value }
+      return { ...record, titTab: next }
+    })
+  }
+
+  const toggleTitBest = (index: number) => {
+    updateCurrentRecord((record) => {
+      const next = ensureTitRows(record.titTab || [])
+      next[index] = { ...next[index], best: !next[index].best }
+      return { ...record, titTab: next }
+    })
+  }
+
+  const saveDesmame = () => {
+    if (!currentRecord) return
+    const rsbi = calculations?.weanRsbi ? calculations.weanRsbi.toFixed(1) : ''
+    const vm = calculations?.weanMinuteVentilation ? calculations.weanMinuteVentilation.toFixed(1) : ''
+    const analise = calculations?.weanSummary?.text || ''
+    if (!currentRecord.dPimax && !currentRecord.dPemax && !currentRecord.dVcDesm) return
+    const entry: DesmHistEntry = {
+      ts: nowIso(),
+      pimax: currentRecord.dPimax,
+      pemax: currentRecord.dPemax,
+      vc: currentRecord.dVcDesm,
+      fr: currentRecord.dFrDesm,
+      cv: currentRecord.dCv,
+      vm,
+      rsbi,
+      analise,
+    }
+    updateCurrentRecord((record) => ({ ...record, desmHist: [entry, ...(record.desmHist || [])] }))
+  }
+
+  const deleteDesmame = (index: number) => {
+    updateCurrentRecord((record) => ({ ...record, desmHist: (record.desmHist || []).filter((_, i) => i !== index) }))
+  }
+
+  const saveDesmEtapas = () => {
+    if (!currentRecord) return
+    const isTOT = currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML'
+    const isTQT = currentRecord.tipoVia?.startsWith('TQT')
+    let tipo = 'Simples'
+    if (currentRecord.treOK && currentRecord.treDt && currentRecord.dataTOT) {
+      const dias = Math.floor((new Date(currentRecord.treDt).getTime() - new Date(currentRecord.dataTOT).getTime()) / 86400000)
+      if (dias > 14) tipo = 'Prolongado'
+      else if (dias > 7) tipo = 'Dificil'
+    }
+    const entry: DesmEtapaEntry = {
+      ts: nowIso(),
+      treOK: currentRecord.treOK === '1',
+      treDt: currentRecord.treDt,
+      treTm: currentRecord.treTm,
+      extOK: isTOT ? currentRecord.extOK === '1' : false,
+      extResult: currentRecord.extResult,
+      descVMOK: isTQT ? currentRecord.descVMOK === '1' : false,
+      descResult: currentRecord.descResult,
+      tipo,
+    }
+    updateCurrentRecord((record) => ({ ...record, desmEtapasHist: [entry, ...(record.desmEtapasHist || [])] }))
+  }
+
+  const deleteDesmEtapa = (index: number) => {
+    updateCurrentRecord((record) => ({ ...record, desmEtapasHist: (record.desmEtapasHist || []).filter((_, i) => i !== index) }))
+  }
+
+  const saveProna = () => {
+    if (!currentRecord || !currentRecord.pronaAtiva) return
+    const entry: PronaHistEntry = {
+      ts: nowIso(),
+      tempo: currentRecord.pronaTempo,
+      dataInicio: currentRecord.pronaData,
+      horaInicio: currentRecord.pronaHora,
+    }
+    updateCurrentRecord((record) => ({ ...record, pronaHist: [entry, ...(record.pronaHist || [])] }))
+  }
+
+  const deleteProna = (index: number) => {
+    updateCurrentRecord((record) => ({ ...record, pronaHist: (record.pronaHist || []).filter((_, i) => i !== index) }))
   }
 
   const addRecord = () => {
@@ -3466,7 +3848,177 @@ export function ProntuarioSystemPanel() {
                       color={calculations?.weanSummary?.color}
                     />
                   </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <button
+                      onClick={saveDesmame}
+                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                    >
+                      <Save className="h-4 w-4" />
+                      Salvar Desmame
+                    </button>
+                  </div>
+
+                  {currentRecord.desmHist?.length ? (
+                    <div className="mt-4">
+                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                        Historico Desmame · {currentRecord.desmHist.length}
+                      </p>
+                      <div className="space-y-2">
+                        {currentRecord.desmHist.map((entry, i) => (
+                          <div key={`desm-${i}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0 flex-1">
+                                <p className="text-[10px] text-white/44">{formatDateTime(entry.ts)}</p>
+                                <p className="mt-0.5 text-[10px] text-white/60">
+                                  PImax {entry.pimax || '--'} · PEmax {entry.pemax || '--'} · VC {entry.vc || '--'} · FR {entry.fr || '--'} · CV {entry.cv || '--'}
+                                </p>
+                                <p className="mt-0.5 text-[10px] text-white/40">VM {entry.vm || '--'} · RSBI {entry.rsbi || '--'}</p>
+                                {entry.analise ? (
+                                  <p className="mt-1 text-[10px] font-semibold" style={{ color: calculations?.weanSummary?.color || '#60a5fa' }}>{entry.analise}</p>
+                                ) : null}
+                              </div>
+                              <button onClick={() => deleteDesmame(i)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                                <Trash2 className="h-3 w-3" />
+                              </button>
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null}
                 </div>
+
+                {(() => {
+                  const isTOT = currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML'
+                  const isTQT = currentRecord.tipoVia?.startsWith('TQT')
+                  const treActive = currentRecord.treOK === '1'
+                  const extActive = currentRecord.extOK === '1'
+                  const descActive = currentRecord.descVMOK === '1'
+                  let tipoDesmame = 'Simples'; let corDesm = '#4ade80'
+                  if (treActive && currentRecord.treDt && currentRecord.dataTOT) {
+                    const dias = Math.floor((new Date(currentRecord.treDt).getTime() - new Date(currentRecord.dataTOT).getTime()) / 86400000)
+                    if (dias > 14) { tipoDesmame = 'Prolongado'; corDesm = '#f87171' }
+                    else if (dias > 7) { tipoDesmame = 'Dificil'; corDesm = '#facc15' }
+                  }
+                  return (
+                    <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                      <div className="mb-4 flex items-center gap-3">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                          Parametros de Desmame Ventilatorio
+                        </p>
+                        {treActive && currentRecord.treDt ? (
+                          <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: corDesm, borderColor: `${corDesm}30`, background: `${corDesm}12` }}>
+                            {tipoDesmame}
+                          </span>
+                        ) : null}
+                      </div>
+
+                      <div className="mb-4 flex items-center justify-center gap-2 flex-wrap text-[10px] text-white/50">
+                        {[['① VCV/PCV', '#60a5fa'], ['② PSV', '#60a5fa'], ['③ TRE', treActive ? '#4ade80' : undefined], ['④ ' + (isTQT ? 'Desconexao' : 'Extubacao'), (isTOT && extActive) || (isTQT && descActive) ? '#4ade80' : undefined]] .map(([label, color], idx, arr) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <span className="rounded-[0.5rem] border border-white/10 bg-white/4 px-2 py-1" style={color ? { color: color as string, borderColor: `${color}40`, background: `${color}12` } : {}}>{label}</span>
+                            {idx < arr.length - 1 ? <span className="text-white/20">→</span> : null}
+                          </div>
+                        ))}
+                      </div>
+
+                      <div className="flex flex-wrap gap-2 justify-center mb-3">
+                        <button
+                          type="button"
+                          onClick={() => setField('treOK', treActive ? '' : '1')}
+                          className="rounded-[1rem] border px-4 py-2 text-[11px] font-semibold cursor-pointer"
+                          style={treActive ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
+                        >TRE</button>
+                        {isTOT ? (
+                          <button
+                            type="button"
+                            onClick={() => setField('extOK', extActive ? '' : '1')}
+                            className="rounded-[1rem] border px-4 py-2 text-[11px] font-semibold cursor-pointer"
+                            style={extActive ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
+                          >Extubacao</button>
+                        ) : null}
+                        {isTQT ? (
+                          <button
+                            type="button"
+                            onClick={() => setField('descVMOK', descActive ? '' : '1')}
+                            className="rounded-[1rem] border px-4 py-2 text-[11px] font-semibold cursor-pointer"
+                            style={descActive ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
+                          >Desconexao VM</button>
+                        ) : null}
+                      </div>
+
+                      {treActive ? (
+                        <div className="grid gap-3 grid-cols-2 mb-3">
+                          <FieldShell label="Data TRE">
+                            <input className={INPUT_CLASS_SM} type="date" value={currentRecord.treDt} onChange={(e) => setField('treDt', e.target.value)} />
+                          </FieldShell>
+                          <FieldShell label="Hora TRE">
+                            <input className={INPUT_CLASS_SM} type="time" value={currentRecord.treTm} onChange={(e) => setField('treTm', e.target.value)} />
+                          </FieldShell>
+                        </div>
+                      ) : null}
+
+                      {isTOT && extActive ? (
+                        <div className="mb-3">
+                          <p className="mb-1.5 text-[10px] text-white/40">Resultado da Extubacao</p>
+                          <div className="flex gap-2">
+                            {(['Sucesso', 'Falha'] as const).map((opt) => (
+                              <button key={opt} type="button" onClick={() => setField('extResult', opt)}
+                                className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
+                                style={currentRecord.extResult === opt ? (opt === 'Sucesso' ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(248,113,113,0.12)', borderColor: 'rgba(248,113,113,0.35)', color: '#f87171' }) : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.50)' }}>
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      {isTQT && descActive ? (
+                        <div className="mb-3">
+                          <p className="mb-1.5 text-[10px] text-white/40">Resultado da Desconexao</p>
+                          <div className="flex gap-2">
+                            {(['Sucesso', 'Falha'] as const).map((opt) => (
+                              <button key={opt} type="button" onClick={() => setField('descResult', opt)}
+                                className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
+                                style={currentRecord.descResult === opt ? (opt === 'Sucesso' ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(248,113,113,0.12)', borderColor: 'rgba(248,113,113,0.35)', color: '#f87171' }) : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.50)' }}>
+                                {opt}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+
+                      <div className="mt-3">
+                        <button onClick={saveDesmEtapas} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
+                          <Save className="h-4 w-4" />
+                          Salvar Etapas
+                        </button>
+                      </div>
+
+                      {currentRecord.desmEtapasHist?.length ? (
+                        <div className="mt-3 space-y-2">
+                          {currentRecord.desmEtapasHist.map((entry, i) => (
+                            <div key={`etapa-${i}`} className="flex items-center justify-between gap-2 rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2">
+                              <div>
+                                <p className="text-[10px] text-white/40">{formatDateTime(entry.ts)}</p>
+                                <p className="mt-0.5 text-[10px] text-white/60">
+                                  TRE: {entry.treOK ? 'Sim' : 'Nao'}{entry.treDt ? ` ${entry.treDt}` : ''}
+                                  {entry.extOK ? ` | Ext: ${entry.extResult || '-'}` : ''}
+                                  {entry.descVMOK ? ` | Desc: ${entry.descResult || '-'}` : ''}
+                                  {entry.tipo ? ` | ${entry.tipo}` : ''}
+                                </p>
+                              </div>
+                              <button onClick={() => deleteDesmEtapa(i)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                                <Trash2 className="h-3 w-3" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+                    </div>
+                  )
+                })()}
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
@@ -3497,6 +4049,35 @@ export function ProntuarioSystemPanel() {
                       )
                     })}
                   </div>
+                  {currentRecord.protocoloVM.length > 0 ? (
+                    <div className="mt-4 space-y-2">
+                      {currentRecord.protocoloVM.map((pid) => {
+                        const proto = PROTOCOL_OPTIONS.find((p) => p.id === pid)
+                        if (!proto) return null
+                        const isOpen = expandedProtocols.has(pid)
+                        return (
+                          <div key={pid}>
+                            <button
+                              type="button"
+                              onClick={() => setExpandedProtocols((prev) => { const next = new Set(prev); isOpen ? next.delete(pid) : next.add(pid); return next })}
+                              className="flex w-full items-center gap-2 rounded-[1rem] border px-4 py-2.5 text-left"
+                              style={{ borderColor: `${proto.color}30`, background: `${proto.color}08` }}
+                            >
+                              <svg viewBox="0 0 24 24" fill="none" stroke={proto.color} strokeWidth="2.5" className="h-3 w-3 shrink-0 transition-transform" style={{ transform: isOpen ? 'rotate(90deg)' : 'rotate(0deg)' }}>
+                                <path d="M9 18l6-6-6-6" />
+                              </svg>
+                              <span className="text-[10px] font-bold" style={{ color: proto.color }}>{proto.label}</span>
+                            </button>
+                            {isOpen ? (
+                              <div className="rounded-b-[1rem] border border-t-0 px-4 py-3" style={{ borderColor: `${proto.color}15`, background: `${proto.color}03` }}>
+                                {getProtocolContent(pid)}
+                              </div>
+                            ) : null}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  ) : null}
                 </div>
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
@@ -3548,6 +4129,129 @@ export function ProntuarioSystemPanel() {
                       />
                     </div>
                   ) : null}
+
+                  {proneActive ? (
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <button onClick={saveProna} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
+                        <Save className="h-4 w-4" />
+                        Salvar Prona
+                      </button>
+                    </div>
+                  ) : null}
+
+                  {currentRecord.pronaHist?.length ? (
+                    <div className="mt-3 space-y-1.5">
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/36">Historico Prona</p>
+                      {currentRecord.pronaHist.map((entry, i) => (
+                        <div key={`prona-${i}`} className="flex items-center justify-between gap-2 rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2">
+                          <p className="text-[10px] text-white/50">
+                            {formatDateTime(entry.ts)} · {entry.tempo || '--'} · {entry.dataInicio || '--'} {entry.horaInicio || ''}
+                          </p>
+                          <button onClick={() => deleteProna(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                            <Trash2 className="h-2.5 w-2.5" />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+
+                  <div className="mt-5 border-t border-white/8 pt-5">
+                    <p className="mb-2 text-[10px] font-bold text-[#fb923c]">Manobra de Recrutamento</p>
+                    <p className="mb-3 text-[9px] leading-relaxed text-white/30">FiO₂ 100%, FR 10, ΔP 15 cmH₂O | PCV: PEEP +5 a cada 2min ate 25-45 cmH₂O | Apos: PEEP 25, calcular Cest, iniciar titulacao decremental.</p>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse text-[10px]">
+                        <thead>
+                          <tr className="bg-white/4">
+                            {['PLATO','PEEP','ΔP','CEST','SAT','PAM','★'].map((h) => (
+                              <th key={h} className="border border-white/8 px-2 py-1.5 text-center text-[9px] font-semibold text-white/44">{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {ensureMraRows(currentRecord.mraTab || []).map((row, ri) => {
+                            const plato = parseFloat(row.plato); const peep = parseFloat(row.peep)
+                            const dp = (!isNaN(plato) && !isNaN(peep)) ? (plato - peep).toFixed(0) : ''
+                            return (
+                              <tr key={ri} style={row.best ? { background: 'rgba(74,222,128,0.08)' } : {}}>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.plato} onChange={(e) => setMraField(ri, 'plato', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.peep} onChange={(e) => setMraField(ri, 'peep', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-2 py-1 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.cest} onChange={(e) => setMraField(ri, 'cest', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.sat} onChange={(e) => setMraField(ri, 'sat', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.pam} onChange={(e) => setMraField(ri, 'pam', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-2 py-1 text-center">
+                                  <button type="button" onClick={() => toggleMraBest(ri)} className="text-[12px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => updateCurrentRecord((r) => ({ ...r, mraTab: Array(8).fill(null).map(() => ({ plato: '', peep: '', cest: '', sat: '', pam: '', best: false })) }))}
+                      className="mt-2 rounded-[0.8rem] border border-[#f8717130] bg-[#f8717110] px-3 py-1.5 text-[9px] font-semibold text-[#fca5a5]"
+                    >
+                      Limpar Tabela
+                    </button>
+                  </div>
+
+                  <div className="mt-5 border-t border-white/8 pt-5">
+                    <p className="mb-2 text-[10px] font-bold text-[#60a5fa]">Titulacao PEEP Decremental</p>
+                    <p className="mb-3 text-[9px] leading-relaxed text-white/30">VCV, Onda Quadrada | PEEP 25: reduzir -2 cmH₂O a cada 4min | PEEP ideal: melhor Cest + 2 cmH₂O.</p>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border-collapse text-[10px]">
+                        <thead>
+                          <tr className="bg-white/4">
+                            {['PICO','PLATO','PEEP','ΔP','CEST','SI','SAT','PAM','★'].map((h) => (
+                              <th key={h} className="border border-white/8 px-2 py-1.5 text-center text-[9px] font-semibold text-white/44">{h}</th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {ensureTitRows(currentRecord.titTab || []).map((row, ti) => {
+                            const plato = parseFloat(row.plato); const peep = parseFloat(row.peep)
+                            const dp = (!isNaN(plato) && !isNaN(peep)) ? (plato - peep).toFixed(0) : ''
+                            return (
+                              <tr key={ti} style={row.best ? { background: 'rgba(74,222,128,0.08)' } : {}}>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.pico} onChange={(e) => setTitField(ti, 'pico', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.plato} onChange={(e) => setTitField(ti, 'plato', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.peep} onChange={(e) => setTitField(ti, 'peep', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-2 py-1 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.cest} onChange={(e) => setTitField(ti, 'cest', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="text" value={row.si} onChange={(e) => setTitField(ti, 'si', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="=1" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.sat} onChange={(e) => setTitField(ti, 'sat', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.pam} onChange={(e) => setTitField(ti, 'pam', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-2 py-1 text-center">
+                                  <button type="button" onClick={() => toggleTitBest(ti)} className="text-[12px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                </td>
+                              </tr>
+                            )
+                          })}
+                        </tbody>
+                      </table>
+                    </div>
+                    {(() => {
+                      const bestTit = (currentRecord.titTab || []).find((r) => r.best)
+                      if (bestTit?.peep) {
+                        const peepIdeal = parseFloat(bestTit.peep) + 2
+                        return (
+                          <div className="mt-2 rounded-[0.8rem] border border-[#4ade8030] bg-[#4ade8008] px-3 py-2 text-[10px] font-semibold text-[#4ade80]">
+                            PEEP Ideal: {peepIdeal} cmH₂O (melhor Cest {bestTit.cest} + 2)
+                          </div>
+                        )
+                      }
+                      return null
+                    })()}
+                    <button
+                      type="button"
+                      onClick={() => updateCurrentRecord((r) => ({ ...r, titTab: Array(10).fill(null).map(() => ({ pico: '', plato: '', peep: '', cest: '', si: '', sat: '', pam: '', best: false })) }))}
+                      className="mt-2 rounded-[0.8rem] border border-[#f8717130] bg-[#f8717110] px-3 py-1.5 text-[9px] font-semibold text-[#fca5a5]"
+                    >
+                      Limpar Tabela
+                    </button>
+                  </div>
 
                   <div className="mt-5 border-t border-white/8 pt-5">
                     <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
