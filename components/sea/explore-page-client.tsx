@@ -139,6 +139,10 @@ function Card3D({
   const rotY = useSpring(useTransform(mx, [0, 1], [-6, 6]), { stiffness: 160, damping: 20 })
   const glowX = useTransform(mx, [0, 1], [20, 80])
   const glowY = useTransform(my, [0, 1], [20, 80])
+  const glowBackground = useTransform(
+    [glowX, glowY],
+    ([x, y]) => `radial-gradient(340px circle at ${x}% ${y}%, rgba(255,255,255,0.055), transparent 65%)`,
+  )
 
   const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!isActive || !ref.current) return
@@ -169,13 +173,7 @@ function Card3D({
         {isActive && (
           <motion.div
             className="pointer-events-none absolute inset-0"
-            style={{
-              background: useTransform(
-                [glowX, glowY],
-                ([x, y]) =>
-                  `radial-gradient(340px circle at ${x}% ${y}%, rgba(255,255,255,0.055), transparent 65%)`,
-              ),
-            }}
+            style={{ background: glowBackground }}
           />
         )}
 
