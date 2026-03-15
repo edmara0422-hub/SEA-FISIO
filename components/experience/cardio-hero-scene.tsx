@@ -1,121 +1,120 @@
 'use client'
 
+import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float } from '@react-three/drei'
-import { useMemo, useRef } from 'react'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 export function CardioHeroScene({ transparent = false }: { transparent?: boolean }) {
   return (
-    <Canvas camera={{ position: [0, 0, 4.8], fov: 32 }} gl={{ alpha: transparent, antialias: true }}>
-      {!transparent ? <color attach="background" args={['#050304']} /> : null}
-      <fog attach="fog" args={['#060304', 10, 18]} />
+    <Canvas
+      camera={{ position: [0, 0, 4.2], fov: 38 }}
+      gl={{ alpha: transparent, antialias: true }}
+    >
+      {!transparent ? <color attach="background" args={['#07080f']} /> : null}
+      {/* Strong key from top-right — white hot on top edges */}
+      <directionalLight position={[3, 8, 2]}  intensity={7.0} color="#ffffff" />
+      {/* Softer fill from front-left */}
+      <directionalLight position={[-2, 2, 4]} intensity={1.0} color="#cc8899" />
+      {/* Red rim from below */}
+      <pointLight position={[0, -5, -1]} intensity={16} color="#bb1122" distance={20} />
+      <ambientLight intensity={0.04} color="#150508" />
 
-      {/* Rich anatomical lighting — deep reds, warm highlights */}
-      <ambientLight intensity={0.32} color="#f5e0e0" />
-      <directionalLight position={[1.5, 5, 4]} intensity={2.4} color="#ffe4e4" />
-      <pointLight position={[-3, 1, 3.5]} intensity={26} color="#cc1020" distance={14} />
-      <pointLight position={[3, -1, 3]} intensity={18} color="#ff3040" distance={12} />
-      <pointLight position={[0, -4, 1]} intensity={8} color="#880010" distance={10} />
-      <pointLight position={[0, 3, -1]} intensity={6} color="#aa1525" distance={10} />
-
-      <Float speed={1.5} rotationIntensity={0.06} floatIntensity={0.18}>
-        <HeartForm />
-      </Float>
+      <HeartModel />
     </Canvas>
   )
 }
 
-// Heartbeat: fast systole, slow diastole at ~68 BPM
+useGLTF.preload('/heart.glb')
+
+// Heartbeat: fast systole, slow diastole ~68 BPM
 function heartbeatPulse(t: number): number {
   const period = 0.88
   const ph = (t % period) / period
-  if (ph < 0.12) return 1 - (ph / 0.12) * 0.12       // fast compress
-  if (ph < 0.28) return 0.88 + ((ph - 0.12) / 0.16) * 0.12 // elastic rebound
-  return 1                                              // diastole rest
+  if (ph < 0.12) return 1 - (ph / 0.12) * 0.10
+  if (ph < 0.28) return 0.90 + ((ph - 0.12) / 0.16) * 0.10
+  return 1
 }
 
-function HeartForm() {
+function HeartModel() {
   const groupRef = useRef<THREE.Group>(null)
+  const { scene } = useGLTF('/heart.glb')
 
-  // 3D heart built from a proper 2D heart curve extruded with aggressive beveling
-  // High bevelSegments turns the flat extrusion into a rounded 3D solid
-  const heartGeo = useMemo(() => {
-    const s = new THREE.Shape()
+  const solidMat = useMemo(() => new THREE.MeshStandardMaterial({
+    color:             '#060810',
+    roughness:         1.0,
+    metalness:         0.0,
+    flatShading:       true,
+    emissive:          new THREE.Color('#100305'),
+    emissiveIntensity: 1.0,
+  }), [])
 
-    // Classic anatomical heart silhouette with proper proportions
-    s.moveTo(0, 0.28)
-    s.bezierCurveTo(0.02, 0.92, -0.98, 1.04, -0.98, 0.26)
-    s.bezierCurveTo(-0.98, -0.28, -0.40, -0.70, 0, -1.18)
-    s.bezierCurveTo(0.40, -0.70, 0.98, -0.28, 0.98, 0.26)
-    s.bezierCurveTo(0.98, 1.04, -0.02, 0.92, 0, 0.28)
+  const edgeMat = useMemo(() => new THREE.LineBasicMaterial({
+    vertexColors: true,
+    transparent:  true,
+    opacity:      0.92,
+  }), [])
 
-    const geo = new THREE.ExtrudeGeometry(s, {
-      depth: 1.05,
-      bevelEnabled: true,
-      bevelSegments: 18,      // HIGH — rounds all edges into a near-spherical puff
-      steps: 1,
-      bevelSize: 0.26,        // HIGH — pushes edges outward into a pillow shape
-      bevelThickness: 0.28,   // HIGH — thickness of the rounded bevel cap
-      curveSegments: 56,
+  const normScene = useMemo(() => {
+    const root = scene.clone(true)
+
+    const box = new THREE.Box3().setFromObject(root)
+    const size = new THREE.Vector3()
+    const center = new THREE.Vector3()
+    box.getSize(size)
+    box.getCenter(center)
+
+    const maxDim = Math.max(size.x, size.y, size.z)
+    const scale = 2.8 / maxDim
+    root.scale.setScalar(scale)
+    root.position.sub(center.multiplyScalar(scale))
+
+    root.traverse((child) => {
+      if (!(child instanceof THREE.Mesh)) return
+      const geo = child.geometry.index
+        ? child.geometry.toNonIndexed()
+        : child.geometry
+      geo.computeVertexNormals()
+      child.geometry = geo
+      child.material = solidMat
+
+      const edges = new THREE.EdgesGeometry(geo, 15)
+      const pos = edges.attributes.position
+      let minY = Infinity, maxY = -Infinity
+      for (let v = 0; v < pos.count; v++) {
+        const y = pos.getY(v)
+        if (y < minY) minY = y
+        if (y > maxY) maxY = y
+      }
+      const rangeY = maxY - minY || 1
+      const colors = new Float32Array(pos.count * 3)
+      for (let v = 0; v < pos.count; v++) {
+        const t = Math.pow((pos.getY(v) - minY) / rangeY, 0.55)
+        // bottom = deep red (0.70, 0.03, 0.03) → top = warm white-pink (1.0, 0.80, 0.80)
+        colors[v*3]   = t * 0.30 + 0.70   // R: always warm
+        colors[v*3+1] = t * 0.77 + 0.03   // G: red at bottom, pink-white at top
+        colors[v*3+2] = t * 0.77 + 0.03   // B: same
+      }
+      edges.setAttribute('color', new THREE.BufferAttribute(colors, 3))
+      const seg = new THREE.LineSegments(edges, edgeMat)
+      child.add(seg)
     })
-    geo.center()
-    return geo
-  }, [])
+
+    return root
+  }, [scene, solidMat, edgeMat])
 
   useFrame((state) => {
+    if (!groupRef.current) return
     const t = state.clock.elapsedTime
     const p = heartbeatPulse(t)
-
-    if (groupRef.current) {
-      // Gentle anatomical rotation — heart tilted as in real anatomy
-      groupRef.current.rotation.y = Math.sin(t * 0.22) * 0.28 + 0.18
-      groupRef.current.rotation.x = Math.sin(t * 0.17) * 0.08 + 0.12
-      // Uniform pulse — whole heart contracts and releases
-      groupRef.current.scale.setScalar(p)
-    }
+    groupRef.current.rotation.y = Math.sin(t * 0.20) * 0.22 + 0.18
+    groupRef.current.rotation.x = Math.sin(t * 0.15) * 0.06 + 0.08
+    groupRef.current.scale.setScalar(p)
   })
 
   return (
-    // Anatomical tilt: apex down-left, base up-right
-    <group ref={groupRef} rotation={[0.18, 0.20, -0.14]}>
-      {/* Main heart body */}
-      <mesh geometry={heartGeo}>
-        <meshPhysicalMaterial
-          color="#731520"
-          roughness={0.72}
-          metalness={0.0}
-          clearcoat={0.08}
-          clearcoatRoughness={0.92}
-          emissive="#3a0608"
-          emissiveIntensity={0.30}
-          sheen={0.28}
-          sheenColor={new THREE.Color('#cc2535')}
-        />
-      </mesh>
-
-      {/* Aorta — arches up from the base */}
-      <mesh position={[-0.08, 1.32, 0.10]} rotation={[0.06, 0, 0.20]}>
-        <cylinderGeometry args={[0.14, 0.17, 0.70, 22]} />
-        <meshPhysicalMaterial color="#8a1c28" roughness={0.68} metalness={0.0} emissive="#2e0608" emissiveIntensity={0.22} />
-      </mesh>
-      {/* Aortic arch */}
-      <mesh position={[0.28, 1.62, 0.08]} rotation={[0.05, 0.12, Math.PI / 2]}>
-        <cylinderGeometry args={[0.11, 0.14, 0.54, 20]} />
-        <meshPhysicalMaterial color="#8a1c28" roughness={0.68} metalness={0.0} emissive="#2e0608" emissiveIntensity={0.22} />
-      </mesh>
-
-      {/* Pulmonary trunk */}
-      <mesh position={[0.46, 1.28, 0.22]} rotation={[0.12, 0, -0.24]}>
-        <cylinderGeometry args={[0.10, 0.12, 0.60, 18]} />
-        <meshPhysicalMaterial color="#7a1620" roughness={0.70} metalness={0.0} emissive="#280506" emissiveIntensity={0.18} />
-      </mesh>
-
-      {/* Superior vena cava */}
-      <mesh position={[0.62, 1.18, -0.04]} rotation={[0, 0, 0.14]}>
-        <cylinderGeometry args={[0.08, 0.09, 0.50, 16]} />
-        <meshPhysicalMaterial color="#5a1018" roughness={0.74} metalness={0.0} emissive="#200406" emissiveIntensity={0.14} />
-      </mesh>
+    <group ref={groupRef} rotation={[0.05, 0.20, 0]} position={[0, -0.05, 0]}>
+      <primitive object={normScene} />
     </group>
   )
 }
