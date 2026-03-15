@@ -3,140 +3,165 @@
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Brain, HeartPulse, Wind } from 'lucide-react'
-import { GlassPanel } from '@/components/sea/glass-panel'
 
 const BrainHeroScene = dynamic(
   () => import('@/components/experience/brain-hero-scene').then((mod) => mod.BrainHeroScene),
-  { ssr: false, loading: () => <SceneFallback label="Neuro core" tone="brain" /> }
+  { ssr: false, loading: () => <SceneSkeleton /> }
 )
-
 const CardioHeroScene = dynamic(
   () => import('@/components/experience/cardio-hero-scene').then((mod) => mod.CardioHeroScene),
-  { ssr: false, loading: () => <SceneFallback label="Cardio engine" tone="cardio" /> }
+  { ssr: false, loading: () => <SceneSkeleton /> }
 )
-
 const PneumoHeroScene = dynamic(
   () => import('@/components/experience/pneumo-hero-scene').then((mod) => mod.PneumoHeroScene),
-  { ssr: false, loading: () => <SceneFallback label="Pneumo engine" tone="pneumo" /> }
+  { ssr: false, loading: () => <SceneSkeleton /> }
 )
 
-function SceneFallback({
-  label,
-  tone,
-}: {
-  label: string
-  tone: 'brain' | 'cardio' | 'pneumo'
-}) {
-  const gradient =
-    tone === 'brain'
-      ? 'from-white/16 via-white/6 to-transparent'
-      : tone === 'cardio'
-      ? 'from-rose-500/18 via-red-300/8 to-transparent'
-      : tone === 'pneumo'
-        ? 'from-cyan-500/18 via-sky-300/8 to-transparent'
-        : 'from-white/16 via-white/6 to-transparent'
-
-  return (
-    <div className={`flex h-full items-end rounded-2xl bg-gradient-to-br ${gradient} p-5`}>
-      <div>
-        <p className="text-[11px] uppercase tracking-[0.28em] text-white/40">{label}</p>
-        <div className="mt-3 flex gap-2">
-          <span className="h-2 w-2 rounded-full bg-white/40" />
-          <span className="h-2 w-2 rounded-full bg-white/25" />
-          <span className="h-2 w-2 rounded-full bg-white/15" />
-        </div>
-      </div>
-    </div>
-  )
+function SceneSkeleton() {
+  return <div className="h-full w-full animate-pulse bg-white/4 rounded-[2rem]" />
 }
+
+const spring = { type: 'spring', stiffness: 280, damping: 28 } as const
 
 export function SimulationsGrid() {
   return (
     <motion.div
-      className="grid grid-cols-1 gap-4 md:grid-cols-2"
-      initial={{ opacity: 0, y: 20 }}
+      className="grid grid-cols-2 gap-3"
+      initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.1 }}
+      transition={{ duration: 0.45, delay: 0.1 }}
     >
-      <GlassPanel
-        title="Neuro"
-        subtitle="Core neural"
-        className="md:col-span-2"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.15 }}
+      {/* ── NEURO — full width hero ──────────────────────────────── */}
+      <motion.div
+        className="col-span-2 relative overflow-hidden rounded-[2rem] cursor-pointer"
+        style={{
+          height: 'clamp(280px, 44vw, 400px)',
+          border: '1px solid rgba(255,255,255,0.09)',
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 32px 72px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.07)',
+        }}
+        whileHover={{ scale: 1.008 }}
+        transition={spring}
       >
-        <div className="grid gap-4 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="space-y-4">
-            <div className="sea-dark-glass inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-1 text-[10px] uppercase tracking-[0.24em] text-white/55">
-              <Brain className="h-3.5 w-3.5 text-silver-light" />
-              Neuro Core
-            </div>
-            <div className="grid grid-cols-2 gap-3">
-              <MetricCard label="Frequencia" value="10 Hz" />
-              <MetricCard label="Modo" value="Imersivo" />
-            </div>
-          </div>
-          <div className="sea-dark-glass h-72 overflow-hidden rounded-2xl border border-white/10">
-            <BrainHeroScene compact />
-          </div>
+        {/* 3D scene fills the card */}
+        <div className="absolute inset-0">
+          <BrainHeroScene compact transparent />
         </div>
-      </GlassPanel>
 
-      <GlassPanel
-        title="Pneumo"
-        subtitle="Pulmao e loops"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-      >
-        <div className="space-y-4">
-          <div className="sea-dark-glass h-56 overflow-hidden rounded-2xl border border-cyan-400/18">
-            <PneumoHeroScene />
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-2 text-sm text-white/65">
-              <Wind className="h-4 w-4 text-cyan-300" />
-              Pneumo engine
-            </div>
-            <span className="rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-cyan-200/80">
-              PEEP 5
-            </span>
-          </div>
-        </div>
-      </GlassPanel>
+        {/* Top shimmer */}
+        <div className="pointer-events-none absolute inset-x-6 top-0 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.14) 50%, transparent)' }} />
 
-      <GlassPanel
-        title="Cardio"
-        subtitle="Leitura cardiaca"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.25 }}
-      >
-        <div className="space-y-4">
-          <div className="sea-dark-glass h-56 overflow-hidden rounded-2xl border border-rose-400/18">
-            <CardioHeroScene />
-          </div>
-          <div className="flex items-center justify-between gap-3">
-            <div className="inline-flex items-center gap-2 text-sm text-white/65">
-              <HeartPulse className="h-4 w-4 text-rose-300" />
-              Cardio engine
+        {/* Bottom overlay */}
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-36"
+          style={{ background: 'linear-gradient(to top, rgba(4,5,6,0.92) 0%, transparent 100%)' }} />
+
+        <div className="absolute bottom-0 inset-x-0 p-5 md:p-6 flex items-end justify-between">
+          <div>
+            <p className="text-[9px] uppercase tracking-[0.30em] text-white/35 mb-1.5">Sistema Neural</p>
+            <div className="flex items-center gap-2">
+              <Brain className="h-4 w-4 text-white/50" />
+              <span className="text-xl font-semibold text-white/90 tracking-wide">Neuro</span>
             </div>
-            <span className="rounded-full border border-rose-400/20 bg-rose-400/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-rose-200/80">
-              72 BPM
-            </span>
           </div>
+          <span
+            className="text-[9px] font-semibold uppercase tracking-[0.22em] px-3 py-1.5 rounded-full"
+            style={{
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.10)',
+              color: 'rgba(255,255,255,0.50)',
+            }}
+          >
+            10 Hz
+          </span>
         </div>
-      </GlassPanel>
+      </motion.div>
+
+      {/* ── CARDIO ───────────────────────────────────────────────── */}
+      <motion.div
+        className="relative overflow-hidden rounded-[1.8rem] cursor-pointer"
+        style={{
+          height: 'clamp(220px, 36vw, 300px)',
+          border: '1px solid rgba(204,17,32,0.18)',
+          background: 'linear-gradient(160deg, rgba(120,10,18,0.12) 0%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 24px 56px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,200,200,0.06)',
+        }}
+        whileHover={{ scale: 1.012 }}
+        transition={spring}
+      >
+        <div className="absolute inset-0">
+          <CardioHeroScene transparent />
+        </div>
+
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"
+          style={{ background: 'linear-gradient(to top, rgba(5,3,4,0.92) 0%, transparent 100%)' }} />
+
+        <div className="pointer-events-none absolute inset-x-4 top-0 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(204,40,50,0.20) 50%, transparent)' }} />
+
+        <div className="absolute bottom-0 inset-x-0 p-4 md:p-5 flex items-end justify-between">
+          <div>
+            <p className="text-[8px] uppercase tracking-[0.28em] text-white/30 mb-1">Cardio</p>
+            <div className="flex items-center gap-1.5">
+              <HeartPulse className="h-3.5 w-3.5 text-rose-400/70" />
+              <span className="text-base font-semibold text-white/88 tracking-wide">Coração</span>
+            </div>
+          </div>
+          <span
+            className="text-[8px] font-semibold uppercase tracking-[0.20em] px-2.5 py-1 rounded-full"
+            style={{
+              background: 'rgba(204,17,32,0.12)',
+              border: '1px solid rgba(204,17,32,0.22)',
+              color: 'rgba(255,160,160,0.70)',
+            }}
+          >
+            72 BPM
+          </span>
+        </div>
+      </motion.div>
+
+      {/* ── PNEUMO ───────────────────────────────────────────────── */}
+      <motion.div
+        className="relative overflow-hidden rounded-[1.8rem] cursor-pointer"
+        style={{
+          height: 'clamp(220px, 36vw, 300px)',
+          border: '1px solid rgba(56,189,248,0.14)',
+          background: 'linear-gradient(160deg, rgba(7,30,45,0.18) 0%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 24px 56px rgba(0,0,0,0.5), inset 0 1px 0 rgba(150,230,255,0.05)',
+        }}
+        whileHover={{ scale: 1.012 }}
+        transition={spring}
+      >
+        <div className="absolute inset-0">
+          <PneumoHeroScene transparent />
+        </div>
+
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"
+          style={{ background: 'linear-gradient(to top, rgba(4,6,7,0.92) 0%, transparent 100%)' }} />
+
+        <div className="pointer-events-none absolute inset-x-4 top-0 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(56,189,248,0.16) 50%, transparent)' }} />
+
+        <div className="absolute bottom-0 inset-x-0 p-4 md:p-5 flex items-end justify-between">
+          <div>
+            <p className="text-[8px] uppercase tracking-[0.28em] text-white/30 mb-1">Pneumo</p>
+            <div className="flex items-center gap-1.5">
+              <Wind className="h-3.5 w-3.5 text-cyan-400/70" />
+              <span className="text-base font-semibold text-white/88 tracking-wide">Pulmão</span>
+            </div>
+          </div>
+          <span
+            className="text-[8px] font-semibold uppercase tracking-[0.20em] px-2.5 py-1 rounded-full"
+            style={{
+              background: 'rgba(56,189,248,0.10)',
+              border: '1px solid rgba(56,189,248,0.18)',
+              color: 'rgba(150,230,255,0.70)',
+            }}
+          >
+            PEEP 5
+          </span>
+        </div>
+      </motion.div>
     </motion.div>
-  )
-}
-
-function MetricCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="sea-dark-glass rounded-2xl border border-white/10 p-3">
-      <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">{label}</p>
-      <p className="mt-2 text-base font-semibold text-white">{value}</p>
-    </div>
   )
 }
