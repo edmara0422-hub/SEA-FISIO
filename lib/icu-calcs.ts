@@ -148,6 +148,34 @@ export type PronaHistEntry = {
   horaInicio: string
 }
 
+export type MrcHistEntry = {
+  ts: string
+  ombroD: string; ombroE: string
+  cotoveloD: string; cotoveloE: string
+  punhoD: string; punhoE: string
+  quadrilD: string; quadrilE: string
+  joelhoD: string; joelhoE: string
+  tornozeloD: string; tornozeloE: string
+  total: number
+}
+
+export type PermeHistEntry = {
+  ts: string
+  estado: string
+  barreira: string
+  forcaMS: string
+  forcaMI: string
+  leito: string
+  transf: string
+  marcha: string
+  total: number
+}
+
+export type ImsHistEntry = {
+  ts: string
+  score: string
+}
+
 export function calcPesoIdeal(alt: number, sexo: string): number {
   if (!alt || alt < 100 || alt > 250) return 0
   if (sexo === 'M') return 50 + 0.91 * (alt - 152.4)
@@ -479,6 +507,9 @@ export type PatientData = {
   permeTransf: string
   permeMarcha: string
   imsScore: string
+  mrcHist: MrcHistEntry[]
+  permeHist: PermeHistEntry[]
+  imsHist: ImsHistEntry[]
   percepcao: string
   pendencias: string
   condutas: string
@@ -633,6 +664,9 @@ export function emptyPatient(): PatientData {
     permeTransf: '',
     permeMarcha: '',
     imsScore: '',
+    mrcHist: [],
+    permeHist: [],
+    imsHist: [],
     percepcao: '',
     pendencias: '',
     condutas: '',

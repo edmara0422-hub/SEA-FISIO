@@ -8,18 +8,23 @@ import {
   ArrowLeft,
   BookOpen,
   Brain,
+  CheckCircle2,
+  Cloud,
   Eye,
   FileText,
   HeartPulse,
+  Loader2,
   PencilLine,
   Plus,
   RotateCcw,
   Save,
   Trash2,
+  WifiOff,
   Wind,
   Zap,
 } from 'lucide-react'
 import { ICUSystemPanel } from '@/components/sea/icu-system-panel'
+import { supabase } from '@/lib/supabase'
 import {
   analisarGaso,
   calcCdyn,
@@ -43,10 +48,13 @@ import {
   type DVAEntry,
   type GasometryHistoryEntry,
   type ImageExamEntry,
+  type ImsHistEntry,
   type LabExamEntry,
   type MraRow,
+  type MrcHistEntry,
   type PatientData,
   type PeepOptEntry,
+  type PermeHistEntry,
   type PronaHistEntry,
   type SedativeEntry,
   type TitRow,
@@ -1312,6 +1320,7 @@ export function ProntuarioSystemPanel() {
   const [collapsedPeep, setCollapsedPeep] = useState(true)
   const [collapsedDesmame, setCollapsedDesmame] = useState(true)
   const [collapsedProna, setCollapsedProna] = useState(true)
+  const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'saved' | 'offline' | 'error'>('idle')
 
   useEffect(() => {
     try {
@@ -1336,6 +1345,34 @@ export function ProntuarioSystemPanel() {
     if (!hydrated) return
     localStorage.setItem(STORAGE_KEYS.records, JSON.stringify(records))
     localStorage.setItem(STORAGE_KEYS.archive, JSON.stringify(archive))
+  }, [archive, hydrated, records])
+
+  // Supabase sync — debounced 2 s after any record change
+  useEffect(() => {
+    if (!hydrated || !supabase) {
+      if (hydrated) setSyncStatus('offline')
+      return
+    }
+    setSyncStatus('syncing')
+    const timer = setTimeout(async () => {
+      try {
+        const sessionId = (() => {
+          let id = localStorage.getItem('sea-session-id')
+          if (!id) { id = crypto.randomUUID(); localStorage.setItem('sea-session-id', id) }
+          return id
+        })()
+        const { error } = await supabase.from('icu_sessions').upsert({
+          session_id: sessionId,
+          records: records,
+          archive: archive,
+          updated_at: new Date().toISOString(),
+        }, { onConflict: 'session_id' })
+        setSyncStatus(error ? 'error' : 'saved')
+      } catch {
+        setSyncStatus('error')
+      }
+    }, 2000)
+    return () => clearTimeout(timer)
   }, [archive, hydrated, records])
 
   useEffect(() => {
@@ -1996,6 +2033,56 @@ export function ProntuarioSystemPanel() {
     updateCurrentRecord((record) => ({ ...record, desmEtapasHist: (record.desmEtapasHist || []).filter((_, i) => i !== index) }))
   }
 
+  const saveMrc = () => {
+    if (!currentRecord) return
+    const mrc = calculations?.mrc
+    if (!mrc) return
+    const entry: MrcHistEntry = {
+      ts: nowIso(),
+      ombroD: currentRecord.mrcOmbroD, ombroE: currentRecord.mrcOmbroE,
+      cotoveloD: currentRecord.mrcCotoveloD, cotoveloE: currentRecord.mrcCotoveloE,
+      punhoD: currentRecord.mrcPunhoD, punhoE: currentRecord.mrcPunhoE,
+      quadrilD: currentRecord.mrcQuadrilD, quadrilE: currentRecord.mrcQuadrilE,
+      joelhoD: currentRecord.mrcJoelhoD, joelhoE: currentRecord.mrcJoelhoE,
+      tornozeloD: currentRecord.mrcTornozeloD, tornozeloE: currentRecord.mrcTornozeloE,
+      total: mrc.total,
+    }
+    updateCurrentRecord((r) => ({ ...r, mrcHist: [entry, ...(r.mrcHist || [])] }))
+  }
+  const deleteMrc = (index: number) => {
+    updateCurrentRecord((r) => ({ ...r, mrcHist: (r.mrcHist || []).filter((_, i) => i !== index) }))
+  }
+
+  const savePerme = () => {
+    if (!currentRecord) return
+    const perme = calculations?.perme
+    if (!perme) return
+    const entry: PermeHistEntry = {
+      ts: nowIso(),
+      estado: currentRecord.permeEstado,
+      barreira: currentRecord.permeBarreira,
+      forcaMS: currentRecord.permeForcaMS,
+      forcaMI: currentRecord.permeForcaMI,
+      leito: currentRecord.permeLeito,
+      transf: currentRecord.permeTransf,
+      marcha: currentRecord.permeMarcha,
+      total: perme.total,
+    }
+    updateCurrentRecord((r) => ({ ...r, permeHist: [entry, ...(r.permeHist || [])] }))
+  }
+  const deletePerme = (index: number) => {
+    updateCurrentRecord((r) => ({ ...r, permeHist: (r.permeHist || []).filter((_, i) => i !== index) }))
+  }
+
+  const saveIms = () => {
+    if (!currentRecord || !currentRecord.imsScore) return
+    const entry: ImsHistEntry = { ts: nowIso(), score: currentRecord.imsScore }
+    updateCurrentRecord((r) => ({ ...r, imsHist: [entry, ...(r.imsHist || [])] }))
+  }
+  const deleteIms = (index: number) => {
+    updateCurrentRecord((r) => ({ ...r, imsHist: (r.imsHist || []).filter((_, i) => i !== index) }))
+  }
+
   const saveProna = () => {
     if (!currentRecord || !currentRecord.pronaAtiva) return
     const entry: PronaHistEntry = {
@@ -2123,20 +2210,30 @@ export function ProntuarioSystemPanel() {
             </div>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2">
-            <ActionButton
-              icon={Archive}
-              label="Arquivo"
-              badge={archive.length}
-              active={view === 'archive'}
-              onClick={() => setView('archive')}
-            />
-            <ActionButton
-              icon={BookOpen}
-              label="Referencia Clinica"
-              active={view === 'reference'}
-              onClick={() => setView('reference')}
-            />
+          <div className="flex items-center gap-1.5">
+            {/* Sync status indicator */}
+            {syncStatus === 'syncing' && (
+              <span className="flex items-center gap-1 rounded-full border border-[#60a5fa30] bg-[#60a5fa0a] px-2 py-0.5 text-[9px] font-semibold text-[#60a5fa]">
+                <Loader2 className="h-2.5 w-2.5 animate-spin" />Sync
+              </span>
+            )}
+            {syncStatus === 'saved' && (
+              <span className="flex items-center gap-1 rounded-full border border-[#4ade8030] bg-[#4ade800a] px-2 py-0.5 text-[9px] font-semibold text-[#4ade80]">
+                <CheckCircle2 className="h-2.5 w-2.5" />Salvo
+              </span>
+            )}
+            {syncStatus === 'offline' && (
+              <span className="flex items-center gap-1 rounded-full border border-[#facc1530] bg-[#facc150a] px-2 py-0.5 text-[9px] font-semibold text-[#facc15]">
+                <WifiOff className="h-2.5 w-2.5" />Offline
+              </span>
+            )}
+            {syncStatus === 'error' && (
+              <span className="flex items-center gap-1 rounded-full border border-[#f8717130] bg-[#f871710a] px-2 py-0.5 text-[9px] font-semibold text-[#f87171]">
+                <Cloud className="h-2.5 w-2.5" />Erro
+              </span>
+            )}
+            <ActionButton icon={Archive} label="Arquivo" badge={archive.length} active={view === 'archive'} onClick={() => setView('archive')} />
+            <ActionButton icon={BookOpen} label="Ref." active={view === 'reference'} onClick={() => setView('reference')} />
             <ActionButton icon={Plus} label="Adicionar" onClick={addRecord} />
           </div>
         </div>
@@ -4131,7 +4228,7 @@ export function ProntuarioSystemPanel() {
                   return (
                     <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
                       {/* Header */}
-                      <div className="mb-3 flex items-center gap-2 flex-wrap">
+                      <div className="mb-3 flex items-center justify-center gap-2 flex-wrap">
                         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Parametros de Desmame</p>
                         {treActive && currentRecord.treDt ? (
                           <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: corDesm, borderColor: `${corDesm}30`, background: `${corDesm}12` }}>
@@ -4151,7 +4248,7 @@ export function ProntuarioSystemPanel() {
                       </div>
 
                       {/* Phase flow */}
-                      <div className="mb-3 flex items-center gap-1.5 flex-wrap">
+                      <div className="mb-3 flex items-center justify-center gap-1.5 flex-wrap">
                         {([
                           [1, '① VCV/PCV'],
                           [2, '② PSV'],
@@ -4210,7 +4307,7 @@ export function ProntuarioSystemPanel() {
                       )}
 
                       {/* Ext / Desc action buttons */}
-                      <div className="flex flex-wrap gap-2 mb-3">
+                      <div className="flex flex-wrap justify-center gap-2 mb-3">
                         {isTOT && (
                           <button type="button" onClick={() => setField('extOK', extActive ? '' : '1')}
                             className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
@@ -4269,32 +4366,6 @@ export function ProntuarioSystemPanel() {
                         </div>
                       )}
 
-                      <div className="mt-2">
-                        <button onClick={saveDesmEtapas} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
-                          <Save className="h-4 w-4" />
-                          Salvar Etapas
-                        </button>
-                      </div>
-
-                      {currentRecord.desmEtapasHist?.length ? (
-                        <div className="mt-2.5 space-y-1.5">
-                          {currentRecord.desmEtapasHist.map((entry, i) => (
-                            <div key={`etapa-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/10 bg-black/18 px-2.5 py-1.5">
-                              <div>
-                                <p className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</p>
-                                <p className="mt-0.5 text-[9px] text-white/55">
-                                  TRE: {entry.treOK ? 'Sim' : 'Nao'}{entry.treDt ? ` ${entry.treDt}` : ''}
-                                  {entry.extOK ? ` · Ext: ${entry.extResult || '-'}` : ''}
-                                  {entry.descVMOK ? ` · Desc: ${entry.descResult || '-'}` : ''}
-                                </p>
-                              </div>
-                              <button onClick={() => deleteDesmEtapa(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
-                                <Trash2 className="h-2.5 w-2.5" />
-                              </button>
-                            </div>
-                          ))}
-                        </div>
-                      ) : null}
                     </div>
                   )
                 })()}
@@ -4598,11 +4669,18 @@ export function ProntuarioSystemPanel() {
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">MRC</p>
-                    {calculations?.mrc && (
-                      <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.mrc.color, borderColor: `${calculations.mrc.color}30`, background: `${calculations.mrc.color}12` }}>
-                        {calculations.mrc.total}/60 · {calculations.mrc.text}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {calculations?.mrc && (
+                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.mrc.color, borderColor: `${calculations.mrc.color}30`, background: `${calculations.mrc.color}12` }}>
+                          {calculations.mrc.total}/60 · {calculations.mrc.text}
+                        </span>
+                      )}
+                      {calculations?.mrc && (
+                        <button type="button" onClick={saveMrc} title="Salvar avaliacao MRC" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[9px] font-semibold text-white/50 hover:text-white/80">
+                          <Save className="h-2.5 w-2.5" />Salvar
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="space-y-1.5">
                     {MRC_GROUPS.map((group) => (
@@ -4625,16 +4703,50 @@ export function ProntuarioSystemPanel() {
                       </div>
                     ))}
                   </div>
+                  {(currentRecord.mrcHist?.length ?? 0) > 0 && (
+                    <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2.5">
+                      <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico MRC</p>
+                      {currentRecord.mrcHist!.map((entry, i) => {
+                        const prev = currentRecord.mrcHist![i + 1]
+                        const diff = prev != null ? entry.total - prev.total : null
+                        return (
+                          <div key={`mrc-h-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/8 bg-black/15 px-2.5 py-1.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</span>
+                              <span className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold" style={{ color: entry.total >= 48 ? '#4ade80' : entry.total >= 36 ? '#facc15' : '#f87171', borderColor: entry.total >= 48 ? '#4ade8030' : entry.total >= 36 ? '#facc1530' : '#f8717130', background: entry.total >= 48 ? '#4ade8010' : entry.total >= 36 ? '#facc1510' : '#f8717110' }}>
+                                {entry.total}/60
+                              </span>
+                              {diff !== null && (
+                                <span className={`text-[9px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
+                                  {diff > 0 ? `+${diff}` : diff}
+                                </span>
+                              )}
+                            </div>
+                            <button type="button" onClick={() => deleteMrc(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                              <Trash2 className="h-2.5 w-2.5" />
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">PERME</p>
-                    {calculations?.perme && (
-                      <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.perme.color, borderColor: `${calculations.perme.color}30`, background: `${calculations.perme.color}12` }}>
-                        {calculations.perme.total}/21 · {calculations.perme.text}
-                      </span>
-                    )}
+                    <div className="flex items-center gap-2">
+                      {calculations?.perme && (
+                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.perme.color, borderColor: `${calculations.perme.color}30`, background: `${calculations.perme.color}12` }}>
+                          {calculations.perme.total}/21 · {calculations.perme.text}
+                        </span>
+                      )}
+                      {calculations?.perme && (
+                        <button type="button" onClick={savePerme} title="Salvar avaliacao PERME" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[9px] font-semibold text-white/50 hover:text-white/80">
+                          <Save className="h-2.5 w-2.5" />Salvar
+                        </button>
+                      )}
+                    </div>
                   </div>
                   <div className="grid gap-2 grid-cols-2 xl:grid-cols-4">
                     {PERME_ITEMS.map((item) => (
@@ -4647,19 +4759,86 @@ export function ProntuarioSystemPanel() {
                       </FieldShell>
                     ))}
                   </div>
+                  {(currentRecord.permeHist?.length ?? 0) > 0 && (
+                    <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2.5">
+                      <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico PERME</p>
+                      {currentRecord.permeHist!.map((entry, i) => {
+                        const prev = currentRecord.permeHist![i + 1]
+                        const diff = prev != null ? entry.total - prev.total : null
+                        return (
+                          <div key={`perme-h-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/8 bg-black/15 px-2.5 py-1.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</span>
+                              <span className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold" style={{ color: entry.total >= 15 ? '#4ade80' : entry.total >= 8 ? '#facc15' : '#f87171', borderColor: entry.total >= 15 ? '#4ade8030' : entry.total >= 8 ? '#facc1530' : '#f8717130', background: entry.total >= 15 ? '#4ade8010' : entry.total >= 8 ? '#facc1510' : '#f8717110' }}>
+                                {entry.total}/21
+                              </span>
+                              {diff !== null && (
+                                <span className={`text-[9px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
+                                  {diff > 0 ? `+${diff}` : diff}
+                                </span>
+                              )}
+                            </div>
+                            <button type="button" onClick={() => deletePerme(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                              <Trash2 className="h-2.5 w-2.5" />
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
 
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
-                  <div className="grid gap-2 grid-cols-[minmax(0,16rem)_minmax(0,1fr)] items-end">
-                    <FieldShell label="IMS">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.imsScore} onChange={(event) => setField('imsScore', event.target.value)}>
-                        {IMS_OPTIONS.map(([value, label]) => (
-                          <option key={value} value={value}>{label}</option>
-                        ))}
-                      </select>
-                    </FieldShell>
-                    <MetricChip label="IMS" value={calculations?.ims ? `${calculations.ims.value}/10` : '--'} hint={calculations?.ims?.text} color={calculations?.ims?.color} />
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">IMS</p>
+                    <div className="flex items-center gap-2">
+                      {calculations?.ims && (
+                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.ims.color, borderColor: `${calculations.ims.color}30`, background: `${calculations.ims.color}12` }}>
+                          {calculations.ims.value}/10 · {calculations.ims.text}
+                        </span>
+                      )}
+                      {currentRecord.imsScore && (
+                        <button type="button" onClick={saveIms} title="Salvar avaliacao IMS" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[9px] font-semibold text-white/50 hover:text-white/80">
+                          <Save className="h-2.5 w-2.5" />Salvar
+                        </button>
+                      )}
+                    </div>
                   </div>
+                  <FieldShell label="Score IMS">
+                    <select className={INPUT_CLASS_SM} value={currentRecord.imsScore} onChange={(event) => setField('imsScore', event.target.value)}>
+                      {IMS_OPTIONS.map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                      ))}
+                    </select>
+                  </FieldShell>
+                  {(currentRecord.imsHist?.length ?? 0) > 0 && (
+                    <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2.5">
+                      <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico IMS</p>
+                      {currentRecord.imsHist!.map((entry, i) => {
+                        const prev = currentRecord.imsHist![i + 1]
+                        const score = parseInt(entry.score)
+                        const diff = prev != null ? score - parseInt(prev.score) : null
+                        return (
+                          <div key={`ims-h-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/8 bg-black/15 px-2.5 py-1.5">
+                            <div className="flex items-center gap-2">
+                              <span className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</span>
+                              <span className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold" style={{ color: score >= 7 ? '#4ade80' : score >= 4 ? '#facc15' : '#f87171', borderColor: score >= 7 ? '#4ade8030' : score >= 4 ? '#facc1530' : '#f8717130', background: score >= 7 ? '#4ade8010' : score >= 4 ? '#facc1510' : '#f8717110' }}>
+                                IMS {entry.score}/10
+                              </span>
+                              {diff !== null && (
+                                <span className={`text-[9px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
+                                  {diff > 0 ? `+${diff}` : diff}
+                                </span>
+                              )}
+                            </div>
+                            <button type="button" onClick={() => deleteIms(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                              <Trash2 className="h-2.5 w-2.5" />
+                            </button>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
               </div>
             ) : null}
