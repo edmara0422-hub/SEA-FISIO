@@ -1,31 +1,32 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
-import { BookOpen, ChevronRight, Cpu, ArrowUpRight } from 'lucide-react'
+import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion'
+import { BookOpen, ChevronRight, Cpu } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 
-const spring = { type: 'spring', stiffness: 340, damping: 26 } as const
-const ease = [0.16, 1, 0.3, 1] as const
+const spring = { type: 'spring', stiffness: 220, damping: 28 } as const
 
-const NAV_CARDS = [
+const CARDS = [
   {
     href: '/explore/conteudos',
     icon: BookOpen,
     title: 'Conteudos',
-    subtitle: 'Protocolos e referencias',
-    badge: 'Clinico',
-    accent: 'rgba(200,210,255,0.07)',
+    sub: 'Protocolos, referencias e fluxos clinicos para a beira do leito',
+    color: '#A8B8FF',
+    glow: 'rgba(168,184,255,0.18)',
+    grain: 'from-[#1a1e3a] via-[#0d0f1e] to-[#020202]',
   },
   {
     href: '/explore/sistemas',
     icon: Cpu,
     title: 'Sistemas',
-    subtitle: 'Modulos por sistema',
-    badge: 'Interativo',
-    accent: 'rgba(200,255,230,0.06)',
+    sub: 'Modulos interativos — neuro, cardio, pneumo e mais',
+    color: '#7EEFC0',
+    glow: 'rgba(126,239,192,0.14)',
+    grain: 'from-[#0e2420] via-[#081410] to-[#020202]',
   },
 ] as const
 
@@ -33,143 +34,241 @@ export default function ExplorePageClient() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
-
       <main className="relative z-10 px-4 pb-36 pt-8 md:px-8 md:pt-12">
-        <div className="mx-auto max-w-2xl space-y-4">
+        <div className="mx-auto max-w-2xl space-y-10">
           <GreetingClockCard />
-
-          <motion.div
-            className="grid grid-cols-1 gap-3 sm:grid-cols-2"
-            initial="hidden"
-            animate="show"
-            variants={{
-              hidden: {},
-              show: { transition: { staggerChildren: 0.07 } },
-            }}
-          >
-            {NAV_CARDS.map((card) => (
-              <NavCard key={card.href} {...card} />
-            ))}
-          </motion.div>
-
-          <PulseBar />
+          <Carousel3D />
         </div>
       </main>
     </div>
   )
 }
 
-function NavCard({
-  href,
-  icon: Icon,
-  title,
-  subtitle,
-  badge,
-  accent,
-}: (typeof NAV_CARDS)[number]) {
-  const [pressed, setPressed] = useState(false)
+function Carousel3D() {
+  const [active, setActive] = useState(0)
+  const dragX = useMotionValue(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  // Swipe gesture to switch cards
+  const handleDragEnd = (_: unknown, info: { offset: { x: number } }) => {
+    if (info.offset.x < -50 && active < CARDS.length - 1) setActive((v) => v + 1)
+    else if (info.offset.x > 50 && active > 0) setActive((v) => v - 1)
+    animate(dragX, 0, { type: 'spring', stiffness: 400, damping: 40 })
+  }
 
   return (
-    <motion.div
-      variants={{
-        hidden: { opacity: 0, y: 20 },
-        show: { opacity: 1, y: 0, transition: { duration: 0.5, ease } },
-      }}
-    >
-      <Link
-        href={href}
-        prefetch
-        className="block outline-none"
-        onPointerDown={() => setPressed(true)}
-        onPointerUp={() => setPressed(false)}
-        onPointerLeave={() => setPressed(false)}
+    <div className="space-y-5">
+      {/* 3D Stage */}
+      <div
+        ref={containerRef}
+        className="relative select-none"
+        style={{ perspective: '1100px', perspectiveOrigin: '50% 45%', height: 'clamp(340px, 58vh, 520px)' }}
       >
-        <motion.article
-          animate={pressed ? { scale: 0.968, y: 2 } : { scale: 1, y: 0 }}
-          whileHover={{ y: -2, borderColor: 'rgba(255,255,255,0.18)' }}
-          transition={spring}
-          className="group relative overflow-hidden rounded-[1.6rem] border border-white/10 p-5"
-          style={{
-            background: `linear-gradient(145deg, ${accent} 0%, rgba(255,255,255,0.025) 50%, transparent 100%)`,
-            boxShadow: '0 1px 0 rgba(255,255,255,0.06) inset, 0 16px 40px rgba(0,0,0,0.38)',
-          }}
-        >
-          {/* Top shimmer */}
-          <div className="pointer-events-none absolute inset-x-5 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.22)_50%,transparent)]" />
+        {CARDS.map((card, i) => {
+          const offset = i - active
+          const isActive = offset === 0
+          const isRight = offset > 0
+          const isLeft = offset < 0
 
-          {/* Hover glow */}
-          <div className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-            style={{ background: `radial-gradient(320px circle at 30% 50%, ${accent.replace('0.07', '0.12').replace('0.06', '0.10')}, transparent 70%)` }}
-          />
+          return (
+            <motion.div
+              key={card.href}
+              drag={isActive ? 'x' : false}
+              dragConstraints={{ left: 0, right: 0 }}
+              dragElastic={0.18}
+              style={{
+                x: isActive ? dragX : undefined,
+                position: 'absolute',
+                inset: 0,
+                transformStyle: 'preserve-3d',
+                transformOrigin: isRight ? 'left center' : isLeft ? 'right center' : 'center center',
+                zIndex: isActive ? 10 : 1,
+              }}
+              animate={{
+                rotateY: isActive ? 0 : isRight ? 44 : -44,
+                x: isActive ? 0 : isRight ? '58%' : '-58%',
+                z: isActive ? 60 : -40,
+                scale: isActive ? 1 : 0.82,
+                opacity: isActive ? 1 : 0.46,
+              }}
+              transition={spring}
+              onDragEnd={handleDragEnd}
+              onClick={() => !isActive && setActive(i)}
+              className={isActive ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}
+            >
+              <Card3D card={card} isActive={isActive} />
+            </motion.div>
+          )
+        })}
+      </div>
 
-          <div className="relative z-10 flex items-center justify-between gap-4">
-            {/* Left */}
-            <div className="flex items-center gap-4">
-              <motion.div
-                animate={pressed ? { scale: 0.88, rotate: -4 } : { scale: 1, rotate: 0 }}
-                transition={spring}
-                className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[0.9rem] border border-white/10"
-                style={{ background: 'rgba(255,255,255,0.05)' }}
-              >
-                <Icon className="h-5 w-5 text-white/60" />
-              </motion.div>
-
-              <div className="space-y-0.5">
-                <h2 className="text-[15px] font-semibold tracking-[0.06em] text-white/88">{title}</h2>
-                <p className="text-[11px] tracking-[0.03em] text-white/36">{subtitle}</p>
-              </div>
-            </div>
-
-            {/* Right */}
-            <div className="flex shrink-0 flex-col items-end gap-2">
-              <motion.div
-                animate={pressed ? { x: 3, y: -3 } : { x: 0, y: 0 }}
-                transition={spring}
-                className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 transition-colors group-hover:border-white/22"
-                style={{ background: 'rgba(255,255,255,0.04)' }}
-              >
-                <ArrowUpRight className="h-3.5 w-3.5 text-white/32 transition-colors group-hover:text-white/60" />
-              </motion.div>
-              <span className="rounded-full border border-white/8 bg-white/4 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/28">
-                {badge}
-              </span>
-            </div>
-          </div>
-        </motion.article>
-      </Link>
-    </motion.div>
+      {/* Dots + nav */}
+      <div className="flex items-center justify-center gap-3">
+        {CARDS.map((card, i) => (
+          <button
+            key={i}
+            onClick={() => setActive(i)}
+            className="relative flex items-center justify-center"
+          >
+            <motion.span
+              animate={{
+                width: active === i ? 28 : 6,
+                background: active === i ? card.color : 'rgba(255,255,255,0.18)',
+              }}
+              transition={spring}
+              className="block h-1.5 rounded-full"
+            />
+          </button>
+        ))}
+      </div>
+    </div>
   )
 }
 
-function PulseBar() {
+function Card3D({
+  card,
+  isActive,
+}: {
+  card: (typeof CARDS)[number]
+  isActive: boolean
+}) {
+  const ref = useRef<HTMLDivElement>(null)
+  const mx = useMotionValue(0.5)
+  const my = useMotionValue(0.5)
+  const rotX = useSpring(useTransform(my, [0, 1], [6, -6]), { stiffness: 160, damping: 20 })
+  const rotY = useSpring(useTransform(mx, [0, 1], [-6, 6]), { stiffness: 160, damping: 20 })
+  const glowX = useTransform(mx, [0, 1], [20, 80])
+  const glowY = useTransform(my, [0, 1], [20, 80])
+
+  const onMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isActive || !ref.current) return
+    const r = ref.current.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width)
+    my.set((e.clientY - r.top) / r.height)
+  }
+  const onLeave = () => { mx.set(0.5); my.set(0.5) }
+
   return (
     <motion.div
-      className="flex items-center justify-between gap-3 rounded-[1.2rem] border border-white/6 px-4 py-3"
-      style={{ background: 'rgba(255,255,255,0.02)' }}
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.3, ease }}
+      ref={ref}
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      style={{ rotateX: isActive ? rotX : 0, rotateY: isActive ? rotY : 0 }}
+      className="h-full w-full"
     >
-      <div className="flex items-center gap-2.5">
-        <LiveDot />
-        <span className="text-[10px] font-semibold uppercase tracking-[0.24em] text-white/28">
-          SEA Fisio
-        </span>
-      </div>
-      <span className="text-[10px] tracking-[0.12em] text-white/18">ICU · Fisioterapia</span>
-    </motion.div>
-  )
-}
+      <div
+        className={`relative h-full w-full overflow-hidden rounded-[2rem] border border-white/10`}
+        style={{
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
+          boxShadow: isActive
+            ? `0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06) inset, 0 1px 0 rgba(255,255,255,0.10) inset`
+            : '0 20px 40px rgba(0,0,0,0.4)',
+        }}
+      >
+        {/* Dynamic spotlight */}
+        {isActive && (
+          <motion.div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: useTransform(
+                [glowX, glowY],
+                ([x, y]) =>
+                  `radial-gradient(340px circle at ${x}% ${y}%, rgba(255,255,255,0.055), transparent 65%)`,
+              ),
+            }}
+          />
+        )}
 
-function LiveDot() {
-  return (
-    <span className="relative flex h-2 w-2 shrink-0">
-      <motion.span
-        className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/50"
-        animate={{ scale: [1, 1.8, 1], opacity: [0.7, 0, 0.7] }}
-        transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400/70" />
-    </span>
+        {/* Top shimmer */}
+        <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18)_50%,transparent)]" />
+
+        {/* Content */}
+        <div className="relative z-10 flex h-full flex-col justify-between p-7 md:p-8">
+          {/* Top row */}
+          <div className="flex items-start justify-between">
+            <motion.div
+              animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0.9, opacity: 0.6 }}
+              transition={spring}
+              className="flex h-14 w-14 items-center justify-center rounded-[1.2rem] border border-white/10"
+              style={{ background: 'rgba(255,255,255,0.06)' }}
+            >
+              <card.icon className="h-6 w-6 text-white/60" />
+            </motion.div>
+
+            {isActive ? (
+              <Link href={card.href} prefetch>
+                <motion.div
+                  whileHover={{ x: 2, y: -2, scale: 1.06 }}
+                  whileTap={{ scale: 0.92 }}
+                  transition={spring}
+                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6"
+                >
+                  <ChevronRight className="h-4 w-4 text-white/55" />
+                </motion.div>
+              </Link>
+            ) : (
+              <div className="text-[9px] font-semibold uppercase tracking-[0.26em] text-white/24">
+                Toque para ver
+              </div>
+            )}
+          </div>
+
+          {/* Bottom */}
+          <div className="space-y-3">
+            <motion.div
+              className="h-px w-12"
+              animate={{ width: isActive ? 48 : 24, opacity: isActive ? 1 : 0.4 }}
+              transition={spring}
+              style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.5), transparent)' }}
+            />
+            <div className="space-y-2">
+              <h2
+                className="font-semibold leading-none tracking-[0.1em]"
+                style={{
+                  fontSize: 'clamp(2rem, 8vw, 3.2rem)',
+                  background: isActive
+                    ? 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 100%)'
+                    : 'linear-gradient(135deg, rgba(255,255,255,0.65), rgba(255,255,255,0.25))',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                }}
+              >
+                {card.title}
+              </h2>
+              {isActive && (
+                <motion.p
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.12, duration: 0.4 }}
+                  className="text-[12px] leading-relaxed tracking-[0.03em] text-white/40 max-w-[28ch]"
+                >
+                  {card.sub}
+                </motion.p>
+              )}
+            </div>
+
+            {isActive && (
+              <motion.div
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                <Link href={card.href} prefetch>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={spring}
+                    className="mt-1 flex items-center gap-2 rounded-[0.9rem] border border-white/14 bg-white/6 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60"
+                  >
+                    Abrir
+                    <ChevronRight className="h-3.5 w-3.5" />
+                  </motion.button>
+                </Link>
+              </motion.div>
+            )}
+          </div>
+        </div>
+      </div>
+    </motion.div>
   )
 }
