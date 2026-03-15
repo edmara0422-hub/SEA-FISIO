@@ -2,7 +2,6 @@
 
 import { useMemo, useRef } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Float } from '@react-three/drei'
 import * as THREE from 'three'
 
 export function BrainHeroScene({
@@ -14,160 +13,163 @@ export function BrainHeroScene({
 }) {
   return (
     <Canvas
-      camera={{ position: [0, 0, compact ? 4.8 : 5.6], fov: compact ? 42 : 38 }}
+      camera={{ position: [0, 0, compact ? 4.8 : 5.6], fov: compact ? 40 : 36 }}
       gl={{ alpha: transparent, antialias: true }}
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
-      <fog attach="fog" args={['#09090f', 12, 22]} />
 
-      {/* Top key — bright white-silver */}
-      <directionalLight position={[2, 6, 4]} intensity={3.8} color="#ffffff" />
+      {/* Strong key light from top — makes top edges appear white/bright */}
+      <directionalLight position={[1.5, 6, 3]} intensity={4.5} color="#ffffff" />
 
-      {/* Front cool fill */}
-      <directionalLight position={[-2, 1, 4]} intensity={1.2} color="#d4c8ff" />
+      {/* Fill — cool blue-grey from left */}
+      <directionalLight position={[-3, 1, 2]} intensity={1.8} color="#8899cc" />
 
-      {/* Rim from below — indigo-purple */}
-      <pointLight position={[0, -3, -2]} intensity={14} color="#5040a0" distance={14} />
+      {/* Rim from below — deep blue */}
+      <pointLight position={[0, -3, -2]} intensity={8} color="#1133aa" distance={14} />
 
-      {/* Accent — warm indigo side */}
-      <pointLight position={[-3, 0.5, 2]} intensity={10} color="#8060d0" distance={12} />
+      {/* Subtle ambient */}
+      <ambientLight intensity={0.06} color="#080818" />
 
-      {/* Very subtle ambient */}
-      <ambientLight intensity={0.05} color="#0c0c14" />
-
-      <Float speed={0.7} rotationIntensity={0.03} floatIntensity={0.14}>
-        <BrainLowPoly compact={compact} />
-      </Float>
+      <BrainLowPoly compact={compact} />
     </Canvas>
   )
 }
 
-// ── Geometry ──────────────────────────────────────────────────────────────────
+// ── Geometry helpers ───────────────────────────────────────────────────────────
 
-function shapeBrain(_nx: number, ny: number, nz: number): { rx: number; ry: number; rz: number } {
-  let rx = 1.30, ry = 1.00, rz = 1.18
+function shapeBrain(nx: number, ny: number, nz: number) {
+  // Base shape — wider than tall (cerebral hemispheres proportions)
+  let rx = 1.28, ry = 1.00, rz = 1.16
 
-  // Parietal widening
-  const parietal = Math.max(0, ny * 0.7 + 0.3) * (1 - nz * nz * 0.4)
-  rx += parietal * 0.18
+  // Parietal widening — top sides are wide
+  rx += Math.max(0, ny * 0.6 + 0.4) * (1 - nz * nz * 0.3) * 0.22
 
-  // Frontal bulge
-  const frontal = Math.max(0, nz) * Math.max(0, ny * 0.4 + 0.6)
-  ry += frontal * 0.10; rz += frontal * 0.16
+  // Frontal lobe — bulges forward (positive Z in our coord)
+  const frontalMask = Math.max(0, nz) * Math.max(0, ny * 0.3 + 0.7)
+  rz += frontalMask * 0.20
+  ry += frontalMask * 0.08
 
-  // Temporal lobe — pull down-forward
-  const tI = Math.max(0, -ny - 0.05)
-  const tA = Math.max(0, nz * 0.9 + 0.40)
-  const temporal = tI * tA
-  rx += temporal * 0.24; ry -= temporal * 0.40; rz += temporal * 0.14
+  // Temporal lobe — hangs down and slightly forward
+  // Strong downward protrusion on the sides
+  const temporalMask = Math.max(0, -ny - 0.10) * Math.max(0, nz * 0.8 + 0.35)
+  rx += temporalMask * 0.28
+  ry -= temporalMask * 0.48   // pull down
+  rz += temporalMask * 0.12
 
-  // Occipital taper
-  const occip = Math.max(0, -nz)
-  rx -= occip * 0.12; ry -= occip * 0.06
+  // Occipital taper — narrower at back
+  const occipMask = Math.max(0, -nz - 0.1)
+  rx -= occipMask * 0.16
+  ry -= occipMask * 0.08
 
-  // Base flatten
-  if (ny < -0.30) ry += (ny + 0.30) * 0.55
+  // Flatten the bottom (below temporal)
+  if (ny < -0.35) ry += (ny + 0.35) * 0.60
 
-  // Gyri bumps
-  const gyri = Math.sin(nz * 5.8) * Math.sin(ny * 4.9)
-  rx += gyri * 0.05; ry += gyri * 0.045; rz += gyri * 0.03
+  // Slight interhemispheric groove — narrow medial band top
+  if (Math.abs(nx) < 0.08 && ny > 0.2) rx -= 0.06
 
   return { rx, ry, rz }
 }
 
-function createBrainGeo(detail: number): THREE.BufferGeometry {
-  const geo = new THREE.IcosahedronGeometry(1, detail)
-  const pos = geo.attributes.position
+function createBrainGeo(): THREE.BufferGeometry {
+  const geo = new THREE.IcosahedronGeometry(1, 2)   // 320 triangles — clearly low-poly
+  const pos = geo.attributes.position as THREE.BufferAttribute
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i)
-    const len = Math.sqrt(x*x + y*y + z*z) || 1
-    const { rx, ry, rz } = shapeBrain(x/len, y/len, z/len)
-    pos.setXYZ(i, (x/len)*rx, (y/len)*ry, (z/len)*rz)
+    const len = Math.sqrt(x * x + y * y + z * z) || 1
+    const nx = x / len, ny = y / len, nz = z / len
+    const { rx, ry, rz } = shapeBrain(nx, ny, nz)
+    pos.setXYZ(i, nx * rx, ny * ry, nz * rz)
   }
   pos.needsUpdate = true
   geo.computeVertexNormals()
   return geo
 }
 
-function createCerebellumGeo(detail: number): THREE.BufferGeometry {
-  const geo = new THREE.IcosahedronGeometry(1, detail)
-  const pos = geo.attributes.position
+function createCerebellumGeo(): THREE.BufferGeometry {
+  const geo = new THREE.IcosahedronGeometry(1, 1)   // 80 triangles
+  const pos = geo.attributes.position as THREE.BufferAttribute
   for (let i = 0; i < pos.count; i++) {
     const x = pos.getX(i), y = pos.getY(i), z = pos.getZ(i)
-    const len = Math.sqrt(x*x + y*y + z*z) || 1
-    let rx = 0.76 + Math.abs(x/len) * 0.12
-    if (Math.abs(x/len) < 0.12) rx -= 0.06
-    pos.setXYZ(i, (x/len)*rx, (y/len)*0.44, (z/len)*0.60)
+    const len = Math.sqrt(x * x + y * y + z * z) || 1
+    const nx = x / len, ny = y / len, nz = z / len
+    // Bilobed flattened oval
+    let rx = 0.72 + Math.abs(nx) * 0.12
+    if (Math.abs(nx) < 0.12) rx -= 0.08   // central groove
+    pos.setXYZ(i, nx * rx, ny * 0.42, nz * 0.58)
   }
   pos.needsUpdate = true
   geo.computeVertexNormals()
   return geo
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
+// ── Component ──────────────────────────────────────────────────────────────────
 
 function BrainLowPoly({ compact }: { compact: boolean }) {
   const groupRef = useRef<THREE.Group>(null)
 
   const geos = useMemo(() => ({
-    brain:      createBrainGeo(2),
-    cerebellum: createCerebellumGeo(1),
-    stem:       new THREE.CylinderGeometry(0.10, 0.07, 0.52, 6),
+    brain:      createBrainGeo(),
+    cerebellum: createCerebellumGeo(),
+    stem:       new THREE.CylinderGeometry(0.09, 0.06, 0.50, 6),
   }), [])
 
-  // Dark flat-shaded faces — catch directional light for bright/dark facets
+  // Dark flat-shaded material — each triangle face clearly visible
   const solidMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color:            '#080a14',
-    roughness:        1.0,
-    metalness:        0.0,
-    flatShading:      true,
-    emissive:         '#050610',
+    color:             '#06080f',
+    roughness:         1.0,
+    metalness:         0.0,
+    flatShading:       true,     // CRITICAL — shows individual triangular facets
+    emissive:          new THREE.Color('#030510'),
     emissiveIntensity: 1.0,
   }), [])
 
-  // White/silver edges — bright on top where key light hits
-  const edgeMat = useMemo(() => new THREE.LineBasicMaterial({
-    color: '#d8d0f8', transparent: true, opacity: 0.78,
+  // White/silver edges — bright on lit top surface
+  const whiteEdgeMat = useMemo(() => new THREE.LineBasicMaterial({
+    color:       '#d4dff0',
+    transparent: true,
+    opacity:     0.88,
   }), [])
 
-  // Dim indigo secondary edges
-  const dimEdge = useMemo(() => new THREE.LineBasicMaterial({
-    color: '#5848a0', transparent: true, opacity: 0.32,
+  // Blue edges — fills shadow areas with blue electric glow
+  const blueEdgeMat = useMemo(() => new THREE.LineBasicMaterial({
+    color:       '#2244cc',
+    transparent: true,
+    opacity:     0.50,
   }), [])
 
-  const edges      = useMemo(() => new THREE.EdgesGeometry(geos.brain),      [geos.brain])
+  const edges = useMemo(() => new THREE.EdgesGeometry(geos.brain), [geos.brain])
   const cerebEdges = useMemo(() => new THREE.EdgesGeometry(geos.cerebellum), [geos.cerebellum])
-  const stemEdges  = useMemo(() => new THREE.EdgesGeometry(geos.stem),       [geos.stem])
 
   useFrame((state) => {
-    const t = state.clock.elapsedTime
     if (groupRef.current) {
-      groupRef.current.rotation.y = t * 0.11 + Math.sin(t * 0.26) * 0.10
-      groupRef.current.rotation.x = Math.sin(t * 0.17) * 0.04
+      const t = state.clock.elapsedTime
+      groupRef.current.rotation.y = t * 0.20
+      groupRef.current.rotation.x = Math.sin(t * 0.15) * 0.04
     }
   })
 
-  const s = compact ? 0.86 : 1.0
+  const s = compact ? 0.86 : 1.00
 
   return (
-    <group ref={groupRef} scale={s} rotation={[0.08, 0.28, 0]} position={[0, 0.15, 0]}>
+    <group ref={groupRef} scale={s} rotation={[0.06, 0.30, 0]} position={[0, 0.10, 0]}>
 
-      {/* Cerebral hemispheres */}
+      {/* Cerebral hemispheres — solid flat */}
       <mesh geometry={geos.brain} material={solidMat} />
-      <lineSegments geometry={edges} material={edgeMat} />
-      <lineSegments geometry={edges} material={dimEdge} />
+      {/* White edges */}
+      <lineSegments geometry={edges} material={whiteEdgeMat} />
+      {/* Blue edge overlay */}
+      <lineSegments geometry={edges} material={blueEdgeMat} />
 
       {/* Cerebellum */}
-      <group position={[-0.02, -0.94, -0.68]} rotation={[0.18, 0, 0]}>
+      <group position={[-0.02, -0.96, -0.64]} rotation={[0.16, 0, 0]}>
         <mesh geometry={geos.cerebellum} material={solidMat} />
-        <lineSegments geometry={cerebEdges} material={edgeMat} />
-        <lineSegments geometry={cerebEdges} material={dimEdge} />
+        <lineSegments geometry={cerebEdges} material={whiteEdgeMat} />
+        <lineSegments geometry={cerebEdges} material={blueEdgeMat} />
       </group>
 
       {/* Brainstem */}
-      <group position={[0, -1.12, -0.42]} rotation={[0.36, 0, 0]}>
+      <group position={[0, -1.12, -0.38]} rotation={[0.38, 0, 0]}>
         <mesh geometry={geos.stem} material={solidMat} />
-        <lineSegments geometry={stemEdges} material={edgeMat} />
       </group>
 
     </group>

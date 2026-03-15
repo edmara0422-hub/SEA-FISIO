@@ -3,6 +3,7 @@
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Brain, HeartPulse, Wind } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 
 const BrainHeroScene = dynamic(
   () => import('@/components/experience/brain-hero-scene').then((mod) => mod.BrainHeroScene),
@@ -23,58 +24,6 @@ function SceneSkeleton() {
 
 const spring = { type: 'spring', stiffness: 280, damping: 28 } as const
 
-// Same card aesthetic as explore page — glass border, gradient overlay, label at bottom
-const SIMS = [
-  {
-    id: 'neuro',
-    label: 'Sistema Neural',
-    title: 'Neuro',
-    icon: Brain,
-    iconColor: 'text-indigo-300/70',
-    badge: '10 Hz',
-    badgeBg: 'rgba(168,184,255,0.10)',
-    badgeBorder: 'rgba(168,184,255,0.20)',
-    badgeText: 'rgba(168,184,255,0.70)',
-    border: 'rgba(168,184,255,0.14)',
-    shimmer: 'rgba(168,184,255,0.20)',
-    fog: 'rgba(4,4,18,0.90)',
-    colSpan: true,
-    height: 'clamp(280px, 44vw, 400px)',
-  },
-  {
-    id: 'cardio',
-    label: 'Cardio',
-    title: 'Coração',
-    icon: HeartPulse,
-    iconColor: 'text-rose-400/70',
-    badge: '72 BPM',
-    badgeBg: 'rgba(204,17,32,0.12)',
-    badgeBorder: 'rgba(204,17,32,0.22)',
-    badgeText: 'rgba(255,160,160,0.70)',
-    border: 'rgba(204,17,32,0.14)',
-    shimmer: 'rgba(204,40,50,0.20)',
-    fog: 'rgba(5,3,4,0.90)',
-    colSpan: false,
-    height: 'clamp(220px, 36vw, 300px)',
-  },
-  {
-    id: 'pneumo',
-    label: 'Pneumo',
-    title: 'Pulmão',
-    icon: Wind,
-    iconColor: 'text-cyan-400/70',
-    badge: 'PEEP 5',
-    badgeBg: 'rgba(56,189,248,0.10)',
-    badgeBorder: 'rgba(56,189,248,0.18)',
-    badgeText: 'rgba(150,230,255,0.70)',
-    border: 'rgba(56,189,248,0.14)',
-    shimmer: 'rgba(56,189,248,0.16)',
-    fog: 'rgba(4,6,7,0.90)',
-    colSpan: false,
-    height: 'clamp(220px, 36vw, 300px)',
-  },
-] as const
-
 export function SimulationsGrid() {
   return (
     <motion.div
@@ -83,64 +32,205 @@ export function SimulationsGrid() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: 0.1 }}
     >
-      {SIMS.map((sim) => (
-        <motion.div
-          key={sim.id}
-          className={`${sim.colSpan ? 'col-span-2' : ''} relative overflow-hidden rounded-[2rem] cursor-pointer`}
-          style={{
-            height: sim.height,
-            border: `1px solid ${sim.border}`,
-            background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
-            boxShadow: `0 32px 72px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)`,
-          }}
-          whileHover={{ scale: sim.colSpan ? 1.007 : 1.012 }}
-          transition={spring}
-        >
-          {/* 3D scene */}
-          <div className="absolute inset-0">
-            {sim.id === 'neuro'   && <BrainHeroScene compact transparent />}
-            {sim.id === 'cardio'  && <CardioHeroScene transparent />}
-            {sim.id === 'pneumo'  && <PneumoHeroScene transparent />}
-          </div>
 
-          {/* Top shimmer — accent colour */}
-          <div
-            className="pointer-events-none absolute inset-x-6 top-0 h-px"
-            style={{ background: `linear-gradient(90deg, transparent, ${sim.shimmer} 50%, transparent)` }}
-          />
+      {/* ── NEURO ────────────────────────────────────────────────── */}
+      <motion.div
+        className="col-span-2 relative overflow-hidden rounded-[2rem] cursor-pointer"
+        style={{
+          height: 'clamp(280px, 44vw, 400px)',
+          border: '1px solid rgba(255,255,255,0.10)',
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 32px 72px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
+        }}
+        whileHover={{ scale: 1.007 }}
+        transition={spring}
+      >
+        {/* 3D brain scene */}
+        <div className="absolute inset-0">
+          <BrainHeroScene compact transparent />
+        </div>
 
-          {/* Bottom fog gradient */}
-          <div
-            className="pointer-events-none absolute bottom-0 inset-x-0 h-32"
-            style={{ background: `linear-gradient(to top, ${sim.fog} 0%, transparent 100%)` }}
-          />
+        {/* Top shimmer */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.18) 50%, transparent)' }} />
 
-          {/* Label row — same layout as explore Card3D */}
-          <div className={`absolute bottom-0 inset-x-0 ${sim.colSpan ? 'p-5 md:p-6' : 'p-4 md:p-5'} flex items-end justify-between`}>
-            <div>
-              <p className={`${sim.colSpan ? 'text-[9px]' : 'text-[8px]'} uppercase tracking-[0.28em] text-white/30 mb-1`}>
-                {sim.label}
-              </p>
-              <div className="flex items-center gap-1.5">
-                <sim.icon className={`${sim.colSpan ? 'h-4 w-4' : 'h-3.5 w-3.5'} ${sim.iconColor}`} />
-                <span className={`${sim.colSpan ? 'text-xl' : 'text-base'} font-semibold text-white/88 tracking-wide`}>
-                  {sim.title}
-                </span>
-              </div>
+        {/* Top-left: Neural Scan label */}
+        <div className="absolute top-4 left-5 flex items-center gap-2">
+          <span className="relative flex h-1.5 w-1.5">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400/70 opacity-75" />
+            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-teal-400" />
+          </span>
+          <span className="text-[8px] font-mono uppercase tracking-[0.28em] text-teal-400/60">
+            Neural Scan · 10 Hz
+          </span>
+        </div>
+
+        {/* Top-right: Vitals panel (like ref3) */}
+        <NeuroVitals />
+
+        {/* Bottom gradient */}
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-36"
+          style={{ background: 'linear-gradient(to top, rgba(4,12,16,0.95) 0%, transparent 100%)' }} />
+
+        {/* Bottom: label + EEG */}
+        <div className="absolute bottom-0 inset-x-0 p-5 md:p-6 flex items-end justify-between">
+          <div>
+            <p className="text-[8px] uppercase tracking-[0.30em] text-teal-400/40 mb-1.5">Sistema Neural</p>
+            <div className="flex items-center gap-2">
+              <Brain className="h-4 w-4 text-teal-400/60" />
+              <span className="text-xl font-semibold text-teal-100/90 tracking-wide">Neuro</span>
             </div>
-            <span
-              className={`${sim.colSpan ? 'text-[9px] px-3 py-1.5' : 'text-[8px] px-2.5 py-1'} font-semibold uppercase tracking-[0.20em] rounded-full`}
-              style={{
-                background: sim.badgeBg,
-                border: `1px solid ${sim.badgeBorder}`,
-                color: sim.badgeText,
-              }}
-            >
-              {sim.badge}
-            </span>
           </div>
-        </motion.div>
-      ))}
+          <EEGWave />
+        </div>
+      </motion.div>
+
+      {/* ── CARDIO ───────────────────────────────────────────────── */}
+      <motion.div
+        className="relative overflow-hidden rounded-[2rem] cursor-pointer"
+        style={{
+          height: 'clamp(220px, 36vw, 300px)',
+          border: '1px solid rgba(255,255,255,0.10)',
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 24px 56px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+        }}
+        whileHover={{ scale: 1.012 }}
+        transition={spring}
+      >
+        <div className="absolute inset-0"><CardioHeroScene transparent /></div>
+        <div className="pointer-events-none absolute inset-x-6 top-0 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 50%, transparent)' }} />
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"
+          style={{ background: 'linear-gradient(to top, rgba(5,3,4,0.92) 0%, transparent 100%)' }} />
+        <div className="absolute bottom-0 inset-x-0 p-4 md:p-5 flex items-end justify-between">
+          <div>
+            <p className="text-[8px] uppercase tracking-[0.28em] text-white/30 mb-1">Cardio</p>
+            <div className="flex items-center gap-1.5">
+              <HeartPulse className="h-3.5 w-3.5 text-rose-400/70" />
+              <span className="text-base font-semibold text-white/88 tracking-wide">Coração</span>
+            </div>
+          </div>
+          <span className="text-[8px] font-semibold uppercase tracking-[0.20em] px-2.5 py-1 rounded-full"
+            style={{ background: 'rgba(204,17,32,0.12)', border: '1px solid rgba(204,17,32,0.22)', color: 'rgba(255,160,160,0.70)' }}>
+            72 BPM
+          </span>
+        </div>
+      </motion.div>
+
+      {/* ── PNEUMO ───────────────────────────────────────────────── */}
+      <motion.div
+        className="relative overflow-hidden rounded-[2rem] cursor-pointer"
+        style={{
+          height: 'clamp(220px, 36vw, 300px)',
+          border: '1px solid rgba(255,255,255,0.10)',
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 24px 56px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+        }}
+        whileHover={{ scale: 1.012 }}
+        transition={spring}
+      >
+        <div className="absolute inset-0"><PneumoHeroScene transparent /></div>
+        <div className="pointer-events-none absolute inset-x-6 top-0 h-px"
+          style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 50%, transparent)' }} />
+        <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"
+          style={{ background: 'linear-gradient(to top, rgba(4,6,7,0.92) 0%, transparent 100%)' }} />
+        <div className="absolute bottom-0 inset-x-0 p-4 md:p-5 flex items-end justify-between">
+          <div>
+            <p className="text-[8px] uppercase tracking-[0.28em] text-white/30 mb-1">Pneumo</p>
+            <div className="flex items-center gap-1.5">
+              <Wind className="h-3.5 w-3.5 text-cyan-400/70" />
+              <span className="text-base font-semibold text-white/88 tracking-wide">Pulmão</span>
+            </div>
+          </div>
+          <span className="text-[8px] font-semibold uppercase tracking-[0.20em] px-2.5 py-1 rounded-full"
+            style={{ background: 'rgba(56,189,248,0.10)', border: '1px solid rgba(56,189,248,0.18)', color: 'rgba(150,230,255,0.70)' }}>
+            PEEP 5
+          </span>
+        </div>
+      </motion.div>
+
     </motion.div>
   )
+}
+
+// ── Neuro HUD helpers ─────────────────────────────────────────────────────────
+
+function useAnimatedVital(base: number, range: number, interval: number) {
+  const [val, setVal] = useState(base)
+  useEffect(() => {
+    const id = setInterval(() => {
+      setVal(Math.round(base + (Math.random() - 0.5) * range))
+    }, interval)
+    return () => clearInterval(id)
+  }, [base, range, interval])
+  return val
+}
+
+function NeuroVitals() {
+  const sys = useAnimatedVital(120, 6, 2200)
+  const dia = useAnimatedVital(94, 4, 2800)
+  const pul = useAnimatedVital(72, 8, 1600)
+
+  return (
+    <div className="absolute top-4 right-5 font-mono text-right space-y-0.5">
+      <VitalRow label="SYS." value={sys} unit="mmHg" />
+      <VitalRow label="DIA." value={dia} unit="mmHg" />
+      <VitalRow label="Pul." value={pul} unit="/min" />
+    </div>
+  )
+}
+
+function VitalRow({ label, value, unit }: { label: string; value: number; unit: string }) {
+  return (
+    <div className="flex items-baseline justify-end gap-1.5">
+      <span className="text-[7px] uppercase tracking-[0.22em]" style={{ color: 'rgba(0,200,220,0.45)' }}>
+        {label}
+      </span>
+      <span className="text-base font-bold leading-none" style={{ color: 'rgba(0,220,240,0.85)' }}>
+        {value}
+      </span>
+      <span className="text-[7px]" style={{ color: 'rgba(0,180,200,0.40)' }}>
+        {unit}
+      </span>
+    </div>
+  )
+}
+
+function EEGWave() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+    let frame = 0
+    let raf: number
+    function draw() {
+      if (!canvas || !ctx) return
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      const w = canvas.width, h = canvas.height
+      // Two overlapping waves
+      for (let pass = 0; pass < 2; pass++) {
+        ctx.strokeStyle = pass === 0 ? 'rgba(0,210,200,0.70)' : 'rgba(0,160,180,0.30)'
+        ctx.lineWidth = pass === 0 ? 1.5 : 1
+        ctx.beginPath()
+        for (let x = 0; x <= w; x++) {
+          const t = x / w
+          const f = pass === 0 ? 1 : 1.7
+          const y = h / 2
+            + Math.sin(t * 8 * f + frame * (0.05 + pass * 0.03)) * 5
+            + Math.sin(t * 20 * f + frame * 0.10) * 2.5
+            + Math.sin(t * 3 - frame * 0.03) * 3.5
+          if (x === 0) ctx.moveTo(x, y)
+          else ctx.lineTo(x, y)
+        }
+        ctx.stroke()
+      }
+      frame++
+      raf = requestAnimationFrame(draw)
+    }
+    draw()
+    return () => cancelAnimationFrame(raf)
+  }, [])
+  return <canvas ref={canvasRef} width={140} height={30} />
 }
