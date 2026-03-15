@@ -3,6 +3,7 @@
 import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion'
 import { BookOpen, ChevronRight, Cpu } from 'lucide-react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useRef, useState } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
@@ -48,11 +49,16 @@ function Carousel3D() {
   const [active, setActive] = useState(0)
   const dragX = useMotionValue(0)
   const containerRef = useRef<HTMLDivElement>(null)
+  const didDrag = useRef(false)
 
-  // Swipe gesture to switch cards
+  const handleDragStart = () => { didDrag.current = false }
+
   const handleDragEnd = (_: unknown, info: { offset: { x: number } }) => {
-    if (info.offset.x < -50 && active < CARDS.length - 1) setActive((v) => v + 1)
-    else if (info.offset.x > 50 && active > 0) setActive((v) => v - 1)
+    if (Math.abs(info.offset.x) > 12) {
+      didDrag.current = true
+      if (info.offset.x < -50 && active < CARDS.length - 1) setActive((v) => v + 1)
+      else if (info.offset.x > 50 && active > 0) setActive((v) => v - 1)
+    }
     animate(dragX, 0, { type: 'spring', stiffness: 400, damping: 40 })
   }
 
@@ -92,11 +98,12 @@ function Carousel3D() {
                 opacity: isActive ? 1 : 0.46,
               }}
               transition={spring}
+              onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
-              onClick={() => !isActive && setActive(i)}
+              onClick={() => { if (!isActive) setActive(i) }}
               className={isActive ? 'cursor-grab active:cursor-grabbing' : 'cursor-pointer'}
             >
-              <Card3D card={card} isActive={isActive} />
+              <Card3D card={card} isActive={isActive} didDrag={didDrag} />
             </motion.div>
           )
         })}
@@ -128,10 +135,13 @@ function Carousel3D() {
 function Card3D({
   card,
   isActive,
+  didDrag,
 }: {
   card: (typeof CARDS)[number]
   isActive: boolean
+  didDrag: React.MutableRefObject<boolean>
 }) {
+  const router = useRouter()
   const ref = useRef<HTMLDivElement>(null)
   const mx = useMotionValue(0.5)
   const my = useMotionValue(0.5)
@@ -162,6 +172,9 @@ function Card3D({
     >
       <div
         className={`relative h-full w-full overflow-hidden rounded-[2rem] border border-white/10`}
+        onClick={() => {
+          if (isActive && !didDrag.current) router.push(card.href)
+        }}
         style={{
           background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
           boxShadow: isActive
@@ -194,16 +207,13 @@ function Card3D({
             </motion.div>
 
             {isActive ? (
-              <Link href={card.href} prefetch>
-                <motion.div
-                  whileHover={{ x: 2, y: -2, scale: 1.06 }}
-                  whileTap={{ scale: 0.92 }}
-                  transition={spring}
-                  className="flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6"
-                >
-                  <ChevronRight className="h-4 w-4 text-white/55" />
-                </motion.div>
-              </Link>
+              <motion.div
+                whileHover={{ x: 2, y: -2, scale: 1.06 }}
+                transition={spring}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6"
+              >
+                <ChevronRight className="h-4 w-4 text-white/55" />
+              </motion.div>
             ) : (
               <div className="text-[9px] font-semibold uppercase tracking-[0.26em] text-white/24">
                 Toque para ver
@@ -224,11 +234,7 @@ function Card3D({
                 className="font-semibold leading-none tracking-[0.1em]"
                 style={{
                   fontSize: 'clamp(2rem, 8vw, 3.2rem)',
-                  background: isActive
-                    ? 'linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.55) 100%)'
-                    : 'linear-gradient(135deg, rgba(255,255,255,0.65), rgba(255,255,255,0.25))',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
+                  color: isActive ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.35)',
                 }}
               >
                 {card.title}
@@ -251,17 +257,15 @@ function Card3D({
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <Link href={card.href} prefetch>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.96 }}
-                    transition={spring}
-                    className="mt-1 flex items-center gap-2 rounded-[0.9rem] border border-white/14 bg-white/6 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60"
-                  >
-                    Abrir
-                    <ChevronRight className="h-3.5 w-3.5" />
-                  </motion.button>
-                </Link>
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.96 }}
+                  transition={spring}
+                  className="mt-1 inline-flex items-center gap-2 rounded-[0.9rem] border border-white/14 bg-white/6 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60"
+                >
+                  Abrir
+                  <ChevronRight className="h-3.5 w-3.5" />
+                </motion.div>
               </motion.div>
             )}
           </div>
