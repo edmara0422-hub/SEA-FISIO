@@ -1309,6 +1309,9 @@ export function ProntuarioSystemPanel() {
   const [activeTab, setActiveTab] = useState<FormTab>('dados')
   const [hydrated, setHydrated] = useState(false)
   const [expandedProtocols, setExpandedProtocols] = useState<Set<string>>(new Set())
+  const [collapsedPeep, setCollapsedPeep] = useState(false)
+  const [collapsedDesmame, setCollapsedDesmame] = useState(false)
+  const [collapsedProna, setCollapsedProna] = useState(false)
 
   useEffect(() => {
     try {
@@ -3347,11 +3350,11 @@ export function ProntuarioSystemPanel() {
                   </div>
                 ) : null}
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Ventilacao mecanica
                   </p>
-                  <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                  <div className="grid gap-2 grid-cols-3 xl:grid-cols-6">
                     <FieldShell label="Modo ventilatorio" span="xl:col-span-2">
                       <select className={INPUT_CLASS_SM} value={currentRecord.modoVM} onChange={(event) => setField('modoVM', event.target.value)}>
                         {VM_OPTIONS.map((option) => (
@@ -3917,205 +3920,167 @@ export function ProntuarioSystemPanel() {
                   </div>
                 ) : null}
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Otimizacao de PEEP / stress index
-                  </p>
-                  <div className="grid gap-3 xl:grid-cols-3">
-                    {peepRows.map((row, index) => (
-                      <div key={`peep-row-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                        <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/44">Nivel {index + 1}</p>
-                        <div className="grid gap-3 grid-cols-3">
-                          <FieldShell label="PEEP">
-                            <input
-                              className={INPUT_CLASS_SM}
-                              type="number"
-                              value={row.peep}
-                              onChange={(event) => setPeepOptField(index, 'peep', event.target.value)}
-                              placeholder="10"
-                            />
-                          </FieldShell>
-                          <FieldShell label="Plato">
-                            <input
-                              className={INPUT_CLASS_SM}
-                              type="number"
-                              value={row.plato}
-                              onChange={(event) => setPeepOptField(index, 'plato', event.target.value)}
-                              placeholder="22"
-                            />
-                          </FieldShell>
-                          <FieldShell label="Stress index">
-                            <input
-                              className={INPUT_CLASS_SM}
-                              value={row.si}
-                              onChange={(event) => setPeepOptField(index, 'si', event.target.value)}
-                              placeholder="=1"
-                            />
-                          </FieldShell>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="mt-4 grid gap-3 grid-cols-2">
-                    <MetricChip
-                      label="Melhor combinacao"
-                      value={calculations?.peepOptBest ? `Nivel ${calculations.peepOptBest.index + 1}` : '--'}
-                      hint={
-                        calculations?.peepOptBest
-                          ? `PEEP ${calculations.peepOptBest.peep} • ΔP ${calculations.peepOptBest.dp.toFixed(1)} • SI ${calculations.peepOptBest.stressIndex.toFixed(2)}`
-                          : 'Preencha ao menos um nivel completo'
-                      }
-                      color={calculations?.peepOptBest ? '#60a5fa' : undefined}
-                    />
-                    <MetricChip
-                      label="Leitura"
-                      value={calculations?.peepOptBest ? 'Configuracao sugerida' : '--'}
-                      hint="Prioridade: stress index proximo de 1.0 com menor driving pressure"
-                    />
-                  </div>
-                </div>
-
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Analise de curvas e loops
-                  </p>
-                  <div className="grid gap-4 xl:grid-cols-3">
-                    {renderRespSelectionField('Pressao x Tempo', 'curvaPxT', CURVE_PXT_OPTIONS, 'PXT')}
-                    {renderRespSelectionField('Fluxo x Tempo', 'curvaFxT', CURVE_FXT_OPTIONS, 'FXT')}
-                    {renderRespSelectionField('Volume x Tempo', 'curvaVxT', CURVE_VXT_OPTIONS, 'VXT')}
-                    {renderRespSelectionField('Loop P-V', 'loopPV', LOOP_PV_OPTIONS, 'LPV')}
-                    {renderRespSelectionField('Loop F-V', 'loopFV', LOOP_FV_OPTIONS, 'LFV')}
-                    {renderRespSelectionField('Assincronias', 'assincronia', ASSINCRONIA_OPTIONS, 'ASY')}
-                  </div>
-                </div>
-
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Calculadora de desmame
-                  </p>
-                  <div className="grid gap-3 grid-cols-3 xl:grid-cols-7">
-                    <FieldShell label="PImax">
-                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dPimax} onChange={(event) => setField('dPimax', event.target.value)} placeholder="-40" />
-                    </FieldShell>
-                    <FieldShell label="PEmax">
-                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dPemax} onChange={(event) => setField('dPemax', event.target.value)} placeholder="60" />
-                    </FieldShell>
-                    <FieldShell label="VC (mL)">
-                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dVcDesm} onChange={(event) => setField('dVcDesm', event.target.value)} placeholder="450" />
-                    </FieldShell>
-                    <FieldShell label="FR">
-                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dFrDesm} onChange={(event) => setField('dFrDesm', event.target.value)} placeholder="18" />
-                    </FieldShell>
-                    <FieldShell label="CV (mL/kg)">
-                      <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dCv} onChange={(event) => setField('dCv', event.target.value)} placeholder="15" />
-                    </FieldShell>
-                    <FieldShell label="TRE">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.weanTRETipo} onChange={(event) => setField('weanTRETipo', event.target.value)}>
-                        {TRE_TYPE_OPTIONS.map(([value, label]) => (
-                          <option key={value} value={value}>
-                            {label}
-                          </option>
-                        ))}
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Resultado TRE">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.weanTREResult} onChange={(event) => setField('weanTREResult', event.target.value)}>
-                        {TRE_RESULT_OPTIONS.map(([value, label]) => (
-                          <option key={value} value={value}>
-                            {label}
-                          </option>
-                        ))}
-                      </select>
-                    </FieldShell>
-                  </div>
-
-                  <div className="mt-4">
-                    <FieldShell label="Obs. desmame">
-                      <AutoGrowTextarea
-                        value={currentRecord.weanObs}
-                        onChange={(value) => setField('weanObs', value)}
-                        placeholder="TRE, tolerancia, fadiga, tosse, secrecao..."
-                      />
-                    </FieldShell>
-                  </div>
-
-                  <div className="mt-4 grid gap-3 grid-cols-2 xl:grid-cols-6">
-                    <MetricChip
-                      label="VM"
-                      value={calculations?.weanMinuteVentilation ? `${calculations.weanMinuteVentilation.toFixed(1)} L/min` : '--'}
-                      hint="VC x FR"
-                    />
-                    <MetricChip
-                      label="RSBI"
-                      value={calculations?.weanRsbi ? calculations.weanRsbi.toFixed(1) : '--'}
-                      hint={calculations?.weanSummary?.text}
-                      color={calculations?.weanSummary?.color}
-                    />
-                    <MetricChip
-                      label="PImax"
-                      value={currentRecord.dPimax || '--'}
-                      hint={calculations?.pimaxAdequate ? 'Adequado (<= -30)' : 'Vigiar forca inspiratoria'}
-                      color={calculations?.pimaxAdequate ? '#4ade80' : '#facc15'}
-                    />
-                    <MetricChip
-                      label="PEmax"
-                      value={currentRecord.dPemax || '--'}
-                      hint={calculations?.pemaxAdequate ? 'Adequado (>= 60)' : 'Tosse pode ser limitada'}
-                      color={calculations?.pemaxAdequate ? '#4ade80' : '#facc15'}
-                    />
-                    <MetricChip
-                      label="CV"
-                      value={currentRecord.dCv || '--'}
-                      hint={calculations?.cvAdequate ? 'Reserva ventilatoria adequada' : 'Reserva ventilatoria em vigilancia'}
-                      color={calculations?.cvAdequate ? '#4ade80' : '#facc15'}
-                    />
-                    <MetricChip
-                      label="Leitura"
-                      value={calculations?.weanSummary?.text || '--'}
-                      hint="PImax, PEmax, CV e RSBI"
-                      color={calculations?.weanSummary?.color}
-                    />
-                  </div>
-
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <button
-                      onClick={saveDesmame}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
-                    >
-                      <Save className="h-4 w-4" />
-                      Salvar Desmame
-                    </button>
-                  </div>
-
-                  {currentRecord.desmHist?.length ? (
-                    <div className="mt-4">
-                      <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                        Historico Desmame · {currentRecord.desmHist.length}
-                      </p>
-                      <div className="space-y-2">
-                        {currentRecord.desmHist.map((entry, i) => (
-                          <div key={`desm-${i}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
-                            <div className="flex items-start justify-between gap-2">
-                              <div className="min-w-0 flex-1">
-                                <p className="text-[10px] text-white/44">{formatDateTime(entry.ts)}</p>
-                                <p className="mt-0.5 text-[10px] text-white/60">
-                                  PImax {entry.pimax || '--'} · PEmax {entry.pemax || '--'} · VC {entry.vc || '--'} · FR {entry.fr || '--'} · CV {entry.cv || '--'}
-                                </p>
-                                <p className="mt-0.5 text-[10px] text-white/40">VM {entry.vm || '--'} · RSBI {entry.rsbi || '--'}</p>
-                                {entry.analise ? (
-                                  <p className="mt-1 text-[10px] font-semibold" style={{ color: calculations?.weanSummary?.color || '#60a5fa' }}>{entry.analise}</p>
-                                ) : null}
-                              </div>
-                              <button onClick={() => deleteDesmame(i)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
-                                <Trash2 className="h-3 w-3" />
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <button
+                    type="button"
+                    onClick={() => setCollapsedPeep((v) => !v)}
+                    className="flex w-full items-center justify-between gap-2"
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                      Otimizacao de PEEP / stress index
+                    </p>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3 shrink-0 text-white/30 transition-transform" style={{ transform: collapsedPeep ? 'rotate(0deg)' : 'rotate(90deg)' }}>
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
+                  {!collapsedPeep && (
+                    <>
+                      <div className="mt-3 grid gap-2 xl:grid-cols-3">
+                        {peepRows.map((row, index) => (
+                          <div key={`peep-row-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-2.5">
+                            <div className="mb-2 flex items-center justify-between">
+                              <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/36">Nivel {index + 1}</p>
+                              <button
+                                type="button"
+                                onClick={() => setPeepOptField(index, 'peep', '') || setPeepOptField(index, 'plato', '') || setPeepOptField(index, 'si', '')}
+                                className="flex h-5 w-5 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                              >
+                                <Trash2 className="h-2.5 w-2.5" />
                               </button>
+                            </div>
+                            <div className="grid gap-2 grid-cols-3">
+                              <FieldShell label="PEEP">
+                                <input className={INPUT_CLASS_SM} type="number" value={row.peep} onChange={(event) => setPeepOptField(index, 'peep', event.target.value)} placeholder="10" />
+                              </FieldShell>
+                              <FieldShell label="Plato">
+                                <input className={INPUT_CLASS_SM} type="number" value={row.plato} onChange={(event) => setPeepOptField(index, 'plato', event.target.value)} placeholder="22" />
+                              </FieldShell>
+                              <FieldShell label="SI">
+                                <input className={INPUT_CLASS_SM} value={row.si} onChange={(event) => setPeepOptField(index, 'si', event.target.value)} placeholder="=1" />
+                              </FieldShell>
                             </div>
                           </div>
                         ))}
                       </div>
-                    </div>
-                  ) : null}
+                      <div className="mt-3 grid gap-2 grid-cols-2">
+                        <MetricChip
+                          label="Melhor combinacao"
+                          value={calculations?.peepOptBest ? `Nivel ${calculations.peepOptBest.index + 1}` : '--'}
+                          hint={calculations?.peepOptBest ? `PEEP ${calculations.peepOptBest.peep} · ΔP ${calculations.peepOptBest.dp.toFixed(1)} · SI ${calculations.peepOptBest.stressIndex.toFixed(2)}` : 'Preencha ao menos um nivel'}
+                          color={calculations?.peepOptBest ? '#60a5fa' : undefined}
+                        />
+                        <MetricChip label="Leitura" value={calculations?.peepOptBest ? 'Config. sugerida' : '--'} hint="SI proximo de 1.0 com menor DP" />
+                      </div>
+                    </>
+                  )}
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <div className="mb-3 flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Analise de curvas e loops</p>
+                    <button
+                      type="button"
+                      onClick={() => updateCurrentRecord((r) => ({ ...r, curvaPxT: [], curvaFxT: [], curvaVxT: [], loopPV: [], loopFV: [], assincronia: [] }))}
+                      className="inline-flex items-center gap-1 rounded-[0.7rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[9px] font-semibold text-[#fca5a5]"
+                    >
+                      <Trash2 className="h-2.5 w-2.5" />
+                      Limpar
+                    </button>
+                  </div>
+                  <div className="grid gap-2 grid-cols-3">
+                    {renderRespSelectionField('P×T', 'curvaPxT', CURVE_PXT_OPTIONS, 'PXT')}
+                    {renderRespSelectionField('F×T', 'curvaFxT', CURVE_FXT_OPTIONS, 'FXT')}
+                    {renderRespSelectionField('V×T', 'curvaVxT', CURVE_VXT_OPTIONS, 'VXT')}
+                  </div>
+                  <div className="mt-2 grid gap-2 grid-cols-3">
+                    {renderRespSelectionField('Loop P-V', 'loopPV', LOOP_PV_OPTIONS, 'LPV')}
+                    {renderRespSelectionField('Loop F-V', 'loopFV', LOOP_FV_OPTIONS, 'LFV')}
+                    {renderRespSelectionField('Assinc.', 'assincronia', ASSINCRONIA_OPTIONS, 'ASY')}
+                  </div>
+                </div>
+
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <button
+                    type="button"
+                    onClick={() => setCollapsedDesmame((v) => !v)}
+                    className="flex w-full items-center justify-between gap-2"
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Calculadora de desmame</p>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3 shrink-0 text-white/30 transition-transform" style={{ transform: collapsedDesmame ? 'rotate(0deg)' : 'rotate(90deg)' }}>
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
+                  {!collapsedDesmame && (
+                    <>
+                      <div className="mt-3 grid gap-2 grid-cols-3 xl:grid-cols-6">
+                        <FieldShell label="PImax">
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dPimax} onChange={(event) => setField('dPimax', event.target.value)} placeholder="-40" />
+                        </FieldShell>
+                        <FieldShell label="PEmax">
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dPemax} onChange={(event) => setField('dPemax', event.target.value)} placeholder="60" />
+                        </FieldShell>
+                        <FieldShell label="VC (mL)">
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dVcDesm} onChange={(event) => setField('dVcDesm', event.target.value)} placeholder="450" />
+                        </FieldShell>
+                        <FieldShell label="FR">
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dFrDesm} onChange={(event) => setField('dFrDesm', event.target.value)} placeholder="18" />
+                        </FieldShell>
+                        <FieldShell label="CV (mL/kg)">
+                          <input className={INPUT_CLASS_SM} type="number" value={currentRecord.dCv} onChange={(event) => setField('dCv', event.target.value)} placeholder="15" />
+                        </FieldShell>
+                        <FieldShell label="TRE">
+                          <select className={INPUT_CLASS_SM} value={currentRecord.weanTRETipo} onChange={(event) => setField('weanTRETipo', event.target.value)}>
+                            {TRE_TYPE_OPTIONS.map(([value, label]) => (
+                              <option key={value} value={value}>{label}</option>
+                            ))}
+                          </select>
+                        </FieldShell>
+                      </div>
+
+                      <div className="mt-2">
+                        <FieldShell label="Obs. desmame">
+                          <AutoGrowTextarea value={currentRecord.weanObs} onChange={(value) => setField('weanObs', value)} placeholder="TRE, tolerancia, fadiga, tosse, secrecao..." />
+                        </FieldShell>
+                      </div>
+
+                      <div className="mt-3 grid gap-2 grid-cols-2 xl:grid-cols-5">
+                        <MetricChip label="RSBI" value={calculations?.weanRsbi ? calculations.weanRsbi.toFixed(1) : '--'} hint={calculations?.weanSummary?.text} color={calculations?.weanSummary?.color} />
+                        <MetricChip label="PImax" value={currentRecord.dPimax || '--'} hint={calculations?.pimaxAdequate ? 'Adequado' : 'Vigiar'} color={calculations?.pimaxAdequate ? '#4ade80' : '#facc15'} />
+                        <MetricChip label="PEmax" value={currentRecord.dPemax || '--'} hint={calculations?.pemaxAdequate ? 'Adequado' : 'Tosse limitada'} color={calculations?.pemaxAdequate ? '#4ade80' : '#facc15'} />
+                        <MetricChip label="CV" value={currentRecord.dCv || '--'} hint={calculations?.cvAdequate ? 'Reserva adequada' : 'Em vigilancia'} color={calculations?.cvAdequate ? '#4ade80' : '#facc15'} />
+                        <MetricChip label="VM" value={calculations?.weanMinuteVentilation ? `${calculations.weanMinuteVentilation.toFixed(1)} L/min` : '--'} hint="VC × FR" />
+                      </div>
+
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button onClick={saveDesmame} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
+                          <Save className="h-4 w-4" />
+                          Salvar Desmame
+                        </button>
+                      </div>
+
+                      {currentRecord.desmHist?.length ? (
+                        <div className="mt-3">
+                          <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/36">Historico · {currentRecord.desmHist.length}</p>
+                          <div className="space-y-1.5">
+                            {currentRecord.desmHist.map((entry, i) => (
+                              <div key={`desm-${i}`} className="rounded-[0.8rem] border border-white/10 bg-black/18 p-2.5">
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="min-w-0 flex-1">
+                                    <p className="text-[9px] text-white/40">{formatDateTime(entry.ts)}</p>
+                                    <p className="mt-0.5 text-[10px] text-white/60">PImax {entry.pimax || '--'} · PEmax {entry.pemax || '--'} · VC {entry.vc || '--'} · FR {entry.fr || '--'} · RSBI {entry.rsbi || '--'}</p>
+                                    {entry.analise ? <p className="mt-0.5 text-[9px] font-semibold" style={{ color: calculations?.weanSummary?.color || '#60a5fa' }}>{entry.analise}</p> : null}
+                                  </div>
+                                  <button onClick={() => deleteDesmame(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                                    <Trash2 className="h-2.5 w-2.5" />
+                                  </button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ) : null}
+                    </>
+                  )}
                 </div>
 
                 {(() => {
@@ -4124,61 +4089,124 @@ export function ProntuarioSystemPanel() {
                   const treActive = currentRecord.treOK === '1'
                   const extActive = currentRecord.extOK === '1'
                   const descActive = currentRecord.descVMOK === '1'
+
+                  // ── Intelligent phase detection ──────────────────────────────
+                  const isControlled = ['VCV', 'PCV', 'PRVC', 'MMV', 'HFOV'].includes(currentRecord.modoVM)
+                  const isPSV = currentRecord.modoVM === 'PSV'
+                  const psVal = isPSV ? parseFloat(currentRecord.ps || '99') : 99
+                  const psvLow = isPSV && psVal <= 10          // PS <= 10 → sugerir TRE
+                  const rsbiGood = (calculations?.rsbi ?? 999) < 105
+                  const suggestTRE = psvLow && rsbiGood
+
+                  // active phase: 4 > 3 > 2 > 1
+                  const activePhase = (extActive || descActive) ? 4
+                    : treActive ? 3
+                    : isPSV ? 2
+                    : isControlled ? 1
+                    : 0
+
                   let tipoDesmame = 'Simples'; let corDesm = '#4ade80'
                   if (treActive && currentRecord.treDt && currentRecord.dataTOT) {
                     const dias = Math.floor((new Date(currentRecord.treDt).getTime() - new Date(currentRecord.dataTOT).getTime()) / 86400000)
                     if (dias > 14) { tipoDesmame = 'Prolongado'; corDesm = '#f87171' }
                     else if (dias > 7) { tipoDesmame = 'Dificil'; corDesm = '#facc15' }
                   }
+
+                  const phaseColor = (p: number) => {
+                    if (activePhase === p) return '#60a5fa'
+                    if (activePhase > p) return '#4ade80'
+                    return undefined
+                  }
+                  const phaseDone = (p: number) => activePhase > p
+
                   return (
-                    <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                      <div className="mb-4 flex items-center gap-3">
-                        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                          Parametros de Desmame Ventilatorio
-                        </p>
+                    <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                      {/* Header */}
+                      <div className="mb-3 flex items-center gap-2 flex-wrap">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Parametros de Desmame</p>
                         {treActive && currentRecord.treDt ? (
                           <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: corDesm, borderColor: `${corDesm}30`, background: `${corDesm}12` }}>
                             {tipoDesmame}
                           </span>
                         ) : null}
+                        {activePhase === 2 && psvLow && (
+                          <span className="rounded-full border border-[#facc1540] bg-[#facc1512] px-2 py-0.5 text-[9px] font-bold text-[#facc15]">
+                            PS baixa — avaliar TRE
+                          </span>
+                        )}
+                        {activePhase === 2 && suggestTRE && (
+                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
+                            ✓ Pronto para TRE
+                          </span>
+                        )}
                       </div>
 
-                      <div className="mb-4 flex items-center justify-center gap-2 flex-wrap text-[10px] text-white/50">
-                        {[['① VCV/PCV', '#60a5fa'], ['② PSV', '#60a5fa'], ['③ TRE', treActive ? '#4ade80' : undefined], ['④ ' + (isTQT ? 'Desconexao' : 'Extubacao'), (isTOT && extActive) || (isTQT && descActive) ? '#4ade80' : undefined]] .map(([label, color], idx, arr) => (
-                          <div key={idx} className="flex items-center gap-2">
-                            <span className="rounded-[0.5rem] border border-white/10 bg-white/4 px-2 py-1" style={color ? { color: color as string, borderColor: `${color}40`, background: `${color}12` } : {}}>{label}</span>
-                            {idx < arr.length - 1 ? <span className="text-white/20">→</span> : null}
+                      {/* Phase flow */}
+                      <div className="mb-3 flex items-center gap-1.5 flex-wrap">
+                        {([
+                          [1, '① VCV/PCV'],
+                          [2, '② PSV'],
+                          [3, '③ TRE'],
+                          [4, '④ ' + (isTQT ? 'Desconexao' : 'Extubacao')],
+                        ] as [number, string][]).map(([p, label]) => {
+                          const col = phaseColor(p)
+                          const done = phaseDone(p)
+                          return (
+                            <div key={p} className="flex items-center gap-1.5">
+                              <span
+                                className="rounded-[0.5rem] border px-2 py-0.5 text-[10px] font-semibold transition-all"
+                                style={col
+                                  ? { color: col, borderColor: `${col}40`, background: `${col}12` }
+                                  : { color: 'rgba(255,255,255,0.28)', borderColor: 'rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.03)' }
+                                }
+                              >
+                                {done ? '✓ ' : ''}{label}
+                              </span>
+                              {p < 4 ? <span className="text-[9px] text-white/18">→</span> : null}
+                            </div>
+                          )
+                        })}
+                      </div>
+
+                      {/* Phase 2 — PSV guidance */}
+                      {activePhase === 2 && (
+                        <div className="mb-3 rounded-[0.8rem] border border-[#60a5fa20] bg-[#60a5fa08] p-2.5 text-[10px] text-white/60 space-y-1">
+                          <p className="font-semibold text-[#60a5fa]">PSV ativo — protocolo de reducao</p>
+                          <div className="flex flex-wrap gap-3">
+                            <span>PS atual: <strong className={psVal <= 10 ? 'text-[#4ade80]' : 'text-white/80'}>{currentRecord.ps || '--'} cmH₂O</strong></span>
+                            {calculations?.rsbi != null && <span>RSBI: <strong className={rsbiGood ? 'text-[#4ade80]' : 'text-[#f87171]'}>{calculations.rsbi.toFixed(1)}</strong></span>}
+                            <span className={psVal <= 8 ? 'text-[#4ade80]' : 'text-white/40'}>Alvo PS ≤ 8</span>
+                            <span className={rsbiGood ? 'text-[#4ade80]' : 'text-white/40'}>RSBI &lt; 105</span>
                           </div>
-                        ))}
-                      </div>
+                          {suggestTRE && (
+                            <p className="font-semibold text-[#4ade80]">→ Criterios favoraveis: iniciar TRE</p>
+                          )}
+                        </div>
+                      )}
 
-                      <div className="flex flex-wrap gap-2 justify-center mb-3">
-                        <button
-                          type="button"
-                          onClick={() => setField('treOK', treActive ? '' : '1')}
-                          className="rounded-[1rem] border px-4 py-2 text-[11px] font-semibold cursor-pointer"
+                      {/* TRE / Ext / Desc action buttons */}
+                      <div className="flex flex-wrap gap-2 mb-3">
+                        <button type="button" onClick={() => setField('treOK', treActive ? '' : '1')}
+                          className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
                           style={treActive ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
                         >TRE</button>
-                        {isTOT ? (
-                          <button
-                            type="button"
-                            onClick={() => setField('extOK', extActive ? '' : '1')}
-                            className="rounded-[1rem] border px-4 py-2 text-[11px] font-semibold cursor-pointer"
+                        {isTOT && (
+                          <button type="button" onClick={() => setField('extOK', extActive ? '' : '1')}
+                            className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
                             style={extActive ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
                           >Extubacao</button>
-                        ) : null}
-                        {isTQT ? (
-                          <button
-                            type="button"
-                            onClick={() => setField('descVMOK', descActive ? '' : '1')}
-                            className="rounded-[1rem] border px-4 py-2 text-[11px] font-semibold cursor-pointer"
+                        )}
+                        {isTQT && (
+                          <button type="button" onClick={() => setField('descVMOK', descActive ? '' : '1')}
+                            className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
                             style={descActive ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
                           >Desconexao VM</button>
-                        ) : null}
+                        )}
                       </div>
 
-                      {treActive ? (
-                        <div className="grid gap-3 grid-cols-2 mb-3">
+                      {/* TRE date/time */}
+                      {treActive && (
+                        <div className="mb-3 grid gap-2 grid-cols-2">
                           <FieldShell label="Data TRE">
                             <input className={INPUT_CLASS_SM} type="date" value={currentRecord.treDt} onChange={(e) => setField('treDt', e.target.value)} />
                           </FieldShell>
@@ -4186,39 +4214,41 @@ export function ProntuarioSystemPanel() {
                             <input className={INPUT_CLASS_SM} type="time" value={currentRecord.treTm} onChange={(e) => setField('treTm', e.target.value)} />
                           </FieldShell>
                         </div>
-                      ) : null}
+                      )}
 
-                      {isTOT && extActive ? (
+                      {/* Extubation result */}
+                      {isTOT && extActive && (
                         <div className="mb-3">
-                          <p className="mb-1.5 text-[10px] text-white/40">Resultado da Extubacao</p>
+                          <p className="mb-1 text-[9px] text-white/36">Resultado da Extubacao</p>
                           <div className="flex gap-2">
                             {(['Sucesso', 'Falha'] as const).map((opt) => (
                               <button key={opt} type="button" onClick={() => setField('extResult', opt)}
-                                className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
+                                className="rounded-[0.7rem] border px-3 py-1 text-[10px] font-semibold"
                                 style={currentRecord.extResult === opt ? (opt === 'Sucesso' ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(248,113,113,0.12)', borderColor: 'rgba(248,113,113,0.35)', color: '#f87171' }) : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.50)' }}>
                                 {opt}
                               </button>
                             ))}
                           </div>
                         </div>
-                      ) : null}
+                      )}
 
-                      {isTQT && descActive ? (
+                      {/* Disconnection result */}
+                      {isTQT && descActive && (
                         <div className="mb-3">
-                          <p className="mb-1.5 text-[10px] text-white/40">Resultado da Desconexao</p>
+                          <p className="mb-1 text-[9px] text-white/36">Resultado da Desconexao</p>
                           <div className="flex gap-2">
                             {(['Sucesso', 'Falha'] as const).map((opt) => (
                               <button key={opt} type="button" onClick={() => setField('descResult', opt)}
-                                className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
+                                className="rounded-[0.7rem] border px-3 py-1 text-[10px] font-semibold"
                                 style={currentRecord.descResult === opt ? (opt === 'Sucesso' ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(248,113,113,0.12)', borderColor: 'rgba(248,113,113,0.35)', color: '#f87171' }) : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.50)' }}>
                                 {opt}
                               </button>
                             ))}
                           </div>
                         </div>
-                      ) : null}
+                      )}
 
-                      <div className="mt-3">
+                      <div className="mt-2">
                         <button onClick={saveDesmEtapas} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
                           <Save className="h-4 w-4" />
                           Salvar Etapas
@@ -4226,20 +4256,19 @@ export function ProntuarioSystemPanel() {
                       </div>
 
                       {currentRecord.desmEtapasHist?.length ? (
-                        <div className="mt-3 space-y-2">
+                        <div className="mt-2.5 space-y-1.5">
                           {currentRecord.desmEtapasHist.map((entry, i) => (
-                            <div key={`etapa-${i}`} className="flex items-center justify-between gap-2 rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2">
+                            <div key={`etapa-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/10 bg-black/18 px-2.5 py-1.5">
                               <div>
-                                <p className="text-[10px] text-white/40">{formatDateTime(entry.ts)}</p>
-                                <p className="mt-0.5 text-[10px] text-white/60">
+                                <p className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</p>
+                                <p className="mt-0.5 text-[9px] text-white/55">
                                   TRE: {entry.treOK ? 'Sim' : 'Nao'}{entry.treDt ? ` ${entry.treDt}` : ''}
-                                  {entry.extOK ? ` | Ext: ${entry.extResult || '-'}` : ''}
-                                  {entry.descVMOK ? ` | Desc: ${entry.descResult || '-'}` : ''}
-                                  {entry.tipo ? ` | ${entry.tipo}` : ''}
+                                  {entry.extOK ? ` · Ext: ${entry.extResult || '-'}` : ''}
+                                  {entry.descVMOK ? ` · Desc: ${entry.descResult || '-'}` : ''}
                                 </p>
                               </div>
-                              <button onClick={() => deleteDesmEtapa(i)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
-                                <Trash2 className="h-3 w-3" />
+                              <button onClick={() => deleteDesmEtapa(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                                <Trash2 className="h-2.5 w-2.5" />
                               </button>
                             </div>
                           ))}
@@ -4249,11 +4278,11 @@ export function ProntuarioSystemPanel() {
                   )
                 })()}
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Protocolo VM especifico
                   </p>
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-3">
+                  <div className="grid gap-1.5 grid-cols-2 xl:grid-cols-3">
                     {PROTOCOL_OPTIONS.map((protocol) => {
                       const selected = currentRecord.protocoloVM.includes(protocol.id)
                       return (
@@ -4261,19 +4290,19 @@ export function ProntuarioSystemPanel() {
                           key={protocol.id}
                           type="button"
                           onClick={() => toggleStringArrayField('protocoloVM', protocol.id)}
-                          className="flex items-center gap-3 rounded-[1rem] border px-4 py-3 text-left transition-all"
+                          className="flex items-center gap-2 rounded-[0.8rem] border px-3 py-2 text-left transition-all"
                           style={{
                             borderColor: selected ? `${protocol.color}55` : 'rgba(255,255,255,0.08)',
                             background: selected ? `${protocol.color}12` : 'rgba(255,255,255,0.03)',
                           }}
                         >
                           <div
-                            className="flex h-4 w-4 items-center justify-center rounded-[0.3rem] border"
+                            className="flex h-3 w-3 shrink-0 items-center justify-center rounded-[0.25rem] border"
                             style={{ borderColor: selected ? protocol.color : 'rgba(255,255,255,0.18)' }}
                           >
-                            {selected ? <div className="h-2 w-2 rounded-[0.15rem]" style={{ background: protocol.color }} /> : null}
+                            {selected ? <div className="h-1.5 w-1.5 rounded-[0.1rem]" style={{ background: protocol.color }} /> : null}
                           </div>
-                          <span className="text-sm font-medium text-white/76">{protocol.label}</span>
+                          <span className="text-[11px] font-medium text-white/76">{protocol.label}</span>
                         </button>
                       )
                     })}
@@ -4309,84 +4338,97 @@ export function ProntuarioSystemPanel() {
                   ) : null}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Prona / recrutabilidade
-                  </p>
-                  <div className="flex flex-wrap gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setField('pronaAtiva', proneActive ? '' : '1')}
-                      className="rounded-[1rem] border px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.18em]"
-                      style={{
-                        borderColor: proneActive ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.12)',
-                        background: proneActive ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
-                        color: proneActive ? '#86efac' : 'rgba(255,255,255,0.72)',
-                      }}
-                    >
-                      {proneActive ? 'Prona ativa' : 'Iniciar prona'}
-                    </button>
-                  </div>
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <button
+                    type="button"
+                    onClick={() => setCollapsedProna((v) => !v)}
+                    className="flex w-full items-center justify-between gap-2"
+                  >
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Prona / recrutabilidade</p>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3 shrink-0 text-white/30 transition-transform" style={{ transform: collapsedProna ? 'rotate(0deg)' : 'rotate(90deg)' }}>
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </button>
 
-                  {proneActive ? (
-                    <div className="mt-4 grid gap-3 grid-cols-3">
-                      <FieldShell label="Tempo prona">
-                        <select className={INPUT_CLASS_SM} value={currentRecord.pronaTempo} onChange={(event) => setField('pronaTempo', event.target.value)}>
-                          {PRONA_TIME_OPTIONS.map((value) => (
-                            <option key={value} value={value}>
-                              {value}
-                            </option>
-                          ))}
-                        </select>
-                      </FieldShell>
-                      <FieldShell label="Data inicio">
-                        <input className={INPUT_CLASS_SM} type="date" value={currentRecord.pronaData} onChange={(event) => setField('pronaData', event.target.value)} />
-                      </FieldShell>
-                      <FieldShell label="Hora inicio">
-                        <input className={INPUT_CLASS_SM} type="time" value={currentRecord.pronaHora} onChange={(event) => setField('pronaHora', event.target.value)} />
-                      </FieldShell>
-                    </div>
-                  ) : null}
+                  {!collapsedProna && (
+                    <>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setField('pronaAtiva', proneActive ? '' : '1')}
+                          className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.12em]"
+                          style={{
+                            borderColor: proneActive ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.12)',
+                            background: proneActive ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
+                            color: proneActive ? '#86efac' : 'rgba(255,255,255,0.72)',
+                          }}
+                        >
+                          {proneActive ? 'Prona ativa' : 'Iniciar prona'}
+                        </button>
+                        {proneActive && (
+                          <button
+                            type="button"
+                            onClick={() => updateCurrentRecord((r) => ({ ...r, pronaAtiva: '', pronaTempo: '', pronaData: '', pronaHora: '' }))}
+                            className="inline-flex items-center gap-1 rounded-[0.8rem] border border-[#f8717130] bg-[#f8717110] px-3 py-1.5 text-[10px] font-semibold text-[#fca5a5]"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                            Limpar Prona
+                          </button>
+                        )}
+                      </div>
 
-                  {calculations?.proneSupineAt ? (
-                    <div className="mt-4">
-                      <MetricChip
-                        label="Supinar em"
-                        value={formatDateTime(calculations.proneSupineAt.toISOString())}
-                        hint="Previsao automatica da prona"
-                        color="#a78bfa"
-                      />
-                    </div>
-                  ) : null}
+                      {proneActive && (
+                        <div className="mt-2 grid gap-2 grid-cols-3">
+                          <FieldShell label="Tempo prona">
+                            <select className={INPUT_CLASS_SM} value={currentRecord.pronaTempo} onChange={(event) => setField('pronaTempo', event.target.value)}>
+                              {PRONA_TIME_OPTIONS.map((value) => (
+                                <option key={value} value={value}>{value}</option>
+                              ))}
+                            </select>
+                          </FieldShell>
+                          <FieldShell label="Data inicio">
+                            <input className={INPUT_CLASS_SM} type="date" value={currentRecord.pronaData} onChange={(event) => setField('pronaData', event.target.value)} />
+                          </FieldShell>
+                          <FieldShell label="Hora inicio">
+                            <input className={INPUT_CLASS_SM} type="time" value={currentRecord.pronaHora} onChange={(event) => setField('pronaHora', event.target.value)} />
+                          </FieldShell>
+                        </div>
+                      )}
 
-                  {proneActive ? (
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      <button onClick={saveProna} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
-                        <Save className="h-4 w-4" />
-                        Salvar Prona
-                      </button>
-                    </div>
-                  ) : null}
+                      {calculations?.proneSupineAt && (
+                        <div className="mt-2">
+                          <MetricChip label="Supinar em" value={formatDateTime(calculations.proneSupineAt.toISOString())} hint="Previsao automatica" color="#a78bfa" />
+                        </div>
+                      )}
 
-                  {currentRecord.pronaHist?.length ? (
-                    <div className="mt-3 space-y-1.5">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/36">Historico Prona</p>
-                      {currentRecord.pronaHist.map((entry, i) => (
-                        <div key={`prona-${i}`} className="flex items-center justify-between gap-2 rounded-[1rem] border border-white/10 bg-black/18 px-3 py-2">
-                          <p className="text-[10px] text-white/50">
-                            {formatDateTime(entry.ts)} · {entry.tempo || '--'} · {entry.dataInicio || '--'} {entry.horaInicio || ''}
-                          </p>
-                          <button onClick={() => deleteProna(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
-                            <Trash2 className="h-2.5 w-2.5" />
+                      {proneActive && (
+                        <div className="mt-2">
+                          <button onClick={saveProna} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
+                            <Save className="h-4 w-4" />
+                            Salvar Prona
                           </button>
                         </div>
-                      ))}
-                    </div>
-                  ) : null}
+                      )}
 
-                  <div className="mt-5 border-t border-white/8 pt-5">
-                    <p className="mb-2 text-[10px] font-bold text-[#fb923c]">Manobra de Recrutamento</p>
-                    <p className="mb-3 text-[9px] leading-relaxed text-white/30">FiO₂ 100%, FR 10, ΔP 15 cmH₂O | PCV: PEEP +5 a cada 2min ate 25-45 cmH₂O | Apos: PEEP 25, calcular Cest, iniciar titulacao decremental.</p>
+                      {currentRecord.pronaHist?.length ? (
+                        <div className="mt-2 space-y-1.5">
+                          <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/36">Historico Prona</p>
+                          {currentRecord.pronaHist.map((entry, i) => (
+                            <div key={`prona-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/10 bg-black/18 px-2.5 py-1.5">
+                              <p className="text-[9px] text-white/50">
+                                {formatDateTime(entry.ts)} · {entry.tempo || '--'} · {entry.dataInicio || '--'} {entry.horaInicio || ''}
+                              </p>
+                              <button onClick={() => deleteProna(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                                <Trash2 className="h-2.5 w-2.5" />
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      ) : null}
+
+                      <div className="mt-4 border-t border-white/8 pt-4">
+                        <p className="mb-1.5 text-[10px] font-bold text-[#fb923c]">Manobra de Recrutamento</p>
+                        <p className="mb-2 text-[9px] leading-relaxed text-white/30">FiO₂ 100%, FR 10, ΔP 15 cmH₂O | PCV: PEEP +5 a cada 2min ate 25-45 cmH₂O | Apos: PEEP 25, calcular Cest, iniciar titulacao decremental.</p>
                     <div className="overflow-x-auto">
                       <table className="w-full border-collapse text-[10px]">
                         <thead>
@@ -4482,30 +4524,40 @@ export function ProntuarioSystemPanel() {
                     </button>
                   </div>
 
-                  <div className="mt-5 border-t border-white/8 pt-5">
-                    <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                      Recrutabilidade pulmonar
-                    </p>
-                    <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
-                      <FieldShell label="Volume insp. (mL)">
-                        <input className={INPUT_CLASS_SM} type="number" value={currentRecord.recVolInsp} onChange={(event) => setField('recVolInsp', event.target.value)} placeholder="1200" />
-                      </FieldShell>
-                      <FieldShell label="Volume exp. (mL)">
-                        <input className={INPUT_CLASS_SM} type="number" value={currentRecord.recVolExp} onChange={(event) => setField('recVolExp', event.target.value)} placeholder="600" />
-                      </FieldShell>
-                      <MetricChip
-                        label="Diferenca"
-                        value={calculations?.recruitDiff !== null && calculations?.recruitDiff !== undefined ? `${calculations.recruitDiff.toFixed(0)} mL` : '--'}
-                        hint="Volume inspiratorio - expiratorio"
-                      />
-                      <MetricChip
-                        label="Leitura"
-                        value={calculations?.recruitSummary?.text || '--'}
-                        hint="Limiar classico > 500 mL"
-                        color={calculations?.recruitSummary?.color}
-                      />
-                    </div>
-                  </div>
+                      <div className="mt-4 border-t border-white/8 pt-4">
+                        <div className="mb-2 flex items-center justify-between gap-2">
+                          <p className="text-[10px] font-bold text-[#a78bfa]">Recrutabilidade pulmonar</p>
+                          <button
+                            type="button"
+                            onClick={() => updateCurrentRecord((r) => ({ ...r, recVolInsp: '', recVolExp: '' }))}
+                            className="inline-flex items-center gap-1 rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] px-2 py-0.5 text-[9px] font-semibold text-[#fca5a5]"
+                          >
+                            <Trash2 className="h-2.5 w-2.5" />
+                            Limpar
+                          </button>
+                        </div>
+                        <div className="grid gap-2 grid-cols-2 xl:grid-cols-4">
+                          <FieldShell label="Vol. insp. (mL)">
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.recVolInsp} onChange={(event) => setField('recVolInsp', event.target.value)} placeholder="1200" />
+                          </FieldShell>
+                          <FieldShell label="Vol. exp. (mL)">
+                            <input className={INPUT_CLASS_SM} type="number" value={currentRecord.recVolExp} onChange={(event) => setField('recVolExp', event.target.value)} placeholder="600" />
+                          </FieldShell>
+                          <MetricChip
+                            label="Diferenca"
+                            value={calculations?.recruitDiff !== null && calculations?.recruitDiff !== undefined ? `${calculations.recruitDiff.toFixed(0)} mL` : '--'}
+                            hint="Vol. insp. - exp."
+                          />
+                          <MetricChip
+                            label="Leitura"
+                            value={calculations?.recruitSummary?.text || '--'}
+                            hint="> 500 mL recrutavel"
+                            color={calculations?.recruitSummary?.color}
+                          />
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             ) : null}
