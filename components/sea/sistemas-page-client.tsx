@@ -31,19 +31,23 @@ export default function SistemasPageClient() {
       <SeaBackdrop />
 
       <main className="relative z-10 px-4 pb-32 pt-8 md:px-8 md:pt-10">
-        <div className="mx-auto max-w-7xl space-y-5">
+        <div className="mx-auto max-w-4xl space-y-6">
+
+          {/* Header */}
           <div className="flex items-center gap-4">
             <Link href="/explore">
               <motion.div
-                className="chrome-subtle flex h-11 w-11 items-center justify-center rounded-[1rem]"
-                whileTap={{ scale: 0.94 }}
+                whileTap={{ scale: 0.92 }}
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/4 transition-colors hover:bg-white/8"
               >
-                <ArrowLeft className="h-5 w-5 text-white" />
+                <ArrowLeft className="h-4 w-4 text-white/60" />
               </motion.div>
             </Link>
-            <h1 className="metal-text text-[1.4rem] font-semibold uppercase tracking-[0.24em] md:text-[1.7rem]">
-              Sistemas
-            </h1>
+            <div className="h-px flex-1 bg-[linear-gradient(90deg,rgba(255,255,255,0.08),transparent)]" />
+            <div className="flex items-center gap-2">
+              <Calculator className="h-4 w-4 text-white/30" />
+              <span className="text-[10px] font-semibold uppercase tracking-[0.28em] text-white/30">Sistemas</span>
+            </div>
           </div>
 
           <StudyRailBoard
