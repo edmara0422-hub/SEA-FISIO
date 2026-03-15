@@ -178,6 +178,19 @@ export function calcCest(vt: number, dp: number): number | null {
   return vt / dp
 }
 
+/** Compliance dinâmica: Vt / (Ppico - PEEP) */
+export function calcCdyn(vt: number, ppico: number, peep: number): number | null {
+  const denom = ppico - peep
+  if (!vt || !ppico || denom <= 0) return null
+  return vt / denom
+}
+
+/** Mechanical Power (J/min) ≈ 0.098 × FR × Vt(L) × (Ppico − PEEP/2) */
+export function calcMechanicalPower(fr: number, vtMl: number, ppico: number, peep: number): number | null {
+  if (!fr || !vtMl || !ppico) return null
+  return 0.098 * fr * (vtMl / 1000) * (ppico - peep / 2)
+}
+
 export function calcGlasgow(
   o: number,
   v: number | string,
@@ -441,6 +454,10 @@ export type PatientData = {
   mraTab: MraRow[]
   titTab: TitRow[]
   pronaHist: PronaHistEntry[]
+  hfovHz: string
+  hfovBiasFlow: string
+  wob: string
+  vmObs: string
   motora: string
   mrcOmbroD: string
   mrcOmbroE: string
@@ -591,6 +608,10 @@ export function emptyPatient(): PatientData {
     mraTab: [],
     titTab: [],
     pronaHist: [],
+    hfovHz: '',
+    hfovBiasFlow: '',
+    wob: '',
+    vmObs: '',
     motora: '',
     mrcOmbroD: '',
     mrcOmbroE: '',
