@@ -1309,9 +1309,9 @@ export function ProntuarioSystemPanel() {
   const [activeTab, setActiveTab] = useState<FormTab>('dados')
   const [hydrated, setHydrated] = useState(false)
   const [expandedProtocols, setExpandedProtocols] = useState<Set<string>>(new Set())
-  const [collapsedPeep, setCollapsedPeep] = useState(false)
-  const [collapsedDesmame, setCollapsedDesmame] = useState(false)
-  const [collapsedProna, setCollapsedProna] = useState(false)
+  const [collapsedPeep, setCollapsedPeep] = useState(true)
+  const [collapsedDesmame, setCollapsedDesmame] = useState(true)
+  const [collapsedProna, setCollapsedProna] = useState(true)
 
   useEffect(() => {
     try {
