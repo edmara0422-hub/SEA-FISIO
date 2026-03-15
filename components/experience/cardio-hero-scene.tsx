@@ -12,13 +12,15 @@ export function CardioHeroScene({ transparent = false }: { transparent?: boolean
       gl={{ alpha: transparent, antialias: true }}
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
-      {/* Strong key from top-right — white hot on top edges */}
-      <directionalLight position={[3, 8, 2]}  intensity={7.0} color="#ffffff" />
+      {/* Strong key from top-right */}
+      <directionalLight position={[3, 8, 2]}  intensity={12.0} color="#ffffff" />
+      {/* Fill from front */}
+      <directionalLight position={[0, 0, 6]}  intensity={5.0} color="#ffdddd" />
       {/* Softer fill from front-left */}
-      <directionalLight position={[-2, 2, 4]} intensity={1.0} color="#cc8899" />
+      <directionalLight position={[-2, 2, 4]} intensity={3.0} color="#cc8899" />
       {/* Red rim from below */}
-      <pointLight position={[0, -5, -1]} intensity={16} color="#bb1122" distance={20} />
-      <ambientLight intensity={0.04} color="#150508" />
+      <pointLight position={[0, -5, -1]} intensity={24} color="#cc1122" distance={20} />
+      <ambientLight intensity={0.20} color="#200810" />
 
       <HeartModel />
     </Canvas>
@@ -41,11 +43,11 @@ function HeartModel() {
   const { scene } = useGLTF('/heart.glb')
 
   const solidMat = useMemo(() => new THREE.MeshStandardMaterial({
-    color:             '#060810',
+    color:             '#0e0610',
     roughness:         1.0,
     metalness:         0.0,
     flatShading:       true,
-    emissive:          new THREE.Color('#100305'),
+    emissive:          new THREE.Color('#1a0408'),
     emissiveIntensity: 1.0,
   }), [])
 
@@ -90,10 +92,10 @@ function HeartModel() {
       const colors = new Float32Array(pos.count * 3)
       for (let v = 0; v < pos.count; v++) {
         const t = Math.pow((pos.getY(v) - minY) / rangeY, 0.55)
-        // bottom = deep red (0.70, 0.03, 0.03) → top = warm white-pink (1.0, 0.80, 0.80)
-        colors[v*3]   = t * 0.30 + 0.70   // R: always warm
-        colors[v*3+1] = t * 0.77 + 0.03   // G: red at bottom, pink-white at top
-        colors[v*3+2] = t * 0.77 + 0.03   // B: same
+        // bottom = deep red (0.85, 0.05, 0.05) → top = white (1.0, 1.0, 1.0)
+        colors[v*3]   = 1.0                // R: always full
+        colors[v*3+1] = t * 0.95 + 0.05   // G: 0.05 (red) → 1.0 (white)
+        colors[v*3+2] = t * 0.95 + 0.05   // B: 0.05 (red) → 1.0 (white)
       }
       edges.setAttribute('color', new THREE.BufferAttribute(colors, 3))
       const seg = new THREE.LineSegments(edges, edgeMat)
