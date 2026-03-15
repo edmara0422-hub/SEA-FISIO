@@ -167,9 +167,8 @@ export function analisarGaso(params: {
   const co2 = Number(params.gasoPaCO2)
   const hco3 = Number(params.gasoHCO3)
 
-  if ([pH, co2, hco3].some((value) => Number.isNaN(value))) {
-    return null
-  }
+  if (!pH || !co2 || !hco3 || [pH, co2, hco3].some((v) => Number.isNaN(v))) return null
+  if (pH < 6.5 || pH > 8.0 || co2 < 5 || hco3 < 1) return null
 
   let tipo = 'Normal'
   let origem = ''
@@ -177,33 +176,57 @@ export function analisarGaso(params: {
 
   if (pH < 7.35) {
     tipo = 'Acidose'
-    if (co2 > 45 && hco3 < 22) {
+    const hasRespComp = co2 > 45
+    const hasMetComp = hco3 < 22
+    if (hasRespComp && hasMetComp) {
       origem = 'Mista'
       comp = 'Nao compensada'
-    } else if (co2 > 45) {
+    } else if (hasRespComp) {
       origem = 'Respiratoria'
-      comp = hco3 > 26 ? 'Parcial' : 'Nao compensada'
-    } else if (hco3 < 22) {
+      // Compensacao renal: aguda +1 mEq/L por 10 mmHg; cronica +3.5 mEq/L por 10 mmHg
+      const delta = co2 - 40
+      const expAcute = 24 + delta * 0.1
+      const expChronic = 24 + delta * 0.35
+      if (hco3 >= expChronic - 2) comp = 'Cronica compensada'
+      else if (hco3 >= expAcute) comp = 'Aguda sobre cronica'
+      else comp = 'Aguda nao compensada'
+    } else if (hasMetComp) {
       origem = 'Metabolica'
-      comp = co2 < 35 ? 'Parcial' : 'Nao compensada'
+      // Winters: PaCO2 esperado = 1.5 × HCO3 + 8 (±2)
+      const expCO2 = 1.5 * hco3 + 8
+      if (co2 >= expCO2 - 2 && co2 <= expCO2 + 2) comp = 'Compensada (Winters)'
+      else if (co2 < expCO2 - 2) comp = '+Alcalose resp. associada'
+      else comp = '+Acidose resp. associada'
     }
   } else if (pH > 7.45) {
     tipo = 'Alcalose'
-    if (co2 < 35 && hco3 > 26) {
+    const hasRespComp = co2 < 35
+    const hasMetComp = hco3 > 26
+    if (hasRespComp && hasMetComp) {
       origem = 'Mista'
       comp = 'Nao compensada'
-    } else if (co2 < 35) {
+    } else if (hasRespComp) {
       origem = 'Respiratoria'
-      comp = hco3 < 22 ? 'Parcial' : 'Nao compensada'
-    } else if (hco3 > 26) {
+      // Aguda: HCO3 cai 2 por 10 mmHg; cronica: cai 5 por 10 mmHg
+      const delta = 40 - co2
+      const expAcute = 24 - delta * 0.2
+      const expChronic = 24 - delta * 0.5
+      if (hco3 <= expChronic + 2) comp = 'Cronica'
+      else if (hco3 <= expAcute + 2) comp = 'Aguda'
+      else comp = '+Alcalose met. associada'
+    } else if (hasMetComp) {
       origem = 'Metabolica'
-      comp = co2 > 45 ? 'Parcial' : 'Nao compensada'
+      // PaCO2 esperado = 40 + 0.7 × (HCO3 - 24)
+      const expCO2 = 40 + 0.7 * (hco3 - 24)
+      if (co2 >= expCO2 - 3 && co2 <= expCO2 + 3) comp = 'Compensada'
+      else if (co2 < expCO2 - 3) comp = '+Acidose resp. associada'
+      else comp = 'Nao compensada'
     }
   }
 
   let cor = '#4ade80'
   if (tipo !== 'Normal') cor = '#facc15'
-  if (origem === 'Mista' || comp === 'Nao compensada') cor = '#fb923c'
+  if (origem === 'Mista' || comp.includes('Nao compensada') || comp.startsWith('+')) cor = '#fb923c'
   if (pH < 7.2 || pH > 7.6) cor = '#f87171'
 
   return {
@@ -211,7 +234,7 @@ export function analisarGaso(params: {
     origem,
     comp,
     cor,
-    full: `${tipo}${origem ? ` ${origem}` : ''}${comp ? ` - ${comp}` : ''}`,
+    full: `${tipo}${origem ? ` ${origem}` : ''}${comp ? ` — ${comp}` : ''}`,
   }
 }
 

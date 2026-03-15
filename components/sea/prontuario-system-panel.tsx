@@ -771,6 +771,105 @@ function calcSF(spo2: string, fio2: string) {
   return sat / (fi / 100)
 }
 
+function gasoAnaliseColor(analise: string) {
+  if (!analise) return '#94a3b8'
+  if (analise.includes('Normal')) return '#4ade80'
+  if (analise.includes('Mista') || analise.includes('Nao compensada') || analise.includes('associada')) return '#fb923c'
+  if (analise.includes('7.2') || analise.includes('grave')) return '#f87171'
+  return '#facc15'
+}
+
+type TrendInsight = { text: string; color: string }
+
+function numDelta(a: string, b: string) {
+  const va = parseFloat(a)
+  const vb = parseFloat(b)
+  if (!Number.isFinite(va) || !Number.isFinite(vb) || va === 0 || vb === 0) return null
+  return { cur: va, prev: vb, delta: va - vb }
+}
+
+function analyzeGasoTrend(entries: GasometryHistoryEntry[]): TrendInsight[] {
+  if (entries.length < 2) return []
+  const cur = entries[0]
+  const prev = entries[1]
+  const insights: TrendInsight[] = []
+
+  const pf = numDelta(cur.pf, prev.pf)
+  if (pf) {
+    if (pf.delta > 20) insights.push({ text: `P/F melhorou: ${prev.pf}→${cur.pf} (+${pf.delta.toFixed(0)}) — melhora da oxigenação`, color: '#4ade80' })
+    else if (pf.delta < -20) insights.push({ text: `P/F piorou: ${prev.pf}→${cur.pf} (${pf.delta.toFixed(0)}) — investigar hipoxemia`, color: '#f87171' })
+    else insights.push({ text: `P/F estável: ${prev.pf}→${cur.pf}`, color: '#94a3b8' })
+  }
+
+  const ph = numDelta(cur.pH, prev.pH)
+  if (ph) {
+    if (ph.delta > 0.05) insights.push({ text: `pH melhorou: ${prev.pH}→${cur.pH} — reversão da acidemia`, color: '#4ade80' })
+    else if (ph.delta < -0.05) insights.push({ text: `Acidemia progressiva: pH ${prev.pH}→${cur.pH} — reavaliar causa`, color: '#f87171' })
+  }
+
+  const lac = numDelta(cur.lactato, prev.lactato)
+  if (lac) {
+    if (lac.delta < -0.5) insights.push({ text: `Lactato clareando: ${prev.lactato}→${cur.lactato} — melhora perfusional`, color: '#4ade80' })
+    else if (lac.delta > 0.5) insights.push({ text: `Lactato aumentando: ${prev.lactato}→${cur.lactato} — hipoperfusão?`, color: '#f87171' })
+  }
+
+  const co2 = numDelta(cur.paCO2, prev.paCO2)
+  if (co2) {
+    if (co2.delta > 5) insights.push({ text: `Hipercapnia progressiva: PaCO2 ${prev.paCO2}→${cur.paCO2} — ajustar VM`, color: '#fb923c' })
+    else if (co2.delta < -5) insights.push({ text: `Melhora ventilatória: PaCO2 ${prev.paCO2}→${cur.paCO2}`, color: '#4ade80' })
+  }
+
+  if (entries.length >= 3) {
+    const first = entries[entries.length - 1]
+    const pfTrend = numDelta(cur.pf, first.pf)
+    if (pfTrend && Math.abs(pfTrend.delta) > 30) {
+      const dir = pfTrend.delta > 0 ? 'progressão positiva' : 'progressão negativa'
+      insights.push({ text: `Tendência geral (${entries.length} gasos): P/F ${first.pf}→${cur.pf} — ${dir}`, color: pfTrend.delta > 0 ? '#60a5fa' : '#fb923c' })
+    }
+  }
+
+  return insights
+}
+
+function analyzeVMTrend(entries: VMHistoryEntry[]): TrendInsight[] {
+  if (entries.length < 2) return []
+  const cur = entries[0]
+  const prev = entries[1]
+  const insights: TrendInsight[] = []
+
+  const dp = numDelta(cur.dp, prev.dp)
+  if (dp) {
+    if (dp.delta < -2) insights.push({ text: `DP reduziu: ${prev.dp}→${cur.dp} cmH2O — proteção pulmonar`, color: '#4ade80' })
+    else if (dp.delta > 2) insights.push({ text: `DP aumentou: ${prev.dp}→${cur.dp} cmH2O — risco lesão pulmonar`, color: '#f87171' })
+    else insights.push({ text: `DP estável: ${cur.dp} cmH2O`, color: '#94a3b8' })
+  }
+
+  const fio2 = numDelta(cur.fio2, prev.fio2)
+  if (fio2) {
+    if (fio2.delta < -5) insights.push({ text: `FiO2 reduzida: ${prev.fio2}→${cur.fio2}% — desmame de O2`, color: '#4ade80' })
+    else if (fio2.delta > 5) insights.push({ text: `FiO2 aumentada: ${prev.fio2}→${cur.fio2}% — demanda O2 maior`, color: '#fb923c' })
+  }
+
+  const peep = numDelta(cur.peep, prev.peep)
+  if (peep && Math.abs(peep.delta) >= 1) {
+    insights.push({ text: `PEEP ${peep.delta > 0 ? 'aumentado' : 'reduzido'}: ${prev.peep}→${cur.peep} cmH2O`, color: '#facc15' })
+  }
+
+  if (cur.modo && prev.modo && cur.modo !== prev.modo) {
+    insights.push({ text: `Modo alterado: ${prev.modo} → ${cur.modo}`, color: '#60a5fa' })
+  }
+
+  if (entries.length >= 3) {
+    const first = entries[entries.length - 1]
+    const fio2Trend = numDelta(cur.fio2, first.fio2)
+    if (fio2Trend && fio2Trend.delta < -10) {
+      insights.push({ text: `Tendência (${entries.length} registros): FiO2 ${first.fio2}→${cur.fio2}% — desmame em curso`, color: '#60a5fa' })
+    }
+  }
+
+  return insights
+}
+
 function calcResist(pico: string, plato: string, fluxo: string) {
   const pi = parseNumber(pico)
   const pl = parseNumber(plato)
@@ -2508,7 +2607,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5" style={{display:'none'}}>
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Eventos de via aerea
                   </p>
@@ -2634,17 +2733,17 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Gasometria
                   </p>
-                  <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                  <div className="grid gap-2 grid-cols-6">
                     <FieldShell label="Data">
                       <input className={INPUT_CLASS_SM} type="date" value={currentRecord.gasoData} onChange={(event) => setField('gasoData', event.target.value)} />
                     </FieldShell>
                     <FieldShell label="Hora">
                       <input className={INPUT_CLASS_SM} type="time" value={currentRecord.gasoHora} onChange={(event) => setField('gasoHora', event.target.value)} />
                     </FieldShell>
-                    <FieldShell label="SpO2 / S-F">
+                    <FieldShell label="SpO2 S/F">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.sfSpO2} onChange={(event) => setField('sfSpO2', event.target.value)} placeholder="96" />
                     </FieldShell>
-                    <FieldShell label="FiO2 / S-F">
+                    <FieldShell label="FiO2 S/F">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.sfFiO2} onChange={(event) => setField('sfFiO2', event.target.value)} placeholder="40" />
                     </FieldShell>
                     <FieldShell label="pH">
@@ -2668,7 +2767,7 @@ export function ProntuarioSystemPanel() {
                     <FieldShell label="Lactato">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoLactato} onChange={(event) => setField('gasoLactato', event.target.value)} placeholder="1.5" />
                     </FieldShell>
-                    <FieldShell label="FiO2 gaso">
+                    <FieldShell label="FiO2">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoFiO2} onChange={(event) => setField('gasoFiO2', event.target.value)} placeholder="40" />
                     </FieldShell>
                   </div>
@@ -2701,63 +2800,169 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
-                  <MetricChip
-                    label="P/F"
-                    value={calculations?.pf ? calculations.pf.toFixed(0) : '--'}
-                    hint={calculations?.pfInterp?.t}
-                    color={calculations?.pfInterp?.c}
-                  />
-                  <MetricChip
-                    label="S/F"
-                    value={calculations?.sf ? calculations.sf.toFixed(0) : '--'}
-                    hint="Oxigenacao nao invasiva"
-                  />
-                  <MetricChip
-                    label="Gasometria"
-                    value={calculations?.gaso?.tipo || '--'}
-                    hint={calculations?.gaso?.full}
-                    color={calculations?.gaso?.cor}
-                  />
-                </div>
+                {/* Gasometria analise — só aparece quando há dados */}
+                {calculations?.gaso ? (
+                  <div className="chrome-panel rounded-[1.5rem] p-4">
+                    <p className="mb-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">Análise gasométrica</p>
+                    <p className="text-sm font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
+                    {calculations.gaso.comp ? (
+                      <p className="mt-1 text-[11px] text-white/52">{calculations.gaso.comp}</p>
+                    ) : null}
+                  </div>
+                ) : null}
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Historico de gasometria
-                  </p>
-                  <div className="space-y-3">
-                    {currentRecord.gasometrias?.length ? (
-                      currentRecord.gasometrias.map((entry, index) => (
-                        <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                            <div>
-                              <p className="text-sm font-semibold text-white/86">
-                                {entry.data || '--'} {entry.hora || ''} • {entry.analise || 'Gasometria'}
+                {/* P/F classification — 3 colunas */}
+                {calculations?.pf ? (
+                  <div className="chrome-panel rounded-[1.5rem] p-4">
+                    <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                      Relação P/F — <span className="text-white/70">{calculations.pf.toFixed(0)}</span>
+                    </p>
+                    <div className="grid grid-cols-3 gap-2">
+                      {/* Normal/Padrão */}
+                      <div className="space-y-1">
+                        <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36">Padrão</p>
+                        {([
+                          { label: '> 300 Normal', active: calculations.pf > 300, color: '#4ade80' },
+                          { label: '200–300 Leve', active: calculations.pf > 200 && calculations.pf <= 300, color: '#facc15' },
+                          { label: '100–200 Moder.', active: calculations.pf > 100 && calculations.pf <= 200, color: '#fb923c' },
+                          { label: '≤ 100 Grave', active: calculations.pf <= 100, color: '#f87171' },
+                        ] as { label: string; active: boolean; color: string }[]).map((row, i) => (
+                          <div
+                            key={i}
+                            className={`rounded-[0.5rem] px-2 py-1 text-[10px] ${row.active ? 'font-semibold' : 'text-white/28'}`}
+                            style={row.active ? { background: row.color + '20', border: `1px solid ${row.color}40`, color: row.color } : { border: '1px solid transparent' }}
+                          >{row.label}</div>
+                        ))}
+                      </div>
+                      {/* Berlim 2012 */}
+                      <div className="space-y-1">
+                        <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36">Berlim 2012</p>
+                        {([
+                          { label: '> 300 Normal', active: calculations.pf > 300, color: '#4ade80' },
+                          { label: '200–300 Leve', active: calculations.pf > 200 && calculations.pf <= 300, color: '#facc15' },
+                          { label: '100–200 Moder.', active: calculations.pf > 100 && calculations.pf <= 200, color: '#fb923c' },
+                          { label: '≤ 100 Grave', active: calculations.pf <= 100, color: '#f87171' },
+                        ] as { label: string; active: boolean; color: string }[]).map((row, i) => (
+                          <div
+                            key={i}
+                            className={`rounded-[0.5rem] px-2 py-1 text-[10px] ${row.active ? 'font-semibold' : 'text-white/28'}`}
+                            style={row.active ? { background: row.color + '20', border: `1px solid ${row.color}40`, color: row.color } : { border: '1px solid transparent' }}
+                          >{row.label}</div>
+                        ))}
+                      </div>
+                      {/* Global 2023 S/F equivalente */}
+                      <div className="space-y-1">
+                        <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36">Global 2023 (S/F)</p>
+                        {([
+                          { label: 'S/F > 315 Normal', active: (calculations.sf ?? 0) > 315, color: '#4ade80' },
+                          { label: 'S/F 232–315 Leve', active: (calculations.sf ?? 0) > 232 && (calculations.sf ?? 0) <= 315, color: '#facc15' },
+                          { label: 'S/F 148–232 Mod.', active: (calculations.sf ?? 0) > 148 && (calculations.sf ?? 0) <= 232, color: '#fb923c' },
+                          { label: 'S/F ≤ 148 Grave', active: (calculations.sf ?? 0) > 0 && (calculations.sf ?? 0) <= 148, color: '#f87171' },
+                        ] as { label: string; active: boolean; color: string }[]).map((row, i) => (
+                          <div
+                            key={i}
+                            className={`rounded-[0.5rem] px-2 py-1 text-[10px] ${row.active ? 'font-semibold' : 'text-white/28'}`}
+                            style={row.active ? { background: row.color + '20', border: `1px solid ${row.color}40`, color: row.color } : { border: '1px solid transparent' }}
+                          >{row.label}</div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {/* S/F classification — 2 colunas */}
+                {calculations?.sf ? (
+                  <div className="chrome-panel rounded-[1.5rem] p-4">
+                    <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                      Relação S/F — <span className="text-white/70">{calculations.sf.toFixed(0)}</span>
+                      {calculations.sf ? <span className="ml-2 text-[10px] text-white/36">≈ P/F {Math.round((calculations.sf - 64) / 0.84)}</span> : null}
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {/* Tabela 1 */}
+                      <div className="space-y-1">
+                        <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36">Tabela 1</p>
+                        {([
+                          { pf: '> 300', sf: '> 315', active: calculations.sf > 315, color: '#4ade80' },
+                          { pf: '< 300', sf: '≤ 315', active: calculations.sf > 274 && calculations.sf <= 315, color: '#facc15' },
+                          { pf: '< 250', sf: '≤ 274', active: calculations.sf > 232 && calculations.sf <= 274, color: '#fb923c' },
+                          { pf: '< 200', sf: '≤ 232', active: calculations.sf > 0 && calculations.sf <= 232, color: '#f87171' },
+                        ] as { pf: string; sf: string; active: boolean; color: string }[]).map((row, i) => (
+                          <div
+                            key={i}
+                            className={`flex justify-between rounded-[0.5rem] px-2 py-1 text-[10px] ${row.active ? 'font-semibold' : 'text-white/28'}`}
+                            style={row.active ? { background: row.color + '20', border: `1px solid ${row.color}40`, color: row.color } : { border: '1px solid transparent' }}
+                          >
+                            <span>P/F {row.pf}</span>
+                            <span>S/F {row.sf}</span>
+                          </div>
+                        ))}
+                      </div>
+                      {/* Tabela 2 */}
+                      <div className="space-y-1">
+                        <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36">Tabela 2</p>
+                        {([
+                          { pf: '> 300', sf: '> 315', active: calculations.sf > 315, color: '#4ade80' },
+                          { pf: '≤ 300', sf: '≤ 315', active: calculations.sf > 250 && calculations.sf <= 315, color: '#facc15' },
+                          { pf: '≤ 225', sf: '≤ 250', active: calculations.sf > 200 && calculations.sf <= 250, color: '#fb923c' },
+                          { pf: '≤ 150', sf: '≤ 200', active: calculations.sf > 0 && calculations.sf <= 200, color: '#f87171' },
+                        ] as { pf: string; sf: string; active: boolean; color: string }[]).map((row, i) => (
+                          <div
+                            key={i}
+                            className={`flex justify-between rounded-[0.5rem] px-2 py-1 text-[10px] ${row.active ? 'font-semibold' : 'text-white/28'}`}
+                            style={row.active ? { background: row.color + '20', border: `1px solid ${row.color}40`, color: row.color } : { border: '1px solid transparent' }}
+                          >
+                            <span>P/F {row.pf}</span>
+                            <span>S/F {row.sf}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                ) : null}
+
+                {currentRecord.gasometrias?.length ? (
+                  <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                    <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                      Historico de gasometria · {currentRecord.gasometrias.length}
+                    </p>
+                    {currentRecord.gasometrias.length >= 2 && (() => {
+                      const insights = analyzeGasoTrend(currentRecord.gasometrias)
+                      if (!insights.length) return null
+                      return (
+                        <div className="mb-3 rounded-[1rem] border border-white/10 bg-black/22 p-3 space-y-1">
+                          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução gasométrica</p>
+                          {insights.map((ins, i) => (
+                            <p key={i} className="text-[11px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
+                          ))}
+                        </div>
+                      )
+                    })()}
+                    <div className="space-y-2">
+                      {currentRecord.gasometrias.map((entry, index) => (
+                        <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[11px] font-semibold text-white/86">
+                                {entry.data || '--'} {entry.hora || ''}
+                                {entry.analise ? <span className="ml-2 text-[10px]" style={{ color: gasoAnaliseColor(entry.analise) }}>{entry.analise}</span> : null}
                               </p>
-                              <p className="mt-1 text-xs text-white/46">
-                                pH {entry.pH || '--'} • PaCO2 {entry.paCO2 || '--'} • PaO2 {entry.paO2 || '--'} • HCO3 {entry.hco3 || '--'}
+                              <p className="mt-0.5 text-[10px] text-white/44">
+                                pH {entry.pH || '--'} · PaCO2 {entry.paCO2 || '--'} · PaO2 {entry.paO2 || '--'} · HCO3 {entry.hco3 || '--'} · Lac {entry.lactato || '--'}
                               </p>
-                              <p className="mt-1 text-xs text-white/46">
-                                P/F {entry.pf || '--'} • S/F {entry.sf || '--'} • FiO2 {entry.fio2 || '--'} • Lactato {entry.lactato || '--'}
+                              <p className="mt-0.5 text-[10px] text-white/36">
+                                P/F {entry.pf || '--'} · S/F {entry.sf || '--'} · FiO2 {entry.fio2 || '--'}
                               </p>
-                              {entry.obs ? <p className="mt-2 text-xs leading-relaxed text-white/54">{entry.obs}</p> : null}
+                              {entry.obs ? <p className="mt-1 text-[10px] text-white/50">{entry.obs}</p> : null}
                             </div>
-                            <button
-                              onClick={() => deleteGaso(index)}
-                              className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
-                            >
-                              <Trash2 className="h-4 w-4" />
+                            <button onClick={() => deleteGaso(index)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                              <Trash2 className="h-3 w-3" />
                             </button>
                           </div>
                         </div>
-                      ))
-                    ) : (
-                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
-                        Nenhuma gasometria salva.
-                      </div>
-                    )}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : null}
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
@@ -3063,42 +3268,47 @@ export function ProntuarioSystemPanel() {
                   />
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
-                    Historico de parametros VM
-                  </p>
-                  <div className="space-y-3">
-                    {currentRecord.vmHist?.length ? (
-                      currentRecord.vmHist.map((entry, index) => (
-                        <div key={`${entry.ts}-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-4">
-                          <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-                            <div>
-                              <p className="text-sm font-semibold text-white/86">
-                                {entry.modo || 'Sem modo'} • {formatDateTime(entry.ts)}
+                {currentRecord.vmHist?.length ? (
+                  <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                    <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
+                      Historico VM · {currentRecord.vmHist.length}
+                    </p>
+                    {currentRecord.vmHist.length >= 2 && (() => {
+                      const insights = analyzeVMTrend(currentRecord.vmHist)
+                      if (!insights.length) return null
+                      return (
+                        <div className="mb-3 rounded-[1rem] border border-white/10 bg-black/22 p-3 space-y-1">
+                          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução ventilatória</p>
+                          {insights.map((ins, i) => (
+                            <p key={i} className="text-[11px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
+                          ))}
+                        </div>
+                      )
+                    })()}
+                    <div className="space-y-2">
+                      {currentRecord.vmHist.map((entry, index) => (
+                        <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                          <div className="flex items-start justify-between gap-2">
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[11px] font-semibold text-white/86">
+                                {entry.modo || 'Sem modo'} · {formatDateTime(entry.ts)}
                               </p>
-                              <p className="mt-1 text-xs text-white/46">
-                                VT {entry.vt || '--'} • FR {entry.fr || '--'} • PEEP {entry.peep || '--'} • FiO2 {entry.fio2 || '--'}
+                              <p className="mt-0.5 text-[10px] text-white/44">
+                                VT {entry.vt || '--'} · FR {entry.fr || '--'} · PEEP {entry.peep || '--'} · FiO2 {entry.fio2 || '--'}
                               </p>
-                              <p className="mt-1 text-xs text-white/46">
-                                DP {entry.dp || '--'} • Cest {entry.cest || '--'} • Raw {entry.raw || '--'} • Pmusc {entry.pmusc || '--'}
+                              <p className="mt-0.5 text-[10px] text-white/36">
+                                DP {entry.dp || '--'} · Cest {entry.cest || '--'} · Raw {entry.raw || '--'} · Pmusc {entry.pmusc || '--'}
                               </p>
                             </div>
-                            <button
-                              onClick={() => deleteVM(index)}
-                              className="inline-flex h-10 w-10 items-center justify-center rounded-[1rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
-                            >
-                              <Trash2 className="h-4 w-4" />
+                            <button onClick={() => deleteVM(index)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                              <Trash2 className="h-3 w-3" />
                             </button>
                           </div>
                         </div>
-                      ))
-                    ) : (
-                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
-                        Nenhum parametro salvo.
-                      </div>
-                    )}
+                      ))}
+                    </div>
                   </div>
-                </div>
+                ) : null}
 
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
