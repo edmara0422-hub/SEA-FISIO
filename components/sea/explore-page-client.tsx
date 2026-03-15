@@ -130,7 +130,7 @@ function Carousel3D() {
             <motion.span
               animate={{
                 width: active === i ? 28 : 6,
-                background: active === i ? card.color : 'rgba(255,255,255,0.18)',
+                background: active === i ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.18)',
               }}
               transition={spring}
               className="block h-1.5 rounded-full"
