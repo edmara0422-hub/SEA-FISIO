@@ -3,11 +3,11 @@
 import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer-motion'
 import { BookOpen, ChevronRight, Cpu } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 
-const spring = { type: 'spring', stiffness: 220, damping: 28 } as const
+const spring = { type: 'spring', stiffness: 380, damping: 32 } as const
 
 const CARDS = [
   {
@@ -51,6 +51,10 @@ function Carousel3D() {
   const didDrag = useRef(false)
   const router = useRouter()
 
+  useEffect(() => {
+    CARDS.forEach((c) => router.prefetch(c.href))
+  }, [router])
+
   const handleDragStart = () => { didDrag.current = false }
 
   const handleDragEnd = (_: unknown, info: { offset: { x: number } }) => {
@@ -59,7 +63,7 @@ function Carousel3D() {
       if (info.offset.x < -50 && active < CARDS.length - 1) setActive((v) => v + 1)
       else if (info.offset.x > 50 && active > 0) setActive((v) => v - 1)
     }
-    animate(dragX, 0, { type: 'spring', stiffness: 400, damping: 40 })
+    animate(dragX, 0, { type: 'spring', stiffness: 600, damping: 44 })
   }
 
   const handleCardClick = (i: number) => {
@@ -243,7 +247,7 @@ function Card3D({
                 <motion.p
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.12, duration: 0.4 }}
+                  transition={{ duration: 0.18 }}
                   className="text-[12px] leading-relaxed tracking-[0.03em] text-white/40 max-w-[28ch]"
                 >
                   {card.sub}
@@ -255,7 +259,7 @@ function Card3D({
               <motion.div
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
+                transition={{ duration: 0.15 }}
               >
                 <motion.div
                   whileHover={{ scale: 1.02 }}
