@@ -18,7 +18,8 @@ export function BrainHeroScene({
   return (
     <Canvas
       camera={{ position: [0, 0, compact ? 3.8 : 4.4], fov: compact ? 46 : 42 }}
-      gl={{ alpha: transparent, antialias: true }}
+      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
+      dpr={[1, 1.5]}
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
       {/* Strong key from top-right — white hot on top edges */}

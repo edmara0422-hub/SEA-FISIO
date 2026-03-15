@@ -9,7 +9,8 @@ export function PneumoHeroScene({ transparent = false }: { transparent?: boolean
   return (
     <Canvas
       camera={{ position: [0, 0, 4.6], fov: 38 }}
-      gl={{ alpha: transparent, antialias: true }}
+      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
+      dpr={[1, 1.5]}
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
       {/* Strong key from top-right */}

@@ -47,17 +47,26 @@ export function PerformanceBar() {
       {
         label: 'Detratores',
         value: state.detractors,
-        fill: 'linear-gradient(180deg, rgba(255,255,255,0.26) 0%, rgba(173,178,186,0.1) 38%, rgba(71,75,82,0.08) 100%)',
+        fill: 'linear-gradient(180deg, rgba(255,80,80,0.90) 0%, rgba(200,30,30,0.55) 50%, rgba(120,10,10,0.20) 100%)',
+        glow: 'rgba(255,60,60,0.28)',
+        accent: 'rgba(255,100,100,0.70)',
+        border: 'rgba(255,80,80,0.22)',
       },
       {
         label: 'Neutros',
         value: state.neutral,
-        fill: 'linear-gradient(180deg, rgba(255,255,255,0.52) 0%, rgba(207,212,219,0.18) 42%, rgba(86,90,98,0.1) 100%)',
+        fill: 'linear-gradient(180deg, rgba(255,200,60,0.90) 0%, rgba(200,140,20,0.55) 50%, rgba(120,80,10,0.20) 100%)',
+        glow: 'rgba(255,190,40,0.25)',
+        accent: 'rgba(255,210,80,0.70)',
+        border: 'rgba(255,200,60,0.22)',
       },
       {
         label: 'Promotores',
         value: state.promoters,
-        fill: 'linear-gradient(180deg, rgba(255,255,255,0.94) 0%, rgba(225,229,235,0.34) 42%, rgba(104,109,116,0.14) 100%)',
+        fill: 'linear-gradient(180deg, rgba(60,220,140,0.90) 0%, rgba(20,170,90,0.55) 50%, rgba(10,90,40,0.20) 100%)',
+        glow: 'rgba(40,210,120,0.28)',
+        accent: 'rgba(80,230,160,0.70)',
+        border: 'rgba(60,220,140,0.22)',
       },
     ],
     [state.detractors, state.neutral, state.promoters]
@@ -126,7 +135,12 @@ export function PerformanceBar() {
 
   return (
     <motion.section
-      className="sea-dark-glass rounded-[2rem] p-5 md:p-6"
+      className="rounded-[2rem] p-5 md:p-6"
+      style={{
+        border: '1px solid rgba(255,255,255,0.10)',
+        background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
+        boxShadow: '0 32px 72px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
+      }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, delay: 0.14 }}
@@ -156,7 +170,7 @@ export function PerformanceBar() {
           <MetricCard label="Feedbacks lidos" value={state.structured} />
         </div>
 
-        <div className="sea-dark-glass relative overflow-hidden rounded-[1.7rem] p-4">
+        <div className="relative overflow-hidden rounded-[1.7rem] p-4" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.25)' }}>
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_14%_18%,rgba(255,255,255,0.08),transparent_24%),radial-gradient(circle_at_86%_22%,rgba(226,231,238,0.08),transparent_28%)]" />
           <div className="mb-4 flex items-center justify-between">
             <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
@@ -169,28 +183,36 @@ export function PerformanceBar() {
 
           <div className="grid gap-4 xl:grid-cols-[0.76fr_1.24fr]">
             <div className="grid grid-cols-3 gap-3 items-end">
-              {bars.map((bar) => (
-                <div key={bar.label} className="sea-dark-glass relative overflow-hidden rounded-[1.25rem] border border-white/10 px-3 py-3">
-                  <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_-10%,rgba(255,255,255,0.08),transparent_34%)]" />
-                  <div className="relative flex h-36 items-end justify-center overflow-hidden rounded-[0.95rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(10,10,12,0.92)_26%,rgba(2,2,3,0.98)_100%)] px-2 py-2">
-                    <div className="absolute inset-x-2 bottom-2 top-2 rounded-[0.8rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.04),transparent_30%,rgba(255,255,255,0.02)_100%)]" />
-                    <motion.div
-                      className="relative z-10 w-full rounded-[1rem] shadow-[0_0_26px_rgba(255,255,255,0.18)]"
-                      style={{ background: bar.fill }}
-                      initial={{ height: 0 }}
-                      animate={{ height: `${state.mode === 'clean' ? 10 : (bar.value / totalBars) * 100}%` }}
-                      transition={{ duration: 0.6, ease: 'easeOut' }}
-                    />
+              {bars.map((bar) => {
+                const pct = state.mode === 'clean' ? 0 : Math.round((bar.value / totalBars) * 100)
+                return (
+                  <div key={bar.label} className="relative overflow-hidden rounded-[1.25rem] px-3 py-3"
+                    style={{ border: `1px solid ${bar.border}`, background: 'rgba(0,0,0,0.30)' }}>
+                    <div className="relative flex h-36 items-end justify-center overflow-hidden rounded-[0.95rem] px-2 py-2"
+                      style={{ border: '1px solid rgba(255,255,255,0.06)', background: 'linear-gradient(180deg,rgba(255,255,255,0.04),rgba(2,2,3,0.95))' }}>
+                      <motion.div
+                        className="relative z-10 w-full rounded-[0.8rem]"
+                        style={{ background: bar.fill, boxShadow: `0 0 24px ${bar.glow}` }}
+                        initial={{ height: 0 }}
+                        animate={{ height: `${state.mode === 'clean' ? 8 : (bar.value / totalBars) * 100}%` }}
+                        transition={{ duration: 0.7, ease: 'easeOut' }}
+                      />
+                      {state.mode !== 'clean' && (
+                        <span className="absolute top-2 right-2 text-[9px] font-bold" style={{ color: bar.accent }}>
+                          {pct}%
+                        </span>
+                      )}
+                    </div>
+                    <div className="mt-3 text-center">
+                      <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: bar.accent }}>{bar.label}</p>
+                      <p className="mt-1 text-lg font-semibold text-white">{bar.value}</p>
+                    </div>
                   </div>
-                  <div className="mt-3 text-center">
-                    <p className="text-[10px] uppercase tracking-[0.16em] text-white/40">{bar.label}</p>
-                    <p className="mt-1 text-lg font-semibold text-white">{bar.value}</p>
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
 
-            <div className="sea-dark-glass relative overflow-hidden rounded-[1.3rem] border border-white/10 p-4">
+            <div className="relative overflow-hidden rounded-[1.3rem] p-4" style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(0,0,0,0.20)' }}>
               <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_18%_18%,rgba(255,255,255,0.08),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(214,220,228,0.06),transparent_30%)]" />
               <div className="mb-3 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">
                 <span>Pulso NPS</span>
@@ -200,13 +222,13 @@ export function PerformanceBar() {
               <svg viewBox="0 0 420 140" className="relative h-40 w-full">
                 <defs>
                   <linearGradient id="dashStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.28)" />
-                    <stop offset="50%" stopColor="rgba(255,255,255,0.92)" />
-                    <stop offset="100%" stopColor="rgba(255,255,255,0.22)" />
+                    <stop offset="0%"   stopColor="rgba(60,220,140,0.30)" />
+                    <stop offset="50%"  stopColor="rgba(120,240,180,0.95)" />
+                    <stop offset="100%" stopColor="rgba(60,220,140,0.25)" />
                   </linearGradient>
                   <linearGradient id="dashFill" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.24)" />
-                    <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                    <stop offset="0%"   stopColor="rgba(60,220,140,0.22)" />
+                    <stop offset="100%" stopColor="rgba(60,220,140,0)" />
                   </linearGradient>
                 </defs>
 
@@ -227,7 +249,7 @@ export function PerformanceBar() {
                   cx="420"
                   cy={finalPulseY}
                   r="5.5"
-                  fill="#ffffff"
+                  fill="rgba(80,230,160,1)"
                   initial={{ opacity: 0.45, scale: 0.9 }}
                   animate={{ opacity: [0.42, 1, 0.42], scale: [0.9, 1.18, 0.9] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
