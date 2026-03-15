@@ -3490,7 +3490,7 @@ export function ProntuarioSystemPanel() {
                   {currentRecord.modoVM === 'TuboT' && (
                     <div className="mt-4">
                       <FieldShell label="Observacoes Tubo-T" span="col-span-full">
-                        <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Tempo, tolerancia, SatO2, FR..." />
+                        <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Tempo, tolerancia, SatO2, FR..." />
                       </FieldShell>
                     </div>
                   )}
@@ -3578,7 +3578,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.ie} onChange={(e) => setField('ie', e.target.value)} placeholder="1:2" />
                         </FieldShell>
                         <FieldShell label="Observacoes" span="xl:col-span-2">
-                          <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Obs..." />
+                          <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Obs..." />
                         </FieldShell>
                       </div>
                     </div>
@@ -3615,7 +3615,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
                         </FieldShell>
                         <FieldShell label="Observacoes" span="xl:col-span-3">
-                          <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Obs..." />
+                          <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Obs..." />
                         </FieldShell>
                       </div>
                     </div>
@@ -3645,7 +3645,7 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                       </div>
                       <FieldShell label="Observacoes" span="col-span-full">
-                        <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Obs..." />
+                        <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Obs..." />
                       </FieldShell>
                     </div>
                   )}
@@ -3681,7 +3681,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
                         </FieldShell>
                         <FieldShell label="Observacoes" span="xl:col-span-3">
-                          <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Obs..." />
+                          <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Obs..." />
                         </FieldShell>
                       </div>
                     </div>
@@ -3715,7 +3715,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
                         </FieldShell>
                         <FieldShell label="Observacoes" span="xl:col-span-4">
-                          <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Obs..." />
+                          <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Obs..." />
                         </FieldShell>
                       </div>
                     </div>
@@ -3752,7 +3752,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.hfovBiasFlow ?? ''} onChange={(e) => setField('hfovBiasFlow', e.target.value)} placeholder="40" />
                         </FieldShell>
                         <FieldShell label="Observacoes" span="xl:col-span-3">
-                          <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Obs..." />
+                          <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Obs..." />
                         </FieldShell>
                       </div>
                     </div>
@@ -3792,7 +3792,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
                         </FieldShell>
                         <FieldShell label="Observacoes" span="xl:col-span-2">
-                          <AutoGrowTextarea className={INPUT_CLASS_SM} value={currentRecord.vmObs ?? ''} onChange={(e) => setField('vmObs', e.target.value)} placeholder="Obs..." />
+                          <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Obs..." />
                         </FieldShell>
                       </div>
                     </div>
@@ -3942,7 +3942,7 @@ export function ProntuarioSystemPanel() {
                               <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/36">Nivel {index + 1}</p>
                               <button
                                 type="button"
-                                onClick={() => setPeepOptField(index, 'peep', '') || setPeepOptField(index, 'plato', '') || setPeepOptField(index, 'si', '')}
+                                onClick={() => { setPeepOptField(index, 'peep', ''); setPeepOptField(index, 'plato', ''); setPeepOptField(index, 'si', '') }}
                                 className="flex h-5 w-5 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
                               >
                                 <Trash2 className="h-2.5 w-2.5" />
@@ -4000,16 +4000,25 @@ export function ProntuarioSystemPanel() {
                 </div>
 
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
-                  <button
-                    type="button"
-                    onClick={() => setCollapsedDesmame((v) => !v)}
-                    className="flex w-full items-center justify-between gap-2"
-                  >
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Calculadora de desmame</p>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3 shrink-0 text-white/30 transition-transform" style={{ transform: collapsedDesmame ? 'rotate(0deg)' : 'rotate(90deg)' }}>
-                      <path d="M9 18l6-6-6-6" />
-                    </svg>
-                  </button>
+                  <div className="flex items-center justify-between gap-2">
+                    <button
+                      type="button"
+                      onClick={() => setCollapsedDesmame((v) => !v)}
+                      className="flex flex-1 items-center justify-between gap-2"
+                    >
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Calculadora de desmame</p>
+                      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="h-3 w-3 shrink-0 text-white/30 transition-transform" style={{ transform: collapsedDesmame ? 'rotate(0deg)' : 'rotate(90deg)' }}>
+                        <path d="M9 18l6-6-6-6" />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.stopPropagation(); updateCurrentRecord((r) => ({ ...r, dPimax: '', dPemax: '', dVcDesm: '', dFrDesm: '', dCv: '', weanTRETipo: '', weanObs: '' })) }}
+                      className="ml-2 flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </button>
+                  </div>
                   {!collapsedDesmame && (
                     <>
                       <div className="mt-3 grid gap-2 grid-cols-3 xl:grid-cols-6">
@@ -4151,17 +4160,33 @@ export function ProntuarioSystemPanel() {
                         ] as [number, string][]).map(([p, label]) => {
                           const col = phaseColor(p)
                           const done = phaseDone(p)
+                          // Phase 3 (TRE) is clickable to toggle
+                          const isTREPhase = p === 3
                           return (
                             <div key={p} className="flex items-center gap-1.5">
-                              <span
-                                className="rounded-[0.5rem] border px-2 py-0.5 text-[10px] font-semibold transition-all"
-                                style={col
-                                  ? { color: col, borderColor: `${col}40`, background: `${col}12` }
-                                  : { color: 'rgba(255,255,255,0.28)', borderColor: 'rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.03)' }
-                                }
-                              >
-                                {done ? '✓ ' : ''}{label}
-                              </span>
+                              {isTREPhase ? (
+                                <button
+                                  type="button"
+                                  onClick={() => setField('treOK', treActive ? '' : '1')}
+                                  className="rounded-[0.5rem] border px-2 py-0.5 text-[10px] font-semibold transition-all cursor-pointer"
+                                  style={col
+                                    ? { color: col, borderColor: `${col}40`, background: `${col}12` }
+                                    : { color: 'rgba(255,255,255,0.28)', borderColor: 'rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.03)' }
+                                  }
+                                >
+                                  {done ? '✓ ' : ''}{label}
+                                </button>
+                              ) : (
+                                <span
+                                  className="rounded-[0.5rem] border px-2 py-0.5 text-[10px] font-semibold transition-all"
+                                  style={col
+                                    ? { color: col, borderColor: `${col}40`, background: `${col}12` }
+                                    : { color: 'rgba(255,255,255,0.28)', borderColor: 'rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.03)' }
+                                  }
+                                >
+                                  {done ? '✓ ' : ''}{label}
+                                </span>
+                              )}
                               {p < 4 ? <span className="text-[9px] text-white/18">→</span> : null}
                             </div>
                           )
@@ -4184,12 +4209,8 @@ export function ProntuarioSystemPanel() {
                         </div>
                       )}
 
-                      {/* TRE / Ext / Desc action buttons */}
+                      {/* Ext / Desc action buttons */}
                       <div className="flex flex-wrap gap-2 mb-3">
-                        <button type="button" onClick={() => setField('treOK', treActive ? '' : '1')}
-                          className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
-                          style={treActive ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
-                        >TRE</button>
                         {isTOT && (
                           <button type="button" onClick={() => setField('extOK', extActive ? '' : '1')}
                             className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
@@ -4574,89 +4595,70 @@ export function ProntuarioSystemPanel() {
                   </FieldShell>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">MRC</p>
-                  <div className="space-y-3">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">MRC</p>
+                    {calculations?.mrc && (
+                      <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.mrc.color, borderColor: `${calculations.mrc.color}30`, background: `${calculations.mrc.color}12` }}>
+                        {calculations.mrc.total}/60 · {calculations.mrc.text}
+                      </span>
+                    )}
+                  </div>
+                  <div className="space-y-1.5">
                     {MRC_GROUPS.map((group) => (
-                      <div key={group.label} className="grid items-end gap-2 grid-cols-[1.3fr_1fr_1fr]">
-                        <p className="text-sm text-white/74">{group.label}</p>
-                        <FieldShell label="D">
+                      <div key={group.label} className="grid items-center gap-2 grid-cols-[1fr_auto_auto]">
+                        <p className="text-[11px] text-white/65">{group.label}</p>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[9px] text-white/36 w-4 text-center">D</span>
                           <select className={INPUT_CLASS_SM} value={currentRecord[group.right]} onChange={(event) => setField(group.right, event.target.value)}>
-                            <option value="">--</option>
-                            {['0', '1', '2', '3', '4', '5'].map((value) => (
-                              <option key={value} value={value}>
-                                {value}
-                              </option>
-                            ))}
+                            <option value="">-</option>
+                            {['0', '1', '2', '3', '4', '5'].map((v) => <option key={v} value={v}>{v}</option>)}
                           </select>
-                        </FieldShell>
-                        <FieldShell label="E">
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[9px] text-white/36 w-4 text-center">E</span>
                           <select className={INPUT_CLASS_SM} value={currentRecord[group.left]} onChange={(event) => setField(group.left, event.target.value)}>
-                            <option value="">--</option>
-                            {['0', '1', '2', '3', '4', '5'].map((value) => (
-                              <option key={value} value={value}>
-                                {value}
-                              </option>
-                            ))}
+                            <option value="">-</option>
+                            {['0', '1', '2', '3', '4', '5'].map((v) => <option key={v} value={v}>{v}</option>)}
                           </select>
-                        </FieldShell>
+                        </div>
                       </div>
                     ))}
                   </div>
-
-                  <div className="mt-4 grid gap-3 grid-cols-3">
-                    <MetricChip
-                      label="MRC"
-                      value={calculations?.mrc ? `${calculations.mrc.total}/60` : '--'}
-                      hint={calculations?.mrc?.text || 'Preencha os 12 grupos'}
-                      color={calculations?.mrc?.color}
-                    />
-                  </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">PERME</p>
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">PERME</p>
+                    {calculations?.perme && (
+                      <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.perme.color, borderColor: `${calculations.perme.color}30`, background: `${calculations.perme.color}12` }}>
+                        {calculations.perme.total}/21 · {calculations.perme.text}
+                      </span>
+                    )}
+                  </div>
+                  <div className="grid gap-2 grid-cols-2 xl:grid-cols-4">
                     {PERME_ITEMS.map((item) => (
                       <FieldShell key={item.key} label={item.label}>
                         <select className={INPUT_CLASS_SM} value={currentRecord[item.key]} onChange={(event) => setField(item.key, event.target.value)}>
                           {item.options.map(([value, label]) => (
-                            <option key={value} value={value}>
-                              {label}
-                            </option>
+                            <option key={value} value={value}>{label}</option>
                           ))}
                         </select>
                       </FieldShell>
                     ))}
                   </div>
-
-                  <div className="mt-4 grid gap-3 grid-cols-3">
-                    <MetricChip
-                      label="PERME"
-                      value={calculations?.perme ? `${calculations.perme.total}/21` : '--'}
-                      hint={calculations?.perme?.text || 'Preencha os 7 itens'}
-                      color={calculations?.perme?.color}
-                    />
-                  </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
-                  <div className="grid gap-3 grid-cols-[minmax(0,20rem)_minmax(0,1fr)] items-end">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                  <div className="grid gap-2 grid-cols-[minmax(0,16rem)_minmax(0,1fr)] items-end">
                     <FieldShell label="IMS">
                       <select className={INPUT_CLASS_SM} value={currentRecord.imsScore} onChange={(event) => setField('imsScore', event.target.value)}>
                         {IMS_OPTIONS.map(([value, label]) => (
-                          <option key={value} value={value}>
-                            {label}
-                          </option>
+                          <option key={value} value={value}>{label}</option>
                         ))}
                       </select>
                     </FieldShell>
-                    <MetricChip
-                      label="IMS"
-                      value={calculations?.ims ? `${calculations.ims.value}/10` : '--'}
-                      hint={calculations?.ims?.text}
-                      color={calculations?.ims?.color}
-                    />
+                    <MetricChip label="IMS" value={calculations?.ims ? `${calculations.ims.value}/10` : '--'} hint={calculations?.ims?.text} color={calculations?.ims?.color} />
                   </div>
                 </div>
               </div>
