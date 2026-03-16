@@ -1,29 +1,8 @@
-'use client'
-
+import { render } from '@react-three/offscreen'
 import { useRef, useMemo, useEffect } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useGLTF, AdaptiveEvents } from '@react-three/drei'
+import { useFrame, useThree } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
-
-export function CardioHeroScene({ transparent = false }: { transparent?: boolean }) {
-  return (
-    <Canvas
-      camera={{ position: [0, 0, 4.2], fov: 38 }}
-      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
-      dpr={[1, 1.5]}
-      frameloop="demand"
-    >
-      {!transparent ? <color attach="background" args={['#07080f']} /> : null}
-      <directionalLight position={[3, 8, 2]}  intensity={12.0} color="#ffffff" />
-      <directionalLight position={[0, 0, 6]}  intensity={5.0}  color="#ffdddd" />
-      <directionalLight position={[-2, 2, 4]} intensity={3.0}  color="#cc8899" />
-      <pointLight position={[0, -5, -1]} intensity={24} color="#cc1122" distance={20} />
-      <ambientLight intensity={0.20} color="#200810" />
-      <AdaptiveEvents />
-      <HeartModel />
-    </Canvas>
-  )
-}
 
 useGLTF.preload('/heart.glb')
 
@@ -34,7 +13,7 @@ function heartbeatPulse(t: number): number {
   return 1
 }
 
-function HeartModel() {
+function CardioScene() {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/heart.glb')
   const { invalidate } = useThree()
@@ -97,8 +76,17 @@ function HeartModel() {
   })
 
   return (
-    <group ref={groupRef} rotation={[0.05, 0.20, 0]} position={[0, -0.05, 0]}>
-      <primitive object={normScene} />
-    </group>
+    <>
+      <directionalLight position={[3, 8, 2]}  intensity={12.0} color="#ffffff" />
+      <directionalLight position={[0, 0, 6]}  intensity={5.0}  color="#ffdddd" />
+      <directionalLight position={[-2, 2, 4]} intensity={3.0}  color="#cc8899" />
+      <pointLight position={[0, -5, -1]} intensity={24} color="#cc1122" distance={20} />
+      <ambientLight intensity={0.20} color="#200810" />
+      <group ref={groupRef} rotation={[0.05, 0.20, 0]} position={[0, -0.05, 0]}>
+        <primitive object={normScene} />
+      </group>
+    </>
   )
 }
+
+render(<CardioScene />)

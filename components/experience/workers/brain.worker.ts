@@ -1,46 +1,24 @@
-'use client'
+// Web Worker — runs in a separate thread
+// WebGL rendering happens here, never blocks the main UI thread
 
+import { render } from '@react-three/offscreen'
 import { useRef, useMemo, useEffect } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useGLTF, AdaptiveEvents } from '@react-three/drei'
+import { useFrame, useThree } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
 
 const CLIP_PLANE = new THREE.Plane(new THREE.Vector3(0, 1, 0), 1.40)
 
-export function BrainHeroScene({
-  compact = false,
-  transparent = false,
-}: {
-  compact?: boolean
-  transparent?: boolean
-}) {
-  return (
-    <Canvas
-      camera={{ position: [0, 0, compact ? 3.8 : 4.4], fov: compact ? 46 : 42 }}
-      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
-      dpr={[1, 1.5]}
-      frameloop="demand"
-    >
-      {!transparent ? <color attach="background" args={['#07080f']} /> : null}
-      <directionalLight position={[3, 8, 2]}  intensity={7.0} color="#ffffff" />
-      <directionalLight position={[-2, 2, 4]} intensity={1.0} color="#8899cc" />
-      <pointLight position={[0, -5, -1]} intensity={16} color="#1133bb" distance={20} />
-      <ambientLight intensity={0.04} color="#050815" />
-      <AdaptiveEvents />
-      <BrainModel compact={compact} />
-    </Canvas>
-  )
-}
-
 useGLTF.preload('/brain.glb')
 
-function BrainModel({ compact }: { compact: boolean }) {
+function BrainScene() {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/brain.glb')
   const { gl, invalidate } = useThree()
 
   useEffect(() => { gl.localClippingEnabled = true }, [gl])
 
+  // 30fps throttle — ~50% GPU savings vs 60fps
   useEffect(() => {
     let last = 0, raf: number
     function tick(now: number) {
@@ -62,7 +40,7 @@ function BrainModel({ compact }: { compact: boolean }) {
     clippingPlanes: [CLIP_PLANE],
   }), [])
 
-  const { normScene } = useMemo(() => {
+  const normScene = useMemo(() => {
     const root = scene.clone()
     const box = new THREE.Box3().setFromObject(root)
     const size = new THREE.Vector3(), center = new THREE.Vector3()
@@ -75,7 +53,9 @@ function BrainModel({ compact }: { compact: boolean }) {
       if (!(child instanceof THREE.Mesh)) return
       if (child.name.toLowerCase().includes('cube')) { child.visible = false; return }
       const geo = child.geometry.index ? child.geometry.toNonIndexed() : child.geometry
-      geo.computeVertexNormals(); child.geometry = geo; child.material = solidMat
+      geo.computeVertexNormals()
+      child.geometry = geo
+      child.material = solidMat
 
       const edges = new THREE.EdgesGeometry(geo, 15)
       const pos = edges.attributes.position
@@ -90,7 +70,7 @@ function BrainModel({ compact }: { compact: boolean }) {
       edges.setAttribute('color', new THREE.BufferAttribute(colors, 3))
       child.add(new THREE.LineSegments(edges, edgeMat))
     })
-    return { normScene: root }
+    return root
   }, [scene, solidMat, edgeMat])
 
   useFrame((state) => {
@@ -101,8 +81,16 @@ function BrainModel({ compact }: { compact: boolean }) {
   })
 
   return (
-    <group ref={groupRef} scale={compact ? 0.85 : 1.00} rotation={[0.10, 1.20, 0]} position={[0, -0.10, 0]}>
-      <primitive object={normScene} />
-    </group>
+    <>
+      <directionalLight position={[3, 8, 2]}  intensity={7.0} color="#ffffff" />
+      <directionalLight position={[-2, 2, 4]} intensity={1.0} color="#8899cc" />
+      <pointLight position={[0, -5, -1]} intensity={16} color="#1133bb" distance={20} />
+      <ambientLight intensity={0.04} color="#050815" />
+      <group ref={groupRef} scale={0.85} rotation={[0.10, 1.20, 0]} position={[0, -0.10, 0]}>
+        <primitive object={normScene} />
+      </group>
+    </>
   )
 }
+
+render(<BrainScene />)
