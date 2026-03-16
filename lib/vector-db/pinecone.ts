@@ -9,6 +9,15 @@ const pinecone = new Pinecone({
 
 const index = pinecone.Index(process.env.PINECONE_INDEX || 'sea-knowledge')
 
+// Singleton — model loads once per server process, not on every call
+let _embedder: Awaited<ReturnType<typeof TextEmbedder.fromPretrained>> | null = null
+async function getEmbedder() {
+  if (!_embedder) {
+    _embedder = await TextEmbedder.fromPretrained('Xenova/all-MiniLM-L6-v2')
+  }
+  return _embedder
+}
+
 const clinicalDocuments = [
   'Ventilação mecânica protetora com volumes de 6-8 mL/kg',
   'PEEP otimizado baseado em complacência dinâmica',
@@ -31,7 +40,7 @@ export interface SemanticSearchResult {
 
 export async function indexClinicalDocuments() {
   try {
-    const embedder = await TextEmbedder.fromPretrained('Xenova/all-MiniLM-L6-v2')
+    const embedder = await getEmbedder()
 
     const vectors = await Promise.all(
       clinicalDocuments.map(async (doc, idx) => {
@@ -53,7 +62,7 @@ export async function indexClinicalDocuments() {
 
 export async function semanticSearch(query: string, topK = 5): Promise<SemanticSearchResult[]> {
   try {
-    const embedder = await TextEmbedder.fromPretrained('Xenova/all-MiniLM-L6-v2')
+    const embedder = await getEmbedder()
     const queryEmbedding = await embedder(query, { pooling: 'mean', normalize: true })
 
     const results = await index.query({
