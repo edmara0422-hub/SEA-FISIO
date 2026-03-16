@@ -5,31 +5,29 @@ import { ArrowLeft, BookOpen, Brain, Heart, Wind } from 'lucide-react'
 import Link from 'next/link'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { StudyRailBoard } from '@/components/sea/study-rail-board'
+import { CadernoModulePanel } from '@/components/caderno/caderno-module'
 
 const contentModules = [
   {
     id: 'M1',
     title: 'Neuro',
     icon: Brain,
-    description: 'Base do trilho neuro com leitura inicial do sistema nervoso.',
-    content:
-      'Trilho inicial de neuro com foco em plasticidade, mapas funcionais, correlacoes clinicas e leitura estruturada da experiencia neural dentro do SEA.',
+    description: 'Plasticidade neural, mapas funcionais e correlações clínicas.',
+    panel: <CadernoModulePanel moduleId="M1" />,
   },
   {
     id: 'M2',
     title: 'Pneumo / VM',
     icon: Wind,
-    description: 'Base do trilho respiratorio e ventilatorio.',
-    content:
-      'Trilho de pneumo e ventilacao mecanica com abertura para curvas, parametros, logica de ajuste e interpretacao aplicada ao estudo clinico.',
+    description: 'Ventilação mecânica protetora, mecânica pulmonar e desmame.',
+    panel: <CadernoModulePanel moduleId="M2" />,
   },
   {
     id: 'M3',
     title: 'Cardio',
     icon: Heart,
-    description: 'Base do trilho cardiaco com leitura progressiva.',
-    content:
-      'Trilho cardio para estudo de sinais, comportamento hemodinamico, leitura de resposta e consolidacao de raciocinio clinico dentro da plataforma.',
+    description: 'ECG, hemodinâmica e reabilitação cardiovascular.',
+    panel: <CadernoModulePanel moduleId="M3" />,
   },
 ]
 

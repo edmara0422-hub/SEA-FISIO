@@ -10,6 +10,7 @@
     "lint": "npm run typecheck"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
     "@hookform/resolvers": "^3.9.1",
     "@huggingface/transformers": "^3.8.1",
     "@launchdarkly/node-server-sdk": "^9.10.9",
