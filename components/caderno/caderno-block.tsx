@@ -60,6 +60,7 @@ function ProtocolBlock({ block }: { block: Extract<ContentBlock, { type: 'protoc
 
 function VideoBlock({ block }: { block: Extract<ContentBlock, { type: 'video' }> }) {
   const [open, setOpen] = useState(false)
+  const hasUrl = !!block.url
 
   return (
     <div className="space-y-2">
@@ -70,24 +71,7 @@ function VideoBlock({ block }: { block: Extract<ContentBlock, { type: 'video' }>
           <span className="text-[10px] text-white/28">{block.duration}</span>
         )}
       </div>
-      {!open ? (
-        <button
-          onClick={() => setOpen(true)}
-          className="group relative flex w-full items-center justify-center overflow-hidden rounded-[0.9rem]"
-          style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', aspectRatio: '16/9' }}
-        >
-          {block.thumbnail && (
-            <img src={block.thumbnail} alt={block.title} className="absolute inset-0 h-full w-full object-cover opacity-40" />
-          )}
-          <motion.div
-            whileHover={{ scale: 1.1 }}
-            className="relative flex h-10 w-10 items-center justify-center rounded-full"
-            style={{ background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.22)' }}
-          >
-            <Play className="h-4 w-4 text-white/80 translate-x-px" />
-          </motion.div>
-        </button>
-      ) : (
+      {open && hasUrl ? (
         <div className="overflow-hidden rounded-[0.9rem]" style={{ aspectRatio: '16/9' }}>
           <iframe
             src={block.url}
@@ -95,6 +79,43 @@ function VideoBlock({ block }: { block: Extract<ContentBlock, { type: 'video' }>
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
+        </div>
+      ) : (
+        <div
+          onClick={() => hasUrl && setOpen(true)}
+          className="group relative flex w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-[0.9rem]"
+          style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.07)',
+            aspectRatio: '16/9',
+            cursor: hasUrl ? 'pointer' : 'default',
+          }}
+        >
+          {block.thumbnail && hasUrl && (
+            <img src={block.thumbnail} alt={block.title} className="absolute inset-0 h-full w-full object-cover opacity-40" />
+          )}
+          {hasUrl ? (
+            <motion.div
+              whileHover={{ scale: 1.1 }}
+              className="relative flex h-10 w-10 items-center justify-center rounded-full"
+              style={{ background: 'rgba(255,255,255,0.14)', border: '1px solid rgba(255,255,255,0.22)' }}
+            >
+              <Play className="h-4 w-4 text-white/80 translate-x-px" />
+            </motion.div>
+          ) : (
+            <>
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-[0.75rem]"
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}
+              >
+                <Play className="h-4 w-4" style={{ color: 'rgba(255,255,255,0.20)' }} />
+              </div>
+              <div className="text-center">
+                <p className="text-[11px] font-semibold" style={{ color: 'rgba(255,255,255,0.32)' }}>Vídeo em produção</p>
+                <p className="text-[9px]" style={{ color: 'rgba(255,255,255,0.16)' }}>Disponível em breve</p>
+              </div>
+            </>
+          )}
         </div>
       )}
     </div>

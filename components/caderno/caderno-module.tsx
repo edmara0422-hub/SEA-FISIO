@@ -104,14 +104,16 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
       {/* ── Main layout: document | sidebar ── */}
       <div className="grid gap-4 xl:grid-cols-[1fr_272px]">
 
-        {/* ── Document page ── */}
-        <DocumentPage
-          topic={activeTopic}
-          moduleId={moduleId}
-          selectionPopup={selectionPopup}
-          onSelectionPopup={setSelectionPopup}
-          onAskTutor={handleAskTutor}
-        />
+        {/* ── Document page — only visible when summary or tutor is active ── */}
+        {(activeSidebarTool === 'summary' || activeSidebarTool === 'tutor') && (
+          <DocumentPage
+            topic={activeTopic}
+            moduleId={moduleId}
+            selectionPopup={selectionPopup}
+            onSelectionPopup={setSelectionPopup}
+            onAskTutor={handleAskTutor}
+          />
+        )}
 
         {/* ── Study sidebar ── */}
         <StudySidebar
