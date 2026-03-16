@@ -9,8 +9,8 @@ export function CardioHeroScene({ transparent = false }: { transparent?: boolean
   return (
     <Canvas
       camera={{ position: [0, 0, 4.2], fov: 38 }}
-      gl={{ alpha: transparent, antialias: false, powerPreference: 'high-performance' }}
-      dpr={[1, 1.2]}
+      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
+      dpr={[1, 1.5]}
       frameloop="demand"
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
@@ -19,8 +19,6 @@ export function CardioHeroScene({ transparent = false }: { transparent?: boolean
       <directionalLight position={[-2, 2, 4]} intensity={3.0} color="#cc8899" />
       <pointLight position={[0, -5, -1]} intensity={24} color="#cc1122" distance={20} />
       <ambientLight intensity={0.20} color="#200810" />
-      <PerformanceMonitor onDecline={() => {}} />
-      <AdaptiveDpr pixelated />
       <AdaptiveEvents />
       <HeartModel />
     </Canvas>

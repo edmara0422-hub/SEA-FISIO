@@ -52,10 +52,9 @@ function ModuleRail({
   onSelect: (i: number) => void
 }) {
   return (
-    <div
-      className="overflow-hidden rounded-[1.8rem] border border-white/8 px-5 py-6 md:px-8"
-      style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 50%, transparent 100%)' }}
-    >
+    <div className="chrome-panel relative overflow-hidden rounded-[1.8rem] px-5 py-6 md:px-8">
+      <div className="pointer-events-none absolute inset-0 grid-bg opacity-50" />
+      <div className="pointer-events-none absolute inset-x-0 top-0 h-px silver-divider opacity-60" />
       {/* Header */}
       <div className="mb-6 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
@@ -213,29 +212,25 @@ export default function ConteudosPageClient() {
                 className="space-y-3"
               >
                 {/* Module hero card */}
-                <div
-                  className="relative overflow-hidden rounded-[2rem] px-6 py-6 md:px-8 md:py-7"
-                  style={{
-                    background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(0,0,0,0) 100%)',
-                    border: '1px solid rgba(255,255,255,0.07)',
-                  }}
-                >
-                  <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.10),transparent)]" />
-                  <div className="pointer-events-none absolute right-[8%] top-[20%] h-32 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.05)_0%,transparent_72%)] blur-2xl" />
+                <div className="chrome-panel relative overflow-hidden rounded-[2rem] px-6 py-7 md:px-8 md:py-8">
+                  <div className="pointer-events-none absolute inset-0 grid-bg opacity-40" />
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-px silver-divider opacity-70" />
+                  <div className="pointer-events-none absolute right-[8%] top-[20%] h-32 w-40 rounded-full bg-[radial-gradient(circle,rgba(255,255,255,0.06)_0%,transparent_72%)] blur-2xl" />
+                  <div className="pointer-events-none absolute left-[10%] bottom-0 h-20 w-32 rounded-full bg-[radial-gradient(circle,rgba(192,199,208,0.06)_0%,transparent_76%)] blur-2xl" />
 
                   <div className="flex items-start gap-5">
                     <div className="chrome-subtle flex h-16 w-16 shrink-0 items-center justify-center rounded-[1.4rem]">
                       {CurrentIcon && <CurrentIcon className="h-7 w-7 text-white/88" />}
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="mb-1.5 text-[9px] uppercase tracking-[0.44em] text-white/26">Módulo {current.id}</p>
+                      <p className="mb-2 text-[9px] uppercase tracking-[0.44em] text-white/26">Módulo {current.id}</p>
                       <h3
-                        className="text-[clamp(1.2rem,2.8vw,1.8rem)] font-semibold leading-tight tracking-[-0.01em] text-white/94"
-                        style={{ fontFamily: 'system-ui, sans-serif' }}
+                        className="text-[clamp(1.3rem,2.8vw,1.9rem)] font-semibold leading-tight tracking-[-0.01em] text-white/94"
+                        style={{ fontFamily: 'Poppins, system-ui, sans-serif' }}
                       >
                         {current.title}
                       </h3>
-                      <p className="mt-2.5 max-w-xl text-[13px] leading-relaxed text-white/44">
+                      <p className="mt-3 max-w-xl text-[13px] leading-relaxed text-white/44">
                         {current.overview}
                       </p>
                     </div>
@@ -247,11 +242,9 @@ export default function ConteudosPageClient() {
                 </div>
 
                 {/* Caderno + sidebar */}
-                <div
-                  className="overflow-hidden rounded-[1.8rem] border border-white/[0.07]"
-                  style={{ background: 'linear-gradient(180deg, rgba(255,255,255,0.03) 0%, rgba(6,6,8,0.04) 100%)' }}
-                >
-                  <div className="p-4 md:p-5">
+                <div className="chrome-panel relative overflow-hidden rounded-[2rem]">
+                  <div className="pointer-events-none absolute inset-x-0 top-0 h-px silver-divider opacity-40" />
+                  <div className="p-5 md:p-6">
                     <CadernoModulePanel moduleId={current.id} />
                   </div>
                 </div>

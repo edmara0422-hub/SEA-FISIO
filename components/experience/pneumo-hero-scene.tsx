@@ -9,8 +9,8 @@ export function PneumoHeroScene({ transparent = false }: { transparent?: boolean
   return (
     <Canvas
       camera={{ position: [0, 0, 4.6], fov: 38 }}
-      gl={{ alpha: transparent, antialias: false, powerPreference: 'high-performance' }}
-      dpr={[1, 1.2]}
+      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
+      dpr={[1, 1.5]}
       frameloop="demand"
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
@@ -19,8 +19,6 @@ export function PneumoHeroScene({ transparent = false }: { transparent?: boolean
       <directionalLight position={[-2, 2, 4]} intensity={2.0} color="#88bbcc" />
       <pointLight position={[0, -5, -1]} intensity={20} color="#0088bb" distance={20} />
       <ambientLight intensity={0.12} color="#050815" />
-      <PerformanceMonitor onDecline={() => {}} />
-      <AdaptiveDpr pixelated />
       <AdaptiveEvents />
       <LungsModel />
     </Canvas>

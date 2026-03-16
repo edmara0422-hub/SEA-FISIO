@@ -18,8 +18,8 @@ export function BrainHeroScene({
   return (
     <Canvas
       camera={{ position: [0, 0, compact ? 3.8 : 4.4], fov: compact ? 46 : 42 }}
-      gl={{ alpha: transparent, antialias: !compact, powerPreference: 'high-performance' }}
-      dpr={[1, compact ? 1.2 : 1.5]}
+      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
+      dpr={[1, 1.5]}
       frameloop="demand"
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
@@ -27,8 +27,6 @@ export function BrainHeroScene({
       <directionalLight position={[-2, 2, 4]} intensity={1.0} color="#8899cc" />
       <pointLight position={[0, -5, -1]} intensity={16} color="#1133bb" distance={20} />
       <ambientLight intensity={0.04} color="#050815" />
-      <PerformanceMonitor onDecline={() => {}} />
-      <AdaptiveDpr pixelated />
       <AdaptiveEvents />
       <BrainModel compact={compact} />
     </Canvas>

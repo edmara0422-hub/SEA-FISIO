@@ -3,45 +3,54 @@
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Brain, HeartPulse, Wind } from 'lucide-react'
-import { useEffect, useRef, useState, useCallback } from 'react'
-
-// Only mount canvas when the element is visible in viewport
-function useInView(threshold = 0.1) {
-  const ref = useRef<HTMLDivElement>(null)
-  const [inView, setInView] = useState(false)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold })
-    obs.observe(el)
-    return () => obs.disconnect()
-  }, [threshold])
-  return { ref, inView }
-}
+import { useEffect, useRef, useState } from 'react'
 
 const BrainHeroScene = dynamic(
-  () => import('@/components/experience/brain-hero-scene').then((mod) => mod.BrainHeroScene),
+  () => import('@/components/experience/brain-hero-scene').then((m) => m.BrainHeroScene),
   { ssr: false, loading: () => <SceneSkeleton /> }
 )
 const CardioHeroScene = dynamic(
-  () => import('@/components/experience/cardio-hero-scene').then((mod) => mod.CardioHeroScene),
+  () => import('@/components/experience/cardio-hero-scene').then((m) => m.CardioHeroScene),
   { ssr: false, loading: () => <SceneSkeleton /> }
 )
 const PneumoHeroScene = dynamic(
-  () => import('@/components/experience/pneumo-hero-scene').then((mod) => mod.PneumoHeroScene),
+  () => import('@/components/experience/pneumo-hero-scene').then((m) => m.PneumoHeroScene),
   { ssr: false, loading: () => <SceneSkeleton /> }
 )
 
 function SceneSkeleton() {
-  return <div className="h-full w-full animate-pulse bg-white/4 rounded-[2rem]" />
+  return <div className="h-full w-full animate-pulse" style={{ background: 'rgba(255,255,255,0.025)' }} />
+}
+
+// Pause rendering when browser tab is hidden — saves GPU/CPU when user switches tabs
+function usePageVisible() {
+  const [visible, setVisible] = useState(true)
+  useEffect(() => {
+    const h = () => setVisible(!document.hidden)
+    document.addEventListener('visibilitychange', h)
+    return () => document.removeEventListener('visibilitychange', h)
+  }, [])
+  return visible
+}
+
+// Stagger canvas mounts so the page isn't blocked by 3 WebGL inits at once
+function useStaggeredMount(delays: number[]) {
+  const [mounted, setMounted] = useState(delays.map(() => false))
+  useEffect(() => {
+    const timers = delays.map((d, i) =>
+      setTimeout(() => setMounted((prev) => prev.map((v, j) => j === i ? true : v)), d)
+    )
+    return () => timers.forEach(clearTimeout)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+  return mounted
 }
 
 const spring = { type: 'spring', stiffness: 280, damping: 28 } as const
 
 export function SimulationsGrid() {
-  const neuro = useInView(0.1)
-  const cardio = useInView(0.1)
-  const pneumo = useInView(0.1)
+  const pageVisible = usePageVisible()
+  const [neuroOn, cardioOn, pneumoOn] = useStaggeredMount([80, 500, 920])
 
   return (
     <motion.div
@@ -53,7 +62,6 @@ export function SimulationsGrid() {
 
       {/* ── NEURO ────────────────────────────────────────────────── */}
       <motion.div
-        ref={neuro.ref}
         className="col-span-2 relative overflow-hidden rounded-[2rem] cursor-pointer"
         style={{
           height: 'clamp(280px, 44vw, 400px)',
@@ -64,59 +72,42 @@ export function SimulationsGrid() {
         whileHover={{ scale: 1.007 }}
         transition={spring}
       >
-        {/* 3D brain scene — only mounted when visible */}
         <div className="absolute inset-0">
-          {neuro.inView && <BrainHeroScene compact transparent />}
+          {neuroOn && pageVisible && <BrainHeroScene compact transparent />}
         </div>
 
-        {/* Scanner sweep line */}
+        {/* Scanner sweep */}
         <div className="pointer-events-none absolute inset-0 overflow-hidden">
           <div style={{
-            position: 'absolute',
-            left: 0, right: 0,
-            height: '60px',
+            position: 'absolute', left: 0, right: 0, height: '60px',
             background: 'linear-gradient(to bottom, transparent 0%, rgba(45,212,191,0.10) 40%, rgba(45,212,191,0.22) 50%, rgba(45,212,191,0.10) 60%, transparent 100%)',
             animation: 'scanline 4s linear infinite',
           }} />
           <div style={{
-            position: 'absolute',
-            left: 0, right: 0,
-            height: '2px',
+            position: 'absolute', left: 0, right: 0, height: '2px',
             background: 'linear-gradient(90deg, transparent 0%, rgba(45,212,191,0.0) 10%, rgba(45,212,191,0.55) 30%, rgba(180,255,248,0.90) 50%, rgba(45,212,191,0.55) 70%, rgba(45,212,191,0.0) 90%, transparent 100%)',
             boxShadow: '0 0 8px 2px rgba(45,212,191,0.30)',
             animation: 'scanline 4s linear infinite',
           }} />
         </div>
-        <style>{`
-          @keyframes scanline {
-            0%   { top: -60px; }
-            100% { top: 100%; }
-          }
-        `}</style>
+        <style>{`@keyframes scanline { 0% { top: -60px } 100% { top: 100% } }`}</style>
 
-        {/* Top shimmer */}
         <div className="pointer-events-none absolute inset-x-0 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.18) 50%, transparent)' }} />
 
-        {/* Top-left: Neural Scan label */}
         <div className="absolute top-4 left-5 flex items-center gap-2">
           <span className="relative flex h-1.5 w-1.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400/70 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-teal-400" />
           </span>
-          <span className="text-[8px] font-mono uppercase tracking-[0.28em] text-teal-400/60">
-            Neural Scan · 10 Hz
-          </span>
+          <span className="text-[8px] font-mono uppercase tracking-[0.28em] text-teal-400/60">Neural Scan · 10 Hz</span>
         </div>
 
-        {/* Top-right: Vitals panel (like ref3) */}
         <NeuroVitals />
 
-        {/* Bottom gradient */}
         <div className="pointer-events-none absolute bottom-0 inset-x-0 h-36"
           style={{ background: 'linear-gradient(to top, rgba(4,12,16,0.95) 0%, transparent 100%)' }} />
 
-        {/* Bottom: label + EEG */}
         <div className="absolute bottom-0 inset-x-0 p-5 md:p-6 flex items-end justify-between">
           <div>
             <p className="text-[8px] uppercase tracking-[0.30em] text-teal-400/40 mb-1.5">Sistema Neural</p>
@@ -131,7 +122,6 @@ export function SimulationsGrid() {
 
       {/* ── CARDIO ───────────────────────────────────────────────── */}
       <motion.div
-        ref={cardio.ref}
         className="relative overflow-hidden rounded-[2rem] cursor-pointer"
         style={{
           height: 'clamp(220px, 36vw, 300px)',
@@ -142,7 +132,9 @@ export function SimulationsGrid() {
         whileHover={{ scale: 1.012 }}
         transition={spring}
       >
-        <div className="absolute inset-0">{cardio.inView && <CardioHeroScene transparent />}</div>
+        <div className="absolute inset-0">
+          {cardioOn && pageVisible && <CardioHeroScene transparent />}
+        </div>
         <div className="pointer-events-none absolute inset-x-6 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 50%, transparent)' }} />
         <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"
@@ -164,7 +156,6 @@ export function SimulationsGrid() {
 
       {/* ── PNEUMO ───────────────────────────────────────────────── */}
       <motion.div
-        ref={pneumo.ref}
         className="relative overflow-hidden rounded-[2rem] cursor-pointer"
         style={{
           height: 'clamp(220px, 36vw, 300px)',
@@ -175,7 +166,9 @@ export function SimulationsGrid() {
         whileHover={{ scale: 1.012 }}
         transition={spring}
       >
-        <div className="absolute inset-0">{pneumo.inView && <PneumoHeroScene transparent />}</div>
+        <div className="absolute inset-0">
+          {pneumoOn && pageVisible && <PneumoHeroScene transparent />}
+        </div>
         <div className="pointer-events-none absolute inset-x-6 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 50%, transparent)' }} />
         <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"
@@ -204,9 +197,7 @@ export function SimulationsGrid() {
 function useAnimatedVital(base: number, range: number, interval: number) {
   const [val, setVal] = useState(base)
   useEffect(() => {
-    const id = setInterval(() => {
-      setVal(Math.round(base + (Math.random() - 0.5) * range))
-    }, interval)
+    const id = setInterval(() => setVal(Math.round(base + (Math.random() - 0.5) * range)), interval)
     return () => clearInterval(id)
   }, [base, range, interval])
   return val
@@ -216,7 +207,6 @@ function NeuroVitals() {
   const sys = useAnimatedVital(120, 6, 2200)
   const dia = useAnimatedVital(94, 4, 2800)
   const pul = useAnimatedVital(72, 8, 1600)
-
   return (
     <div className="absolute top-4 right-5 font-mono text-right space-y-0.5">
       <VitalRow label="SYS." value={sys} unit="mmHg" />
@@ -229,15 +219,9 @@ function NeuroVitals() {
 function VitalRow({ label, value, unit }: { label: string; value: number; unit: string }) {
   return (
     <div className="flex items-baseline justify-end gap-1.5">
-      <span className="text-[7px] uppercase tracking-[0.22em]" style={{ color: 'rgba(45,212,191,0.45)' }}>
-        {label}
-      </span>
-      <span className="text-base font-bold leading-none" style={{ color: 'rgba(45,212,191,0.90)' }}>
-        {value}
-      </span>
-      <span className="text-[7px]" style={{ color: 'rgba(45,212,191,0.40)' }}>
-        {unit}
-      </span>
+      <span className="text-[7px] uppercase tracking-[0.22em]" style={{ color: 'rgba(45,212,191,0.45)' }}>{label}</span>
+      <span className="text-base font-bold leading-none" style={{ color: 'rgba(45,212,191,0.90)' }}>{value}</span>
+      <span className="text-[7px]" style={{ color: 'rgba(45,212,191,0.40)' }}>{unit}</span>
     </div>
   )
 }
@@ -249,33 +233,33 @@ function EEGWave() {
     if (!canvas) return
     const ctx = canvas.getContext('2d')
     if (!ctx) return
-    let frame = 0
-    let raf: number
-    function draw() {
+    let frame = 0, raf: number
+    let last = 0
+    function draw(now: number) {
+      raf = requestAnimationFrame(draw)
+      // Throttle EEG canvas to 30fps
+      if (now - last < 33) return
+      last = now
       if (!canvas || !ctx) return
       ctx.clearRect(0, 0, canvas.width, canvas.height)
       const w = canvas.width, h = canvas.height
-      // Two overlapping waves
       for (let pass = 0; pass < 2; pass++) {
         ctx.strokeStyle = pass === 0 ? 'rgba(45,212,191,0.75)' : 'rgba(45,212,191,0.28)'
         ctx.lineWidth = pass === 0 ? 1.5 : 1
         ctx.beginPath()
         for (let x = 0; x <= w; x++) {
-          const t = x / w
-          const f = pass === 0 ? 1 : 1.7
+          const t = x / w, f = pass === 0 ? 1 : 1.7
           const y = h / 2
             + Math.sin(t * 8 * f + frame * (0.05 + pass * 0.03)) * 5
             + Math.sin(t * 20 * f + frame * 0.10) * 2.5
             + Math.sin(t * 3 - frame * 0.03) * 3.5
-          if (x === 0) ctx.moveTo(x, y)
-          else ctx.lineTo(x, y)
+          x === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y)
         }
         ctx.stroke()
       }
       frame++
-      raf = requestAnimationFrame(draw)
     }
-    draw()
+    raf = requestAnimationFrame(draw)
     return () => cancelAnimationFrame(raf)
   }, [])
   return <canvas ref={canvasRef} width={140} height={30} />
