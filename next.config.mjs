@@ -11,6 +11,16 @@ const nextConfig = {
   compress: true,
   productionBrowserSourceMaps: false,
 
+  // Keep heavy server-only packages OUT of the browser bundle
+  serverExternalPackages: [
+    '@pinecone-database/pinecone',
+    '@launchdarkly/node-server-sdk',
+    '@huggingface/transformers',
+    'bull',
+    'y-websocket',
+    'yjs',
+  ],
+
   experimental: {
     // Tree-shake large UI packages — only import what's used
     optimizePackageImports: [

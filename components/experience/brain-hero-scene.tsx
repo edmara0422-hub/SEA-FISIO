@@ -2,7 +2,7 @@
 
 import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { useGLTF, AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from '@react-three/drei'
 import * as THREE from 'three'
 
 // Clip plane: hide everything below y = -1.40 in world space (shows cerebellum, cuts long brainstem)
@@ -18,17 +18,18 @@ export function BrainHeroScene({
   return (
     <Canvas
       camera={{ position: [0, 0, compact ? 3.8 : 4.4], fov: compact ? 46 : 42 }}
-      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
-      dpr={[1, 1.5]}
+      gl={{ alpha: transparent, antialias: !compact, powerPreference: 'high-performance' }}
+      dpr={[1, compact ? 1.2 : 1.5]}
+      frameloop="demand"
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
-      {/* Strong key from top-right — white hot on top edges */}
       <directionalLight position={[3, 8, 2]}  intensity={7.0} color="#ffffff" />
-      {/* Softer fill from front-left */}
       <directionalLight position={[-2, 2, 4]} intensity={1.0} color="#8899cc" />
-      {/* Blue rim from below — creates blue glow on shadow edges */}
       <pointLight position={[0, -5, -1]} intensity={16} color="#1133bb" distance={20} />
       <ambientLight intensity={0.04} color="#050815" />
+      <PerformanceMonitor onDecline={() => {}} />
+      <AdaptiveDpr pixelated />
+      <AdaptiveEvents />
       <BrainModel compact={compact} />
     </Canvas>
   )
@@ -41,8 +42,20 @@ function BrainModel({ compact }: { compact: boolean }) {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/brain.glb')
 
-  const { gl } = useThree()
+  const { gl, invalidate } = useThree()
   useEffect(() => { gl.localClippingEnabled = true }, [gl])
+
+  // Throttle to ~30fps — saves ~50% GPU vs 60fps
+  useEffect(() => {
+    let last = 0
+    let raf: number
+    function tick(now: number) {
+      if (now - last >= 33) { invalidate(); last = now }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [invalidate])
 
   // Build flat-shaded solid + edge overlay materials once
   const solidMat = useMemo(() => new THREE.MeshStandardMaterial({

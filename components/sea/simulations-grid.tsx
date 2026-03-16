@@ -3,7 +3,21 @@
 import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Brain, HeartPulse, Wind } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
+
+// Only mount canvas when the element is visible in viewport
+function useInView(threshold = 0.1) {
+  const ref = useRef<HTMLDivElement>(null)
+  const [inView, setInView] = useState(false)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold })
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [threshold])
+  return { ref, inView }
+}
 
 const BrainHeroScene = dynamic(
   () => import('@/components/experience/brain-hero-scene').then((mod) => mod.BrainHeroScene),
@@ -25,6 +39,10 @@ function SceneSkeleton() {
 const spring = { type: 'spring', stiffness: 280, damping: 28 } as const
 
 export function SimulationsGrid() {
+  const neuro = useInView(0.1)
+  const cardio = useInView(0.1)
+  const pneumo = useInView(0.1)
+
   return (
     <motion.div
       className="grid grid-cols-2 gap-3"
@@ -35,6 +53,7 @@ export function SimulationsGrid() {
 
       {/* ── NEURO ────────────────────────────────────────────────── */}
       <motion.div
+        ref={neuro.ref}
         className="col-span-2 relative overflow-hidden rounded-[2rem] cursor-pointer"
         style={{
           height: 'clamp(280px, 44vw, 400px)',
@@ -45,9 +64,9 @@ export function SimulationsGrid() {
         whileHover={{ scale: 1.007 }}
         transition={spring}
       >
-        {/* 3D brain scene */}
+        {/* 3D brain scene — only mounted when visible */}
         <div className="absolute inset-0">
-          <BrainHeroScene compact transparent />
+          {neuro.inView && <BrainHeroScene compact transparent />}
         </div>
 
         {/* Scanner sweep line */}
@@ -112,6 +131,7 @@ export function SimulationsGrid() {
 
       {/* ── CARDIO ───────────────────────────────────────────────── */}
       <motion.div
+        ref={cardio.ref}
         className="relative overflow-hidden rounded-[2rem] cursor-pointer"
         style={{
           height: 'clamp(220px, 36vw, 300px)',
@@ -122,7 +142,7 @@ export function SimulationsGrid() {
         whileHover={{ scale: 1.012 }}
         transition={spring}
       >
-        <div className="absolute inset-0"><CardioHeroScene transparent /></div>
+        <div className="absolute inset-0">{cardio.inView && <CardioHeroScene transparent />}</div>
         <div className="pointer-events-none absolute inset-x-6 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 50%, transparent)' }} />
         <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"
@@ -144,6 +164,7 @@ export function SimulationsGrid() {
 
       {/* ── PNEUMO ───────────────────────────────────────────────── */}
       <motion.div
+        ref={pneumo.ref}
         className="relative overflow-hidden rounded-[2rem] cursor-pointer"
         style={{
           height: 'clamp(220px, 36vw, 300px)',
@@ -154,7 +175,7 @@ export function SimulationsGrid() {
         whileHover={{ scale: 1.012 }}
         transition={spring}
       >
-        <div className="absolute inset-0"><PneumoHeroScene transparent /></div>
+        <div className="absolute inset-0">{pneumo.inView && <PneumoHeroScene transparent />}</div>
         <div className="pointer-events-none absolute inset-x-6 top-0 h-px"
           style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.12) 50%, transparent)' }} />
         <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28"

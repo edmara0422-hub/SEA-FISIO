@@ -1,28 +1,27 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
-import { Canvas, useFrame } from '@react-three/fiber'
-import { useGLTF } from '@react-three/drei'
+import { useRef, useMemo, useEffect } from 'react'
+import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { useGLTF, AdaptiveDpr, AdaptiveEvents, PerformanceMonitor } from '@react-three/drei'
 import * as THREE from 'three'
 
 export function CardioHeroScene({ transparent = false }: { transparent?: boolean }) {
   return (
     <Canvas
       camera={{ position: [0, 0, 4.2], fov: 38 }}
-      gl={{ alpha: transparent, antialias: true, powerPreference: 'high-performance' }}
-      dpr={[1, 1.5]}
+      gl={{ alpha: transparent, antialias: false, powerPreference: 'high-performance' }}
+      dpr={[1, 1.2]}
+      frameloop="demand"
     >
       {!transparent ? <color attach="background" args={['#07080f']} /> : null}
-      {/* Strong key from top-right */}
       <directionalLight position={[3, 8, 2]}  intensity={12.0} color="#ffffff" />
-      {/* Fill from front */}
       <directionalLight position={[0, 0, 6]}  intensity={5.0} color="#ffdddd" />
-      {/* Softer fill from front-left */}
       <directionalLight position={[-2, 2, 4]} intensity={3.0} color="#cc8899" />
-      {/* Red rim from below */}
       <pointLight position={[0, -5, -1]} intensity={24} color="#cc1122" distance={20} />
       <ambientLight intensity={0.20} color="#200810" />
-
+      <PerformanceMonitor onDecline={() => {}} />
+      <AdaptiveDpr pixelated />
+      <AdaptiveEvents />
       <HeartModel />
     </Canvas>
   )
@@ -42,6 +41,18 @@ function heartbeatPulse(t: number): number {
 function HeartModel() {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/heart.glb')
+  const { invalidate } = useThree()
+
+  useEffect(() => {
+    let last = 0
+    let raf: number
+    function tick(now: number) {
+      if (now - last >= 33) { invalidate(); last = now }
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  }, [invalidate])
 
   const solidMat = useMemo(() => new THREE.MeshStandardMaterial({
     color:             '#0e0610',
