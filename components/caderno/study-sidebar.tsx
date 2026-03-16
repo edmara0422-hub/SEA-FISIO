@@ -2,13 +2,9 @@
 
 import { useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import {
-  NotebookPen, Bot, Send, Loader2,
-  FileText, RefreshCw, BarChart2,
-} from 'lucide-react'
+import { NotebookPen, Bot, Send, Loader2, FileText, RefreshCw, BarChart2 } from 'lucide-react'
 import { useCadernoStore } from '@/lib/stores/cadernoStore'
 import type { TutorMessage } from '@/types/caderno'
-import { useState } from 'react'
 
 type SidebarTool = 'summary' | 'tutor' | 'review' | 'notes' | 'performance'
 
@@ -22,6 +18,8 @@ interface StudySidebarProps {
   onTutorHistoryChange: (msgs: TutorMessage[]) => void
   tutorInput: string
   onTutorInputChange: (v: string) => void
+  isTutorLoading: boolean
+  onSendTutor: (q: string) => void
 }
 
 const TABS: { id: SidebarTool; label: string; icon: React.ElementType }[] = [
@@ -33,26 +31,19 @@ const TABS: { id: SidebarTool; label: string; icon: React.ElementType }[] = [
 ]
 
 export function StudySidebar({
-  topicId,
-  topicTitle,
-  moduleId,
-  activeTool,
-  onToolChange,
-  tutorHistory,
-  onTutorHistoryChange,
-  tutorInput,
-  onTutorInputChange,
+  topicId, topicTitle, moduleId,
+  activeTool, onToolChange,
+  tutorHistory, onTutorHistoryChange,
+  tutorInput, onTutorInputChange,
+  isTutorLoading, onSendTutor,
 }: StudySidebarProps) {
   return (
     <div
-      className="flex h-full flex-col rounded-[1.1rem] overflow-hidden"
+      className="flex flex-col rounded-[1.1rem] overflow-hidden"
       style={{ border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(0,0,0,0.25)' }}
     >
       {/* Tab bar */}
-      <div
-        className="flex border-b overflow-x-auto scrollbar-none"
-        style={{ borderColor: 'rgba(255,255,255,0.07)' }}
-      >
+      <div className="flex border-b" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
         {TABS.map(({ id, label, icon: Icon }) => (
           <button
             key={id}
@@ -76,150 +67,105 @@ export function StudySidebar({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.12 }}
-          className="flex-1 flex flex-col min-h-0"
+          className="flex flex-col"
         >
-          {activeTool === 'summary' && (
-            <SummaryPanel topicTitle={topicTitle} />
-          )}
-          {activeTool === 'tutor' && (
+          {activeTool === 'summary'     && <SummaryPanel topicTitle={topicTitle} />}
+          {activeTool === 'tutor'       && (
             <TutorPanel
-              topicTitle={topicTitle}
-              moduleId={moduleId}
               history={tutorHistory}
-              onHistoryChange={onTutorHistoryChange}
               input={tutorInput}
               onInputChange={onTutorInputChange}
+              isLoading={isTutorLoading}
+              onSend={onSendTutor}
             />
           )}
-          {activeTool === 'review' && (
-            <ReviewPanel topicId={topicId} />
-          )}
-          {activeTool === 'notes' && (
-            <NotesPanel topicId={topicId} />
-          )}
-          {activeTool === 'performance' && (
-            <PerformancePanel topicId={topicId} />
-          )}
+          {activeTool === 'review'      && <ReviewPanel />}
+          {activeTool === 'notes'       && <NotesPanel topicId={topicId} />}
+          {activeTool === 'performance' && <PerformancePanel topicId={topicId} />}
         </motion.div>
       </AnimatePresence>
     </div>
   )
 }
 
-// ── Summary ────────────────────────────────────────────────────────────────────
-
 function SummaryPanel({ topicTitle }: { topicTitle: string }) {
   return (
-    <div className="flex-1 p-3 overflow-y-auto">
-      <p
-        className="text-center text-[10px] mt-6"
-        style={{ color: 'rgba(255,255,255,0.20)' }}
-      >
+    <div className="p-3">
+      <p className="text-center text-[10px] mt-6" style={{ color: 'rgba(255,255,255,0.20)' }}>
         Sumário de <span style={{ color: 'rgba(255,255,255,0.38)' }}>{topicTitle}</span> em breve
       </p>
     </div>
   )
 }
 
-// ── Review ─────────────────────────────────────────────────────────────────────
-
-function ReviewPanel({ topicId }: { topicId: string }) {
+function ReviewPanel() {
   return (
-    <div className="flex-1 p-3 overflow-y-auto">
-      <p
-        className="text-center text-[10px] mt-6"
-        style={{ color: 'rgba(255,255,255,0.20)' }}
-      >
+    <div className="p-3">
+      <p className="text-center text-[10px] mt-6" style={{ color: 'rgba(255,255,255,0.20)' }}>
         Flashcards de revisão em breve
       </p>
     </div>
   )
 }
 
-// ── Notes ──────────────────────────────────────────────────────────────────────
-
 function NotesPanel({ topicId }: { topicId: string }) {
   const { notes, setNote } = useCadernoStore()
-  const value = notes[topicId] ?? ''
-
   return (
     <textarea
-      value={value}
+      value={notes[topicId] ?? ''}
       onChange={(e) => setNote(topicId, e.target.value)}
       placeholder="Escreva suas anotações aqui..."
-      className="flex-1 w-full resize-none bg-transparent p-3 text-[12px] leading-relaxed placeholder:text-white/20 focus:outline-none"
-      style={{ color: 'rgba(255,255,255,0.62)', minHeight: '160px' }}
+      className="w-full resize-none bg-transparent p-3 text-[12px] leading-relaxed placeholder:text-white/20 focus:outline-none"
+      style={{ color: 'rgba(255,255,255,0.62)', minHeight: '180px' }}
     />
   )
 }
 
-// ── Performance ────────────────────────────────────────────────────────────────
-
 function PerformancePanel({ topicId }: { topicId: string }) {
+  const { progress } = useCadernoStore()
+  const isRead = progress[topicId] ?? false
   return (
-    <div className="flex-1 p-3 overflow-y-auto">
-      <p
-        className="text-center text-[10px] mt-6"
-        style={{ color: 'rgba(255,255,255,0.20)' }}
+    <div className="p-3 space-y-3">
+      <div
+        className="rounded-[0.7rem] px-3 py-2.5"
+        style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.07)' }}
       >
-        Métricas de desempenho em breve
-      </p>
+        <p className="text-[9px] uppercase tracking-[0.18em] mb-1" style={{ color: 'rgba(255,255,255,0.28)' }}>
+          Status
+        </p>
+        <p className="text-[12px] font-semibold" style={{ color: isRead ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.32)' }}>
+          {isRead ? 'Concluído' : 'Em andamento'}
+        </p>
+      </div>
     </div>
   )
 }
 
-// ── Tutor IA ──────────────────────────────────────────────────────────────────
-
 function TutorPanel({
-  topicTitle,
-  moduleId,
-  history,
-  onHistoryChange,
-  input,
-  onInputChange,
+  history, input, onInputChange, isLoading, onSend,
 }: {
-  topicTitle: string
-  moduleId: string
   history: TutorMessage[]
-  onHistoryChange: (msgs: TutorMessage[]) => void
   input: string
   onInputChange: (v: string) => void
+  isLoading: boolean
+  onSend: (q: string) => void
 }) {
-  const [loading, setLoading] = useState(false)
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])
 
-  async function send() {
+  function handleSend() {
     const q = input.trim()
-    if (!q || loading) return
+    if (!q || isLoading) return
     onInputChange('')
-    const userMsg: TutorMessage = { role: 'user', content: q }
-    const next = [...history, userMsg]
-    onHistoryChange(next)
-    setLoading(true)
-
-    try {
-      const res = await fetch('/api/tutor', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: q, topicTitle, moduleId, history }),
-      })
-      const data = await res.json()
-      onHistoryChange([...next, { role: 'assistant', content: data.response }])
-    } catch {
-      onHistoryChange([...next, { role: 'assistant', content: 'Erro ao conectar. Tente novamente.' }])
-    } finally {
-      setLoading(false)
-    }
+    onSend(q)
   }
 
   return (
     <>
-      {/* Messages */}
-      <div className="flex-1 overflow-y-auto p-3 space-y-3" style={{ minHeight: 0 }}>
+      <div className="overflow-y-auto p-3 space-y-3" style={{ minHeight: 160, maxHeight: 320 }}>
         {history.length === 0 && (
           <p className="text-center text-[10px] mt-4" style={{ color: 'rgba(255,255,255,0.22)' }}>
             Selecione um trecho ou faça uma pergunta
@@ -228,19 +174,20 @@ function TutorPanel({
         {history.map((msg, i) => (
           <div
             key={i}
-            className={`text-[11px] leading-relaxed rounded-[0.7rem] px-3 py-2 ${
-              msg.role === 'user' ? 'ml-4 text-right' : 'mr-4'
-            }`}
+            className={`text-[11px] leading-relaxed rounded-[0.7rem] px-3 py-2 ${msg.role === 'user' ? 'ml-4' : 'mr-4'}`}
             style={{
               color: msg.role === 'user' ? 'rgba(255,255,255,0.70)' : 'rgba(255,255,255,0.55)',
               background: msg.role === 'user' ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.02)',
               border: '1px solid rgba(255,255,255,0.07)',
             }}
           >
+            {msg.role === 'assistant' && (
+              <p className="mb-1 text-[9px] uppercase tracking-[0.18em]" style={{ color: 'rgba(255,255,255,0.28)' }}>Tutor</p>
+            )}
             {msg.content}
           </div>
         ))}
-        {loading && (
+        {isLoading && (
           <div className="flex items-center gap-2 mr-4 px-3 py-2">
             <Loader2 className="h-3 w-3 animate-spin text-white/30" />
             <span className="text-[10px] text-white/28">Respondendo...</span>
@@ -249,7 +196,6 @@ function TutorPanel({
         <div ref={bottomRef} />
       </div>
 
-      {/* Input */}
       <div
         className="flex items-center gap-2 p-2 border-t"
         style={{ borderColor: 'rgba(255,255,255,0.07)' }}
@@ -257,14 +203,14 @@ function TutorPanel({
         <input
           value={input}
           onChange={(e) => onInputChange(e.target.value)}
-          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && send()}
+          onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
           placeholder="Pergunta..."
           className="flex-1 bg-transparent text-[11px] placeholder:text-white/22 focus:outline-none px-1"
           style={{ color: 'rgba(255,255,255,0.65)' }}
         />
         <button
-          onClick={send}
-          disabled={!input.trim() || loading}
+          onClick={handleSend}
+          disabled={!input.trim() || isLoading}
           className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full transition-opacity disabled:opacity-30"
           style={{ background: 'rgba(255,255,255,0.10)' }}
         >
