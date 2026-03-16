@@ -39,23 +39,17 @@ export function StudySidebar({
 }: StudySidebarProps) {
   return (
     <div
-      className="flex flex-col overflow-hidden rounded-[1.4rem]"
+      className="flex flex-col overflow-hidden rounded-[1.6rem]"
       style={{
-        background: 'rgba(3,3,6,0.98)',
+        background: '#030307',
         border: '1px solid rgba(255,255,255,0.08)',
-        boxShadow: '0 24px 56px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)',
+        boxShadow: '0 32px 72px rgba(0,0,0,0.8), inset 0 1px 0 rgba(255,255,255,0.05)',
       }}
     >
-      {/* Radial glow top */}
+      {/* ── Tab strip ── */}
       <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-32 rounded-t-[1.4rem]"
-        style={{ background: 'radial-gradient(ellipse at 50% -20%, rgba(255,255,255,0.06), transparent 70%)' }}
-      />
-
-      {/* ── Tab rail — ícones + label ativo ── */}
-      <div
-        className="relative flex items-center gap-0.5 p-1.5"
-        style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}
+        className="flex gap-0.5 p-1.5"
+        style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
       >
         {TABS.map(({ id, icon: Icon, label }) => {
           const active = activeTool === id
@@ -64,15 +58,16 @@ export function StudySidebar({
               key={id}
               onClick={() => onToolChange(id)}
               title={label}
-              className="relative flex flex-1 flex-col items-center gap-[3px] rounded-[0.6rem] py-2 transition-colors"
+              className="relative flex flex-1 flex-col items-center gap-[3px] rounded-[0.55rem] py-2 transition-all"
               style={{
-                background: active ? 'rgba(255,255,255,0.08)' : 'transparent',
-                color: active ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.22)',
+                background: active ? 'rgba(255,255,255,0.09)' : 'transparent',
+                color: active ? 'rgba(255,255,255,0.88)' : 'rgba(255,255,255,0.20)',
                 border: active ? '1px solid rgba(255,255,255,0.10)' : '1px solid transparent',
+                boxShadow: active ? 'inset 0 1px 0 rgba(255,255,255,0.06)' : 'none',
               }}
             >
               <Icon className="h-3.5 w-3.5" strokeWidth={active ? 2 : 1.5} />
-              <span className="text-[6.5px] font-bold uppercase tracking-[0.10em] leading-none">
+              <span className="text-[6.5px] font-bold uppercase tracking-[0.10em] leading-none whitespace-nowrap">
                 {label}
               </span>
             </button>
@@ -84,10 +79,11 @@ export function StudySidebar({
       <AnimatePresence mode="wait">
         <motion.div
           key={activeTool}
-          initial={{ opacity: 0, y: 4 }}
+          initial={{ opacity: 0, y: 3 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.14 }}
+          exit={{ opacity: 0, y: -3 }}
+          transition={{ duration: 0.13 }}
+          className="flex flex-col"
         >
           {activeTool === 'summary'     && <SummaryPanel topicTitle={topicTitle} />}
           {activeTool === 'tutor'       && (
@@ -108,12 +104,12 @@ export function StudySidebar({
   )
 }
 
-// ── Shared ─────────────────────────────────────────────────────────────────────
+// ── Shared atoms ───────────────────────────────────────────────────────────────
 
-function Card({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function InnerCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   return (
     <div
-      className={`rounded-[1rem] ${className}`}
+      className={`rounded-[0.95rem] ${className}`}
       style={{
         background: 'rgba(255,255,255,0.03)',
         border: '1px solid rgba(255,255,255,0.07)',
@@ -125,9 +121,9 @@ function Card({ children, className = '' }: { children: React.ReactNode; classNa
   )
 }
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
+function Label({ children }: { children: React.ReactNode }) {
   return (
-    <p className="text-[8px] font-bold uppercase tracking-[0.22em]" style={{ color: 'rgba(255,255,255,0.28)' }}>
+    <p className="text-[7.5px] font-bold uppercase tracking-[0.24em]" style={{ color: 'rgba(255,255,255,0.26)' }}>
       {children}
     </p>
   )
@@ -137,25 +133,25 @@ function SectionLabel({ children }: { children: React.ReactNode }) {
 
 function SummaryPanel({ topicTitle }: { topicTitle: string }) {
   return (
-    <div className="p-3 space-y-2.5">
-      <Card className="px-3 py-3">
-        <SectionLabel>Módulo</SectionLabel>
-        <p className="mt-1.5 text-[13px] font-semibold" style={{ color: 'rgba(255,255,255,0.82)' }}>
+    <div className="space-y-2 p-3">
+      <InnerCard className="px-3 py-3">
+        <Label>Módulo</Label>
+        <p className="mt-1.5 text-[13px] font-semibold leading-snug" style={{ color: 'rgba(255,255,255,0.82)' }}>
           {topicTitle}
         </p>
-      </Card>
+      </InnerCard>
 
-      <Card className="px-3 py-3 space-y-2.5">
-        <SectionLabel>Resumo IA</SectionLabel>
+      <InnerCard className="px-3 py-3 space-y-2">
+        <Label>Resumo IA</Label>
         <div className="space-y-1.5">
-          {[92, 78, 85, 62, 74, 55].map((w, i) => (
+          {[88, 72, 80, 60, 74, 52].map((w, i) => (
             <div key={i} className="h-[4px] rounded-full" style={{ width: `${w}%`, background: 'rgba(255,255,255,0.07)' }} />
           ))}
         </div>
-        <p className="text-[8.5px]" style={{ color: 'rgba(255,255,255,0.18)' }}>
+        <p className="text-[8px]" style={{ color: 'rgba(255,255,255,0.18)' }}>
           Gerado automaticamente em breve
         </p>
-      </Card>
+      </InnerCard>
     </div>
   )
 }
@@ -165,18 +161,18 @@ function SummaryPanel({ topicTitle }: { topicTitle: string }) {
 function ReviewPanel() {
   return (
     <div className="p-3">
-      <Card className="flex flex-col items-center gap-3 py-8 px-3">
+      <InnerCard className="flex flex-col items-center gap-3 py-10">
         <div
           className="flex h-10 w-10 items-center justify-center rounded-[0.75rem]"
           style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}
         >
-          <FlipHorizontal2 className="h-4.5 w-4.5" style={{ color: 'rgba(255,255,255,0.28)' }} />
+          <FlipHorizontal2 className="h-4 w-4" style={{ color: 'rgba(255,255,255,0.26)' }} />
         </div>
         <div className="text-center">
-          <p className="text-[11px] font-semibold" style={{ color: 'rgba(255,255,255,0.44)' }}>Flashcards</p>
-          <p className="text-[9px]" style={{ color: 'rgba(255,255,255,0.20)' }}>Disponível em breve</p>
+          <p className="text-[11px] font-semibold" style={{ color: 'rgba(255,255,255,0.42)' }}>Flashcards</p>
+          <p className="text-[9px]" style={{ color: 'rgba(255,255,255,0.18)' }}>Disponível em breve</p>
         </div>
-      </Card>
+      </InnerCard>
     </div>
   )
 }
@@ -186,14 +182,13 @@ function ReviewPanel() {
 function NotesPanel({ topicId }: { topicId: string }) {
   const { notes, setNote } = useCadernoStore()
   const value = notes[topicId] ?? ''
-
   return (
     <div className="flex flex-col">
       <div
         className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
       >
-        <SectionLabel>Anotações</SectionLabel>
+        <Label>Anotações</Label>
         {value.length > 0 && (
           <span className="font-mono text-[8px]" style={{ color: 'rgba(255,255,255,0.18)' }}>
             {value.length}
@@ -205,11 +200,7 @@ function NotesPanel({ topicId }: { topicId: string }) {
         onChange={(e) => setNote(topicId, e.target.value)}
         placeholder="Escreva aqui..."
         className="w-full resize-none bg-transparent px-3 py-3 text-[12px] leading-relaxed focus:outline-none"
-        style={{
-          color: 'rgba(255,255,255,0.72)',
-          minHeight: '190px',
-          caretColor: 'rgba(255,255,255,0.45)',
-        }}
+        style={{ color: 'rgba(255,255,255,0.72)', minHeight: '200px', caretColor: 'rgba(255,255,255,0.4)' }}
       />
     </div>
   )
@@ -222,66 +213,58 @@ function PerformancePanel({ topicId }: { topicId: string }) {
   const isRead = progress[topicId] ?? false
 
   return (
-    <div className="p-3 space-y-2">
-      {/* Status */}
-      <div className="flex items-center justify-between">
-        <SectionLabel>Desempenho</SectionLabel>
+    <div className="space-y-2 p-3">
+      {/* Status row */}
+      <div className="flex items-center justify-between px-1">
+        <Label>Desempenho</Label>
         <span
           className="rounded-full px-2.5 py-0.5 text-[7.5px] font-bold uppercase tracking-[0.14em]"
           style={{
             background: isRead ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
             border: '1px solid rgba(255,255,255,0.09)',
-            color: isRead ? 'rgba(255,255,255,0.68)' : 'rgba(255,255,255,0.26)',
+            color: isRead ? 'rgba(255,255,255,0.65)' : 'rgba(255,255,255,0.24)',
           }}
         >
           {isRead ? 'Concluído' : 'Pendente'}
         </span>
       </div>
 
-      {/* Stats — exato MetricCard do performance-bar */}
+      {/* Stats grid — mesmo padrão MetricCard do performance-bar.tsx */}
       <div className="grid grid-cols-3 gap-1.5">
         {[
           { label: 'Questões', value: '—' },
           { label: 'Acertos',  value: '—' },
           { label: 'Tempo',    value: '—' },
         ].map(({ label, value }) => (
-          <div
-            key={label}
-            className="flex flex-col items-center gap-1.5 rounded-[0.9rem] py-3"
-            style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.07)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
-            }}
-          >
-            <span className="font-mono text-[17px] font-semibold leading-none" style={{ color: 'rgba(255,255,255,0.38)' }}>
+          <InnerCard key={label} className="flex flex-col items-center gap-1.5 py-3">
+            <span className="font-mono text-[18px] font-semibold leading-none" style={{ color: 'rgba(255,255,255,0.36)' }}>
               {value}
             </span>
             <span className="text-[7px] font-semibold uppercase tracking-[0.10em]" style={{ color: 'rgba(255,255,255,0.22)' }}>
               {label}
             </span>
-          </div>
+          </InnerCard>
         ))}
       </div>
 
-      {/* Progress */}
-      <Card className="px-3 py-2.5">
-        <div className="flex items-center justify-between mb-2">
-          <SectionLabel>Progresso</SectionLabel>
-          <span className="font-mono text-[9px] font-bold" style={{ color: 'rgba(255,255,255,0.32)' }}>
+      {/* Progress bar */}
+      <InnerCard className="px-3 py-2.5 space-y-1.5">
+        <div className="flex items-center justify-between">
+          <Label>Progresso</Label>
+          <span className="font-mono text-[9px] font-bold" style={{ color: 'rgba(255,255,255,0.30)' }}>
             {isRead ? '100' : '0'}%
           </span>
         </div>
         <div className="overflow-hidden rounded-full" style={{ height: '3px', background: 'rgba(255,255,255,0.06)' }}>
           <motion.div
             className="h-full rounded-full"
-            style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.65), rgba(255,255,255,0.28))' }}
+            style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.60), rgba(255,255,255,0.24))' }}
             initial={{ width: '0%' }}
             animate={{ width: isRead ? '100%' : '0%' }}
-            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           />
         </div>
-      </Card>
+      </InnerCard>
     </div>
   )
 }
@@ -312,61 +295,60 @@ function TutorPanel({
 
   return (
     <>
-      {/* Status bar */}
+      {/* Status */}
       <div
         className="flex items-center justify-between px-3 py-2"
         style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
       >
-        <SectionLabel>Tutor IA</SectionLabel>
+        <Label>Tutor IA</Label>
         <div className="flex items-center gap-1.5">
           <motion.span
             className="h-1.5 w-1.5 rounded-full"
-            animate={{ opacity: isLoading ? [1, 0.4, 1] : 1 }}
-            transition={{ duration: 1.2, repeat: isLoading ? Infinity : 0 }}
+            animate={{ opacity: isLoading ? [1, 0.3, 1] : 1, scale: isLoading ? [1, 1.2, 1] : 1 }}
+            transition={{ duration: 1, repeat: isLoading ? Infinity : 0 }}
             style={{
               background: isLoading ? 'rgba(255,200,60,0.90)' : 'rgba(60,220,140,0.90)',
-              boxShadow: isLoading ? '0 0 7px rgba(255,200,60,0.65)' : '0 0 7px rgba(60,220,140,0.65)',
+              boxShadow: isLoading ? '0 0 8px rgba(255,200,60,0.60)' : '0 0 8px rgba(60,220,140,0.60)',
             }}
           />
-          <span className="text-[8px]" style={{ color: 'rgba(255,255,255,0.24)' }}>
+          <span className="text-[8px]" style={{ color: 'rgba(255,255,255,0.22)' }}>
             {isLoading ? 'pensando' : 'online'}
           </span>
         </div>
       </div>
 
       {/* Messages */}
-      <div className="overflow-y-auto px-3 py-3 space-y-2" style={{ minHeight: 120, maxHeight: 290 }}>
+      <div className="overflow-y-auto px-3 py-3 space-y-2" style={{ minHeight: 130, maxHeight: 310 }}>
         {history.length === 0 && (
-          <div className="flex flex-col items-center gap-2.5 py-5">
+          <div className="flex flex-col items-center gap-3 py-6">
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-[0.8rem]"
-              style={{
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.08)',
-                boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)',
-              }}
+              className="flex h-11 w-11 items-center justify-center rounded-[0.85rem]"
+              style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.05)' }}
             >
-              <Bot className="h-4.5 w-4.5" style={{ color: 'rgba(255,255,255,0.24)' }} />
+              <Bot className="h-5 w-5" style={{ color: 'rgba(255,255,255,0.22)' }} />
             </div>
-            <p className="text-center text-[9.5px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.26)' }}>
-              Selecione um trecho<br />ou escreva uma pergunta
-            </p>
+            <div className="text-center space-y-0.5">
+              <p className="text-[10px] font-semibold" style={{ color: 'rgba(255,255,255,0.36)' }}>Tutor IA</p>
+              <p className="text-[9px] leading-relaxed" style={{ color: 'rgba(255,255,255,0.22)' }}>
+                Selecione um trecho<br />ou faça uma pergunta
+              </p>
+            </div>
           </div>
         )}
 
         {history.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             <div
-              className="max-w-[93%] rounded-[0.85rem] px-3 py-2 text-[11px] leading-relaxed"
+              className="max-w-[94%] rounded-[0.85rem] px-3 py-2 text-[11px] leading-relaxed"
               style={{
-                color: msg.role === 'user' ? 'rgba(255,255,255,0.80)' : 'rgba(255,255,255,0.62)',
-                background: msg.role === 'user' ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.03)',
-                border: `1px solid ${msg.role === 'user' ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.06)'}`,
+                color: msg.role === 'user' ? 'rgba(255,255,255,0.82)' : 'rgba(255,255,255,0.62)',
+                background: msg.role === 'user' ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.03)',
+                border: `1px solid ${msg.role === 'user' ? 'rgba(255,255,255,0.11)' : 'rgba(255,255,255,0.06)'}`,
                 boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
               }}
             >
               {msg.role === 'assistant' && (
-                <span className="mb-1 block text-[7.5px] font-bold uppercase tracking-[0.18em]" style={{ color: 'rgba(255,255,255,0.24)' }}>
+                <span className="mb-1.5 block text-[7px] font-bold uppercase tracking-[0.22em]" style={{ color: 'rgba(255,255,255,0.22)' }}>
                   IA
                 </span>
               )}
@@ -381,8 +363,8 @@ function TutorPanel({
               className="flex items-center gap-2 rounded-[0.85rem] px-3 py-2.5"
               style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)' }}
             >
-              <Loader2 className="h-3 w-3 animate-spin" style={{ color: 'rgba(255,255,255,0.30)' }} />
-              <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.30)' }}>Respondendo...</span>
+              <Loader2 className="h-3 w-3 animate-spin" style={{ color: 'rgba(255,255,255,0.28)' }} />
+              <span className="text-[10px]" style={{ color: 'rgba(255,255,255,0.28)' }}>Respondendo...</span>
             </div>
           </div>
         )}
@@ -394,7 +376,7 @@ function TutorPanel({
         <div
           className="flex items-center gap-2 rounded-[0.8rem] px-3 py-2"
           style={{
-            background: 'linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(8,8,12,0.95) 100%)',
+            background: 'linear-gradient(180deg, rgba(255,255,255,0.07) 0%, rgba(6,6,12,0.96) 100%)',
             border: '1px solid rgba(255,255,255,0.10)',
             boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.06)',
           }}
@@ -405,17 +387,13 @@ function TutorPanel({
             onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && handleSend()}
             placeholder="Pergunta..."
             className="flex-1 bg-transparent text-[11px] focus:outline-none"
-            style={{ color: 'rgba(255,255,255,0.75)', caretColor: 'rgba(255,255,255,0.45)' }}
+            style={{ color: 'rgba(255,255,255,0.75)', caretColor: 'rgba(255,255,255,0.40)' }}
           />
           <button
             onClick={handleSend}
             disabled={!input.trim() || isLoading}
-            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.45rem] transition-opacity disabled:opacity-20"
-            style={{
-              background: 'rgba(255,255,255,0.12)',
-              border: '1px solid rgba(255,255,255,0.14)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)',
-            }}
+            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] transition-opacity disabled:opacity-20"
+            style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.14)', boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.08)' }}
           >
             <Send className="h-2.5 w-2.5" style={{ color: 'rgba(255,255,255,0.82)' }} />
           </button>
