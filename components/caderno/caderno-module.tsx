@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, Sparkles, BookOpen, Clock } from 'lucide-react'
+import { Sparkles, Clock } from 'lucide-react'
 import { CADERNO_CONTENT } from '@/data/caderno-content'
 import { useCadernoStore } from '@/lib/stores/cadernoStore'
 import { CadernoBlock } from '@/components/caderno/caderno-block'
@@ -92,8 +92,6 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
     }
   }
 
-  const { markRead } = useCadernoStore()
-
   return (
     <div className="flex flex-col gap-4">
 
@@ -143,14 +141,13 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
           />
         </div>
 
-        {/* Caderno — só visível em sumário e IA tutor */}
+        {/* Caderno — só visível em sumário e IA tutor, sem card wrapper */}
         <div className={(activeSidebarTool === 'summary' || activeSidebarTool === 'tutor') ? 'order-2 xl:order-1 space-y-8 min-w-0' : 'hidden'}>
-          <DocumentPage
-            topic={activeTopic}
-            moduleId={moduleId}
-            onAskTutor={handleAskTutor}
-            onMarkRead={() => markRead(resolvedTopicId)}
-          />
+          {activeTopic.blocks.length === 0 ? (
+            <SkeletonDocument />
+          ) : (
+            activeTopic.blocks.map((block) => <CadernoBlock key={block.id} block={block} />)
+          )}
         </div>
       </div>
 
@@ -174,96 +171,6 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
         </AnimatePresence>,
         document.body
       )}
-    </div>
-  )
-}
-
-// ── Document page ──────────────────────────────────────────────────────────────
-
-function DocumentPage({
-  topic, moduleId, onAskTutor, onMarkRead,
-}: {
-  topic: { id: string; title: string; blocks: import('@/types/caderno').ContentBlock[] }
-  moduleId: string
-  onAskTutor: (question: string, preText?: string) => void
-  onMarkRead: () => void
-}) {
-  const { progress } = useCadernoStore()
-  const isRead = progress[topic.id] ?? false
-
-  return (
-    <div
-      className="relative overflow-hidden rounded-[1.6rem]"
-      style={{
-        background: 'rgba(5,5,9,0.97)',
-        border: '1px solid rgba(255,255,255,0.07)',
-        boxShadow: '0 32px 72px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.05)',
-        minHeight: '480px',
-      }}
-    >
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{ background: 'radial-gradient(circle at 18% 0%, rgba(255,255,255,0.04), transparent 45%), radial-gradient(circle at 82% 100%, rgba(255,255,255,0.02), transparent 40%)' }}
-      />
-
-      {/* Header */}
-      <div className="flex items-center justify-between gap-3 px-6 py-4" style={{ borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
-        <div className="flex items-center gap-2 min-w-0">
-          <div
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[0.55rem]"
-            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.09)' }}
-          >
-            <BookOpen className="h-3.5 w-3.5" style={{ color: 'rgba(255,255,255,0.50)' }} />
-          </div>
-          <span className="font-mono text-[8px] font-bold uppercase tracking-[0.20em]" style={{ color: 'rgba(255,255,255,0.28)' }}>
-            {moduleId}
-          </span>
-          <span style={{ color: 'rgba(255,255,255,0.14)' }}>/</span>
-          <span className="truncate text-[11px] font-semibold" style={{ color: 'rgba(255,255,255,0.55)' }}>
-            {topic.title}
-          </span>
-        </div>
-
-        <button
-          onClick={onMarkRead}
-          className="flex shrink-0 items-center gap-1.5 rounded-full px-3 py-1.5 transition-all"
-          style={{
-            background: isRead ? 'rgba(255,255,255,0.07)' : 'rgba(255,255,255,0.03)',
-            border: `1px solid ${isRead ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.07)'}`,
-            color: isRead ? 'rgba(255,255,255,0.65)' : 'rgba(255,255,255,0.28)',
-          }}
-        >
-          <CheckCircle2 className="h-3 w-3" />
-          <span className="text-[8.5px] font-bold uppercase tracking-[0.14em]">
-            {isRead ? 'Lido' : 'Marcar lido'}
-          </span>
-        </button>
-      </div>
-
-      {/* Content */}
-      <div className="relative space-y-5 px-6 py-6">
-        {topic.blocks.length === 0
-          ? <SkeletonDocument />
-          : topic.blocks.map((block) => <CadernoBlock key={block.id} block={block} />)
-        }
-
-        {!isRead && topic.blocks.length > 0 && (
-          <div className="pt-4" style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-            <button
-              onClick={onMarkRead}
-              className="flex items-center gap-2 rounded-full px-4 py-2 text-[9px] font-bold uppercase tracking-[0.18em] transition-all"
-              style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(255,255,255,0.09)',
-                color: 'rgba(255,255,255,0.40)',
-              }}
-            >
-              <CheckCircle2 className="h-3 w-3" />
-              Marcar como lido
-            </button>
-          </div>
-        )}
-      </div>
     </div>
   )
 }
