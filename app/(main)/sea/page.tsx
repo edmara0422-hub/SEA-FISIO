@@ -1,5 +1,4 @@
-import { SeaPageEntry } from '@/components/sea/sea-page-entry'
-
+// Home content is rendered by MainShell (kept mounted for instant tab switch)
 export default function SeaPage() {
-  return <SeaPageEntry />
+  return null
 }

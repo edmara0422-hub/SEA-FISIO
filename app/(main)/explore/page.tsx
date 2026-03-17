@@ -1,5 +1,4 @@
-import { ExplorePageEntry } from '@/components/sea/explore-page-entry'
-
+// Explore content is rendered by MainShell (kept mounted for instant tab switch)
 export default function ExplorePage() {
-  return <ExplorePageEntry />
+  return null
 }

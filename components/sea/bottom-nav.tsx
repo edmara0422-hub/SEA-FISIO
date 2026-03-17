@@ -1,26 +1,16 @@
 'use client'
 
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Compass, Home } from 'lucide-react'
-import { usePathname, useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 export function BottomNav({
-  active,
   onSwitch,
 }: {
   active?: string
   onSwitch?: (tab: string) => void
 }) {
   const pathname = usePathname()
-  const router = useRouter()
-
-  // Prefetch both routes immediately on mount
-  useEffect(() => {
-    router.prefetch('/sea')
-    router.prefetch('/explore')
-  }, [router])
 
   const isHome = pathname === '/sea' || pathname === '/home' || pathname === '/'
   const isExplore = pathname === '/explore' || pathname.startsWith('/explore/')
@@ -45,15 +35,15 @@ export function BottomNav({
             'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
         }}
       >
-        <Link href="/sea" prefetch className={tabClass(isHome)} onClick={() => onSwitch?.('home')}>
+        <button className={tabClass(isHome)} onClick={() => onSwitch?.('home')}>
           <Home className="h-4 w-4" />
           <span>HOME</span>
-        </Link>
+        </button>
 
-        <Link href="/explore" prefetch className={tabClass(isExplore)} onClick={() => onSwitch?.('explorar')}>
+        <button className={tabClass(isExplore)} onClick={() => onSwitch?.('explorar')}>
           <Compass className="h-4 w-4" />
           <span>EXPLORAR</span>
-        </Link>
+        </button>
       </div>
     </motion.nav>
   )
