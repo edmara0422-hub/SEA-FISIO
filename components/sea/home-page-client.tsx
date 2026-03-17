@@ -1,7 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
+import BusinessClock from '@/components/sea/greeting-clock-card'
 import { PerformanceBar } from '@/components/sea/performance-bar'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { TopBarSEA } from '@/components/sea/top-bar-sea'
@@ -22,7 +22,7 @@ export default function HomePageClient() {
 
       <main className="relative z-10 px-4 pb-32 pt-28 md:px-8 md:pt-32">
         <div className="mx-auto max-w-7xl space-y-3">
-          <GreetingClockCard />
+          <BusinessClock variant="hero" showGreeting />
           <div className="pt-3">
           <SimulationsGrid />
           </div>

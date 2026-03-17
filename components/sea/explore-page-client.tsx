@@ -4,7 +4,7 @@ import { motion, useMotionValue, useTransform, useSpring, animate } from 'framer
 import { BookOpen, ChevronRight, Cpu } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
+import BusinessClock from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 
 // Defer carousel mount by 1 frame — clock renders instantly, carousel after
@@ -45,7 +45,7 @@ export default function ExplorePageClient() {
       <SeaBackdrop />
       <main className="relative z-10 px-4 pb-36 pt-8 md:px-8 md:pt-12">
         <div className="mx-auto max-w-2xl space-y-10">
-          <GreetingClockCard />
+          <BusinessClock variant="hero" showGreeting />
           {ready
             ? <Carousel3D />
             : <div className="w-full rounded-[2rem] bg-white/3" style={{ height: 'clamp(340px, 58vh, 520px)' }} />
@@ -141,11 +141,11 @@ function Carousel3D() {
           >
             <motion.span
               animate={{
-                width: active === i ? 28 : 6,
-                background: active === i ? 'rgba(255,255,255,0.72)' : 'rgba(255,255,255,0.18)',
+                width: active === i ? 24 : 5,
+                background: active === i ? 'rgba(255,255,255,0.55)' : 'rgba(255,255,255,0.14)',
               }}
               transition={spring}
-              className="block h-1.5 rounded-full"
+              className="block h-1 rounded-full"
             />
           </button>
         ))}
@@ -190,7 +190,7 @@ function Card3D({
       className="h-full w-full"
     >
       <div
-        className={`relative h-full w-full overflow-hidden rounded-[2rem] border border-white/10`}
+        className={`relative h-full w-full overflow-hidden rounded-[1.75rem] border border-white/8`}
         style={{
           background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
           boxShadow: isActive
@@ -207,50 +207,50 @@ function Card3D({
         )}
 
         {/* Top shimmer */}
-        <div className="pointer-events-none absolute inset-x-6 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.18)_50%,transparent)]" />
+        <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.12)_50%,transparent)]" />
 
         {/* Content */}
-        <div className="relative z-10 flex h-full flex-col justify-between p-7 md:p-8">
+        <div className="relative z-10 flex h-full flex-col justify-between p-6 md:p-7">
           {/* Top row */}
           <div className="flex items-start justify-between">
             <motion.div
               animate={isActive ? { scale: 1, opacity: 1 } : { scale: 0.9, opacity: 0.6 }}
               transition={spring}
-              className="flex h-14 w-14 items-center justify-center rounded-[1.2rem] border border-white/10"
-              style={{ background: 'rgba(255,255,255,0.06)' }}
+              className="flex h-11 w-11 items-center justify-center rounded-[1rem] border border-white/8"
+              style={{ background: 'rgba(255,255,255,0.05)' }}
             >
-              <card.icon className="h-6 w-6 text-white/60" />
+              <card.icon className="h-5 w-5 text-white/50" />
             </motion.div>
 
             {isActive ? (
               <motion.div
                 whileHover={{ x: 2, y: -2, scale: 1.06 }}
                 transition={spring}
-                className="flex h-9 w-9 items-center justify-center rounded-full border border-white/14 bg-white/6"
+                className="flex h-7 w-7 items-center justify-center rounded-full border border-white/10 bg-white/5"
               >
-                <ChevronRight className="h-4 w-4 text-white/55" />
+                <ChevronRight className="h-3.5 w-3.5 text-white/45" />
               </motion.div>
             ) : (
-              <div className="text-[9px] font-semibold uppercase tracking-[0.26em] text-white/24">
+              <div className="text-[8px] font-medium uppercase tracking-[0.28em] text-white/20">
                 Toque para ver
               </div>
             )}
           </div>
 
           {/* Bottom */}
-          <div className="space-y-3">
+          <div className="space-y-2.5">
             <motion.div
-              className="h-px w-12"
-              animate={{ width: isActive ? 48 : 24, opacity: isActive ? 1 : 0.4 }}
+              className="h-px w-10"
+              animate={{ width: isActive ? 40 : 20, opacity: isActive ? 1 : 0.35 }}
               transition={spring}
-              style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.5), transparent)' }}
+              style={{ background: 'linear-gradient(90deg, rgba(255,255,255,0.4), transparent)' }}
             />
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <h2
-                className="font-semibold leading-none tracking-[0.1em]"
+                className="font-light leading-none tracking-[0.12em]"
                 style={{
-                  fontSize: 'clamp(2rem, 8vw, 3.2rem)',
-                  color: isActive ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.35)',
+                  fontSize: 'clamp(1.75rem, 7vw, 2.8rem)',
+                  color: isActive ? 'rgba(255,255,255,0.85)' : 'rgba(255,255,255,0.30)',
                 }}
               >
                 {card.title}
@@ -260,7 +260,7 @@ function Card3D({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.18 }}
-                  className="text-[12px] leading-relaxed tracking-[0.03em] text-white/40 max-w-[28ch]"
+                  className="text-[11px] leading-relaxed tracking-[0.04em] text-white/35 max-w-[28ch]"
                 >
                   {card.sub}
                 </motion.p>
@@ -277,10 +277,10 @@ function Card3D({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.96 }}
                   transition={spring}
-                  className="mt-1 inline-flex items-center gap-2 rounded-[0.9rem] border border-white/14 bg-white/6 px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white/60"
+                  className="mt-1 inline-flex items-center gap-1.5 rounded-[0.8rem] border border-white/10 bg-white/5 px-3.5 py-2 text-[10px] font-medium uppercase tracking-[0.22em] text-white/50"
                 >
                   Abrir
-                  <ChevronRight className="h-3.5 w-3.5" />
+                  <ChevronRight className="h-3 w-3" />
                 </motion.div>
               </motion.div>
             )}
