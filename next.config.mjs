@@ -22,10 +22,6 @@ const nextConfig = {
   ],
 
   experimental: {
-    // Disable Turbopack — uses webpack which supports Web Workers with JSX
-    // This is required for @react-three/offscreen (3D in worker threads)
-    turbopack: false,
-
     // Tree-shake large UI packages — only import what's used
     optimizePackageImports: [
       'lucide-react',
