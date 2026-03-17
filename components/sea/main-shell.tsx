@@ -26,7 +26,7 @@ export function MainShell({ children }: { children: ReactNode }) {
       {showSplash === null ? <div className="fixed inset-0 z-[89] bg-[#010101]" /> : null}
 
       {showSplash ? (
-        <PremiumSplash durationMs={8200} exitHoldMs={1200} onComplete={() => setShowSplash(false)} />
+        <PremiumSplash durationMs={2400} exitHoldMs={500} onComplete={() => setShowSplash(false)} />
       ) : null}
 
       <div className="min-h-screen bg-[#020202] text-white">
