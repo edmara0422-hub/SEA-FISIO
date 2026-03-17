@@ -1,58 +1,7 @@
-'use client'
-
 import { useRef, useMemo, useEffect } from 'react'
-import { Canvas as OffscreenCanvas } from '@react-three/offscreen'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
-import { useGLTF, AdaptiveEvents } from '@react-three/drei'
+import { useFrame, useThree } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 import * as THREE from 'three'
-
-let _worker: Worker | null = null
-function getWorker(): Worker | null {
-  if (typeof window === 'undefined') return null
-  if (typeof window.Worker === 'undefined') return null
-  if (!_worker) {
-    try {
-      _worker = new Worker(new URL('./workers/pneumo.worker.ts', import.meta.url), { type: 'module' })
-    } catch { return null }
-  }
-  return _worker
-}
-
-const baseProps = {
-  camera: { position: [0, 0, 4.6] as [number, number, number], fov: 38 },
-  gl: { antialias: true, powerPreference: 'high-performance' as const },
-  dpr: [1, 1.5] as [number, number],
-  frameloop: 'demand' as const,
-  style: { width: '100%', height: '100%' },
-}
-
-export function PneumoHeroScene({ transparent = false }: { transparent?: boolean }) {
-  const w = getWorker()
-  const glProps = { ...baseProps.gl, alpha: transparent }
-
-  if (w) {
-    return (
-      <OffscreenCanvas worker={w} fallback={<FallbackCanvas transparent={transparent} />}
-        {...baseProps} gl={glProps} />
-    )
-  }
-  return <FallbackCanvas transparent={transparent} />
-}
-
-function FallbackCanvas({ transparent }: { transparent: boolean }) {
-  return (
-    <Canvas {...baseProps} gl={{ ...baseProps.gl, alpha: transparent }}>
-      {!transparent ? <color attach="background" args={['#07080f']} /> : null}
-      <directionalLight position={[3, 8, 2]}  intensity={9.0} color="#ffffff" />
-      <directionalLight position={[0, 0, 6]}  intensity={3.0} color="#ddf4ff" />
-      <directionalLight position={[-2, 2, 4]} intensity={2.0} color="#88bbcc" />
-      <pointLight position={[0, -5, -1]} intensity={20} color="#0088bb" distance={20} />
-      <ambientLight intensity={0.12} color="#050815" />
-      <AdaptiveEvents />
-      <LungsModel />
-    </Canvas>
-  )
-}
 
 useGLTF.preload('/lungs.glb')
 
@@ -63,14 +12,17 @@ function breathScale(t: number): number {
   return 1.10 - ((ph - 0.50) / 0.50) * 0.10
 }
 
-function LungsModel() {
+export function PneumoScene() {
   const groupRef = useRef<THREE.Group>(null)
   const { scene } = useGLTF('/lungs.glb')
   const { invalidate } = useThree()
 
   useEffect(() => {
     let last = 0, raf: number
-    const tick = (now: number) => { if (now - last >= 33) { invalidate(); last = now }; raf = requestAnimationFrame(tick) }
+    const tick = (now: number) => {
+      if (now - last >= 33) { invalidate(); last = now }
+      raf = requestAnimationFrame(tick)
+    }
     raf = requestAnimationFrame(tick)
     return () => cancelAnimationFrame(raf)
   }, [invalidate])
@@ -80,7 +32,9 @@ function LungsModel() {
     emissive: new THREE.Color('#030810'), emissiveIntensity: 1.0,
   }), [])
 
-  const edgeMat = useMemo(() => new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.88 }), [])
+  const edgeMat = useMemo(() => new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.88,
+  }), [])
 
   const normScene = useMemo(() => {
     const root = scene.clone(true)
@@ -88,7 +42,8 @@ function LungsModel() {
     const size = new THREE.Vector3(), center = new THREE.Vector3()
     box.getSize(size); box.getCenter(center)
     const scale = 3.0 / Math.max(size.x, size.y, size.z)
-    root.scale.setScalar(scale); root.position.sub(center.multiplyScalar(scale))
+    root.scale.setScalar(scale)
+    root.position.sub(center.multiplyScalar(scale))
     root.traverse((child) => {
       if (!(child instanceof THREE.Mesh)) return
       const geo = child.geometry.index ? child.geometry.toNonIndexed() : child.geometry
@@ -119,8 +74,15 @@ function LungsModel() {
   })
 
   return (
-    <group ref={groupRef} rotation={[0.10, 0, 0]} position={[0, -0.10, 0]}>
-      <primitive object={normScene} />
-    </group>
+    <>
+      <directionalLight position={[3, 8, 2]}  intensity={9.0} color="#ffffff" />
+      <directionalLight position={[0, 0, 6]}  intensity={3.0} color="#ddf4ff" />
+      <directionalLight position={[-2, 2, 4]} intensity={2.0} color="#88bbcc" />
+      <pointLight position={[0, -5, -1]} intensity={20} color="#0088bb" distance={20} />
+      <ambientLight intensity={0.12} color="#050815" />
+      <group ref={groupRef} rotation={[0.10, 0, 0]} position={[0, -0.10, 0]}>
+        <primitive object={normScene} />
+      </group>
+    </>
   )
 }
