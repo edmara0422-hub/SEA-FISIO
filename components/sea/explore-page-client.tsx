@@ -7,6 +7,13 @@ import { useEffect, useRef, useState } from 'react'
 import { GreetingClockCard } from '@/components/sea/greeting-clock-card'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 
+// Defer carousel mount by 1 frame — clock renders instantly, carousel after
+function useDeferredMount() {
+  const [ready, setReady] = useState(false)
+  useEffect(() => { const id = requestAnimationFrame(() => setReady(true)); return () => cancelAnimationFrame(id) }, [])
+  return ready
+}
+
 const spring = { type: 'spring', stiffness: 380, damping: 32 } as const
 
 const CARDS = [
@@ -31,13 +38,18 @@ const CARDS = [
 ] as const
 
 export default function ExplorePageClient() {
+  const ready = useDeferredMount()
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
       <main className="relative z-10 px-4 pb-36 pt-8 md:px-8 md:pt-12">
         <div className="mx-auto max-w-2xl space-y-10">
           <GreetingClockCard />
-          <Carousel3D />
+          {ready
+            ? <Carousel3D />
+            : <div className="w-full rounded-[2rem] bg-white/3" style={{ height: 'clamp(340px, 58vh, 520px)' }} />
+          }
         </div>
       </main>
     </div>
