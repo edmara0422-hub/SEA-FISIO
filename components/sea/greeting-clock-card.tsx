@@ -14,12 +14,30 @@ export default function BusinessClock({
   className = '',
   showGreeting = false,
 }: BusinessClockProps) {
+  const [mounted, setMounted] = useState(false)
   const [now, setNow] = useState(() => new Date())
 
   useEffect(() => {
+    setMounted(true)
+    setNow(new Date())
     const interval = window.setInterval(() => setNow(new Date()), 1000)
     return () => window.clearInterval(interval)
   }, [])
+
+  if (!mounted) {
+    const placeholderH = variant === 'hero' ? 'h-8' : 'h-10'
+    return (
+      <div
+        className={`${placeholderH} w-full overflow-hidden rounded-[0.75rem] border border-white/12 shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl ${className}`}
+        style={{
+          background:
+            variant === 'hero'
+              ? 'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)'
+              : 'linear-gradient(180deg, rgba(255,255,255,0.82) 0%, rgba(229,234,241,0.32) 16%, rgba(83,89,97,0.92) 44%, rgba(10,10,12,0.98) 100%)',
+        }}
+      />
+    )
+  }
 
   const dateLabel = new Intl.DateTimeFormat('pt-BR', {
     weekday: 'short',
