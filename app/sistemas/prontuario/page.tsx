@@ -1,15 +1,3 @@
-{/* Índices Calculados */ }
-<div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-  <GlassPanel>
-  </GlassPanel>
-  ...existing code...
-</div>
-{/* Botões menores em uma linha após área de pacientes/referência clínica */ }
-<div className="flex flex-row gap-2 mb-4">
-  <Button variant="outline" size="xs" className="text-xs px-2 py-1">Arquivo</Button>
-  <Button variant="outline" size="xs" className="text-xs px-2 py-1">Referência Clínica</Button>
-  <Button variant="outline" size="xs" className="text-xs px-2 py-1">Adicionar</Button>
-</div>
 'use client'
 
 import { motion } from 'framer-motion'

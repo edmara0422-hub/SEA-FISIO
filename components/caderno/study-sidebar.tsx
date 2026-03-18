@@ -25,7 +25,7 @@ interface StudySidebarProps {
   onSendTutor: (q: string) => void
 }
 
-const TABS: { id: SidebarTool; icon: React.ElementType; label: string }[] = [
+const TABS: { id: SidebarTool; icon: React.ComponentType<{ className?: string }>; label: string }[] = [
   { id: 'summary',     icon: ScanText,   label: 'Sumário'  },
   { id: 'tutor',       icon: Sparkles,   label: 'IA Tutor' },
   { id: 'notes',       icon: PenLine,    label: 'Notas'    },

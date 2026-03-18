@@ -24,14 +24,13 @@ export function CardioExperience({ bpm = 72, isActive = true }: CardioExperience
     const rawData = generateECGData({
       bpm,
       sampleRate: 250,
-      duration: 4,
-      amplitude: 1,
+      beats: 4,
     })
 
     // Formata para Recharts
-    const formattedData = rawData.map((value, index) => ({
-      time: (index / 250) * 1000, // em ms
-      ecg: value,
+    const formattedData = rawData.map((point) => ({
+      time: Math.round(point.t * 1000), // em ms
+      ecg: point.value,
     }))
 
     setEcgData(formattedData)
