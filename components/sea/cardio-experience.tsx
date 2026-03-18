@@ -12,9 +12,10 @@ interface CardioExperienceProps {
 export function CardioExperience({ bpm = 72, isActive = true }: CardioExperienceProps) {
   const [ecgData, setEcgData] = useState<Array<{ time: number; ecg: number }>>([])
 
-  const formatTooltipValue = (value: string | number) => {
-    const numericValue = typeof value === 'number' ? value : Number(value)
-    return Number.isFinite(numericValue) ? numericValue.toFixed(3) : String(value)
+  const formatTooltipValue = (value: string | number | (string | number)[]) => {
+    const v = Array.isArray(value) ? value[0] : value
+    const numericValue = typeof v === 'number' ? v : Number(v)
+    return Number.isFinite(numericValue) ? numericValue.toFixed(3) : String(v)
   }
 
   useEffect(() => {

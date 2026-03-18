@@ -18,9 +18,10 @@ export function NeuroExperience({
   const [neuroData, setNeuroData] = useState<Array<{ time: number; signal: number }>>([])
   const [analysis, setAnalysis] = useState<any>(null)
 
-  const formatTooltipValue = (value: string | number) => {
-    const numericValue = typeof value === 'number' ? value : Number(value)
-    return Number.isFinite(numericValue) ? numericValue.toFixed(3) : String(value)
+  const formatTooltipValue = (value: string | number | (string | number)[]) => {
+    const v = Array.isArray(value) ? value[0] : value
+    const numericValue = typeof v === 'number' ? v : Number(v)
+    return Number.isFinite(numericValue) ? numericValue.toFixed(3) : String(v)
   }
 
   useEffect(() => {

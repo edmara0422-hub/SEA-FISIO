@@ -5,7 +5,7 @@ import { BookMarked, FolderKanban, Search } from 'lucide-react'
 import { ICU_REFERENCE_SYSTEMS } from '@/lib/generated/icu-reference-data'
 
 type ClinicalSystem = (typeof ICU_REFERENCE_SYSTEMS)[number]
-type ClinicalProblem = ClinicalSystem['problems'][number]
+type ClinicalProblem = ClinicalSystem['problems'][number] & { block?: string; goals?: readonly string[]; assess?: readonly string[]; interv?: readonly string[]; phases?: readonly { timeframe: string; interv?: readonly string[] }[] }
 
 function SystemGlyph({ path, color }: { path: string; color: string }) {
   return (
@@ -60,10 +60,11 @@ export function ICUSystemPanel() {
         return system
       }
 
-      const problems = system.problems.filter((problem) => {
+      const problems = system.problems.filter((rawProblem) => {
+        const problem = rawProblem as ClinicalProblem
         const haystack = [
           problem.name,
-          problem.desc,
+          'desc' in problem ? (problem as { desc?: string }).desc : '',
           problem.block ?? '',
           ...(problem.goals ?? []),
           ...(problem.assess ?? []),
@@ -121,7 +122,8 @@ export function ICUSystemPanel() {
 
     const groups = new Map<string, ClinicalProblem[]>()
 
-    activeSystem.problems.forEach((problem) => {
+    activeSystem.problems.forEach((rawProblem) => {
+      const problem = rawProblem as ClinicalProblem
       const block = problem.block || 'Base clinica'
       const current = groups.get(block) ?? []
       current.push(problem)
