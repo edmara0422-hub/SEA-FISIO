@@ -607,33 +607,16 @@ function normalizeRecord(raw: Partial<ICURecord> | null | undefined): ICURecord 
     createdAt: raw?.createdAt || timestamp,
     updatedAt: raw?.updatedAt || raw?.createdAt || timestamp,
     examesLabList: Array.isArray(raw?.examesLabList)
-      ? raw.examesLabList.map((exam) => ({
-        hb: '',
-        ht: '',
-        leuco: '',
-        plaq: '',
-        creat: '',
-        ureia: '',
-        k: '',
-        na: '',
-        lac: '',
-        pcr: '',
-        bt: '',
-        alb: '',
-        tgo: '',
-        tgp: '',
-        inr: '',
-        ...(exam ?? {}),
-      }))
+      ? raw.examesLabList.map((exam) => {
+        const labDefaults: LabExamEntry = { data: '', hb: '', ht: '', leuco: '', plaq: '', creat: '', ureia: '', k: '', na: '', lac: '', pcr: '', bt: '', alb: '', tgo: '', tgp: '', inr: '' }
+        return { ...labDefaults, ...(exam ?? {}) }
+      })
       : [],
     examesImagemList: Array.isArray(raw?.examesImagemList)
-      ? raw.examesImagemList.map((exam) => ({
-        data: '',
-        tipo: '',
-        laudo: '',
-        achados: Array.isArray(exam?.achados) ? exam.achados : [],
-        ...(exam ?? {}),
-      }))
+      ? raw.examesImagemList.map((exam) => {
+        const imgDefaults: ImageExamEntry = { data: '', tipo: '', laudo: '', achados: [] }
+        return { ...imgDefaults, ...(exam ?? {}), achados: Array.isArray(exam?.achados) ? exam.achados : [] }
+      })
       : [],
     sedativos: Array.isArray(raw?.sedativos) ? raw.sedativos : [],
     bnmList: Array.isArray(raw?.bnmList) ? raw.bnmList : [],
