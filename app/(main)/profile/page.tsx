@@ -20,11 +20,9 @@ export default function ProfilePage() {
   const [user, setUser] = useState({ name: 'Usuario', email: 'usuario@sea.com' })
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const userData = localStorage.getItem('sea_user')
-      if (userData) {
-        setUser(JSON.parse(userData))
-      }
+    const userData = localStorage.getItem('sea_user')
+    if (userData) {
+      setUser(JSON.parse(userData))
     }
   }, [])
 

@@ -41,13 +41,9 @@ export function MainShell({ children }: { children: ReactNode }) {
     if (!splashShownForRuntime) {
       splashShownForRuntime = true
       setShowSplash(true)
-      return
+    } else {
+      setShowSplash(false)
     }
-    setShowSplash(false)
-  }, [pathname])
-
-  // Sync tab with pathname
-  useLayoutEffect(() => {
     const tab = pathToTab(pathname)
     setActiveTab(tab)
     if (tab === 'home' || tab === 'explore') {
