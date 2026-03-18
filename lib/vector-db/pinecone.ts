@@ -1,19 +1,20 @@
 'use server'
 
 import { Pinecone } from '@pinecone-database/pinecone'
-import { TextEmbedder } from '@huggingface/transformers'
+import { pipeline, type FeatureExtractionPipeline } from '@huggingface/transformers'
 
 const pinecone = new Pinecone({
-  apiKey: process.env.PINECONE_API_KEY,
+  apiKey: process.env.PINECONE_API_KEY ?? '',
 })
 
 const index = pinecone.Index(process.env.PINECONE_INDEX || 'sea-knowledge')
 
 // Singleton — model loads once per server process, not on every call
-let _embedder: Awaited<ReturnType<typeof TextEmbedder.fromPretrained>> | null = null
+let _embedder: FeatureExtractionPipeline | null = null
 async function getEmbedder() {
   if (!_embedder) {
-    _embedder = await TextEmbedder.fromPretrained('Xenova/all-MiniLM-L6-v2')
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    _embedder = (await (pipeline as any)('feature-extraction', 'Xenova/all-MiniLM-L6-v2')) as FeatureExtractionPipeline
   }
   return _embedder
 }

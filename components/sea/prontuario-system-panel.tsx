@@ -1344,7 +1344,7 @@ export function ProntuarioSystemPanel() {
           if (!id) { id = crypto.randomUUID(); localStorage.setItem('sea-session-id', id) }
           return id
         })()
-        const { error } = await supabase.from('icu_sessions').upsert({
+        const { error } = await supabase!.from('icu_sessions').upsert({
           session_id: sessionId,
           records: records,
           archive: archive,

@@ -155,7 +155,7 @@ export async function sendWebPushNotification(
   try {
     if (!subscription) {
       const registration = await navigator.serviceWorker.ready
-      subscription = await registration.pushManager.getSubscription()
+      subscription = await registration.pushManager.getSubscription() ?? undefined
     }
 
     if (!subscription) {

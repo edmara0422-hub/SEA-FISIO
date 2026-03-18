@@ -6,10 +6,10 @@ const redis = {
   password: process.env.REDIS_PASSWORD,
 }
 
-export const vmCalculationQueue = new Queue('vm-calculations', redis)
-export const reportGenerationQueue = new Queue('report-generation', redis)
-export const notificationQueue = new Queue('notifications', redis)
-export const aiAnalysisQueue = new Queue('ai-analysis', redis)
+export const vmCalculationQueue = new Queue('vm-calculations', { redis })
+export const reportGenerationQueue = new Queue('report-generation', { redis })
+export const notificationQueue = new Queue('notifications', { redis })
+export const aiAnalysisQueue = new Queue('ai-analysis', { redis })
 
 vmCalculationQueue.process(async (job) => {
   console.log('[v0] Processing VM calculation:', job.id)
@@ -63,13 +63,13 @@ aiAnalysisQueue.process(async (job) => {
 })
 
 export async function enqueueVMCalculation(patientId: string, parameters: Record<string, number>) {
-  return vmCalculationQueue.add({ patientId, parameters }, { attempts: 3, backoff: 'exponential' })
+  return vmCalculationQueue.add({ patientId, parameters }, { attempts: 3, backoff: { type: 'exponential' } })
 }
 
 export async function enqueueReportGeneration(patientId: string, type: 'pdf' | 'excel') {
   return reportGenerationQueue.add(
     { patientId, type },
-    { attempts: 3, backoff: 'exponential', priority: 5 }
+    { attempts: 3, backoff: { type: 'exponential' }, priority: 5 }
   )
 }
 
@@ -78,7 +78,7 @@ export async function enqueueNotification(userId: string, message: string, type:
 }
 
 export async function enqueueAIAnalysis(query: string, context: unknown) {
-  return aiAnalysisQueue.add({ query, context }, { attempts: 5, backoff: 'exponential' })
+  return aiAnalysisQueue.add({ query, context }, { attempts: 5, backoff: { type: 'exponential' } })
 }
 
 async function performVMCalculation(patientId: string, parameters: Record<string, number>) {

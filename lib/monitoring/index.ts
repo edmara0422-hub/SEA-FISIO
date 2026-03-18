@@ -42,7 +42,7 @@ export function trackEvent(
   }
 
   // Sentry
-  Sentry.captureMessage(eventName, 'info', { tags: properties })
+  Sentry.captureMessage(eventName, { level: 'info', tags: properties })
 }
 
 export function captureException(error: Error, context?: Record<string, any>) {
