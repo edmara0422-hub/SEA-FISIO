@@ -27,9 +27,7 @@ export default function ProfilePage() {
   }, [])
 
   const handleLogout = () => {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('sea_user')
-    }
+    localStorage.removeItem('sea_user')
     router.push('/auth')
   }
 
