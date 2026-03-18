@@ -41,9 +41,13 @@ export function MainShell({ children }: { children: ReactNode }) {
     if (!splashShownForRuntime) {
       splashShownForRuntime = true
       setShowSplash(true)
-    } else {
-      setShowSplash(false)
+      return
     }
+    setShowSplash(false)
+  }, [pathname])
+
+  // Sync tab with pathname
+  useLayoutEffect(() => {
     const tab = pathToTab(pathname)
     setActiveTab(tab)
     if (tab === 'home' || tab === 'explore') {
@@ -68,13 +72,13 @@ export function MainShell({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {showSplash === null ? <div className="fixed inset-0 z-[89] bg-[#010101]" /> : null}
+      {showSplash === null ? <div className="sea-shell-overlay" /> : null}
 
       {showSplash ? (
         <PremiumSplash durationMs={2400} exitHoldMs={500} onComplete={() => setShowSplash(false)} />
       ) : null}
 
-      <div className="min-h-screen bg-[#020202] text-white">
+      <div className="sea-shell-root">
         <main className="pb-28">
           {/* Cached Home tab — stays mounted once visited */}
           {visited.home && (

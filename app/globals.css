@@ -104,6 +104,20 @@
   --color-glass-border: var(--glass-border);
 }
 
+/* Force-generate critical shell classes that Tailwind v4 may miss */
+.sea-shell-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 89;
+  background: #010101;
+}
+
+.sea-shell-root {
+  min-height: 100vh;
+  background: #020202;
+  color: #fff;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
