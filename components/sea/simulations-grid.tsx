@@ -50,7 +50,7 @@ const spring = { type: 'spring', stiffness: 280, damping: 28 } as const
 
 export function SimulationsGrid() {
   const pageVisible = usePageVisible()
-  const [neuroOn, cardioOn, pneumoOn] = useStaggeredMount([80, 500, 920])
+  const [neuroOn, cardioOn, pneumoOn] = useStaggeredMount([0, 200, 400])
 
   return (
     <motion.div

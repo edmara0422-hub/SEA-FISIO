@@ -1367,9 +1367,9 @@ export function ProntuarioSystemPanel() {
           archive: archive,
           updated_at: new Date().toISOString(),
         }, { onConflict: 'session_id' })
-        setSyncStatus(error ? 'error' : 'saved')
+        setSyncStatus(error ? 'offline' : 'saved')
       } catch {
-        setSyncStatus('error')
+        setSyncStatus('offline')
       }
     }, 2000)
     return () => clearTimeout(timer)

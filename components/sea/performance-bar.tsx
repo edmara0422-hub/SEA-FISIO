@@ -163,7 +163,7 @@ export function PerformanceBar() {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-2 md:gap-3">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-4 md:gap-3">
           <MetricCard label="NPS" value={state.nps} suffix={state.mode === 'clean' ? '' : ''} />
           <MetricCard label="Fidelidade" value={state.fidelity} suffix={state.mode === 'clean' ? '' : '%'} />
           <MetricCard label="Respostas" value={state.responses} />
@@ -311,7 +311,7 @@ function MetricCard({
 }) {
   return (
     <div className="sea-dark-glass rounded-[1.25rem] px-3 py-3">
-      <p className="whitespace-nowrap text-[8px] font-semibold uppercase tracking-[0.14em] text-white/42 md:text-[9px]">
+      <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/42 md:text-[9px]">
         {label}
       </p>
       <p className="mt-2 text-lg font-semibold text-white md:text-xl">

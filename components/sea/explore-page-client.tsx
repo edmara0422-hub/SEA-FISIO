@@ -43,12 +43,12 @@ export default function ExplorePageClient() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
-      <main className="relative z-10 px-4 pb-36 pt-8 md:px-8 md:pt-12">
-        <div className="mx-auto max-w-2xl space-y-10">
+      <main className="relative z-10 px-4 pb-36 pt-14 md:px-8 md:pt-12">
+        <div className="mx-auto max-w-2xl space-y-5 md:space-y-10">
           <BusinessClock variant="hero" showGreeting />
           {ready
             ? <Carousel3D />
-            : <div className="w-full rounded-[2rem] bg-white/3" style={{ height: 'clamp(340px, 58vh, 520px)' }} />
+            : <div className="w-full rounded-[2rem] bg-white/3" style={{ height: 'clamp(300px, 50vh, 520px)' }} />
           }
         </div>
       </main>
@@ -90,7 +90,7 @@ function Carousel3D() {
       <div
         ref={containerRef}
         className="relative select-none"
-        style={{ perspective: '1100px', perspectiveOrigin: '50% 45%', height: 'clamp(340px, 58vh, 520px)' }}
+        style={{ perspective: '1100px', perspectiveOrigin: '50% 45%', height: 'clamp(300px, 50vh, 520px)' }}
       >
         {CARDS.map((card, i) => {
           const offset = i - active
