@@ -8,6 +8,8 @@ const withBundleAnalyzer = bundleAnalyzer({
 const nextConfig = {
   devIndicators: false,
 
+  allowedDevOrigins: ['192.168.18.9', '127.0.0.1', 'localhost'],
+
   compress: true,
   productionBrowserSourceMaps: false,
 
