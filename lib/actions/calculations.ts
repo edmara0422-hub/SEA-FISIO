@@ -35,7 +35,7 @@ export async function computeVMIndices(params: {
     // Computar índices
     const dp = calcDP(params.platoPressure, params.peep)
     const cest = calcCest(params.tidalVolume, dp || 0)
-    const cdyn = calcCdyn(params.peakPressure, params.peep)
+    const cdyn = calcCdyn(params.tidalVolume, params.peakPressure, params.peep)
     const raw = calcRaw(params.peakPressure, params.platoPressure, params.flow)
     const pf = calcPF(params.pao2, params.fio2)
     const pfInterp = pf ? interpPF(pf) : null

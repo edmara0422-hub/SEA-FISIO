@@ -36,7 +36,7 @@ export async function trackEvent(
   data?: Record<string, unknown>
 ) {
   try {
-    client.track(eventName, context, 1, data)
+    client.track(eventName, context, data, 1)
   } catch (error) {
     console.error('[v0] Event tracking error:', error)
   }

@@ -27,7 +27,6 @@ export function initializeMonitoring() {
       persistence: 'localStorage+cookie',
       session_recording: {
         maskAllInputs: true,
-        maskAllText: true,
       },
     })
   }

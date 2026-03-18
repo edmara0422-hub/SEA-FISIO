@@ -1710,7 +1710,7 @@ export function ProntuarioSystemPanel() {
           inr: '',
         } satisfies LabExamEntry)
       } else if (key === 'examesImagemList') {
-        next.push({ data: '', tipo: '', laudo: '', achados: [] } satisfies ImageExamEntry)
+        next.push({ data: '', tipo: '', laudo: '', achados: [] as string[] } as unknown as Record<string, string>)
       }
 
       return {

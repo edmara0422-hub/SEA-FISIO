@@ -72,6 +72,7 @@ export type VMHistoryEntry = {
   modo: string
   vt: string
   vc: string
+  ve: string
   fr: string
   peep: string
   fio2: string
@@ -83,6 +84,8 @@ export type VMHistoryEntry = {
   pplato: string
   pmean: string
   ps: string
+  ipap: string
+  epap: string
   p01: string
   pocc: string
   pmusc: string
