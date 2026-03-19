@@ -204,8 +204,8 @@ export function PerformanceBar() {
                       )}
                     </div>
                     <div className="mt-3 text-center">
-                      <p className="text-[10px] uppercase tracking-[0.16em]" style={{ color: bar.accent }}>{bar.label}</p>
-                      <p className="mt-1 text-lg font-semibold text-white">{bar.value}</p>
+                      <p className="text-[8px] uppercase tracking-[0.10em] md:text-[10px] md:tracking-[0.16em]" style={{ color: bar.accent }}>{bar.label}</p>
+                      <p className="mt-1 text-base font-semibold text-white md:text-lg">{bar.value}</p>
                     </div>
                   </div>
                 )
