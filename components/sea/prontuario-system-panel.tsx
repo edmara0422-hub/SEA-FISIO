@@ -2908,7 +2908,7 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Hemodinamica / DVA
                   </p>
-                  <div className="grid gap-2 grid-cols-7">
+                  <div className="grid gap-2 grid-cols-3 md:grid-cols-7">
                     <FieldShell label="PAS">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.pas} onChange={(event) => setField('pas', event.target.value)} placeholder="120" />
                     </FieldShell>
@@ -2924,7 +2924,7 @@ export function ProntuarioSystemPanel() {
                     <FieldShell label="Lactato">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.lactatoCardio} onChange={(event) => setField('lactatoCardio', event.target.value)} placeholder="1.2" />
                     </FieldShell>
-                    <FieldShell label="Mudanca hemodinamica" span="col-span-2">
+                    <FieldShell label="Mudanca hemodinamica" span="col-span-3 md:col-span-2">
                       <select className={INPUT_CLASS_SM} value={currentRecord.cardiovascularMudanca} onChange={(event) => setField('cardiovascularMudanca', event.target.value)}>
                         <option value="">--</option>
                         <option value="estavel">Estavel</option>
@@ -2963,8 +2963,8 @@ export function ProntuarioSystemPanel() {
                         const analise = analiseDVA(item.inicio, item.dose)
                         return (
                         <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
-                          <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
-                            <FieldShell label="Droga">
+                          <div className="grid gap-2 grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                            <FieldShell label="Droga" span="col-span-2 md:col-span-1">
                               <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('dvaList', index, 'droga', event.target.value)}>
                                 {DVA_OPTIONS.map((option) => (
                                   <option key={option} value={option}>{option || 'Selecionar'}</option>
@@ -2980,7 +2980,7 @@ export function ProntuarioSystemPanel() {
                             <FieldShell label="Unidade">
                               <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('dvaList', index, 'unidade', event.target.value)} />
                             </FieldShell>
-                            <div className="flex items-end pb-1">
+                            <div className="flex items-end justify-end pb-1 md:justify-start">
                               <button
                                 onClick={() => removeListItem('dvaList', index)}
                                 className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
