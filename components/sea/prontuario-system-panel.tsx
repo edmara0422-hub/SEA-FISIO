@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState, type ReactNode } from 'react'
+import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import {
   Activity,
@@ -1380,10 +1380,12 @@ export function ProntuarioSystemPanel() {
     }
   }, [records, selectedId])
 
+  const tabContentRef = useRef<HTMLDivElement>(null)
+
   useEffect(() => {
     if (!selectedId) return
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }, [activeTab, selectedId])
+    tabContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }, [activeTab])
 
   const currentRecord = records.find((record) => record.id === selectedId) ?? null
 
@@ -2342,6 +2344,7 @@ export function ProntuarioSystemPanel() {
               </div>
             </div>
 
+            <div ref={tabContentRef} />
             {activeTab === 'dados' ? (
               <div className="space-y-5">
                 <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
@@ -4900,7 +4903,7 @@ export function ProntuarioSystemPanel() {
                     </div>
 
                     {/* Badges afastados do nome */}
-                    <div className="flex shrink-0 items-center gap-0.5">
+                    <div className="flex shrink-0 flex-col items-center gap-1">
                       {cardStatus ? (
                         <span
                           className="rounded-full border px-1 py-px text-[6px] font-semibold uppercase tracking-[0.08em]"
@@ -4931,17 +4934,17 @@ export function ProntuarioSystemPanel() {
                     <div className="flex shrink-0 items-center gap-1.5">
                       <button
                         onClick={() => openRecord(record.id)}
-                        className="chrome-subtle flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-white/12 text-white/62 hover:text-white"
+                        className="chrome-subtle flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/62 hover:text-white"
                         title="Editar"
                       >
-                        <PencilLine className="h-3 w-3" />
+                        <PencilLine className="h-3.5 w-3.5" />
                       </button>
                       <button
                         onClick={() => archiveRecord(record.id)}
-                        className="flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-[#facc1530] bg-[#facc150d] text-[#fde68a] hover:bg-[#facc1520]"
+                        className="flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#facc1530] bg-[#facc150d] text-[#fde68a] hover:bg-[#facc1520]"
                         title="Arquivo"
                       >
-                        <Archive className="h-3 w-3" />
+                        <Archive className="h-3.5 w-3.5" />
                       </button>
                     </div>
 
