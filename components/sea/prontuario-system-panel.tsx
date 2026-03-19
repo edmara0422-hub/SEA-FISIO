@@ -2232,8 +2232,8 @@ export function ProntuarioSystemPanel() {
                 <Cloud className="h-2.5 w-2.5" />Erro
               </span>
             )}
-            <ActionButton icon={Archive} label="Arquivo" badge={archive.length} active={view === 'archive'} onClick={() => setView('archive')} />
-            <ActionButton icon={BookOpen} label="Ref." active={view === 'reference'} onClick={() => setView('reference')} />
+            <ActionButton icon={Archive} label="Arquivo" badge={archive.length} active={view === 'archive'} onClick={() => setView(view === 'archive' ? 'records' : 'archive')} />
+            <ActionButton icon={BookOpen} label="Ref." active={view === 'reference'} onClick={() => setView(view === 'reference' ? 'records' : 'reference')} />
             <ActionButton icon={Plus} label="Adicionar" onClick={addRecord} />
           </div>
         </div>

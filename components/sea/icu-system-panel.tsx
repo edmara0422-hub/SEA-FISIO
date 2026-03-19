@@ -52,10 +52,12 @@ export function ICUSystemPanel() {
   const [activeSystemId, setActiveSystemId] = useState<string>(ICU_REFERENCE_SYSTEMS[0]?.id ?? '')
   const [expandedProblemId, setExpandedProblemId] = useState<string | null>(null)
 
+  const HIDDEN_SYSTEMS = new Set(['renal', 'infectious', 'metabolic', 'gastrointestinal', 'hematologic', 'infectionsSepsis'])
+
   const filteredSystems = useMemo(() => {
     const normalized = query.trim().toLowerCase()
 
-    return ICU_REFERENCE_SYSTEMS.map((system) => {
+    return ICU_REFERENCE_SYSTEMS.filter((s) => !HIDDEN_SYSTEMS.has(s.id)).map((system) => {
       if (!normalized) {
         return system
       }
@@ -98,15 +100,8 @@ export function ICUSystemPanel() {
   const activeSystem = filteredSystems.find((system) => system.id === activeSystemId) ?? filteredSystems[0] ?? null
 
   useEffect(() => {
-    if (!activeSystem?.problems.length) {
-      setExpandedProblemId(null)
-      return
-    }
-
-    if (!expandedProblemId || !activeSystem.problems.some((problem) => problem.name === expandedProblemId)) {
-      setExpandedProblemId(activeSystem.problems[0].name)
-    }
-  }, [activeSystem, expandedProblemId])
+    setExpandedProblemId(null)
+  }, [activeSystemId])
 
   const totalProblems = useMemo(
     () => ICU_REFERENCE_SYSTEMS.reduce((total, system) => total + system.problems.length, 0),
@@ -150,14 +145,14 @@ export function ICUSystemPanel() {
         </div>
       </div>
 
-      <div className="chrome-panel rounded-[1.6rem] p-4 md:p-5">
+      <div className="chrome-panel rounded-[0.9rem] p-1.5">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-white/36" />
+          <Search className="pointer-events-none absolute left-2.5 top-1/2 h-2.5 w-2.5 -translate-y-1/2 text-white/36" />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Buscar bloco, problema, objetivo ou conduta ICU..."
-            className="w-full rounded-[1.2rem] border border-white/10 bg-black/20 py-3 pl-11 pr-4 text-sm text-white outline-none transition-all placeholder:text-white/26 focus:border-white/18"
+            placeholder="Buscar..."
+            className="w-full rounded-[0.6rem] border border-white/10 bg-black/20 py-1 pl-7 pr-2 text-[10px] text-white outline-none transition-all placeholder:text-white/26 focus:border-white/18"
           />
         </div>
       </div>
