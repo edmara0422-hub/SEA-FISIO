@@ -405,7 +405,9 @@ export type PatientData = {
   secrecao: string
   tipoVia: string
   dataTOT: string
+  horaTOT: string
   dataTQT: string
+  horaTQT: string
   dataExtubacao: string
   horaExtubacao: string
   dataReIOT: string
@@ -558,7 +560,9 @@ export function emptyPatient(): PatientData {
     secrecao: '',
     tipoVia: '',
     dataTOT: '',
+    horaTOT: '',
     dataTQT: '',
+    horaTQT: '',
     dataExtubacao: '',
     horaExtubacao: '',
     dataReIOT: '',

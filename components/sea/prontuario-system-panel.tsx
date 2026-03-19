@@ -765,7 +765,14 @@ function summarizeIms(score: string) {
 
 function calcDays(value: string) {
   if (!value) return null
-  const start = new Date(value)
+  let start: Date
+  const br = value.match(/^(\d{1,2})\/(\d{1,2})\/(\d{2,4})$/)
+  if (br) {
+    const year = br[3].length === 2 ? 2000 + parseInt(br[3]) : parseInt(br[3])
+    start = new Date(year, parseInt(br[2]) - 1, parseInt(br[1]))
+  } else {
+    start = new Date(value)
+  }
   if (Number.isNaN(start.getTime())) return null
   const diff = Date.now() - start.getTime()
   return Math.max(1, Math.floor(diff / 86400000) + 1)
@@ -1641,33 +1648,32 @@ export function ProntuarioSystemPanel() {
     options: readonly string[],
     icon: string,
   ) => (
-    <div className="rounded-[1.2rem] border border-white/10 bg-black/16 p-4">
-      <FieldShell label={`${icon} ${label}`}>
-        <select
-          className={INPUT_CLASS_SM}
-          defaultValue=""
-          onChange={(event) => {
-            toggleStringArrayField(field, event.target.value)
-            event.target.selectedIndex = 0
-          }}
-        >
-          <option value="">Selecione alteracoes...</option>
-          {options.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
-      </FieldShell>
+    <div className="rounded-[0.75rem] border border-white/10 bg-black/16 p-1.5">
+      <p className="mb-1 text-[7px] font-semibold uppercase tracking-[0.12em] text-white/40">{icon} {label}</p>
+      <select
+        className="w-full rounded-[0.4rem] border border-white/10 bg-black/22 px-1 py-0.5 text-[9px] text-white outline-none"
+        defaultValue=""
+        onChange={(event) => {
+          toggleStringArrayField(field, event.target.value)
+          event.target.selectedIndex = 0
+        }}
+      >
+        <option value="">Selecione...</option>
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
 
       {(currentRecord?.[field] as string[])?.length ? (
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-1.5 flex flex-wrap gap-1">
           {(currentRecord?.[field] as string[]).map((item) => {
             const ok = item.startsWith('Normal') || item === 'Sem assincronias'
             return (
               <div
                 key={`${field}-${item}`}
-                className="flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10px]"
+                className="flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[8px]"
                 style={{
                   borderColor: ok ? 'rgba(74,222,128,0.28)' : 'rgba(251,146,60,0.28)',
                   background: ok ? 'rgba(74,222,128,0.08)' : 'rgba(251,146,60,0.08)',
@@ -1678,7 +1684,7 @@ export function ProntuarioSystemPanel() {
                 <button
                   type="button"
                   onClick={() => removeStringArrayItem(field, item)}
-                  className="text-[12px] leading-none text-[#fca5a5]"
+                  className="text-[10px] leading-none text-[#fca5a5]"
                 >
                   ×
                 </button>
@@ -2743,7 +2749,7 @@ export function ProntuarioSystemPanel() {
                         {['+4','+3','+2','+1','0','-1','-2','-3','-4','-5'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
-                    <FieldShell label="Meta RASS">
+                    <FieldShell label="M.RASS">
                       <select className={INPUT_CLASS_SM} value={currentRecord.metaRASS} onChange={(e) => setField('metaRASS', e.target.value)}>
                         <option value="">--</option>
                         {['0','-1','-2','-3','-4','-5'].map((v) => <option key={v} value={v}>{v}</option>)}
@@ -3076,102 +3082,54 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5" style={{display:'none'}}>
+                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Eventos de via aerea
                   </p>
-                  <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-6">
                     {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
                       <>
-                        <FieldShell label="Data e hora IOT" span="xl:col-span-2">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="datetime-local"
-                            value={currentRecord.dataTOT}
-                            onChange={(event) => setField('dataTOT', event.target.value)}
-                          />
+                        <FieldShell label="Data IOT">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="dd/mm/aa" value={currentRecord.dataTOT} onChange={(event) => setField('dataTOT', event.target.value)} />
                         </FieldShell>
-                        <FieldShell label="Extubacao">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="date"
-                            value={currentRecord.dataExtubacao}
-                            onChange={(event) => setField('dataExtubacao', event.target.value)}
-                          />
+                        <FieldShell label="Hora IOT">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="hh:mm" value={currentRecord.horaTOT} onChange={(event) => setField('horaTOT', event.target.value)} />
+                        </FieldShell>
+                        <FieldShell label="Data extubacao">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="dd/mm/aa" value={currentRecord.dataExtubacao} onChange={(event) => setField('dataExtubacao', event.target.value)} />
                         </FieldShell>
                         <FieldShell label="Hora extubacao">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="time"
-                            value={currentRecord.horaExtubacao}
-                            onChange={(event) => setField('horaExtubacao', event.target.value)}
-                          />
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="hh:mm" value={currentRecord.horaExtubacao} onChange={(event) => setField('horaExtubacao', event.target.value)} />
                         </FieldShell>
-                        <FieldShell label="Re-IOT">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="date"
-                            value={currentRecord.dataReIOT}
-                            onChange={(event) => setField('dataReIOT', event.target.value)}
-                          />
+                        <FieldShell label="Data Re-IOT">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="dd/mm/aa" value={currentRecord.dataReIOT} onChange={(event) => setField('dataReIOT', event.target.value)} />
                         </FieldShell>
                         <FieldShell label="Hora Re-IOT">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="time"
-                            value={currentRecord.horaReIOT}
-                            onChange={(event) => setField('horaReIOT', event.target.value)}
-                          />
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="hh:mm" value={currentRecord.horaReIOT} onChange={(event) => setField('horaReIOT', event.target.value)} />
                         </FieldShell>
                       </>
                     )}
 
                     {currentRecord.tipoVia.startsWith('TQT') && (
                       <>
-                        <FieldShell label="Data e hora TQT" span="xl:col-span-2">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="datetime-local"
-                            value={currentRecord.dataTQT}
-                            onChange={(event) => setField('dataTQT', event.target.value)}
-                          />
+                        <FieldShell label="Data TQT">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="dd/mm/aa" value={currentRecord.dataTQT} onChange={(event) => setField('dataTQT', event.target.value)} />
                         </FieldShell>
-                        <FieldShell label="Decanulacao">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="date"
-                            value={currentRecord.dataDecanulacao}
-                            onChange={(event) => setField('dataDecanulacao', event.target.value)}
-                          />
+                        <FieldShell label="Hora TQT">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="hh:mm" value={currentRecord.horaTQT} onChange={(event) => setField('horaTQT', event.target.value)} />
+                        </FieldShell>
+                        <FieldShell label="Data decanulacao">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="dd/mm/aa" value={currentRecord.dataDecanulacao} onChange={(event) => setField('dataDecanulacao', event.target.value)} />
                         </FieldShell>
                         <FieldShell label="Hora decanulacao">
-                          <input
-                            className={INPUT_CLASS_SM}
-                            type="time"
-                            value={currentRecord.horaDecanulacao}
-                            onChange={(event) => setField('horaDecanulacao', event.target.value)}
-                          />
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="hh:mm" value={currentRecord.horaDecanulacao} onChange={(event) => setField('horaDecanulacao', event.target.value)} />
                         </FieldShell>
-                        {currentRecord.tipoVia === 'TQT-VM' ? (
-                          <>
-                            <FieldShell label="Desconexao VM">
-                              <input
-                                className={INPUT_CLASS_SM}
-                                type="date"
-                                value={currentRecord.dataDescVM}
-                                onChange={(event) => setField('dataDescVM', event.target.value)}
-                              />
-                            </FieldShell>
-                            <FieldShell label="Hora desc. VM">
-                              <input
-                                className={INPUT_CLASS_SM}
-                                type="time"
-                                value={currentRecord.horaDescVM}
-                                onChange={(event) => setField('horaDescVM', event.target.value)}
-                              />
-                            </FieldShell>
-                          </>
-                        ) : null}
+                        <FieldShell label="Data desc. VM">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="dd/mm/aa" value={currentRecord.dataDescVM} onChange={(event) => setField('dataDescVM', event.target.value)} />
+                        </FieldShell>
+                        <FieldShell label="Hora desc. VM">
+                          <input className={INPUT_CLASS_SM} type="text" placeholder="hh:mm" value={currentRecord.horaDescVM} onChange={(event) => setField('horaDescVM', event.target.value)} />
+                        </FieldShell>
                       </>
                     )}
                   </div>
@@ -3202,13 +3160,29 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Gasometria
                   </p>
-                  <div className="grid gap-2 grid-cols-6">
-                    <FieldShell label="Data">
-                      <input className={INPUT_CLASS_SM} type="date" value={currentRecord.gasoData} onChange={(event) => setField('gasoData', event.target.value)} />
-                    </FieldShell>
-                    <FieldShell label="Hora">
-                      <input className={INPUT_CLASS_SM} type="time" value={currentRecord.gasoHora} onChange={(event) => setField('gasoHora', event.target.value)} />
-                    </FieldShell>
+                  <div className="mb-2 flex gap-3">
+                    <div className="w-[55%]">
+                      <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.12em] text-white/48">Data</p>
+                      <input
+                        className="w-full rounded-[0.5rem] border border-white/10 bg-black/22 px-1.5 py-1 text-[10px] text-white outline-none placeholder:text-white/30"
+                        type="text"
+                        placeholder="dd/mm/aa"
+                        value={currentRecord.gasoData}
+                        onChange={(event) => setField('gasoData', event.target.value)}
+                      />
+                    </div>
+                    <div className="w-[45%]">
+                      <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.12em] text-white/48">Hora</p>
+                      <input
+                        className="w-full rounded-[0.5rem] border border-white/10 bg-black/22 px-1.5 py-1 text-[10px] text-white outline-none placeholder:text-white/30"
+                        type="text"
+                        placeholder="hh:mm"
+                        value={currentRecord.gasoHora}
+                        onChange={(event) => setField('gasoHora', event.target.value)}
+                      />
+                    </div>
+                  </div>
+                  <div className="grid gap-2 grid-cols-5">
                     <FieldShell label="SpO2 S/F">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.sfSpO2} onChange={(event) => setField('sfSpO2', event.target.value)} placeholder="96" />
                     </FieldShell>
@@ -3233,7 +3207,7 @@ export function ProntuarioSystemPanel() {
                     <FieldShell label="SaO2">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoSaO2} onChange={(event) => setField('gasoSaO2', event.target.value)} placeholder="96" />
                     </FieldShell>
-                    <FieldShell label="Lactato">
+                    <FieldShell label="Lac">
                       <input className={INPUT_CLASS_SM} type="number" value={currentRecord.gasoLactato} onChange={(event) => setField('gasoLactato', event.target.value)} placeholder="1.5" />
                     </FieldShell>
                     <FieldShell label="FiO2">
@@ -4054,8 +4028,8 @@ export function ProntuarioSystemPanel() {
                   )}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
-                  <div className="mb-3 flex items-center justify-between gap-2">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-3">
+                  <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Analise de curvas e loops</p>
                     <button
                       type="button"
@@ -4504,11 +4478,11 @@ export function ProntuarioSystemPanel() {
                         <p className="mb-1.5 text-[10px] font-bold text-[#fb923c]">Manobra de Recrutamento</p>
                         <p className="mb-2 text-[9px] leading-relaxed text-white/30">FiO₂ 100%, FR 10, ΔP 15 cmH₂O | PCV: PEEP +5 a cada 2min ate 25-45 cmH₂O | Apos: PEEP 25, calcular Cest, iniciar titulacao decremental.</p>
                     <div className="overflow-x-auto">
-                      <table className="w-full border-collapse text-[10px]">
+                      <table className="w-full border-collapse text-[9px]">
                         <thead>
                           <tr className="bg-white/4">
                             {['PLATO','PEEP','ΔP','CEST','SAT','PAM','★'].map((h) => (
-                              <th key={h} className="border border-white/8 px-2 py-1.5 text-center text-[9px] font-semibold text-white/44">{h}</th>
+                              <th key={h} className="border border-white/8 px-1 py-1 text-center text-[8px] font-semibold text-white/44">{h}</th>
                             ))}
                           </tr>
                         </thead>
@@ -4518,14 +4492,14 @@ export function ProntuarioSystemPanel() {
                             const dp = (!isNaN(plato) && !isNaN(peep)) ? (plato - peep).toFixed(0) : ''
                             return (
                               <tr key={ri} style={row.best ? { background: 'rgba(74,222,128,0.08)' } : {}}>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.plato} onChange={(e) => setMraField(ri, 'plato', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.peep} onChange={(e) => setMraField(ri, 'peep', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-2 py-1 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.cest} onChange={(e) => setMraField(ri, 'cest', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.sat} onChange={(e) => setMraField(ri, 'sat', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.pam} onChange={(e) => setMraField(ri, 'pam', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-2 py-1 text-center">
-                                  <button type="button" onClick={() => toggleMraBest(ri)} className="text-[12px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.plato} onChange={(e) => setMraField(ri, 'plato', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.peep} onChange={(e) => setMraField(ri, 'peep', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-0.5 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.cest} onChange={(e) => setMraField(ri, 'cest', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setMraField(ri, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setMraField(ri, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-0.5 text-center">
+                                  <button type="button" onClick={() => toggleMraBest(ri)} className="text-[11px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
                                 </td>
                               </tr>
                             )
@@ -4546,11 +4520,11 @@ export function ProntuarioSystemPanel() {
                     <p className="mb-2 text-[10px] font-bold text-[#60a5fa]">Titulacao PEEP Decremental</p>
                     <p className="mb-3 text-[9px] leading-relaxed text-white/30">VCV, Onda Quadrada | PEEP 25: reduzir -2 cmH₂O a cada 4min | PEEP ideal: melhor Cest + 2 cmH₂O.</p>
                     <div className="overflow-x-auto">
-                      <table className="w-full border-collapse text-[10px]">
+                      <table className="w-full border-collapse text-[9px]">
                         <thead>
                           <tr className="bg-white/4">
                             {['PICO','PLATO','PEEP','ΔP','CEST','SI','SAT','PAM','★'].map((h) => (
-                              <th key={h} className="border border-white/8 px-2 py-1.5 text-center text-[9px] font-semibold text-white/44">{h}</th>
+                              <th key={h} className="border border-white/8 px-1 py-1 text-center text-[8px] font-semibold text-white/44">{h}</th>
                             ))}
                           </tr>
                         </thead>
@@ -4560,16 +4534,16 @@ export function ProntuarioSystemPanel() {
                             const dp = (!isNaN(plato) && !isNaN(peep)) ? (plato - peep).toFixed(0) : ''
                             return (
                               <tr key={ti} style={row.best ? { background: 'rgba(74,222,128,0.08)' } : {}}>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.pico} onChange={(e) => setTitField(ti, 'pico', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.plato} onChange={(e) => setTitField(ti, 'plato', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.peep} onChange={(e) => setTitField(ti, 'peep', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-2 py-1 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.cest} onChange={(e) => setTitField(ti, 'cest', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="text" value={row.si} onChange={(e) => setTitField(ti, 'si', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="=1" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.sat} onChange={(e) => setTitField(ti, 'sat', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-1 py-1"><input type="number" value={row.pam} onChange={(e) => setTitField(ti, 'pam', e.target.value)} className="w-full bg-transparent text-center text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-2 py-1 text-center">
-                                  <button type="button" onClick={() => toggleTitBest(ti)} className="text-[12px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pico} onChange={(e) => setTitField(ti, 'pico', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.plato} onChange={(e) => setTitField(ti, 'plato', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.peep} onChange={(e) => setTitField(ti, 'peep', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-0.5 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.cest} onChange={(e) => setTitField(ti, 'cest', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="text" value={row.si} onChange={(e) => setTitField(ti, 'si', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="=1" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setTitField(ti, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setTitField(ti, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-1 py-0.5 text-center">
+                                  <button type="button" onClick={() => toggleTitBest(ti)} className="text-[11px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
                                 </td>
                               </tr>
                             )
