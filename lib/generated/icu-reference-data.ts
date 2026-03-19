@@ -1,1784 +1,837 @@
 export const ICU_REFERENCE_SYSTEMS = [
-  {
+{
     "id": "cardiovascular",
     "name": "Sistema Cardiovascular",
     "icon": "M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z",
     "color": "#f87171",
     "problems": [
       {
-        "name": "C1.P1 — Hipoperfusao tecidual",
-        "desc": "Critico. PAM < alvo, extremidades frias, TEC > 3s, lactato elevado, oliguria, rebaixamento de consciencia",
-        "assess": [],
-        "interv": [
-          "Oxigenoterapia convencional para SpO₂ 92-96% (Titular)",
-          "CNAF: Fluxo 40-60 L/min se FR ≥ 28-30 (Se indicado)",
-          "VNI conservadora: EPAP 5-8 cmH₂O (Se fadiga respiratoria)",
-          "Cabeceira elevada (30-60°) (Continuo)",
-          "Evitar decubito totalmente horizontal prolongado (Preventivo)",
-          "Mobilizacao passiva + bomba muscular (Degrau 0)",
-          "Sedestacao no leito se PAM ≥ alvo (Degrau 1)",
-          "Sedestacao beira-leito (Degrau 2)",
-          "Poltrona (Degrau 3)",
-          "Ortostatismo curto (30-120s) (Degrau 4)",
-          "PARADA: queda PAM + sintomas, tontura, sudorese, taquicardia sustentada (Criterios)"
-        ],
-        "block": "C1 — Choque e instabilidade hemodinamica",
-        "goals": [
-          "Manter PAM ≥ alvo (geralmente ≥ 65 mmHg), SpO₂ ≥ 92%, FR < 30",
-          "Iniciar verticalizacao progressiva segura"
-        ],
+        "name": "C1.P1 — Hipoperfusão tecidual",
+        "desc": "Crítico. PAM < alvo, extremidades frias, TEC > 3s, lactato elevado, oligúria, rebaixamento de consciência",
+        "assess": ["Manter PAM ≥ alvo (≥ 65 mmHg), SpO₂ ≥ 92%, FR < 30", "Iniciar verticalização progressiva segura"],
+        "interv": ["O₂ para SpO₂ 92-96% (Titular)", "Cabeceira elevada (30-60°) (Contínuo)", "Mobilização passiva + bomba muscular (Degrau 0)", "Sedestação no leito se PAM ≥ alvo (Degrau 1)", "PARADA: queda PAM + sintomas, tontura, sudorese, taquicardia sustentada"],
+        "block": "❤️ BLOCO C1 — Choque e instabilidade hemodinâmica",
+        "goals": ["Manter PAM ≥ alvo (≥ 65 mmHg), SpO₂ ≥ 92%, FR < 30", "Iniciar verticalização progressiva segura"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Oxigenoterapia convencional para SpO₂ 92-96% (Titular)",
-              "CNAF: Fluxo 40-60 L/min se FR ≥ 28-30 (Se indicado)",
-              "VNI conservadora: EPAP 5-8 cmH₂O (atencao: pode ↓ retorno venoso) (Se fadiga respiratoria)",
-              "Cabeceira elevada (30-60°) (Continuo)",
-              "Evitar decubito totalmente horizontal prolongado (Preventivo)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Mobilizacao passiva + bomba muscular (Degrau 0)",
-              "Sedestacao no leito se PAM ≥ alvo (Degrau 1)",
-              "Sedestacao beira-leito (Degrau 2)",
-              "Poltrona (Degrau 3)",
-              "Ortostatismo curto (30-120s) (Degrau 4)",
-              "PARADA: queda PAM + sintomas, tontura, sudorese, taquicardia sustentada (Criterios)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Oxigenoterapia para SpO₂ 92-96% (Titular)", "CNAF: fluxo 40-60 L/min se FR ≥ 28-30 (Se indicado)", "VNI conservadora: EPAP 5-8 cmH₂O, atenção ao retorno venoso (Se fadiga)", "Cabeceira elevada (30-60°) (Contínuo)", "Evitar decúbito totalmente horizontal prolongado (Preventivo)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização passiva + bomba muscular (Degrau 0)", "Sedestação no leito se PAM ≥ alvo (Degrau 1)", "Sedestação beira-leito (Degrau 2)", "Poltrona (Degrau 3)", "Ortostatismo curto (30-120s) (Degrau 4)", "PARADA: queda PAM + sintomas, tontura, sudorese, taquicardia sustentada (Critérios)"]}
         ]
       },
       {
-        "name": "C1.P2 — Instabilidade hemodinamica ao esforco/mudanca postural",
+        "name": "C1.P2 — Instabilidade hemodinâmica ao esforço/mudança postural",
         "desc": "Grave. Queda de PAM > 10-20 mmHg ao elevar cabeceira/sentar, taquicardia reacional, tontura, sudorese fria, palidez",
-        "assess": [],
-        "interv": [
-          "Exercicios de bomba muscular em leito antes de verticalizar (Preparacao)",
-          "Elevacao progressiva: 30° → 45° → 60° → 90° (Gradual 3-5 min/estagio)",
-          "Monitorar PA a cada mudanca (Vigilancia)"
-        ],
-        "block": "C1 — Choque e instabilidade hemodinamica",
-        "goals": [
-          "Permitir mudancas posturais seguras"
-        ],
+        "assess": ["Permitir mudanças posturais seguras"],
+        "interv": ["Exercícios de bomba muscular em leito antes de verticalizar (Preparação)", "Elevação progressiva: 30° → 45° → 60° → 90° (Gradual 3-5 min/estágio)", "Monitorar PA a cada mudança (Vigilância)"],
+        "block": "❤️ BLOCO C1 — Choque e instabilidade hemodinâmica",
+        "goals": ["Permitir mudanças posturais seguras"],
         "phases": [
-          {
-            "timeframe": "24-48h",
-            "interv": [
-              "Exercicios de bomba muscular em leito antes de verticalizar (Preparacao)",
-              "Elevacao progressiva: 30° → 45° → 60° → 90° (Gradual 3-5 min/estagio)",
-              "Monitorar PA a cada mudanca (Vigilancia)"
-            ]
-          }
+          {"timeframe": "24-48h", "interv": ["Exercícios de bomba muscular em leito antes de verticalizar (Preparação)", "Elevação progressiva: 30° → 45° → 60° → 90° (Gradual 3-5 min/estágio)", "Monitorar PA a cada mudança (Vigilância)"]}
         ]
       },
       {
-        "name": "C1.P3 — Aumento do trabalho respiratorio e consumo de O₂",
-        "desc": "Grave. FR > 28-30, uso de musculatura acessoria, dispneia, taquicardia associada ao esforco respiratorio",
-        "assess": [],
-        "interv": [
-          "CNAF prioritario: reduz FR e esforco, PEEP fisiologica ~3-5 cmH₂O (Tratamento principal)",
-          "Evitar VNI/VM com PEEP alta (↓ retorno venoso) (Cautela)",
-          "Posicionamento: sentado/cabeceira elevada (Terapeutico)"
-        ],
-        "block": "C1 — Choque e instabilidade hemodinamica",
-        "goals": [
-          "Reduzir trabalho respiratorio e consumo metabolico"
-        ],
+        "name": "C1.P3 — Aumento do trabalho respiratório e consumo de O₂",
+        "desc": "Grave. FR > 28-30, uso de musculatura acessória, dispneia, taquicardia associada ao esforço respiratório",
+        "assess": ["Reduzir trabalho respiratório e consumo metabólico"],
+        "interv": ["CNAF prioritário: reduz FR e esforço, PEEP fisiológica ~3-5 cmH₂O (Tratamento principal)", "Evitar VNI/VM com PEEP alta (↓ retorno venoso) (Cautela)", "Posicionamento: sentado/cabeceira elevada (Terapêutico)"],
+        "block": "❤️ BLOCO C1 — Choque e instabilidade hemodinâmica",
+        "goals": ["Reduzir trabalho respiratório e consumo metabólico"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "CNAF prioritario: reduz FR e esforco, PEEP fisiologica ~3-5 cmH₂O (Tratamento principal)",
-              "Evitar VNI/VM com PEEP alta (↓ retorno venoso) (Cautela)",
-              "Posicionamento: sentado/cabeceira elevada (Terapeutico)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["CNAF prioritário: reduz FR e esforço, PEEP fisiológica ~3-5 cmH₂O (Tratamento principal)", "Evitar VNI/VM com PEEP alta (↓ retorno venoso) (Cautela)", "Posicionamento: sentado/cabeceira elevada (Terapêutico)"]}
         ]
       },
       {
-        "name": "C1.P4 — Dependencia de suporte ventilatorio (O₂, CNAF, VNI ou VM)",
-        "desc": "Grave. SpO₂ < alvo em ar ambiente, fadiga respiratoria, necessidade de poupar musculatura",
-        "assess": [],
-        "interv": [
-          "Preferir O₂/CNAF sempre que possivel (Primeira escolha)",
-          "VM protetora: Vt 6-8 mL/kg, Pplato < 30, ΔP < 12-14, PEEP minima (Se VM necessaria)"
-        ],
-        "block": "C1 — Choque e instabilidade hemodinamica",
-        "goals": [
-          "Manter SpO₂ alvo com menor impacto hemodinamico"
-        ],
+        "name": "C1.P4 — Dependência de suporte ventilatório (O₂, CNAF, VNI ou VM)",
+        "desc": "Grave. SpO₂ < alvo em ar ambiente, fadiga respiratória, necessidade de poupar musculatura",
+        "assess": ["Reduzir suporte ventilatório gradualmente"],
+        "interv": ["Titular O₂: menor suporte que mantém SpO₂ alvo (Gradual)", "CNAF conservador: menor fluxo eficaz (Ajuste fino)", "Evitar PEEP excessiva em cardiopata (Cautela)", "Desmame progressivo guiado por SpO₂ e trabalho respiratório"],
+        "block": "❤️ BLOCO C1 — Choque e instabilidade hemodinâmica",
+        "goals": ["Reduzir suporte ventilatório gradualmente"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Preferir O₂/CNAF sempre que possivel (Primeira escolha)",
-              "VM protetora: Vt 6-8 mL/kg, Pplato < 30, ΔP < 12-14, PEEP minima (Se VM necessaria)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Titular O₂: menor suporte que mantém SpO₂ alvo (Gradual)", "CNAF conservador: menor fluxo eficaz (Ajuste fino)", "Evitar PEEP excessiva em cardiopata (Cautela)"]},
+          {"timeframe": "24-72h", "interv": ["Reduzir fluxo/FiO₂ progressivamente conforme tolerância (Desmame)", "Monitorar hemodinâmica ao reduzir suporte (Vigilância)"]}
         ]
       },
       {
-        "name": "C1.P5 — Intolerancia a mobilizacao / risco de colapso hemodinamico",
-        "desc": "Critico. Instabilidade com pequenas mudancas de posicao, sincope previa, piora de perfusao ao esforco minimo",
-        "assess": [],
-        "interv": [
-          "Mobilizacao passiva inicial (Segura)",
-          "Progressao apenas se PAM estavel, sem aumento recente de vasopressor (Criterios)",
-          "PARADA imediata: queda PAM + sintomas, tontura, palidez, dessaturacao (Vigilancia)"
-        ],
-        "block": "C1 — Choque e instabilidade hemodinamica",
-        "goals": [
-          "Mobilizacao em microdoses sem colapso"
-        ],
+        "name": "C1.P5 — Intolerância à mobilização / risco de colapso hemodinâmico",
+        "desc": "Crítico. Instabilidade com pequenas mudanças de posição, síncope prévia, piora de perfusão ao esforço mínimo",
+        "assess": ["Verticalizar com segurança hemodinâmica"],
+        "interv": ["Aguardar PAM ≥ 65 mmHg estável antes de mobilizar (Pré-condição)", "Exercícios passivos em leito: bomba muscular, flexo-extensão MMII (Início)", "Elevação de cabeceira em degraus de 10-15° com pausa de 3-5 min (Progressivo)"],
+        "block": "❤️ BLOCO C1 — Choque e instabilidade hemodinâmica",
+        "goals": ["Verticalizar com segurança hemodinâmica"],
         "phases": [
-          {
-            "timeframe": "48-72h",
-            "interv": [
-              "Mobilizacao passiva inicial (Segura)",
-              "Progressao apenas se PAM estavel, sem aumento recente de vasopressor (Criterios)",
-              "PARADA imediata: queda PAM + sintomas, tontura, palidez, dessaturacao (Vigilancia)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Aguardar PAM ≥ 65 mmHg estável antes de mobilizar (Pré-condição)", "Exercícios passivos em leito: bomba muscular, flexo-extensão MMII (Início)", "Elevação de cabeceira em degraus de 10-15° com pausa de 3-5 min (Progressivo)", "PARADA: PAM < 55 ou queda > 20 mmHg com sintomas (Critério de parada)"]}
         ]
       },
       {
-        "name": "C2.P1 — Congestao pulmonar / edema intersticial ou alveolar",
-        "desc": "Critico. Dispneia, ortopneia, crepitacoes difusas, RX com congestao/edema, SpO₂ reduzida, PaO₂/FiO₂ reduzida",
-        "assess": [],
-        "interv": [
-          "VNI = TRATAMENTO DE PRIMEIRA LINHA: CPAP 8-12 cmH₂O ou BiPAP (EPAP 8-10, IPAP 12-16) (Prioritario)",
-          "CNAF se FR ≥ 28-30 + esforco respiratorio (Alternativa/ponte)",
-          "Posicionamento: sentado/poltrona = tratamento (Terapeutico)",
-          "Avaliar resposta em 30-120 min: FR ↓, SpO₂ ↑, menor dispneia (Reavaliar)",
-          "Criterios de falha VNI: piora consciencia, instabilidade, exaustao → IOT (Alerta)",
-          "Progressao: VNI/CNAF → O₂ baixo fluxo → ar ambiente (Desmame)",
-          "Mobilizacao apos estabilizacao: poltrona → ortostatismo → marcha 5-40 m (Funcional)",
-          "PARADA: dispneia intensa, dessaturacao, dor toracica, tontura (Criterios)"
-        ],
-        "block": "C2 — Insuficiencia cardiaca e edema agudo de pulmao",
-        "goals": [
-          "Reduzir dispneia e trabalho respiratorio, manter SpO₂ ≥ 92-96%",
-          "Reduzir dependencia de suporte ventilatorio"
-        ],
+        "name": "C2.P1 — Congestão pulmonar / edema intersticial ou alveolar",
+        "desc": "Crítico. Dispneia, ortopneia, crepitações difusas, RX com congestão/edema, SpO₂ reduzida, PaO₂/FiO₂ reduzida",
+        "assess": ["Reduzir congestão", "Melhorar SpO₂ e mecânica ventilatória"],
+        "interv": ["Posição sentada (90°) ou semi-Fowler (Imediato)", "O₂ suplementar titulado para SpO₂ 92-96%", "CNAF/VNI (CPAP 5-10 cmH₂O) se SpO₂ não melhora com O₂ convencional", "Exercícios respiratórios progressivos após estabilização"],
+        "block": "💧 BLOCO C2 — Insuficiência cardíaca e edema agudo de pulmão",
+        "goals": ["Reduzir congestão", "Melhorar SpO₂ e mecânica ventilatória"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "VNI = TRATAMENTO DE PRIMEIRA LINHA: CPAP 8-12 cmH₂O ou BiPAP (EPAP 8-10, IPAP 12-16) (Prioritario)",
-              "CNAF se FR ≥ 28-30 + esforco respiratorio (Alternativa/ponte)",
-              "Posicionamento: sentado/poltrona = tratamento (Terapeutico)",
-              "Avaliar resposta em 30-120 min: FR ↓, SpO₂ ↑, menor dispneia (Reavaliar)",
-              "Criterios de falha VNI: piora consciencia, instabilidade, exaustao → IOT (Alerta)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Progressao: VNI/CNAF → O₂ baixo fluxo → ar ambiente (Desmame)",
-              "Mobilizacao apos estabilizacao: poltrona → ortostatismo → marcha 5-40 m (Funcional)",
-              "PARADA: dispneia intensa, dessaturacao, dor toracica, tontura (Criterios)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Posição sentada (90°) ou semi-Fowler (Imediato)", "O₂ suplementar titulado para SpO₂ 92-96% (Titular)", "CNAF: fluxo 40-60 L/min se persistência de hipoxemia (Se indicado)", "VNI com CPAP 5-10 cmH₂O ou BiPAP se hipercapnia (Se necessário)"]},
+          {"timeframe": "24-48h", "interv": ["Exercícios respiratórios: respiração diafragmática, expansão costal (Sessões)", "Monitorar SpO₂, FR e congestão (Contínuo)", "Mobilização progressiva conforme tolerância (Degraus)"]}
         ]
       },
       {
-        "name": "C2.P2 — Aumento importante do trabalho respiratorio",
-        "desc": "Critico. FR > 28-30 irpm, uso de musculatura acessoria, tiragem/batimento de asa nasal, dispneia intensa (Borg ≥ 6)",
-        "assess": [],
-        "interv": [
-          "CPAP efeitos: ↓ pre-carga, ↓ pos-carga VE, redistribuicao liquido alveolar (Fisiologia)",
-          "CNAF: ↓ trabalho respiratorio, PEEP fisiologica 3-5 cmH₂O (Suporte)"
-        ],
-        "block": "C2 — Insuficiencia cardiaca e edema agudo de pulmao",
-        "goals": [
-          "Reduzir FR, melhorar conforto ventilatorio"
-        ],
+        "name": "C2.P2 — Aumento importante do trabalho respiratório",
+        "desc": "Crítico. FR > 28-30 irpm, uso de musculatura acessória, tiragem/batimento de asa nasal, dispneia intensa (Borg ≥ 6)",
+        "assess": ["Reduzir FR para < 25 irpm", "Reduzir uso de musculatura acessória"],
+        "interv": ["Posição sentada (90°) (Imediato)", "VNI com CPAP ou BiPAP (Primeira linha para EAP)", "O₂ alto fluxo (Se aguardando VNI)", "Controle de ansiedade e conforto (Contínuo)"],
+        "block": "💧 BLOCO C2 — Insuficiência cardíaca e edema agudo de pulmão",
+        "goals": ["Reduzir FR para < 25 irpm", "Reduzir uso de musculatura acessória"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "CPAP efeitos: ↓ pre-carga, ↓ pos-carga VE, redistribuicao liquido alveolar (Fisiologia)",
-              "CNAF: ↓ trabalho respiratorio, PEEP fisiologica 3-5 cmH₂O (Suporte)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Posição sentada (90°) (Imediato)", "VNI: CPAP 5-10 cmH₂O (EAP) ou BiPAP IPAP 12-16/EPAP 5-8 se hipercapnia (Primeira linha)", "O₂ alto fluxo se VNI indisponível (Temporário)", "Controle de ansiedade e conforto (Contínuo)"]},
+          {"timeframe": "24-48h", "interv": ["Desmame gradual do suporte (Progressivo)", "Monitorar sinais de fadiga muscular (Vigilância)"]}
         ]
       },
       {
         "name": "C2.P3 — Hipoxemia",
         "desc": "Grave. SpO₂ < 92% em ar ambiente ou O₂ baixo fluxo, PaO₂ < 60 mmHg",
-        "assess": [],
-        "interv": [
-          "Oxigenoterapia se hipoxemia leve e FR < 28-30 (Inicial)",
-          "Escalar para CNAF/VNI conforme necessidade (Progressao)"
-        ],
-        "block": "C2 — Insuficiencia cardiaca e edema agudo de pulmao",
-        "goals": [
-          "SpO₂ 92-96%"
-        ],
+        "assess": ["SpO₂ ≥ 92-96%"],
+        "interv": ["O₂ titulado: cateter nasal → máscara simples → máscara com reservatório (Escalonar)", "CNAF se SpO₂ < 92% apesar de máscara com reservatório", "VNI se persistência de hipoxemia"],
+        "block": "💧 BLOCO C2 — Insuficiência cardíaca e edema agudo de pulmão",
+        "goals": ["SpO₂ ≥ 92-96%"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Oxigenoterapia se hipoxemia leve e FR < 28-30 (Inicial)",
-              "Escalar para CNAF/VNI conforme necessidade (Progressao)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["O₂ titulado: cateter nasal → máscara simples → máscara com reservatório (Escalonar)", "CNAF se SpO₂ < 92% apesar de O₂ convencional (Se indicado)", "VNI se persistência de hipoxemia (Escalonar)"]},
+          {"timeframe": "24-48h", "interv": ["Reduzir suporte progressivamente conforme melhora (Desmame)", "Posicionamento sentado para facilitar mecânica (Terapêutico)"]}
         ]
       },
       {
-        "name": "C2.P4 — Baixa tolerancia ao esforco / intolerancia ao ortostatismo",
-        "desc": "Moderado. Queda de SpO₂ ou aumento de FR/FC ao sentar/ficar em pe, dispneia desproporcional, fadiga precoce",
-        "assess": [],
-        "interv": [
-          "Progressao funcional: sedestacao → poltrona → ortostatismo → marcha curta (Gradual)",
-          "Criterios para iniciar: FR < 28-30, SpO₂ estavel, dispneia controlada (Elegibilidade)"
-        ],
-        "block": "C2 — Insuficiencia cardiaca e edema agudo de pulmao",
-        "goals": [
-          "Melhorar tolerancia ao esforco e AVDs"
-        ],
+        "name": "C2.P4 — Baixa tolerância ao esforço / intolerância ao ortostatismo",
+        "desc": "Moderado. Queda de SpO₂ ou aumento de FR/FC ao sentar/ficar em pé, dispneia desproporcional, fadiga precoce",
+        "assess": ["Progredir mobilização com segurança"],
+        "interv": ["Elevar cabeceira gradualmente: 30° → 45° → 60° → 90° (Progressivo)", "Sedestação assistida beira-leito (Degrau 2)", "Monitorar SpO₂, FC, PA e Borg ao mobilizar (Vigilância)"],
+        "block": "💧 BLOCO C2 — Insuficiência cardíaca e edema agudo de pulmão",
+        "goals": ["Progredir mobilização com segurança"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Progressao funcional: sedestacao → poltrona → ortostatismo → marcha curta (Gradual)",
-              "Criterios para iniciar: FR < 28-30, SpO₂ estavel, dispneia controlada (Elegibilidade)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Elevar cabeceira gradualmente: 30° → 45° → 60° → 90° (Progressivo)", "Sedestação assistida beira-leito (Degrau 2)", "Ortostatismo curto com monitoração (Degrau 3)", "Monitorar SpO₂, FC, PA e Borg ao mobilizar (Vigilância)", "PARADA: SpO₂ < 88%, Borg ≥ 8, queda PA > 20 mmHg, arritmia (Critérios)"]}
         ]
       },
       {
-        "name": "C2.P5 — Risco de fadiga respiratoria e falencia ventilatoria",
-        "desc": "Critico. FR persistentemente > 30, uso intenso de musculatura acessoria, taquicardia associada, queda de consciencia",
-        "assess": [],
-        "interv": [
-          "VNI precoce e otimizada (Urgente)",
-          "Monitorizacao intensiva: FR, consciencia, esforco (Continuo)",
-          "VM se falha de VNI (Backup)"
-        ],
-        "block": "C2 — Insuficiencia cardiaca e edema agudo de pulmao",
-        "goals": [
-          "Evitar fadiga e intubacao"
-        ],
+        "name": "C2.P5 — Risco de fadiga respiratória e falência ventilatória",
+        "desc": "Crítico. FR persistentemente > 30, uso intenso de musculatura acessória, taquicardia associada, queda de consciência",
+        "assess": ["Prevenir fadiga", "Manter ventilação adequada"],
+        "interv": ["Suporte ventilatório precoce: VNI ou VM (Urgente)", "Monitorar sinais de fadiga: FR, uso acessória, rebaixamento (Contínuo)", "Posição sentada, O₂ máximo enquanto prepara suporte (Imediato)"],
+        "block": "💧 BLOCO C2 — Insuficiência cardíaca e edema agudo de pulmão",
+        "goals": ["Prevenir fadiga", "Manter ventilação adequada"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "VNI precoce e otimizada (Urgente)",
-              "Monitorizacao intensiva: FR, consciencia, esforco (Continuo)",
-              "VM se falha de VNI (Backup)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Suporte ventilatório precoce: VNI ou VM se rápida deterioração (Urgente)", "Posição sentada, O₂ máximo enquanto prepara suporte (Imediato)", "Monitorar sinais de fadiga: FR, uso acessória, rebaixamento (Contínuo)", "Baixo limiar para intubação se piora (Vigilância)"]}
         ]
       },
       {
-        "name": "C3.P1 — Taquiarritmias (FA/Flutter, TSV, TV nao sustentada)",
-        "desc": "Grave. FC persistentemente > 120-130 bpm, palpitacoes, dispneia, tontura, queda de PA, ECG com ritmo patologico",
-        "assess": [],
-        "interv": [
-          "Controle respiratorio = controle eletrico: hipoxia e hipercapnia sao gatilhos (Fundamental)",
-          "Oxigenoterapia para SpO₂ 92-96% (Alvo)",
-          "CNAF se FR ≥ 28-30 (reduz estresse simpatico) (Se indicado)",
-          "VNI com cautela: EPAP 5-8 cmH₂O, monitorar PA (Se fadiga)",
-          "Mobilizacao apenas em zonas seguras: ritmo controlado, FC sem extremos, PAM ≥ alvo (Criterios)",
-          "Progressao: sedestacao → poltrona → ortostatismo → marcha 5-10 m (Gradual)",
-          "PARADA: palpitacao intensa, tontura, dor toracica, queda PA, dessaturacao (Criterios)"
-        ],
-        "block": "C3 — Arritmias e instabilidade eletrica",
-        "goals": [
-          "Manter estabilidade hemodinamica, evitar gatilhos de arritmia",
-          "Retomar mobilidade funcional"
-        ],
+        "name": "C3.P1 — Taquiarritmias (FA/Flutter, TSV, TV não sustentada)",
+        "desc": "Grave. FC persistentemente > 120-130 bpm, palpitações, dispneia, tontura, queda de PA, ECG com ritmo patológico",
+        "assess": ["Controlar FC", "Mobilização segura quando FC controlada"],
+        "interv": ["Repouso relativo durante taquiarritmia ativa (Imediato)", "O₂ se SpO₂ < 94% (Titular)", "Monitorar ECG contínuo (Vigilância)", "Mobilização cautelosa quando FC < 110 bpm em repouso"],
+        "block": "⚡ BLOCO C3 — Arritmias e instabilidade elétrica",
+        "goals": ["Controlar FC", "Mobilização segura quando FC controlada"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Controle respiratorio = controle eletrico: hipoxia e hipercapnia sao gatilhos (Fundamental)",
-              "Oxigenoterapia para SpO₂ 92-96% (Alvo)",
-              "CNAF se FR ≥ 28-30 (reduz estresse simpatico) (Se indicado)",
-              "VNI com cautela: EPAP 5-8 cmH₂O, monitorar PA (Se fadiga)",
-              "Mobilizacao apenas em zonas seguras: ritmo controlado, FC sem extremos, PAM ≥ alvo (Criterios)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Progressao: sedestacao → poltrona → ortostatismo → marcha 5-10 m (Gradual)",
-              "PARADA: palpitacao intensa, tontura, dor toracica, queda PA, dessaturacao (Criterios)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Repouso relativo durante taquiarritmia ativa (Imediato)", "O₂ se SpO₂ < 94% (Titular)", "Monitorar ECG contínuo (Vigilância)", "Controle de ansiedade e conforto (Contínuo)"]},
+          {"timeframe": "24-48h", "interv": ["Mobilização progressiva quando FC controlada (< 110 bpm repouso)", "Escalonamento cuidadoso: sedestação → ortostatismo → marcha", "Monitorar telemetria durante exercício (Vigilância)"]}
         ]
       },
       {
-        "name": "C3.P2 — Bradiarritmias e disturbios de conducao (BAV, pausas)",
-        "desc": "Grave. FC < 50 bpm com sintomas, tontura, sincope, hipotensao, pausas em monitorizacao",
-        "assess": [],
-        "interv": [
-          "Manter oxigenacao adequada (SpO₂ 92-96%)",
-          "Mobilizacao conservadora: sessoes curtas e frequentes (Seguranca)",
-          "PARADA: bradicardia sintomatica, presincope (Criterios)"
-        ],
-        "block": "C3 — Arritmias e instabilidade eletrica",
-        "goals": [
-          "Evitar sincope e instabilidade"
-        ],
+        "name": "C3.P2 — Bradiarritmias e distúrbios de condução (BAV, pausas)",
+        "desc": "Grave. FC < 50 bpm com sintomas, tontura, síncope, hipotensão, pausas em monitorização",
+        "assess": ["Manter FC e PA adequadas", "Segurança na mobilização"],
+        "interv": ["Repouso até avaliação e tratamento médico (Imediato)", "Monitorar telemetria contínua (Vigilância)", "Mobilização muito progressiva quando FC estabilizada e sem pausas"],
+        "block": "⚡ BLOCO C3 — Arritmias e instabilidade elétrica",
+        "goals": ["Manter FC e PA adequadas", "Segurança na mobilização"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Manter oxigenacao adequada (SpO₂ 92-96%)",
-              "Mobilizacao conservadora: sessoes curtas e frequentes (Seguranca)",
-              "PARADA: bradicardia sintomatica, presincope (Criterios)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Repouso até avaliação e tratamento médico (Imediato)", "Monitorar telemetria contínua (Vigilância)", "Exercícios passivos MMII em leito se estável (Mínimo)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização progressiva quando FC e ritmo estabilizados", "Monitorar FC resposta ao esforço (Vigilância)", "PARADA: pausas > 3s, síncope, tontura intensa, queda PA (Critérios)"]}
         ]
       },
       {
-        "name": "C3.P3 — Instabilidade hemodinamica induzida por arritmia",
-        "desc": "Critico. Queda de PAM < alvo, alteracao de consciencia, dor toracica isquemica, dispneia subita, hipoperfusao",
-        "assess": [],
-        "interv": [
-          "Suporte ventilatorio conforme necessidade (Reduzir estresse)",
-          "Evitar mobilizacao ate estabilizacao (Repouso)"
-        ],
-        "block": "C3 — Arritmias e instabilidade eletrica",
-        "goals": [
-          "Estabilizacao hemodinamica"
-        ],
+        "name": "C3.P3 — Instabilidade hemodinâmica induzida por arritmia",
+        "desc": "Crítico. Queda de PAM < alvo, alteração de consciência, dor torácica isquêmica, dispneia súbita, hipoperfusão",
+        "assess": ["Estabilizar hemodinâmica", "Suporte ventilatório se necessário"],
+        "interv": ["Repouso absoluto durante instabilidade (Imediato)", "O₂ alto fluxo (Urgente)", "Monitorização contínua de PA, FC, ECG, SpO₂ (Contínuo)", "Comunicar equipe imediatamente (URGENTE)"],
+        "block": "⚡ BLOCO C3 — Arritmias e instabilidade elétrica",
+        "goals": ["Estabilizar hemodinâmica", "Suporte ventilatório se necessário"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Suporte ventilatorio conforme necessidade (Reduzir estresse)",
-              "Evitar mobilizacao ate estabilizacao (Repouso)"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["Repouso absoluto durante instabilidade (Imediato)", "O₂ alto fluxo (Urgente)", "Monitorização contínua de PA, FC, ECG, SpO₂ (Contínuo)", "Comunicar equipe imediatamente (URGENTE)", "Preparo para cardioversão/desfibrilação se indicado (Suporte)"]}
         ]
       },
       {
-        "name": "C3.P4 — Baixa tolerancia ao esforco por instabilidade cronotropica",
-        "desc": "Moderado. FC sobe excessivamente ou nao sobe adequadamente, intolerancia ao ortostatismo/marcha",
-        "assess": [],
-        "interv": [
-          "Sessoes curtas e frequentes (Fracionado)",
-          "Priorizar funcionalidade basica, nao exaustao (Estrategia)",
-          "Evitar exercicios resistidos intensos (Cautela)"
-        ],
-        "block": "C3 — Arritmias e instabilidade eletrica",
-        "goals": [
-          "Melhorar tolerancia funcional basica"
-        ],
+        "name": "C3.P4 — Baixa tolerância ao esforço por instabilidade cronotrópica",
+        "desc": "Moderado. FC sobe excessivamente ou não sobe adequadamente, intolerância ao ortostatismo/marcha",
+        "assess": ["Mobilização segura com FC adequada ao esforço"],
+        "interv": ["Aquecimento progressivo antes de cada sessão (Preparo)", "Escalonamento lento: sedestação → ortostatismo → marcha pausada (Progressivo)", "Monitorar FC antes/durante/após (Vigilância)"],
+        "block": "⚡ BLOCO C3 — Arritmias e instabilidade elétrica",
+        "goals": ["Mobilização segura com FC adequada ao esforço"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Sessoes curtas e frequentes (Fracionado)",
-              "Priorizar funcionalidade basica, nao exaustao (Estrategia)",
-              "Evitar exercicios resistidos intensos (Cautela)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Aquecimento progressivo antes de cada sessão (Preparo)", "Escalonamento lento: sedestação → ortostatismo → marcha pausada (Progressivo)", "Monitorar FC antes/durante/após (Vigilância)", "PARADA: FC > 130 bpm ou queda FC com piora sintomática (Critérios)"]}
         ]
       },
       {
-        "name": "C3.P5 — Hipoxemia/alto trabalho respiratorio como gatilho",
-        "desc": "Grave. SpO₂ < 92%, FR > 28-30, uso de musculatura acessoria, piora do ritmo com hipoxia/esforco",
-        "assess": [],
-        "interv": [
-          "CNAF/VNI para reduzir trabalho respiratorio (Tratamento)",
-          "Evitar hipoxia e hipercapnia (Vigilancia)"
-        ],
-        "block": "C3 — Arritmias e instabilidade eletrica",
-        "goals": [
-          "Controlar gatilhos respiratorios"
-        ],
+        "name": "C3.P5 — Hipoxemia/alto trabalho respiratório como gatilho arrítmico",
+        "desc": "Grave. SpO₂ < 92%, FR > 28-30, uso de musculatura acessória, piora do ritmo com hipóxia/esforço",
+        "assess": ["Corrigir hipoxemia para estabilizar ritmo"],
+        "interv": ["O₂/CNAF titulado para SpO₂ 92-96% (Imediato)", "Posicionamento sentado (Terapêutico)", "Controle de dor, febre e ansiedade (Tratar causas gatilho)"],
+        "block": "⚡ BLOCO C3 — Arritmias e instabilidade elétrica",
+        "goals": ["Corrigir hipoxemia para estabilizar ritmo"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "CNAF/VNI para reduzir trabalho respiratorio (Tratamento)",
-              "Evitar hipoxia e hipercapnia (Vigilancia)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["O₂/CNAF titulado para SpO₂ 92-96% (Imediato)", "Posicionamento sentado (Terapêutico)", "Controle de dor, febre e ansiedade (Tratar causas gatilho)", "Monitorar ECG ao corrigir hipóxia (Vigilância)"]}
         ]
       },
       {
-        "name": "C4.P1 — Dor toracica/incisional com limitacao ventilatoria",
-        "desc": "Moderado. EVA > 5-6, respiracao superficial, tosse ineficaz, protecao excessiva da ferida",
-        "assess": [],
-        "interv": [
-          "Exercicios ventilatorios: inspiracoes lentas profundas com pausa (3-5 series de 5-10 rep)",
-          "Tosse eficaz com protecao: splinting (apoio manual/almofada sobre incisao) (Tecnica)",
-          "Huffing se tolerado (Alternativa)"
-        ],
-        "block": "C3 — Arritmias e instabilidade eletrica",
-        "goals": [
-          "Garantir ventilacao adequada e tosse eficaz"
-        ],
+        "name": "C4.P1 — Dor torácica/incisional com limitação ventilatória",
+        "desc": "Moderado. EVA > 5-6, respiração superficial, tosse ineficaz, proteção excessiva da ferida",
+        "assess": ["Controlar dor", "Expandir pulmões", "Tosse eficaz"],
+        "interv": ["Analgesia adequada com equipe antes de exercícios (Fundamental)", "Contenção manual/almofada da ferida para tosse e respiração profunda (Técnica)", "Exercícios ventilatórios: inspiração profunda, fracionada (Sessões)", "Orientar sobre proteção segura da ferida durante tosse (Educação)"],
+        "block": "🔪 BLOCO C4 — Pós-operatório cardíaco e torácico",
+        "goals": ["Controlar dor", "Expandir pulmões", "Tosse eficaz"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Exercicios ventilatorios: inspiracoes lentas profundas com pausa (3-5 series de 5-10 rep)",
-              "Tosse eficaz com protecao: splinting (apoio manual/almofada sobre incisao) (Tecnica)",
-              "Huffing se tolerado (Alternativa)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Analgesia adequada com equipe antes de exercícios (Fundamental)", "Contenção manual/almofada da ferida para tosse e respiração profunda (Técnica)", "Exercícios ventilatórios: inspiração profunda, fracionada (Sessões)", "Orientar sobre proteção segura da ferida durante tosse (Educação)"]},
+          {"timeframe": "24-72h", "interv": ["Treino de tosse eficaz com contenção (2-3x/dia)", "Inspirometria de incentivo (se EVA ≤ 4) (Uso progressivo)", "Mobilização progressiva conforme controle da dor"]}
         ]
       },
       {
-        "name": "C4.P2 — Hipoventilacao e risco de atelectasia",
-        "desc": "Grave. FR superficial, ausculta com reducao de murmurio, RX com atelectasia, queda de SpO₂",
-        "assess": [],
-        "interv": [
-          "Expansao pulmonar: exercicios ventilatorios + incentivo respiratorio (Sessoes)",
-          "Suporte ventilatorio: O₂ se SpO₂ < 92-94%, considerar CNAF/VNI se atelectasia importante (Se necessario)",
-          "Posicionamento: evitar decubito dorsal prolongado, sentar em poltrona precoce (Terapeutico)"
-        ],
-        "block": "C4 — Pos-operatorio cardiaco e toracico",
-        "goals": [
-          "Prevenir atelectasia, manter SpO₂ ≥ 92-96%"
-        ],
+        "name": "C4.P2 — Hipoventilação e risco de atelectasia",
+        "desc": "Grave. FR superficial, ausculta com redução de murmúrio, RX com atelectasia, queda de SpO₂",
+        "assess": ["Manter VC adequado", "Prevenir/reverter atelectasia"],
+        "interv": ["Exercícios ventilatórios: inspiração lenta e profunda (Sessões)", "Inspirometria de incentivo (Uso)", "Posicionamento: sedestação/cabeceira ≥ 30° (Contínuo)", "Higiene brônquica se secreção (PRN)"],
+        "block": "🔪 BLOCO C4 — Pós-operatório cardíaco e torácico",
+        "goals": ["Manter VC adequado", "Prevenir/reverter atelectasia"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Expansao pulmonar: exercicios ventilatorios + incentivo respiratorio (Sessoes)",
-              "Suporte ventilatorio: O₂ se SpO₂ < alvo, CNAF/VNI se atelectasia importante (Se necessario)",
-              "Posicionamento: evitar decubito dorsal prolongado, sentar em poltrona precoce (Terapeutico)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Exercícios ventilatórios: inspiração lenta e profunda (Sessões)", "Inspirometria de incentivo (Uso)", "Posicionamento: sedestação/cabeceira ≥ 30° (Contínuo)", "O₂ suplementar se SpO₂ < 92% (Titular)"]},
+          {"timeframe": "24-72h", "interv": ["Higiene brônquica se secreção (PRN)", "Mobilização precoce: sedestação beira-leito, ortostatismo (Progressivo)", "Reavaliar ausculta e SpO₂ (Diário)"]}
         ]
       },
       {
-        "name": "C4.P3 — Secrecao retida / tosse ineficaz",
-        "desc": "Moderado. Tosse fraca/dolorosa, ruidos adventicios, aspiracao frequente, pico de fluxo reduzido",
-        "assess": [],
-        "interv": [
-          "Treino de tosse assistida com protecao (Sessoes)",
-          "Huffing, tosse em series (Tecnicas)"
-        ],
-        "block": "C4 — Pos-operatorio cardiaco e toracico",
-        "goals": [
-          "Higiene bronquica eficaz"
-        ],
+        "name": "C4.P3 — Secreção retida / tosse ineficaz",
+        "desc": "Moderado. Tosse fraca/dolorosa, ruídos adventícios, aspiração frequente, pico de fluxo reduzido",
+        "assess": ["Eliminar secreção", "PCF > 160 L/min"],
+        "interv": ["Medir PCF (Inicial)", "Técnica de tosse assistida com contenção da ferida (Sessões)", "Huffing dirigido (Técnica)", "Higiene brônquica: posicionamento, tapotagem se não contraindicado"],
+        "block": "🔪 BLOCO C4 — Pós-operatório cardíaco e torácico",
+        "goals": ["Eliminar secreção", "PCF > 160 L/min"],
         "phases": [
-          {
-            "timeframe": "24-48h",
-            "interv": [
-              "Treino de tosse assistida com protecao (Sessoes)",
-              "Huffing, tosse em series (Tecnicas)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Medir PCF (Inicial)", "Higiene brônquica: posicionamento, vibração manual (Sessões)", "Técnica de tosse assistida com contenção da ferida (Sessões)", "Huffing dirigido (Técnica)"]},
+          {"timeframe": "24-72h", "interv": ["Treino de tosse progressiva (2-3x/dia)", "Mobilização: melhora clearance (Diário)", "Reavaliar PCF (A cada 48-72h)"]}
         ]
       },
       {
-        "name": "C4.P4 — Fraqueza global e intolerancia a mobilizacao",
+        "name": "C4.P4 — Fraqueza global e intolerância à mobilização",
         "desc": "Moderado. Dificuldade para sentar/levantar, queda de PA ou SpO₂ ao mobilizar, fadiga precoce",
-        "assess": [],
-        "interv": [
-          "Progressao tipica: D0-D1 sedestacao/poltrona, D1-D2 ortostatismo/marcha 5-10m, D2-D3 marcha 20-50m (Funcional)",
-          "Treino de transferencias: rolar → sentar → sentar/levantar → poltrona, 3-8 repeticoes (Diario)",
-          "PARADA: dor toracica isquemica, queda PA, arritmia nova, dessaturacao, tontura (Criterios)"
-        ],
-        "block": "C4 — Pos-operatorio cardiaco e toracico",
-        "goals": [
-          "Melhorar independencia nas transferencias"
-        ],
+        "assess": ["Progredir mobilização", "Alta funcional"],
+        "interv": ["Sedestação beira-leito assistida (Degrau 2)", "Ortostatismo progressivo (Degrau 3)", "Marcha assistida crescente (Degrau 4)", "Monitorar PA, SpO₂ e FC ao mobilizar"],
+        "block": "🔪 BLOCO C4 — Pós-operatório cardíaco e torácico",
+        "goals": ["Progredir mobilização", "Alta funcional"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Progressao tipica: D0-D1 sedestacao/poltrona, D1-D2 ortostatismo/marcha 5-10m, D2-D3 marcha 20-50m (Funcional)",
-              "Treino de transferencias: rolar → sentar → sentar/levantar → poltrona, 3-8 repeticoes (Diario)",
-              "PARADA: dor toracica isquemica, queda PA, arritmia nova, dessaturacao, tontura (Criterios)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Sedestação beira-leito assistida (Degrau 2)", "Ortostatismo progressivo (Degrau 3)", "Monitorar PA, SpO₂ e FC ao mobilizar (Vigilância)"]},
+          {"timeframe": "3-7 dias", "interv": ["Marcha assistida crescente (Degrau 4)", "Escada se necessário para alta (Funcional)", "Orientação para reabilitação fase II (Pré-alta)"]}
         ]
       },
       {
-        "name": "C4.P5 — Restricao de movimento por esternotomia/toracotomia",
-        "desc": "Leve. Medo de mover MMSS/tronco, limitacao funcional, postura protetora",
-        "assess": [],
-        "interv": [
-          "Educacao terapeutica: movimentos seguros (Orientacao)",
-          "Mobilizacao ativa-assistida progressiva (Gradual)"
-        ],
-        "block": "C4 — Pos-operatorio cardiaco e toracico",
-        "goals": [
-          "Restaurar amplitude de movimento funcional"
-        ],
+        "name": "C4.P5 — Restrição de movimento por esternotomia/toracotomia",
+        "desc": "Leve. Medo de mover MMSS/tronco, limitação funcional, postura protetora",
+        "assess": ["Mobilidade funcional com proteção da ferida"],
+        "interv": ["Orientação sobre movimentos permitidos e protegidos (Educação)", "MMSS: mobilização passiva/ativo-assistida respeitando restrições de esternotomia (Sessões)", "Exercícios de MMII sem restrição (Contínuo)"],
+        "block": "🔪 BLOCO C4 — Pós-operatório cardíaco e torácico",
+        "goals": ["Mobilidade funcional com proteção da ferida"],
         "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Educacao terapeutica: movimentos seguros (Orientacao)",
-              "Mobilizacao ativa-assistida progressiva (Gradual)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Orientação sobre movimentos permitidos e protegidos (Educação)", "MMSS: mobilização passiva/ativo-assistida respeitando restrições de esternotomia (Sessões)", "Exercícios de MMII sem restrição (Contínuo)"]},
+          {"timeframe": "24-72h", "interv": ["Progredir MMSS conforme protocolo da instituição (Gradual)", "Postura ereta segura: orientar para não cruzar braços, não apoiar (Educação)"]}
         ]
       },
       {
-        "name": "C4.P6 — Risco tromboembolico por imobilismo",
-        "desc": "Moderado. Longo tempo em leito, baixa mobilidade, edema de MMII, fatores de risco clinicos",
-        "assess": [],
-        "interv": [
-          "Exercicios de bomba muscular MMII: dorsiflexao/plantiflexao, extensao joelhos (Varias vezes/dia)",
-          "Mobilizacao precoce (Diario)"
-        ],
-        "block": "C4 — Pos-operatorio cardiaco e toracico",
-        "goals": [
-          "Prevenir trombose"
-        ],
+        "name": "C4.P6 — Risco tromboembólico por imobilismo",
+        "desc": "Moderado. Longo tempo em leito, baixa mobilidade, edema de MMII, fatores de risco clínicos",
+        "assess": ["Prevenir TVP/TEP"],
+        "interv": ["Exercícios de bomba muscular MMII: flexo-extensão tornozelo, panturrilha (Contínuo)", "Mobilização precoce: sedestação beira-leito (24-48h pós-operatório)", "Meias de compressão graduada (Contínuo)", "Deambulação progressiva o quanto antes (Prioridade)"],
+        "block": "🔪 BLOCO C4 — Pós-operatório cardíaco e torácico",
+        "goals": ["Prevenir TVP/TEP"],
         "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Exercicios de bomba muscular MMII: dorsiflexao/plantiflexao, extensao joelhos (Varias vezes/dia)",
-              "Mobilizacao precoce (Diario)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Exercícios de bomba muscular MMII: flexo-extensão tornozelo, panturrilha (Contínuo)", "Meias de compressão graduada (Contínuo)", "Elevar MMII 30° se edema sem contraindicação hemodinâmica"]},
+          {"timeframe": "24-72h", "interv": ["Sedestação beira-leito (Degrau 2)", "Ortostatismo e marcha progressiva (Prioritário)", "Monitorar sinais TVP: edema, calor, dor panturrilha (Vigilância)"]}
         ]
       },
       {
         "name": "C5.P1 — Hipoxemia por mismatch V/Q",
         "desc": "Grave. SpO₂ < 92%, PaO₂ reduzida, gradiente A-a aumentado, necessidade de O₂ suplementar",
-        "assess": [],
-        "interv": [
-          "Oxigenoterapia para SpO₂ 92-96% (Inicial)",
-          "CNAF se FR ≥ 28-30: Fluxo 40-60 L/min, FiO₂ para alvo (Se indicado)",
-          "VNI com MUITA CAUTELA: EPAP baixa (5-8) apenas se fadiga clara (Cautela extrema)",
-          "Regra: evitar tudo que aumente pos-carga do VD (Fisiologia)",
-          "Cabeceira elevada, evitar supino horizontal (Posicionamento)",
-          "Mobilizacao so apos estabilizacao: sedestacao → poltrona → ortostatismo → marcha 5-10m (Progressao)",
-          "PARADA: tontura, queda PA, dessaturacao, dor toracica, dispneia desproporcional (Criterios)"
-        ],
-        "block": "C4 — Pos-operatorio cardiaco e toracico",
-        "goals": [
-          "Manter SpO₂ ≥ 92-96%, reduzir trabalho respiratorio",
-          "Reduzir dependencia de O₂"
-        ],
+        "assess": ["SpO₂ ≥ 92-96%"],
+        "interv": ["O₂ suplementar titulado (Escalonar)", "CNAF se SpO₂ < 90% com O₂ convencional (Se indicado)", "Posicionamento sentado (Terapêutico)", "Reduzir O₂ gradualmente conforme melhora"],
+        "block": "🩸 BLOCO C5 — Tromboembolismo pulmonar (TEP)",
+        "goals": ["SpO₂ ≥ 92-96%"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Oxigenoterapia para SpO₂ 92-96% (Inicial)",
-              "CNAF se FR ≥ 28-30: Fluxo 40-60 L/min, FiO₂ para alvo (Se indicado)",
-              "VNI com MUITA CAUTELA: EPAP ↑ → ↓ retorno venoso → piora VD. Usar EPAP baixa (5-8) apenas se fadiga clara (Cautela extrema)",
-              "Regra: evitar tudo que aumente pos-carga do VD (Fisiologia)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Cabeceira elevada, evitar supino horizontal (Posicionamento)",
-              "Mobilizacao so apos estabilizacao: sedestacao → poltrona → ortostatismo → marcha 5-10m (Progressao)",
-              "PARADA: tontura, queda PA, dessaturacao, dor toracica, dispneia desproporcional (Criterios)"
-            ]
-          }
+          {"timeframe": "0-6h", "interv": ["O₂ suplementar titulado: cateter → máscara → reservatório (Escalonar)", "CNAF se SpO₂ < 90% com O₂ convencional (Se indicado)", "Posicionamento sentado (Terapêutico)"]},
+          {"timeframe": "24-48h", "interv": ["Reduzir O₂ gradualmente conforme melhora (Desmame)", "Exercícios respiratórios: respiração profunda (Sessões)", "Monitorar SpO₂ ao repouso e esforço (Vigilância)"]}
         ]
       },
       {
-        "name": "C5.P2 — Aumento do trabalho respiratorio",
-        "desc": "Grave. FR > 28-30 irpm, uso de musculatura acessoria, dispneia subita/desproporcional",
-        "assess": [],
-        "interv": [
-          "CNAF preferencial: reduz trabalho sem grande impacto VD (Escolha)",
-          "Evitar VNI agressiva (Cautela)"
-        ],
-        "block": "C5 — Tromboembolismo pulmonar (TEP)",
-        "goals": [
-          "Reduzir FR < 30, melhorar conforto"
-        ],
+        "name": "C5.P2 — Aumento do trabalho respiratório",
+        "desc": "Grave. FR > 28-30 irpm, uso de musculatura acessória, dispneia súbita/desproporcional",
+        "assess": ["Reduzir FR", "Reduzir trabalho respiratório"],
+        "interv": ["O₂/CNAF (Imediato)", "Posição sentada ou semi-Fowler (Terapêutico)", "Monitorar FR, SpO₂ e esforço (Contínuo)", "Mobilização muito lenta após estabilização"],
+        "block": "🩸 BLOCO C5 — Tromboembolismo pulmonar (TEP)",
+        "goals": ["Reduzir FR", "Reduzir trabalho respiratório"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "CNAF preferencial: reduz trabalho sem grande impacto VD (Escolha)",
-              "Evitar VNI agressiva (Cautela)"
-            ]
-          }
+          {"timeframe": "0-6h", "interv": ["O₂/CNAF (Imediato)", "Posição sentada ou semi-Fowler (Terapêutico)", "Monitorar FR, SpO₂ e esforço (Contínuo)"]},
+          {"timeframe": "24-48h", "interv": ["Mobilização muito lenta após estabilização clínica", "Exercícios respiratórios passivos/ativos (Sessões)"]}
         ]
       },
       {
-        "name": "C5.P3 — Sobrecarga aguda de ventriculo direito (VD)",
-        "desc": "Critico. Taquicardia persistente, hipotensao, ECO com VD dilatado/septo em D, baixo debito",
-        "assess": [],
-        "interv": [
-          "Evitar PEEP/EPAP elevada (Fundamental)",
-          "Mobilizacao em microdoses apenas se estavel (Cauteloso)"
-        ],
-        "block": "C5 — Tromboembolismo pulmonar (TEP)",
-        "goals": [
-          "Evitar piora da sobrecarga de VD"
-        ],
+        "name": "C5.P3 — Sobrecarga aguda de ventrículo direito (VD)",
+        "desc": "Crítico. Taquicardia persistente, hipotensão, ECO com VD dilatado/septo em D, baixo débito",
+        "assess": ["Preservar função do VD", "Manter PAM ≥ alvo"],
+        "interv": ["Repouso absoluto (Imediato)", "O₂ máximo para reduzir vasoconstrição hipóxica do VD (Urgente)", "Evitar PEEP alta (piora pós-carga VD) (Cautela)", "Mobilização muito cautelosa somente após estabilização hemodinâmica"],
+        "block": "🩸 BLOCO C5 — Tromboembolismo pulmonar (TEP)",
+        "goals": ["Preservar função do VD", "Manter PAM ≥ alvo"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Evitar PEEP/EPAP elevada (Fundamental)",
-              "Mobilizacao em microdoses apenas se estavel (Cauteloso)"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["Repouso absoluto (Imediato)", "O₂ máximo para reduzir vasoconstrição hipóxica (Urgente)", "Evitar PEEP alta (piora pós-carga VD) (Cautela)", "Monitorar PAM, FC, SpO₂ contínuos (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização muito cautelosa somente após estabilização hemodinâmica", "Elevar cabeceira em degraus de 10° com monitoração de PA (Progressivo)"]}
         ]
       },
       {
-        "name": "C5.P4 — Baixa tolerancia ao esforco / risco de colapso",
-        "desc": "Grave. Queda de PA ou SpO₂ ao sentar/ficar em pe, tontura, pre-sincope, dispneia intensa",
-        "assess": [],
-        "interv": [
-          "Criterios para iniciar: hemodinamicamente estavel, sem aumento vasopressor, SpO₂ estavel, dor controlada (Elegibilidade)",
-          "Progressao muito gradual: sedestacao leito → beira-leito → poltrona → ortostatismo curto → marcha 5-10m (Microdegraus)"
-        ],
-        "block": "C5 — Tromboembolismo pulmonar (TEP)",
-        "goals": [
-          "Mobilizacao segura sem colapso"
-        ],
+        "name": "C5.P4 — Baixa tolerância ao esforço / risco de colapso",
+        "desc": "Grave. Queda de PA ou SpO₂ ao sentar/ficar em pé, tontura, pré-síncope, dispneia intensa",
+        "assess": ["Verticalizar com segurança após estabilização"],
+        "interv": ["Aguardar estabilização clínica (PAM > 65, SpO₂ > 92%) (Pré-condição)", "Elevar cabeceira gradualmente monitorando PA (Progressivo)", "Sedestação assistida beira-leito com monitoração"],
+        "block": "🩸 BLOCO C5 — Tromboembolismo pulmonar (TEP)",
+        "goals": ["Verticalizar com segurança após estabilização"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Criterios para iniciar: hemodinamicamente estavel, sem aumento vasopressor, SpO₂ estavel, dor controlada (Elegibilidade)",
-              "Progressao muito gradual: sedestacao leito → beira-leito → poltrona → ortostatismo curto → marcha 5-10m (Microdegraus)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Aguardar estabilização clínica (PAM > 65, SpO₂ > 92%) (Pré-condição)", "Elevar cabeceira gradualmente monitorando PA (Progressivo)", "Sedestação assistida beira-leito com monitoração", "PARADA: queda PA > 20 mmHg, SpO₂ < 88%, tontura intensa (Critérios)"]}
         ]
       },
       {
-        "name": "C5.P5 — Dor toracica pleuritica e limitacao ventilatoria",
-        "desc": "Moderado. Dor ventilatorio-dependente, respiracao superficial, hipoventilacao regional",
-        "assess": [],
-        "interv": [
-          "Exercicios ventilatorios com analgesia adequada (Sessoes)",
-          "Evitar hipoventilacao prolongada (Vigilancia)"
-        ],
-        "block": "C5 — Tromboembolismo pulmonar (TEP)",
-        "goals": [
-          "Controlar dor e prevenir hipoventilacao"
-        ],
+        "name": "C5.P5 — Dor torácica pleurítica e limitação ventilatória",
+        "desc": "Moderado. Dor ventilatório-dependente, respiração superficial, hipoventilação regional",
+        "assess": ["Controlar dor", "Manter expansão pulmonar"],
+        "interv": ["Analgesia adequada com equipe (Fundamental)", "Exercícios ventilatórios: inspiração profunda com suporte manual (Sessões)", "Posicionamento para melhor conforto respiratório"],
+        "block": "🩸 BLOCO C5 — Tromboembolismo pulmonar (TEP)",
+        "goals": ["Controlar dor", "Manter expansão pulmonar"],
         "phases": [
-          {
-            "timeframe": "24-48h",
-            "interv": [
-              "Exercicios ventilatorios com analgesia adequada (Sessoes)",
-              "Evitar hipoventilacao prolongada (Vigilancia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Analgesia adequada com equipe (Fundamental)", "Exercícios ventilatórios: inspiração profunda com suporte manual (Sessões)", "Posicionamento para melhor conforto respiratório (Terapêutico)"]}
         ]
       },
       {
-        "name": "C5.P6 — Risco de progressao tromboembolica",
-        "desc": "Grave. TVP associada, instabilidade clinica, imobilidade prolongada",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce quando seguro (Fundamental)",
-          "Bomba muscular de MMII (Frequente)"
-        ],
-        "block": "C5 — Tromboembolismo pulmonar (TEP)",
-        "goals": [
-          "Prevenir complicacoes por imobilismo"
-        ],
+        "name": "C5.P6 — Risco de progressão tromboembólica",
+        "desc": "Grave. TVP associada, instabilidade clínica, imobilidade prolongada",
+        "assess": ["Prevenir novos eventos", "Mobilização segura"],
+        "interv": ["Anticoagulação pela equipe médica (Fundamental)", "Exercícios de bomba muscular MMII em leito (Contínuo)", "Mobilização precoce quando estável (Prioritário)", "Monitorar sinais de TVP: edema, calor, dor panturrilha"],
+        "block": "🩸 BLOCO C5 — Tromboembolismo pulmonar (TEP)",
+        "goals": ["Prevenir novos eventos", "Mobilização segura"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Mobilizacao precoce quando seguro (Fundamental)",
-              "Bomba muscular de MMII (Frequente)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Exercícios de bomba muscular MMII em leito (Contínuo)", "Elevar MMII 30° se não comprometer hemodinâmica", "Monitorar sinais de TVP e embolia (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização precoce quando estável (Prioritário)", "Ortostatismo e marcha progressiva (Escalonar)", "Orientação sobre sinais de alerta (Educação)"]}
         ]
       },
       {
-        "name": "C6.P1 — Queda de retorno venoso induzida por PEEP/pressao positiva",
-        "desc": "Grave. Queda de PAM apos aumento de PEEP/EPAP, reducao debito urinario, taquicardia reacional, baixo debito",
-        "assess": [],
-        "interv": [
-          "Regra de ouro: Em cardiopata, toda PEEP e uma droga vasoativa (Conceito)",
-          "Comecar PEEP 5 cmH₂O, subir em passos pequenos (2 cmH₂O) (Titulacao)",
-          "Apos cada ajuste: checar PA, FC, SpO₂, perfusao, debito urinario (Monitorizacao)",
-          "Criterio de limite: queda PA, taquicardia reacional, sinais baixo debito (PARADA)"
-        ],
-        "block": "C5 — Tromboembolismo pulmonar (TEP)",
-        "goals": [
-          "Otimizar PEEP sem comprometer hemodinamica"
-        ],
+        "name": "C6.P1 — Queda de retorno venoso induzida por PEEP/pressão positiva",
+        "desc": "Grave. Queda de PAM após aumento de PEEP/EPAP, redução débito urinário, taquicardia reacional, baixo débito",
+        "assess": ["Manter débito cardíaco com suporte ventilatório"],
+        "interv": ["Usar menor PEEP eficaz (Princípio)", "Testar redução de PEEP se PA cai após aumento (Imediato)", "Avaliar responsividade a fluidos com equipe (Coordenação)", "Monitorar PAM ao ajustar PEEP (Contínuo)"],
+        "block": "🫀 BLOCO C6 — Interação coração-ventilação",
+        "goals": ["Manter débito cardíaco com suporte ventilatório"],
         "phases": [
-          {
-            "timeframe": "0-2h",
-            "interv": [
-              "Regra de ouro: Em cardiopata, toda PEEP e uma droga vasoativa (Conceito)",
-              "Comecar PEEP 5 cmH₂O, subir em passos pequenos (2 cmH₂O) (Titulacao)",
-              "Apos cada ajuste: checar PA, FC, SpO₂, perfusao, debito urinario (Monitorizacao)",
-              "Criterio de limite: queda PA, taquicardia reacional, sinais baixo debito (PARADA)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Usar menor PEEP eficaz (Princípio)", "Testar redução de PEEP se PA cai após aumento (Imediato)", "Avaliar responsividade a fluidos com equipe (Coordenação)"]},
+          {"timeframe": "Contínuo", "interv": ["Monitorar PAM ao ajustar PEEP (Contínuo)", "Ajustar PEEP em degraus de 2 cmH₂O com intervalo de avaliação (Gradual)"]}
         ]
       },
       {
-        "name": "C6.P2 — Aumento de pos-carga de ventriculo direito (VD)",
-        "desc": "Critico. PEEP elevada, hipercapnia, hipoxia, ECO com VD dilatado/septo em D, piora hemodinamica",
-        "assess": [],
-        "interv": [
-          "Evitar PEEP excessiva (Fundamental)",
-          "Corrigir hipoxia e hipercapnia (gatilhos RVP ↑) (Tratamento)",
-          "PEEP minima necessaria (Estrategia)"
-        ],
-        "block": "C6 — Interacao coracao-ventilacao",
-        "goals": [
-          "Minimizar pos-carga de VD"
-        ],
+        "name": "C6.P2 — Aumento de pós-carga de ventrículo direito (VD)",
+        "desc": "Crítico. PEEP elevada, hipercapnia, hipóxia, ECO com VD dilatado/septo em D, piora hemodinâmica",
+        "assess": ["Reduzir pós-carga do VD", "Normalizar hemodinâmica"],
+        "interv": ["Corrigir hipóxia: O₂ alvo SpO₂ 92-96% (Imediato)", "Corrigir hipercapnia: ajustar ventilação (Imediato)", "Usar menor PEEP eficaz (Princípio)", "Evitar acidose respiratória (pH > 7,30)"],
+        "block": "🫀 BLOCO C6 — Interação coração-ventilação",
+        "goals": ["Reduzir pós-carga do VD", "Normalizar hemodinâmica"],
         "phases": [
-          {
-            "timeframe": "0-2h",
-            "interv": [
-              "Evitar PEEP excessiva (Fundamental)",
-              "Corrigir hipoxia e hipercapnia (gatilhos RVP ↑) (Tratamento)",
-              "PEEP minima necessaria (Estrategia)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Corrigir hipóxia: O₂ alvo SpO₂ 92-96% (Imediato)", "Corrigir hipercapnia: ajustar ventilação (Imediato)", "Usar menor PEEP eficaz (Princípio)", "Evitar acidose respiratória (pH > 7,30)", "Monitorar função VD por ECO e hemodinâmica (Vigilância)"]}
         ]
       },
       {
-        "name": "C6.P3 — Hipotensao associada a manobras ventilatorias",
-        "desc": "Grave. Queda de PA durante recrutamento alveolar, aumento de PEEP, inicio de VNI/VM",
-        "assess": [],
-        "interv": [
-          "Toda manobra ventilatoria e um teste hemodinamico (Conceito)",
-          "Manobra de recrutamento: so se realmente necessario, com equipe alinhada, monitorizacao rigorosa (Cautela)",
-          "Contraindicacoes relativas: choque nao controlado, VD falente, hipovolemia (Avaliar)"
-        ],
-        "block": "C6 — Interacao coracao-ventilacao",
-        "goals": [
-          "Realizar manobras com seguranca hemodinamica"
-        ],
+        "name": "C6.P3 — Hipotensão associada a manobras ventilatórias",
+        "desc": "Grave. Queda de PA durante recrutamento alveolar, aumento de PEEP, início de VNI/VM",
+        "assess": ["Manter PAM ≥ alvo durante manobras ventilatórias"],
+        "interv": ["Avaliar hemodinâmica ANTES de iniciar manobra (Pré-condição)", "Se PA cai: interromper manobra, reduzir PEEP (Imediato)", "Ajustes de PEEP em degraus pequenos (2 cmH₂O) com avaliação hemodinâmica entre cada degrau"],
+        "block": "🫀 BLOCO C6 — Interação coração-ventilação",
+        "goals": ["Manter PAM ≥ alvo durante manobras ventilatórias"],
         "phases": [
-          {
-            "timeframe": "0-1h",
-            "interv": [
-              "Toda manobra ventilatoria e um teste hemodinamico (Conceito)",
-              "Manobra de recrutamento: so se realmente necessario, com equipe alinhada, monitorizacao rigorosa (Cautela)",
-              "Contraindicacoes relativas: choque nao controlado, VD falente, hipovolemia (Avaliar)"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["Avaliar hemodinâmica ANTES de iniciar manobra (Pré-condição)", "Se PA cai: interromper manobra, reduzir PEEP (Imediato)", "Coordenar volume/vasopressor com equipe antes de recrutar (Preparo)", "Ajustes em degraus pequenos com avaliação entre cada degrau (Gradual)"]}
         ]
       },
       {
-        "name": "C6.P4 — Dependencia de suporte ventilatorio em cardiopata grave",
-        "desc": "Critico. Falha repetida de desmame, edema pulmonar recorrente no TRE, dispneia/congestao ao reduzir suporte",
-        "assess": [],
-        "interv": [
-          "Problema classico: TRE → edema pulmonar → falha (Reconhecer)",
-          "Otimizar: PEEP antes do teste, volemia, congestao pulmonar (Preparacao)",
-          "Preferir: PSV com PEEP baixa. T-piece com extremo cuidado (Tecnica)",
-          "Sinais falha precoce: dispneia subita, taquicardia, aumento PA, crepitacoes, queda SpO₂ (Vigilancia)"
-        ],
-        "block": "C6 — Interacao coracao-ventilacao",
-        "goals": [
-          "Facilitar desmame ventilatorio"
-        ],
+        "name": "C6.P4 — Dependência de suporte ventilatório em cardiopata grave",
+        "desc": "Crítico. Falha repetida de desmame, edema pulmonar recorrente no TRE, dispneia/congestão ao reduzir suporte",
+        "assess": ["Desmame progressivo respeitando função cardíaca"],
+        "interv": ["TRE com monitorização de PA, SpO₂, FC (Protocolo)", "HFNC pós-extubação se edema ou alto risco (Estratégia)", "Coordenar desmame com otimização cardíaca (equipe multidisciplinar)", "Discutir TQT se VM prolongada > 10-14 dias"],
+        "block": "🫀 BLOCO C6 — Interação coração-ventilação",
+        "goals": ["Desmame progressivo respeitando função cardíaca"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Problema classico: TRE → edema pulmonar → falha (Reconhecer)",
-              "Otimizar: PEEP antes do teste, volemia, congestao pulmonar (Preparacao)",
-              "Preferir: PSV com PEEP baixa. T-piece com extremo cuidado (Tecnica)",
-              "Sinais falha precoce: dispneia subita, taquicardia, aumento PA, crepitacoes, queda SpO₂ (Vigilancia)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["TRE com monitorização de PA, SpO₂, FC (Protocolo)", "HFNC pós-extubação se edema ou alto risco (Estratégia)", "Observar sinais de congestão durante TRE (Vigilância)"]},
+          {"timeframe": "> 7 dias", "interv": ["Discutir TQT se VM prolongada > 10-14 dias (Multidisciplinar)", "Otimizar função cardíaca com equipe antes de novo TRE"]}
         ]
       },
       {
-        "name": "C6.P5 — Hipoxemia/hipercapnia com impacto hemodinamico",
-        "desc": "Grave. SpO₂ < 92%, PaCO₂ > 50 mmHg, piora de PA/FC/perfusao associada",
-        "assess": [],
-        "interv": [
-          "Oxigenio/CNAF: preferir sempre que possivel (Primeira escolha)",
-          "VNI: indicada se edema/fadiga, mas EPAP 5-10 cmH₂O, monitorar PA (Com cautela)",
-          "VM: Vt 6-8, Pplato < 30, ΔP < 12-14, PEEP minima necessaria (Se necessario)"
-        ],
-        "block": "C6 — Interacao coracao-ventilacao",
-        "goals": [
-          "Manter SpO₂ ≥ 92-96%, PaCO₂ aceitavel"
-        ],
+        "name": "C6.P5 — Hipoxemia/hipercapnia com impacto hemodinâmico",
+        "desc": "Grave. SpO₂ < 92%, PaCO₂ > 50 mmHg, piora de PA/FC/perfusão associada",
+        "assess": ["Corrigir gases", "Estabilizar hemodinâmica"],
+        "interv": ["O₂/VNI para normalizar gases (Imediato)", "Titulação rigorosa: evitar hiperoxia e hipercapnia (Cuidado)", "Monitorar hemodinâmica ao corrigir gases (Vigilância)"],
+        "block": "🫀 BLOCO C6 — Interação coração-ventilação",
+        "goals": ["Corrigir gases", "Estabilizar hemodinâmica"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Oxigenio/CNAF: preferir sempre que possivel (Primeira escolha)",
-              "VNI: indicada se edema/fadiga, mas EPAP 5-10 cmH₂O, monitorar PA (Com cautela)",
-              "VM: Vt 6-8, Pplato < 30, ΔP < 12-14, PEEP minima necessaria (Se necessario)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["O₂/VNI para normalizar gases (Imediato)", "SpO₂ alvo 92-96% (evitar hiperoxia) (Titular)", "VNI para CO₂ se hipercapnia com pH < 7,30 (Se indicado)", "Monitorar hemodinâmica ao corrigir gases (Vigilância)"]}
         ]
       },
       {
-        "name": "C7.P1 — Hipovolemia funcional / dependencia de pre-carga",
-        "desc": "Grave. Hipotensao/labilidade pressorica, taquicardia, extremidades frias, TEC > 3s, oliguria, queda PA com cabeceira elevada/PEEP",
-        "assess": [],
-        "interv": [
-          "Pressao positiva → ↓ retorno venoso → ↓ debito cardiaco (Fisiologia)",
-          "Preferir: O₂ baixo fluxo, CNAF (se necessario) (Escolha)",
-          "Evitar: EPAP/PEEP altas, VNI agressiva (Cautela)",
-          "VM: PEEP minima (geralmente 5 cmH₂O), evitar recrutamento (Se necessario)",
-          "Mobilizacao: subidas posturais lentas, monitorar PA a cada mudanca (Gradual)"
-        ],
-        "block": "C6 — Interacao coracao-ventilacao",
-        "goals": [
-          "Manter estabilidade hemodinamica"
-        ],
+        "name": "C7.P1 — Hipovolemia funcional / dependência de pré-carga",
+        "desc": "Grave. Hipotensão/labilidade pressórica, taquicardia, extremidades frias, TEC > 3s, oligúria, queda PA com cabeceira elevada/PEEP",
+        "assess": ["Restabelecer volemia", "Estabilizar PA"],
+        "interv": ["Posição supina/Trendelenburg se PA cai ao sentar (Imediato)", "Elevar MMII (retorno venoso) (Imediato)", "Coordenar reposição hídrica com equipe (Fundamental)", "Mobilização apenas quando hemodinâmica estável"],
+        "block": "💧 BLOCO C7 — Distúrbios de volume",
+        "goals": ["Restabelecer volemia", "Estabilizar PA"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Pressao positiva → ↓ retorno venoso → ↓ debito cardiaco (Fisiologia)",
-              "Preferir: O₂ baixo fluxo, CNAF (se necessario) (Escolha)",
-              "Evitar: EPAP/PEEP altas, VNI agressiva (Cautela)",
-              "VM: PEEP minima (geralmente 5 cmH₂O), evitar recrutamento (Se necessario)",
-              "Mobilizacao: subidas posturais lentas, monitorar PA a cada mudanca (Gradual)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Posição supina/Trendelenburg se PA cai ao sentar (Imediato)", "Elevar MMII (retorno venoso) (Imediato)", "Coordenar reposição hídrica com equipe (Fundamental)"]},
+          {"timeframe": "24-48h", "interv": ["Mobilização progressiva quando hemodinâmica estável", "Elevar cabeceira lentamente monitorando PA (Gradual)"]}
         ]
       },
       {
-        "name": "C7.P2 — Sobrecarga hidrica / congestao pulmonar e sistemica",
-        "desc": "Grave. Edema periferico/anasarca, balanco hidrico positivo, estertores/congestao, RX com congestao, ganho ponderal",
-        "assess": [],
-        "interv": [
-          "VNI (CPAP/BiPAP): EPAP 8-12 cmH₂O (ou conforme resposta) (Tratamento)",
-          "CNAF: util para reduzir trabalho respiratorio (Suporte)",
-          "VM: PEEP suficiente para manter alveolos abertos e melhorar oxigenacao (Se necessario)",
-          "Posicionamento: sentado/poltrona = tratamento, evitar decubito horizontal (Terapeutico)",
-          "Mobilizacao: parte do tratamento, ajuda na mobilizacao de liquido e ventilacao (Benefico)"
-        ],
-        "block": "C7 — Disturbios de volume",
-        "goals": [
-          "Usar pressao positiva como ferramenta terapeutica"
-        ],
+        "name": "C7.P2 — Sobrecarga hídrica / congestão pulmonar e sistêmica",
+        "desc": "Grave. Edema periférico/anasarca, balanço hídrico positivo, estertores/congestão, RX com congestão, ganho ponderal",
+        "assess": ["Reduzir congestão", "Melhorar tolerância ao esforço"],
+        "interv": ["Posição sentada: melhora mecânica respiratória e drenagem venosa (Terapêutico)", "O₂ titulado (Titular)", "VNI se SpO₂ < 92% com O₂ convencional (Se indicado)", "Mobilização progressiva conforme tolerância"],
+        "block": "💧 BLOCO C7 — Distúrbios de volume",
+        "goals": ["Reduzir congestão", "Melhorar tolerância ao esforço"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "VNI (CPAP/BiPAP): EPAP 8-12 cmH₂O (ou conforme resposta) (Tratamento)",
-              "CNAF: util para reduzir trabalho respiratorio (Suporte)",
-              "VM: PEEP suficiente para manter alveolos abertos e melhorar oxigenacao (Se necessario)",
-              "Posicionamento: sentado/poltrona = tratamento, evitar decubito horizontal (Terapeutico)",
-              "Mobilizacao: parte do tratamento, ajuda na mobilizacao de liquido e ventilacao (Benefico)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Posição sentada: melhora mecânica respiratória e drenagem venosa (Terapêutico)", "O₂ titulado para SpO₂ 92-96% (Titular)", "VNI se SpO₂ < 92% com O₂ convencional (Se indicado)"]},
+          {"timeframe": "24-72h", "interv": ["Exercícios respiratórios: respiração diafragmática, expansão costal (Sessões)", "Mobilização progressiva: sedestação → ortostatismo → marcha", "Monitorar congestão ao mobilizar (Vigilância)"]}
         ]
       },
       {
-        "name": "C7.P3 — Hipoxemia secundaria a disturbio de volume",
-        "desc": "Grave. SpO₂ < 92%, PaO₂ reduzida, aumento necessidade O₂, relacao com congestao/colapso",
-        "assess": [],
-        "interv": [
-          "Hipovolemico: O₂/CNAF, evitar PEEP alta (Estrategia)",
-          "Hipervolêmico: VNI/CPAP como terapia (Estrategia)"
-        ],
-        "block": "C7 — Disturbios de volume",
-        "goals": [
-          "Otimizar oxigenacao conforme estado volemico"
-        ],
+        "name": "C7.P3 — Hipoxemia secundária a distúrbio de volume",
+        "desc": "Grave. SpO₂ < 92%, PaO₂ reduzida, aumento necessidade O₂, relação com congestão/colapso",
+        "assess": ["SpO₂ ≥ 92%"],
+        "interv": ["O₂ titulado (Imediato)", "CNAF se persistência de hipoxemia (Se indicado)", "Tratar causa (congestão ou hipovolemia) com equipe", "Posicionamento adequado conforme causa"],
+        "block": "💧 BLOCO C7 — Distúrbios de volume",
+        "goals": ["SpO₂ ≥ 92%"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Hipovolemico: O₂/CNAF, evitar PEEP alta (Estrategia)",
-              "Hipervolêmico: VNI/CPAP como terapia (Estrategia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["O₂ titulado para SpO₂ 92-96% (Imediato)", "CNAF se persistência de hipoxemia (Se indicado)", "Tratar causa com equipe médica (Fundamental)"]},
+          {"timeframe": "24-48h", "interv": ["Reduzir suporte progressivamente conforme melhora (Desmame)", "Posicionamento terapêutico conforme causa do distúrbio"]}
         ]
       },
       {
-        "name": "C7.P4 — Instabilidade hemodinamica induzida por ajustes ventilatorios/posturais",
-        "desc": "Grave. Queda de PA apos aumento PEEP/EPAP, inicio VNI, mudancas posturais, taquicardia, baixo debito",
-        "assess": [],
-        "interv": [
-          "Ajustar em pequenos passos (Gradual)",
-          "Monitorar PA, FC, perfusao apos cada mudanca (Vigilancia)"
-        ],
-        "block": "C7 — Disturbios de volume",
-        "goals": [
-          "Ajustes graduais com monitorizacao"
-        ],
+        "name": "C7.P4 — Instabilidade hemodinâmica induzida por ajustes ventilatórios/posturais",
+        "desc": "Grave. Queda de PA após aumento PEEP/EPAP, início VNI, mudanças posturais, taquicardia, baixo débito",
+        "assess": ["Manter PA estável durante ajustes"],
+        "interv": ["Ajustes graduais de PEEP em degraus de 2 cmH₂O (Gradual)", "Mudanças posturais lentas com pausa de avaliação (Progressivo)", "Monitorar PA continuamente durante ajustes (Vigilância)"],
+        "block": "💧 BLOCO C7 — Distúrbios de volume",
+        "goals": ["Manter PA estável durante ajustes"],
         "phases": [
-          {
-            "timeframe": "0-2h",
-            "interv": [
-              "Ajustar em pequenos passos (Gradual)",
-              "Monitorar PA, FC, perfusao apos cada mudanca (Vigilancia)"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["Ajustes graduais de PEEP em degraus de 2 cmH₂O (Gradual)", "Mudanças posturais lentas com pausa de avaliação (Progressivo)", "Monitorar PA continuamente durante ajustes (Vigilância)", "Se PA cai: reverter ajuste e avaliar volume (Imediato)"]}
         ]
       },
       {
-        "name": "C7.P5 — Intolerancia a mobilizacao por desequilibrio de volume",
-        "desc": "Moderado. Tontura, queda PA ao sentar/ficar em pe, dessaturacao associada a congestao, fadiga precoce",
-        "assess": [],
-        "interv": [
-          "Hipovolemico: microetapas, pausas longas, monitorar PA a cada mudanca (Cautela)",
-          "Hipervolêmico: mobilizacao como tratamento (Terapeutico)",
-          "Progressao: sedestacao → beira-leito → poltrona → ortostatismo → marcha (Gradual)"
-        ],
-        "block": "C7 — Disturbios de volume",
-        "goals": [
-          "Mobilizacao segura conforme volume"
-        ],
+        "name": "C7.P5 — Intolerância à mobilização por desequilíbrio de volume",
+        "desc": "Moderado. Tontura, queda PA ao sentar/ficar em pé, dessaturação associada à congestão, fadiga precoce",
+        "assess": ["Mobilização segura após otimização de volume"],
+        "interv": ["Aguardar otimização de volume com equipe (Pré-condição)", "Elevar cabeceira progressivamente com monitoração de PA (Gradual)", "Monitorar SpO₂ e FC ao mobilizar (Vigilância)"],
+        "block": "💧 BLOCO C7 — Distúrbios de volume",
+        "goals": ["Mobilização segura após otimização de volume"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Hipovolemico: microetapas, pausas longas, monitorar PA a cada mudanca (Cautela)",
-              "Hipervolêmico: mobilizacao como tratamento (Terapeutico)",
-              "Progressao: sedestacao → beira-leito → poltrona → ortostatismo → marcha (Gradual)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Aguardar otimização de volume com equipe (Pré-condição)", "Elevar cabeceira progressivamente com monitoração de PA (Gradual)", "Monitorar SpO₂ e FC ao mobilizar (Vigilância)", "PARADA: queda PA > 20 mmHg, SpO₂ < 88%, tontura intensa (Critérios)"]}
         ]
       },
       {
-        "name": "C8.P1 — Queda de PA ao sentar ou ficar em pe (hipotensao ortostatica)",
-        "desc": "Grave. Queda PAS ≥ 20 mmHg ou PAD ≥ 10 mmHg em ate 3 min, sintomas: tontura, escurecimento visual, sudorese fria, nausea, sincope",
-        "assess": [],
-        "interv": [
-          "Preparacao: exercicios bomba muscular em leito (dorsiflexao/plantiflexao, extensao joelhos) (Antes de verticalizar)",
-          "Respiracoes profundas (Preparacao)",
-          "Elevacao progressiva cabeceira (Gradual)",
-          "Compressao periferica: meias elasticas, faixas MMII (se disponivel) (Suporte)",
-          "Verticalizacao cabeceira/leito: 30° → 45° → 60° → 75° → 90°, 3-5 min cada angulo (Opcao 1)",
-          "Prancha ortostatica: 30° → 45° → 60° → 75° → 90°, 3-10 min/estagio, monitorar PA/FC/sintomas (Opcao 2)",
-          "Treino funcional: sedestacao sustentada, transferencia leito-poltrona, sentar/levantar assistido, marcha estacionaria (Progressao)",
-          "Fortalecimento bomba muscular: plantiflexao resistida, extensao joelhos, mini-agachamento (Varias vezes/dia)",
-          "PARADA: queda PA significativa, tontura intensa, nausea, escurecimento visual, sudorese fria, palidez, sincope (Criterios)"
-        ],
-        "block": "C7 — Disturbios de volume",
-        "goals": [
-          "Permitir sedestacao segura e sustentada",
-          "Tolerar ortostatismo por tempo progressivo"
-        ],
+        "name": "C8.P1 — Queda de PA ao sentar ou ficar em pé (hipotensão ortostática)",
+        "desc": "Grave. Queda PAS ≥ 20 mmHg ou PAD ≥ 10 mmHg em até 3 min, sintomas: tontura, escurecimento visual, sudorese fria, náusea, síncope",
+        "assess": ["Tolerância ao ortostatismo sem sintomas"],
+        "interv": ["Elevar cabeceira gradualmente: 30° → 45° → 60° → 90° (Progressivo, 3-5 min/estágio)", "Exercícios de bomba muscular MMII antes de verticalizar (Preparo)", "Meias de compressão graduada ou bandagem elástica MMII (Usar)", "Monitorar PA imediatamente e 1-3 min após mudança postural"],
+        "block": "🧍 BLOCO C8 — Hipotensão ortostática e intolerância postural",
+        "goals": ["Tolerância ao ortostatismo sem sintomas"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Preparacao: exercicios bomba muscular em leito (dorsiflexao/plantiflexao, extensao joelhos) (Antes de verticalizar)",
-              "Respiracoes profundas (Preparacao)",
-              "Elevacao progressiva cabeceira (Gradual)",
-              "Compressao periferica: meias elasticas, faixas MMII (se disponivel) (Suporte)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Verticalizacao cabeceira/leito: 30° → 45° → 60° → 75° → 90°, 3-5 min cada angulo (Opcao 1)",
-              "Prancha ortostatica: 30° → 45° → 60° → 75° → 90°, 3-10 min/estagio, monitorar PA/FC/sintomas (Opcao 2)",
-              "Treino funcional: sedestacao sustentada, transferencia leito-poltrona, sentar/levantar assistido, marcha estacionaria (Progressao)",
-              "Fortalecimento bomba muscular: plantiflexao resistida, extensao joelhos, mini-agachamento (Varias vezes/dia)",
-              "PARADA: queda PA significativa, tontura intensa, nausea, escurecimento visual, sudorese fria, palidez, sincope (Criterios)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Elevar cabeceira gradualmente: 30° → 45° → 60° → 90° (Progressivo, 3-5 min/estágio)", "Exercícios de bomba muscular MMII antes de verticalizar: dorsiflexão, flexo-extensão joelho (Preparo)", "Monitorar PA imediatamente e 1-3 min após mudança postural (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Ortostatismo com suporte (barras, andador) (Progressivo)", "Meias de compressão graduada ou bandagem elástica MMII (Usar)", "Marcha progressiva quando tolera ortostatismo (Escalonamento)"]}
         ]
       },
       {
-        "name": "C8.P2 — Intolerancia a verticalizacao",
-        "desc": "Grave. Incapacidade de manter sedestacao/ortostatismo, sintomas neurovegetativos importantes",
-        "assess": [],
-        "interv": [
-          "Verticalizacao em microetapas com pausas (Estrategia)",
-          "Monitorizacao continua (Vigilancia)"
-        ],
-        "block": "C8 — Hipotensao ortostatica e intolerancia postural",
-        "goals": [
-          "Tolerancia progressiva a mudancas posturais"
-        ],
+        "name": "C8.P2 — Intolerância à verticalização",
+        "desc": "Grave. Incapacidade de manter sedestação/ortostatismo, sintomas neurovegetativos importantes",
+        "assess": ["Manter sedestação/ortostatismo sem sintomas"],
+        "interv": ["Protocolo de ortostatismo progressivo com inclinação gradual (Protocolo)", "Compressão elástica MMII antes de verticalizar (Preparo)", "Exercícios de bomba muscular MMII em cada estágio (Ativo)"],
+        "block": "🧍 BLOCO C8 — Hipotensão ortostática e intolerância postural",
+        "goals": ["Manter sedestação/ortostatismo sem sintomas"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Verticalizacao em microetapas com pausas (Estrategia)",
-              "Monitorizacao continua (Vigilancia)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Protocolo de ortostatismo progressivo: 30° → 45° → 60° → 90° com 3-5 min em cada estágio", "Compressão elástica MMII antes de verticalizar (Preparo)", "Exercícios de bomba muscular MMII em cada estágio (Ativo)", "PARADA: sintomas intensos (síncope, escurecimento visual, palidez, hipotensão) (Critérios)"]}
         ]
       },
       {
         "name": "C8.P3 — Baixo retorno venoso por desacondicionamento e bomba muscular ineficiente",
-        "desc": "Moderado. Fraqueza de MMII, edema de MMII, longo tempo de leito, queda de PA ao minimo esforco postural",
-        "assess": [],
-        "interv": [
-          "Exercicios ativos MMII: bomba muscular frequente (Diario)",
-          "Mobilizacao precoce (Fundamental)"
-        ],
-        "block": "C8 — Hipotensao ortostatica e intolerancia postural",
-        "goals": [
-          "Melhorar retorno venoso e controle postural"
-        ],
+        "desc": "Moderado. Fraqueza de MMII, edema de MMII, longo tempo de leito, queda de PA ao mínimo esforço postural",
+        "assess": ["Melhora de bomba muscular e retorno venoso"],
+        "interv": ["Exercícios isométricos e isotônicos MMII em leito (2-3x/dia)", "Pompeamento de panturrilha: 30 rep/série (Contínuo)", "Progressão para ortostatismo com suporte (Gradual)", "Meias de compressão e elevação de MMII"],
+        "block": "🧍 BLOCO C8 — Hipotensão ortostática e intolerância postural",
+        "goals": ["Melhora de bomba muscular e retorno venoso"],
         "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Exercicios ativos MMII: bomba muscular frequente (Diario)",
-              "Mobilizacao precoce (Fundamental)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Exercícios isométricos e isotônicos MMII em leito (2-3x/dia)", "Pompeamento de panturrilha: 30 rep/série (Contínuo)", "Meias de compressão e elevação de MMII (Usar)"]},
+          {"timeframe": "24-72h", "interv": ["Progressão para sedestação beira-leito com bomba muscular ativa (Gradual)", "Ortostatismo com suporte (Progressivo)", "Marcha beira-leito (Escalonamento)"]}
         ]
       },
       {
-        "name": "C8.P4 — Baixa tolerancia ao esforco funcional",
+        "name": "C8.P4 — Baixa tolerância ao esforço funcional",
         "desc": "Moderado. Fadiga precoce, tontura, queda de PA com pequenas atividades",
-        "assess": [],
-        "interv": [
-          "Progressao funcional gradual (Diario)",
-          "Aumentar tempo em ortostatismo (Progressivo)"
-        ],
-        "block": "C8 — Hipotensao ortostatica e intolerancia postural",
-        "goals": [
-          "Iniciar treino de marcha assistida"
-        ],
+        "assess": ["Progredir funcionalidade"],
+        "interv": ["Escalonamento progressivo de atividades (Protocolo)", "Monitorar PA e FC antes/durante/após (Vigilância)", "PARADA: queda PA > 20 mmHg ou aumento FC > 40 bpm acima repouso com sintomas (Critérios)"],
+        "block": "🧍 BLOCO C8 — Hipotensão ortostática e intolerância postural",
+        "goals": ["Progredir funcionalidade"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Progressao funcional gradual (Diario)",
-              "Aumentar tempo em ortostatismo (Progressivo)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Escalonamento progressivo: sedestação → ortostatismo → marcha beira-leito → corredor (Protocolo)", "Monitorar PA e FC antes/durante/após (Vigilância)", "PARADA: queda PA > 20 mmHg ou aumento FC > 40 bpm com sintomas (Critérios)", "Exercícios aeróbicos leves (Cicloergômetro, caminhada) conforme tolerância"]}
         ]
       },
       {
-        "name": "C9.P1 — Isquemia miocardica aguda / risco de reinfarto",
-        "desc": "Critico. Dor toracica tipica/recorrente, alteracoes ECG/telemetria, troponina elevada, instabilidade hemodinamica",
-        "assess": [],
-        "interv": [
-          "Oxigenoterapia para SpO₂ 92-96% (evita hipoxia que piora isquemia) (Alvo)",
-          "CNAF se FR ≥ 28-30 + esforco respiratorio (Reduz demanda)",
-          "VNI se SCA + edema/congestao importante: CPAP 8-12 cmH₂O, monitorar PA (Se indicado)",
-          "Cabeceira elevada (reduz dispneia e trabalho) (Posicionamento)",
-          "Mobilizacao: sedestacao leito 10-20 min se liberado e estavel (Dose segura)",
-          "D1-D2: poltrona 30-60 min, ortostatismo curto, marcha 5-20 m assistida (Progressao)",
-          "D2-D3: marcha 20-100 m conforme tolerancia, treino AVDs simples com pausas (Funcional)",
-          "Regra IAM: mobilizar sem disparar taquicardia, hipertensao e dor (Fundamento)",
-          "PARADA: dor toracica/pressao, dispneia desproporcional, queda PA ou elevacao com sintomas, taquicardia sustentada, arritmia nova, dessaturacao (Criterios rigidos)"
-        ],
-        "block": "C8 — Hipotensao ortostatica e intolerancia postural",
-        "goals": [
-          "Evitar aumento de consumo miocardico de O₂",
-          "Iniciar reabilitacao fase I hospitalar"
-        ],
+        "name": "C9.P1 — Isquemia miocárdica aguda / risco de reinfarto",
+        "desc": "Crítico. Dor torácica típica/recorrente, alterações ECG/telemetria, troponina elevada, instabilidade hemodinâmica",
+        "assess": ["Reduzir consumo O₂ miocárdico", "Prevenir reinfarto"],
+        "interv": ["Repouso estrito nas primeiras 12-24h (Protocolo SCA)", "O₂ se SpO₂ < 94% (Evitar hiperoxia)", "Controle de dor, ansiedade e FC (Reduz demanda O₂)", "Mobilização muito progressiva após estabilização e reperfusão"],
+        "block": "🚨 BLOCO C9 — Síndrome coronariana aguda (SCA)",
+        "goals": ["Reduzir consumo O₂ miocárdico", "Prevenir reinfarto"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Oxigenoterapia para SpO₂ 92-96% (evita hipoxia que piora isquemia) (Alvo)",
-              "CNAF se FR ≥ 28-30 + esforco respiratorio (Reduz demanda)",
-              "VNI se SCA + edema/congestao importante: CPAP 8-12 cmH₂O, monitorar PA (Se indicado)",
-              "Cabeceira elevada (reduz dispneia e trabalho) (Posicionamento)",
-              "Mobilizacao: sedestacao leito 10-20 min se liberado e estavel (sem dor, hemodinamica estavel, sem arritmia) (Dose segura)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "D1-D2: poltrona 30-60 min, ortostatismo curto, marcha 5-20 m assistida (Progressao)",
-              "D2-D3: marcha 20-100 m conforme tolerancia, treino AVDs simples com pausas (Funcional)",
-              "Regra IAM: mobilizar sem disparar taquicardia, hipertensao e dor (Fundamento)",
-              "PARADA: dor toracica/pressao, dispneia desproporcional, queda PA ou elevacao com sintomas, taquicardia sustentada, arritmia nova, dessaturacao (Criterios rigidos)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Repouso estrito nas primeiras 12-24h (Protocolo SCA)", "O₂ se SpO₂ < 94% (Evitar hiperoxia - causa vasoconstrição coronariana)", "Controle de dor, ansiedade e FC (Reduz demanda O₂)", "Monitorar ECG e telemetria (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização muito progressiva após estabilização e reperfusão", "Sedestação beira-leito quando PA e ritmo estáveis (Degrau 2)", "Monitorar PA, FC, ECG ao mobilizar (Vigilância)"]}
         ]
       },
       {
-        "name": "C9.P2 — Desequilibrio oferta/consumo de O₂ do miocardio",
+        "name": "C9.P2 — Desequilíbrio oferta/consumo de O₂ do miocárdio",
         "desc": "Grave. Taquicardia, hipoxemia, anemia/hipovolemia, dor/ansiedade, febre/sepse concomitante",
-        "assess": [],
-        "interv": [
-          "Suporte respiratorio adequado (Fundamental)",
-          "Controle de dor e ansiedade (Essencial)",
-          "Evitar esforcos desnecessarios (Economia)"
-        ],
-        "block": "C9 — Sindrome coronariana aguda (SCA/IAM)",
-        "goals": [
-          "Otimizar oferta e reduzir consumo"
-        ],
+        "assess": ["Reduzir demanda", "Aumentar oferta de O₂ miocárdico"],
+        "interv": ["O₂ se SpO₂ < 94% (Aumentar oferta)", "Controle de FC: analgesia, ansiolítico, temperatura (Reduzir demanda)", "Tratar causas reversíveis: febre, anemia, hipovolemia (Equipe)"],
+        "block": "🚨 BLOCO C9 — Síndrome coronariana aguda (SCA)",
+        "goals": ["Reduzir demanda", "Aumentar oferta de O₂ miocárdico"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Suporte respiratorio adequado (Fundamental)",
-              "Controle de dor e ansiedade (Essencial)",
-              "Evitar esforcos desnecessarios (Economia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["O₂ se SpO₂ < 94% (Aumentar oferta - evitar hiperoxia)", "Controle de FC: analgesia, ansiolítico, temperatura (Reduzir demanda)", "Tratar causas reversíveis: febre, anemia, hipovolemia (Equipe)", "Repouso relativo para reduzir consumo (Protocolo)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização progressiva após controle do desequilíbrio", "Monitorar FC resposta ao esforço (Vigilância)"]}
         ]
       },
       {
-        "name": "C9.P3 — Dispneia/hipoxemia associada (congestao, edema, atelectasia, dor)",
-        "desc": "Grave. SpO₂ < 92%, FR elevada, crepitacoes/congestao, RX sugestivo",
-        "assess": [],
-        "interv": [
-          "Tratar congestao se presente (VNI como no C2) (Especifico)",
-          "Expansao pulmonar se atelectasia (Especifico)"
-        ],
-        "block": "C9 — Sindrome coronariana aguda (SCA/IAM)",
-        "goals": [
-          "Melhorar oxigenacao e conforto"
-        ],
+        "name": "C9.P3 — Dispneia/hipoxemia associada (congestão, edema, atelectasia, dor)",
+        "desc": "Grave. SpO₂ < 92%, FR elevada, crepitações/congestão, RX sugestivo",
+        "assess": ["SpO₂ ≥ 94%", "Reduzir FR"],
+        "interv": ["O₂/CNAF titulado (Imediato)", "Posição sentada ou semi-Fowler (Terapêutico)", "Tratar causa com equipe (congestão, dor, atelectasia)"],
+        "block": "🚨 BLOCO C9 — Síndrome coronariana aguda (SCA)",
+        "goals": ["SpO₂ ≥ 94%", "Reduzir FR"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Tratar congestao se presente (VNI como no C2) (Especifico)",
-              "Expansao pulmonar se atelectasia (Especifico)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["O₂/CNAF titulado para SpO₂ 92-96% (Imediato)", "Posição sentada ou semi-Fowler (Terapêutico)", "Tratar causa com equipe: congestão, dor, atelectasia (Fundamental)", "VNI se hipoxemia grave ou EAP associado (Se indicado)"]}
         ]
       },
       {
         "name": "C9.P4 — Risco de arritmias malignas no contexto de SCA",
-        "desc": "Grave. Extrassistoles frequentes, TVNS, FA, instabilidade eletrica, sintomas (palpitacao, sincope, tontura)",
-        "assess": [],
-        "interv": [
-          "Manter SpO₂ adequada (hipoxia e gatilho) (Vigilancia)",
-          "Evitar esforcos que disparem FC excessiva (Cautela)"
-        ],
-        "block": "C9 — Sindrome coronariana aguda (SCA/IAM)",
-        "goals": [
-          "Prevenir arritmias por controle de gatilhos"
-        ],
+        "desc": "Grave. Extrassístoles frequentes, TVNS, FA, instabilidade elétrica, sintomas (palpitação, síncope, tontura)",
+        "assess": ["Prevenir arritmias por hipóxia/esforço excessivo"],
+        "interv": ["O₂ se SpO₂ < 94% (Prevenir hipóxia gatilho)", "Repouso quando arritmia ativa (Imediato)", "Monitorar telemetria durante mobilização (Vigilância)"],
+        "block": "🚨 BLOCO C9 — Síndrome coronariana aguda (SCA)",
+        "goals": ["Prevenir arritmias por hipóxia/esforço excessivo"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Manter SpO₂ adequada (hipoxia e gatilho) (Vigilancia)",
-              "Evitar esforcos que disparem FC excessiva (Cautela)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["O₂ se SpO₂ < 94% (Prevenir hipóxia gatilho)", "Repouso quando arritmia ativa (Imediato)", "Monitorar telemetria durante mobilização (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização quando ritmo estável (Progressivo)", "PARADA: TV sustentada, FA com FC > 130, síncope, queda PA (Critérios)"]}
         ]
       },
       {
-        "name": "C9.P5 — Baixa tolerancia ao esforco / restricao funcional inicial",
-        "desc": "Moderado. Dispneia e fadiga ao minimo esforco, medo de mobilizar, fraqueza e descondicionamento",
-        "assess": [],
-        "interv": [
-          "Reabilitacao fase I progressiva (Gradual)",
-          "Educacao: sinais de alerta (Orientacao)"
-        ],
-        "block": "C9 — Sindrome coronariana aguda (SCA/IAM)",
-        "goals": [
-          "Melhorar independencia para AVDs basicas"
-        ],
+        "name": "C9.P5 — Baixa tolerância ao esforço / restrição funcional inicial",
+        "desc": "Moderado. Dispneia e fadiga ao mínimo esforço, medo de mobilizar, fraqueza e descondicionamento",
+        "assess": ["Progressão segura da mobilização"],
+        "interv": ["Sedestação beira-leito quando PA e ritmo estáveis (Degrau 2)", "Ortostatismo progressivo (Degrau 3)", "Marcha crescente no corredor (Degrau 4)", "Orientação e educação sobre segurança do movimento"],
+        "block": "🚨 BLOCO C9 — Síndrome coronariana aguda (SCA)",
+        "goals": ["Progressão segura da mobilização"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Reabilitacao fase I progressiva (Gradual)",
-              "Educacao: sinais de alerta (Orientacao)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Sedestação beira-leito quando PA e ritmo estáveis (Degrau 2)", "Ortostatismo progressivo (Degrau 3)", "Marcha beira-leito (Degrau 4)", "Orientação e educação sobre segurança do movimento (Educação)"]},
+          {"timeframe": "3-5 dias", "interv": ["Marcha no corredor crescente (Progressivo)", "Subir degraus se necessário para alta (Funcional)", "Orientar para reabilitação cardíaca fase II (Pré-alta)"]}
         ]
       },
       {
-        "name": "C9.P6 — Pos-procedimento (cateterismo/angioplastia) com restricoes e risco de sangramento",
-        "desc": "Moderado. Puncao femoral/radial recente, dor local/hematoma, restricao de mobilidade do membro puncionado",
-        "assess": [],
-        "interv": [
-          "Evitar flexao excessiva quadril (femoral) nas primeiras horas conforme protocolo (Cautela)",
-          "Evitar carga/forca no punho (radial) se doloroso/hematoma (Cautela)",
-          "Priorizar mobilizacao segura sem tracionar local (Seguranca)"
-        ],
-        "block": "C9 — Sindrome coronariana aguda (SCA/IAM)",
-        "goals": [
-          "Mobilizacao respeitando restricoes de puncao"
-        ],
+        "name": "C9.P6 — Pós-cateterismo/angioplastia com restrições e risco de sangramento",
+        "desc": "Moderado. Punção femoral/radial recente, dor local/hematoma, restrição de mobilidade do membro puncionado",
+        "assess": ["Mobilização respeitando restrições do acesso vascular"],
+        "interv": ["Repouso do membro puncionado conforme protocolo (femoral: 4-6h; radial: 2-4h) (Protocolo)", "Exercícios MMII/MMSS não puncionados durante repouso (Ativo)", "Deambulação progressiva após liberação do sítio de punção"],
+        "block": "🚨 BLOCO C9 — Síndrome coronariana aguda (SCA)",
+        "goals": ["Mobilização respeitando restrições do acesso vascular"],
         "phases": [
-          {
-            "timeframe": "24-48h",
-            "interv": [
-              "Evitar flexao excessiva quadril (femoral) nas primeiras horas conforme protocolo (Cautela)",
-              "Evitar carga/forca no punho (radial) se doloroso/hematoma (Cautela)",
-              "Priorizar mobilizacao segura sem tracionar local (Seguranca)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Repouso do membro puncionado conforme protocolo (femoral: 4-6h; radial: 2-4h) (Protocolo)", "Exercícios MMII/MMSS não puncionados durante repouso (Ativo)", "Monitorar sítio de punção: hematoma, sangramento, pulso (Vigilância)"]},
+          {"timeframe": "24-48h", "interv": ["Deambulação progressiva após liberação do sítio de punção", "Monitorar hematoma ao mobilizar (Vigilância)"]}
         ]
       },
       {
-        "name": "C10.P1 — Baixo debito / intolerancia ao esforco por limitacao valvar",
-        "desc": "Grave. Fadiga/dispneia desproporcionais, hipotensao/labilidade ao ortostatismo, queda de performance funcional",
-        "assess": [],
-        "interv": [
-          "Oxigenoterapia/CNAF se necessario (Suporte)",
-          "VNI se congestao (comum em IM/EM/EAo descompensada): CPAP 8-12 cmH₂O, monitorar PA (Se indicado)",
-          "Mobilizacao conservadora: sedestacao → poltrona (dose minima eficaz) (Segura)"
-        ],
-        "block": "C9 — Sindrome coronariana aguda (SCA/IAM)",
-        "goals": [
-          "Manter estabilidade hemodinamica sem disparar taquicardia ou hipotensao"
-        ],
+        "name": "C10.P1 — Baixo débito / intolerância ao esforço por limitação valvar",
+        "desc": "Grave. Fadiga/dispneia desproporcionais, hipotensão/labilidade ao ortostatismo, queda de performance funcional",
+        "assess": ["Mobilização segura dentro dos limites hemodinâmicos"],
+        "interv": ["Elevar cabeceira gradualmente com monitoração de PA/FC (Progressivo)", "Sedestação assistida beira-leito (Degrau 2)", "Ortostatismo progressivo com monitoração (Degrau 3)", "Intensidade leve a moderada: Borg ≤ 5 (Limite)"],
+        "block": "🫀 BLOCO C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
+        "goals": ["Mobilização segura dentro dos limites hemodinâmicos"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Oxigenoterapia/CNAF se necessario (Suporte)",
-              "VNI se congestao (comum em IM/EM/EAo descompensada): CPAP 8-12 cmH₂O, monitorar PA (Se indicado)",
-              "Mobilizacao conservadora: sedestacao → poltrona (dose minima eficaz) (Segura)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Elevar cabeceira gradualmente com monitoração de PA/FC (Progressivo)", "Sedestação assistida beira-leito (Degrau 2)", "Ortostatismo progressivo com monitoração (Degrau 3)", "Intensidade leve: Borg ≤ 5 (Limite)", "PARADA: queda PA > 20 mmHg, Borg > 6, síncope (Critérios)"]}
         ]
       },
       {
-        "name": "C10.P2 — Congestao pulmonar/edema por falencia esquerda (IM/EM/EAo avancada)",
-        "desc": "Critico. Ortopneia, DPN, crepitacoes, RX com congestao, hipoxemia, FR elevada",
-        "assess": [],
-        "interv": [
-          "VNI/CPAP como no C2 (Tratamento)",
-          "Posicionamento: sentado/poltrona (Terapeutico)"
-        ],
-        "block": "C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
-        "goals": [
-          "Reduzir congestao, melhorar oxigenacao"
-        ],
+        "name": "C10.P2 — Congestão pulmonar/edema por falência esquerda (IM/EM/EAo avançada)",
+        "desc": "Crítico. Ortopneia, DPN, crepitações, RX com congestão, hipoxemia, FR elevada",
+        "assess": ["Reduzir congestão", "Melhorar SpO₂"],
+        "interv": ["Posição sentada imediata (90°) (Terapêutico)", "O₂ titulado para SpO₂ 92-96% (Imediato)", "VNI com CPAP 5-10 cmH₂O (Se indicado)", "Exercícios respiratórios após estabilização"],
+        "block": "🫀 BLOCO C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
+        "goals": ["Reduzir congestão", "Melhorar SpO₂"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "VNI/CPAP como no C2 (Tratamento)",
-              "Posicionamento: sentado/poltrona (Terapeutico)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Posição sentada imediata (90°) (Terapêutico)", "O₂ titulado para SpO₂ 92-96% (Imediato)", "VNI com CPAP 5-10 cmH₂O (Se indicado)"]},
+          {"timeframe": "24-48h", "interv": ["Exercícios respiratórios progressivos (Sessões)", "Mobilização progressiva conforme tolerância"]}
         ]
       },
       {
-        "name": "C10.P3 — Isquemia/sincope em estenose aortica grave (EAo)",
-        "desc": "Critico. Sincope/presincope ao esforco, angina/dor toracica, PA nao sustenta em mudancas posturais",
-        "assess": [],
-        "interv": [
-          "EAo: mobilizacao conservadora e lenta, etapas curtas (Cuidado especial)",
-          "Priorizar: sedestacao → poltrona → ortostatismo 30-60s (Gradual)",
-          "Evitar picos de esforco (sem \"levanta e anda\" rapido) (Cautela)",
-          "Pausas longas e monitorizacao PA/FC (Vigilancia)",
-          "PARADA EAo: tontura/presincope, queda PA, dor toracica, dispneia desproporcional (Criterios)"
-        ],
-        "block": "C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
-        "goals": [
-          "Evitar sincope e isquemia"
-        ],
+        "name": "C10.P3 — Isquemia/síncope em estenose aórtica grave (EAo)",
+        "desc": "Crítico. Síncope/presíncope ao esforço, angina/dor torácica, PA não sustenta em mudanças posturais",
+        "assess": ["Prevenir síncope ao esforço"],
+        "interv": ["Evitar esforço brusco e manobra de Valsalva (Sempre)", "Elevação de cabeceira lenta (< 10°/vez) com pausa de 3 min (Muito gradual)", "Monitorar PA rigorosamente ao mobilizar (Vigilância)", "Mobilização de intensidade muito leve (Borg ≤ 3)"],
+        "block": "🫀 BLOCO C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
+        "goals": ["Prevenir síncope ao esforço"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "EAo: mobilizacao conservadora e lenta, etapas curtas (Cuidado especial)",
-              "Priorizar: sedestacao → poltrona → ortostatismo 30-60s (Gradual)",
-              "Evitar picos de esforco (sem \"levanta e anda\" rapido) (Cautela)",
-              "Pausas longas e monitorizacao PA/FC (Vigilancia)",
-              "PARADA EAo: tontura/presincope, queda PA, dor toracica, dispneia desproporcional (Criterios)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Evitar esforço brusco e manobra de Valsalva (Sempre)", "Elevação de cabeceira muito lenta com pausa de 3 min (Muito gradual)", "Monitorar PA rigorosamente ao mobilizar (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização de intensidade muito leve (Borg ≤ 3) (Limite rígido)", "PARADA: síncope, queda PA > 10 mmHg com sintomas, angina (Critérios)"]}
         ]
       },
       {
         "name": "C10.P4 — Taquicardia como inimiga (especialmente EM e IAo)",
-        "desc": "Grave. FC elevada reduz enchimento diastolico (EM) e piora congestao, FC elevada encurta diastole (IAo)",
-        "assess": [],
-        "interv": [
-          "EM: controle rigoroso de carga, sedestacao e marcha curta, CNAF/VNI se congesto, monitorar FC (Estrategia)",
-          "IAo: evitar picos de FC, sessoes curtas com pausas, marcha fracionada (2×10m com pausa) (Estrategia)"
-        ],
-        "block": "C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
-        "goals": [
-          "Controle rigoroso de carga para evitar disparos de FC"
-        ],
+        "desc": "Grave. FC elevada reduz enchimento diastólico (EM) e piora congestão, FC elevada encurta diástole (IAo)",
+        "assess": ["Controlar FC", "Evitar esforços que aumentem FC"],
+        "interv": ["Evitar manobras/exercícios que acelerem FC excessivamente (Cautela)", "Aquecimento lento (5-10 min) antes de qualquer atividade (Preparo)", "Monitorar FC continuamente: limite conforme patologia (Vigilância)"],
+        "block": "🫀 BLOCO C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
+        "goals": ["Controlar FC", "Evitar esforços que aumentem FC"],
         "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "EM: controle rigoroso de carga, sedestacao e marcha curta, CNAF/VNI se congesto, monitorar FC (Estrategia)",
-              "IAo: evitar picos de FC, sessoes curtas com pausas, marcha fracionada (2×10m com pausa) (Estrategia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Repouso relativo, evitar esforços que acelerem FC (Cautela)", "O₂ se necessário (Titular)", "Monitorar FC e ritmo (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização progressiva com FC monitorada (Vigilância)", "Intensidade baixa: manter FC dentro do limite definido com equipe", "PARADA: FC acima do limite com sintomas (Critérios)"]}
         ]
       },
       {
-        "name": "C10.P5 — Hipoxemia e alto trabalho respiratorio aumentando carga cardiaca",
-        "desc": "Grave. FR > 28-30, uso de musculatura acessoria, dessaturacao ao mobilizar/deitar, piora FC/PA",
-        "assess": [],
-        "interv": [
-          "CNAF/VNI conforme necessidade (Suporte)",
-          "IM: VNI/CPAP se congesto, mobilizacao com controle dispneia (Borg), estrategia tempo ↑ antes intensidade ↑ (Especifico)",
-          "PARADA IM: dispneia intensa, dessaturacao, taquicardia sintomatica (Criterios)"
-        ],
-        "block": "C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
-        "goals": [
-          "Reduzir trabalho respiratorio e demanda miocardica"
-        ],
+        "name": "C10.P5 — Hipoxemia e alto trabalho respiratório aumentando carga cardíaca",
+        "desc": "Grave. FR > 28-30, uso de musculatura acessória, dessaturação ao mobilizar/deitar, piora FC/PA",
+        "assess": ["SpO₂ ≥ 92%", "Reduzir trabalho respiratório"],
+        "interv": ["O₂/CNAF titulado (Imediato)", "Posição sentada (Terapêutico)", "VNI se indicado (Escalonar)", "Exercícios respiratórios após estabilização"],
+        "block": "🫀 BLOCO C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
+        "goals": ["SpO₂ ≥ 92%", "Reduzir trabalho respiratório"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "CNAF/VNI conforme necessidade (Suporte)",
-              "IM: VNI/CPAP se congesto, mobilizacao com controle dispneia (Borg), estrategia tempo ↑ antes intensidade ↑ (Especifico)",
-              "PARADA IM: dispneia intensa, dessaturacao, taquicardia sintomatica (Criterios)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["O₂/CNAF titulado para SpO₂ 92-96% (Imediato)", "Posição sentada (Terapêutico)", "VNI se indicado (Escalonar)"]},
+          {"timeframe": "24-48h", "interv": ["Exercícios respiratórios progressivos (Sessões)", "Monitorar SpO₂ ao mobilizar (Vigilância)"]}
         ]
       },
       {
-        "name": "C10.P6 — Pos-intervencao valvar (TAVI/valva cirurgica) com risco de complicacoes",
-        "desc": "Grave. Pos-op imediato, drenos, dor, restricoes, risco de disturbios conducao/arritmias, sangramento",
-        "assess": [],
-        "interv": [
-          "Terapia respiratoria: expansao pulmonar, tosse eficaz com protecao (C4) (Sessoes)",
-          "Suporte ventilatorio: O₂, CNAF, VNI conforme necessidade (Se indicado)",
-          "Progressao funcional: D0-D1 sedestacao/poltrona, D1-D2 ortostatismo/marcha 5-10m, D2-D3 marcha 20-50m (Gradual)",
-          "Seguranca por puncao (TAVI/cateter): evitar flexao quadril (femoral) ou apoio punho (radial) conforme protocolo (Cautela)",
-          "PARADA: dor toracica, queda PA, arritmia nova, dessaturacao, sangramento (Criterios)"
-        ],
-        "block": "C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
-        "goals": [
-          "Recuperacao funcional segura pos-procedimento"
-        ],
+        "name": "C10.P6 — Pós-intervenção valvar (TAVI/valva cirúrgica) com risco de complicações",
+        "desc": "Grave. Pós-op imediato, drenos, dor, restrições, risco de distúrbios condução/arritmias, sangramento",
+        "assess": ["Mobilização segura pós-procedimento", "Prevenir complicações"],
+        "interv": ["Exercícios respiratórios: inspiração profunda, tosse assistida (0-24h)", "Mobilização passiva MMII (0-24h)", "Monitorar ritmo/PA/drenos (Vigilância)", "Sedestação beira-leito quando PA e ritmo estáveis"],
+        "block": "🫀 BLOCO C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
+        "goals": ["Mobilização segura pós-procedimento", "Prevenir complicações"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Terapia respiratoria: expansao pulmonar, tosse eficaz com protecao (C4) (Sessoes)",
-              "Suporte ventilatorio: O₂, CNAF, VNI conforme necessidade (Se indicado)",
-              "Progressao funcional: D0-D1 sedestacao/poltrona, D1-D2 ortostatismo/marcha 5-10m, D2-D3 marcha 20-50m (Gradual)",
-              "Seguranca por puncao (TAVI/cateter): evitar flexao quadril (femoral) ou apoio punho (radial) conforme protocolo (Cautela)",
-              "PARADA: dor toracica, queda PA, arritmia nova, dessaturacao, sangramento (Criterios)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Exercícios respiratórios: inspiração profunda, tosse assistida (Sessões)", "Mobilização passiva MMII: bomba muscular, flexo-extensão (Contínuo)", "Monitorar ritmo/PA/drenos/sítio de punção (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Sedestação beira-leito quando PA e ritmo estáveis (Degrau 2)", "Ortostatismo progressivo com monitoração (Degrau 3)", "Marcha progressiva conforme protocolo (Degrau 4)"]}
         ]
       },
       {
-        "name": "C10.P7 — Insuficiencia tricuspide / falencia direita (IT importante)",
-        "desc": "Grave. Dependencia de pre-carga, edema periferico, baixa tolerancia postural, hipotensao com pressao positiva",
-        "assess": [],
-        "interv": [
-          "Oxigenio/CNAF se hipoxemia, cautela com VNI/PEEP alta (Suporte)",
-          "Mobilizacao: similar ao C1/C8, bomba muscular MMII e poltrona ajudam retorno venoso se tolerado (Estrategia)"
-        ],
-        "block": "C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
-        "goals": [
-          "Mobilizacao em microdegraus sem colapso"
-        ],
+        "name": "C10.P7 — Insuficiência tricúspide / falência direita (IT importante)",
+        "desc": "Grave. Dependência de pré-carga, edema periférico, baixa tolerância postural, hipotensão com pressão positiva",
+        "assess": ["Manter pré-carga adequada", "Evitar pressão positiva excessiva"],
+        "interv": ["Menor PEEP eficaz (Princípio VD)", "Elevar cabeceira lentamente monitorando PAM (Muito gradual)", "Monitorar PAM ao mobilizar (Vigilância)", "Mobilização muito progressiva e cautelosa"],
+        "block": "🫀 BLOCO C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
+        "goals": ["Manter pré-carga adequada", "Evitar pressão positiva excessiva"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Oxigenio/CNAF se hipoxemia, cautela com VNI/PEEP alta (Suporte)",
-              "Mobilizacao: similar ao C1/C8, bomba muscular MMII e poltrona ajudam retorno venoso se tolerado (Estrategia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Menor PEEP eficaz (Princípio VD)", "Elevar cabeceira lentamente: 10°/vez com pausa de 3 min (Muito gradual)", "Monitorar PAM ao mobilizar (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização muito progressiva e cautelosa", "PARADA: queda PAM < 55 ou queda > 15 mmHg com sintomas (Critérios)"]}
         ]
       },
       {
-        "name": "C11.P1 — Hipoxemia com alto impacto sobre o VD (vasoconstricao hipoxica)",
-        "desc": "Critico. SpO₂ < 92%, PaO₂ reduzida, piora hemodinamica associada a hipoxia",
-        "assess": [],
-        "interv": [
-          "Regra: O VD MANDA. Hipoxia ↑ RVP → piora VD (Fisiologia)",
-          "Oxigenoterapia para SpO₂ 92-96% (ou alvo individual) (Fundamental)",
-          "CNAF frequentemente a melhor ponte: Fluxo 40-60 L/min, melhora oxigenacao com pouco impacto hemodinamico (Preferencial)",
-          "VNI com cautela: EPAP/PEEP ↑ → ↓ retorno venoso → piora VD. EPAP 5-8 cmH₂O, monitorar PA/perfusao apos iniciar (Pressao minima eficaz)",
-          "VM se necessario: estrategia VD-protetora (Vt 6-8, Pplato < 30, ΔP < 12-14, PEEP minima, evitar hipercapnia/acidose) (Protecao)",
-          "Cabeceira elevada, evitar supino se piora (Posicionamento)",
-          "Mobilizacao em microdegraus: passivo/bomba muscular → cabeceira elevada → sedestacao 2-10 min → poltrona → ortostatismo 30-60s (Progressao)",
-          "PARADA: queda PA/baixo debito, dessaturacao, dispneia intensa, tontura, taquicardia sustentada (Criterios)"
-        ],
-        "block": "C10 — Valvopatias (EAo, IM, IAo, EM, IT)",
-        "goals": [
-          "Manter SpO₂ ≥ 92-96% para reduzir RVP",
-          "Reduzir dependencia de alto suporte"
-        ],
+        "name": "C11.P1 — Hipoxemia com alto impacto sobre o VD (vasoconstrição hipóxica)",
+        "desc": "Crítico. SpO₂ < 92%, PaO₂ reduzida, piora hemodinâmica associada à hipóxia",
+        "assess": ["SpO₂ ≥ 92-94%", "Evitar vasoconstrição hipóxica do VD"],
+        "interv": ["O₂ titulado alvo SpO₂ 92-94% (Imediato)", "CNAF se SpO₂ < 90% com O₂ convencional (Se indicado)", "Manter oxigenação rigorosa: nunca deixar SpO₂ < 90% em HP"],
+        "block": "🫁 BLOCO C11 — Hipertensão pulmonar e cor pulmonale",
+        "goals": ["SpO₂ ≥ 92-94%", "Evitar vasoconstrição hipóxica do VD"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Regra: O VD MANDA. Hipoxia ↑ RVP → piora VD (Fisiologia)",
-              "Oxigenoterapia para SpO₂ 92-96% (ou alvo individual) (Fundamental)",
-              "CNAF frequentemente a melhor ponte: Fluxo 40-60 L/min (Preferencial)",
-              "VNI com cautela: EPAP 5-8 cmH₂O, monitorar PA/perfusao (Pressao minima eficaz)",
-              "VM se necessario: estrategia VD-protetora (Protecao)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Cabeceira elevada, evitar supino se piora (Posicionamento)",
-              "Mobilizacao em microdegraus: passivo/bomba muscular → cabeceira elevada → sedestacao 2-10 min → poltrona → ortostatismo 30-60s (Progressao)",
-              "PARADA: queda PA/baixo debito, dessaturacao, dispneia intensa, tontura, taquicardia sustentada (Criterios)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["O₂ titulado alvo SpO₂ 92-94% (Imediato)", "CNAF se SpO₂ < 90% com O₂ convencional (Se indicado)", "Manter oxigenação rigorosa: nunca deixar SpO₂ < 90% em HP (Vigilância)"]},
+          {"timeframe": "Contínuo", "interv": ["Monitorar SpO₂ continuamente (Contínuo)", "Ajustar O₂ ao mínimo eficaz (Desmame gradual)"]}
         ]
       },
       {
-        "name": "C11.P2 — Hipercapnia/acidose respiratoria aumentando RVP (pos-carga do VD)",
-        "desc": "Critico. PaCO₂ > 50 mmHg e/ou pH < 7,30, aumento esforco respiratorio, sonolencia, piora do VD",
-        "assess": [],
-        "interv": [
-          "VNI se fadiga/hipercapnia: EPAP conservadora 5-8 cmH₂O (Cautela)",
-          "VM: evitar hipercapnia grave e auto-PEEP (Se necessario)"
-        ],
-        "block": "C11 — Hipertensao pulmonar e cor pulmonale",
-        "goals": [
-          "Evitar hipercapnia/acidose significativa"
-        ],
+        "name": "C11.P2 — Hipercapnia/acidose respiratória aumentando RVP (pós-carga do VD)",
+        "desc": "Crítico. PaCO₂ > 50 mmHg e/ou pH < 7,30, aumento esforço respiratório, sonolência, piora do VD",
+        "assess": ["PaCO₂ ≤ 45 mmHg", "pH > 7,35"],
+        "interv": ["VNI para controle de CO₂: IPAP 10-14, EPAP 4-6 (Imediato)", "Posição sentada (Terapêutico)", "Titular suporte por gasometria (Ajuste fino)", "Desmame cuidadoso mantendo controle de gases"],
+        "block": "🫁 BLOCO C11 — Hipertensão pulmonar e cor pulmonale",
+        "goals": ["PaCO₂ ≤ 45 mmHg", "pH > 7,35"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "VNI se fadiga/hipercapnia: EPAP conservadora 5-8 cmH₂O (Cautela)",
-              "VM: evitar hipercapnia grave e auto-PEEP (Se necessario)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["VNI para controle de CO₂: IPAP 10-14, EPAP 4-6 (Imediato)", "Posição sentada (Terapêutico)", "Titular suporte por gasometria (Ajuste fino)"]},
+          {"timeframe": "24-48h", "interv": ["Desmame cuidadoso mantendo controle de gases (Progressivo)", "Gasometria seriada para guiar desmame (Seriado)"]}
         ]
       },
       {
-        "name": "C11.P3 — Sobrecarga de VD / baixo debito por aumento de RVP",
-        "desc": "Critico. Hipotensao, hipoperfusao, taquicardia, extremidades frias, TEC prolongado, ECO: VD dilatado/septo em D",
-        "assess": [],
-        "interv": [
-          "Evitar PEEP/EPAP excessiva (Fundamental)",
-          "Evitar manobras de recrutamento (podem derrubar PA) (So se imprescindivel)"
-        ],
-        "block": "C11 — Hipertensao pulmonar e cor pulmonale",
-        "goals": [
-          "Evitar colapso hemodinamico"
-        ],
+        "name": "C11.P3 — Sobrecarga de VD / baixo débito por aumento de RVP",
+        "desc": "Crítico. Hipotensão, hipoperfusão, taquicardia, extremidades frias, TEC prolongado, ECO: VD dilatado/septo em D",
+        "assess": ["Preservar função VD", "Manter PAM ≥ 65"],
+        "interv": ["O₂ máximo (reduz vasoconstrição hipóxica) (Urgente)", "Evitar PEEP alta (piora pós-carga VD) (Cautela)", "Repouso absoluto (Imediato)", "Mobilização somente após estabilização hemodinâmica"],
+        "block": "🫁 BLOCO C11 — Hipertensão pulmonar e cor pulmonale",
+        "goals": ["Preservar função VD", "Manter PAM ≥ 65"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Evitar PEEP/EPAP excessiva (Fundamental)",
-              "Evitar manobras de recrutamento (podem derrubar PA) (So se imprescindivel)"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["O₂ máximo (reduz vasoconstrição hipóxica) (Urgente)", "Evitar PEEP alta (piora pós-carga VD) (Cautela)", "Repouso absoluto (Imediato)", "Monitorar PAM, FC, SpO₂ contínuos (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização muito cautelosa somente após estabilização", "Elevar cabeceira em degraus de 10° com monitoração de PA (Progressivo)"]}
         ]
       },
       {
-        "name": "C11.P4 — Dependencia de pre-carga + risco de colapso com pressao positiva",
-        "desc": "Critico. Queda de PA apos iniciar VNI/VM ou subir PEEP, piora com recrutamento, instabilidade postural importante",
-        "assess": [],
-        "interv": [
-          "PEEP/EPAP minima necessaria (Estrategia)",
-          "Mobilizacao apenas se PAM ≥ alvo, sem escalada recente suporte, SpO₂ estavel, FR toleravel (Criterios)"
-        ],
-        "block": "C11 — Hipertensao pulmonar e cor pulmonale",
-        "goals": [
-          "Minimizar impacto hemodinamico negativo"
-        ],
+        "name": "C11.P4 — Dependência de pré-carga + risco de colapso com pressão positiva",
+        "desc": "Crítico. Queda de PA após iniciar VNI/VM ou subir PEEP, piora com recrutamento, instabilidade postural importante",
+        "assess": ["Manter PAM ao iniciar/ajustar suporte ventilatório"],
+        "interv": ["Iniciar PEEP baixa ≤ 5 cmH₂O (Princípio VD)", "Testar resposta hemodinâmica a cada incremento de PEEP (Titulação)", "Coordenar volume/vasopressor com equipe antes de ajustar (Preparo)"],
+        "block": "🫁 BLOCO C11 — Hipertensão pulmonar e cor pulmonale",
+        "goals": ["Manter PAM ao iniciar/ajustar suporte ventilatório"],
         "phases": [
-          {
-            "timeframe": "0-2h",
-            "interv": [
-              "PEEP/EPAP minima necessaria (Estrategia)",
-              "Mobilizacao apenas se PAM ≥ alvo, sem escalada recente suporte, SpO₂ estavel, FR toleravel (Criterios)"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["Iniciar PEEP baixa ≤ 5 cmH₂O (Princípio VD)", "Testar resposta hemodinâmica a cada incremento de PEEP (Titulação)", "Coordenar volume/vasopressor com equipe antes de ajustar (Preparo)", "Se PA cai: reduzir PEEP imediatamente (Imediato)"]}
         ]
       },
       {
-        "name": "C11.P5 — Aumento do trabalho respiratorio elevando consumo de O₂ e estresse simpatico",
-        "desc": "Grave. FR > 28-30, uso de musculatura acessoria, taquicardia induzida por dispneia",
-        "assess": [],
-        "interv": [
-          "CNAF: reduz trabalho com pouca PEEP (Ideal)",
-          "VNI: carga fisiologica (Com cautela)"
-        ],
-        "block": "C11 — Hipertensao pulmonar e cor pulmonale",
-        "goals": [
-          "Reduzir trabalho respiratorio e estresse"
-        ],
+        "name": "C11.P5 — Aumento do trabalho respiratório elevando consumo de O₂ e estresse simpático",
+        "desc": "Grave. FR > 28-30, uso de musculatura acessória, taquicardia induzida por dispneia",
+        "assess": ["Reduzir FR e esforço respiratório"],
+        "interv": ["Suporte respiratório: O₂/CNAF/VNI conforme gravidade (Imediato)", "Posição sentada (Terapêutico)", "Controle de ansiedade e conforto (Contínuo)"],
+        "block": "🫁 BLOCO C11 — Hipertensão pulmonar e cor pulmonale",
+        "goals": ["Reduzir FR e esforço respiratório"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "CNAF: reduz trabalho com pouca PEEP (Ideal)",
-              "VNI: carga fisiologica (Com cautela)"
-            ]
-          }
+          {"timeframe": "0-2h", "interv": ["Suporte respiratório: O₂/CNAF/VNI conforme gravidade (Imediato)", "Posição sentada (Terapêutico)", "Controle de ansiedade e conforto (Contínuo)", "Monitorar FR, SpO₂, esforço respiratório (Vigilância)"]}
         ]
       },
       {
-        "name": "C11.P6 — Intolerancia a mobilizacao por limitacao hemodinamica",
-        "desc": "Grave. Tontura/presincope ao sentar/ficar em pe, queda de PA com pequenos esforcos, dessaturacao ao mobilizar",
-        "assess": [],
-        "interv": [
-          "Microdegraus: similar ao C1 (Estrategia)",
-          "Prevenir complicacoes por imobilismo (Objetivo)"
-        ],
-        "block": "C11 — Hipertensao pulmonar e cor pulmonale",
-        "goals": [
-          "Mobilizacao sem descompensar VD"
-        ],
+        "name": "C11.P6 — Intolerância à mobilização por limitação hemodinâmica",
+        "desc": "Grave. Tontura/presíncope ao sentar/ficar em pé, queda de PA com pequenos esforços, dessaturação ao mobilizar",
+        "assess": ["Mobilização segura respeitando limites hemodinâmicos"],
+        "interv": ["Elevar cabeceira muito lentamente (10°/vez, pausa 3 min) (Muito gradual)", "Sedestação progressiva com monitoração rigorosa de PA/SpO₂ (Vigilância)", "PARADA: queda PA > 10 mmHg com sintomas ou SpO₂ < 88% (Critérios rígidos)"],
+        "block": "🫁 BLOCO C11 — Hipertensão pulmonar e cor pulmonale",
+        "goals": ["Mobilização segura respeitando limites hemodinâmicos"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Microdegraus: similar ao C1 (Estrategia)",
-              "Prevenir complicacoes por imobilismo (Objetivo)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Elevar cabeceira muito lentamente (10°/vez, pausa 3 min) (Muito gradual)", "Sedestação progressiva com monitoração rigorosa de PA/SpO₂ (Vigilância)", "Exercícios MMII passivos/ativos no leito antes de verticalizar (Preparo)", "PARADA: queda PA > 10 mmHg com sintomas ou SpO₂ < 88% (Critérios rígidos)"]}
         ]
       },
       {
-        "name": "C12.P1 — Comprometimento ventilatorio pos-procedimento (dor, hipoventilacao, atelectasia)",
-        "desc": "Grave. Padrao superficial, queda SpO₂, ausculta com reducao MV, RX com atelectasia/congestao, tosse ineficaz",
-        "assess": [],
-        "interv": [
-          "Expansao pulmonar: respiracao diafragmatica, inspiracoes lentas profundas com pausas, 3-5 × 5-10 rep (Sessoes)",
-          "Tosse eficaz com protecao: splinting com almofada/apoio, huffing/tosse assistida (Tecnica)",
-          "Suporte ventilatorio: O₂ se SpO₂ < alvo, CNAF se esforco alto + hipoxemia, VNI se congestao/edema (Conforme necessidade)"
-        ],
-        "block": "C11 — Hipertensao pulmonar e cor pulmonale",
-        "goals": [
-          "Garantir ventilacao adequada e prevencao de atelectasia"
-        ],
+        "name": "C12.P1 — Comprometimento ventilatório pós-procedimento (dor, hipoventilação, atelectasia)",
+        "desc": "Grave. Padrão superficial, queda SpO₂, ausculta com redução MV, RX com atelectasia/congestão, tosse ineficaz",
+        "assess": ["Manter expansão pulmonar", "Prevenir atelectasia"],
+        "interv": ["Exercícios respiratórios: inspiração profunda, fracionada (Sessões)", "Inspirometria de incentivo (Uso)", "Posicionamento: sedestação/cabeceira ≥ 30° (Contínuo)", "Higiene brônquica se secreção (PRN)"],
+        "block": "🔬 BLOCO C12 — Pós-TAVI/pós-valva/pós-transplante",
+        "goals": ["Manter expansão pulmonar", "Prevenir atelectasia"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Expansao pulmonar: respiracao diafragmatica, inspiracoes lentas profundas com pausas, 3-5 × 5-10 rep (Sessoes)",
-              "Tosse eficaz com protecao: splinting com almofada/apoio, huffing/tosse assistida (Tecnica)",
-              "Suporte ventilatorio: O₂ se SpO₂ < alvo, CNAF se esforco alto + hipoxemia, VNI se congestao/edema (Conforme necessidade)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Exercícios respiratórios: inspiração profunda, fracionada (Sessões)", "Inspirometria de incentivo (Uso)", "Posicionamento: sedestação/cabeceira ≥ 30° (Contínuo)", "O₂ suplementar se SpO₂ < 92% (Titular)"]},
+          {"timeframe": "24-72h", "interv": ["Higiene brônquica se secreção (PRN)", "Tosse assistida com contenção da ferida (Sessões)", "Mobilização precoce: sedestação beira-leito, ortostatismo (Progressivo)"]}
         ]
       },
       {
-        "name": "C12.P2 — Instabilidade eletrica / disturbios de conducao pos-procedimento",
-        "desc": "Grave. Bradicardia, BAV, pausas, arritmias novas em telemetria (risco aumentado especialmente pos-TAVI)",
-        "assess": [],
-        "interv": [
-          "Mobilizacao apenas se ritmo sem instabilidade ativa (Criterio)",
-          "Monitorar FC, PA, SpO₂, FR durante sessao (Vigilancia)"
-        ],
-        "block": "C12 — Pos-TAVI/Pos-Valva/Pos-Transplante",
-        "goals": [
-          "Monitorizacao e mobilizacao segura"
-        ],
+        "name": "C12.P2 — Instabilidade elétrica / distúrbios de condução pós-procedimento",
+        "desc": "Grave. Bradicardia, BAV, pausas, arritmias novas em telemetria (risco aumentado especialmente pós-TAVI)",
+        "assess": ["Monitorar ritmo", "Mobilização segura"],
+        "interv": ["Repouso relativo e monitoração telemetria contínua (0-24h)", "Exercícios passivos MMII quando estável (Mínimo)", "Mobilização progressiva quando ritmo estabilizado"],
+        "block": "🔬 BLOCO C12 — Pós-TAVI/pós-valva/pós-transplante",
+        "goals": ["Monitorar ritmo", "Mobilização segura"],
         "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Mobilizacao apenas se ritmo sem instabilidade ativa (Criterio)",
-              "Monitorar FC, PA, SpO₂, FR durante sessao (Vigilancia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Repouso relativo e monitoração telemetria contínua (0-24h)", "Exercícios passivos MMII quando estável (Mínimo)", "Monitorar FC e ritmo (Vigilância)"]},
+          {"timeframe": "24-72h", "interv": ["Mobilização progressiva quando ritmo estabilizado", "PARADA: bradicardia sintomática, pausas, TV (Critérios)"]}
         ]
       },
       {
-        "name": "C12.P3 — Instabilidade hemodinamica / labilidade pressorica",
-        "desc": "Grave. PAM oscilante, necessidade de suporte vasoativo (UTI), hipotensao ao mobilizar",
-        "assess": [],
-        "interv": [
-          "Mobilizacao apenas se PAM ≥ alvo e estavel (Criterio)",
-          "Evitar queda PA ao mobilizar (Vigilancia)"
-        ],
-        "block": "C12 — Pos-TAVI/Pos-Valva/Pos-Transplante",
-        "goals": [
-          "Manter PAM ≥ alvo e estavel"
-        ],
+        "name": "C12.P3 — Instabilidade hemodinâmica / labilidade pressórica",
+        "desc": "Grave. PAM oscilante, necessidade de suporte vasoativo (UTI), hipotensão ao mobilizar",
+        "assess": ["PAM estável", "Mobilização progressiva"],
+        "interv": ["Posição semi-Fowler (30-45°) (Estável)", "Monitorar PA continuamente (Contínuo)", "Ajustar suporte vasoativo com equipe (Fundamental)", "Mobilização somente quando PA estável sem vasopressor ou dose mínima"],
+        "block": "🔬 BLOCO C12 — Pós-TAVI/pós-valva/pós-transplante",
+        "goals": ["PAM estável", "Mobilização progressiva"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Mobilizacao apenas se PAM ≥ alvo e estavel (Criterio)",
-              "Evitar queda PA ao mobilizar (Vigilancia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Posição semi-Fowler (30-45°) (Estável)", "Monitorar PA continuamente (Contínuo)", "Ajustar suporte vasoativo com equipe (Fundamental)"]},
+          {"timeframe": "24-72h", "interv": ["Elevar cabeceira gradualmente quando PA estável (Progressivo)", "Sedestação assistida beira-leito (Degrau 2)", "Monitorar PA ao mobilizar (Vigilância)"]}
         ]
       },
       {
-        "name": "C12.P4 — Restricao por puncao vascular (TAVI/cateter) e risco de sangramento/hematoma",
-        "desc": "Moderado. Puncao femoral/radial recente, dor local/hematoma, limitacao mobilidade do membro, restricoes conforme protocolo",
-        "assess": [],
-        "interv": [
-          "Puncao femoral: evitar flexao excessiva quadril nas primeiras horas, cuidado em sentar/levantar (Protocolo local)",
-          "Puncao radial: evitar apoio e forca no punho se doloroso/hematoma (Cautela)",
-          "Inspecao do sitio de puncao antes/depois da sessao (Vigilancia)"
-        ],
-        "block": "C12 — Pos-TAVI/Pos-Valva/Pos-Transplante",
-        "goals": [
-          "Mobilizacao respeitando seguranca de puncao"
-        ],
+        "name": "C12.P4 — Restrição por punção vascular (TAVI/cateter) e risco de sangramento/hematoma",
+        "desc": "Moderado. Punção femoral/radial recente, dor local/hematoma, limitação mobilidade do membro, restrições conforme protocolo",
+        "assess": ["Mobilização do membro respeitando protocolo"],
+        "interv": ["Repouso do membro puncionado conforme protocolo institucional (Protocolo)", "Exercícios dos outros membros durante repouso (Ativo)", "Deambulação progressiva após liberação"],
+        "block": "🔬 BLOCO C12 — Pós-TAVI/pós-valva/pós-transplante",
+        "goals": ["Mobilização do membro respeitando protocolo"],
         "phases": [
-          {
-            "timeframe": "24-48h",
-            "interv": [
-              "Puncao femoral: evitar flexao excessiva quadril nas primeiras horas, cuidado em sentar/levantar (Protocolo local)",
-              "Puncao radial: evitar apoio e forca no punho se doloroso/hematoma (Cautela)",
-              "Inspecao do sitio de puncao antes/depois da sessao (Vigilancia)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Repouso do membro puncionado conforme protocolo (Protocolo)", "Exercícios dos outros membros durante repouso (Ativo)", "Monitorar sítio de punção: hematoma, sangramento, pulso (Vigilância)"]},
+          {"timeframe": "24-48h", "interv": ["Deambulação progressiva após liberação do sítio", "Monitorar hematoma ao mobilizar (Vigilância)"]}
         ]
       },
       {
-        "name": "C12.P5 — Fraqueza e descondicionamento (pos-UTI/pos-cirurgia)",
-        "desc": "Moderado. Dificuldade em transferencias, baixa tolerancia a marcha, fadiga precoce",
-        "assess": [],
-        "interv": [
-          "Progressao: D0-D1 sedestacao/poltrona, D1-D2 ortostatismo 30-120s/marcha 5-10m, D2-D3 marcha 20-50m (Adaptavel)",
-          "PARADA: dor toracica, queda PA, arritmia nova, dessaturacao, sangramento, tontura (Criterios)"
-        ],
-        "block": "C12 — Pos-TAVI/Pos-Valva/Pos-Transplante",
-        "goals": [
-          "Melhorar independencia em transferencias"
-        ],
+        "name": "C12.P5 — Fraqueza e descondicionamento (pós-UTI/pós-cirurgia)",
+        "desc": "Moderado. Dificuldade em transferências, baixa tolerância à marcha, fadiga precoce",
+        "assess": ["Recuperar funcionalidade", "Independência para alta"],
+        "interv": ["Sedestação beira-leito (Degrau 2)", "Ortostatismo com suporte (Degrau 3)", "Marcha progressiva (Degrau 4)", "Treino de transferências e AVDs"],
+        "block": "🔬 BLOCO C12 — Pós-TAVI/pós-valva/pós-transplante",
+        "goals": ["Recuperar funcionalidade", "Independência para alta"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Progressao: D0-D1 sedestacao/poltrona, D1-D2 ortostatismo 30-120s/marcha 5-10m, D2-D3 marcha 20-50m (Adaptavel)",
-              "PARADA: dor toracica, queda PA, arritmia nova, dessaturacao, sangramento, tontura (Criterios)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Sedestação beira-leito (Degrau 2)", "Ortostatismo com suporte (Degrau 3)", "Marcha beira-leito (Degrau 4)"]},
+          {"timeframe": "3-7 dias", "interv": ["Marcha no corredor crescente (Progressivo)", "Escada se necessário para alta (Funcional)", "Orientar para reabilitação cardíaca fase II (Pré-alta)"]}
         ]
       },
       {
-        "name": "C12.P6 — Situacoes especificas do transplante: resposta cronotropica alterada",
-        "desc": "Moderado. FC de repouso mais alta, resposta ao esforco menos previsivel (transplante cardiaco)",
-        "assess": [],
-        "interv": [
-          "Monitorar: PA, sintomas, SpO₂, percepcao de esforco (Borg) (Objetiva)",
-          "FC menos confiavel como marcador de esforco (Conhecimento)"
-        ],
-        "block": "C12 — Pos-TAVI/Pos-Valva/Pos-Transplante",
-        "goals": [
-          "Monitorizacao mais objetiva"
-        ],
+        "name": "C12.P6 — Resposta cronotrópica alterada pós-transplante cardíaco",
+        "desc": "Moderado. FC de repouso mais alta, resposta ao esforço menos previsível (transplante cardíaco)",
+        "assess": ["Progressão segura com monitoramento da FC"],
+        "interv": ["Aquecimento prolongado (10-15 min) antes de cada sessão (Preparo)", "Progressão mais lenta que paciente cardíaco convencional (Gradual)", "Monitorar FC e Borg durante esforço (Vigilância)"],
+        "block": "🔬 BLOCO C12 — Pós-TAVI/pós-valva/pós-transplante",
+        "goals": ["Progressão segura com monitoramento da FC"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Monitorar: PA, sintomas, SpO₂, percepcao de esforco (Borg) (Objetiva)",
-              "FC menos confiavel como marcador de esforco (Conhecimento)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Aquecimento prolongado (10-15 min) antes de cada sessão (Preparo)", "Progressão mais lenta que cardiopata convencional (Gradual)", "Monitorar FC e Borg durante esforço (Vigilância)", "Usar Borg como guia principal (FC menos previsível em denervação)"]}
         ]
       },
       {
         "name": "C13.P1 — Descondicionamento cardiovascular agudo",
-        "desc": "Moderado. Fadiga e dispneia a esforcos minimos, queda importante de tolerancia funcional, imobilismo recente/UTI/pos-evento",
-        "assess": [],
-        "interv": [
-          "Criterios para entrar: sem dor toracica ativa, sem arritmia instavel, hemodinamica estavel, SpO₂ estavel, liberacao clinica (Elegibilidade)",
-          "NIVEL 1: exercicios ativos MMSS/MMII, sedestacao sustentada, transferencia leito↔poltrona (Leito/poltrona)",
-          "NIVEL 2: ortostatismo com apoio, marcha estacionaria, sentar/levantar (Ortostatismo)",
-          "NIVEL 3: marcha no quarto/corredor 5-20m → 20-100+m conforme tolerancia (Marcha)"
-        ],
-        "block": "C12 — Pos-TAVI/Pos-Valva/Pos-Transplante",
-        "goals": [
-          "Sentar no leito/poltrona com seguranca",
-          "Ficar em pe com seguranca"
-        ],
+        "desc": "Moderado. Fadiga e dispneia a esforços mínimos, queda importante de tolerância funcional, imobilismo recente/UTI/pós-evento",
+        "assess": ["Recuperar funcionalidade progressivamente"],
+        "interv": ["Sedestação beira-leito (Degrau 2)", "Ortostatismo e marcha beira-leito (Degrau 3)", "Marcha crescente no corredor (Degrau 4)", "Cicloergômetro se disponível (Aeróbico leve)"],
+        "block": "🏃 BLOCO C13 — Reabilitação cardíaca fase I",
+        "goals": ["Recuperar funcionalidade progressivamente"],
         "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Criterios para entrar: sem dor toracica ativa, sem arritmia instavel, hemodinamica estavel, SpO₂ estavel, liberacao clinica (Elegibilidade)",
-              "NIVEL 1: exercicios ativos MMSS/MMII, sedestacao sustentada, transferencia leito↔poltrona (Leito/poltrona)"
-            ]
-          },
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "NIVEL 2: ortostatismo com apoio, marcha estacionaria, sentar/levantar (Ortostatismo)",
-              "NIVEL 3: marcha no quarto/corredor 5-20m → 20-100+m conforme tolerancia (Marcha)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Sedestação beira-leito (Degrau 2)", "Exercícios de bomba muscular MMII (Contínuo)"]},
+          {"timeframe": "24-72h", "interv": ["Ortostatismo e marcha beira-leito (Degrau 3)", "Marcha no corredor (Degrau 4)"]},
+          {"timeframe": "3-7 dias", "interv": ["Marcha crescente (Progressivo)", "Cicloergômetro se disponível (Aeróbico leve)", "Orientar para fase II (Pré-alta)"]}
         ]
       },
       {
-        "name": "C13.P2 — Baixa tolerancia ortostatica e ao esforco",
-        "desc": "Moderado. Tontura, hipotensao ao sentar/ficar em pe, taquicardia ou dispneia precoce, pausas muito frequentes",
-        "assess": [],
-        "interv": [
-          "Progressao gradual conforme tolerancia (Individualizado)",
-          "Monitorar: FC, PA, SpO₂, FR, Borg (dispneia e esforco) (Continuo)"
-        ],
-        "block": "C13 — Reabilitacao cardiaca fase I",
-        "goals": [
-          "Iniciar marcha assistida curta"
-        ],
+        "name": "C13.P2 — Baixa tolerância ortostática e ao esforço",
+        "desc": "Moderado. Tontura, hipotensão ao sentar/ficar em pé, taquicardia ou dispneia precoce, pausas muito frequentes",
+        "assess": ["Tolerar ortostatismo e marcha funcional"],
+        "interv": ["Elevar cabeceira gradualmente (Progressivo)", "Ortostatismo assistido com monitoração (Degrau 3)", "Marcha progressiva quando tolera ortostatismo sem sintomas"],
+        "block": "🏃 BLOCO C13 — Reabilitação cardíaca fase I",
+        "goals": ["Tolerar ortostatismo e marcha funcional"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Progressao gradual conforme tolerancia (Individualizado)",
-              "Monitorar: FC, PA, SpO₂, FR, Borg (dispneia e esforco) (Continuo)"
-            ]
-          }
+          {"timeframe": "24-72h", "interv": ["Elevar cabeceira gradualmente: 30° → 45° → 60° → 90° (Progressivo)", "Ortostatismo assistido com monitoração (Degrau 3)", "Monitorar PA, FC, SpO₂, Borg ao mobilizar (Vigilância)"]},
+          {"timeframe": "3-7 dias", "interv": ["Marcha progressiva quando tolera ortostatismo (Degrau 4)", "Marcha crescente no corredor (Escalonamento)"]}
         ]
       },
       {
-        "name": "C13.P3 — Medo de mobilizar / comportamento de evitacao",
-        "desc": "Leve. Inseguranca do paciente, recusa ou rigidez excessiva, postura de \"fragilidade aprendida\"",
-        "assess": [],
-        "interv": [
-          "Educacao terapeutica: ensinar sinais de alerta, importancia da progressao, conservacao de energia (Orientacao)",
-          "Progressao gradual com reforco positivo (Abordagem)"
-        ],
-        "block": "C13 — Reabilitacao cardiaca fase I",
-        "goals": [
-          "Reduzir medo e hipervigilancia disfuncional"
-        ],
+        "name": "C13.P3 — Medo de mobilizar / comportamento de evitação",
+        "desc": "Leve. Insegurança do paciente, recusa ou rigidez excessiva, postura de fragilidade aprendida",
+        "assess": ["Educação e confiança progressiva no movimento"],
+        "interv": ["Orientação educacional: explicar segurança e benefícios do movimento (Imediato)", "Definir limites seguros com o paciente (Educação)", "Progressão assistida com feedback positivo (Motivacional)"],
+        "block": "🏃 BLOCO C13 — Reabilitação cardíaca fase I",
+        "goals": ["Educação e confiança progressiva no movimento"],
         "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Educacao terapeutica: ensinar sinais de alerta, importancia da progressao, conservacao de energia (Orientacao)",
-              "Progressao gradual com reforco positivo (Abordagem)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Orientação educacional: explicar segurança e benefícios do movimento (Imediato)", "Definir limites seguros com o paciente (Educação)"]},
+          {"timeframe": "24-72h", "interv": ["Progressão assistida com feedback positivo (Motivacional)", "Envolver familiar/cuidador no processo (Suporte)"]}
         ]
       },
       {
-        "name": "C13.P4 — Risco de complicacoes por imobilismo",
+        "name": "C13.P4 — Risco de complicações por imobilismo",
         "desc": "Moderado. Risco de: trombose, atelectasia, perda de massa muscular, perda de autonomia",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce conforme criterios (Fundamental)",
-          "Bomba muscular de MMII (Frequente)"
-        ],
-        "block": "C13 — Reabilitacao cardiaca fase I",
-        "goals": [
-          "Prevenir complicacoes"
-        ],
+        "assess": ["Prevenir TVP, atelectasia, sarcopenia"],
+        "interv": ["Exercícios de bomba muscular MMII (Contínuo)", "Respiração profunda: 10 rep/hora (Preventivo)", "Mobilização ativa no leito (2-3x/dia)", "Sedestação beira-leito o mais precoce possível"],
+        "block": "🏃 BLOCO C13 — Reabilitação cardíaca fase I",
+        "goals": ["Prevenir TVP, atelectasia, sarcopenia"],
         "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Mobilizacao precoce conforme criterios (Fundamental)",
-              "Bomba muscular de MMII (Frequente)"
-            ]
-          }
+          {"timeframe": "0-24h", "interv": ["Exercícios de bomba muscular MMII (Contínuo)", "Respiração profunda: 10 rep/hora (Preventivo)", "Mobilização ativa no leito: MMSS e MMII (2-3x/dia)"]},
+          {"timeframe": "24-72h", "interv": ["Sedestação beira-leito o mais precoce possível (Prioritário)", "Ortostatismo e marcha progressivos (Escalonamento)"]}
         ]
       },
       {
-        "name": "C13.P5 — Progressao funcional ate a alta",
-        "desc": "Leve. Necessidade de marcha funcional, subir/descer degraus se necessario para casa, entender limites",
-        "assess": [],
-        "interv": [
-          "NIVEL 4 (funcional): treino de escada se indicado para casa, AVDs com deslocamento, simulacao de tarefas reais (Progressao)",
-          "Dosagem: Intensidade Borg 2-4 (leve a moderado), Duracao curtos blocos 3-10 min, Frequencia 1-2x/dia (Parametros)",
-          "PARADA: dor toracica, dispneia desproporcional, tontura, queda/elevacao PA com sintomas, arritmia nova, dessaturacao (Criterios classicos)"
-        ],
-        "block": "C13 — Reabilitacao cardiaca fase I",
-        "goals": [
-          "Alta com mobilidade funcional segura"
-        ],
+        "name": "C13.P5 — Progressão funcional até a alta",
+        "desc": "Leve. Necessidade de marcha funcional, subir/descer degraus se necessário para casa, entender limites",
+        "assess": ["Alta funcional: marcha independente, subir degraus se necessário"],
+        "interv": ["Marcha crescente no corredor (Progressivo)", "Treino de escada se necessário para casa (Funcional)", "Orientação sobre sinais de alerta e limites em casa (Educação)"],
+        "block": "🏃 BLOCO C13 — Reabilitação cardíaca fase I",
+        "goals": ["Alta funcional: marcha independente, subir degraus se necessário"],
         "phases": [
-          {
-            "timeframe": "Ate alta",
-            "interv": [
-              "NIVEL 4 (funcional): treino de escada se indicado para casa, AVDs com deslocamento, simulacao de tarefas reais (Progressao)",
-              "Dosagem: Intensidade Borg 2-4 (leve a moderado), Duracao curtos blocos 3-10 min, Frequencia 1-2x/dia (Parametros)",
-              "PARADA: dor toracica, dispneia desproporcional, tontura, queda/elevacao PA com sintomas, arritmia nova, dessaturacao (Criterios classicos)"
-            ]
-          }
+          {"timeframe": "3-7 dias", "interv": ["Marcha crescente no corredor (Progressivo)", "Treino de escada se necessário para casa (Funcional)", "Orientação sobre sinais de alerta e limites em casa (Educação)", "Encaminhar para reabilitação cardíaca fase II (Pré-alta)"]}
         ]
       }
     ]
@@ -2729,1040 +1782,1544 @@ export const ICU_REFERENCE_SYSTEMS = [
     "name": "Sistema Neurologico",
     "icon": "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z",
     "color": "#c084fc",
-    "problems": [
-      {
-        "name": "N1.1 — Imobilismo neurologico severo",
-        "desc": "Critico. Coma, sedacao profunda, sem mobilidade voluntaria",
-        "assess": [],
-        "interv": [
-          "Mobilizacao passiva 2x/dia (10-15 rep/articulacao)",
-          "Posicionamento terapeutico (Troca a cada 2h)",
-          "Expansao toracica passiva (Sessoes)",
-          "Sedestacao cabeceira 30-90° (Progressivo 10-60 min)",
-          "Prancha ortostatica quando elegivel (1-2x/dia)",
-          "Eletroestimulacao se disponivel (20-30 min/grupo)"
-        ],
-        "block": "N1 — Rebaixamento / Coma / Sedacao",
-        "goals": [
-          "Preservar funcao e prevenir complicacoes"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Mobilizacao passiva 2x/dia (10-15 rep/articulacao)",
-              "Posicionamento terapeutico (Troca a cada 2h)",
-              "Expansao toracica passiva (Sessoes)",
-              "Sedestacao cabeceira 30-90° (Progressivo 10-60 min)",
-              "Prancha ortostatica quando elegivel (1-2x/dia)",
-              "Eletroestimulacao se disponivel (20-30 min/grupo)"
-            ]
-          }
+    "problems":     {
+        "id": "neurological",
+        "name": "Sistema Neurológico",
+        "icon": "M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z",
+        "color": "#c084fc",
+        "problems": [
+            {
+                "name": "N1.1 — Imobilismo neurológico severo",
+                "desc": "Crítico. Coma, sedação profunda, sem mobilidade voluntária",
+                "assess": [
+                    "Prevenir complicações do imobilismo",
+                    "Manter amplitude de movimento e integridade tissular"
+                ],
+                "interv": [
+                    "Mobilização passiva: MMSS e MMII (2-3x/dia)",
+                    "Posicionamento em alinhamento: decúbito lateral, semi-Fowler (A cada 2h)",
+                    "Cabeceira 30-45° (Contínuo)",
+                    "Higiene brônquica: posicionamento, vibração, aspiração PRN"
+                ],
+                "block": "🧩 BLOCO N1 — Rebaixamento, coma e sedação",
+                "goals": [
+                    "Prevenir complicações do imobilismo",
+                    "Manter amplitude de movimento e integridade tissular"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Mobilização passiva: MMSS e MMII (2-3x/dia)",
+                            "Posicionamento em alinhamento: decúbito lateral, semi-Fowler (A cada 2h)",
+                            "Cabeceira 30-45° para prevenir aspiração (Contínuo)",
+                            "Higiene brônquica: posicionamento, vibração, aspiração PRN"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Prevenção de lesão por pressão: mudança de decúbito 2/2h (Rotina)",
+                            "Manter Pcuff adequado (20-30 cmH₂O) se VAA presente (12/12h)",
+                            "Monitorar PIC se indicado: evitar manobras que aumentem PIC (Vigilância)",
+                            "Estimulação sensitiva: falar com o paciente, toques organizados (Neuro)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N1.2 — Baixa responsividade / despertar minimal",
+                "desc": "Grave. Não sustenta tronco, não mantém cabeça",
+                "assess": [
+                    "Progredir estímulos e posicionamento funcional"
+                ],
+                "interv": [
+                    "Sedestação assistida com suporte de cabeça/tronco (Progressivo)",
+                    "Estimulação sensorial estruturada (Neuro)",
+                    "Exercícios ativos assistidos: MMSS e MMII conforme resposta (Sessões)",
+                    "Monitorar resposta a comandos simples (Avaliação)"
+                ],
+                "block": "🧩 BLOCO N1 — Rebaixamento, coma e sedação",
+                "goals": [
+                    "Progredir estímulos e posicionamento funcional"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Sedestação com suporte de cabeça e tronco (Progressivo)",
+                            "Estimulação sensorial estruturada: tato, voz, visual (Neuro)",
+                            "Exercícios ativos assistidos conforme resposta (Sessões)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Progredir controle de cabeça/tronco (Gradual)",
+                            "Tentativas de ortostatismo com suporte quando hemodinâmica permite (Degrau)",
+                            "Avaliar resposta a comandos e nível de consciência (Monitorar)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N1.3 — Início de participação ativa",
+                "desc": "Moderado. Fraqueza grave, fadiga rápida",
+                "assess": [
+                    "Progredir funcionalidade com respeito à fadiga"
+                ],
+                "interv": [
+                    "Exercícios ativos com pausas frequentes (Sessões curtas 5-10 min)",
+                    "Sedestação beira-leito (Degrau 2)",
+                    "Ortostatismo com suporte (Degrau 3)",
+                    "Treino de AVDs básicas: higiene, alimentação (Funcional)"
+                ],
+                "block": "🧩 BLOCO N1 — Rebaixamento, coma e sedação",
+                "goals": [
+                    "Progredir funcionalidade com respeito à fadiga"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Exercícios ativos com pausas frequentes: sessões de 5-10 min (Curtas)",
+                            "Sedestação beira-leito (Degrau 2)",
+                            "Ortostatismo com suporte quando tolera sedestação (Degrau 3)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Progressão gradual de tempo e intensidade (Gradual)",
+                            "Treino de AVDs básicas: higiene, alimentação (Funcional)",
+                            "Marcha assistida progressiva (Degrau 4)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N2.1 — Hemiparesia / perda controle postural",
+                "desc": "Grave. Fraqueza unilateral, assimetria, alto risco queda",
+                "assess": [
+                    "Melhorar controle postural",
+                    "Reduzir assimetria",
+                    "Prevenir quedas"
+                ],
+                "interv": [
+                    "Mobilização ativa-assistida do lado parético (Sessões)",
+                    "Treino de controle postural sentado: transferência de peso (Funcional)",
+                    "Estimulação sensório-motora do hemicorpo parético (Neuro)",
+                    "Uso de suportes/órteses conforme necessidade (Compensatório)"
+                ],
+                "block": "🧩 BLOCO N2 — AVC (isquêmico/hemorrágico)",
+                "goals": [
+                    "Melhorar controle postural",
+                    "Reduzir assimetria",
+                    "Prevenir quedas"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Mobilização ativa-assistida do lado parético (Sessões)",
+                            "Treino de controle postural sentado: transferência de peso (Funcional)",
+                            "Estimulação sensório-motora do hemicorpo parético (Neuro)",
+                            "Prevenção de lesões: posicionamento correto do lado parético (Contínuo)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Treino de equilíbrio dinâmico sentado/em pé (Progressivo)",
+                            "Uso de espelho e biofeedback (Neuro)",
+                            "Órteses/suportes conforme avaliação (Compensatório)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N2.2 — Incapacidade de transferências",
+                "desc": "Grave. Não rola, não senta, não levanta",
+                "assess": [
+                    "Independência progressiva nas transferências"
+                ],
+                "interv": [
+                    "Treino de rolar para ambos os lados (Funcional)",
+                    "Treino de sentar: apoio no cotovelo, lateral (Funcional)",
+                    "Transferências assistidas: leito → cadeira (Progressivo)",
+                    "Treino de levantamento com suporte (Funcional)"
+                ],
+                "block": "🧩 BLOCO N2 — AVC (isquêmico/hemorrágico)",
+                "goals": [
+                    "Independência progressiva nas transferências"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Treino de rolar para ambos os lados com assistência (Funcional)",
+                            "Treino de sentar com apoio no cotovelo (Funcional)",
+                            "Transferência assistida leito → cadeira (Progressivo)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Reduzir grau de assistência progressivamente (Independência)",
+                            "Treino de levantamento com suporte (Funcional)",
+                            "Transferência cadeira → vaso sanitário/poltrona (Funcional)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N2.3 — Intolerância ao ortostatismo",
+                "desc": "Moderado. Queda PA, tontura, taquicardia, fadiga",
+                "assess": [
+                    "Tolerar ortostatismo sem sintomas"
+                ],
+                "interv": [
+                    "Elevação progressiva de cabeceira: 30° → 45° → 60° → 90° (Gradual)",
+                    "Meias de compressão graduada MMII (Usar)",
+                    "Monitorar PA, FC e sintomas ao verticalizar (Vigilância)",
+                    "Prancheta ortostática se disponível (Protocolo)"
+                ],
+                "block": "🧩 BLOCO N2 — AVC (isquêmico/hemorrágico)",
+                "goals": [
+                    "Tolerar ortostatismo sem sintomas"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Elevação progressiva de cabeceira: 30° → 45° → 60° → 90° (Gradual)",
+                            "Meias de compressão graduada MMII (Usar)",
+                            "Monitorar PA, FC e sintomas ao verticalizar (Vigilância)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Ortostatismo assistido com suporte (Degrau 3)",
+                            "Prancheta ortostática se disponível (Protocolo)",
+                            "PARADA: queda PA > 20 mmHg com sintomas, síncope (Critérios)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N2.4 — Ausência de marcha funcional",
+                "desc": "Moderado. Não sustenta peso, arrasta lado parético",
+                "assess": [
+                    "Marcha funcional assistida",
+                    "Sustentação de peso bilateral"
+                ],
+                "interv": [
+                    "Treino de sustentação de peso no lado parético (Funcional)",
+                    "Treino de marcha em paralelas (Início)",
+                    "Treino de padrão de marcha: fase de balanço e apoio (Neuro)",
+                    "Uso de órtese tornozelo-pé se necessário (Compensatório)"
+                ],
+                "block": "🧩 BLOCO N2 — AVC (isquêmico/hemorrágico)",
+                "goals": [
+                    "Marcha funcional assistida",
+                    "Sustentação de peso bilateral"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Treino de sustentação de peso no lado parético (Funcional)",
+                            "Treino de marcha em paralelas com cueing (Início)",
+                            "Treino de padrão de marcha: fase de balanço e apoio (Neuro)"
+                        ]
+                    },
+                    {
+                        "timeframe": "7-14 dias",
+                        "interv": [
+                            "Marcha com auxiliar de marcha (Progressivo)",
+                            "Treino de marcha em terreno irregular e degraus (Funcional)",
+                            "Uso de órtese tornozelo-pé se necessário (Compensatório)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N2.5 — Ombro doloroso / subluxação",
+                "desc": "Moderado. Dor, flacidez, tração durante mobilização",
+                "assess": [
+                    "Prevenir/tratar subluxação",
+                    "Manter amplitude sem dor"
+                ],
+                "interv": [
+                    "Posicionamento correto do ombro parético (Contínuo)",
+                    "Órtese de ombro ou tipoia funcional (Usar)",
+                    "Mobilização cuidadosa: nunca tracionar pelo braço parético (Sempre)",
+                    "Exercícios pendulares e mobilização passiva gentil (Sessões)"
+                ],
+                "block": "🧩 BLOCO N2 — AVC (isquêmico/hemorrágico)",
+                "goals": [
+                    "Prevenir/tratar subluxação",
+                    "Manter amplitude sem dor"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Posicionamento correto do ombro parético em todas as posições (Contínuo)",
+                            "Orientar equipe e familiar: NUNCA tracionar pelo braço parético (Educação)",
+                            "Órtese de ombro ou tipoia funcional (Usar)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Mobilização passiva gentil do ombro em amplitude livre de dor (Sessões)",
+                            "Exercícios pendulares se tolera (Sessões)",
+                            "Crioterapia se inflamação (PRN)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N2.6 — Componente respiratório no AVC",
+                "desc": "Moderado. Tosse fraca, PCF baixo, risco aspiração",
+                "assess": [
+                    "PCF > 160 L/min",
+                    "Prevenir aspiração e pneumonia"
+                ],
+                "interv": [
+                    "Medir PCF (Inicial)",
+                    "Cabeceira ≥ 30-45° (Contínuo)",
+                    "Higiene brônquica: posicionamento, tosse assistida (Sessões)",
+                    "Treino de tosse voluntária (Sessões)"
+                ],
+                "block": "🧩 BLOCO N2 — AVC (isquêmico/hemorrágico)",
+                "goals": [
+                    "PCF > 160 L/min",
+                    "Prevenir aspiração e pneumonia"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Medir PCF (Inicial)",
+                            "Cabeceira ≥ 30-45° (Contínuo)",
+                            "Higiene oral rigorosa (Rotina)",
+                            "Aspiração orofaríngea PRN (Vigilância)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Higiene brônquica: posicionamento, tosse assistida (Sessões)",
+                            "Treino de tosse voluntária (Sessões)",
+                            "Avaliação de deglutição se não disfagico avaliado (Encaminhar fono)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N3.1 — Rebaixamento / coma / despertar lento no TCE",
+                "desc": "Crítico. GCS baixo, sem comandos, dependência total",
+                "assess": [
+                    "Prevenir complicações do imobilismo",
+                    "Estimular despertar progressivo"
+                ],
+                "interv": [
+                    "Mobilização passiva: MMSS e MMII (2-3x/dia)",
+                    "Posicionamento: evitar hiperextensão de cervical, cabeceira 30° (Contínuo)",
+                    "Higiene brônquica: vibração, posicionamento, aspiração PRN",
+                    "Estimulação sensorial estruturada conforme nível de consciência"
+                ],
+                "block": "🧩 BLOCO N3 — TCE (traumatismo cranioencefálico)",
+                "goals": [
+                    "Prevenir complicações do imobilismo",
+                    "Estimular despertar progressivo"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Mobilização passiva cuidadosa: MMSS e MMII (2-3x/dia)",
+                            "Posicionamento: cabeceira 30°, alinhamento cervical neutro (Contínuo)",
+                            "Higiene brônquica: vibração, posicionamento, aspiração PRN",
+                            "Monitorar PIC: evitar manobras que aumentem PIC (Vigilância)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Estimulação sensorial estruturada: voz, toque, visual (Neuro)",
+                            "Sedestação com suporte quando PIC estável (Progressivo)",
+                            "Prevenção de contraturas: mobilização passiva e posicionamento"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N3.2 — Agitação / hiperatividade / delirium no TCE",
+                "desc": "Grave. Arranca dispositivos, não tolera manuseio",
+                "assess": [
+                    "Controlar agitação",
+                    "Prevenir autolesão e perda de dispositivos"
+                ],
+                "interv": [
+                    "Ambiente calmo: reduzir estímulos (luz, som) (Ambiental)",
+                    "Abordagem calma e gentil, um estímulo de cada vez (Técnica)",
+                    "Coordenar sedação mínima com equipe (Farmacológico)",
+                    "Mobilização em momentos de menor agitação (Oportunidade)"
+                ],
+                "block": "🧩 BLOCO N3 — TCE (traumatismo cranioencefálico)",
+                "goals": [
+                    "Controlar agitação",
+                    "Prevenir autolesão e perda de dispositivos"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Ambiente calmo: reduzir estímulos de luz e som (Ambiental)",
+                            "Abordagem calma e gentil, um estímulo de cada vez (Técnica)",
+                            "Coordenar sedação mínima com equipe médica (Farmacológico)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Mobilização em janelas de menor agitação (Oportunidade)",
+                            "Reorientação repetida: nome, local, data (Neuro)",
+                            "Progressão de atividades conforme melhora da agitação (Gradual)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N3.3 — Perda de controle de tronco/cabeça no TCE",
+                "desc": "Grave. Cabeça cai, tronco colapsa",
+                "assess": [
+                    "Recuperar controle de cabeça e tronco"
+                ],
+                "interv": [
+                    "Treino de controle de cabeça: sedestação com suporte progressivo (Funcional)",
+                    "Exercícios de fortalecimento de musculatura cervical e paravertebral (Sessões)",
+                    "Sedestação com suporte de tronco (Progressivo)"
+                ],
+                "block": "🧩 BLOCO N3 — TCE (traumatismo cranioencefálico)",
+                "goals": [
+                    "Recuperar controle de cabeça e tronco"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Sedestação com suporte de cabeça e tronco (Progressivo)",
+                            "Treino de controle de cabeça: reduzir suporte gradualmente (Funcional)",
+                            "Exercícios de fortalecimento cervical e tronco (Sessões)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Sedestação sem suporte de cabeça (Independência progressiva)",
+                            "Transferência de peso lateral e anterior no sentar (Equilíbrio)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N3.4 — Incapacidade de transferências no TCE",
+                "desc": "Grave. Não rola, não senta, não levanta",
+                "assess": [
+                    "Independência progressiva nas transferências"
+                ],
+                "interv": [
+                    "Treino de rolar e sentar (Funcional)",
+                    "Transferências assistidas leito → cadeira (Progressivo)",
+                    "Treino de ortostatismo com suporte (Progressivo)",
+                    "Reduzir grau de assistência progressivamente"
+                ],
+                "block": "🧩 BLOCO N3 — TCE (traumatismo cranioencefálico)",
+                "goals": [
+                    "Independência progressiva nas transferências"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Treino de rolar para ambos os lados com assistência (Funcional)",
+                            "Treino de sentar beira-leito (Funcional)",
+                            "Transferência assistida leito → cadeira (Progressivo)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Reduzir grau de assistência progressivamente (Independência)",
+                            "Treino de ortostatismo com suporte (Progressivo)",
+                            "Transferências para cadeira de rodas, vaso sanitário (Funcional)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N3.5 — Intolerância ao ortostatismo no TCE",
+                "desc": "Moderado. Queda PA, tontura, palidez",
+                "assess": [
+                    "Tolerar ortostatismo sem sintomas"
+                ],
+                "interv": [
+                    "Elevação progressiva de cabeceira (Gradual)",
+                    "Meias de compressão MMII (Usar)",
+                    "Monitorar PA, FC e sintomas (Vigilância)",
+                    "Prancheta ortostática se disponível"
+                ],
+                "block": "🧩 BLOCO N3 — TCE (traumatismo cranioencefálico)",
+                "goals": [
+                    "Tolerar ortostatismo sem sintomas"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Elevação progressiva de cabeceira: 30° → 60° → 90° (Gradual)",
+                            "Meias de compressão MMII (Usar)",
+                            "Monitorar PA, FC e sintomas ao verticalizar (Vigilância)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Ortostatismo assistido com suporte (Degrau 3)",
+                            "PARADA: queda PA > 20 mmHg com sintomas, palidez intensa (Critérios)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N3.6 — Fraqueza respiratória no TCE",
+                "desc": "Moderado. Tosse fraca, PCF baixo, risco atelectasia",
+                "assess": [
+                    "PCF > 160 L/min",
+                    "Prevenir atelectasia e pneumonia"
+                ],
+                "interv": [
+                    "Medir PCF e PImáx/PEmáx (Inicial)",
+                    "Higiene brônquica: posicionamento, vibração, tosse assistida (Sessões)",
+                    "Exercícios ventilatórios: inspiração profunda (Sessões)",
+                    "Cabeceira 30-45° (Contínuo)"
+                ],
+                "block": "🧩 BLOCO N3 — TCE (traumatismo cranioencefálico)",
+                "goals": [
+                    "PCF > 160 L/min",
+                    "Prevenir atelectasia e pneumonia"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Medir PCF e PImáx/PEmáx (Inicial)",
+                            "Cabeceira 30-45° (Contínuo)",
+                            "Higiene brônquica: posicionamento, vibração (Sessões)",
+                            "Aspiração traqueal PRN (Vigilância)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Exercícios ventilatórios: inspiração profunda, TMI se indicado (Sessões)",
+                            "Tosse assistida com contenção (Sessões)",
+                            "Reavaliar PCF (A cada 48-72h)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N3.7 — Transição para participação ativa no TCE",
+                "desc": "Moderado. Fraqueza global, fadiga rápida",
+                "assess": [
+                    "Progredir funcionalidade com respeito à fadiga"
+                ],
+                "interv": [
+                    "Sessões curtas (10-15 min) com pausas (Tolerância à fadiga)",
+                    "Exercícios ativos progressivos: MMSS, MMII, tronco (Sessões)",
+                    "Marcha assistida progressiva (Degrau 4)",
+                    "Treino de AVDs (Funcional)"
+                ],
+                "block": "🧩 BLOCO N3 — TCE (traumatismo cranioencefálico)",
+                "goals": [
+                    "Progredir funcionalidade com respeito à fadiga"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Sessões curtas (10-15 min) com pausas (Tolerância à fadiga)",
+                            "Exercícios ativos progressivos: MMSS, MMII, tronco (Sessões)",
+                            "Sedestação → ortostatismo → marcha (Escalonamento)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Aumentar progressivamente duração e intensidade (Gradual)",
+                            "Treino de AVDs: higiene, alimentação (Funcional)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N4.1 — Fraqueza respiratória na lesão medular",
+                "desc": "Crítico. Paralisia diafragma/intercostais, tosse ineficaz",
+                "assess": [
+                    "Manter ventilação adequada",
+                    "Tosse eficaz (PCF > 160 L/min ou assistida)"
+                ],
+                "interv": [
+                    "VNI ou VM se insuficiência respiratória (Urgente se necessário)",
+                    "Medir PImáx, PEmáx, PCF, VC, CVF (Inicial e monitorar)",
+                    "Tosse assistida: compressão abdominal sincronizada (Sessões)",
+                    "TMI: carga progressiva se nível medular permite"
+                ],
+                "block": "🧩 BLOCO N4 — TRM (lesão medular)",
+                "goals": [
+                    "Manter ventilação adequada",
+                    "PCF > 160 L/min ou tosse assistida eficaz"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Avaliar nível medular e função respiratória: PImáx, PEmáx, PCF, VC, CVF (Inicial)",
+                            "VNI noturna ou de suporte se hipoventilação (Se indicado)",
+                            "Cabeceira 30-45° (Contínuo)",
+                            "Tosse assistida: compressão abdominal sincronizada (Sessões)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "TMI: carga progressiva se nível medular permite (2x/dia)",
+                            "Higiene brônquica: tosse assistida, vibração, posicionamento (Sessões)",
+                            "Se PCF < 160: tosse mecânica (MI-E) (Obrigatório)",
+                            "Reavaliar PCF e função respiratória (A cada 48-72h)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N4.2 — Disautonomia / intolerância ortostática na lesão medular",
+                "desc": "Grave. Hipotensão ortostática grave, síncope",
+                "assess": [
+                    "Tolerar verticalização sem síncope"
+                ],
+                "interv": [
+                    "Protocolo de verticalização muito gradual (Protocolo estrito)",
+                    "Meias de compressão + cinta abdominal (Usar sempre)",
+                    "Prancheta ortostática se disponível (Protocolo)",
+                    "Monitorar PA e FC ao verticalizar (Vigilância)"
+                ],
+                "block": "🧩 BLOCO N4 — TRM (lesão medular)",
+                "goals": [
+                    "Tolerar verticalização sem síncope"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Meias de compressão + cinta abdominal antes de qualquer verticalização (Usar sempre)",
+                            "Elevação progressiva de cabeceira: 15° → 30° → 45° → 60° → 90° (Muito gradual)",
+                            "Prancheta ortostática se disponível: começar em 30° por 10-15 min (Protocolo)",
+                            "Monitorar PA e FC a cada incremento (Vigilância)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Aumentar grau e tempo de verticalização progressivamente (Gradual)",
+                            "PARADA: queda PAS > 20 mmHg com sintomas, pré-síncope (Critérios rígidos)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N4.3 — Imobilismo, contraturas e espasticidade na lesão medular",
+                "desc": "Grave. Paralisia, espasticidade, encurtamentos",
+                "assess": [
+                    "Prevenir contraturas",
+                    "Manter amplitude de movimento funcional"
+                ],
+                "interv": [
+                    "Mobilização passiva completa de todos os segmentos (2-3x/dia)",
+                    "Posicionamento funcional: evitar posturas viciosas (A cada 2-4h)",
+                    "Órteses noturnas para prevenção de equino e outras contraturas (Noturno)",
+                    "Técnicas de inibição da espasticidade: relaxamento progressivo, posicionamento"
+                ],
+                "block": "🧩 BLOCO N4 — TRM (lesão medular)",
+                "goals": [
+                    "Prevenir contraturas",
+                    "Manter amplitude de movimento funcional"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Mobilização passiva completa de todos os segmentos (2-3x/dia)",
+                            "Posicionamento funcional: evitar posturas viciosas (A cada 2-4h)",
+                            "Órteses noturnas para prevenção de equino e outras contraturas (Noturno)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Técnicas de inibição da espasticidade: posicionamento, relaxamento progressivo (Sessões)",
+                            "Alongamentos passivos sustentados (Sessões)",
+                            "Mudança de decúbito 2/2h para prevenir lesão por pressão (Rotina)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N4.4 — Incapacidade de transferências na lesão medular",
+                "desc": "Grave. Dependência total, não controla tronco",
+                "assess": [
+                    "Máxima independência funcional possível nas transferências"
+                ],
+                "interv": [
+                    "Treino de rolar com equipamento adaptado (Funcional)",
+                    "Transferências assistidas: leito → cadeira de rodas (Progressivo)",
+                    "Treino de equilíbrio sentado com suporte (Funcional)",
+                    "Adaptações e equipamentos de auxílio (Compensatório)"
+                ],
+                "block": "🧩 BLOCO N4 — TRM (lesão medular)",
+                "goals": [
+                    "Máxima independência funcional possível nas transferências"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Treino de rolar com equipamento adaptado conforme nível (Funcional)",
+                            "Transferências assistidas: leito → cadeira de rodas (Progressivo)",
+                            "Treino de equilíbrio sentado com suporte (Funcional)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Progressão para transferências com menor assistência (Independência)",
+                            "Adaptações e equipamentos de auxílio conforme avaliação (Compensatório)",
+                            "Treino de propulsão de cadeira de rodas se motorização permite (Funcional)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N4.5 — Prevenção de complicações secundárias na lesão medular",
+                "desc": "Moderado. TVP, atelectasia, úlcera por pressão, osteopenia",
+                "assess": [
+                    "Prevenir TVP, atelectasia, úlcera por pressão, osteopenia"
+                ],
+                "interv": [
+                    "Mudança de decúbito: 2/2h (Rotina rigorosa)",
+                    "Exercícios de bomba muscular MMII: mobilização passiva (Contínuo)",
+                    "Higiene brônquica preventiva (Sessões)",
+                    "Carga axial progressiva quando ortopedia permite (Osso)"
+                ],
+                "block": "🧩 BLOCO N4 — TRM (lesão medular)",
+                "goals": [
+                    "Prevenir TVP, atelectasia, úlcera por pressão, osteopenia"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Mudança de decúbito 2/2h com alívio de pressão em proeminências (Rotina rigorosa)",
+                            "Mobilização passiva MMII: prevenção TVP e osteopenia (Contínuo)",
+                            "Cabeceira 30-45°: prevenção de atelectasia (Contínuo)",
+                            "Inspeção diária de pele (Rotina)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Higiene brônquica preventiva (Sessões)",
+                            "Verticalização progressiva: carga axial para osso (Gradual)",
+                            "Meias de compressão + profilaxia TVP com equipe (Contínuo)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N4.6 — Transição para funcionalidade (lesão incompleta)",
+                "desc": "Moderado. Fraqueza residual, baixa resistência",
+                "assess": [
+                    "Maximizar função residual",
+                    "Independência progressiva"
+                ],
+                "interv": [
+                    "Exercícios ativos de grupos musculares preservados (Sessões)",
+                    "Treino de marcha com auxílio conforme preservação motora (Progressivo)",
+                    "TMI se fraqueza respiratória residual (2x/dia)",
+                    "Treino de AVDs com adaptações se necessário"
+                ],
+                "block": "🧩 BLOCO N4 — TRM (lesão medular)",
+                "goals": [
+                    "Maximizar função residual",
+                    "Independência progressiva"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Exercícios ativos de grupos musculares preservados (Sessões)",
+                            "Treino de transferências e equilíbrio (Funcional)",
+                            "Ortostatismo com suporte conforme tolerância (Progressivo)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Treino de marcha com auxiliar conforme preservação motora (Progressivo)",
+                            "TMI se fraqueza respiratória residual (2x/dia)",
+                            "Treino de AVDs com adaptações (Funcional)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N5.1 — Fraqueza respiratória progressiva (doenças neuromusculares)",
+                "desc": "Crítico. Queda progressiva PImáx, PEmáx, PCF",
+                "assess": [
+                    "Monitorar e manter função respiratória",
+                    "Indicação oportuna de VNI/VM"
+                ],
+                "interv": [
+                    "Medir PImáx, PEmáx, PCF, CVF em posição sentada e supina (Monitorar seriado)",
+                    "TMI: carga 30-50% PImáx se CVF > 50% previsto (Cautela: pode fatiga)",
+                    "VNI noturna quando CVF < 50% previsto ou sintomas de hipoventilação",
+                    "Orientar sobre sinais de alarme: acordar com cefaleia, sonolência, dispneia"
+                ],
+                "block": "🧩 BLOCO N5 — Doenças neuromusculares",
+                "goals": [
+                    "Monitorar e manter função respiratória",
+                    "Indicação oportuna de VNI/VM"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Monitoramento",
+                        "interv": [
+                            "Medir PImáx, PEmáx, PCF, CVF sentado e supino (Seriado)",
+                            "VNI noturna quando CVF < 50% previsto ou PaCO₂ > 45 (Indicação)",
+                            "TMI com carga leve se CVF > 50% previsto e sem fadiga (Cautela)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Reavaliar função respiratória (A cada 2-4 semanas ou ao piora)",
+                            "Orientar sobre sinais de alarme (Educação)",
+                            "Planejar transição para VM quando indicado (Multidisciplinar)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N5.2 — Tosse ineficaz / incapacidade de limpar via aérea",
+                "desc": "Crítico. PCF < 160 L/min, acúmulo secreção",
+                "assess": [
+                    "PCF > 160 L/min ou tosse mecânica assistida eficaz"
+                ],
+                "interv": [
+                    "Medir PCF (Baseline e seriado)",
+                    "Tosse assistida manual: compressão abdominal sincronizada (Sessões)",
+                    "Se PCF < 160: MI-E (tosse mecânica) 2-3x/dia (Obrigatório)",
+                    "Higiene brônquica complementar: posicionamento, vibração"
+                ],
+                "block": "🧩 BLOCO N5 — Doenças neuromusculares",
+                "goals": [
+                    "PCF > 160 L/min ou tosse mecânica eficaz"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Sessão/24h",
+                        "interv": [
+                            "Medir PCF (Baseline e a cada avaliação)",
+                            "Tosse assistida manual: compressão abdominal sincronizada (Sessões)",
+                            "Se PCF < 160: MI-E (Insuflador-Exsuflador Mecânico) 2-3x/dia (Obrigatório)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Higiene brônquica: posicionamento, vibração, aspiração se necessário (PRN)",
+                            "Reavaliar PCF periodicamente (Seriado)",
+                            "Orientar familiar/cuidador sobre técnica de tosse assistida (Educação)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N5.3 — Fadiga muscular global (doenças neuromusculares)",
+                "desc": "Grave. Fadiga rápida, piora ao longo do dia",
+                "assess": [
+                    "Otimizar energia para atividades funcionais prioritárias"
+                ],
+                "interv": [
+                    "Sessões curtas (10-15 min) com pausas prolongadas (Respeitar fadiga)",
+                    "Programar atividades no período de melhor energia (manhã) (Timing)",
+                    "Princípio da conservação de energia: atividades essenciais primeiro (Prioridade)",
+                    "Evitar exercícios resistidos pesados (Pode agravar fraqueza em DNM)"
+                ],
+                "block": "🧩 BLOCO N5 — Doenças neuromusculares",
+                "goals": [
+                    "Otimizar energia para atividades funcionais prioritárias"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Sessões",
+                        "interv": [
+                            "Sessões curtas (10-15 min) com pausas prolongadas (Respeitar fadiga)",
+                            "Programar atividades no período de melhor energia (manhã) (Timing)",
+                            "Evitar exercícios resistidos pesados em doenças progressivas (Cautela)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Princípio da conservação de energia: priorizar AVDs essenciais (Prioridade)",
+                            "Adaptações e equipamentos de economia de energia (Compensatório)",
+                            "Monitorar padrão de fadiga e ajustar atividades (Ajuste)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N5.4 — Perda de mobilidade e função (doenças neuromusculares)",
+                "desc": "Grave. Fraqueza proximal/distal, incapacidade funcional",
+                "assess": [
+                    "Manter máxima funcionalidade possível",
+                    "Prevenir complicações do imobilismo"
+                ],
+                "interv": [
+                    "Exercícios ativos de baixa intensidade dos grupos preservados (Sessões)",
+                    "Mobilização passiva de segmentos sem força ativa (Sessões)",
+                    "Adaptações e equipamentos de auxílio (Compensatório)",
+                    "Prevenção de contraturas: alongamentos e posicionamento"
+                ],
+                "block": "🧩 BLOCO N5 — Doenças neuromusculares",
+                "goals": [
+                    "Manter máxima funcionalidade possível",
+                    "Prevenir complicações do imobilismo"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Sessões",
+                        "interv": [
+                            "Exercícios ativos de baixa intensidade dos grupos preservados (Sessões)",
+                            "Mobilização passiva de segmentos sem força ativa (Sessões)",
+                            "Adaptações e equipamentos de auxílio: órteses, andador, cadeira (Compensatório)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Prevenção de contraturas: alongamentos e posicionamento (Diário)",
+                            "Treino de AVDs com adaptações (Funcional)",
+                            "Mudança de decúbito: prevenção de lesão por pressão (2/2h)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N5.5 — Necessidade de VM ou VNI em doença neuromuscular",
+                "desc": "Crítico. Hipoventilação, hipercapnia, trabalho respiratório aumentado",
+                "assess": [
+                    "Ventilação adequada",
+                    "Conforto e qualidade de vida"
+                ],
+                "interv": [
+                    "VNI: iniciar com IPAP 8-10, EPAP 4-5, ajustar por conforto e gasometria (Início)",
+                    "Higiene brônquica intensiva: tosse assistida, MI-E (Antes e depois de VNI)",
+                    "Desmame criterioso respeitando a doença de base (Cauteloso)",
+                    "Discutir objetivos de cuidado com paciente e família (Multidisciplinar)"
+                ],
+                "block": "🧩 BLOCO N5 — Doenças neuromusculares",
+                "goals": [
+                    "Ventilação adequada",
+                    "Conforto e qualidade de vida"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "VNI: iniciar com baixa pressão, ajustar por conforto e gasometria (Início)",
+                            "Higiene brônquica intensiva: tosse assistida, MI-E (Antes e depois de VNI)",
+                            "Posicionamento: semi-Fowler para melhor mecânica (Contínuo)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Desmame criterioso respeitando a doença de base (Cauteloso)",
+                            "Discutir objetivos de cuidado com paciente e família (Multidisciplinar)",
+                            "Suporte ventilatório domiciliar se indicado (Planejar alta)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N6.1 — Delirium hipoativo",
+                "desc": "Grave. Quieto, sonolento, pouco responsivo, imóvel",
+                "assess": [
+                    "Mobilização precoce",
+                    "Estimulação cognitiva e sensorial"
+                ],
+                "interv": [
+                    "Mobilização precoce: sentar beira-leito, ortostatismo progressivo (Protocolo A-F Bundle)",
+                    "Estimulação cognitiva: reorientação (nome, local, data/hora) (Frequente)",
+                    "Reduzir sedação com equipe (Despertar diário)",
+                    "Ciclo sono-vigília: luz natural, reduzir ruído noturno (Ambiental)"
+                ],
+                "block": "🧩 BLOCO N6 — Delirium e agitação",
+                "goals": [
+                    "Mobilização precoce",
+                    "Estimulação cognitiva e sensorial"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Reorientação frequente: nome, local, data/hora (Cada contato)",
+                            "Estimulação sensorial: falar com o paciente, toques organizados",
+                            "Ciclo sono-vigília: luz natural dia, reduzir ruído e luz noite (Ambiental)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Mobilização precoce: sentar beira-leito, ortostatismo (Protocolo A-F Bundle)",
+                            "Reduzir sedação com equipe (Despertar diário)",
+                            "Estimulação cognitiva: conversar, atividades simples (Frequente)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N6.2 — Delirium hiperativo",
+                "desc": "Crítico. Agitado, arrancando dispositivos",
+                "assess": [
+                    "Controlar agitação",
+                    "Prevenir autolesão"
+                ],
+                "interv": [
+                    "Ambiente calmo: reduzir estímulos (luz, som, pessoas) (Ambiental)",
+                    "Abordagem calma, voz baixa, um estímulo de cada vez (Técnica)",
+                    "Coordenar sedação mínima eficaz com equipe (Farmacológico)",
+                    "Mobilização em janelas de menor agitação (Oportunidade)"
+                ],
+                "block": "🧩 BLOCO N6 — Delirium e agitação",
+                "goals": [
+                    "Controlar agitação",
+                    "Prevenir autolesão"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Ambiente calmo: reduzir estímulos de luz, som e pessoas (Ambiental)",
+                            "Abordagem calma, voz baixa, um estímulo de cada vez (Técnica)",
+                            "Coordenar sedação mínima eficaz com equipe médica (Farmacológico)",
+                            "Reorientação gentil e repetida (Neuro)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Mobilização em janelas de menor agitação (Oportunidade)",
+                            "Progressão de atividades conforme melhora (Gradual)",
+                            "Protocolo A-F Bundle adaptado: despertar, respiração, sedação, delirium, mobilização (Bundle)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N6.3 — Delirium + imobilidade prolongada",
+                "desc": "Grave. Dias/semanas no leito, extremamente fraco",
+                "assess": [
+                    "Mobilização progressiva",
+                    "Recuperar força e funcionalidade"
+                ],
+                "interv": [
+                    "Protocolo de mobilização precoce: sentar → ortostatismo → marcha (Progressivo)",
+                    "Exercícios ativos de fortalecimento global (Sessões)",
+                    "Fisioterapia 2x/dia (Intensivo)",
+                    "Reorientação durante todos os contatos (Neuro)"
+                ],
+                "block": "🧩 BLOCO N6 — Delirium e agitação",
+                "goals": [
+                    "Mobilização progressiva",
+                    "Recuperar força e funcionalidade"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Sedestação beira-leito (Degrau 2)",
+                            "Exercícios ativos assistidos: MMSS, MMII, tronco (Sessões)",
+                            "Reorientação durante todos os contatos (Neuro)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Ortostatismo com suporte (Degrau 3)",
+                            "Marcha progressiva (Degrau 4)",
+                            "Fisioterapia 2x/dia quando tolera (Intensivo)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N6.4 — Delirium + fraqueza respiratória",
+                "desc": "Grave. Padrão rápido/superficial, tosse ineficaz",
+                "assess": [
+                    "PCF > 160 L/min",
+                    "Prevenir complicações respiratórias"
+                ],
+                "interv": [
+                    "Medir PCF (Inicial)",
+                    "Higiene brônquica: posicionamento, vibração, aspiração PRN (Sessões)",
+                    "Exercícios respiratórios: inspiração profunda quando coopera (Sessões)",
+                    "Cabeceira 30-45° (Contínuo)"
+                ],
+                "block": "🧩 BLOCO N6 — Delirium e agitação",
+                "goals": [
+                    "PCF > 160 L/min",
+                    "Prevenir complicações respiratórias"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Medir PCF quando coopera (Inicial)",
+                            "Cabeceira 30-45° (Contínuo)",
+                            "Higiene brônquica: posicionamento, vibração, aspiração PRN (Sessões)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Exercícios respiratórios quando coopera: inspiração profunda (Sessões)",
+                            "Tosse assistida quando agitação controlada (Sessões)",
+                            "Reavaliar PCF conforme melhora do nível de consciência"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N7.1 — Rebaixamento pós-crise / pós-sedativos",
+                "desc": "Grave. Sonolência, confusão, não segue comandos",
+                "assess": [
+                    "Recuperação progressiva do nível de consciência"
+                ],
+                "interv": [
+                    "Reorientação frequente: nome, local, data (Cada contato)",
+                    "Estimulação sensorial organizada: voz, toque, visual (Neuro)",
+                    "Mobilização passiva enquanto não coopera (Sessões)",
+                    "Cabeceira 30-45° e posicionamento adequado"
+                ],
+                "block": "🧩 BLOCO N7 — Pós-crise convulsiva e status epiléptico",
+                "goals": [
+                    "Recuperação progressiva do nível de consciência"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Reorientação frequente: nome, local, data (Cada contato)",
+                            "Estimulação sensorial organizada: voz, toque, visual (Neuro)",
+                            "Mobilização passiva: MMSS e MMII (Sessões)",
+                            "Cabeceira 30-45° e posicionamento adequado (Contínuo)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Progredir para exercícios ativos conforme melhora do nível de consciência",
+                            "Sedestação quando coopera e tolera (Progressivo)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N7.2 — Risco de aspiração / secreção retida pós-crise",
+                "desc": "Grave. Tosse ineficaz pós-ictal, disfagia",
+                "assess": [
+                    "Prevenir aspiração e pneumonia",
+                    "Limpar via aérea"
+                ],
+                "interv": [
+                    "Cabeceira ≥ 30-45° (Contínuo)",
+                    "Higiene brônquica: posicionamento, tosse assistida (Sessões)",
+                    "Avaliação de deglutição antes de iniciar dieta oral (Encaminhar fono)",
+                    "Aspiração orofaríngea PRN (Vigilância)"
+                ],
+                "block": "🧩 BLOCO N7 — Pós-crise convulsiva e status epiléptico",
+                "goals": [
+                    "Prevenir aspiração e pneumonia",
+                    "Limpar via aérea"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Cabeceira ≥ 30-45° (Contínuo)",
+                            "Higiene oral rigorosa (Rotina)",
+                            "Aspiração orofaríngea PRN (Vigilância)",
+                            "Higiene brônquica: posicionamento, vibração (Sessões)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-48h",
+                        "interv": [
+                            "Tosse assistida quando coopera (Sessões)",
+                            "Avaliação de deglutição antes de iniciar dieta oral (Encaminhar fono)",
+                            "Reavaliar PCF (Avaliação)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N7.3 — Instabilidade autonômica / fadiga pós-crise",
+                "desc": "Moderado. Taquicardia, PA lábil, fadiga intensa",
+                "assess": [
+                    "Estabilizar autonômica",
+                    "Repouso ativo"
+                ],
+                "interv": [
+                    "Repouso relativo nas primeiras horas pós-crise (Imediato)",
+                    "Monitorar PA, FC e SpO₂ (Contínuo)",
+                    "Exercícios muito leves quando hemodinâmica estável (Sessões)",
+                    "Progressão cuidadosa: fadiga pode ser prolongada"
+                ],
+                "block": "🧩 BLOCO N7 — Pós-crise convulsiva e status epiléptico",
+                "goals": [
+                    "Estabilizar função autonômica",
+                    "Progressão cuidadosa"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-12h",
+                        "interv": [
+                            "Repouso relativo nas primeiras horas pós-crise (Imediato)",
+                            "Monitorar PA, FC e SpO₂ (Contínuo)",
+                            "O₂ se SpO₂ < 94% (Titular)"
+                        ]
+                    },
+                    {
+                        "timeframe": "12-72h",
+                        "interv": [
+                            "Exercícios muito leves quando hemodinâmica estável (Sessões)",
+                            "Progressão cuidadosa respeitando fadiga (Gradual)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N7.4 — Fraqueza global / descondicionamento pós-status",
+                "desc": "Grave. Não consegue sentar, levantar, transferir",
+                "assess": [
+                    "Recuperar funcionalidade progressivamente"
+                ],
+                "interv": [
+                    "Exercícios ativos progressivos: MMSS, MMII, tronco (Sessões)",
+                    "Sedestação beira-leito (Degrau 2)",
+                    "Ortostatismo com suporte (Degrau 3)",
+                    "Marcha assistida progressiva (Degrau 4)"
+                ],
+                "block": "🧩 BLOCO N7 — Pós-crise convulsiva e status epiléptico",
+                "goals": [
+                    "Recuperar funcionalidade progressivamente"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Exercícios ativos progressivos: MMSS, MMII, tronco (Sessões)",
+                            "Sedestação beira-leito (Degrau 2)",
+                            "Monitorar PA e FC ao mobilizar (Vigilância)"
+                        ]
+                    },
+                    {
+                        "timeframe": "3-7 dias",
+                        "interv": [
+                            "Ortostatismo com suporte (Degrau 3)",
+                            "Marcha assistida progressiva (Degrau 4)",
+                            "Treino de AVDs (Funcional)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N7.5 — Paciente em VM após status epiléptico",
+                "desc": "Crítico. Fraqueza respiratória, tosse ineficaz, assincronia",
+                "assess": [
+                    "Desmame seguro da VM",
+                    "PCF > 160 L/min pós-extubação"
+                ],
+                "interv": [
+                    "Protocolo de desmame de VM (Ver R5-A)",
+                    "Medir PImáx, PEmáx, PCF quando coopera (Inicial)",
+                    "TMI se fraqueza muscular respiratória (2x/dia quando estável)",
+                    "Tosse assistida pós-extubação se PCF baixo"
+                ],
+                "block": "🧩 BLOCO N7 — Pós-crise convulsiva e status epiléptico",
+                "goals": [
+                    "Desmame seguro da VM",
+                    "PCF > 160 L/min pós-extubação"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-24h",
+                        "interv": [
+                            "Protocolo de desmame de VM conforme critérios (Ver R5-A)",
+                            "Higiene brônquica: posicionamento, vibração, aspiração PRN",
+                            "Mobilização passiva/ativo-assistida enquanto sedado (Sessões)"
+                        ]
+                    },
+                    {
+                        "timeframe": "24-72h",
+                        "interv": [
+                            "Medir PImáx, PEmáx, PCF quando coopera (Inicial)",
+                            "TMI se fraqueza muscular respiratória (2x/dia quando estável)",
+                            "TRE diários quando critérios atingidos (Protocolo)",
+                            "Tosse assistida pós-extubação se PCF baixo (Sessões)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N7.6 — Risco de recorrência de crise durante terapia",
+                "desc": "Moderado. História recente de crise/status",
+                "assess": [
+                    "Realizar terapia com segurança",
+                    "Reconhecer sinais de crise"
+                ],
+                "interv": [
+                    "Verificar anticonvulsivante e nível sérico com equipe antes de iniciar (Pré-condição)",
+                    "Monitorar durante toda a sessão (Vigilância)",
+                    "Identificar e remover fatores gatilho: hipóxia, hiperventilação, estresse (Prevenir)",
+                    "Se crise: proteger paciente, chamar equipe, O₂ (Protocolo)"
+                ],
+                "block": "🧩 BLOCO N7 — Pós-crise convulsiva e status epiléptico",
+                "goals": [
+                    "Realizar terapia com segurança",
+                    "Reconhecer sinais de crise"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Pré-sessão",
+                        "interv": [
+                            "Verificar anticonvulsivante e nível sérico com equipe (Pré-condição)",
+                            "Identificar fatores gatilho: hipóxia, hiperventilação, estresse (Prevenir)",
+                            "Ter O₂ e resgate disponível (Preparo)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Durante sessão",
+                        "interv": [
+                            "Monitorar SpO₂, FC e estado de consciência (Vigilância)",
+                            "Evitar hiperventilação durante exercícios (Cautela)",
+                            "Se crise: proteger paciente, chamar equipe, O₂, posição lateral (Protocolo)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N8.1 — Risco de lesão pulmonar (VILI) em morte encefálica",
+                "desc": "Crítico. Pulmão normal pode tornar-se lesionado por VM inadequada",
+                "assess": [
+                    "Preservar pulmão para captação",
+                    "VM protetora rigorosa"
+                ],
+                "interv": [
+                    "VM protetora: Vt 6 mL/kg PBW, Pplatô ≤ 30, PEEP 8-10 cmH₂O (Protocolo doador)",
+                    "Medir mecânica pulmonar a cada 4-6h (Obrigatório)",
+                    "FiO₂ mínima que mantém SpO₂ > 95% (Reduzir hiperoxia)",
+                    "Suspiros: 2-3 por hora se protocolo permitir"
+                ],
+                "block": "🔒 BLOCO N8 — Morte encefálica (doador potencial)",
+                "goals": [
+                    "Preservar pulmão para captação",
+                    "VM protetora rigorosa"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "0-2h",
+                        "interv": [
+                            "VM protetora: Vt 6 mL/kg PBW, Pplatô ≤ 30, PEEP 8-10 cmH₂O (Protocolo doador)",
+                            "Medir mecânica pulmonar: Pplatô, ΔP, Cest (A cada 4-6h)",
+                            "FiO₂ mínima que mantém SpO₂ > 95% (Reduzir hiperoxia)"
+                        ]
+                    },
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Manter parâmetros protetores rigorosamente (Vigilância)",
+                            "Ajustar PEEP por melhor Cest e oxigenação (Titulação)",
+                            "Documentar mecânica e gasometria (Prontuário)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N8.2 — Atelectasia por imobilidade em morte encefálica",
+                "desc": "Grave. Perda de suspiros, colapso gravitacional",
+                "assess": [
+                    "Manter expansão pulmonar bilateral"
+                ],
+                "interv": [
+                    "Mudança de decúbito: lateral esquerdo/direito/supino (A cada 2-4h)",
+                    "MRA se indicado pelo protocolo de captação (Protocolo)",
+                    "PEEP adequada para manter abertura alveolar (8-10 cmH₂O)",
+                    "Auscultar bilateralmente após mudança de decúbito (Verificar)"
+                ],
+                "block": "🔒 BLOCO N8 — Morte encefálica (doador potencial)",
+                "goals": [
+                    "Manter expansão pulmonar bilateral"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Mudança de decúbito: lateral esquerdo/direito/supino (A cada 2-4h)",
+                            "PEEP adequada para manter abertura alveolar (8-10 cmH₂O) (Titulação)",
+                            "MRA se indicado pelo protocolo de captação (Protocolo)",
+                            "Auscultar bilateralmente após mudança de decúbito (Verificar)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N8.3 — Secreção brônquica em morte encefálica",
+                "desc": "Grave. Tosse inexistente, drenagem abolida",
+                "assess": [
+                    "Manter via aérea limpa"
+                ],
+                "interv": [
+                    "Aspiração traqueal: técnica asséptica, sistema fechado (Sob demanda: ↑ Ppico, ↑ secreção)",
+                    "Umidificação adequada: HME ou umidificador aquecido (Contínuo)",
+                    "Higiene brônquica: posicionamento e vibração (A cada 4h)",
+                    "Instilação SF 0.9% se secreção espessa (PRN)"
+                ],
+                "block": "🔒 BLOCO N8 — Morte encefálica (doador potencial)",
+                "goals": [
+                    "Manter via aérea limpa"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Aspiração traqueal: técnica asséptica, sistema fechado (Sob demanda)",
+                            "Umidificação adequada: HME ou umidificador aquecido (Contínuo)",
+                            "Higiene brônquica: posicionamento e vibração (A cada 4h)",
+                            "Instilação SF 0.9% se secreção espessa (PRN)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N8.4 — Instabilidade hemodinâmica induzida pela VM",
+                "desc": "Crítico. PEEP alta → queda de retorno venoso, manobras → colapso",
+                "assess": [
+                    "Manter PAM ≥ 65 mmHg durante ajustes ventilatórios"
+                ],
+                "interv": [
+                    "Menor PEEP que mantém oxigenação e expansão (Equilíbrio)",
+                    "Ajustar PEEP em degraus de 2 cmH₂O com avaliação hemodinâmica (Gradual)",
+                    "Coordenar reposição e vasopressor com equipe antes de aumentar PEEP (Preparo)",
+                    "Se PA cai: reduzir PEEP imediatamente (Imediato)"
+                ],
+                "block": "🔒 BLOCO N8 — Morte encefálica (doador potencial)",
+                "goals": [
+                    "Manter PAM ≥ 65 mmHg durante ajustes ventilatórios"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Imediato",
+                        "interv": [
+                            "Menor PEEP que mantém oxigenação e expansão (Equilíbrio)",
+                            "Ajustar PEEP em degraus de 2 cmH₂O com avaliação hemodinâmica entre degraus (Gradual)",
+                            "Coordenar volume/vasopressor com equipe antes de ajustar PEEP (Preparo)",
+                            "Se PA cai: reduzir PEEP imediatamente (Imediato)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N8.5 — Hipotermia e alterações metabólicas em morte encefálica",
+                "desc": "Grave. Perda do controle térmico, hipotermia → piora da oxigenação",
+                "assess": [
+                    "Manter temperatura alvo (35-37°C)",
+                    "Otimizar oxigenação"
+                ],
+                "interv": [
+                    "Monitorar temperatura corporal central (Contínuo)",
+                    "Coordenar aquecimento ativo com equipe (Cobertores, soluções aquecidas) (Equipe)",
+                    "Ajustar FiO₂ conforme temperatura e gasometria (Ajuste)",
+                    "Gasometria seriada para guiar parâmetros (A cada 4-6h)"
+                ],
+                "block": "🔒 BLOCO N8 — Morte encefálica (doador potencial)",
+                "goals": [
+                    "Manter temperatura alvo (35-37°C)",
+                    "Otimizar oxigenação"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Contínuo",
+                        "interv": [
+                            "Monitorar temperatura corporal central (Contínuo)",
+                            "Coordenar aquecimento ativo com equipe (Equipe)",
+                            "Ajustar FiO₂ conforme temperatura e gasometria (Ajuste)",
+                            "Gasometria seriada para guiar parâmetros (A cada 4-6h)"
+                        ]
+                    }
+                ]
+            },
+            {
+                "name": "N8.6 — Preparação do pulmão para captação",
+                "desc": "Crítico. Pulmão precisa estar expandido, limpo e estável para captação",
+                "assess": [
+                    "Pulmão expandido, PaO₂/FiO₂ ≥ 300 (critério captação)",
+                    "Via aérea limpa, sem atelectasia"
+                ],
+                "interv": [
+                    "Teste de apneia respiratório com FiO₂ 100% e PEEP 5-10 cmH₂O conforme protocolo (Pré-captação)",
+                    "MRA se atelectasia presente (Protocolo de captação)",
+                    "Higiene brônquica completa antes de captação (Preparo)",
+                    "Documentar gasometria e mecânica para equipe de captação (Prontuário)"
+                ],
+                "block": "🔒 BLOCO N8 — Morte encefálica (doador potencial)",
+                "goals": [
+                    "Pulmão expandido, PaO₂/FiO₂ ≥ 300 (critério captação)",
+                    "Via aérea limpa"
+                ],
+                "phases": [
+                    {
+                        "timeframe": "Pré-captação",
+                        "interv": [
+                            "MRA se atelectasia presente (Protocolo de captação)",
+                            "Higiene brônquica completa: aspiração, posicionamento (Preparo)",
+                            "Teste de apneia respiratório conforme protocolo (Pré-captação)",
+                            "Documentar gasometria e mecânica para equipe de captação (Prontuário)",
+                            "Manter VM protetora até momento da captação (Contínuo)"
+                        ]
+                    }
+                ]
+            }
         ]
-      },
-      {
-        "name": "N1.2 — Baixa responsividade / Despertar minimal",
-        "desc": "Grave. Nao sustenta tronco, nao mantem cabeca",
-        "assess": [],
-        "interv": [
-          "Sedestacao a beira do leito (5-10 min → 20-40 min)",
-          "Treino de controle de tronco (Deslocamento peso, alcance)",
-          "Transferencias terapeuticas (Diaria leito↔poltrona)"
-        ],
-        "block": "N1 — Rebaixamento / Coma / Sedacao",
-        "goals": [
-          "Iniciar controle postural"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Sedestacao a beira do leito (5-10 min → 20-40 min)",
-              "Treino de controle de tronco (Deslocamento peso, alcance)",
-              "Transferencias terapeuticas (Diaria leito↔poltrona)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N1.3 — Inicio de participacao ativa",
-        "desc": "Moderado. Fraqueza grave, fadiga rapida",
-        "assess": [],
-        "interv": [
-          "Ortostatismo assistido (30-60s → 5-10 min)",
-          "Transferencias ativas-assistidas (Diario)",
-          "TMI se PImax < -40 (30-50% carga, 2x/dia)"
-        ],
-        "block": "N1 — Rebaixamento / Coma / Sedacao",
-        "goals": [
-          "Ortostatismo e funcionalidade"
-        ],
-        "phases": [
-          {
-            "timeframe": "7-14 dias",
-            "interv": [
-              "Ortostatismo assistido (30-60s → 5-10 min)",
-              "Transferencias ativas-assistidas (Diario)",
-              "TMI se PImax < -40 (30-50% carga, 2x/dia)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N2.1 — Hemiparesia / Perda controle postural",
-        "desc": "Grave. Fraqueza unilateral, assimetria, alto risco queda",
-        "assess": [],
-        "interv": [
-          "Posicionamento terapeutico rigoroso (Troca 2h, proteger ombro)",
-          "Treino controle tronco na beira do leito (5-10 min → 20-40 min)",
-          "Sedestacao em poltrona (30 min → 2-4h)"
-        ],
-        "block": "N2 — AVC (Isquemico/Hemorragico)",
-        "goals": [
-          "Recuperar controle postural e prevenir complicacoes"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Posicionamento terapeutico rigoroso (Troca 2h, proteger ombro)",
-              "Treino controle tronco na beira do leito (5-10 min → 20-40 min)",
-              "Sedestacao em poltrona (30 min → 2-4h)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N2.2 — Incapacidade transferencias",
-        "desc": "Grave. Nao rola, nao senta, nao levanta",
-        "assess": [],
-        "interv": [
-          "Treino transferencias: decubito→sentado→pe→cadeira (Todo dia)",
-          "Treino sentar-levantar (5-10 rep, 2-3 series)"
-        ],
-        "block": "N2 — AVC (Isquemico/Hemorragico)",
-        "goals": [
-          "Iniciar transferencias funcionais"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Treino transferencias: decubito→sentado→pe→cadeira (Todo dia)",
-              "Treino sentar-levantar (5-10 rep, 2-3 series)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N2.3 — Intolerancia ortostatismo",
-        "desc": "Moderado. Queda PA, tontura, taquicardia, fadiga",
-        "assess": [],
-        "interv": [
-          "Prancha ortostatica 30→70-80° (1-2x/dia)",
-          "Ortostatismo assistido progressivo (30s → 5-10 min)"
-        ],
-        "block": "N2 — AVC (Isquemico/Hemorragico)",
-        "goals": [
-          "Tolerar ortostatismo ≥ 5-10 min"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Prancha ortostatica 30→70-80° (1-2x/dia)",
-              "Ortostatismo assistido progressivo (30s → 5-10 min)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N2.4 — Ausencia marcha funcional",
-        "desc": "Moderado. Nao sustenta peso, arrasta lado paretico",
-        "assess": [],
-        "interv": [
-          "Pre-marcha: transferencia peso em pe (Treino)",
-          "Marcha assistida: 2 terapeutas/andador (2-5 m → progredir)"
-        ],
-        "block": "N2 — AVC (Isquemico/Hemorragico)",
-        "goals": [
-          "Iniciar marcha com apoio"
-        ],
-        "phases": [
-          {
-            "timeframe": "7-14 dias",
-            "interv": [
-              "Pre-marcha: transferencia peso em pe (Treino)",
-              "Marcha assistida: 2 terapeutas/andador (2-5 m → progredir)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N2.5 — Ombro doloroso / Subluxacao",
-        "desc": "Moderado. Dor, flacidez, tracao durante mobilizacao",
-        "assess": [],
-        "interv": [
-          "Posicionamento rigoroso (Sempre)",
-          "Suporte de ombro em sedestacao (Obrigatorio)",
-          "Mobilizacao so com escapula controlada (Tecnica)",
-          "Evitar puxar pelo braco (Nunca)"
-        ],
-        "block": "N2 — AVC (Isquemico/Hemorragico)",
-        "goals": [
-          "Prevenir subluxacao e dor"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato",
-            "interv": [
-              "Posicionamento rigoroso (Sempre)",
-              "Suporte de ombro em sedestacao (Obrigatorio)",
-              "Mobilizacao so com escapula controlada (Tecnica)",
-              "Evitar puxar pelo braco (Nunca)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N2.6 — Componente respiratorio",
-        "desc": "Moderado. Tosse fraca, PCF baixo, risco aspiracao",
-        "assess": [],
-        "interv": [
-          "Medir PCF e PEmax (Inicial e seriado)",
-          "Treinar tosse e huffing (Sessoes)",
-          "Higiene bronquica por criterio (PRN)",
-          "Mobilizacao precoce (Principal prevencao)"
-        ],
-        "block": "N2 — AVC (Isquemico/Hemorragico)",
-        "goals": [
-          "Manter via aerea limpa, prevenir pneumonia"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
-            "interv": [
-              "Medir PCF e PEmax (Inicial e seriado)",
-              "Treinar tosse e huffing (Sessoes)",
-              "Higiene bronquica por criterio (PRN)",
-              "Mobilizacao precoce (Principal prevencao)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N3.1 — Rebaixamento / Coma / Despertar lento",
-        "desc": "Critico. GCS baixo, sem comandos, dependencia total",
-        "assess": [],
-        "interv": [
-          "Mobilizacao passiva global 2x/dia (10-15 rep)",
-          "Posicionamento terapeutico rigoroso (Troca 2h)",
-          "Sedestacao progressiva 30-90° (10-60 min)",
-          "Prancha ortostatica quando elegivel (1-2x/dia)",
-          "Eletroestimulacao se disponivel (20-30 min)"
-        ],
-        "block": "N3 — TCE (Traumatismo Cranioencefalico)",
-        "goals": [
-          "Preservar funcao e prevenir complicacoes"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Mobilizacao passiva global 2x/dia (10-15 rep)",
-              "Posicionamento terapeutico rigoroso (Troca 2h)",
-              "Sedestacao progressiva 30-90° (10-60 min)",
-              "Prancha ortostatica quando elegivel (1-2x/dia)",
-              "Eletroestimulacao se disponivel (20-30 min)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N3.2 — Agitacao / Hiperatividade / Delirium",
-        "desc": "Grave. Arranca dispositivos, nao tolera manuseio",
-        "assess": [],
-        "interv": [
-          "Mobilizacao como tratamento delirium (Sedestacao/poltrona diaria)",
-          "Controle drive respiratorio se VM (Revisar conforto)"
-        ],
-        "block": "N3 — TCE (Traumatismo Cranioencefalico)",
-        "goals": [
-          "Reduzir contencao, organizar"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Mobilizacao como tratamento delirium (Sedestacao/poltrona diaria)",
-              "Controle drive respiratorio se VM (Revisar conforto)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N3.3 — Perda controle tronco/cabeca",
-        "desc": "Grave. Cabeca cai, tronco colapsa",
-        "assess": [],
-        "interv": [
-          "Treino controle tronco beira leito (5-10 min → 30-40 min)",
-          "Deslocamento peso, alcance funcional (Sessoes)"
-        ],
-        "block": "N3 — TCE (Traumatismo Cranioencefalico)",
-        "goals": [
-          "Manter sedestacao ≥ 10-20 min"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Treino controle tronco beira leito (5-10 min → 30-40 min)",
-              "Deslocamento peso, alcance funcional (Sessoes)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N3.4 — Incapacidade transferencias",
-        "desc": "Grave. Nao rola, nao senta, nao levanta",
-        "assess": [],
-        "interv": [
-          "Treino diario: decubito→sentado→poltrona (Todo dia)"
-        ],
-        "block": "N3 — TCE (Traumatismo Cranioencefalico)",
-        "goals": [
-          "Iniciar transferencias assistidas"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Treino diario: decubito→sentado→poltrona (Todo dia)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N3.5 — Intolerancia ortostatismo",
-        "desc": "Moderado. Queda PA, tontura, palidez",
-        "assess": [],
-        "interv": [
-          "Prancha ortostatica progressiva (1-2x/dia)",
-          "Monitorizacao continua sinais vitais (Sempre)"
-        ],
-        "block": "N3 — TCE (Traumatismo Cranioencefalico)",
-        "goals": [
-          "Tolerar ortostatismo ≥ 5-10 min"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Prancha ortostatica progressiva (1-2x/dia)",
-              "Monitorizacao continua sinais vitais (Sempre)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N3.6 — Fraqueza respiratoria",
-        "desc": "Moderado. Tosse fraca, PCF baixo, risco atelectasia",
-        "assess": [],
-        "interv": [
-          "Medir PCF, PEmax, PImax (Seriado)",
-          "Treinar tosse e huffing (Sessoes)",
-          "Mobilizacao precoce (Principal estrategia)"
-        ],
-        "block": "N3 — TCE (Traumatismo Cranioencefalico)",
-        "goals": [
-          "Manter via aerea limpa"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
-            "interv": [
-              "Medir PCF, PEmax, PImax (Seriado)",
-              "Treinar tosse e huffing (Sessoes)",
-              "Mobilizacao precoce (Principal estrategia)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N3.7 — Transicao participacao ativa",
-        "desc": "Moderado. Fraqueza global, fadiga rapida",
-        "assess": [],
-        "interv": [
-          "Pre-marcha: transferencia peso, passos no lugar (Treino)",
-          "Marcha assistida: barras/andador (2-5 m → progredir)"
-        ],
-        "block": "N3 — TCE (Traumatismo Cranioencefalico)",
-        "goals": [
-          "Iniciar ortostatismo e marcha"
-        ],
-        "phases": [
-          {
-            "timeframe": "7-14 dias",
-            "interv": [
-              "Pre-marcha: transferencia peso, passos no lugar (Treino)",
-              "Marcha assistida: barras/andador (2-5 m → progredir)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N4.1 — Fraqueza respiratoria na lesao medular",
-        "desc": "Critico. Paralisia diafragma/intercostais, tosse ineficaz",
-        "assess": [],
-        "interv": [
-          "Avaliar PImax, PEmax, PCF (Inicial e seriado)",
-          "Higiene bronquica e tosse assistida (PRN)",
-          "TMI: 30-50% PImax 2x/dia (Se PImax < -40)",
-          "Posicionamento e expansao (Sedestacao precoce)"
-        ],
-        "block": "N4 — TRM (Lesao Medular)",
-        "goals": [
-          "Garantir via aerea limpa, melhorar forca"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Avaliar PImax, PEmax, PCF (Inicial e seriado)",
-              "Higiene bronquica e tosse assistida (PRN)",
-              "TMI: 30-50% PImax 2x/dia (Se PImax < -40)",
-              "Posicionamento e expansao (Sedestacao precoce)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N4.2 — Disautonomia / Intolerancia ortostatica",
-        "desc": "Grave. Hipotensao ortostatica grave, sincope",
-        "assess": [],
-        "interv": [
-          "Prancha ortostatica 30→70-80° (1-2x/dia)",
-          "Medidas auxiliares: meias, faixa abdominal (Suporte)"
-        ],
-        "block": "N4 — TRM (Lesao Medular)",
-        "goals": [
-          "Tolerar sedestacao e ortostatismo"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Prancha ortostatica 30→70-80° (1-2x/dia)",
-              "Medidas auxiliares: meias, faixa abdominal (Suporte)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N4.3 — Imobilismo, contraturas",
-        "desc": "Grave. Paralisia, espasticidade, encurtamentos",
-        "assess": [],
-        "interv": [
-          "Mobilizacao passiva global 2x/dia (10-15 rep)",
-          "Posicionamento terapeutico rigoroso (Alinhamento, orteses)"
-        ],
-        "block": "N4 — TRM (Lesao Medular)",
-        "goals": [
-          "Preservar amplitude e alinhamento"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato",
-            "interv": [
-              "Mobilizacao passiva global 2x/dia (10-15 rep)",
-              "Posicionamento terapeutico rigoroso (Alinhamento, orteses)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N4.4 — Incapacidade transferencias",
-        "desc": "Grave. Dependencia total, nao controla tronco",
-        "assess": [],
-        "interv": [
-          "Treino controle tronco (Sedestacao beira leito)",
-          "Treino transferencias leito↔cadeira (Diario)"
-        ],
-        "block": "N4 — TRM (Lesao Medular)",
-        "goals": [
-          "Iniciar sedestacao e transferencias"
-        ],
-        "phases": [
-          {
-            "timeframe": "7-14 dias",
-            "interv": [
-              "Treino controle tronco (Sedestacao beira leito)",
-              "Treino transferencias leito↔cadeira (Diario)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N4.5 — Prevencao complicacoes secundarias",
-        "desc": "Moderado. TVP, atelectasia, ulcera, osteopenia",
-        "assess": [],
-        "interv": [
-          "Mobilizacao diaria (Obrigatorio)",
-          "Mudanca decubito rigorosa (A cada 2h)",
-          "Sedestacao/verticalizacao precoce (Diario)"
-        ],
-        "block": "N4 — TRM (Lesao Medular)",
-        "goals": [
-          "Reduzir complicacoes imobilidade"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
-            "interv": [
-              "Mobilizacao diaria (Obrigatorio)",
-              "Mudanca decubito rigorosa (A cada 2h)",
-              "Sedestacao/verticalizacao precoce (Diario)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N4.6 — Transicao funcionalidade (lesao incompleta)",
-        "desc": "Moderado. Fraqueza residual, baixa resistencia",
-        "assess": [],
-        "interv": [
-          "Pre-marcha: descarga peso, fortalecimento (Treino)",
-          "Marcha assistida se elegivel (Barras/andador)",
-          "Treino funcional diario (Progressivo)"
-        ],
-        "block": "N4 — TRM (Lesao Medular)",
-        "goals": [
-          "Aumentar independencia"
-        ],
-        "phases": [
-          {
-            "timeframe": "14-30 dias",
-            "interv": [
-              "Pre-marcha: descarga peso, fortalecimento (Treino)",
-              "Marcha assistida se elegivel (Barras/andador)",
-              "Treino funcional diario (Progressivo)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N5.1 — Fraqueza respiratoria progressiva",
-        "desc": "Critico. Queda progressiva PImax, PEmax, PCF",
-        "assess": [],
-        "interv": [
-          "Medir PImax, PEmax, PCF diariamente (Monitorar tendencia)",
-          "Higiene bronquica e tosse assistida (PRN)",
-          "TMI com CAUTELA: 20-30% se estavel (1-2x/dia, interromper se piora)"
-        ],
-        "block": "N5 — Doencas Neuromusculares",
-        "goals": [
-          "Monitorar e prevenir falencia"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Medir PImax, PEmax, PCF diariamente (Monitorar tendencia)",
-              "Higiene bronquica e tosse assistida (PRN)",
-              "TMI com CAUTELA: 20-30% se estavel (1-2x/dia, interromper se piora)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N5.2 — Tosse ineficaz / Incapacidade limpar via aerea",
-        "desc": "Critico. PCF < 160 L/min, acumulo secrecao",
-        "assess": [],
-        "interv": [
-          "Medir PCF seriado (Monitorar)",
-          "Tosse assistida manual/mecanica (Varias vezes/dia)",
-          "Air stacking se indicado (Tecnica)"
-        ],
-        "block": "N5 — Doencas Neuromusculares",
-        "goals": [
-          "Garantir via aerea limpa"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato",
-            "interv": [
-              "Medir PCF seriado (Monitorar)",
-              "Tosse assistida manual/mecanica (Varias vezes/dia)",
-              "Air stacking se indicado (Tecnica)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N5.3 — Fadiga muscular global",
-        "desc": "Grave. Fadiga rapida, piora ao longo do dia",
-        "assess": [],
-        "interv": [
-          "Sessoes curtas e fracionadas (Evitar overtraining)",
-          "Priorizar funcao, nao cansaco (Estrategia)",
-          "Monitorar FR, FC, fadiga (Continuo)"
-        ],
-        "block": "N5 — Doencas Neuromusculares",
-        "goals": [
-          "Manter funcao sem piorar"
-        ],
-        "phases": [
-          {
-            "timeframe": "7-14 dias",
-            "interv": [
-              "Sessoes curtas e fracionadas (Evitar overtraining)",
-              "Priorizar funcao, nao cansaco (Estrategia)",
-              "Monitorar FR, FC, fadiga (Continuo)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N5.4 — Perda de mobilidade e funcao",
-        "desc": "Grave. Fraqueza proximal/distal, incapacidade funcional",
-        "assess": [],
-        "interv": [
-          "Treino funcional: transferencias, sedestacao (Diario)",
-          "Uso de orteses e dispositivos (Auxiliar)",
-          "Controle de fadiga (Sempre)"
-        ],
-        "block": "N5 — Doencas Neuromusculares",
-        "goals": [
-          "Preservar independencia maxima"
-        ],
-        "phases": [
-          {
-            "timeframe": "7-30 dias",
-            "interv": [
-              "Treino funcional: transferencias, sedestacao (Diario)",
-              "Uso de orteses e dispositivos (Auxiliar)",
-              "Controle de fadiga (Sempre)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N5.5 — Necessidade de VM ou VNI",
-        "desc": "Critico. Hipoventilacao, hipercapnia, trabalho ↑",
-        "assess": [],
-        "interv": [
-          "Ajuste e monitorizacao VNI (Continuo)",
-          "Avaliar retirada/progressao diaria (Reavaliar)"
-        ],
-        "block": "N5 — Doencas Neuromusculares",
-        "goals": [
-          "Manter conforto e PaCO₂ aceitavel"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato",
-            "interv": [
-              "Ajuste e monitorizacao VNI (Continuo)",
-              "Avaliar retirada/progressao diaria (Reavaliar)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N6.1 — Delirium hipoativo",
-        "desc": "Grave. Quieto, sonolento, pouco responsivo, imovel",
-        "assess": [],
-        "interv": [
-          "Mobilizacao como medicamento (Todo dia, 2x/dia)",
-          "Progressao postura: decubito→sedestacao→poltrona→ortostatismo (Obrigatorio)",
-          "Sedestacao em poltrona 30-60 min→2-6h (Estimulo sensorial)",
-          "Treino funcional simples: alcancar, sentar-levantar (Sessoes)"
-        ],
-        "block": "N6 — Delirium / Agitacao",
-        "goals": [
-          "Aumentar vigilia e mobilidade"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Mobilizacao como medicamento (Todo dia, 2x/dia)",
-              "Progressao postura: decubito→sedestacao→poltrona→ortostatismo (Obrigatorio)",
-              "Sedestacao em poltrona 30-60 min→2-6h (Estimulo sensorial)",
-              "Treino funcional simples: alcancar, sentar-levantar (Sessoes)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N6.2 — Delirium hiperativo",
-        "desc": "Critico. Agitado, arrancando dispositivos",
-        "assess": [],
-        "interv": [
-          "Mobilizacao como antidelirium (Mesmo agitado: sedestacao/poltrona)",
-          "Organizacao respiratoria: revisar conforto VM/O₂ (Se aplicavel)",
-          "Sessoes curtas e frequentes 10-15 min (1-3x/dia)"
-        ],
-        "block": "N6 — Delirium / Agitacao",
-        "goals": [
-          "Reduzir contencao, organizar"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Mobilizacao como antidelirium (Mesmo agitado: sedestacao/poltrona)",
-              "Organizacao respiratoria: revisar conforto VM/O₂ (Se aplicavel)",
-              "Sessoes curtas e frequentes 10-15 min (1-3x/dia)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N6.3 — Delirium + Imobilidade prolongada",
-        "desc": "Grave. Dias/semanas no leito, extremamente fraco",
-        "assess": [],
-        "interv": [
-          "Prancha ortostatica 30-40°→progredir (Progressivo)",
-          "Treino transferencias leito↔cadeira (Diario com 2 terapeutas se necessario)"
-        ],
-        "block": "N6 — Delirium / Agitacao",
-        "goals": [
-          "Tolerar sedestacao ≥ 20-30 min"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Prancha ortostatica 30-40°→progredir (Progressivo)",
-              "Treino transferencias leito↔cadeira (Diario com 2 terapeutas se necessario)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N6.4 — Delirium + Fraqueza respiratoria",
-        "desc": "Grave. Padrao rapido/superficial, tosse ineficaz",
-        "assess": [],
-        "interv": [
-          "Avaliar FR, padrao, PCF, PEmax, PImax (Seriado)",
-          "Integrar: mobilizacao + higiene + treino respiratorio (Abordagem global)"
-        ],
-        "block": "N6 — Delirium / Agitacao",
-        "goals": [
-          "Estabilizar padrao, prevenir complicacoes"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
-            "interv": [
-              "Avaliar FR, padrao, PCF, PEmax, PImax (Seriado)",
-              "Integrar: mobilizacao + higiene + treino respiratorio (Abordagem global)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N7.1 — Rebaixamento pos-crise / pos-sedativos",
-        "desc": "Grave. Sonolencia, confusao, nao segue comandos",
-        "assess": [],
-        "interv": [
-          "Posicionamento: lateral de seguranca, cabeceira elevada (Imediato)",
-          "Sedestacao progressiva 10-15 min→20-40 min (24-72h)",
-          "Transferencia leito→poltrona diariamente (Quando elegivel)"
-        ],
-        "block": "N7 — Pos-crise Convulsiva / Status",
-        "goals": [
-          "Garantir seguranca e verticalizacao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Posicionamento: lateral de seguranca, cabeceira elevada (Imediato)",
-              "Sedestacao progressiva 10-15 min→20-40 min (24-72h)",
-              "Transferencia leito→poltrona diariamente (Quando elegivel)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N7.2 — Risco aspiracao / Secrecao retida",
-        "desc": "Grave. Tosse ineficaz pos-ictal, disfagia",
-        "assess": [],
-        "interv": [
-          "Avaliar tosse: PCF quando possivel (Se PCF < 160: alto risco)",
-          "Higiene bronquica por criterio (Ausculta, secrecao, RX)",
-          "Tosse/huffing assistidos (PRN)",
-          "Mobilizacao precoce (Principal prevencao)"
-        ],
-        "block": "N7 — Pos-crise Convulsiva / Status",
-        "goals": [
-          "Manter via aerea limpa, prevenir pneumonia"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato",
-            "interv": [
-              "Avaliar tosse: PCF quando possivel (Se PCF < 160: alto risco)",
-              "Higiene bronquica por criterio (Ausculta, secrecao, RX)",
-              "Tosse/huffing assistidos (PRN)",
-              "Mobilizacao precoce (Principal prevencao)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N7.3 — Instabilidade autonômica / Fadiga",
-        "desc": "Moderado. Taquicardia, PA labil, fadiga intensa",
-        "assess": [],
-        "interv": [
-          "Sessoes curtas 5-10 min, 1-3x/dia (Fracionado)",
-          "Escada postural: cabeceira→sedestacao→poltrona→ortostatismo (Progressivo)",
-          "Monitorar PA, FC, SpO₂ continuamente (Sempre)"
-        ],
-        "block": "N7 — Pos-crise Convulsiva / Status",
-        "goals": [
-          "Mobilizar sem instabilizar"
-        ],
-        "phases": [
-          {
-            "timeframe": "24-72h",
-            "interv": [
-              "Sessoes curtas 5-10 min, 1-3x/dia (Fracionado)",
-              "Escada postural: cabeceira→sedestacao→poltrona→ortostatismo (Progressivo)",
-              "Monitorar PA, FC, SpO₂ continuamente (Sempre)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N7.4 — Fraqueza global / Descondicionamento",
-        "desc": "Grave. Nao consegue sentar, levantar, transferir",
-        "assess": [],
-        "interv": [
-          "Treino controle tronco: deslocamento peso, alcance (Beira-leito)",
-          "Transferencias terapeuticas: rolar→sentar→sentar/levantar→pivot (Diario)",
-          "Ortostatismo: prancha 30→60-80° se intolerante (Progressivo)"
-        ],
-        "block": "N7 — Pos-crise Convulsiva / Status",
-        "goals": [
-          "Recuperar funcao basica"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Treino controle tronco: deslocamento peso, alcance (Beira-leito)",
-              "Transferencias terapeuticas: rolar→sentar→sentar/levantar→pivot (Diario)",
-              "Ortostatismo: prancha 30→60-80° se intolerante (Progressivo)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N7.5 — Paciente em VM apos status",
-        "desc": "Critico. Fraqueza respiratoria, tosse ineficaz, assincronia",
-        "assess": [],
-        "interv": [
-          "Revisar conforto ventilatorio: trigger, fluxo, suporte (Imediato)",
-          "Higiene bronquica por criterio (PRN)",
-          "Mobilizacao precoce em VM: sedestacao, poltrona (Se estavel)",
-          "Avaliar prontidao TRE/desmame 48-72h (Integrar com R5)"
-        ],
-        "block": "N7 — Pos-crise Convulsiva / Status",
-        "goals": [
-          "Garantir ventilacao segura, avaliar desmame"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-24h",
-            "interv": [
-              "Revisar conforto ventilatorio: trigger, fluxo, suporte (Imediato)",
-              "Higiene bronquica por criterio (PRN)",
-              "Mobilizacao precoce em VM: sedestacao, poltrona (Se estavel)",
-              "Avaliar prontidao TRE/desmame 48-72h (Integrar com R5)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N7.6 — Risco recorrencia crise durante terapia",
-        "desc": "Moderado. Historia recente de crise/status",
-        "assess": [],
-        "interv": [
-          "Ambiente seguro: cama baixa, laterais, equipe proxima (Sempre)",
-          "Primeiras sessoes: em leito/sentado→progredir (Cautela)",
-          "Evitar estimulos extremos: hiperventilacao, fadiga extenuante (Controle)",
-          "Se crise: proteger, lateral, suspender, acionar equipe (Protocolo)"
-        ],
-        "block": "N7 — Pos-crise Convulsiva / Status",
-        "goals": [
-          "Mobilizar com seguranca"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato",
-            "interv": [
-              "Ambiente seguro: cama baixa, laterais, equipe proxima (Sempre)",
-              "Primeiras sessoes: em leito/sentado→progredir (Cautela)",
-              "Evitar estimulos extremos: hiperventilacao, fadiga extenuante (Controle)",
-              "Se crise: proteger, lateral, suspender, acionar equipe (Protocolo)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N8.1 — Risco lesao pulmonar (VILI)",
-        "desc": "Critico. Pulmao normal pode virar lesionado por VM inadequada",
-        "assess": [],
-        "interv": [
-          "Vt: 6-8 mL/kg, Pplato < 30, ΔP < 12-14 (VM protetora obrigatoria)",
-          "PEEP: 8-10, ajustar por mecanica (Evitar colapso)",
-          "FiO₂: minima para SpO₂ > 92-95% (Titular)",
-          "Monitorar complacencia, Pplato, ΔP, curvas (Continuo)",
-          "MRA somente se queda SpO₂/atelectasia, seguida de ajuste PEEP (Criterioso)"
-        ],
-        "block": "N8 — Morte Encefalica (Doador)",
-        "goals": [
-          "Manter VM protetora, preservar pulmao para transplante"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato e continuo",
-            "interv": [
-              "Vt: 6-8 mL/kg, Pplato < 30, ΔP < 12-14 (VM protetora obrigatoria)",
-              "PEEP: 8-10, ajustar por mecanica (Evitar colapso)",
-              "FiO₂: minima para SpO₂ > 92-95% (Titular)",
-              "Monitorar complacencia, Pplato, ΔP, curvas (Continuo)",
-              "MRA somente se queda SpO₂/atelectasia, seguida de ajuste PEEP (Criterioso)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N8.2 — Atelectasia por imobilidade",
-        "desc": "Grave. Perda suspiros, colapso gravitacional",
-        "assess": [],
-        "interv": [
-          "Alternancia decubitos a cada 2h (Rigoroso)",
-          "Evitar decubito dorsal prolongado (Preferir lateral alternado)",
-          "Semifowler quando possivel (Posicionar)"
-        ],
-        "block": "N8 — Morte Encefalica (Doador)",
-        "goals": [
-          "Manter pulmao totalmente expandido"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
-            "interv": [
-              "Alternancia decubitos a cada 2h (Rigoroso)",
-              "Evitar decubito dorsal prolongado (Preferir lateral alternado)",
-              "Semifowler quando possivel (Posicionar)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N8.3 — Secrecao bronquica",
-        "desc": "Grave. Tosse inexistente, drenagem abolida",
-        "assess": [],
-        "interv": [
-          "Aspiracao por criterio (PRN)",
-          "Mobilizacao de secrecao, vibrocompressao (Tecnicas)",
-          "Monitorar PIP, ausculta, SpO₂ (Continuo)"
-        ],
-        "block": "N8 — Morte Encefalica (Doador)",
-        "goals": [
-          "Manter vias aereas pervias"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
-            "interv": [
-              "Aspiracao por criterio (PRN)",
-              "Mobilizacao de secrecao, vibrocompressao (Tecnicas)",
-              "Monitorar PIP, ausculta, SpO₂ (Continuo)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N8.4 — Instabilidade hemodinamica induzida VM",
-        "desc": "Critico. PEEP alta→queda retorno, manobras→colapso",
-        "assess": [],
-        "interv": [
-          "Recrutamento/ajuste PEEP: feito com equipe medica (Sempre)",
-          "Monitorar PA invasiva, FC, debito urinario (Continuo)"
-        ],
-        "block": "N8 — Morte Encefalica (Doador)",
-        "goals": [
-          "Manter PAM ≥ 65 mmHg"
-        ],
-        "phases": [
-          {
-            "timeframe": "Imediato",
-            "interv": [
-              "Recrutamento/ajuste PEEP: feito com equipe medica (Sempre)",
-              "Monitorar PA invasiva, FC, debito urinario (Continuo)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N8.5 — Hipotermia e alteracoes metabolicas",
-        "desc": "Grave. Perda controle termico, hipotermia→piora oxigenacao",
-        "assess": [],
-        "interv": [
-          "Monitorar temperatura (Continuo)",
-          "Evitar exposicao excessiva (Durante procedimentos)",
-          "Ajustar ventilacao conforme gasometria (Em conjunto com equipe)"
-        ],
-        "block": "N8 — Morte Encefalica (Doador)",
-        "goals": [
-          "Manter normotermia e estabilidade"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
-            "interv": [
-              "Monitorar temperatura (Continuo)",
-              "Evitar exposicao excessiva (Durante procedimentos)",
-              "Ajustar ventilacao conforme gasometria (Em conjunto com equipe)"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "N8.6 — Preparacao para captacao",
-        "desc": "Critico. Pulmao precisa estar expandido, limpo, estavel",
-        "assess": [],
-        "interv": [
-          "VM protetora rigorosa (Obrigatorio)",
-          "Higiene bronquica impecavel (Continuo)",
-          "Posicao adequada (Monitorado)",
-          "Gasometrias de controle (Seriadas)",
-          "Evitar: atelectasia, infeccao, hipoxemia (Prevencao total)"
-        ],
-        "block": "N8 — Morte Encefalica (Doador)",
-        "goals": [
-          "Manter pulmao em condicoes ideais ate captacao"
-        ],
-        "phases": [
-          {
-            "timeframe": "Ate o fim",
-            "interv": [
-              "VM protetora rigorosa (Obrigatorio)",
-              "Higiene bronquica impecavel (Continuo)",
-              "Posicao adequada (Monitorado)",
-              "Gasometrias de controle (Seriadas)",
-              "Evitar: atelectasia, infeccao, hipoxemia (Prevencao total)"
-            ]
-          }
-        ]
-      }
-    ]
+    }
   },
   {
     "id": "renal",
