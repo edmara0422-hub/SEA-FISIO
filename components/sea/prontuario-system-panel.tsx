@@ -81,6 +81,9 @@ const INPUT_CLASS =
 
 const INPUT_CLASS_SM =
   'w-full rounded-[0.7rem] border border-white/10 bg-black/22 px-2 py-1.5 text-xs text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
+
+const INPUT_CLASS_LAB =
+  'w-full rounded-[0.5rem] border border-white/10 bg-black/22 px-1.5 py-1.5 text-[13px] text-white outline-none transition-all placeholder:text-white/20 focus:border-white/18 pr-5'
 const INPUT_FLEX =
   'rounded-[0.7rem] border border-white/10 bg-black/22 px-2 py-1.5 text-xs text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
 
@@ -2555,18 +2558,18 @@ export function ProntuarioSystemPanel() {
                                   <Trash2 className="h-3.5 w-3.5" />
                                 </button>
                               </div>
-                              <div className="grid grid-cols-5 gap-1.5">
+                              <div className="grid grid-cols-5 gap-1">
                                 {LAB_FIELDS.map((field) => (
                                   <FieldShell key={field.key} label={field.label}>
                                     <div className="relative">
                                       <input
-                                        className={`${INPUT_CLASS_SM} pr-8`}
+                                        className={INPUT_CLASS_LAB}
                                         value={String(exam[field.key] ?? '')}
                                         onChange={(event) => updateListItem('examesLabList', index, field.key, event.target.value)}
                                         placeholder={field.ref}
                                       />
                                       {field.unit ? (
-                                        <span className="pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 text-[8px] text-white/30">
+                                        <span className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[7px] text-white/30">
                                           {field.unit}
                                         </span>
                                       ) : null}
