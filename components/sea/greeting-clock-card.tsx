@@ -60,7 +60,7 @@ export default function BusinessClock({
   if (variant === 'hero') {
     return (
       <div
-        className={`floating-silver-strip relative w-full overflow-hidden rounded-[0.75rem] border border-white/12 px-4 py-1 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-5 ${className}`}
+        className={`floating-silver-strip relative w-full overflow-hidden rounded-[0.75rem] border border-white/12 px-3 py-0.5 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-5 md:py-1 ${className}`}
         style={{
           background:
             'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
@@ -72,21 +72,21 @@ export default function BusinessClock({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2.5 md:gap-3">
             {showGreeting ? (
-              <div className="flex items-center gap-1.5 rounded-full border border-white/12 bg-black/18 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.24em] text-white/74">
-                <GreetingIcon className="h-3 w-3 text-white/74" />
+              <div className="flex items-center gap-1 rounded-full border border-white/12 bg-black/18 px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.20em] text-white/74 md:gap-1.5 md:px-2 md:text-[9px] md:tracking-[0.24em]">
+                <GreetingIcon className="h-2.5 w-2.5 text-white/74 md:h-3 md:w-3" />
                 <span>{greeting}</span>
               </div>
             ) : null}
 
             <div className="h-3.5 w-px bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.24)_50%,transparent_100%)]" />
 
-            <div className="flex items-center gap-1.5 text-xs text-white/62">
-              <CalendarDays className="h-3 w-3 text-white/56" />
-              <span className="uppercase tracking-[0.16em]">{dateLabel}</span>
+            <div className="flex items-center gap-1 text-[9px] text-white/62 md:gap-1.5 md:text-xs">
+              <CalendarDays className="h-2.5 w-2.5 text-white/56 md:h-3 md:w-3" />
+              <span className="uppercase tracking-[0.12em] md:tracking-[0.16em]">{dateLabel}</span>
             </div>
           </div>
 
-          <p className="metal-text text-[0.85rem] font-semibold leading-none tracking-[0.22em] md:text-[0.95rem]">
+          <p className="metal-text text-[0.72rem] font-semibold leading-none tracking-[0.18em] md:text-[0.85rem] md:tracking-[0.22em]">
             {timeLabel}
           </p>
         </div>

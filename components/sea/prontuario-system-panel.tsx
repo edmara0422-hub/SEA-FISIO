@@ -586,11 +586,18 @@ function nowIso() {
   return new Date().toISOString()
 }
 
+function generateId(): string {
+  if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+    return crypto.randomUUID()
+  }
+  return 'icu-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 9)
+}
+
 function createRecord(): ICURecord {
   const timestamp = nowIso()
   return {
     ...emptyPatient(),
-    id: crypto.randomUUID(),
+    id: generateId(),
     createdAt: timestamp,
     updatedAt: timestamp,
   }
@@ -1341,7 +1348,7 @@ export function ProntuarioSystemPanel() {
       try {
         const sessionId = (() => {
           let id = localStorage.getItem('sea-session-id')
-          if (!id) { id = crypto.randomUUID(); localStorage.setItem('sea-session-id', id) }
+          if (!id) { id = generateId(); localStorage.setItem('sea-session-id', id) }
           return id
         })()
         const { error } = await supabase!.from('icu_sessions').upsert({

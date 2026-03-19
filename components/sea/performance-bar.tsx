@@ -157,7 +157,7 @@ export function PerformanceBar() {
               <ActionButton icon={RotateCcw} label="Atualizar" onClick={refreshDemo} />
               <ActionButton icon={Trash2} label="Apagar" onClick={clearDashboard} />
             </div>
-            <h3 className="text-xl font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
+            <h3 className="text-base font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
               DASH
             </h3>
           </div>
@@ -314,9 +314,9 @@ function MetricCard({
       <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/42 md:text-[9px]">
         {label}
       </p>
-      <p className="mt-2 text-lg font-semibold text-white md:text-xl">
+      <p className="mt-1.5 text-base font-semibold text-white md:text-xl">
         {value}
-        <span className="ml-0.5 text-[11px] text-white/54 md:text-xs">{suffix}</span>
+        <span className="ml-0.5 text-[10px] text-white/54 md:text-xs">{suffix}</span>
       </p>
     </div>
   )
