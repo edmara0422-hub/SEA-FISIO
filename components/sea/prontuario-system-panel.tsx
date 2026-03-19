@@ -2456,13 +2456,13 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   <div className="mt-4 space-y-3">
-                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2.5">
-                      <div className="flex flex-wrap justify-center items-center gap-1.5">
+                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2">
+                      <div className="scrollbar-hide flex flex-nowrap items-center gap-1.5 overflow-x-auto">
                         {calculations?.vtTargets?.length ? (
                           calculations.vtTargets.map((target) => (
                             <span
                               key={target.multiplier}
-                              className="rounded-full border px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.14em]"
+                              className="shrink-0 rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.10em]"
                               style={target.multiplier === 6 ? {
                                 borderColor: 'rgba(34,211,238,0.40)',
                                 background: 'rgba(34,211,238,0.14)',
@@ -2473,7 +2473,7 @@ export function ProntuarioSystemPanel() {
                                 color: 'rgba(255,255,255,0.62)',
                               }}
                             >
-                              {target.multiplier === 6 ? '★ ' : ''}VC {target.multiplier} mL/kg: {target.value} mL
+                              {target.multiplier === 6 ? '★ ' : ''}VC{target.multiplier}: {target.value}mL
                             </span>
                           ))
                         ) : (
@@ -2555,7 +2555,7 @@ export function ProntuarioSystemPanel() {
                                   <Trash2 className="h-3.5 w-3.5" />
                                 </button>
                               </div>
-                              <div className="grid grid-cols-8 gap-1.5">
+                              <div className="grid grid-cols-5 gap-1.5">
                                 {LAB_FIELDS.map((field) => (
                                   <FieldShell key={field.key} label={field.label}>
                                     <div className="relative">
