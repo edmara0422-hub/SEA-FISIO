@@ -2718,7 +2718,7 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Avaliacao neurologica
                   </p>
-                  <div className="grid gap-2 grid-cols-7">
+                  <div className="grid gap-2 grid-cols-5">
                     <FieldShell label="O">
                       <select className={INPUT_CLASS_SM} value={currentRecord.glasgowO} onChange={(e) => setField('glasgowO', e.target.value)}>
                         <option value="">--</option>
@@ -2747,18 +2747,6 @@ export function ProntuarioSystemPanel() {
                       <select className={INPUT_CLASS_SM} value={currentRecord.metaRASS} onChange={(e) => setField('metaRASS', e.target.value)}>
                         <option value="">--</option>
                         {['0','-1','-2','-3','-4','-5'].map((v) => <option key={v} value={v}>{v}</option>)}
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Meta TOF">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.metaTOF} onChange={(e) => setField('metaTOF', e.target.value)}>
-                        <option value="">--</option>
-                        {['0/4','1/4','2/4','3/4','4/4'].map((v) => <option key={v} value={v}>{v}</option>)}
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Ult. TOF">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.ultimoTOF} onChange={(e) => setField('ultimoTOF', e.target.value)}>
-                        <option value="">--</option>
-                        {['0/4','1/4','2/4','3/4','4/4'].map((v) => <option key={v} value={v}>{v}</option>)}
                       </select>
                     </FieldShell>
                   </div>
