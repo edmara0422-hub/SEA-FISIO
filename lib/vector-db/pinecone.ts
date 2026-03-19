@@ -48,13 +48,14 @@ export async function indexClinicalDocuments() {
         const embedding = await embedder(doc, { pooling: 'mean', normalize: true })
         return {
           id: `doc-${idx}`,
-          values: Array.from(embedding.data),
+          values: Array.from(embedding.data) as number[],
           metadata: { text: doc, type: 'clinical' },
         }
       })
     )
 
-    await index.upsert(vectors)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    await (index.upsert as any)(vectors)
     console.log('[v0] Indexed', vectors.length, 'clinical documents to Pinecone')
   } catch (error) {
     console.error('[v0] Indexing error:', error)
@@ -74,7 +75,7 @@ export async function semanticSearch(query: string, topK = 5): Promise<SemanticS
 
     return results.matches.map((match) => ({
       id: match.id,
-      content: match.metadata?.text || '',
+      content: String(match.metadata?.text ?? ''),
       score: match.score || 0,
       metadata: match.metadata || {},
     }))
