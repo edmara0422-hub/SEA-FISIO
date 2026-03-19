@@ -14,6 +14,8 @@ const config: CapacitorConfig = {
     contentInset: 'automatic',
     preferredContentMode: 'mobile',
     scheme: 'SEA Fisio',
+    allowsLinkPreview: false,
+    scrollEnabled: true,
   },
 };
 
