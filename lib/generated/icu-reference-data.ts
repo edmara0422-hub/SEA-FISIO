@@ -5573,1831 +5573,1525 @@ export const ICU_REFERENCE_SYSTEMS = [
     "icon": "M8.25 3v1.5M4.5 8.25H3m3.75 8.25h-.75M3 12h.75M8.25 8.25V12m0-3.75v1.5M12 3v1.5m0 9V21m-3.75-9h.75M12 8.25h.75m-9 3.75h.75M12 12h.75",
     "color": "#fb923c",
     "problems": [
-      {
-        "name": "5.0.P1 — Dor traumatica ou pos-operatoria limitante",
-        "desc": "Grave. EVA ≥6 repouso ou ≥4 ao mobilizar",
-        "assess": [],
-        "interv": [
-          "Posicionamento antalgico",
-          "Protecao com coxins",
-          "Crioterapia/termoterapia quando indicado",
-          "Treinar como mover sem gerar dor mecanica",
-          "Alvo EVA ≤4 durante mobilizacao"
-        ],
-        "block": "5.0 — Base Transversal Trauma/Ortopedia",
-        "goals": [
-          "Controlar dor para ventilacao e mobilizacao segura"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Posicionamento",
-              "Protecao",
-              "Crio/termo",
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.0.P2 — Restricao de carga (NWB/TTWB/PWB/WBAT)",
-        "desc": "Grave. Prescricao formal, risco falha sintese",
-        "assess": [],
-        "interv": [
-          "Definir regra: NWB sem carga, TTWB toque ponta, PWB parcial, WBAT tolerado",
-          "Treino ortostatismo com descarga correta",
-          "Transferencia leito↔poltrona respeitando carga",
-          "Marcha com dispositivo conforme caso",
-          "Nunca testar carga proibida"
-        ],
-        "block": "5.0 — Base Transversal Trauma/Ortopedia",
-        "goals": [
-          "Proteger fratura/sintese, transferencias seguras"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Definir regra",
-              "Treino ortostatismo",
-              "Transferencias",
-              "Marcha dispositivo"
-            ]
-          },
-          {
-            "timeframe": "Ate alta",
-            "interv": [
-              "Uso correto dispositivos",
-              "Plano continuidade"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.0.P3 — Risco instabilidade mecanica / falha fixacao",
-        "desc": "Critico. Osteossintese recente, fixador, fratura instavel",
-        "assess": [],
-        "interv": [
-          "Transferencias protegidas: rolar em bloco se coluna, sentar pelo lado protegido",
-          "Tudo lento, organizado, sem alavancas perigosas",
-          "PARADA: dor mecanica subita intensa, sensacao falha, deficit neurologico novo"
-        ],
-        "block": "5.0 — Base Transversal Trauma/Ortopedia",
-        "goals": [
-          "Proteger sintese e prevenir complicacoes"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Transferencias protegidas",
-              "Vigilancia"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.0.P4 — Imobilismo com risco sistemico",
-        "desc": "Grave. Risco atelectasia, TEP/TVP, perda funcional",
-        "assess": [],
-        "interv": [
-          "Inspiracoes profundas, tosse assistida",
-          "Mudanca frequente decubito",
-          "Sedestacao/poltrona o mais precoce possivel",
-          "Bomba muscular multiplas vezes/dia",
-          "Elevacao MMII quando indicado, monitorar edema assimetrico dor panturrilha"
-        ],
-        "block": "5.0 — Base Transversal Trauma/Ortopedia",
-        "goals": [
-          "Prevenir atelectasia, trombose, colapso funcional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Respiratorio",
-              "Posicionamento",
-              "Mobilizacao",
-              "TVP"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.0.P5 — Perda ADM e forca segmentos nao imobilizados",
-        "desc": "Moderado. Edema, rigidez, inibicao, desuso",
-        "assess": [],
-        "interv": [
-          "Exercicios ativos/isometricos: quadriceps, gluteos, panturrilha, MMSS",
-          "Objetivo: evitar ICU-AW localizada, TVP, preservar capacidade funcional"
-        ],
-        "block": "5.0 — Base Transversal Trauma/Ortopedia",
-        "goals": [
-          "Manter funcao dos segmentos livres"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Ativos/isometricos"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.1.P1 — Dor ventilatorio-dependente com hipoventilacao",
-        "desc": "Grave. EVA ≥6 ao inspirar/tossir, FR superficial, volumes baixos",
-        "assess": [],
-        "interv": [
-          "Gestao funcional dor: posicionamento antalgico, apoio manual/travesseiro para tosse",
-          "Treino huffing, tosse protegida. Sessoes curtas frequentes. Alvo EVA ≤4",
-          "Reexpansao: inspiracao lenta profunda com pausa 2-3s, expansao segmentar, espironetro"
-        ],
-        "block": "5.1 — Trauma Toracico",
-        "goals": [
-          "Permitir ventilacao profunda e eficaz"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Dor",
-              "Tosse protegida",
-              "Reexpansao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.1.P2 — Atelectasia segmentar/lobar pos-trauma",
-        "desc": "Grave. RX/TC colapso, ausculta ↓ MV, ↑ O2",
-        "assess": [],
-        "interv": [
-          "Reexpansao dirigida",
-          "Posicionamento: decubito lateral pulmao bom para baixo",
-          "Alternancia frequente decubitos",
-          "Mobilizacao precoce: sentar, pe, andar"
-        ],
-        "block": "5.1 — Trauma Toracico",
-        "goals": [
-          "Reexpandir areas colapsadas"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Reexpansao",
-              "Posicionamento",
-              "Mobilizacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.1.P3 — Tosse ineficaz e retencao secrecao",
-        "desc": "Grave. PCF <270 ineficaz, <160 incapaz limpar",
-        "assess": [],
-        "interv": [
-          "Higiene por criterio: ha secrecao? tosse eficaz?",
-          "Se PCF <270 tecnicas auxiliares; <160 critico",
-          "Huffing, tosse assistida manual, ciclo ativo, drenagem postural com cautela"
-        ],
-        "block": "5.1 — Trauma Toracico",
-        "goals": [
-          "Garantir tosse funcional ou alternativa eficaz"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Avaliacao",
-              "Tecnicas"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.1.P4 — Contusao pulmonar com alteracao troca gasosa",
-        "desc": "Critico. PaO2/FiO2 <300, SpO2 instavel",
-        "assess": [],
-        "interv": [
-          "CNAF hipoxemia moderada. VNI (CPAP/BiPAP) se trabalho respiratorio alto, contusao, atelectasia",
-          "Posicionamento terapeutico estrategico"
-        ],
-        "block": "5.1 — Trauma Toracico",
-        "goals": [
-          "Manter SpO2 na meta individual"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "CNAF/VNI",
-              "Posicionamento"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.1.P5 — Instabilidade mecanica parede toracica (volet)",
-        "desc": "Critico. Movimento paradoxal, dor intensa, ↑ trabalho respiratorio",
-        "assess": [],
-        "interv": [
-          "Suporte ventilatorio conforme necessario",
-          "Posicionamento para estabilizacao",
-          "Controle rigoroso dor"
-        ],
-        "block": "5.1 — Trauma Toracico",
-        "goals": [
-          "Prevenir fadiga respiratoria"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Suporte",
-              "Posicionamento",
-              "Dor"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.1.P6 — Pneumo/hemotorax drenado com risco complicacoes",
-        "desc": "Grave. Dreno selo agua, dor, risco hipoventilacao/atelectasia",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce com dreno protegido (sedestacao/poltrona/ortostatismo/marcha se estavel)",
-          "Tecnicas ventilatorias respeitando dor",
-          "Monitorar fuga aerea. PARADA: aumento fuga no dreno"
-        ],
-        "block": "5.1 — Trauma Toracico",
-        "goals": [
-          "Prevenir complicacoes respiratorias"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Mobilizacao precoce",
-              "Tecnicas",
-              "Vigilancia"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.1.P7 — Insuficiencia respiratoria aguda pos-trauma",
-        "desc": "Critico. SpO2 <90%, FR >30 ou <10, PaO2/FiO2 <200",
-        "assess": [],
-        "interv": [
-          "Suporte ventilatorio agressivo conforme necessario",
-          "Otimizacao: dor, posicionamento, higiene, expansao",
-          "PARADA: dor incapacitante, SpO2 <88-90% persistente, taquipneia extrema, instabilidade hemodinamica"
-        ],
-        "block": "5.1 — Trauma Toracico",
-        "goals": [
-          "Estabilizar funcao respiratoria"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Suporte",
-              "Otimizacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.2.P1 — Risco instabilidade coluna e piora neurologica",
-        "desc": "Critico. Fratura instavel ou em investigacao, colar/colete",
-        "assess": [],
-        "interv": [
-          "REGRA: protecao coluna. Nenhum ganho compensa piora neurologica",
-          "Alinhamento neutro SEMPRE. Nunca flexionar, rodar, torcer",
-          "Toda mobilizacao em BLOCO. Rolamento em bloco: cabeca/tronco/pelve peça unica",
-          "2-3 pessoas se necessario, prancha lençol/coxins",
-          "PARADA: dor axial subita intensa, piora neurologica, parestesias novas, perda alinhamento"
-        ],
-        "block": "5.2 — Coluna e TRM",
-        "goals": [
-          "Proteger coluna e medula, rolamento em bloco"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Protecao",
-              "Rolamento bloco"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.2.P2 — Deficit neurologico medular (completo ou incompleto)",
-        "desc": "Critico. Paresia/plegia, nivel ASIA A-D",
-        "assess": [],
-        "interv": [
-          "Exercicios ativos/resistidos MMSS (paraplegia) ou MMII (tetraparesia parcial)",
-          "Prevenir atrofia, rigidez, contraturas"
-        ],
-        "block": "5.2 — Coluna e TRM",
-        "goals": [
-          "Preservar forca e ADM segmentos livres"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-10 dias",
-            "interv": [
-              "Ativos/resistidos",
-              "Prevencao"
-            ]
-          },
-          {
-            "timeframe": "Ate alta",
-            "interv": [
-              "Rolamento e transferencias seguras",
-              "Uso colar/colete",
-              "Plano continuidade"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.2.P3 — Incapacidade transferencias seguras",
-        "desc": "Grave. Nao rola, senta, transfere sem violar alinhamento",
-        "assess": [],
-        "interv": [
-          "Sedestacao segura: cabeceira progressiva, depois sedestacao tronco alinhado",
-          "Apoio bracos, colete quando indicado. Monitorar PA, sintomas, fadiga",
-          "Transferencias leito↔poltrona sempre em bloco, sem flexao/rotacao"
-        ],
-        "block": "5.2 — Coluna e TRM",
-        "goals": [
-          "Transferencias seguras independente ou assistido"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-10 dias",
-            "interv": [
-              "Sedestacao",
-              "Transferencias bloco"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.2.P4 — Hipoventilacao por dor, colar ou fraqueza respiratoria",
-        "desc": "Grave. FR superficial, ↓ volumes, tosse fraca (lesoes cervicais/altas)",
-        "assess": [],
-        "interv": [
-          "Fisioterapia respiratoria TRM essencial",
-          "Avaliar ventilometria, CV, PImax/PEmax, tosse PCF",
-          "Inspiracoes profundas, empilhamento ar se indicado, tosse assistida manual/mecanica",
-          "TMI quando possivel"
-        ],
-        "block": "5.2 — Coluna e TRM",
-        "goals": [
-          "Manter volumes pulmonares"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Respiratoria",
-              "Avaliacao",
-              "Tecnicas"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.2.P5 — Alto risco complicacoes imobilismo",
-        "desc": "Grave. Risco atelectasia, pneumonia, trombose, ulceras",
-        "assess": [],
-        "interv": [
-          "Mudanca decubito em bloco frequente",
-          "Bomba muscular, posicionamento adequado",
-          "Mobilizacao precoce possivel",
-          "Ortostatismo/verticalizacao so se liberado: cabeceira→prancha→ortostatismo assistido"
-        ],
-        "block": "5.2 — Coluna e TRM",
-        "goals": [
-          "Prevenir complicacoes imobilismo"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Decubito bloco",
-              "Bomba",
-              "Posicionamento",
-              "Mobilizacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P1 — Restricao carga MMII (NWB/TTWB/PWB/WBAT)",
-        "desc": "Critico. Ordem medica, risco falha sintese",
-        "assess": [],
-        "interv": [
-          "Checklist pre-mobilizacao: regra carga, tipo fixacao, dor, pressao, sinais neurovasculares, risco queda, dispositivos",
-          "Regras por carga: NWB membro no ar, TTWB dedo chao, PWB ensinar porcentagem pratica",
-          "Transferencias protegidas leito↔poltrona/banheiro em sequencia fixa",
-          "Ortostatismo→marcha estacionaria→passos→corredor. Dispositivo: andador/muletas/bengala"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Mobilizacao segura respeitando carga"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Checklist",
-              "Regras",
-              "Transferencias"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Ortostatismo",
-              "Marcha"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P2 — Dor mecanica limitante MMII",
-        "desc": "Grave. EVA ≥6 repouso ou ≥4 ao mobilizar",
-        "assess": [],
-        "interv": [
-          "Controle funcional: posicionamento+elevacao, crioterapia se apropriado",
-          "Mobilizacao graduada sem tranco",
-          "Treino tosse/respiracao se dor limita ventilacao",
-          "Regra: treinar EVA 0-4; ajustar 5-6; parar ≥7 ou dor mecanica nova intensa"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Reduzir dor para treino, alvo EVA ≤4"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Controle dor",
-              "Mobilizacao graduada"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P3 — Inibicao muscular e fraqueza segmentar (quadriceps/gluteos)",
-        "desc": "Moderado. Lag extensor, incapaz controle pelvico, falha STS",
-        "assess": [],
-        "interv": [
-          "Ativacao essencial 24-72h: isometricos quadriceps (sustentada), gluteos, bomba panturrilha",
-          "Elevacao perna estendida so se permitido sem dor relevante",
-          "Ponte parcial se permitido. Dose: micro-series ao dia > sessao unica longa"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Manter ADM funcional e ativacao muscular"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Isometricos",
-              "Bomba",
-              "Ponte"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P4 — Edema, rigidez e perda ADM pos-imobilizacao/pos-op",
-        "desc": "Moderado. Limita marcha (passo curto, dorsiflexao), transferencias",
-        "assess": [],
-        "interv": [
-          "ADM para funcao: joelho flexao/extensao para sentar/levantar e marcha",
-          "Tornozelo dorsiflexao para apoio e passada (prevenir equino)",
-          "Quadril mobilidade para transferencias. Evitar agressividade que piore edema/dor"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Manter ADM funcional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "ADM funcional"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P5 — Instabilidade marcha / alto risco queda",
-        "desc": "Grave. Andador+inseguranca, quase-quedas, medo",
-        "assess": [],
-        "interv": [
-          "Treino marcha foco estabilidade (prioridade)",
-          "Consolidar independencia com dispositivo",
-          "PARADA: dor mecanica subita/estalo, perda neurovascular distal, instabilidade importante/quase-quedas, hipotensao, dessaturacao, sangramento/hematoma expansivo"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Melhorar padrao marcha dentro restricao"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Marcha estabilidade",
-              "Dispositivo"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P6 — Alto risco tromboembolico e complicacoes imobilismo",
-        "desc": "Grave. Trauma+repouso+edema MMII, baixa mobilidade 72h",
-        "assess": [],
-        "interv": [
-          "TVP prevencao ativa: bomba muscular varias vezes/dia, mobilizacao precoce possivel, elevacao membro se indicado",
-          "Vigilancia: edema assimetrico, dor panturrilha, calor"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Prevenir TVP, atelectasia, perda funcional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Bomba",
-              "Mobilizacao",
-              "Vigilancia"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P7 — Fratura pelve/acetabulo com limitacao severa",
-        "desc": "Critico. Dor pelvica importante, restricao carga mais rigida",
-        "assess": [],
-        "interv": [
-          "Tecnicas especificas transferencia respeitando pelve",
-          "Progressao muito cautelosa"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Transferencias seguras com protecao pelvica"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Transferencias pelve"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P8 — Paciente nao domina regra de carga",
-        "desc": "Grave. Apoia sem perceber, cognitivo limitrofe",
-        "assess": [],
-        "interv": [
-          "Educacao intensiva e repetida",
-          "Supervisao constante",
-          "Treino subir/descer degrau quando necessario: sobe com bom, desce com ruim"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Dominio da regra de carga"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Educacao",
-              "Supervisao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P9 — Fratura FEMUR proximal (colo/transtrocantérica/subtrocantérica)",
-        "desc": "Critico. Idoso pos-queda, fixacao DHS/haste/artroplastia",
-        "assess": [],
-        "interv": [
-          "PRIORIDADE: mobilizacao precoce 24-48h pos-op se estavel",
-          "Checklist: tipo fixacao, regra carga, restricoes movimento, dor, hemodinamica, dispositivo",
-          "Sedestacao precoce D1-D2: cabeceira→borda→poltrona, almofada abdutor se artroplastia",
-          "Ortostatismo e marcha D1-D2: andador/paralelas, WBAT geralmente, 3-10 m",
-          "Prevencao TVP agressiva: mobilizacao, bomba panturrilha",
-          "Progressao marcha 10→20→50 m. Fortalecimento quadriceps/gluteos D1+"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Mobilizacao precoce segura",
-          "Marcha funcional com dispositivo"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Checklist",
-              "Sedestacao",
-              "Ortostatismo marcha",
-              "TVP"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Progressao marcha",
-              "Fortalecimento",
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P10 — Fratura FEMUR diafisaria",
-        "desc": "Critico. Alta energia, haste intramedular, PWB/WBAT",
-        "assess": [],
-        "interv": [
-          "Avaliacao: tipo haste, regra carga, Hb/Ht (sangramento coxa), vigilancia compartimental",
-          "Mobilizacao precoce: sedestacao D1-D2, ortostatismo D2-D3 se estavel",
-          "Marcha com andador PWB/WBAT, 20-50 m ate alta",
-          "Ativacao: isometricos quadriceps (critico), gluteos, dorsiflexores"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Mobilizacao segura respeitando carga"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Avaliacao",
-              "Sedestacao",
-              "Ativacao"
-            ]
-          },
-          {
-            "timeframe": "D2-D3",
-            "interv": [
-              "Ortostatismo",
-              "Marcha"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P11 — Fratura TIBIA/FIBULA",
-        "desc": "Critico. Haste/placa ou fixador externo, ALTO RISCO sindrome compartimental",
-        "assess": [],
-        "interv": [
-          "VIGILANCIA COMPARTIMENTAL 48h: 5 Ps (Pain desproporcional, Pressure, Paresthesia, Pallor, Pulselessness). Qualquer suspeita PARAR+avisar URGENTE",
-          "Fixador externo: cuidados pinos, protecao mobilizacao",
-          "Edema: elevacao ACIMA coracao, crioterapia, bomba tornozelo ativa",
-          "Mobilizacao gradual: sedestacao perna elevada, ortostatismo NWB/PWB quando liberado",
-          "Prevencao rigidez tornozelo: mobilizacao ativa D1"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Mobilizacao protegida, vigilancia compartimental"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Vigilancia 5Ps",
-              "Edema",
-              "Mobilizacao",
-              "Tornozelo"
-            ]
-          },
-          {
-            "timeframe": "3-10 dias",
-            "interv": [
-              "Marcha",
-              "ADM tornozelo"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P12 — Fratura TORNOZELO (maleolar uni/bi/trimaleolar)",
-        "desc": "Grave. Edema importante, restricao NWB/TTWB, risco rigidez/equino",
-        "assess": [],
-        "interv": [
-          "Edema prioridade: elevacao acima coracao, crioterapia 15-20 min varias/dia, compressao",
-          "Mobilizacao DEDOS obrigatoria desde D1",
-          "Transferencias protegidas NWB, posicionamento antiequino 24h (90°)",
-          "Recuperacao ADM tornozelo apos liberacao 4-6 sem: mobilizacao, alongamento sural",
-          "Progressao carga: NWB→TTWB→PWB 50%→WBAT conforme protocolo"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Controle edema, preservar ADM dedos, prevenir equino"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Edema",
-              "Dedos",
-              "Transferencias",
-              "Antiequino"
-            ]
-          },
-          {
-            "timeframe": "2-6 sem",
-            "interv": [
-              "ADM tornozelo",
-              "Progressao carga"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P13 — Fratura CALCANEO / ossos do pe",
-        "desc": "Grave. Trauma altura, edema maciço, NWB 8-12 sem",
-        "assess": [],
-        "interv": [
-          "Edema: elevacao rigorosa, crioterapia, compressao",
-          "Mobilizacao obrigatoria: dedos vigoroso, tornozelo dorsi/plantiflexao suave. NUNCA inversao/eversao (subtalar)",
-          "Marcha NWB estrita, dominar perfeitamente",
-          "Manutencao MMII contralateral, core, MMSS"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Controle edema, mobilizacao sem carga"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-2 sem",
-            "interv": [
-              "Edema",
-              "Dedos/tornozelo",
-              "NWB"
-            ]
-          },
-          {
-            "timeframe": "3-6 meses",
-            "interv": [
-              "Progressao carga muito lenta",
-              "ADM",
-              "Calçado"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.3.P14 — Fratura PATELA",
-        "desc": "Grave. Lag extensor grave/completo, imobilizador extensao",
-        "assess": [],
-        "interv": [
-          "Protecao mecanismo extensor: imobilizador 0° 2-4 sem, proibido flexao ativa contra gravidade",
-          "Ativacao quadriceps CRITICA: set quadriceps D1, 10-15 contracoes 5-10s varias/dia",
-          "Controle edema: elevacao, crioterapia, compressao",
-          "Mobilizacao sedestacao/ortostatismo com imobilizador, WBAT geralmente permitida",
-          "Recuperacao extensao ativa (LAG 0°), progressao flexao apos 2-4 sem"
-        ],
-        "block": "5.3 — Fraturas MMII",
-        "goals": [
-          "Proteger fixacao, recuperar extensao ativa"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-2 sem",
-            "interv": [
-              "Protecao",
-              "Quadriceps",
-              "Edema"
-            ]
-          },
-          {
-            "timeframe": "2-6 sem",
-            "interv": [
-              "Extensao ativa",
-              "Flexao progressiva",
-              "Marcha"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P1 — Dor e protecao antalgica MS",
-        "desc": "Grave. EVA ≥6 ao mover/apoiar, MS colado ao corpo",
-        "assess": [],
-        "interv": [
-          "Checklist MS obrigatorio: osso fraturado? fixacao? movimentos proibidos? pode apoiar peso? ate onde mover?",
-          "Controle dor/edema: elevacao, posicionamento, crioterapia",
-          "Mobilizacao ativa dedos, punho (se permitido), cotovelo (se permitido). Mao parada = mao rigida"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Controlar dor e edema, preservar mobilidade segmentos liberados"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Checklist",
-              "Dor/edema",
-              "Mobilizacao segmentos livres"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P2 — Restricao movimento ombro/cotovelo/punho",
-        "desc": "Moderado. Imobilizacao, tipoia, gesso, movimentos proibidos",
-        "assess": [],
-        "interv": [
-          "Educacao paciente: o que pode/nao pode, como deitar/levantar/sentar/andar, proteger braco"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Ensinar movimento e transferir protegendo MS"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P3 — Incapacidade usar dispositivos marcha por limitacao MMSS",
-        "desc": "Grave. Nao segura andador, muletas, mesmo com MMII capazes",
-        "assess": [],
-        "interv": [
-          "Transferencias SEM usar (ou minimamente) braco acometido: levantar com MS contralateral+MMII",
-          "Adaptar altura cama/cadeira, posicao maos",
-          "Adaptacao marcha: andador apoio unilateral? bengala lado oposto? marcha assistida pessoa?"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Levantar e andar mesmo sem usar plenamente braco"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Transferencias sem MS",
-              "Adaptacao"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Consolidar independencia"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P4 — Edema, rigidez e perda ADM membro imobilizado",
-        "desc": "Moderado. Mao inchada, dedos rigidos, risco SDRC",
-        "assess": [],
-        "interv": [
-          "Movimento frequente segmentos liberados, estimulo sensorial leve, uso funcional protegido mao quando possivel",
-          "Evitar imobilizacao desnecessaria, medo de mover tudo"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Prevenir rigidez cronica e SDRC"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Mobilizacao",
-              "Uso protegido"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P5 — Perda funcao global AVDs por limitacao MS",
-        "desc": "Moderado. Dificuldade higiene, alimentacao, vestir, apoiar",
-        "assess": [],
-        "interv": [
-          "Treino AVDs adaptadas",
-          "Estrategias compensatorias"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Melhorar uso funcional protegido MS"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "AVDs adaptadas"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P6 — Risco complicacoes imobilismo MS",
-        "desc": "Moderado. Imobilizacao prolongada, dor+edema+rigidez",
-        "assess": [],
-        "interv": [
-          "Manutencao funcao global: MMII, tronco, MS nao acometido",
-          "Plano progressao ambulatorial mobilidade membro",
-          "PARADA: dor desproporcional/progressiva, edema aumentando, alteracao cor/temperatura/sensibilidade mao, sinais compressao neurovascular, estalo/falha sintese"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Manter funcao global, alta com dominio regras protecao MS"
-        ],
-        "phases": [
-          {
-            "timeframe": "Ate alta",
-            "interv": [
-              "Manutencao global",
-              "Plano",
-              "Criterios parada"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P7 — Fratura UMERO proximal",
-        "desc": "Grave. Queda ombro/braco, tipoia/Velpeau, risco capsulite adesiva",
-        "assess": [],
-        "interv": [
-          "Avaliacao: tipo fratura, tratamento, restricoes, status neurovascular (nervo axilar)",
-          "Controle dor/edema: elevacao, crioterapia, posicionamento tipoia",
-          "Mobilizacao OBRIGATORIA dedos, punho, cotovelo desde D1. NUNCA mao/punho parados",
-          "Prevencao rigidez ombro: exercicios pendulares apos 1-3 sem conforme protocolo",
-          "Progressao ADM passiva→ativo-assistida→ativa conforme protocolo"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Controlar dor/edema, prevenir rigidez ombro"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-2 sem",
-            "interv": [
-              "Avaliacao",
-              "Dor/edema",
-              "Dedos/punho/cotovelo"
-            ]
-          },
-          {
-            "timeframe": "2-6 sem",
-            "interv": [
-              "Pendulares",
-              "ADM"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P8 — Fratura UMERO diafisaria",
-        "desc": "Grave. Trauma direto, RISCO nervo radial 20%",
-        "assess": [],
-        "interv": [
-          "Avaliacao neurologica OBRIGATORIA nervo radial: extensao punho (sinal stop), extensao dedos, abdutor polegar, sensibilidade dorso mao. Qualquer alteracao AVISAR",
-          "Mobilizacao agressiva segmentos livres: dedos e punho CRITICO, ombro pendulares, cotovelo confirmar",
-          "Controle edema. Recuperacao ADM cotovelo e ombro conforme tratamento"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Protecao fixacao, avaliacao neurologica seriada"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-2 sem",
-            "interv": [
-              "Neurologico radial",
-              "Mobilizacao livres",
-              "Edema"
-            ]
-          },
-          {
-            "timeframe": "2-8 sem",
-            "interv": [
-              "ADM",
-              "Fortalecimento"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P9 — Fratura CLAVICULA",
-        "desc": "Moderado. Queda ombro/braco, imobilizacao 8 ou tipoia",
-        "assess": [],
-        "interv": [
-          "Tipo tratamento: conservador 4-6 sem ou cirurgico",
-          "Mobilizacao obrigatoria: dedos, punho, cotovelo. Ombro geralmente restrito 4-6 sem",
-          "Restricoes: evitar elevacao >90°, abducao forçada, rotacao externa extrema, apoiar peso/empurrar",
-          "Controle dor/edema. Progressao ADM ombro apos 4-6 sem"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Controlar dor, protecao fixacao, funcao cotovelo/punho/mao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-3 sem",
-            "interv": [
-              "Mobilizacao",
-              "Restricoes",
-              "Dor"
-            ]
-          },
-          {
-            "timeframe": "3-8 sem",
-            "interv": [
-              "ADM ombro",
-              "Fortalecimento"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P10 — Fratura PUNHO (Colles, Smith, estiloide)",
-        "desc": "Grave. FOOSH, edema importante, ALTO RISCO rigidez e SDRC",
-        "assess": [],
-        "interv": [
-          "Edema prioridade absoluta: elevacao ACIMA coracao, crioterapia, compressao",
-          "Mobilizacao DEDOS obrigatoria D1: flexao/extensao vigorosa todos dedos, punho completo, pinças, oposicao polegar. 10-15 rep 1-2h acordado",
-          "Prevencao SDRC: sinais precoces dor desproporcional, edema progressivo, alteracao cor/temperatura. Qualquer suspeita AVISAR",
-          "Ombro e cotovelo ADM completa D1. Recuperacao ADM punho apos retirada gesso ~6 sem"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Controle edema agressivo, mobilizacao dedos, prevenir SDRC"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-6 sem",
-            "interv": [
-              "Edema",
-              "Dedos",
-              "SDRC"
-            ]
-          },
-          {
-            "timeframe": "6-12 sem",
-            "interv": [
-              "ADM punho",
-              "Fortalecimento"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P11 — Fratura ESCAFOIDE",
-        "desc": "Grave. Tabaqueira anatomica, gesso INCLUINDO POLEGAR 8-12 sem, risco pseudoartrose",
-        "assess": [],
-        "interv": [
-          "Caracteristicas: vascularizacao retrograda, polo proximal/terco medio alto risco necrose/pseudoartrose. Consolidacao lenta 8-12 sem",
-          "Imobilizacao especifica incluindo polegar 8-12 sem minimo",
-          "Mobilizacao dedos 2-5 (indicador ao minimo) ATIVA VIGOROSA D1. NUNCA parados",
-          "Educacao: escafoide consolida LENTAMENTE. Remover gesso antes = risco alto pseudoartrose"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Protecao rigorosa, prevencao rigidez dedos livres"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-12 sem",
-            "interv": [
-              "Imobilizacao",
-              "Dedos livres",
-              "Educacao"
-            ]
-          },
-          {
-            "timeframe": "3-6 meses",
-            "interv": [
-              "Recuperacao pos-imobilizacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.4.P12 — Fratura MAO (metacarpos, falanges)",
-        "desc": "Grave. Trauma direto, edema importante, risco rigidez digital grave",
-        "assess": [],
-        "interv": [
-          "Edema prioridade maxima: elevacao rigorosa, crioterapia, compressao suave",
-          "Posicao imobilizacao CRITICA: punho leve extensao 20-30°, MF flexao 70-90°, IF extensao 0°, polegar abducao. NUNCA MF extensao",
-          "Mobilizacao precoce protegida: dedos nao fraturados ATIVA VIGOROSA D1. Dedo fraturado conforme protocolo",
-          "Recuperacao ADM: prioridade MF flexao 90°, IF proximal 100°, IF distal 70°. Fortalecimento e funcao"
-        ],
-        "block": "5.4 — Fraturas MMSS",
-        "goals": [
-          "Controle edema, mobilizacao protegida precoce"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-3 sem",
-            "interv": [
-              "Edema",
-              "Posicao",
-              "Mobilizacao"
-            ]
-          },
-          {
-            "timeframe": "3-12 sem",
-            "interv": [
-              "ADM",
-              "Fortalecimento"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.5.P1 — Dor pos-operatoria limitante e protecao antalgica",
-        "desc": "Grave. EVA ≥6 ou dor impede respiracao/transferencia",
-        "assess": [],
-        "interv": [
-          "Checklist pre-sessao: cirurgia exata? movimentos proibidos? regra carga? dreno? PA/FC/SpO2/dor? dispositivo marcha?",
-          "Controle dor para permitir mobilizacao"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Reduzir dor para funcao, meta EVA ≤4 treino"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Checklist",
-              "Controle dor"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.5.P2 — Restricao movimento especifica cirurgia",
-        "desc": "Critico. Ex: quadril flexao/adução/rotacao, risco luxacao",
-        "assess": [],
-        "interv": [
-          "Educacao especifica conforme cirurgia"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Dominar regras cirurgia (movimento e carga)"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.5.P3 — Restricao carga (WBAT/PWB/TTWB/NWB) pos-op",
-        "desc": "Critico. Conforme protese, osteossintese, qualidade ossea",
-        "assess": [],
-        "interv": [
-          "Protocolo D0-D2: tirar do leito com seguranca, impedir espiral imobilismo",
-          "Exercicios circulatorios (bomba panturrilha), ativacao quadriceps+gluteo (isometricos), treino respiratorio se dor limita",
-          "Sedestacao progressiva, transferencia leito↔poltrona tecnica protegida, ortostatismo curto seguro, marcha muito curta se permitido"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Mobilizacao precoce segura"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Protocolo base",
-              "Exercicios",
-              "Sedestacao",
-              "Transferencia",
-              "Ortostatismo",
-              "Marcha"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.5.P4 — Fraqueza/inibicao muscular pos-op (quadriceps/gluteo)",
-        "desc": "Moderado. Extensor lag, incapaz estabilizar pelve, falha STS",
-        "assess": [],
-        "interv": [
-          "D3-D7: consolidar funcao e independencia",
-          "Progressao marcha distancia curta→corredor",
-          "Treino sit-to-stand tecnica segura",
-          "ADM funcional sem violar restricoes",
-          "Fortalecimento progressivo quando permitido",
-          "Treino AVDs: banheiro, higiene, vestir"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Fortalecer ativacao quadriceps/gluteo/tronco"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Marcha",
-              "STS",
-              "ADM",
-              "Fortalecimento",
-              "AVDs"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.5.P5 — Rigidez/queda ADM (risco contraturas)",
-        "desc": "Moderado. Amplitude insuficiente sentar/levantar/marcha",
-        "assess": [],
-        "interv": [
-          "Mobilizacao especifica conforme cirurgia"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Recuperar ADM funcional minima"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Mobilizacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.5.P6 — Alto risco trombose, atelectasia, complicacoes sistemicas",
-        "desc": "Grave. Cirurgia+imobilismo+dor+sedacao",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce agressiva dentro restricoes"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Prevenir atelectasia, trombose, perda funcional rapida"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Mobilizacao precoce"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.5.P7 — Risco queda e violar regras pos-operatorias",
-        "desc": "Grave. Impulsivo, ansioso, delirium, uso inadequado dispositivo",
-        "assess": [],
-        "interv": [
-          "Subprotocolos por cirurgia: ATQ (altura sentar, evitar cruzar pernas, rotacoes), ATJ (edema+mobilidade+quadriceps), osteossintese (educacao carga), coluna (rolar bloco)",
-          "Regras movimento e carga dominadas, plano progressao ambulatorial",
-          "PARADA: dor mecanica subita intensa, sangramento/hematoma expansivo, instabilidade hemodinamica, sinais neurovasculares alterados, queda/quase-queda, piora neurologica coluna"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Alta com seguranca e autonomia compativel domicilio"
-        ],
-        "phases": [
-          {
-            "timeframe": "Ate alta",
-            "interv": [
-              "Protocolos especificos",
-              "Criterios parada"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.6.P1 — Fratura COLUNA CERVICAL (estavel sem deficit neurologico)",
-        "desc": "Critico. Trauma cervical, colar/halo-colete/fixacao, risco lesao medular tardia",
-        "assess": [],
-        "interv": [
-          "Avaliacao neurologica OBRIGATORIA antes toda mobilizacao: forca MMSS/MMII, sensibilidade, reflexos. Qualquer alteracao nova PARAR+AVISAR",
-          "Tipo imobilizacao: colar movimento cervical PROIBIDO; halo limita tronco; fixacao confirmar restricoes",
-          "Mobilizacao gradual protegida D1-D2 sedestacao com colar, transferencias NUNCA remover colar sem ordem",
-          "Restricoes absolutas: NUNCA remover colar, movimentos cervicais, manipulacao"
-        ],
-        "block": "5.5 — Pos-operatorio Ortopedico",
-        "goals": [
-          "Protecao rigorosa coluna cervical"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-2 sem",
-            "interv": [
-              "Avaliacao neuro",
-              "Mobilizacao com colar"
-            ]
-          },
-          {
-            "timeframe": "2-12 sem",
-            "interv": [
-              "Funcao global",
-              "Educacao colar"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.6.P2 — Fratura COLUNA TORACICA (compressao/estavel)",
-        "desc": "Grave. Queda altura, osteoporose, dor toracica intensa",
-        "assess": [],
-        "interv": [
-          "Avaliacao: tipo fratura, estabilidade 3 colunas Denis, deficit neurologico? tratamento?",
-          "Controle dor crucial para respiracao profunda e mobilizacao. EVA >6 limita severamente",
-          "Prevencao complicacoes respiratorias PRIORIDADE: respiracao profunda APESAR dor (com analgesia), tosse assistida/controlada, mudancas decubito, mobilizacao precoce",
-          "Mobilizacao gradual D1-D2 sedestacao, D2-D3 ortostatismo e marcha. Evitar flexao tronco, rotacoes forçadas, carga axial"
-        ],
-        "block": "5.6 — Fraturas Coluna / Politrauma",
-        "goals": [
-          "Controle dor, mobilizacao protegida precoce"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Avaliacao",
-              "Dor",
-              "Respiratorio",
-              "Mobilizacao"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Marcha",
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.6.P3 — Fratura COLUNA LOMBAR (compressao/explosao)",
-        "desc": "Critico. Dor lombar intensa, possivel deficit L2-S1",
-        "assess": [],
-        "interv": [
-          "Avaliacao neurologica OBRIGATORIA MMII cada sessao: forca flexores quadril, quadriceps, dorsiflexores, plantiflexores, gluteos; sensibilidade; reflexos; esfincteriana (sindrome cauda equina ALERTA)",
-          "Restricoes conforme tratamento: conservador repouso 1-3 dias→mobilizacao gradual, evitar flexao lombar/torcoes/carga axial; cirurgico confirmar restricoes",
-          "Mobilizacao precoce protegida D1-D2 sedestacao (pode ser dolorosa), D2-D3 ortostatismo e marcha andador/paralelas. Log roll, sentar/levantar com apoio MMSS",
-          "Prevencao TVP. Marcha, fortalecimento MMII, educacao mecanica corporal e sinais alerta"
-        ],
-        "block": "5.6 — Fraturas Coluna / Politrauma",
-        "goals": [
-          "Protecao coluna, avaliacao neurologica seriada"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Neuro MMII",
-              "Restricoes",
-              "Mobilizacao",
-              "TVP"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Marcha",
-              "Fortalecimento",
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.7.P1 — TCE leve/moderado SEM indicacao neurocirurgica",
-        "desc": "Critico. Glasgow 9-15, cefaleia, nausea, tontura, confusao",
-        "assess": [],
-        "interv": [
-          "Avaliacao neurologica OBRIGATORIA cada sessao: Glasgow, orientacao, pupilas, forca MMSS/MMII, marcha. Sinais alarme: piora Glasgow, cefaleia pior vida, vomitos jato, sonolencia, assimetria pupilar/forca, convulsao AVISAR",
-          "Liberacao medica para levantar (TC estavel+observacao 12-24h). Progressao cautelosa D1-D2 cabeceira 30°→45°→sentado; D2-D3 beira leito→poltrona; D3+ ortostatismo/marcha SE estavel",
-          "Prevencao sindrome pos-concussional: repouso relativo (mobilizacao leve OK), evitar esforco fisico/cognitivo intenso, hidratacao, sono",
-          "Posicionamento cabeceira 30-45°"
-        ],
-        "block": "5.6 — Fraturas Coluna / Politrauma",
-        "goals": [
-          "Observacao neurologica seriada, mobilizacao cautelosa"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Avaliacao neuro",
-              "Progressao cautelosa",
-              "Prevencao"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Progressao funcional",
-              "Educacao alta"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.7.P2 — Trauma ABDOMINAL fechado sob observacao",
-        "desc": "Critico. Dor abdominal, distensao, tratamento conservador ou pos-laparotomia",
-        "assess": [],
-        "interv": [
-          "Sinais alerta: sangramento (taquicardia, hipotensao, palidez, distensao progressiva, Hb/Ht); peritonite (dor difusa, defesa, febre, RHA). Qualquer alteracao AVISAR",
-          "Repouso 24-48h: decubito dorsal ou conforto, joelhos semifletidos. Mobilizacao minima: mudancas decubito suaves, exercicios MMII leito. Evitar sentar/levantar precipitado, Valsalva, contracao abdominal",
-          "Contraindicacoes temporarias: instavel, sangramento ativo, EVA >7, suspeita lesao. Aguardar estabilizacao e liberacao medica",
-          "Progressao D2-D3 cabeceira→beira leito→poltrona; D3-D5 ortostatismo e marcha curta"
-        ],
-        "block": "5.6 — Fraturas Coluna / Politrauma",
-        "goals": [
-          "Repouso inicial, observacao sangramento/peritonite"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Sinais alerta",
-              "Repouso"
-            ]
-          },
-          {
-            "timeframe": "2-7 dias",
-            "interv": [
-              "Progressao",
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.7.P3 — Lesao LIGAMENTAR grave joelho/tornozelo (entorse II-III)",
-        "desc": "Grave. Dor intensa, edema maciço, instabilidade",
-        "assess": [],
-        "interv": [
-          "PROTOCOLO PRICE/POLICE: Protection, Ice 15-20 min 3-6x/dia, Compression, Elevation, Load conforme protocolo",
-          "Tipo lesao e tratamento: grau I mobilizacao precoce; II imobilizacao 2-4 sem; III cirurgico ou conservador conforme ligamento",
-          "Controle atrofia: isometricos quadriceps D1 5s 10-15 rep 3-4x/dia; tornozelo se permitido",
-          "Mobilizacao conforme protocolo. Progressao carga tipica 0-2 sem descarga, 2-6 sem parcial, 6-8 sem total. Propriocepcao essencial 4-6 sem"
-        ],
-        "block": "5.6 — Fraturas Coluna / Politrauma",
-        "goals": [
-          "Controle edema, protecao, prevenir rigidez"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-2 sem",
-            "interv": [
-              "PRICE/POLICE",
-              "Tipo lesao",
-              "Atrofia"
-            ]
-          },
-          {
-            "timeframe": "2-12 sem",
-            "interv": [
-              "Progressao carga",
-              "Fortalecimento",
-              "Propriocepcao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.7.P4 — Suspeita ou SINDROME COMPARTIMENTAL",
-        "desc": "Critico. EMERGENCIA ortopedica. 5 Ps, risco necrose <6h",
-        "assess": [],
-        "interv": [
-          "5 Ps: Pain desproporcional e à extensao passiva dedos (precoce), Pressure compartimento tenso, Paresthesia, Pallor (tardio), Pulselessness (tardio). Situacoes risco: fraturas alta energia, esmagamento, reperfusao",
-          "Conduta imediata: RECONHECER, AVISAR EQUIPE URGENTE, REMOVER imobilizacoes constritivas, ELEVAR membro nivel coracao (NAO acima), NAO mobilizar. Tratamento: FASCIOTOMIA URGENCIA <6h",
-          "Janela <6h reversivel; 6-12h sequelas; >12h necrose/amputacao"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Reconhecimento precoce e acionamento cirurgia urgente"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-6h",
-            "interv": [
-              "5 Ps",
-              "Conduta imediata"
-            ]
-          },
-          {
-            "timeframe": "Pos-fasciotomia",
-            "interv": [
-              "Cuidados ferida",
-              "Mobilizacao precoce"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.7.P5 — AMPUTACAO traumatica membro (aguda)",
-        "desc": "Critico. Perda traumatica segmento, dor intensa, choque emocional",
-        "assess": [],
-        "interv": [
-          "Suporte psicologico PRIORIDADE: presenca empatica, escuta, nunca minimizar, psicologia urgente",
-          "Controle dor: incisional + fantasma (dessensibilizacao coto, espelhamento, TENS)",
-          "Posicionamento coto: MMII evitar flexao quadril/joelho prolongada (contratura flexao); decubito ventral 20-30 min 2-3x/dia; MMSS membro ao longo corpo",
-          "Cuidados coto: curativo, bandagem compressiva 8 quando liberado. Mobilizacao e treino funcional precoce D1-D2 sedestacao/transferencias, D2-D3 ortostatismo/marcha 2 muletas",
-          "Fortalecimento residual e contralateral, AVDs adaptadas, preparacao protetizacao"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Suporte psicologico, controle dor, posicionamento adequado"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Psicologico",
-              "Dor",
-              "Posicionamento",
-              "Coto"
-            ]
-          },
-          {
-            "timeframe": "3-14 dias",
-            "interv": [
-              "Mobilizacao",
-              "Fortalecimento",
-              "AVDs",
-              "Protetizacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P1 — Instabilidade clinica global (hemodinamica e/ou respiratoria)",
-        "desc": "Critico. PAM <65 ou vasopressor, SpO2 instavel/FiO2 alta, lactato elevado, VM em parametros altos",
-        "assess": [],
-        "interv": [
-          "Verificar criterios estabilidade com equipe antes de mobilizar",
-          "Priorizar intervencoes no leito: posicionamento, recrutamento, prevencao complicacoes",
-          "Mobilizacao passiva/ativo-assistida de segmentos livres se tolerado",
-          "PARADA: queda PAM, dessaturacao sustentada, arritmia, piora neurologica"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Manter seguranca hemodinamica/respiratoria durante fisioterapia"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Reavaliacao seriada",
-              "Mobilizacao leve",
-              "Prevencao complicacoes"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P2 — Multiplas restricoes de movimento e carga",
-        "desc": "Critico. Varios focos fratura, lesao coluna/pelve, ordens conflitantes",
-        "assess": [],
-        "interv": [
-          "Mapear TODAS as restricoes antes da sessao (carga, movimentos proibidos, posicionamentos)",
-          "Planejar trajeto e tecnicas de mobilizacao com 2-3 profissionais",
-          "Usar dispositivos auxiliares (prancha, cinto, andador) conforme quadro",
-          "Registrar plano simplificado junto ao leito"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Mobilizar sem violar nenhuma restricao mecanica"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Mapa restricoes",
-              "Planejamento equipe",
-              "Mobilizacao assistida"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Revisar restricoes",
-              "Progredir conforme liberacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P3 — Alto risco hipoxemia, atelectasia e complicacoes pulmonares",
-        "desc": "Critico. Trauma toracico/contusao, dor importante, secrecao retida, imobilidade",
-        "assess": [],
-        "interv": [
-          "Combinar analgesia otima com medico antes de sessoes",
-          "Reexpansao e higiene brônquica frequentes (criterios: SpO2, RX, ausculta, secrecao)",
-          "Posicionamento terapeutico (decubitos estrategicos, semi-Fowler, prona vigil se indicado)",
-          "Mobilizacao precoce dentro seguranca hemodinamica"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Reduzir risco IRpA, pneumonia e VMI prolongada"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Analgesia",
-              "Reexpansao",
-              "Higiene",
-              "Posicionamento"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Mobilizacao progressiva",
-              "Reavaliacao imagem"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P4 — Rebaixamento do nivel de consciencia / TCE associado",
-        "desc": "Critico. Glasgow <13, sedacao, deficits focais, colaboracao limitada",
-        "assess": [],
-        "interv": [
-          "Avaliacao neurologica seriada a cada sessao",
-          "Manter cabeca alinhada, evitar manobras que aumentem PIC",
-          "Mobilizacao graduada (cabeceira→beira leito→poltrona→ortostatismo) somente se autorizado",
-          "Estimulo sensorial e motor precoce sem provocar agitacao"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Prevenir complicacoes do coma e promover recuperacao neurologica"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Avaliacao neuro",
-              "Posicionamento",
-              "Estimulo seguro"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Progressao mobilizacao",
-              "Treino funcional basico"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P5 — Dor intensa e resposta simpatica exagerada",
-        "desc": "Grave. EVA ≥7 com taquicardia/hipertensao associadas",
-        "assess": [],
-        "interv": [
-          "Coordinar manejo analgésico com equipe (antes, durante e apos sessao)",
-          "Usar tecnicas de mobilizacao em blocos curtos com pausas",
-          "Ensinar estrategias nao farmacologicas (posicionamento, respiracao, gelo/calor quando indicado)",
-          "Monitorar sinais vitais durante mobilizacao"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Reduzir dor a nivel que permita mobilizacao segura"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Analgesia otima",
-              "Sessões curtas",
-              "Treino respiratorio"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Aumentar tolerancia ao movimento",
-              "Autogestao da dor"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P6 — Fraqueza global e risco extremo de perda funcional",
-        "desc": "Critico. Leito >72h, VM/sedacao/BNM, incapaz rolar/sentar ou sustentar cabeca/tronco",
-        "assess": [],
-        "interv": [
-          "Protocolo de mobilizacao precoce em UTI: mobilizacao passiva/assistida, sedestacao, ortostatismo progressivo",
-          "Treinar rolar, sentar beira leito e STS conforme nivel de consciencia/forca",
-          "Associar eletroestimulacao se disponivel em grupos chave (quadriceps, gluteos)",
-          "Planejar metas funcionais semanais com equipe"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Evitar fraqueza adquirida na UTI e perda de autonomia"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-7 dias",
-            "interv": [
-              "Mobilizacao precoce",
-              "Treino leito",
-              "Sedestacao"
-            ]
-          },
-          {
-            "timeframe": ">7 dias",
-            "interv": [
-              "Ortostatismo/marcha",
-              "Fortalecimento",
-              "Treino AVDs"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P7 — Alto risco tromboembolico e complicacoes do imobilismo",
-        "desc": "Critico. Trauma+inflamacao+imobilidade+cirurgias multiplas",
-        "assess": [],
-        "interv": [
-          "Garantir medidas farmacologicas conforme protocolo (se nao contraindicadas)",
-          "Bomba muscular frequente MMII, mudanca decubito, sedestacao precoce",
-          "Educar paciente/familia sobre sinais de TVP/TEP",
-          "Registrar contraindicacoes e revisar diariamente"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Reduzir incidência de TVP/TEP e complicacoes do repouso"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Profilaxia",
-              "Bomba muscular",
-              "Decubitos"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Mobilizacao ativa",
-              "Educacao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "5.8.P8 — Risco de queda, falha de sintese e eventos adversos na mobilizacao",
-        "desc": "Critico. Multiplos dispositivos, instabilidade postural, deficit cognitivo/impulsividade",
-        "assess": [],
-        "interv": [
-          "Definir nivel minimo de ajuda (2-3 pessoas) e equipamentos antes de cada sessao",
-          "Usar cintos de seguranca, andadores, suportes conforme necessario",
-          "Estabelecer criterios PARADA claros (quase-queda, dor mecanica aguda, perda contato linha/dispositivo critico)",
-          "Documentar eventos adversos e ajustar plano"
-        ],
-        "block": "5.7 — Outros Traumas",
-        "goals": [
-          "Realizar mobilizacao segura mesmo em politrauma complexo"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Planejamento seguranca",
-              "Mobilizacao assistida",
-              "Criterios parada"
-            ]
-          },
-          {
-            "timeframe": "3-14 dias",
-            "interv": [
-              "Reducao ajuda",
-              "Autonomia progressiva"
-            ]
-          }
-        ]
-      }
+        {
+            "name": "5.0.P1 — Dor traumática ou pós-operatória limitante",
+            "desc": "Grave. EVA ≥ 6 em repouso ou ≥ 4 ao mobilizar, dor impede: respirar fundo, tossir, sentar, levantar, andar",
+            "block": "🦴 5.0 — BASE TRANSVERSAL DO TRAUMA/ORTOPEDIA",
+            "goals": [
+                "Reduzir EVA ≤ 4 em repouso e ≤ 3 ao mobilizar",
+                "Participar da fisioterapia sem interrupção por dor",
+                "Realizar respiração profunda e tosse sem espasmo álgico"
+            ],
+            "assess": [
+                "EVA/NRS em repouso e durante movimento/função",
+                "Impacto da dor na mecânica ventilatória (expansibilidade, tosse)",
+                "Analgesia atual e janela de maior efeito",
+                "Avaliação de guarding e comportamento de proteção"
+            ],
+            "interv": [
+                "Solicitar analgesia antes das sessões (comunicar equipe médica)",
+                "TENS analgésico no local da dor antes de mobilizar",
+                "Técnicas suaves: mobilização passiva, posicionamento anti-álgico",
+                "Incentivo à respiração profunda na janela de analgesia adequada",
+                "Progressão de mobilização conforme controle da dor"
+            ]
+        },
+        {
+            "name": "5.0.P2 — Restrição de carga (NWB / TTWB / PWB / WBAT)",
+            "desc": "Grave. Prescrição formal de restrição, risco de falha de síntese/colapso estrutural",
+            "block": "🦴 5.0 — BASE TRANSVERSAL DO TRAUMA/ORTOPEDIA",
+            "goals": [
+                "Cumprir restrição de carga com zero violações",
+                "Treinar marcha com dispositivo adequado dentro dos limites",
+                "Manter força e ADM dos segmentos não restritos"
+            ],
+            "assess": [
+                "Classificação de carga prescrita e justificativa",
+                "Domínio do paciente sobre a restrição (NWB/TTWB/PWB/WBAT)",
+                "Dispositivo de marcha mais adequado ao nível de carga",
+                "Risco de queda durante deambulação com restrição"
+            ],
+            "interv": [
+                "Treino da técnica de marcha com carga prescrita (andador/muletas)",
+                "Educação do paciente e família sobre restrição: o que é e por quê",
+                "Exercícios de MMSS e core sem carga no segmento restrito",
+                "Fortalecimento isométrico do membro restrito sem carga axial",
+                "Revisão diária com equipe médica sobre progressão da carga"
+            ]
+        },
+        {
+            "name": "5.0.P3 — Risco de instabilidade mecânica / falha de fixação",
+            "desc": "Crítico. Osteossíntese recente, fixador externo, fratura instável, dor mecânica localizada",
+            "block": "🦴 5.0 — BASE TRANSVERSAL DO TRAUMA/ORTOPEDIA",
+            "goals": [
+                "Realizar mobilização sem comprometer fixação cirúrgica",
+                "Identificar sinais precoces de falha de fixação",
+                "Manter movimentos dentro dos limites de segurança mecânica"
+            ],
+            "assess": [
+                "Tipo de fixação e protocolo do cirurgião",
+                "Dor mecânica localizada no foco de fratura",
+                "Crepitação, calor ou aumento de edema local",
+                "Comunicação diária com equipe cirúrgica"
+            ],
+            "interv": [
+                "Mobilização apenas dentro dos limites aprovados pelo cirurgião",
+                "Nenhuma carga ou movimento proibido sem liberação médica",
+                "Checklist de segurança antes de cada sessão",
+                "Interrupção imediata se dor mecânica nova ou crepitação",
+                "Comunicar qualquer alteração ao cirurgião imediatamente"
+            ]
+        },
+        {
+            "name": "5.0.P4 — Imobilismo com risco sistêmico",
+            "desc": "Grave. Paciente restrito ao leito, risco de: atelectasia, TEP/TVP, perda funcional acelerada",
+            "block": "🦴 5.0 — BASE TRANSVERSAL DO TRAUMA/ORTOPEDIA",
+            "goals": [
+                "Iniciar mobilização precoce nas primeiras 24-48h quando seguro",
+                "Realizar exercícios de MMII para profilaxia de TVP",
+                "Manter expansibilidade pulmonar e trocas gasosas"
+            ],
+            "assess": [
+                "Risco de TVP: Caprini ou Wells Score",
+                "Risco de atelectasia: ausculta, RX, SpO₂",
+                "Tempo em decúbito nas últimas 24h",
+                "Medicação antitrombótica prescrita"
+            ],
+            "interv": [
+                "Exercícios de bombeamento de panturrilha 10x/h acordado",
+                "Mobilização passiva e ativa-assistida de MMII",
+                "Fisioterapia respiratória: expansão, tosse dirigida",
+                "Mudança de decúbito a cada 2h",
+                "Deambulação precoce assim que segura clinicamente"
+            ]
+        },
+        {
+            "name": "5.0.P5 — Perda de ADM e força nos segmentos não imobilizados",
+            "desc": "Moderado. Edema, rigidez, inibição muscular, desuso nos segmentos proximal e contralateral ao trauma",
+            "block": "🦴 5.0 — BASE TRANSVERSAL DO TRAUMA/ORTOPEDIA",
+            "goals": [
+                "Manter ADM completa nos segmentos não imobilizados",
+                "Prevenir atrofia muscular nos membros não afetados",
+                "Manter condicionamento cardiovascular mínimo"
+            ],
+            "assess": [
+                "Goniometria dos segmentos proximais e contralaterais",
+                "MRC dos grupos musculares não restritos",
+                "Edema: perimetria e sinal de cacifo",
+                "Força de preensão (quando MMSS livre)"
+            ],
+            "interv": [
+                "Exercícios ativos de todos os segmentos não restritos diariamente",
+                "Mobilização de articulações proximais ao trauma (ex: quadril em fratura de joelho)",
+                "Cicloergômetro de MMSS quando MMII restrito",
+                "Treino de MMSS para uso de dispositivos de marcha",
+                "Correção de edema: elevação, crioterapia, compressão"
+            ]
+        },
+        {
+            "name": "5.1.P1 — Dor ventilatório-dependente com hipoventilação",
+            "desc": "Grave. EVA ≥ 6 ao inspirar profundo/tossir, FR superficial, ↓ excursão torácica, ↓ volumes, piora da SpO₂ ao esforço, RX: hipoventilação basal/atelectasia incipiente",
+            "block": "🫁 5.1 — TRAUMA TORÁCICO",
+            "goals": [
+                "Expansibilidade torácica simétrica sem dor limitante",
+                "Vt > 5-8 mL/kg ao respirar profundo com analgesia",
+                "SpO₂ ≥ 94% em ar ambiente ao esforço leve"
+            ],
+            "assess": [
+                "Cirtometria axilar e xifoidiana",
+                "Ventilometria: Vt e CV",
+                "SpO₂ em repouso e ao esforço",
+                "EVA ao inspirar profundo, tossir e mobilizar",
+                "Ausculta: redução de MV, presença de estertores"
+            ],
+            "interv": [
+                "Solicitar analgesia antes da sessão (bloco intercostal, PCA, EV)",
+                "Fisioterapia respiratória: expansão costal manual e incentivador",
+                "Sniff test e inspiração fracionada para ganho de volume",
+                "Suporte de tórax para tosse (travesseiro/mão do terapeuta)",
+                "Posicionamento lateral contrário à lesão para expansão do pulmão acometido"
+            ]
+        },
+        {
+            "name": "5.1.P2 — Atelectasia segmentar/lobar pós-trauma",
+            "desc": "Grave. RX/TC: colapso parcial/total, ausculta: ↓ MV localizado, ↑ necessidade de O₂ ou queda de SpO₂, ↓ complacência regional",
+            "block": "🫁 5.1 — TRAUMA TORÁCICO",
+            "goals": [
+                "Reexpansão radiológica da área colapsada",
+                "SpO₂ ≥ 94% sem aumento de FiO₂",
+                "Ausculta com MV presente nos segmentos afetados"
+            ],
+            "assess": [
+                "RX/TC: localização e extensão da atelectasia",
+                "Ausculta: segmentos hipoventilados",
+                "SpO₂ e necessidade de O₂ suplementar",
+                "Capacidade de tosse eficaz (PCF)"
+            ],
+            "interv": [
+                "Drenagem postural para o segmento afetado",
+                "Vibrocompressão segmentar sobre a área colapsada",
+                "Manobra de hiperinsuflação manual (bag squeezing) em ventilados",
+                "CPAP/EPAP para recrutamento alveolar",
+                "Deambulação precoce como potente recurso de expansão pulmonar"
+            ]
+        },
+        {
+            "name": "5.1.P3 — Tosse ineficaz e retenção de secreção",
+            "desc": "Grave. Dor ou fraqueza impede tosse, PCF < 270 L/min = tosse ineficaz, PCF < 160 L/min = incapaz de limpar via aérea, roncos/estertores, necessidade de aspiração",
+            "block": "🫁 5.1 — TRAUMA TORÁCICO",
+            "goals": [
+                "PCF ≥ 270 L/min ou tosse eficaz com suporte",
+                "Via aérea limpa sem necessidade frequente de aspiração",
+                "Ausculta sem roncos persistentes"
+            ],
+            "assess": [
+                "PCF (Peak Cough Flow) com fluxômetro",
+                "Ausculta: roncos, estertores, crepitações",
+                "SpO₂ antes e após higiene brônquica",
+                "Capacidade ventilatória para suportar manobra de tosse"
+            ],
+            "interv": [
+                "Suporte manual de tórax durante tosse (travesseiro/mãos)",
+                "Técnica de expiração forçada (huff) como alternativa à tosse explosiva",
+                "Drenagem autogênica para mobilização de secreção",
+                "Cough Assist (insuflador-exsuflador) se PCF < 160 L/min",
+                "Analgesia adequada como pré-requisito para tosse eficaz"
+            ]
+        },
+        {
+            "name": "5.1.P4 — Contusão pulmonar com alteração de troca gasosa",
+            "desc": "Crítico. PaO₂/FiO₂ < 300 (ou SpO₂ instável), RX/TC: consolidações/vidro fosco, aumento progressivo da FiO₂ necessária",
+            "block": "🫁 5.1 — TRAUMA TORÁCICO",
+            "goals": [
+                "PaO₂/FiO₂ > 300 com progressão positiva",
+                "SpO₂ estável ≥ 92% com FiO₂ mínima",
+                "Evitar progressão para SDRA"
+            ],
+            "assess": [
+                "PaO₂/FiO₂ (relação P/F)",
+                "SpO₂ e FiO₂ necessária",
+                "TC de tórax: extensão das consolidações",
+                "Mecânica ventilatória: Vt, pressão de pico, complacência (em ventilados)"
+            ],
+            "interv": [
+                "Posicionamento em prona 16h/dia se P/F < 150 em ventilados",
+                "Estratégia protetora de VM: Vt 6 mL/kg, PEEP adequada",
+                "Drenagem postural e higiene brônquica cuidadosa",
+                "Mobilização passiva precoce para recrutar regiões dorsais",
+                "Monitorização rigorosa da SpO₂ durante qualquer intervenção"
+            ]
+        },
+        {
+            "name": "5.1.P5 — Instabilidade mecânica da parede torácica (volet costal)",
+            "desc": "Crítico. Movimento paradoxal, dor intensa, ↑ trabalho respiratório, risco de fadiga respiratória",
+            "block": "🫁 5.1 — TRAUMA TORÁCICO",
+            "goals": [
+                "Manutenção de ventilação adequada sem fadiga",
+                "Prevenir deterioração para insuficiência respiratória",
+                "Suporte ventilatório de manutenção segura"
+            ],
+            "assess": [
+                "Extensão do volet e movimento paradoxal",
+                "FR, volume corrente e SpO₂",
+                "Trabalho respiratório: uso de musculatura acessória",
+                "Gasometria arterial: pH, PaCO₂, PaO₂"
+            ],
+            "interv": [
+                "Imobilização pneumática interna: CPAP ou VM com PEEP",
+                "Posicionamento lateral sobre o lado do volet para estabilização",
+                "Fisioterapia respiratória não agressiva (sem compressão do volet)",
+                "Comunicar imediatamente fadiga respiratória à equipe médica",
+                "Preparação para intubação se deterioração"
+            ]
+        },
+        {
+            "name": "5.1.P6 — Pneumo/hemotórax drenado com risco de complicações",
+            "desc": "Grave. Dreno em selo d'água, dor e proteção ventilatória, risco de: hipoventilação, atelectasia, infecção",
+            "block": "🫁 5.1 — TRAUMA TORÁCICO",
+            "goals": [
+                "Expansão pulmonar completa com dreno funcionante",
+                "Ausculta com MV presente no hemitórax drenado",
+                "Resolução da coleção com progressão para remoção do dreno"
+            ],
+            "assess": [
+                "Drenagem: volume, características, oscilação, fuga aérea",
+                "RX: expansão do pulmão, posição do dreno",
+                "Ausculta: MV no lado drenado",
+                "EVA ao respirar e mobilizar com dreno"
+            ],
+            "interv": [
+                "Orientação sobre mobilização segura com dreno (não dobrar, não elevar além da altura do tórax)",
+                "Fisioterapia respiratória ipsilateral ao dreno com cuidado",
+                "Expansão do hemitórax drenado: incentivador, expansão costal manual",
+                "Drenagem postural cuidadosa evitando posições que aumentem dor",
+                "Analgesia adequada para permitir expansão torácica"
+            ]
+        },
+        {
+            "name": "5.1.P7 — Insuficiência respiratória aguda pós-trauma",
+            "desc": "Crítico. SpO₂ < 90% com O₂, FR > 30 ou < 10, PaO₂/FiO₂ < 200, uso de musculatura acessória/fadiga",
+            "block": "🫁 5.1 — TRAUMA TORÁCICO",
+            "goals": [
+                "Suporte ventilatório adequado sem intubação (se possível)",
+                "SpO₂ ≥ 92% com suporte O₂/VNI",
+                "Identificar causa e tratar fator precipitante"
+            ],
+            "assess": [
+                "SpO₂, FR, gasometria arterial",
+                "Causa: pneumotórax, hemotórax, contusão pulmonar, SDRA",
+                "Nível de consciência e proteção de via aérea",
+                "Resposta à VNI: Vt, sincronia, tolerância"
+            ],
+            "interv": [
+                "VNI (CPAP ou BiPAP) se sem contraindicação",
+                "Posicionamento para maximizar relação V/Q",
+                "Fisioterapia respiratória somente após estabilização",
+                "Comunicar imediatamente à equipe qualquer deterioração",
+                "Preparação de material para intubação"
+            ]
+        },
+        {
+            "name": "5.2.P1 — Risco de instabilidade da coluna e piora neurológica",
+            "desc": "Crítico. Fratura instável ou em investigação, uso obrigatório de colar/colete, dor axial importante, prescrição de restrição de movimento",
+            "block": "🦴 5.2 — COLUNA & TRAUMA RAQUIMEDULAR (TRM)",
+            "goals": [
+                "Manutenção de alinhamento espinhal em todas as manobras",
+                "Zero eventos de deterioração neurológica por mobilização",
+                "Mobilização segura com técnica de log roll correta"
+            ],
+            "assess": [
+                "Nível neurológico e ASIA (A-E)",
+                "Imagem: tipo de fratura, estabilidade",
+                "Dispositivo de imobilização em uso (colar, colete, halo)",
+                "Protocolo de precauções da equipe cirúrgica"
+            ],
+            "interv": [
+                "Técnica de log roll para todos os decúbitos e mudanças de posição",
+                "Nunca mobilizar sem equipamento de imobilização em uso",
+                "Treino da equipe de enfermagem na técnica de log roll",
+                "Educação do paciente sobre importância das restrições de movimento",
+                "Posicionamento neutro da coluna em toda posição"
+            ]
+        },
+        {
+            "name": "5.2.P2 — Déficit neurológico medular (completo ou incompleto)",
+            "desc": "Crítico. Paresia/plegia, alteração sensitiva, nível neurológico definido, ASIA A-D",
+            "block": "🦴 5.2 — COLUNA & TRAUMA RAQUIMEDULAR (TRM)",
+            "goals": [
+                "Preservar e maximizar função residual abaixo do nível de lesão",
+                "Prevenir complicações secundárias do imobilismo",
+                "Promover independência funcional máxima conforme nível ASIA"
+            ],
+            "assess": [
+                "Classificação ASIA: nível motor e sensitivo",
+                "Escala ASIA: A (completo) a E (normal)",
+                "Função respiratória: nível cervical compromete diafragma e intercostais",
+                "Tônus, reflexos, espasticidade, bexiga/intestino neurogênico"
+            ],
+            "interv": [
+                "Mobilização passiva de todos os segmentos plégicos",
+                "Posicionamento terapêutico para prevenir contraturas",
+                "Fisioterapia respiratória intensiva em lesões cervicais/torácicas altas",
+                "Fortalecimento intensivo de segmentos preservados",
+                "Treinamento funcional conforme nível de lesão: C5-T4-T10-L1 etc"
+            ]
+        },
+        {
+            "name": "5.2.P3 — Incapacidade de realizar transferências seguras",
+            "desc": "Grave. Não consegue: rolar, sentar, transferir sem violar alinhamento da coluna ou restrições mecânicas",
+            "block": "🦴 5.2 — COLUNA & TRAUMA RAQUIMEDULAR (TRM)",
+            "goals": [
+                "Realizar log roll e transferências com alinhamento espinhal mantido",
+                "Transferência leito-cadeira com 2 pessoas de forma segura",
+                "Progredir para transferências com assistência mínima quando estabilizado"
+            ],
+            "assess": [
+                "Força funcional dos segmentos preservados",
+                "Capacidade de cooperar com a manobra de transferência",
+                "Número de pessoas necessárias para transferência segura",
+                "Equipamentos disponíveis: tábua de transferência, guindaste"
+            ],
+            "interv": [
+                "Treino de log roll: posição supina → decúbito lateral → sedestação em etapas",
+                "Transferência com equipe treinada: 3-4 pessoas na fase aguda",
+                "Uso de tábua de deslizamento para transferência leito-cadeira",
+                "Treino de transferência independente conforme potencial neurológico",
+                "Cadeira de rodas com suporte lombar adequado para nível de lesão"
+            ]
+        },
+        {
+            "name": "5.2.P4 — Hipoventilação por dor, colar ou fraqueza muscular respiratória",
+            "desc": "Grave. FR superficial, ↓ expansibilidade torácica, ↓ volumes pulmonares, tosse fraca em lesões cervicais/altas",
+            "block": "🦴 5.2 — COLUNA & TRAUMA RAQUIMEDULAR (TRM)",
+            "goals": [
+                "CV > 15-20 mL/kg (referência para extubação/evitar intubação)",
+                "SpO₂ ≥ 94% sem suporte ou com suporte mínimo",
+                "Tosse eficaz com assistência manual ou PCF ≥ 270 L/min com auxílio"
+            ],
+            "assess": [
+                "Ventilometria: Vt, CV, PIM, PEM",
+                "SpO₂ e FR",
+                "PCF com e sem assistência manual",
+                "Nível neurológico: C3-5 compromete diafragma, T1-12 intercostais"
+            ],
+            "interv": [
+                "Fisioterapia respiratória com técnica de glossofaríngea em tetraplégicos",
+                "Cough Assist (insuflador-exsuflador) para PCF < 160 L/min",
+                "Assistência manual à tosse: compressão costal durante expiração",
+                "Posicionamento: Fowler 30-45° para facilitar ventilação diafragmática",
+                "VNI noturna se CV < 50% ou PaCO₂ elevado"
+            ]
+        },
+        {
+            "name": "5.2.P5 — Alto risco de complicações do imobilismo",
+            "desc": "Grave. Restrição ao leito, risco de: atelectasia, pneumonia, trombose, úlceras de pressão, perda funcional acelerada",
+            "block": "🦴 5.2 — COLUNA & TRAUMA RAQUIMEDULAR (TRM)",
+            "goals": [
+                "Manter pele íntegra com mudanças de decúbito programadas",
+                "Zero episódios de pneumonia aspirativa",
+                "Profilaxia de TVP eficaz em combinação com tratamento farmacológico"
+            ],
+            "assess": [
+                "Inspeção de pele a cada 4h (atenção: sacro, calcâneos, occipital, escápulas)",
+                "Score de Braden para úlcera de pressão",
+                "Wells score e presença de MMII edemaciados (TVP)",
+                "Ausculta pulmonar e SpO₂"
+            ],
+            "interv": [
+                "Mudança de decúbito a cada 2h (protocolo com enfermagem)",
+                "Mobilização passiva MMII para prevenção de TVP",
+                "Exercícios respiratórios a cada 2-3h",
+                "Colchão piramidal/AR ou cinesiterapia motora em plégicos",
+                "Comunicação com equipe sobre restrições x necessidade de mobilização"
+            ]
+        },
+        {
+            "name": "5.3.P1 — Restrição de carga (NWB/TTWB/PWB/WBAT) em MMII",
+            "desc": "Crítico. Ordem médica explícita ou implícita pelo tipo de fratura/síntese, dor mecânica ao apoio, alto risco de falha de fixação",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Zero violação da restrição de carga em todas as atividades",
+                "Domínio do paciente sobre sua restrição e como aplicar",
+                "Marcha segura com dispositivo adequado ao nível de carga"
+            ],
+            "assess": [
+                "Prescrição médica: NWB, TTWB, PWB (% carga), WBAT",
+                "Avaliação do tipo de fixação e estágio de consolidação",
+                "Capacidade do paciente de entender e cumprir a restrição",
+                "Balanço de MMSS para uso de andador/muletas"
+            ],
+            "interv": [
+                "Treino de marcha com carga prescrita: andador (NWB/TTWB), muletas (PWB)",
+                "Escala de carga progressiva conforme protocolo do cirurgião",
+                "Exercícios isométricos no membro restrito sem carga axial",
+                "MMSS e CORE: treino para suporte e uso de dispositivos de marcha",
+                "Educação repetitiva sobre regra de carga a cada sessão"
+            ]
+        },
+        {
+            "name": "5.3.P2 — Dor mecânica limitante em MMII",
+            "desc": "Grave. EVA ≥ 6 em repouso ou ≥ 4 ao mobilizar, dor impede: sentar-levantar, ortostatismo, marcha/treino de apoio",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "EVA ≤ 3 durante treino de marcha",
+                "Sit-to-stand sem interrupção por dor",
+                "Tolerar sessão de 20-30 min de reabilitação funcional"
+            ],
+            "assess": [
+                "EVA em repouso, durante mobilização e após",
+                "Localização e padrão da dor: foco de fratura vs musculotendinosa",
+                "Analgesia atual e momento de pico de efeito",
+                "Edema e temperatura local"
+            ],
+            "interv": [
+                "Coordenação com enfermagem para analgesia 30-60 min antes da sessão",
+                "TENS analgésico na região dolorosa",
+                "Crioterapia pós-sessão para controle de edema e dor",
+                "Elevação do membro entre sessões",
+                "Progressão do treino dentro do limiar de dor tolerável"
+            ]
+        },
+        {
+            "name": "5.3.P3 — Inibição muscular e fraqueza segmentar (quadríceps/glúteos)",
+            "desc": "Moderado. Incapaz de extensão ativa adequada de joelho (lag extensor), incapaz de manter controle pélvico em ortostatismo, falha funcional em STS",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Quadríceps MRC ≥ 3 (vencer gravidade) sem lag extensor",
+                "Glúteo médio MRC ≥ 3 para controle pélvico",
+                "Sit-to-stand sem colapso de joelho/pelve"
+            ],
+            "assess": [
+                "Teste de lag extensor de joelho",
+                "MRC de quadríceps, glúteo médio, isquiossurais, tibial anterior",
+                "Controle pélvico durante step e ortostatismo unipodal",
+                "Velocidade de recrutamento motor"
+            ],
+            "interv": [
+                "Isometria de quadríceps: contração sustentada, progressão de ângulo",
+                "Elevação do membro estendido (SLR) contra gravidade",
+                "Mini-squat assistido para recrutamento funcional",
+                "EENM de quadríceps para superar inibição reflexa",
+                "Glúteo médio: abdução em decúbito lateral → clamshell → em pé"
+            ]
+        },
+        {
+            "name": "5.3.P4 — Edema, rigidez e perda de ADM (pós-imobilização/pós-op)",
+            "desc": "Moderado. Limita padrão de marcha, rigidez que impede transferências, dorsiflexão e flexão de joelho reduzidas",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Edema controlado (perimetria sem aumento nas últimas 48h)",
+                "Dorsiflexão ≥ 10° para padrão de marcha adequado",
+                "Flexão de joelho ≥ 90° para sentar e subir escadas"
+            ],
+            "assess": [
+                "Perimetria do membro (maleolar, panturrilha, coxa)",
+                "Goniometria: dorsiflexão, flexão/extensão de joelho, flexão de quadril",
+                "Sinal de cacifo / sinais de TVP",
+                "Temperatura e rubor local (descartar infecção)"
+            ],
+            "interv": [
+                "Elevação do membro entre sessões",
+                "Compressão elástica (meia ou bandagem) para controle de edema",
+                "Mobilização passiva e ativo-assistida dentro dos limites",
+                "Crioterapia 20 min 3-4x/dia na fase aguda",
+                "Ganho de dorsiflexão: exercício de toalha, calcanhar no chão, bicicleta"
+            ]
+        },
+        {
+            "name": "5.3.P5 — Instabilidade de marcha / alto risco de queda",
+            "desc": "Grave. Precisa de apoio amplo (andador) + insegurança, quase-quedas, oscilação importante, medo de cair",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Marcha com andador sem quase-quedas",
+                "Berg Balance Scale ≥ 45/56 para marcha segura",
+                "Confiança no uso do dispositivo de marcha (FES-I adequada)"
+            ],
+            "assess": [
+                "TUG (Timed Up and Go)",
+                "Berg Balance Scale",
+                "Apoio unipodal no membro saudável",
+                "Falls Efficacy Scale (FES-I) / ABC Scale"
+            ],
+            "interv": [
+                "Treino de marcha com progressão de dispositivo: andador → muleta → bengala",
+                "Treino de transferência de peso e passo lateral",
+                "Ambiente seguro para treino: corredor com corrimão",
+                "Treino em diferentes superfícies: liso, irregular, rampas",
+                "Fortalecimento de tobillo e quadril como estabilizadores primários"
+            ]
+        },
+        {
+            "name": "5.3.P6 — Alto risco tromboembólico e complicações por imobilismo",
+            "desc": "Grave. Trauma + repouso + edema MMII, mobilidade muito baixa nas primeiras 72h, riscos adicionais",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Zero eventos de TVP sintomática",
+                "Mobilização precoce dentro das restrições mecânicas",
+                "Exercícios de MMII realizados no mínimo 3x/dia"
+            ],
+            "assess": [
+                "Wells Score para TVP",
+                "Edema assimétrico de MMII, calor local, dor à palpação de panturrilha",
+                "Doppler venoso quando indicado",
+                "Anticoagulação prescrita"
+            ],
+            "interv": [
+                "Exercícios de bombeamento de tornozelo e panturrilha 10x/h",
+                "Mobilização passiva de quadril, joelho e tornozelo 3x/dia",
+                "Compressão pneumática intermitente quando disponível",
+                "Deambulação precoce assim que clearance médico",
+                "Educação sobre sinais de alerta de TVP/TEP"
+            ]
+        },
+        {
+            "name": "5.3.P7 — Fratura de PELVE/ACETÁBULO com limitação funcional severa",
+            "desc": "Crítico. Dor pélvica intensa, restrição de carga frequentemente mais rígida, transferências complexas",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Transferências seguras sem dor na pelve > EVA 5",
+                "Sentar em cadeira reclinável por ≥ 30 min",
+                "Caminhar com andador e restrição de carga conforme protocolo"
+            ],
+            "assess": [
+                "Tipo de fratura: estável (ramo pubiano) vs instável (sacroilíaca, acetábulo)",
+                "Restrição de carga e posição proibida (ex: flexão de quadril > 60-90°)",
+                "Dor à palpação de sínfise, sacroilíaca, virilha",
+                "Força de MMII e capacidade de sentar-levantar"
+            ],
+            "interv": [
+                "Log roll modificado para decúbitos respeitando estabilidade pélvica",
+                "Transferência com 2-3 pessoas nas primeiras semanas",
+                "Sentar em superfície alta (cadeira alta) para reduzir carga na pelve",
+                "Isometria de glúteo e quadríceps em decúbito",
+                "Progressão de carga conforme protocolo específico do cirurgião"
+            ]
+        },
+        {
+            "name": "5.3.P8 — Paciente não domina a regra de carga (risco de violar restrição)",
+            "desc": "Grave. Apoia sem perceber/impulsivo, cognitivo limítrofe ou ansiedade, falha repetida em obedecer TTWB/PWB",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Zero violações não intencionais de carga nas últimas 24h",
+                "Paciente capaz de explicar e demonstrar a restrição",
+                "Uso correto e consistente do dispositivo de marcha"
+            ],
+            "assess": [
+                "Avaliação cognitiva: compreensão da restrição",
+                "Observação durante marcha: apoia sem perceber?",
+                "Teste: 'Mostre como você anda com o andador'",
+                "Medo vs impulsividade como causa da violação"
+            ],
+            "interv": [
+                "Educação repetitiva a cada sessão: verbal + demonstração + prática",
+                "Recurso visual: fita no membro restrito como lembrete",
+                "Treino de marcha com feedback imediato ao apoiar errado",
+                "Comunicar risco à equipe de enfermagem e família para reforço",
+                "Avaliação de cognitivo com psicologia se falhas repetidas"
+            ]
+        },
+        {
+            "name": "5.3.P9 — Fratura de FÊMUR PROXIMAL (colo / transtrocantérica / subtrocantérica)",
+            "desc": "Crítico. Idoso pós-queda, encurtamento e rotação externa, dor inguinal/coxa proximal intensa, incapacidade total de carga, alto risco TVP, fixação com DHS/haste/artroplastia",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Marcha com andador e carga prescrita até alta hospitalar",
+                "Sit-to-stand com assistência mínima",
+                "Retorno ao nível funcional pré-fratura em 3-6 meses"
+            ],
+            "assess": [
+                "Tipo de fixação: DHS, haste cefalomedular, artroplastia parcial/total",
+                "Restrição de carga e movimentos proibidos (pós-ATQ: flexão > 90°, adução, RI)",
+                "Força de extensores de quadril e joelho",
+                "Estado cognitivo e risco de quedas pré-morbido"
+            ],
+            "interv": [
+                "Mobilização precoce D1-D2 pós-op: sentar na borda do leito",
+                "Treino de sit-to-stand com ajuda e alturas progressivas",
+                "Precauções pós-ATQ: evitar flexão > 90°, adução, RI de quadril",
+                "Marcha com andador WBAT/PWB conforme fixação",
+                "Prevenção de quedas: revisão do ambiente domiciliar para alta"
+            ]
+        },
+        {
+            "name": "5.3.P10 — Fratura de FÊMUR DIAFISÁRIO",
+            "desc": "Crítico. Trauma de alta energia, dor intensa coxa, deformidade/encurtamento, fixação com haste intramedular bloqueada, carga variável (PWB/WBAT), risco de sangramento oculto (500-1500mL)",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Marcha com andador e carga conforme protocolo em 48-72h pós-op",
+                "Controle do edema da coxa",
+                "Força de quadríceps MRC ≥ 3 em 2 semanas"
+            ],
+            "assess": [
+                "Estado hemodinâmico: Hb, hematócrito, hipotensão por sangramento oculto",
+                "Tipo de haste e protocolo de carga do cirurgião",
+                "Edema da coxa: perimetria",
+                "Força de quadríceps e glúteos no pós-op precoce"
+            ],
+            "interv": [
+                "Monitorização hemodinâmica nas primeiras 72h durante mobilização",
+                "Isometria de quadríceps D1 pós-op",
+                "Mobilização de quadril e joelho: ADM progressiva conforme dor",
+                "Marcha com carga progressiva conforme protocolo",
+                "Elevação e compressão para controle do edema"
+            ]
+        },
+        {
+            "name": "5.3.P11 — Fratura de TÍBIA/FÍBULA",
+            "desc": "Crítico. Dor perna intensa, edema importante, fixação com haste/placa OU fixador externo, restrição NWB/PWB, ALTO RISCO de síndrome compartimental aguda",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Diagnóstico precoce de síndrome compartimental (monitorização ativa)",
+                "Dorsiflexão ≥ 5-10° ao final da imobilização",
+                "Marcha sem dispositivo em 12-16 semanas conforme consolidação"
+            ],
+            "assess": [
+                "SINAIS DE ALERTA — Síndrome compartimental: dor desproporcional + dor extensão passiva + parestesia + tensão do compartimento",
+                "Edema: perimetria, temperatura, coloração",
+                "Goniometria de tornozelo: dorsiflexão, plantiflexão",
+                "Pulso poplíteo e tibial posterior"
+            ],
+            "interv": [
+                "Elevação do membro RIGOROSA nas primeiras 48h",
+                "Monitorização horária de sinais de síndrome compartimental",
+                "COMUNICAR IMEDIATAMENTE qualquer piora de dor desproporcional à equipe médica",
+                "Mobilização de tornozelo dentro dos limites (isometria inicial)",
+                "Progressão de carga conforme consolidação radiológica"
+            ]
+        },
+        {
+            "name": "5.3.P12 — Fratura de TORNOZELO (maleolar uni/bi/trimaleolar)",
+            "desc": "Grave. Dor intensa tornozelo, edema importante, instabilidade articular, fixação com placa/parafusos, imobilização temporária, restrição NWB/TTWB, ALTO RISCO de rigidez e equino",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Dorsiflexão ≥ 10° ao final do protocolo de reabilitação",
+                "Marcha com carga total sem dor ao rolar do pé",
+                "Prevenção de equino: dorsiflexão ≥ 0° ao final da imobilização"
+            ],
+            "assess": [
+                "Goniometria de tornozelo: dorsiflexão (principal), plantiflexão, inversão, eversão",
+                "Edema: perimetria maleolar",
+                "Dor à palpação dos maléolos e linha articular",
+                "Força de tibial anterior e tríceps sural"
+            ],
+            "interv": [
+                "Mobilização precoce de tornozelo: circundução, dorsiflexão, plantiflexão DENTRO dos limites",
+                "Elevação + crioterapia 20 min 3-4x/dia para controle de edema",
+                "Treino de dorsiflexão progressivo: toalha, heel slides, ramp walking",
+                "Treino de marcha com padrão de rolamento do pé",
+                "Propriocepção progressiva: equilíbrio estático → dinâmico → superfície instável"
+            ]
+        },
+        {
+            "name": "5.3.P13 — Fratura de CALCÂNEO / ossos do pé (Lisfranc, metatarsos)",
+            "desc": "Grave. Trauma de alta energia (queda de altura), edema maciço pé/retropé, NWB prolongado (8-12 semanas comum), risco de rigidez subtalar/mediotarsal",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Manutenção de ADM subtalar e mediotarsal durante imobilização",
+                "Marcha sem dor em carga total ao fim do protocolo",
+                "Prevenção de equino e rigidez grave do pé"
+            ],
+            "assess": [
+                "Edema do pé: perimetria do tornozelo e mediopé",
+                "Goniometria: inversão/eversão subtalar, mobilidade mediotarsal",
+                "Dor à palpação do calcâneo/tarso/metatarso",
+                "Tipo de fixação e restrição de carga prescrita"
+            ],
+            "interv": [
+                "NWB rigoroso nas primeiras 8-12 semanas (cirúrgico)",
+                "Elevação contínua do pé acima do nível do coração para edema",
+                "Mobilização de dedos, tornozelo e joelho: segmentos não restritos",
+                "Início de carga progressiva após clearance radiológico",
+                "Mobilização da subtalar e mediotarsal após liberação médica"
+            ]
+        },
+        {
+            "name": "5.3.P14 — Fratura de PATELA",
+            "desc": "Grave. Dor joelho anterior intensa, lag extensor grave/completo, mecanismo extensor comprometido, fixação com banda de tensão/parafusos OU conservador com imobilizador, restrição de flexão de joelho",
+            "block": "🦵 5.3 — FRATURAS DE MEMBROS INFERIORES",
+            "goals": [
+                "Extensão ativa de joelho completa sem lag",
+                "Flexão de joelho ≥ 90° respeitando protocolo",
+                "Sit-to-stand sem compensação e sem dor > EVA 4"
+            ],
+            "assess": [
+                "Lag extensor: diferença entre extensão passiva e ativa",
+                "Goniometria de flexão de joelho (progressão dentro do protocolo)",
+                "Força de quadríceps: MRC e dinamometria",
+                "Dor retropatelar e ao movimento"
+            ],
+            "interv": [
+                "Isometria de quadríceps em extensão desde D1",
+                "SLR (straight leg raise) como exercício de progressão",
+                "Extensão ativa contra gravidade conforme protocolo de liberação de flexão",
+                "Treino de sit-to-stand com superfície alta inicialmente",
+                "EENM de quadríceps para superar inibição reflexa"
+            ]
+        },
+        {
+            "name": "5.4.P1 — Dor e proteção antálgica do membro superior",
+            "desc": "Grave. EVA ≥ 6 ao mover ou apoiar, MS colado ao corpo/protegido, dor impede: apoiar em andador, empurrar da cama, transferir",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "EVA ≤ 3 durante mobilização do MS",
+                "Usar MS para apoio em andador quando bilateralmente necessário",
+                "Participar de transferências sem proteção antálgica excessiva"
+            ],
+            "assess": [
+                "EVA ao repouso e ao mover o MS",
+                "Postura antálgica: ombro elevado, braço colado ao corpo, pronação de antebraço",
+                "Impacto na transferência e uso de dispositivos de marcha",
+                "Analgesia atual e janela de efeito"
+            ],
+            "interv": [
+                "Tipoia de alívio para posicionamento anti-álgico",
+                "TENS analgésico ou crioterapia local antes da mobilização",
+                "Mobilização pendular de Codman em pendente (ombro)",
+                "Instruções de analgesia prévia às sessões",
+                "Adaptação de dispositivos de marcha se MS comprometido (ex: plataforma de apoio)"
+            ]
+        },
+        {
+            "name": "5.4.P2 — Restrição de movimento do ombro/cotovelo/punho",
+            "desc": "Moderado. Ordem médica de imobilização, tipoia, gesso, órtese, movimentos proibidos (ex: elevação, rotação, carga)",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Cumprir todas as restrições sem violações",
+                "Manter ADM e força dos segmentos não restritos",
+                "Progressão de mobilização assim que liberado pelo cirurgião"
+            ],
+            "assess": [
+                "Documentação das restrições específicas: amplitude, carga, posição",
+                "Tipo de dispositivo: gesso, tala, tipoia, órtese funcional",
+                "Avaliação da adequação do dispositivo (pressão, edema, neurovascularposta)",
+                "Circulação e sensibilidade distal ao dispositivo"
+            ],
+            "interv": [
+                "Exercícios dos segmentos distais livres: dedos, punho (se livre)",
+                "Exercícios isométricos dentro do imobilizador quando indicado",
+                "Manutenção da força do ombro contralateral",
+                "Educação sobre cuidados com o dispositivo e sinais de alerta",
+                "Progressão de mobilização conforme protocolo do cirurgião"
+            ]
+        },
+        {
+            "name": "5.4.P3 — Incapacidade de usar dispositivos de marcha por limitação de MMSS",
+            "desc": "Grave. Não consegue segurar andador, usar muletas, apoiar para levantar, mesmo com MMII capazes",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Identificar dispositivo de marcha adequado ao MS comprometido",
+                "Marcha funcional com adaptação ao deficit de MS",
+                "Transferências seguras sem apoio no MS comprometido"
+            ],
+            "assess": [
+                "Força e ADM do MS não comprometido",
+                "Tipo de lesão de MS e o que pode apoiar",
+                "Peso corporal e necessidade de suporte em dispositivo",
+                "Alternativas de dispositivos: andador de plataforma, andador de apoio de antebraço"
+            ],
+            "interv": [
+                "Andador com plataforma de apoio de antebraço para lesões de punho/mão",
+                "Adaptação de andador com apoio lateral no MS comprometido",
+                "Treino de transferência sem usar o MS afetado",
+                "Fortalecimento intensivo do MS saudável",
+                "Comunicação com equipe médica sobre limitação para ajuste de indicação de dispositivo"
+            ]
+        },
+        {
+            "name": "5.4.P4 — Edema, rigidez e perda de ADM do membro imobilizado",
+            "desc": "Moderado. Mão inchada, dedos rígidos, dor e limitação progressiva de punho/cotovelo/ombro, risco de SDRC",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Edema da mão controlado: sem anéis apertados, dedos móveis",
+                "Prevenção de SDRC: cor, temperatura e mobilidade normais distalmente",
+                "Manter ADM máxima possível dentro da imobilização"
+            ],
+            "assess": [
+                "Edema distal: perimetria digital, punho",
+                "Mobilidade de dedos e punho dentro da imobilização",
+                "Sinais de SDRC: alodinia, mudança de cor/temperatura, sudorese",
+                "Coloração e temperatura dos dedos distalmente ao gesso/tala"
+            ],
+            "interv": [
+                "Elevação do MS acima do nível do coração constantemente",
+                "Exercícios de abertura e fechamento da mão: 10x/h",
+                "Mobilização dos dedos livres distalmente ao imobilizador",
+                "Reconhecimento precoce de SDRC: comunicar equipe se sinais",
+                "Crioterapia distal e massagem linfática para edema"
+            ]
+        },
+        {
+            "name": "5.4.P5 — Perda de função global nas AVDs por limitação do membro superior",
+            "desc": "Moderado. Dificuldade para: higiene, alimentação, vestir-se, apoiar-se para transferir",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Independência em AVDs básicas com MS saudável e adaptações",
+                "Higiene e alimentação com máxima independência",
+                "Estratégias compensatórias eficazes durante imobilização"
+            ],
+            "assess": [
+                "FIM motor: alimentação, higiene, vestir-se, transferências",
+                "Dominância e impacto: MS dominante vs não dominante",
+                "Força e coordenação do MS saudável para compensar",
+                "Recursos disponíveis: órteses, adaptações, família"
+            ],
+            "interv": [
+                "Treino de AVDs com MS saudável (troca de dominância se necessário)",
+                "Adaptações: abridor de garrafa, adaptadores de garfo, velcro em roupas",
+                "Treino de vestir roupa com uma mão",
+                "Treino de transferências sem apoio no MS comprometido",
+                "Terapia ocupacional quando disponível para adaptação de AVDs"
+            ]
+        },
+        {
+            "name": "5.4.P6 — Risco de complicações do imobilismo do MS",
+            "desc": "Moderado. Imobilização prolongada, dor + edema + rigidez, inibição muscular e perda rápida de função",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Manutenção de força do membro contralateral e proximal ao imobilizado",
+                "Prevenção de rigidez digital e de punho durante imobilização",
+                "Retorno funcional precoce após liberação do imobilizador"
+            ],
+            "assess": [
+                "Força de preensão do MS saudável",
+                "ADM dos segmentos livres no MS imobilizado",
+                "Rigidez digital e dos dedos",
+                "Força muscular proximal: ombro, cotovelo (se livre)"
+            ],
+            "interv": [
+                "Exercícios de dedos, punho e cotovelo nos segmentos livres",
+                "Isometria no MS imobilizado conforme permitido",
+                "Fortalecimento do MS saudável para compensar função",
+                "Mobilização precoce após retirada do imobilizador",
+                "Educação sobre exercícios domiciliares durante imobilização"
+            ]
+        },
+        {
+            "name": "5.4.P7 — Fratura de ÚMERO PROXIMAL (colo cirúrgico, tuberosidade)",
+            "desc": "Grave. Queda sobre ombro/braço estendido (comum em idosos), dor intensa ombro, equimose extensa, incapacidade de abdução/elevação ativa, tipoia/Velpeau, risco de capsulite adesiva",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Retorno à elevação ≥ 120° sem dor em 3-6 meses",
+                "RE ≥ 30° e RI funcional (mão nas costas até L3)",
+                "Prevenção de capsulite: mobilização precoce conforme protocolo"
+            ],
+            "assess": [
+                "Goniometria: elevação, RE, RI",
+                "Tipo de fratura e fixação: conservador (tipoia) ou ORIF",
+                "Dor ao fim de amplitude (EVA)",
+                "Força do manguito rotador e deltoides (quando liberado)"
+            ],
+            "interv": [
+                "Pendular de Codman passivo desde 1ª semana (se protocolo permitir)",
+                "Mobilização passiva de ombro em decúbito 2ª-3ª semana",
+                "Ativo-assistido 4ª-6ª semana conforme progressão radiológica",
+                "Fortalecimento do manguito rotador: fase 2 (geralmente 6-8 semanas)",
+                "Progressão para exercícios ativos e funcionais: pentear, alcançar"
+            ]
+        },
+        {
+            "name": "5.4.P8 — Fratura de ÚMERO DIAFISÁRIO",
+            "desc": "Grave. Trauma direto, dor intensa diáfise umeral, deformidade/crepitação, imobilização com tala/órtese funcional OU fixação cirúrgica, RISCO de lesão do nervo radial (20%)",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Detecção precoce de lesão de nervo radial (extensão de punho e dedos)",
+                "Manutenção de ADM de cotovelo e ombro durante imobilização",
+                "Retorno funcional após consolidação (12-16 semanas)"
+            ],
+            "assess": [
+                "Função do nervo radial: extensão ativa de punho, polegar, dedos",
+                "Extensão de cotovelo e supinação (nervo radial)",
+                "Sensibilidade dorsal do polegar e 1ª comissura digital",
+                "ADM de ombro e cotovelo"
+            ],
+            "interv": [
+                "AVALIAÇÃO IMEDIATA de nervo radial: extensão de punho e dedos",
+                "Órtese de punho/mão (cock-up splint) se lesão de radial confirmada",
+                "Mobilização pendular de ombro desde imobilização",
+                "Exercícios de cotovelo: flexão/extensão dentro dos limites",
+                "Mobilização de dedos e punho: segmentos distais"
+            ]
+        },
+        {
+            "name": "5.4.P9 — Fratura de CLAVÍCULA",
+            "desc": "Moderado. Queda sobre ombro ou braço estendido (comum em jovens/esportes), dor intensa clavicular, deformidade, postura antálgica com ombro caído/anteriorizado, imobilização em '8' ou tipoia OU fixação cirúrgica",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Retorno a ADM de ombro completa em 3-6 semanas (conservador)",
+                "Postura normal sem protração do ombro afetado",
+                "Retorno à atividade esportiva em 12-16 semanas"
+            ],
+            "assess": [
+                "Goniometria de ombro: elevação, RE, RI",
+                "Dor à palpação da clavícula",
+                "Postura: altura e anteriorização do ombro afetado",
+                "Força de deltoides, manguito e trapézio"
+            ],
+            "interv": [
+                "Pendular passivo de Codman nas primeiras 2-3 semanas",
+                "Mobilização ativa-assistida após 3-4 semanas conforme protocolo",
+                "Fortalecimento de manguito e escapulares na fase 2",
+                "Retração escapular para correção postural",
+                "Retorno à carga/esporte conforme consolidação radiológica"
+            ]
+        },
+        {
+            "name": "5.4.P10 — Fratura de PUNHO (Colles, Smith, estilóide radial)",
+            "desc": "Grave. Queda sobre mão espalmada (FOOSH), deformidade em 'dorso de garfo' (Colles) ou palmar (Smith), imobilização gessada/tala OU fixação com placa/pinos, ALTO RISCO de rigidez de punho e dedos",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Extensão de punho ≥ 30° ao final do protocolo",
+                "Flexão de punho ≥ 45°",
+                "Prevenção de rigidez digital: dedos com ADM completa"
+            ],
+            "assess": [
+                "Goniometria: flexão/extensão de punho, pronação/supinação",
+                "ADM ativa e passiva dos dedos",
+                "Edema: perimetria de punho e mão",
+                "Sinais de SDRC: alodinia, mudança de cor/temperatura, sudorese excessiva"
+            ],
+            "interv": [
+                "Exercícios de dedos 10x/h durante imobilização: punho livre para mobilizar",
+                "Elevação constante do MS para controle de edema",
+                "Mobilização precoce de punho após retirada do gesso",
+                "Fortalecimento de preensão com putsifyin: 6 semanas pós-lesão",
+                "Precauções SDRC: monitorizar cor, temperatura e dor"
+            ]
+        },
+        {
+            "name": "5.4.P11 — Fratura de ESCAFOIDE (osso do carpo)",
+            "desc": "Grave. Queda sobre mão estendida, dor na tabaqueira anatômica (base do polegar), imobilização INCLUINDO POLEGAR por 8-12 semanas, ALTO RISCO de pseudoartrose por vascularização precária",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Consolidação óssea radiológica confirmada (8-12 semanas)",
+                "ADM de punho e polegar preservados após imobilização",
+                "Força de preensão e pinça recuperadas após liberação"
+            ],
+            "assess": [
+                "Dor à palpação da tabaqueira anatômica",
+                "Mobilidade de dedos 2-5 (livres do imobilizador)",
+                "Edema de punho e mão",
+                "Força de polegar após liberação: oponência, pinça"
+            ],
+            "interv": [
+                "Mobilização dos dedos 2-5 constantemente durante imobilização",
+                "Isometria do polegar dentro do gesso (contração leve)",
+                "Mobilização de cotovelo e ombro para evitar rigidez proximal",
+                "Mobilização agressiva de punho e polegar após liberação da imobilização",
+                "Treino de pinça e preensão fina progressivo após consolidação"
+            ]
+        },
+        {
+            "name": "5.4.P12 — Fratura de MÃO (metacarpos, falanges)",
+            "desc": "Grave. Trauma direto (soco, esmagamento, queda), dor intensa, deformidade/rotação digital, edema importante, imobilização com tala/órtese OU fixação cirúrgica (pinos/placas), ALTO RISCO de rigidez digital grave",
+            "block": "🦾 5.4 — FRATURAS DE MEMBROS SUPERIORES",
+            "goals": [
+                "Prevenção de rigidez: mobilização dos dedos livres desde o 1° dia",
+                "Flexão completa de todos os dedos em pós-imobilização",
+                "Preensão funcional para AVDs em 6-12 semanas"
+            ],
+            "assess": [
+                "ADM ativa e passiva de cada articulação digital: MCF, IFP, IFD",
+                "Edema digital: medição com fita",
+                "Rotação e desvio de dedos (deformidade rotacional)",
+                "Alinhamento digital na flexão (todos os dedos apontam para escafoide)"
+            ],
+            "interv": [
+                "Mobilização dos dedos livres: 10x/h abertura e fechamento",
+                "Elevação constante para controle de edema",
+                "Mobilização precoce dentro dos limites do protocolo cirúrgico",
+                "Mobilização passiva e splinting após liberação",
+                "Treino de preensão progressivo: cilíndrica → esférica → pinça"
+            ]
+        },
+        {
+            "name": "5.6.P1 — Fratura de COLUNA CERVICAL (estável sem déficit neurológico)",
+            "desc": "Crítico. Trauma cervical, dor cervical intensa, espasmo muscular, imobilização com colar cervical rígido OU halo-colete OU fixação cirúrgica, RISCO de lesão medular tardia se instável",
+            "block": "🦴 5.6 — FRATURAS DE COLUNA",
+            "goals": [
+                "Manutenção de alinhamento cervical em todas as atividades",
+                "Mobilização segura sem comprometimento neurológico",
+                "Retorno a ADM de cervical funcional após retirada do imobilizador"
+            ],
+            "assess": [
+                "Tipo de fratura e dispositivo: colar duro, halo-colete",
+                "Força e sensibilidade dos MMSS (raízes C5-T1)",
+                "Dor cervical: EVA e localização",
+                "Capacidade de deglutição (risco com colar e fraturas altas)"
+            ],
+            "interv": [
+                "Nenhum movimento cervical ativo ou passivo durante imobilização",
+                "Transferências com alinhamento cervical neutro",
+                "Exercícios de MMSS e ombros liberados (isometria de deltoides, bíceps)",
+                "Fortalecimento de cervical apenas após liberação médica",
+                "Educação sobre cuidados com o colar e sinais de alerta"
+            ]
+        },
+        {
+            "name": "5.6.P2 — Fratura de COLUNA TORÁCICA (por compressão/estável)",
+            "desc": "Grave. Queda de altura, trauma direto em tórax, osteoporose (idosos), dor torácica intensa (piora com movimento/respiração profunda), cifose aumentada, conservador OU fixação cirúrgica se instável",
+            "block": "🦴 5.6 — FRATURAS DE COLUNA",
+            "goals": [
+                "Dor torácica controlada para respiração profunda sem proteção",
+                "Uso correto e confortável de colete ortopédico quando prescrito",
+                "Retorno a atividades básicas sem dor incapacitante em 6-12 semanas"
+            ],
+            "assess": [
+                "Dor à palpação do processo espinhoso",
+                "EVA ao movimento, respiração profunda e tosse",
+                "Grau de cifose e deformidade",
+                "Força e sensibilidade de MMII (nível torácico: T1-L1)"
+            ],
+            "interv": [
+                "Posicionamento: evitar flexão de tronco (agrava compressão)",
+                "Preferir extensão/posição neutra",
+                "Fisioterapia respiratória: expansão pulmonar com suporte de tronco",
+                "Fortalecimento de extensores da coluna (fase subaguda)",
+                "Treino de transferências respeitando alinhamento torácico"
+            ]
+        },
+        {
+            "name": "5.6.P3 — Fratura de COLUNA LOMBAR (por compressão/explosão)",
+            "desc": "Crítico. Queda sentada, acidente de trânsito, trauma direto, dor lombar intensa (piora ao sentar/movimentar), possível déficit neurológico (L2-S1), tratamento conservador OU fixação cirúrgica",
+            "block": "🦴 5.6 — FRATURAS DE COLUNA",
+            "goals": [
+                "Mobilização segura com coluna em posição neutra",
+                "Preservação de função neurológica de MMII",
+                "Retorno a marcha funcional em 4-12 semanas conforme tratamento"
+            ],
+            "assess": [
+                "Força e sensibilidade de MMII: L2 (quadríceps), L4 (tibial ant), L5 (EHL), S1 (tríceps sural)",
+                "Função vesical e intestinal (conus medullaris)",
+                "Tipo de fratura: compressão estável vs explosão instável",
+                "Dor lombar: EVA e relação com posição"
+            ],
+            "interv": [
+                "Transferências com alinhamento lombar neutro (log roll lombar)",
+                "Uso correto de colete lombar prescrito",
+                "Isometria de CORE leve sem flexão de coluna",
+                "Fortalecimento de MMII conforme função neurológica",
+                "Marcha progressiva com dispositivo assim que estabilidade garantida"
+            ]
+        },
+        {
+            "name": "5.7.P1 — TCE leve/moderado SEM indicação neurocirúrgica",
+            "desc": "Crítico. Glasgow 9-15, cefaleia intensa, náusea/vômitos, tontura, confusão mental transitória, RISCO de deterioração neurológica (hematoma subdural tardio)",
+            "block": "🚨 5.7 — OUTROS TRAUMAS",
+            "goals": [
+                "Monitorização de sinais de deterioração neurológica durante sessões",
+                "Retorno progressivo a atividades conforme protocolo de concussão",
+                "Prevenção de síndrome pós-concussional por retorno precoce"
+            ],
+            "assess": [
+                "GCS a cada sessão",
+                "Cefaleia: intensidade e fatores de piora",
+                "Náuseas, vômitos, fotofobia, fonofobia",
+                "Equilíbrio: Romberg, tandem gait, BESS (Balance Error Scoring System)"
+            ],
+            "interv": [
+                "Repouso relativo nas primeiras 24-48h conforme protocolo",
+                "Evitar esforço que piore cefaleia na fase aguda",
+                "Protocolo de retorno gradual ao esforço: repouso → caminhada leve → exercício aeróbico",
+                "Exercícios de equilíbrio progressivos após resolução de sintomas",
+                "COMUNICAR imediatamente piora de GCS, cefaleia ou vômitos à equipe médica"
+            ]
+        },
+        {
+            "name": "5.7.P2 — Trauma ABDOMINAL fechado (contusão, laceração de órgãos) sob observação",
+            "desc": "Crítico. Trauma abdominal, dor abdominal intensa, distensão, equimose, tratamento conservador (observação) OU pós-op de laparotomia",
+            "block": "🚨 5.7 — OUTROS TRAUMAS",
+            "goals": [
+                "Mobilização precoce respeitando dor abdominal e restrições",
+                "Retomada de respiração profunda e tosse eficaz",
+                "Prevenção de complicações pulmonares pós-operatórias"
+            ],
+            "assess": [
+                "Dor abdominal: localização, EVA, sinais de peritonite",
+                "Distensão abdominal e ruídos hidroaéreos",
+                "SpO₂ e FR: splinting abdominal reduz volumes",
+                "Restrições da equipe cirúrgica: o que é permitido"
+            ],
+            "interv": [
+                "Fisioterapia respiratória suave: expansão costal sem compressão abdominal",
+                "Suporte de abdome durante tosse: travesseiro ou mão",
+                "Deambulação precoce com suporte: reduz íleo e complicações",
+                "Posicionamento semi-sentado para reduzir tensão abdominal",
+                "Evitar ortostatismo brusco: hipotensão e dor pós-laparotomia"
+            ]
+        },
+        {
+            "name": "5.7.P3 — Lesão LIGAMENTAR grave de joelho/tornozelo (entorse grau II-III)",
+            "desc": "Grave. Trauma em varo/valgo/rotação (esportes, queda, acidente), dor intensa articular, edema maciço, instabilidade articular, incapacidade de carga, imobilização OU reconstrução cirúrgica de ligamento",
+            "block": "🚨 5.7 — OUTROS TRAUMAS",
+            "goals": [
+                "Controle de edema e dor para iniciar reabilitação",
+                "Retorno a carga total funcional em 6-12 semanas (conservador) ou 9-12 meses (cirúrgico LCA)",
+                "Propriocepção e estabilidade neuromuscular recuperadas antes do retorno esportivo"
+            ],
+            "assess": [
+                "Teste de estabilidade: Lachman (LCA), gaveta posterior (LCP), varo/valgo, gaveta anterior de tornozelo",
+                "Edema: perimetria articular",
+                "Goniometria: flexão/extensão de joelho ou dorsiflexão/plantiflexão",
+                "Força de quadríceps vs isquiossurais (limb symmetry index)"
+            ],
+            "interv": [
+                "Fase aguda: PRICE (proteção, repouso relativo, gelo, compressão, elevação)",
+                "Mobilização precoce de ADM: redução de edema e rigidez",
+                "Fortalecimento progressivo: isometria → cadeia fechada → cadeia aberta",
+                "Propriocepção: prancha de equilíbrio progressiva",
+                "Retorno esportivo: protocolo com critérios funcionais (não apenas tempo)"
+            ]
+        },
+        {
+            "name": "5.7.P4 — Suspeita ou SÍNDROME COMPARTIMENTAL (emergência ortopédica)",
+            "desc": "Crítico. Trauma de alta energia (fratura, esmagamento, reperfusão), dor DESPROPORCIONAL e progressiva, dor à extensão passiva dos dedos (sinal precoce), parestesia/hipoestesia, tensão palpável de compartimento, RISCO de necrose muscular irreversível",
+            "block": "🚨 5.7 — OUTROS TRAUMAS",
+            "goals": [
+                "Diagnóstico e comunicação imediata à equipe médica",
+                "ZERO atraso no encaminhamento para fasciotomia de emergência",
+                "Monitorização ativa durante e após qualquer intervenção de fisioterapia"
+            ],
+            "assess": [
+                "5 P's: Pain (desproporcional), Pressure (tensão), Paresthesia, Paralysis, Pallor",
+                "Dor à extensão passiva dos dedos do pé/mão: SINAL MAIS PRECOCE",
+                "Pulso distal e tempo de enchimento capilar",
+                "Tensão do compartimento à palpação"
+            ],
+            "interv": [
+                "PARAR IMEDIATAMENTE qualquer compressão/elevação do membro",
+                "Manter membro ao nível do coração (não elevar)",
+                "CHAMAR A EQUIPE MÉDICA DE EMERGÊNCIA imediatamente",
+                "NÃO realizar fisioterapia até avaliação médica completa",
+                "Documentar hora do início dos sintomas e comunicação à equipe"
+            ]
+        },
+        {
+            "name": "5.7.P5 — AMPUTAÇÃO TRAUMÁTICA de membro (aguda)",
+            "desc": "Crítico. Perda traumática de segmento (dedos, mão, antebraço, braço, pé, perna, coxa) por trauma de alta energia, coto com curativo/penso, choque emocional severo, necessidade de reabilitação precoce",
+            "block": "🚨 5.7 — OUTROS TRAUMAS",
+            "goals": [
+                "Coto cicatrizado e modelado para prótese em 4-8 semanas",
+                "Mobilidade e força dos segmentos preservados",
+                "Suporte psicológico integrado à reabilitação física"
+            ],
+            "assess": [
+                "Estado do coto: cicatrização, edema, forma (cônica vs cilíndrica)",
+                "Dor no coto e dor fantasma: localização, intensidade, caráter",
+                "Força e ADM dos segmentos proximais preservados",
+                "Estado emocional e psicológico: aceitação, depressão, ansiedade"
+            ],
+            "interv": [
+                "Modelagem do coto: bandagem em 8 progressiva para forma cônica",
+                "Dessensibilização progressiva do coto: toque, pressão, textura",
+                "Fortalecimento dos segmentos proximais para controle de prótese futura",
+                "Treino de AVDs e transferências com membro contralateral",
+                "Suporte psicológico: luto pelo membro, adaptação, expectativas realistas"
+            ]
+        },
+        {
+            "name": "5.5.P1 — Dor pós-operatória limitante e proteção antálgica",
+            "desc": "Grave. EVA ≥ 6 ou dor que impede respiração profunda/transferência, guarding, incapaz de ativar músculo",
+            "block": "🔧 5.5 — PÓS-OPERATÓRIO ORTOPÉDICO",
+            "goals": [
+                "EVA ≤ 3 nas primeiras 24h pós-op com analgesia adequada",
+                "Respiração profunda e tosse sem espasmo álgico",
+                "Participação ativa na sessão de fisioterapia nas primeiras 48h"
+            ],
+            "assess": [
+                "EVA em repouso e ao mobilizar: escala numérica e FACES",
+                "Guarding: contração protetora ao movimento",
+                "Analgesia atual: tipo, dose, via, horário do pico",
+                "Impacto da dor na ventilação e mobilização"
+            ],
+            "interv": [
+                "Coordenação com anestesia/médico para analgesia preventiva",
+                "TENS analgésico na incisão e região dolorosa",
+                "Posicionamento anti-álgico e órtese de conforto",
+                "Técnicas suaves: mobilização passiva, exercício isométrico leve",
+                "Ensinar suporte manual da incisão para tosse e transferência"
+            ]
+        },
+        {
+            "name": "5.5.P2 — Restrição de movimento específica da cirurgia (movimentos proibidos)",
+            "desc": "Crítico. Ordem médica explícita (ex: quadril: flexão/adução/rotação em ATQ), risco de luxação, sangramento ou falha tecidual",
+            "block": "🔧 5.5 — PÓS-OPERATÓRIO ORTOPÉDICO",
+            "goals": [
+                "Zero violações de movimentos proibidos em todas as sessões",
+                "Todos os profissionais e família cientes das restrições",
+                "Domínio do paciente sobre seus limites de movimento"
+            ],
+            "assess": [
+                "Protocolo cirúrgico: movimento(s) proibido(s), ângulo, tempo de restrição",
+                "Capacidade do paciente de entender e cumprir",
+                "Presença de dispositivo preventor (ex: abductor pillow em ATQ)",
+                "Verificação pré-sessão das restrições atualizadas"
+            ],
+            "interv": [
+                "Checklist pré-sessão: restrições de movimento vigentes",
+                "Treino do paciente com demonstração de movimentos proibidos",
+                "Treino da equipe de enfermagem e família",
+                "Exercícios somente dentro dos limites liberados",
+                "Verificar com cirurgião antes de qualquer avanço de mobilidade"
+            ]
+        },
+        {
+            "name": "5.5.P3 — Restrição de carga (WBAT/PWB/TTWB/NWB) pós-op",
+            "desc": "Crítico. Prescrição conforme: tipo de prótese, osteossíntese, qualidade óssea",
+            "block": "🔧 5.5 — PÓS-OPERATÓRIO ORTOPÉDICO",
+            "goals": [
+                "Marcha com carga prescrita e dispositivo correto nas primeiras 24-48h pós-op",
+                "Zero violações de carga durante internação",
+                "Progressão de carga conforme protocolo e liberação médica"
+            ],
+            "assess": [
+                "Classificação de carga prescrita e justificativa cirúrgica",
+                "Dispositivo de marcha mais adequado ao nível de carga",
+                "Capacidade física: força, equilíbrio, MMSS para uso do dispositivo",
+                "Estado cognitivo para compreensão e cumprimento da restrição"
+            ],
+            "interv": [
+                "Treino de marcha com carga prescrita D1 pós-op",
+                "Educação clara: NWB (sem apoio), TTWB (toque leve), PWB (parcial), WBAT (conforme tolerância)",
+                "Treino em escadas conforme carga e necessidade domiciliar",
+                "Revisão diária da restrição com equipe cirúrgica",
+                "Progressão de carga conforme protocolo e exames de imagem"
+            ]
+        },
+        {
+            "name": "5.5.P4 — Fraqueza/inibição muscular pós-op (quadríceps/glúteo principalmente)",
+            "desc": "Moderado. Lag extensor de joelho, incapaz de estabilizar pelve em ortostatismo, falha no sit-to-stand",
+            "block": "🔧 5.5 — PÓS-OPERATÓRIO ORTOPÉDICO",
+            "goals": [
+                "Quadríceps MRC ≥ 3 (vencer gravidade) nas primeiras 48h pós-op",
+                "Glúteo médio ativo para controle pélvico em ortostatismo",
+                "Sit-to-stand sem colapso em 48-72h pós-op"
+            ],
+            "assess": [
+                "Lag extensor quantificado (diferença passiva-ativa em graus)",
+                "MRC de quadríceps, glúteo médio, tibial anterior",
+                "Teste de sit-to-stand: capacidade e grau de assistência",
+                "EENM disponível para estimulação"
+            ],
+            "interv": [
+                "Isometria de quadríceps D0 (na sala de recuperação se possível)",
+                "SLR (straight leg raise) D1 pós-op",
+                "EENM de quadríceps para superar inibição reflexa pós-articular",
+                "Mini-squat assistido para recrutamento funcional precoce",
+                "Glúteo médio: abdução em decúbito lateral → standing abduction"
+            ]
+        },
+        {
+            "name": "5.5.P5 — Rigidez/queda de ADM (risco de contraturas e perda funcional)",
+            "desc": "Moderado. Amplitude insuficiente para: sentar com segurança, levantar, marcha com padrão adequado",
+            "block": "🔧 5.5 — PÓS-OPERATÓRIO ORTOPÉDICO",
+            "goals": [
+                "Flexão de joelho ≥ 90° para sentar/subir escadas (ATJ)",
+                "Dorsiflexão ≥ 10° para padrão de marcha adequado",
+                "Manter ADM de quadril dentro das precauções pós-ATQ"
+            ],
+            "assess": [
+                "Goniometria de flexão de joelho, dorsiflexão, flexão de quadril",
+                "ADM ativa vs passiva (lag de extensão)",
+                "Tempo de imobilização pré e pós-op",
+                "Temperatura e edema articular local"
+            ],
+            "interv": [
+                "Mobilização passiva contínua (CPM) se disponível para joelho",
+                "Mobilização ativo-assistida progressiva desde D1",
+                "Bicicleta estática (ergômetro) para ganho de ADM de joelho",
+                "Alongamento progressivo de gastrocnêmio e plantar para dorsiflexão",
+                "Uso de dispositivos de posicionamento para prevenir contraturas"
+            ]
+        },
+        {
+            "name": "5.5.P6 — Alto risco de trombose, atelectasia e complicações sistêmicas",
+            "desc": "Grave. Cirurgia + imobilismo + dor + sedação, baixa mobilidade nas primeiras 48h",
+            "block": "🔧 5.5 — PÓS-OPERATÓRIO ORTOPÉDICO",
+            "goals": [
+                "Deambulação precoce nas primeiras 24-48h pós-op quando clearance",
+                "Exercícios de TVP realizados ≥ 3x/dia",
+                "Ausculta pulmonar sem sinais de atelectasia"
+            ],
+            "assess": [
+                "Sinais de TVP: Wells score, edema assimétrico, dor à palpação",
+                "Ausculta pulmonar: MV simétrico, ausência de crepitações",
+                "SpO₂ e FR em repouso e ao esforço",
+                "Anticoagulação prescrita e profilaxia mecânica"
+            ],
+            "interv": [
+                "Exercícios de bombeamento de tornozelo 10x/h acordado D0 pós-op",
+                "Compressão pneumática intermitente quando em repouso (se disponível)",
+                "Deambulação precoce D1 como mais efetivo antitrombótico",
+                "Fisioterapia respiratória: incentivador, tosse, expansão costal",
+                "Educação sobre sinais de alerta de TVP/TEP e importância de reportar"
+            ]
+        },
+        {
+            "name": "5.5.P7 — Risco de queda e de violar regras pós-operatórias",
+            "desc": "Grave. Paciente impulsivo, ansioso ou com delirium, não entende as restrições, uso inadequado de dispositivo",
+            "block": "🔧 5.5 — PÓS-OPERATÓRIO ORTOPÉDICO",
+            "goals": [
+                "Zero quedas durante internação pós-operatória",
+                "Domínio correto do dispositivo de marcha",
+                "Compreensão das restrições de movimento e carga"
+            ],
+            "assess": [
+                "Estado cognitivo: CAM-ICU, MMSE simplificado",
+                "Impulsividade: tenta levantar sem chamar, ansiedade",
+                "Uso correto do andador/muleta",
+                "Recursos de segurança: grades, alarme de cama"
+            ],
+            "interv": [
+                "Ativar protocolo de prevenção de quedas: grades, cama baixa, iluminação",
+                "Educação repetitiva sobre restrições a cada contato",
+                "Alarme de cama para pacientes impulsivos",
+                "Avaliação e manejo de delirium com equipe médica",
+                "Supervisão próxima durante primeiras deambulações"
+            ]
+        },
+        {
+            "name": "5.6.P1 — Instabilidade clínica global (hemodinâmica e/ou respiratória)",
+            "desc": "Crítico. PAM < 65 ou necessidade de droga vasoativa, SpO₂ instável/FiO₂ alta, lactato elevado, VM em parâmetros altos",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "Avaliar critérios de segurança para mobilização em cada turno",
+                "Realizar mobilização passiva segura quando clinicamente estável",
+                "Progredir mobilização conforme estabilidade clínica diária"
+            ],
+            "assess": [
+                "PAM, necessidade de noradrenalina/adrenalina, dose atual",
+                "SpO₂ e FiO₂, PEEP atual em ventilados",
+                "Lactato sérico nas últimas 6h",
+                "Score SOFA ou APACHE para gravidade"
+            ],
+            "interv": [
+                "Aplicar critérios de segurança para mobilização: PAM ≥ 60-65, SpO₂ ≥ 88-90%, dose de NE ≤ 0.1 mcg/kg/min",
+                "Mobilização passiva em leito quando critérios de segurança atendidos",
+                "Mobilização ativa apenas com estabilidade confirmada pela equipe médica",
+                "Comunicação diária com médico sobre elegibilidade para mobilização",
+                "Documentar resposta hemodinâmica e respiratória a cada intervenção"
+            ]
+        },
+        {
+            "name": "5.6.P2 — Múltiplas restrições de movimento e carga",
+            "desc": "Crítico. Mais de um foco de fratura, lesão de coluna/pelve, ordens médicas conflitantes ou restritivas",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "Mapa claro de restrições para toda a equipe",
+                "Mobilização segura respeitando TODAS as restrições simultaneamente",
+                "Identificar movimento funcional dentro das restrições combinadas"
+            ],
+            "assess": [
+                "Inventário de todas as lesões e restrições de cada uma",
+                "Priorização: restrição mais restritiva define o limite",
+                "Conflitos entre restrições: ex: NWB em joelho mas estimular sentar",
+                "Comunicação com cada especialidade envolvida"
+            ],
+            "interv": [
+                "Reunião multidisciplinar para definir plano único e consistente",
+                "Mapa escrito de restrições disponível no leito",
+                "Exercícios para segmentos NÃO restritos: MMSS, respiratórios, cervical",
+                "Mobilização passiva dos segmentos restritos dentro dos limites",
+                "Revisão diária das restrições com cada equipe cirúrgica"
+            ]
+        },
+        {
+            "name": "5.6.P3 — Alto risco de hipoxemia, atelectasia e complicações pulmonares",
+            "desc": "Crítico. Trauma torácico/contusão pulmonar, dor que impede expansão, imobilidade prolongada, secreção retida",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "SpO₂ ≥ 92% sem aumento progressivo de FiO₂",
+                "Ausculta com MV bilateral",
+                "Tosse eficaz ou higiene brônquica assistida efetiva"
+            ],
+            "assess": [
+                "SpO₂, FiO₂, PaO₂/FiO₂",
+                "Ausculta: hipoventilação, crepitações, roncos",
+                "PCF ou capacidade de tosse",
+                "RX/TC: atelectasia, consolidação, derrame"
+            ],
+            "interv": [
+                "Fisioterapia respiratória: expansão, vibrocompressão, tosse assistida",
+                "Decúbito lateral para drenagem do pulmão acometido",
+                "CPAP/VNI para recrutamento alveolar",
+                "Aspiração traqueal quando necessário",
+                "Deambulação precoce quando hemodinamicamente estável"
+            ]
+        },
+        {
+            "name": "5.6.P4 — Rebaixamento do nível de consciência / TCE associado",
+            "desc": "Crítico. Glasgow < 13, sedação, déficits neurológicos focais, incapacidade de colaborar com a terapia",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "Mobilização passiva segura preservando alinhamento espinhal",
+                "Prevenção de complicações do imobilismo sem comprometer coluna",
+                "Progressão de estimulação sensoriomotora conforme nível de consciência"
+            ],
+            "assess": [
+                "GCS: olhos, motor, verbal — progressão ao longo do tempo",
+                "CAM-ICU para delirium quando GCS > 8",
+                "Função motora de MMSS e MMII por segmento",
+                "Reflexos e tônus: presença de decorticação/descerebração"
+            ],
+            "interv": [
+                "Mobilização passiva completa de todos os segmentos 2x/dia",
+                "Posicionamento terapêutico: evitar padrão de espasticidade",
+                "Estimulação sensorial multimodal: voz, toque, luz, objetos familiares",
+                "Protocolo de despertar progressivo (integrar com equipe médica)",
+                "Fisioterapia respiratória: higiene brônquica e expansão pulmonar"
+            ]
+        },
+        {
+            "name": "5.6.P5 — Dor intensa e resposta simpática exagerada",
+            "desc": "Grave. EVA ≥ 7, taquicardia/hipertensão associada à dor, proteção antálgica global",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "EVA ≤ 4 com esquema analgésico multimodal",
+                "FC e PA controladas durante sessões de fisioterapia",
+                "Participação ativa na mobilização"
+            ],
+            "assess": [
+                "EVA antes e durante intervenções",
+                "FC, PA e SpO₂ como parâmetros de resposta à dor",
+                "Eficácia do esquema analgésico atual",
+                "Guarding global: proteção e espasmo generalizado"
+            ],
+            "interv": [
+                "Solicitar analgesia multimodal adequada antes das sessões",
+                "Posicionamento anti-álgico confortável como base",
+                "Técnicas de relaxamento: respiração controlada, posicionamento",
+                "TENS em focos dolorosos principais",
+                "Técnicas suaves e mobilização passiva respeitando limiar de dor"
+            ]
+        },
+        {
+            "name": "5.6.P6 — Fraqueza global e risco extremo de perda funcional",
+            "desc": "Crítico. Permanência em leito > 72h, VM/sedação/BNM, incapaz de rolar/sentar ou sustentar cabeça/tronco",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "Manutenção de ADM articular completa durante período de sedação",
+                "Início de mobilização ativa assim que BNM suspenso",
+                "MRC ≥ 3 em grupos musculares principais ao final da fase aguda"
+            ],
+            "assess": [
+                "MRC-sum quando cooperativo",
+                "Posição de reposo: contraturas instaladas?",
+                "Tempo de imobilização total",
+                "EENM disponível para manutenção de função em sedados"
+            ],
+            "interv": [
+                "EENM de quadríceps, tibial anterior e deltoides em sedados",
+                "Mobilização passiva completa 2x/dia: todas as articulações",
+                "Posicionamento terapêutico anti-contratura: extensão de joelho, dorsiflexão, extensão de cotovelo",
+                "Cicloergômetro passivo em leito quando disponível",
+                "Despertar diário e exercício ativo precoce assim que sedação reduzida"
+            ]
+        },
+        {
+            "name": "5.6.P7 — Alto risco tromboembólico e complicações do imobilismo",
+            "desc": "Crítico. Trauma + inflamação + imobilidade + cirurgias múltiplas",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "Zero eventos de TVP/TEP durante internação",
+                "Exercícios de MMII realizados ≥ 3x/dia",
+                "Deambulação precoce em < 72h quando clinicamente possível"
+            ],
+            "assess": [
+                "Caprini score ou escala de Wells para TVP",
+                "Edema de MMII, calor local, dor à dorsiflexão passiva",
+                "Anticoagulação prescrita e profilaxia mecânica",
+                "Doppler venoso quando indicado"
+            ],
+            "interv": [
+                "Exercícios de bombeamento de tornozelo e panturrilha 10x/h",
+                "Compressão pneumática intermitente bilateral quando em repouso",
+                "Mobilização passiva de MMII 2-3x/dia",
+                "Deambulação precoce assim que estabilidade clínica e cirúrgica permitirem",
+                "Comunicar qualquer sinal de TVP/TEP imediatamente"
+            ]
+        },
+        {
+            "name": "5.6.P8 — Risco de queda, falha de síntese e eventos adversos durante mobilização",
+            "desc": "Crítico. Múltiplos dispositivos, instabilidade postural, déficit cognitivo ou impulsividade",
+            "block": "🚨 5.6 — POLITRAUMA",
+            "goals": [
+                "Zero quedas e zero falhas de síntese durante sessões",
+                "Checklist de segurança realizado antes de toda mobilização",
+                "Mobilização supervisionada por profissional adequado"
+            ],
+            "assess": [
+                "Número de dispositivos: VM, drenos, linhas, fixadores",
+                "Estado cognitivo e impulsividade",
+                "Força e equilíbrio para estabilidade durante mobilização",
+                "Risco de queda: escala de Morse ou similar"
+            ],
+            "interv": [
+                "Checklist pré-mobilização: dispositivos organizados, linhas com folga, monitores conectados",
+                "Mobilização com equipe mínima de 2 pessoas no politrauma",
+                "Ativar protocolo de prevenção de quedas",
+                "Nunca mobilizar sozinho paciente com múltiplos dispositivos",
+                "Comunicar à equipe antes de toda mobilização complexa"
+            ]
+        }
     ]
   },
   {
