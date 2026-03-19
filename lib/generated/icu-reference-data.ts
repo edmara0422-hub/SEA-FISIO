@@ -1783,1363 +1783,944 @@ export const ICU_REFERENCE_SYSTEMS = [
       }
     ]
   },
-  {
+{
     "id": "respiratory",
-    "name": "Sistema Respiratorio",
+    "name": "Sistema Respiratório",
     "icon": "M12 12.75c1.148 0 2.278.08 3.383.237 1.037.146 1.866.966 1.866 2.013 0 3.728-2.35 6.75-5.25 6.75S6.75 18.728 6.75 15c0-1.046.83-1.867 1.866-2.013A24.204 24.204 0 0112 12.75zm0 0c2.883 0 5.647.508 8.207 1.44a23.91 23.91 0 01-1.152-7.065c-.022-.826-.16-1.875-.903-2.373-.715-.478-1.755-.142-2.29.526-1.084 1.352-2.07 1.934-3.862 1.934s-2.778-.582-3.862-1.934c-.535-.668-1.575-1.004-2.29-.526-.743.498-.881 1.547-.903 2.373a23.91 23.91 0 01-1.152 7.065C5.353 13.258 9.117 12.75 12 12.75z",
     "color": "#38bdf8",
     "problems": [
       {
-        "name": "R1.1 — Hipoxemia leve a moderada em resp. espontanea",
+        "name": "R1.1 — Hipoxemia leve a moderada em respiração espontânea",
         "desc": "Moderado. SpO₂ < 92% (geral) ou < 88-90% (DPOC), FR normal/leve↑, sem fadiga grave",
-        "assess": [
-          "Atingir SpO₂ alvo: Geral 92-96%, DPOC 88-92%",
-          "Menor suporte que mantem SpO₂ alvo",
-          "Reduzir gradualmente dependencia de O₂"
-        ],
-        "interv": [
-          "Cateter nasal 1-5 L/min (titular)",
-          "Mascara simples 5-10 L/min se insuficiente",
-          "Mascara com reservatorio 10-15 L/min se necessario",
-          "Posicionamento terapeutico, mobilizacao precoce",
-          "Monitorar SpO₂, FR, FC, esforco respiratorio"
-        ],
-        "block": "R1 — Oxigenoterapia, HFNC e VNI",
-        "goals": [
-          "Atingir SpO₂ alvo: Geral 92-96%, DPOC 88-92%",
-          "Menor suporte que mantem SpO₂ alvo",
-          "Reduzir gradualmente dependencia de O₂"
-        ],
-        "phases": []
+        "assess": ["Atingir SpO₂ alvo: Geral 92-96%, DPOC 88-92%", "Reduzir gradualmente dependência de O₂"],
+        "interv": ["Cateter nasal: 1-5 L/min (≈24-40%) (Titular)", "Máscara simples: 5-10 L/min (Se insuficiente)", "Máscara com reservatório: 10-15 L/min (Se necessário)", "Posicionamento terapêutico (sentado/cabeceira elevada) (Contínuo)", "Mobilização precoce (2-3x/dia)", "Monitorar: SpO₂, FR, FC, esforço respiratório (Contínuo)"],
+        "block": "🫁 BLOCO R1 — Oxigenoterapia, HFNC e VNI",
+        "goals": ["Atingir SpO₂ alvo: Geral 92-96%, DPOC 88-92%", "Reduzir gradualmente dependência de O₂"],
+        "phases": [
+          {"timeframe": "0-30 min", "interv": ["Cateter nasal: 1-5 L/min (≈24-40%) (Titular)", "Máscara simples: 5-10 L/min (Se insuficiente)", "Máscara com reservatório: 10-15 L/min (Se necessário)", "Regra: menor suporte que mantém SpO₂ alvo (Sempre)"]},
+          {"timeframe": "24-48h", "interv": ["Posicionamento terapêutico (sentado/cabeceira elevada) (Contínuo)", "Mobilização precoce (2-3x/dia)", "Exercícios ventilatórios se indicados (Se pós-op/hipoventilação)", "Higiene brônquica se secreção (PRN)", "Monitorar: SpO₂, FR, FC, esforço respiratório (Contínuo)"]}
+        ]
       },
       {
-        "name": "R1.2 — Hipoxemia moderada a grave com alto trabalho respiratorio",
-        "desc": "Grave. SpO₂ < alvo com mascara reservatorio, FR > 28-30, musculatura acessoria",
-        "assess": [
-          "Reduzir trabalho respiratorio, melhorar SpO₂",
-          "Estabilizar e evitar intubacao"
-        ],
-        "interv": [
-          "HFNC fluxo 40-60 L/min, FiO₂ alto e reduzir conforme SpO₂",
-          "Primeiro aumentar fluxo, depois reduzir FiO₂",
-          "Posicao sentada/tripe",
-          "Higiene bronquica se secrecao; reavaliar 15-30-60 min",
-          "Criterios de falha: FR>30, esforco nao reduz → escalar VNI/IOT"
-        ],
-        "block": "R1 — Oxigenoterapia, HFNC e VNI",
-        "goals": [
-          "Reduzir trabalho respiratorio, melhorar SpO₂",
-          "Estabilizar e evitar intubacao"
-        ],
-        "phases": []
+        "name": "R1.2 — Hipoxemia moderada a grave com alto trabalho respiratório",
+        "desc": "Grave. SpO₂ < alvo mesmo com máscara reservatório, FR > 28-30, uso musculatura acessória",
+        "assess": ["Reduzir trabalho respiratório", "Melhorar SpO₂", "Estabilizar e evitar intubação"],
+        "interv": ["HFNC: Fluxo 40-60 L/min (Inicial)", "FiO₂: iniciar alto (1.0) e reduzir conforme SpO₂ (Titular)", "Posição sentada/tripé (Imediato)", "Reavaliar em 15-30-60 min: SpO₂, FR, esforço, consciência (Seriado)", "Escalonar para VNI ou via aérea invasiva se falha (Se necessário)"],
+        "block": "🫁 BLOCO R1 — Oxigenoterapia, HFNC e VNI",
+        "goals": ["Reduzir trabalho respiratório", "Melhorar SpO₂", "Estabilizar e evitar intubação"],
+        "phases": [
+          {"timeframe": "0-60 min", "interv": ["HFNC: Fluxo 40-60 L/min (Inicial)", "FiO₂: iniciar alto (1.0) e reduzir conforme SpO₂ (Titular)", "Primeiro: aumentar fluxo (↓FR e esforço) (Ajuste)", "Depois: reduzir FiO₂ mantendo SpO₂ (Gradual)", "Posição sentada/tripé (Imediato)"]},
+          {"timeframe": "24h", "interv": ["Higiene brônquica se secreção (PRN)", "Controle ansiedade e conforto (Contínuo)", "Reavaliar em 15-30-60 min: SpO₂, FR, esforço, consciência (Seriado)", "CRITÉRIOS DE FALHA: FR > 30, esforço não reduz, SpO₂ instável, rebaixamento (Vigilância)", "Escalonar para VNI ou via aérea invasiva se falha (Se necessário)"]}
+        ]
       },
       {
-        "name": "R1.3 — Insuf. respiratoria com componente ventilatorio (hipercapnia)",
-        "desc": "Critico. PaCO₂ elevada + pH < 7,35, sonolencia, FR alta com baixa efetividade",
-        "assess": [
-          "Reduzir trabalho, melhorar pH e ventilacao alveolar",
-          "Reverter falencia e evitar intubacao"
-        ],
-        "interv": [
-          "VNI: IPAP 10-14 cmH₂O, EPAP 4-6, FiO₂ titular",
-          "Ajustar por Vt espontaneo, FR, conforto, gasometria, vazamento",
-          "Pausas programadas; higiene bronquica antes longos periodos",
-          "Monitorar 1-2h: FR, SpO₂, consciencia, fadiga, gaso",
-          "Criterios de falha: piora consciencia, instabilidade → IOT"
-        ],
-        "block": "R1 — Oxigenoterapia, HFNC e VNI",
-        "goals": [
-          "Reduzir trabalho, melhorar pH e ventilacao alveolar",
-          "Reverter falencia e evitar intubacao"
-        ],
-        "phases": []
+        "name": "R1.3 — Insuficiência respiratória com componente ventilatório (hipercapnia)",
+        "desc": "Crítico. PaCO₂ elevada + pH < 7,35, sonolência, FR alta com baixa efetividade",
+        "assess": ["Reduzir trabalho respiratório", "Melhorar pH e ventilação alveolar", "Reverter falência ventilatória e evitar intubação"],
+        "interv": ["VNI: IPAP 10-14 cmH₂O (subir conforme resposta) (Inicial)", "EPAP: 4-6 cmH₂O (Inicial)", "FiO₂: titular para SpO₂ alvo (Ajustar)", "Ajustar por: Vt espontâneo, FR, conforto, gasometria, vazamento (Fino)", "CRITÉRIOS DE FALHA: piora consciência, instabilidade, intolerância, pH/CO₂ piora (Alerta IOT)"],
+        "block": "🫁 BLOCO R1 — Oxigenoterapia, HFNC e VNI",
+        "goals": ["Reduzir trabalho respiratório", "Melhorar pH e ventilação alveolar", "Reverter falência ventilatória e evitar intubação"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["VNI: IPAP 10-14 cmH₂O (subir conforme resposta) (Inicial)", "EPAP: 4-6 cmH₂O (Inicial)", "FiO₂: titular para SpO₂ alvo (Ajustar)", "Objetivo: IPAP ↑Vt → ↓PaCO₂, EPAP melhora oxigenação (Fisiológico)"]},
+          {"timeframe": "24-48h", "interv": ["Ajustar por: Vt espontâneo, FR, conforto, gasometria, vazamento (Fino)", "Ajuste interface e vedação (Contínuo)", "Pausas programadas (higiene/conforto) (Planejado)", "Higiene brônquica antes de longos períodos (Preventivo)", "Monitorar primeiras 1-2h: FR, SpO₂, consciência, fadiga, gaso (Intensivo)", "CRITÉRIOS DE FALHA: piora consciência, instabilidade, intolerância, pH/CO₂ piora (Alerta IOT)"]}
+        ]
       },
       {
-        "name": "R1.4 — Intolerancia a interface / falha de adaptacao",
-        "desc": "Moderado. Ansiedade, vazamento, dor facial, claustrofobia, lesao pele",
-        "assess": [
-          "Manter suporte nao invasivo por blocos progressivos"
-        ],
-        "interv": [
-          "Trocar tipo/tamanho interface",
-          "Ajustar tirantes e vazamentos",
-          "Adaptacao gradual com pausas programadas",
-          "Umidificacao adequada"
-        ],
-        "block": "R1 — Oxigenoterapia, HFNC e VNI",
-        "goals": [
-          "Manter suporte nao invasivo por blocos progressivos"
-        ],
-        "phases": []
+        "name": "R1.4 — Intolerância à interface / falha de adaptação",
+        "desc": "Moderado. Ansiedade, vazamento, dor facial, claustrofobia, lesão pele",
+        "assess": ["Manter suporte não invasivo por blocos progressivos"],
+        "interv": ["Trocar tipo/tamanho interface (Testar opções)", "Ajustar tirantes e vazamentos (Fino)", "Adaptação gradual com pausas programadas (Progressivo)", "Umidificação adequada (Ajustar)"],
+        "block": "🫁 BLOCO R1 — Oxigenoterapia, HFNC e VNI",
+        "goals": ["Manter suporte não invasivo por blocos progressivos"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Trocar tipo/tamanho interface (Testar opções)", "Ajustar tirantes e vazamentos (Fino)", "Adaptação gradual com pausas programadas (Progressivo)", "Umidificação adequada (Ajustar)"]}
+        ]
       },
       {
-        "name": "R1.5 — Dependencia prolongada de oxigenio",
-        "desc": "Moderado. Estavel mas nao reduz O₂ sem dessaturar",
-        "assess": [
-          "Reduzir progressivamente necessidade de O₂"
-        ],
-        "interv": [
-          "Avaliar causa: descondicionamento, atelectasia, congestao, shunt",
-          "Mobilizacao progressiva 2-3x/dia",
-          "Reexpansao pulmonar, treino funcional com SpO₂",
-          "Ajustar O₂ durante esforco"
-        ],
-        "block": "R1 — Oxigenoterapia, HFNC e VNI",
-        "goals": [
-          "Reduzir progressivamente necessidade de O₂"
-        ],
-        "phases": []
+        "name": "R1.5 — Dependência prolongada de oxigênio",
+        "desc": "Moderado. Paciente estável mas não reduz O₂ sem dessaturar",
+        "assess": ["Reduzir progressivamente necessidade de O₂"],
+        "interv": ["Avaliar causa: descondicionamento, atelectasia, congestão, shunt (Investigar)", "Mobilização progressiva (2-3x/dia)", "Reexpansão pulmonar (Exercícios)", "Treino funcional com monitorização SpO₂ (Gradual)", "Ajustar O₂ durante esforço, não só repouso (Dinâmico)"],
+        "block": "🫁 BLOCO R1 — Oxigenoterapia, HFNC e VNI",
+        "goals": ["Reduzir progressivamente necessidade de O₂"],
+        "phases": [
+          {"timeframe": "3-7 dias", "interv": ["Avaliar causa: descondicionamento, atelectasia, congestão, shunt (Investigar)", "Mobilização progressiva (2-3x/dia)", "Reexpansão pulmonar (Exercícios)", "Treino funcional com monitorização SpO₂ (Gradual)", "Ajustar O₂ durante esforço, não só repouso (Dinâmico)"]}
+        ]
       },
       {
         "name": "R2.1 — Tosse ineficaz",
-        "desc": "Grave. PCF < 160 (alto risco < 60 inutil), PEmax < 60, secrecao sem aspiracao",
-        "assess": [
-          "Aumentar fluxo tosse efetivo, eliminar secrecao"
-        ],
-        "interv": [
-          "Medir PCF, PEmax, PImax",
-          "Treino muscular expiratorio POWERbreathe 30-50% PEmax",
-          "Treino tosse: insp profunda → pausa → exp explosiva; huffing",
-          "Tosse assistida manual; se PCF<60: tosse assistida mecanica",
-          "Reavaliar PCF/PEmax 48-72h"
-        ],
-        "block": "R2 — Via aerea, secrecao e higiene bronquica",
-        "goals": [
-          "Aumentar fluxo tosse efetivo, eliminar secrecao"
-        ],
-        "phases": []
+        "desc": "Grave. PCF < 160 L/min (alto risco < 60 inútil), PEmáx < 60 cmH₂O, secreção sem aspiração",
+        "assess": ["Aumentar fluxo tosse efetivo", "Eliminar secreção sem dessaturar", "PCF > 160 L/min (ou > 100)", "PEmáx progressiva"],
+        "interv": ["Medir: PCF, PEmáx, PImáx (Inicial)", "Treino muscular expiratório: POWERbreathe 30-50% PEmáx (2-3 séries 10-15 rep, 1-2x/dia)", "Treino tosse: inspiração profunda → pausa → expiração explosiva (Sessões)", "Tosse assistida manual (compressão sincronizada) (Se necessário)", "Se PCF < 60: tosse assistida mecânica + higiene programada (Obrigatório)"],
+        "block": "🫁 BLOCO R2 — Via aérea, secreção e higiene brônquica",
+        "goals": ["Aumentar fluxo tosse efetivo", "Eliminar secreção sem dessaturar", "PCF > 160 L/min (ou > 100)", "PEmáx progressiva"],
+        "phases": [
+          {"timeframe": "Sessão/24h", "interv": ["Medir obrigatório: PCF, PEmáx, PImáx (Inicial)", "Avaliar: dor, consciência, coordenação (Inicial)"]},
+          {"timeframe": "3-7 dias", "interv": ["Treino muscular expiratório: POWERbreathe carga 30-50% PEmáx (2-3 séries 10-15 rep, 1-2x/dia)", "Treino tosse: inspiração profunda → pausa → expiração explosiva (Sessões)", "Huffing dirigido (Técnica)", "Tosse assistida manual (compressão sincronizada) (Se necessário)", "Se PCF < 60: tosse assistida mecânica + higiene programada (Obrigatório)", "Reavaliar PCF e PEmáx (A cada 48-72h)"]}
+        ]
       },
       {
-        "name": "R2.2 — Hipoventilacao / baixo volume corrente em resp. espontanea",
-        "desc": "Moderado. VC < 5-7 mL/kg, VE baixo, FR alta superficial, atelectasia basal",
-        "assess": [
-          "Aumentar volume corrente, melhorar expansibilidade"
-        ],
-        "interv": [
-          "Ventilometria VC, VE; avaliar dor, mobilidade toracica",
-          "Exercicios ventilatorios: inspiracao lenta profunda, fracionada",
-          "Inspirometria incentivo; sedestacao, ortostatismo precoce",
-          "Mobilizacao global 2-3x/dia; repetir ventilometria diario"
-        ],
-        "block": "R2 — Via aerea, secrecao e higiene bronquica",
-        "goals": [
-          "Aumentar volume corrente, melhorar expansibilidade"
-        ],
-        "phases": []
+        "name": "R2.2 — Hipoventilação / baixo volume corrente em respiração espontânea",
+        "desc": "Moderado. VC < 5-7 mL/kg, VE baixo, FR alta padrão superficial, atelectasia basal",
+        "assess": ["Aumentar volume corrente", "Melhorar expansibilidade", "Normalizar padrão ventilatório", "Prevenir atelectasia"],
+        "interv": ["Ventilometria: VC, VE (Inicial)", "Exercícios ventilatórios: inspiração lenta profunda, fracionada (Sessões)", "Posicionamento: sedestação, ortostatismo precoce (Progressivo)", "Mobilização global (2-3x/dia)", "Critério sucesso: VC ↑, FR ↓, SpO₂ melhora (Avaliar)"],
+        "block": "🫁 BLOCO R2 — Via aérea, secreção e higiene brônquica",
+        "goals": ["Aumentar volume corrente", "Melhorar expansibilidade", "Normalizar padrão ventilatório", "Prevenir atelectasia"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Ventilometria: VC, VE (Inicial)", "Avaliar: dor, mobilidade torácica, consciência (Inicial)", "Exercícios ventilatórios: inspiração lenta profunda, fracionada (Sessões)", "Inspirometria incentivo (se aplicável) (Uso)", "Posicionamento: sedestação, ortostatismo precoce (Progressivo)", "Mobilização global (2-3x/dia)"]},
+          {"timeframe": "3-5 dias", "interv": ["Repetir ventilometria (Diário)", "Critério sucesso: VC ↑, FR ↓, SpO₂ melhora (Avaliar)"]}
+        ]
       },
       {
-        "name": "R2.3 — Fraqueza muscular respiratoria",
-        "desc": "Grave. PImax < -60 (< -30 grave), desmame dificil, tosse fraca",
-        "assess": [
-          "Iniciar treino muscular respiratorio"
-        ],
-        "interv": [
-          "TMI: POWERbreathe 30-50% PImax, 2x/dia, 2-3 series 10-15 rep",
-          "Progressao carga a cada 3-5 dias",
-          "Mobilizacao global; medir PImax/PEmax 5-7 dias"
-        ],
-        "block": "R2 — Via aerea, secrecao e higiene bronquica",
-        "goals": [
-          "Iniciar treino muscular respiratorio"
-        ],
-        "phases": []
+        "name": "R2.3 — Fraqueza muscular respiratória",
+        "desc": "Grave. PImáx < -60 cmH₂O (< -30 grave), desmame difícil, tosse fraca",
+        "assess": ["Iniciar treino muscular respiratório", "Aumentar PImáx e PEmáx", "Resistência ao esforço"],
+        "interv": ["TMI: POWERbreathe carga 30-50% PImáx (2x/dia, 2-3 séries 10-15 rep)", "Progressão carga (A cada 3-5 dias)", "Mobilização global (2-3x/dia)", "Medir PImáx/PEmáx (A cada 5-7 dias)"],
+        "block": "🫁 BLOCO R2 — Via aérea, secreção e higiene brônquica",
+        "goals": ["Iniciar treino muscular respiratório", "Aumentar PImáx e PEmáx", "Resistência ao esforço"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["TMI: POWERbreathe carga 30-50% PImáx (2x/dia, 2-3 séries 10-15 rep)", "Progressão carga (A cada 3-5 dias)"]},
+          {"timeframe": "7-14 dias", "interv": ["Mobilização global (2-3x/dia)", "Treino funcional (Progressivo)", "Controle dor e ansiedade (Contínuo)", "Medir PImáx/PEmáx (A cada 5-7 dias)"]}
+        ]
       },
       {
-        "name": "R2.4 — Secrecao espessa / desidratada",
-        "desc": "Moderado. Aspiracao dificil, secrecao seca/aderida",
-        "assess": [
-          "Reduzir viscosidade, facilitar remocao"
-        ],
-        "interv": [
-          "Corrigir umidificacao; avaliar hidratacao sistemica",
-          "Higiene bronquica frequente",
-          "Evitar aspiracao traumatica repetitiva"
-        ],
-        "block": "R2 — Via aerea, secrecao e higiene bronquica",
-        "goals": [
-          "Reduzir viscosidade, facilitar remocao"
-        ],
-        "phases": []
+        "name": "R2.4 — Secreção espessa / desidratada",
+        "desc": "Moderado. Aspiração difícil, secreção seca/aderida, umidificação inadequada",
+        "assess": ["Reduzir viscosidade", "Facilitar remoção"],
+        "interv": ["Corrigir umidificação (Imediato)", "Avaliar hidratação sistêmica (com equipe) (Verificar)", "Higiene brônquica frequente (Aumentar)", "Evitar aspiração traumática repetitiva (Cuidado)"],
+        "block": "🫁 BLOCO R2 — Via aérea, secreção e higiene brônquica",
+        "goals": ["Reduzir viscosidade", "Facilitar remoção"],
+        "phases": [
+          {"timeframe": "24h", "interv": ["Corrigir umidificação (Imediato)", "Avaliar hidratação sistêmica (com equipe) (Verificar)", "Higiene brônquica frequente (Aumentar)", "Evitar aspiração traumática repetitiva (Cuidado)"]}
+        ]
       },
       {
-        "name": "R2.5 — Atelectasia por retencao / hipoventilacao",
+        "name": "R2.5 — Atelectasia por retenção / hipoventilação",
         "desc": "Grave. RX colapso segmentar/lobar, MV reduzido, hipoxemia",
-        "assess": [
-          "Reexpandir area colapsada"
-        ],
-        "interv": [
-          "Posicionamento: pulmao afetado para cima 2-4h",
-          "Exercicios reexpansao; se VM: MRA + PEEP adequada",
-          "Reavaliar clinica e imagem diario"
-        ],
-        "block": "R2 — Via aerea, secrecao e higiene bronquica",
-        "goals": [
-          "Reexpandir area colapsada"
-        ],
-        "phases": []
+        "assess": ["Reexpandir área colapsada", "Restaurar ventilação regional"],
+        "interv": ["Posicionamento: pulmão afetado para cima (A cada 2-4h)", "Exercícios reexpansão (Sessões)", "Se em VM: MRA + PEEP adequada (Se indicado)", "Reavaliar clínica e imagem (Diário)"],
+        "block": "🫁 BLOCO R2 — Via aérea, secreção e higiene brônquica",
+        "goals": ["Reexpandir área colapsada", "Restaurar ventilação regional"],
+        "phases": [
+          {"timeframe": "48-72h", "interv": ["Posicionamento: pulmão afetado para cima (A cada 2-4h)", "Exercícios reexpansão (Sessões)", "Se em VM: MRA + PEEP adequada (Se indicado)", "Reavaliar clínica e imagem (Diário)"]}
+        ]
       },
       {
-        "name": "R2.6 — Pressao de cuff inadequada",
-        "desc": "Moderado. Pcuff < 20 (vazamento/aspiracao) ou > 30 (lesao traqueal)",
-        "assess": [
-          "Pcuff 20-30 cmH₂O (ideal 25)"
-        ],
-        "interv": [
-          "Medir Pcuff com cuffometro; ajustar volume cuff",
-          "Verificar vazamento Vt exp vs insp; auscultar regiao glotica",
-          "Reavaliar Pcuff 12/12h; registrar em prontuario"
-        ],
-        "block": "R2 — Via aerea, secrecao e higiene bronquica",
-        "goals": [
-          "Pcuff 20-30 cmH₂O (ideal 25)"
-        ],
-        "phases": []
+        "name": "R2.6 — Pressão de cuff inadequada",
+        "desc": "Moderado. Pcuff < 20 cmH₂O (vazamento, risco aspiração) ou > 30 cmH₂O (lesão traqueal)",
+        "assess": ["Ajustar Pcuff 20-30 cmH₂O", "Prevenir aspiração e lesão traqueal", "Monitorar Pcuff continuamente"],
+        "interv": ["Medir Pcuff com cufômetro (Imediato)", "Meta: 20-30 cmH₂O (ideal 25 cmH₂O) (Alvo)", "Reavaliar Pcuff a cada plantão (12/12h) (Rotina)", "Registrar valor de Pcuff em prontuário (Toda medição)"],
+        "block": "🫁 BLOCO R2 — Via aérea, secreção e higiene brônquica",
+        "goals": ["Ajustar Pcuff 20-30 cmH₂O", "Prevenir aspiração e lesão traqueal", "Monitorar Pcuff continuamente"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Medir Pcuff com cufômetro (Imediato)", "Ajustar volume do cuff (inflar/desflar) (Titular)", "Meta: 20-30 cmH₂O (ideal 25 cmH₂O) (Alvo)", "Verificar vazamento (Vt exp vs insp) (Após ajuste)", "Auscultar região glótica (ouvir escape de ar) (Confirmação)"]},
+          {"timeframe": "Contínuo", "interv": ["Reavaliar Pcuff a cada plantão (12/12h) (Rotina)", "Ajustar PRN (após mudança decúbito, tosse) (PRN)", "Se vazamento persistente: comunicar médico (troca TOT/TQT?) (Se necessário)", "Registrar valor de Pcuff em prontuário (Toda medição)"]}
+        ]
       },
       {
-        "name": "R2.7 — Risco de aspiracao / disfagia",
-        "desc": "Grave. Rebaixamento, AVE/TRM, falha teste degluticao, FOIS < 5",
-        "assess": [
-          "Prevenir pneumonia aspirativa"
-        ],
-        "interv": [
-          "Cabeceira ≥ 30-45°; higiene oral 3-4x/dia",
-          "Aspiracao orofaringea PRN; Pcuff 20-30",
-          "Pre-extubacao: teste tosse voluntaria, degluticao agua 3-10ml",
-          "Se falha: adiar extubacao, fonoaudiologia; considerar TQT"
-        ],
-        "block": "R2 — Via aerea, secrecao e higiene bronquica",
-        "goals": [
-          "Prevenir pneumonia aspirativa"
-        ],
-        "phases": []
+        "name": "R2.7 — Risco de aspiração / disfagia",
+        "desc": "Grave. Rebaixamento, histórico AVE/TRM, falha teste deglutição, FOIS < 5, reflexo tosse/deglutição abolido",
+        "assess": ["Prevenir pneumonia aspirativa", "Avaliar deglutição pré-extubação"],
+        "interv": ["Cabeceira ≥ 30-45° (SEMPRE!) (Contínuo)", "Higiene oral rigorosa 3-4x/dia (Rotina)", "Manter Pcuff adequado (20-30 cmH₂O) (Contínuo)", "Teste tosse voluntária (força e eficácia) (Pré-extubação)", "Considerar TQT se disfagia grave + VM prolongada (Discutir com equipe)"],
+        "block": "🫁 BLOCO R2 — Via aérea, secreção e higiene brônquica",
+        "goals": ["Prevenir pneumonia aspirativa", "Avaliar deglutição pré-extubação"],
+        "phases": [
+          {"timeframe": "Contínuo", "interv": ["Cabeceira ≥ 30-45° (SEMPRE!) (Contínuo)", "Higiene oral rigorosa 3-4x/dia (Rotina)", "Aspiração orofaríngea PRN (evitar acúmulo saliva) (PRN)", "Manter Pcuff adequado (20-30 cmH₂O) (Contínuo)", "Observar secreção (se ↑ volume súbito → aspiração?) (Vigilância)"]},
+          {"timeframe": "Antes extubação", "interv": ["Teste tosse voluntária (força e eficácia) (Pré-extubação)", "Teste deglutição água 3-10ml (se acordado) (Pré-extubação)", "Observar: tosse, engasgo, mudança voz, dessaturação (Durante teste)", "Se falha: adiar extubação, solicitar avaliação fonoaudiologia (Se necessário)", "Considerar TQT se disfagia grave + VM prolongada (Discutir com equipe)"]}
+        ]
       },
       {
-        "name": "R3.1 — IRA hipoxemica",
-        "desc": "Critico. SpO₂ < 90-92% ar, PaO₂ < 60, P/F < 300",
-        "assess": [
-          "Corrigir hipoxemia, reduzir trabalho"
-        ],
-        "interv": [
-          "Escalonamento: cateter → mascara → reservatorio → HFNC → VNI → VM",
-          "O₂ titular SpO₂ alvo; HFNC 40-60 L/min; VNI EPAP 5-10",
-          "Posicionamento, mobilizacao precoce, higiene bronquica",
-          "FALHA: FR>30, P/F<150 → escalar"
-        ],
-        "block": "R3 — Insuf. respiratoria aguda",
-        "goals": [
-          "Corrigir hipoxemia, reduzir trabalho"
-        ],
-        "phases": []
+        "name": "R3.1 — IRA hipoxêmica",
+        "desc": "Crítico. SpO₂ < 90-92% ar ambiente, PaO₂ < 60 mmHg, PaO₂/FiO₂ < 300",
+        "assess": ["Corrigir hipoxemia", "Reduzir trabalho respiratório", "Estabilizar SpO₂"],
+        "interv": ["Escalonamento: cateter → máscara → reservatório → HFNC → VNI → VM (Menor eficaz)", "O₂: titular SpO₂ alvo (92-96% ou 88-92% DPOC) (Ajustar)", "HFNC: fluxo 40-60 L/min, FiO₂ alto e reduzir (Se indicado)", "Posicionamento terapêutico (Contínuo)", "FALHA: FR > 30, esforço ↑, rebaixamento, PaO₂/FiO₂ < 150 → escalar (Vigilância)"],
+        "block": "🫁 BLOCO R3 — Insuficiência respiratória aguda",
+        "goals": ["Corrigir hipoxemia", "Reduzir trabalho respiratório", "Estabilizar SpO₂", "Reduzir dependência O₂", "Tratar causa base"],
+        "phases": [
+          {"timeframe": "0-60 min", "interv": ["Avaliação: SpO₂ contínua, FR/FC, gasometria, RX/TC, esforço (Inicial)", "Escalonamento: cateter → máscara → reservatório → HFNC → VNI → VM (Menor eficaz)", "O₂: titular SpO₂ alvo (92-96% ou 88-92% DPOC) (Ajustar)", "HFNC: fluxo 40-60 L/min, FiO₂ alto e reduzir (Se indicado)", "VNI: EPAP 5-10, IPAP conforme esforço (Se indicado)"]},
+          {"timeframe": "24-48h", "interv": ["Posicionamento terapêutico (Contínuo)", "Mobilização precoce (se estável) (2-3x/dia)", "Higiene brônquica se secreção (PRN)", "Exercícios ventilatórios se hipoventilação (Se indicado)", "Reavaliar (15-30-60 min inicial, depois 2-4h)", "FALHA: FR > 30, esforço ↑, rebaixamento, PaO₂/FiO₂ < 150 → escalar (Vigilância)"]}
+        ]
       },
       {
-        "name": "R3.2 — IRA hipercapnica",
-        "desc": "Critico. PaCO₂ > 45, pH < 7,35, sonolencia/asterixis",
-        "assess": [
-          "Melhorar ventilacao alveolar, corrigir acidose"
-        ],
-        "interv": [
-          "VNI: IPAP 10-14, EPAP 4-6; ajustar por Vt, FR, PaCO₂",
-          "Interface e vedacao; pausas programadas",
-          "Gasometria 1-2h; FALHA → VM invasiva"
-        ],
-        "block": "R3 — Insuf. respiratoria aguda",
-        "goals": [
-          "Melhorar ventilacao alveolar, corrigir acidose"
-        ],
-        "phases": []
+        "name": "R3.2 — IRA hipercápnica",
+        "desc": "Crítico. PaCO₂ > 45 mmHg, pH < 7,35, sonolência/confusão/asterixis",
+        "assess": ["Melhorar ventilação alveolar", "Corrigir acidose", "Reverter causa"],
+        "interv": ["VNI primeira escolha: IPAP 10-14, EPAP 4-6 (Inicial)", "Ajustar IPAP por: Vt, FR, PaCO₂ (Fino)", "Gasometria em 1-2h (Seriado)", "FALHA: pH piora, rebaixamento, intolerância → VM invasiva (Alerta)"],
+        "block": "🫁 BLOCO R3 — Insuficiência respiratória aguda",
+        "goals": ["Melhorar ventilação alveolar", "Corrigir acidose", "Reduzir suporte", "Reverter causa"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Avaliação: gasometria seriada, FR/SpO₂, consciência, PImáx/PEmáx (Inicial)", "VNI primeira escolha: IPAP 10-14, EPAP 4-6 (Inicial)", "Ajustar IPAP por: Vt, FR, PaCO₂ (Fino)", "Interface e vedação (Ajuste)", "Pausas programadas (Planejado)", "Higiene brônquica se secreção (PRN)"]},
+          {"timeframe": "24-48h", "interv": ["Controle ansiedade/conforto (Contínuo)", "Gasometria em 1-2h (Seriado)", "Sucesso: pH ↑, CO₂ ↓, FR ↓, consciência melhora (Avaliar)", "FALHA: pH piora, rebaixamento, intolerância, instabilidade → VM invasiva (Alerta)"]}
+        ]
       },
       {
-        "name": "R3.3 — IRA mista (hipoxemica + hipercapnica)",
-        "desc": "Critico. PaO₂ baixa + PaCO₂ alta + pH alterado",
-        "assess": [
-          "Estabilizar oxigenacao e ventilacao"
-        ],
-        "interv": [
-          "HFNC ou VNI conforme perfil; baixo limiar para VM",
-          "Monitorizacao intensiva; tratar causa base agressivamente"
-        ],
-        "block": "R3 — Insuf. respiratoria aguda",
-        "goals": [
-          "Estabilizar oxigenacao e ventilacao"
-        ],
-        "phases": []
+        "name": "R3.3 — IRA mista (hipoxêmica + hipercápnica)",
+        "desc": "Crítico. PaO₂ baixa + PaCO₂ alta + pH alterado, quadro grave",
+        "assess": ["Estabilizar oxigenação e ventilação simultaneamente"],
+        "interv": ["HFNC ou VNI conforme perfil (Inicial)", "Baixo limiar para VM invasiva (Vigilância)", "Monitorização intensiva (Contínuo)", "Tratar causa base agressivamente (Urgente)"],
+        "block": "🫁 BLOCO R3 — Insuficiência respiratória aguda",
+        "goals": ["Estabilizar oxigenação e ventilação simultaneamente"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["HFNC ou VNI conforme perfil (Inicial)", "Baixo limiar para VM invasiva (Vigilância)", "Monitorização intensiva (Contínuo)", "Tratar causa base agressivamente (Urgente)"]}
+        ]
       },
       {
-        "name": "R3.4 — Fadiga muscular respiratoria",
-        "desc": "Critico. FR > 35, acessorios, sudorese, paradoxo, PImax < -30, Vt caindo",
-        "assess": [
-          "Reduzir trabalho imediato, prevenir parada"
-        ],
-        "interv": [
-          "Suporte ventilatorio HFNC/VNI/VM conforme gravidade",
-          "Evitar exercicios nesse momento; apos estabilizacao: TMI progressivo"
-        ],
-        "block": "R3 — Insuf. respiratoria aguda",
-        "goals": [
-          "Reduzir trabalho imediato, prevenir parada"
-        ],
-        "phases": []
+        "name": "R3.4 — Fadiga muscular respiratória",
+        "desc": "Crítico. FR > 35, musculatura acessória, sudorese, paradoxo, PImáx < -30, Vt caindo",
+        "assess": ["Reduzir trabalho respiratório imediatamente", "Prevenir parada"],
+        "interv": ["Suporte ventilatório (HFNC/VNI/VM conforme gravidade) (Urgente)", "Evitar exercícios nesse momento (Contraindicado)", "Treino muscular inspiratório (Quando estável)"],
+        "block": "🫁 BLOCO R3 — Insuficiência respiratória aguda",
+        "goals": ["Reduzir trabalho respiratório imediatamente", "Prevenir parada", "Após estabilização: iniciar TMI progressivo"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Suporte ventilatório (HFNC/VNI/VM conforme gravidade) (Urgente)", "Evitar exercícios nesse momento (Contraindicado)"]},
+          {"timeframe": "48-72h", "interv": ["Treino muscular inspiratório (Quando estável)"]}
+        ]
       },
       {
-        "name": "R3.5 — Falencia respiratoria iminente",
-        "desc": "Critico. Rebaixamento, exaustao, instabilidade, gaso grave",
-        "assess": [
-          "Garantir via aerea e ventilacao"
-        ],
-        "interv": [
-          "Preparar VM invasiva; pre-oxigenacao; auxiliar equipe IOT",
-          "Pos-intubacao: protocolo VM protetora (R4)"
-        ],
-        "block": "R3 — Insuf. respiratoria aguda",
-        "goals": [
-          "Garantir via aerea e ventilacao"
-        ],
-        "phases": []
+        "name": "R3.5 — Falência respiratória iminente",
+        "desc": "Crítico. Rebaixamento, exaustão, instabilidade hemodinâmica, gasometria grave",
+        "assess": ["Garantir via aérea e ventilação"],
+        "interv": ["Preparar VM invasiva (Urgente)", "Pré-oxigenação (Antes IOT)", "Auxiliar equipe via aérea (Suporte)", "Pós-intubação: protocolo VM protetora (R4) (Seguir)"],
+        "block": "🫁 BLOCO R3 — Insuficiência respiratória aguda",
+        "goals": ["Garantir via aérea e ventilação"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Preparar VM invasiva (Urgente)", "Pré-oxigenação (Antes IOT)", "Auxiliar equipe via aérea (Suporte)", "Pós-intubação: protocolo VM protetora (R4) (Seguir)"]}
+        ]
       },
       {
-        "name": "R4-A1 — VM fora da zona protetora (risco VILI)",
-        "desc": "Critico. Vt > 8 mL/kg PBW, Pplat > 30, ΔP > 15, SI fora 0,9-1,1, Cest < 30",
-        "assess": [
-          "Vt 4-6 mL/kg PBW, Pplat ≤ 30, ΔP < 15"
-        ],
-        "interv": [
-          "Medir Vt, Pplat, PEEP, ΔP, Cest por plantao",
-          "Reduzir Vt stepwise; hipercapnia permissiva se pH ≥ 7,20",
-          "Titular PEEP por Cest/ΔP; recrutamento se indicado; pronacao se P/F < 150"
-        ],
-        "block": "R4-A — VM: Mecanica e protecao",
-        "goals": [
-          "Vt 4-6 mL/kg PBW, Pplat ≤ 30, ΔP < 15"
-        ],
-        "phases": []
+        "name": "R4-A1 — VM fora da zona protetora (risco de VILI)",
+        "desc": "Crítico. Vt > 8 mL/kg PBW, Pplatô > 30 cmH₂O, ΔP > 15, SI < 0,9 ou > 1,1, Cest < 30",
+        "assess": ["Vt = 4-6 mL/kg PBW", "Pplatô ≤ 30", "ΔP < 15", "SpO₂ alvo com menor FiO₂"],
+        "interv": ["Medir por plantão: Vt (mL/kg PBW), Pplatô, PEEP, ΔP, Cest, curvas/loops, gasometria (Obrigatório)", "Reduzir Vt stepwise até PBW-alvo, aceitar hipercapnia permissiva se pH ≥ 7,20 (Proteção)", "Titular PEEP: testar 8-10-12-14… escolher melhor Cest, menor ΔP, melhor SpO₂, sem ↓PAM (Titulação)", "Pronação se SDRA/hipoxemia grave (Se PaO₂/FiO₂ < 150)"],
+        "block": "🧠 BLOCO R4-A — VM: Mecânica e proteção pulmonar",
+        "goals": ["Vt = 4-6 mL/kg PBW", "Pplatô ≤ 30", "ΔP < 15", "SpO₂ alvo com menor FiO₂", "Melhorar/estabilizar Cest", "Reduzir FiO₂"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Medir por plantão: Vt (mL/kg PBW), Pplatô, PEEP, ΔP, Cest, curvas/loops, gasometria (Obrigatório)", "Reduzir Vt stepwise até PBW-alvo, aceitar hipercapnia permissiva se pH ≥ 7,20 (Proteção)", "Se Pplatô > 30 → reduzir Vt, avaliar parede/abdome (Correção)", "Se ΔP > 15 → reduzir Vt, testar PEEP por Cest/ΔP (Ajuste)", "Titular PEEP: testar 8-10-12-14… escolher melhor Cest, menor ΔP, melhor SpO₂, sem ↓PAM (Titulação)", "Recrutamento alveolar se indicado (nunca sem PEEP manutenção) (Se colapso)", "Pronação se SDRA/hipoxemia grave (Se PaO₂/FiO₂ < 150)"]},
+          {"timeframe": "24-72h", "interv": ["Monitorizar mecânica pulmonar (Vigilância)"]}
+        ]
       },
       {
         "name": "R4-A2 — Driving pressure elevado",
-        "desc": "Critico. ΔP > 15 cmH₂O",
-        "assess": [
-          "ΔP < 15 (ideal < 12)"
-        ],
-        "interv": [
-          "Reduzir Vt; testar PEEP; avaliar parede/abdome; Vt ultrabaixo se necessario"
-        ],
-        "block": "R4-A — VM: Mecanica e protecao",
-        "goals": [
-          "ΔP < 15 (ideal < 12)"
-        ],
-        "phases": []
+        "desc": "Crítico. ΔP > 15 cmH₂O",
+        "assess": ["Reduzir ΔP para < 15 (ideal < 12)"],
+        "interv": ["Reduzir Vt (Primeira ação)", "Testar PEEP para melhorar Cest (Titulação)", "Avaliar limitação parede/abdome (Investigar)", "Se necessário: aceitar Vt ultrabaixo (Proteção)"],
+        "block": "🧠 BLOCO R4-A — VM: Mecânica e proteção pulmonar",
+        "goals": ["Reduzir ΔP para < 15 (ideal < 12)"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Reduzir Vt (Primeira ação)", "Testar PEEP para melhorar Cest (Titulação)", "Avaliar limitação parede/abdome (Investigar)", "Se necessário: aceitar Vt ultrabaixo (Proteção)"]}
+        ]
       },
       {
-        "name": "R4-A3 — Pressao de plato elevada",
-        "desc": "Grave. Pplat > 30 cmH₂O",
-        "assess": [
-          "Pplat ≤ 30 (ideal < 28)"
-        ],
-        "interv": [
-          "Reduzir Vt; rever PEEP; avaliar pressao abdominal"
-        ],
-        "block": "R4-A — VM: Mecanica e protecao",
-        "goals": [
-          "Pplat ≤ 30 (ideal < 28)"
-        ],
-        "phases": []
+        "name": "R4-A3 — Pressão de platô elevada",
+        "desc": "Grave. Pplatô > 30 cmH₂O",
+        "assess": ["Manter Pplatô ≤ 30 (ideal < 28)"],
+        "interv": ["Reduzir Vt (Ajuste)", "Rever PEEP (Avaliar)", "Avaliar pressão abdominal (Investigar)"],
+        "block": "🧠 BLOCO R4-A — VM: Mecânica e proteção pulmonar",
+        "goals": ["Manter Pplatô ≤ 30 (ideal < 28)"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Reduzir Vt (Ajuste)", "Rever PEEP (Avaliar)", "Avaliar pressão abdominal (Investigar)"]}
+        ]
       },
       {
         "name": "R4-A4 — Volume corrente excessivo",
         "desc": "Grave. Vt > 8 mL/kg PBW",
-        "assess": [
-          "Vt 4-6 mL/kg PBW"
-        ],
-        "interv": [
-          "Recalcular PBW; ajustar Vt no ventilador; reavaliar gaso 30-60 min"
-        ],
-        "block": "R4-A — VM: Mecanica e protecao",
-        "goals": [
-          "Vt 4-6 mL/kg PBW"
-        ],
-        "phases": []
+        "assess": ["Ajustar Vt para 4-6 mL/kg PBW"],
+        "interv": ["Recalcular PBW por sexo e altura (Cálculo)", "Ajustar Vt no ventilador (Programar)", "Reavaliar gasometria e mecânica (30-60 min)"],
+        "block": "🧠 BLOCO R4-A — VM: Mecânica e proteção pulmonar",
+        "goals": ["Ajustar Vt para 4-6 mL/kg PBW"],
+        "phases": [
+          {"timeframe": "0-1h", "interv": ["Recalcular PBW por sexo e altura (Cálculo)", "Ajustar Vt no ventilador (Programar)", "Reavaliar gasometria e mecânica (30-60 min)"]}
+        ]
       },
       {
-        "name": "R4-A5 — Complacencia pulmonar muito baixa",
+        "name": "R4-A5 — Complacência pulmonar muito baixa",
         "desc": "Grave. Cest < 30 mL/cmH₂O",
-        "assess": [
-          "Melhorar recrutamento, minimizar estresse"
-        ],
-        "interv": [
-          "Titular PEEP por melhor Cest; pronacao se SDRA; MRA se indicado"
-        ],
-        "block": "R4-A — VM: Mecanica e protecao",
-        "goals": [
-          "Melhorar recrutamento, minimizar estresse"
-        ],
-        "phases": []
+        "assess": ["Melhorar recrutamento", "Minimizar estresse"],
+        "interv": ["Titular PEEP por melhor Cest (Teste)", "Pronação se SDRA (Indicado)", "MRA se indicado (Se recrutável)"],
+        "block": "🧠 BLOCO R4-A — VM: Mecânica e proteção pulmonar",
+        "goals": ["Melhorar recrutamento", "Minimizar estresse"],
+        "phases": [
+          {"timeframe": "2-6h", "interv": ["Titular PEEP por melhor Cest (Teste)", "Pronação se SDRA (Indicado)", "MRA se indicado (Se recrutável)"]}
+        ]
       },
       {
         "name": "R4-A6 — Stress index alterado",
-        "desc": "Moderado. SI < 0,9 (colapso) ou > 1,1 (hiperdistensao)",
-        "assess": [
-          "SI entre 0,9-1,1"
-        ],
-        "interv": [
-          "SI < 0,9 → subir PEEP; SI > 1,1 → reduzir PEEP ou Vt"
-        ],
-        "block": "R4-A — VM: Mecanica e protecao",
-        "goals": [
-          "SI entre 0,9-1,1"
-        ],
-        "phases": []
+        "desc": "Moderado. SI < 0,9 (colapso) ou SI > 1,1 (hiperdistensão)",
+        "assess": ["Manter SI entre 0,9-1,1"],
+        "interv": ["Se SI < 0,9 → subir PEEP (Ajuste)", "Se SI > 1,1 → reduzir PEEP ou Vt (Ajuste)"],
+        "block": "🧠 BLOCO R4-A — VM: Mecânica e proteção pulmonar",
+        "goals": ["Manter SI entre 0,9-1,1"],
+        "phases": [
+          {"timeframe": "1-2h", "interv": ["Se SI < 0,9 → subir PEEP (Ajuste)", "Se SI > 1,1 → reduzir PEEP ou Vt (Ajuste)"]}
+        ]
       },
       {
-        "name": "R4-A7 — Hiperinsuflacao / hiperdistensao global",
+        "name": "R4-A7 — Hiperinsuflação / hiperdistensão global",
         "desc": "Grave. Curvas achatadas, ΔP alto, Cest piora ao subir PEEP",
-        "assess": [
-          "Reduzir volumes pulmonares finais"
-        ],
-        "interv": [
-          "Reduzir PEEP e Vt; reavaliar hemodinamica"
-        ],
-        "block": "R4-A — VM: Mecanica e protecao",
-        "goals": [
-          "Reduzir volumes pulmonares finais"
-        ],
-        "phases": []
+        "assess": ["Reduzir volumes pulmonares finais"],
+        "interv": ["Reduzir PEEP (Ajuste)", "Reduzir Vt (Ajuste)", "Reavaliar hemodinâmica (Monitorar)"],
+        "block": "🧠 BLOCO R4-A — VM: Mecânica e proteção pulmonar",
+        "goals": ["Reduzir volumes pulmonares finais"],
+        "phases": [
+          {"timeframe": "0-1h", "interv": ["Reduzir PEEP (Ajuste)", "Reduzir Vt (Ajuste)", "Reavaliar hemodinâmica (Monitorar)"]}
+        ]
       },
       {
-        "name": "R4-B1 — Hipoxemia refrataria em VM",
-        "desc": "Critico. P/F < 150, SpO₂ < 90% com FiO₂ ≥ 0,8",
-        "assess": [
-          "Aumentar P/F, FiO₂ < 0,6"
-        ],
-        "interv": [
-          "Otimizar PEEP; MRA se recrutavel; pronacao se P/F < 150"
-        ],
-        "block": "R4-B — VM: Oxigenacao e recrutamento",
-        "goals": [
-          "Aumentar P/F, FiO₂ < 0,6"
-        ],
-        "phases": []
+        "name": "R4-B1 — Hipoxemia refratária em VM",
+        "desc": "Crítico. PaO₂/FiO₂ < 150, SpO₂ < 90% com FiO₂ ≥ 0,8",
+        "assess": ["Aumentar PaO₂/FiO₂", "Reduzir FiO₂ < 0,6"],
+        "interv": ["Confirmar mecanismo: RX/TC, curvas, Cest (Investigar)", "Otimizar PEEP (Titular)", "Pronação se PaO₂/FiO₂ < 150 (Fortemente indicado)", "Posicionamento: cabeceira elevada (Ajustar)"],
+        "block": "🫁 BLOCO R4-B — VM: Oxigenação e recrutamento",
+        "goals": ["Aumentar PaO₂/FiO₂", "Reduzir FiO₂ < 0,6"],
+        "phases": [
+          {"timeframe": "1-6h", "interv": ["Confirmar mecanismo: RX/TC, curvas, Cest (Investigar)", "Otimizar PEEP (Titular)", "Considerar MRA se recrutável (Se indicado)", "Pronação se PaO₂/FiO₂ < 150 (Fortemente indicado)", "Posicionamento: cabeceira elevada (Ajustar)"]}
+        ]
       },
       {
         "name": "R4-B2 — PEEP insuficiente (colapso)",
         "desc": "Grave. SI < 0,9, Cest melhora ao subir PEEP",
-        "assess": [
-          "Manter pulmao aberto"
-        ],
-        "interv": [
-          "Titulacao PEEP 8→10→12→14; melhor Cest, menor ΔP, sem ↓PAM"
-        ],
-        "block": "R4-B — VM: Oxigenacao e recrutamento",
-        "goals": [
-          "Manter pulmao aberto"
-        ],
-        "phases": []
+        "assess": ["Manter pulmão aberto", "Reduzir colapso cíclico"],
+        "interv": ["Titulação PEEP: testar 8→10→12→14 (Protocolo)", "Escolher: melhor Cest, menor ΔP, sem ↓PAM (Critérios)", "Usar SI: < 0,9 → subir PEEP (Guia)"],
+        "block": "🫁 BLOCO R4-B — VM: Oxigenação e recrutamento",
+        "goals": ["Manter pulmão aberto", "Reduzir colapso cíclico"],
+        "phases": [
+          {"timeframe": "1-2h", "interv": ["Titulação PEEP: testar 8→10→12→14 (Protocolo)", "Escolher: melhor Cest, menor ΔP, sem ↓PAM (Critérios)", "Usar SI: < 0,9 → subir PEEP (Guia)"]}
+        ]
       },
       {
-        "name": "R4-B3 — PEEP excessiva (hiperdistensao)",
-        "desc": "Grave. SI > 1,1, ΔP ↑ ao subir PEEP, hipotensao",
-        "assess": [
-          "Reduzir hiperdistensao"
-        ],
-        "interv": [
-          "Reduzir PEEP 2 cmH₂O; reavaliar Cest, ΔP, SpO₂, PAM"
-        ],
-        "block": "R4-B — VM: Oxigenacao e recrutamento",
-        "goals": [
-          "Reduzir hiperdistensao"
-        ],
-        "phases": []
+        "name": "R4-B3 — PEEP excessiva (hiperdistensão)",
+        "desc": "Grave. SI > 1,1, ΔP ↑ ao subir PEEP, hipotensão",
+        "assess": ["Reduzir hiperdistensão"],
+        "interv": ["Reduzir PEEP em degraus de 2 cmH₂O (Gradual)", "Reavaliar: Cest, ΔP, SpO₂, PAM (Após ajuste)"],
+        "block": "🫁 BLOCO R4-B — VM: Oxigenação e recrutamento",
+        "goals": ["Reduzir hiperdistensão"],
+        "phases": [
+          {"timeframe": "0-1h", "interv": ["Reduzir PEEP em degraus de 2 cmH₂O (Gradual)", "Reavaliar: Cest, ΔP, SpO₂, PAM (Após ajuste)"]}
+        ]
       },
       {
-        "name": "R4-B4 — Pulmao recrutavel vs nao recrutavel",
-        "desc": "Moderado. Curva P×V, Cest, MRA, TC",
-        "assess": [
-          "Identificar estrategia"
-        ],
-        "interv": [
-          "Recrutavel: MRA + PEEP manutencao; Nao: pressao minima + pronacao"
-        ],
-        "block": "R4-B — VM: Oxigenacao e recrutamento",
-        "goals": [
-          "Identificar estrategia"
-        ],
-        "phases": []
+        "name": "R4-B4 — Pulmão recrutável vs não recrutável",
+        "desc": "Moderado. Avaliação por: curva P×V, resposta Cest, MRA, TC",
+        "assess": ["Identificar estratégia correta"],
+        "interv": ["Recrutável: usar MRA + PEEP manutenção (Estratégia)", "Não recrutável: pressão mínima + pronação (Estratégia)"],
+        "block": "🫁 BLOCO R4-B — VM: Oxigenação e recrutamento",
+        "goals": ["Identificar estratégia correta"],
+        "phases": [
+          {"timeframe": "2-6h", "interv": ["Recrutável: usar MRA + PEEP manutenção (Estratégia)", "Não recrutável: pressão mínima + pronação (Estratégia)"]}
+        ]
       },
       {
         "name": "R4-B5 — Manobra de recrutamento alveolar",
-        "desc": "Grave. Atelectasia, queda Cest, pos-desconexao",
-        "assess": [
-          "Abrir unidades colapsadas"
-        ],
-        "interv": [
-          "Contraindicacoes: pneumotorax, choque, VD falente",
-          "Monitorar SpO₂, PAM, FC durante MRA; fixar PEEP apos MRA"
-        ],
-        "block": "R4-B — VM: Oxigenacao e recrutamento",
-        "goals": [
-          "Abrir unidades colapsadas"
-        ],
-        "phases": []
+        "desc": "Grave. Indicações: atelectasia, queda Cest, pós-desconexão",
+        "assess": ["Abrir unidades colapsadas"],
+        "interv": ["Contraindicações: pneumotórax, choque, VD falente (Verificar)", "Monitorar SpO₂, PAM, FC (Durante MRA)", "Fixar PEEP acima ponto colapso (Após MRA)"],
+        "block": "🫁 BLOCO R4-B — VM: Oxigenação e recrutamento",
+        "goals": ["Abrir unidades colapsadas"],
+        "phases": [
+          {"timeframe": "15-30 min", "interv": ["Contraindicações: pneumotórax, choque, VD falente (Verificar)", "Monitorar SpO₂, PAM, FC (Durante MRA)", "Fixar PEEP acima ponto colapso (Após MRA)"]}
+        ]
       },
       {
-        "name": "R4-B6 — Pronacao",
-        "desc": "Critico. P/F < 150-200, SDRA",
-        "assess": [
-          "Aumentar P/F, reduzir FiO₂"
-        ],
-        "interv": [
-          "Prona 16-20h/dia; fisio: proteger tubo, posicionamento; higiene antes/depois"
-        ],
-        "block": "R4-B — VM: Oxigenacao e recrutamento",
-        "goals": [
-          "Aumentar P/F, reduzir FiO₂"
-        ],
-        "phases": []
+        "name": "R4-B6 — Pronação",
+        "desc": "Crítico. PaO₂/FiO₂ < 150-200, SDRA",
+        "assess": ["Aumentar PaO₂/FiO₂", "Reduzir FiO₂"],
+        "interv": ["Prona por 16-20h/dia em SDRA (Protocolo)", "Fisio: proteger tubo, posicionamento (Técnica)", "Higiene brônquica antes/depois (PRN)"],
+        "block": "🫁 BLOCO R4-B — VM: Oxigenação e recrutamento",
+        "goals": ["Aumentar PaO₂/FiO₂", "Reduzir FiO₂"],
+        "phases": [
+          {"timeframe": "16-20h/dia", "interv": ["Prona por 16-20h/dia em SDRA (Protocolo)", "Fisio: proteger tubo, posicionamento (Técnica)", "Higiene brônquica antes/depois (PRN)"]}
+        ]
       },
       {
-        "name": "R4-B7 — Consolidacao / shunt nao recrutavel",
-        "desc": "Grave. Consolidacao extensa, Cest nao melhora",
-        "assess": [
-          "Otimizar oxigenacao sem VILI"
-        ],
-        "interv": [
-          "Nao forcar PEEP alta; PEEP moderada + pronacao; aguardar causa base"
-        ],
-        "block": "R4-B — VM: Oxigenacao e recrutamento",
-        "goals": [
-          "Otimizar oxigenacao sem VILI"
-        ],
-        "phases": []
+        "name": "R4-B7 — Consolidação / shunt não recrutável",
+        "desc": "Grave. Consolidação extensa, Cest não melhora",
+        "assess": ["Otimizar oxigenação sem VILI"],
+        "interv": ["Não forçar PEEP alta (Evitar)", "PEEP moderada + pronação (Estratégia)", "Aguardar resolução causa base (Suporte)"],
+        "block": "🫁 BLOCO R4-B — VM: Oxigenação e recrutamento",
+        "goals": ["Otimizar oxigenação sem VILI"],
+        "phases": [
+          {"timeframe": "24-72h", "interv": ["Não forçar PEEP alta (Evitar)", "PEEP moderada + pronação (Estratégia)", "Aguardar resolução causa base (Suporte)"]}
+        ]
       },
       {
-        "name": "R4-C1 — Hipercapnia / acidose respiratoria",
-        "desc": "Grave. PaCO₂ > 50 e/ou pH < 7,30",
-        "assess": [
-          "pH ≥ 7,25, evitar ↑ΔP/Pplat"
-        ],
-        "interv": [
-          "Ajustar FR (se nao autoPEEP); reduzir Vd; gaso 30-60 min"
-        ],
-        "block": "R4-C — VM: Controle ventilatorio (CO₂)",
-        "goals": [
-          "pH ≥ 7,25, evitar ↑ΔP/Pplat"
-        ],
-        "phases": []
+        "name": "R4-C1 — Hipercapnia / acidose respiratória",
+        "desc": "Grave. PaCO₂ > 50 mmHg e/ou pH < 7,30",
+        "assess": ["pH ≥ 7,25", "Evitar ↑ΔP/Pplatô"],
+        "interv": ["Confirmar se permissível ou inaceitável (HIC/TCE/arritmias) (Avaliar)", "1º: ajustar FR (se não gera autoPEEP) (Gradual)", "2º: reduzir Vd (assincronias, posição, higiene) (Eficiência)", "Reavaliar gasometria 30-60 min (Seriado)"],
+        "block": "🌬️ BLOCO R4-C — VM: Controle ventilatório (CO₂)",
+        "goals": ["pH ≥ 7,25", "Evitar ↑ΔP/Pplatô"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Confirmar se permissível ou inaceitável (HIC/TCE/arritmias) (Avaliar)", "1º: ajustar FR (se não gera autoPEEP) (Gradual)", "2º: reduzir Vd (assincronias, posição, higiene) (Eficiência)", "Reavaliar gasometria 30-60 min (Seriado)"]}
+        ]
       },
       {
-        "name": "R4-C2 — Espaco morto aumentado",
+        "name": "R4-C2 — Espaço morto aumentado",
         "desc": "Grave. PaCO₂ alto apesar VE alto, TEP/choque",
-        "assess": [
-          "Melhorar eficiencia ventilatoria"
-        ],
-        "interv": [
-          "Revisar PEEP; pronacao; tratar hemodinamica, TEP"
-        ],
-        "block": "R4-C — VM: Controle ventilatorio (CO₂)",
-        "goals": [
-          "Melhorar eficiencia ventilatoria"
-        ],
-        "phases": []
+        "assess": ["Melhorar eficiência ventilatória"],
+        "interv": ["Revisar PEEP (excessiva pode ↑Vd) (Ajustar)", "Pronação (melhora VA/Q) (Otimizar)", "Tratar causas: hemodinâmica, TEP (Investigar)"],
+        "block": "🌬️ BLOCO R4-C — VM: Controle ventilatório (CO₂)",
+        "goals": ["Melhorar eficiência ventilatória"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Revisar PEEP (excessiva pode ↑Vd) (Ajustar)", "Pronação (melhora VA/Q) (Otimizar)", "Tratar causas: hemodinâmica, TEP (Investigar)"]}
+        ]
       },
       {
         "name": "R4-C3 — Hipercapnia permissiva",
-        "desc": "Moderado. Protecao Vt baixo, ΔP limite",
-        "assess": [
-          "pH toleravel sem ultrapassar protecao"
-        ],
-        "interv": [
-          "Alvo pH ≥ 7,20-7,25; manter VM protetora; monitorar repercussao"
-        ],
-        "block": "R4-C — VM: Controle ventilatorio (CO₂)",
-        "goals": [
-          "pH toleravel sem ultrapassar protecao"
-        ],
-        "phases": []
+        "desc": "Moderado. Proteção pulmonar Vt baixo, ΔP limite",
+        "assess": ["Manter pH tolerável sem ultrapassar proteção"],
+        "interv": ["Definir alvo pH (≥ 7,20-7,25) (Estabelecer)", "Manter ventilação protetora (Prioridade)", "Monitorar repercussão clínica (Vigilância)"],
+        "block": "🌬️ BLOCO R4-C — VM: Controle ventilatório (CO₂)",
+        "goals": ["Manter pH tolerável sem ultrapassar proteção"],
+        "phases": [
+          {"timeframe": "Contínuo", "interv": ["Definir alvo pH (≥ 7,20-7,25) (Estabelecer)", "Manter ventilação protetora (Prioridade)", "Monitorar repercussão clínica (Vigilância)"]}
+        ]
       },
       {
         "name": "R4-D1 — Assincronia significativa",
-        "desc": "Grave. Double trigger, esforco inefetivo, Vt irregular",
-        "assess": [
-          "Reduzir assincronia, Vt/pressoes seguras"
-        ],
-        "interv": [
-          "Curvas P×T, F×T, loops; checar circuito, agua, secrecao; identificar tipo"
-        ],
-        "block": "R4-D — VM: Assincronias",
-        "goals": [
-          "Reduzir assincronia, Vt/pressoes seguras"
-        ],
-        "phases": []
+        "desc": "Grave. Double trigger, esforço inefetivo, Vt irregular",
+        "assess": ["Reduzir assincronia", "Vt/pressões seguras"],
+        "interv": ["Ver curvas P×T, F×T, loops (Diagnóstico)", "Checar circuito, água, secreção (Mecânico)", "Identificar tipo e corrigir (Ajustar)"],
+        "block": "🔁 BLOCO R4-D — VM: Assincronias",
+        "goals": ["Reduzir assincronia", "Vt/pressões seguras"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Ver curvas P×T, F×T, loops (Diagnóstico)", "Checar circuito, água, secreção (Mecânico)", "Identificar tipo e corrigir (Ajustar)"]}
+        ]
       },
       {
         "name": "R4-D2 — Flow starvation",
-        "desc": "Moderado. Curva P×T concava, esforco puxando",
-        "assess": [
-          "Satisfazer demanda inspiratoria"
-        ],
-        "interv": [
-          "Aumentar fluxo inspiratorio; ajustar rampa/rise time; checar resistencia"
-        ],
-        "block": "R4-D — VM: Assincronias",
-        "goals": [
-          "Satisfazer demanda inspiratoria"
-        ],
-        "phases": []
+        "desc": "Moderado. Curva P×T côncava, esforço puxando",
+        "assess": ["Satisfazer demanda inspiratória"],
+        "interv": ["Aumentar fluxo inspiratório (Ajustar)", "Ajustar rampa/rise time (Ajustar)", "Checar resistência (Investigar)"],
+        "block": "🔁 BLOCO R4-D — VM: Assincronias",
+        "goals": ["Satisfazer demanda inspiratória"],
+        "phases": [
+          {"timeframe": "15-30 min", "interv": ["Aumentar fluxo inspiratório (Ajustar)", "Ajustar rampa/rise time (Ajustar)", "Checar resistência (Investigar)"]}
+        ]
       },
       {
         "name": "R4-D3 — Double trigger",
         "desc": "Grave. Dois ciclos colados, Vt somado",
-        "assess": [
-          "Eliminar empilhamento"
-        ],
-        "interv": [
-          "Aumentar TI; ajustar trigger; tratar drive alto: dor, febre, hipoxemia"
-        ],
-        "block": "R4-D — VM: Assincronias",
-        "goals": [
-          "Eliminar empilhamento"
-        ],
-        "phases": []
+        "assess": ["Eliminar empilhamento volume"],
+        "interv": ["Aumentar TI (Ajustar)", "Ajustar trigger (Ajustar)", "Tratar drive alto: dor, febre, hipoxemia (Causa)"],
+        "block": "🔁 BLOCO R4-D — VM: Assincronias",
+        "goals": ["Eliminar empilhamento volume"],
+        "phases": [
+          {"timeframe": "15-30 min", "interv": ["Aumentar TI (Ajustar)", "Ajustar trigger (Ajustar)", "Tratar drive alto: dor, febre, hipoxemia (Causa)"]}
+        ]
       },
       {
-        "name": "R4-D4 — Esforco inefetivo",
-        "desc": "Moderado. Deflexoes sem disparar, autoPEEP",
-        "assess": [
-          "Melhorar disparo efetivo"
-        ],
-        "interv": [
-          "Trigger mais sensivel; reduzir autoPEEP; PEEP externa ate 80% intrínseca"
-        ],
-        "block": "R4-D — VM: Assincronias",
-        "goals": [
-          "Melhorar disparo efetivo"
-        ],
-        "phases": []
+        "name": "R4-D4 — Esforço inefetivo",
+        "desc": "Moderado. Deflexões sem disparar, autoPEEP",
+        "assess": ["Melhorar disparo efetivo"],
+        "interv": ["Ajustar trigger mais sensível (Ajustar)", "Reduzir autoPEEP (Otimizar)", "PEEP externa até 80% intrínseca (Se indicado)"],
+        "block": "🔁 BLOCO R4-D — VM: Assincronias",
+        "goals": ["Melhorar disparo efetivo"],
+        "phases": [
+          {"timeframe": "1-2h", "interv": ["Ajustar trigger mais sensível (Ajustar)", "Reduzir autoPEEP (Otimizar)", "PEEP externa até 80% intrínseca (Se indicado)"]}
+        ]
       },
       {
         "name": "R4-D5 — Drive excessivo (P-SILI)",
-        "desc": "Critico. FR alta, Vt escapa alto, dor/febre",
-        "assess": [
-          "Reduzir esforco lesivo"
-        ],
-        "interv": [
-          "Corrigir dor, febre, acidose, hipoxia; ajustar suporte; monitorar Vt e ΔP"
-        ],
-        "block": "R4-D — VM: Assincronias",
-        "goals": [
-          "Reduzir esforco lesivo"
-        ],
-        "phases": []
+        "desc": "Crítico. FR alta, Vt escapa alto, dor/febre",
+        "assess": ["Reduzir esforço lesivo"],
+        "interv": ["Corrigir causa: dor, febre, acidose, hipóxia (Tratar)", "Ajustar suporte para ↓trabalho (Otimizar)", "Monitorar Vt real e ΔP (Vigilância)"],
+        "block": "🔁 BLOCO R4-D — VM: Assincronias",
+        "goals": ["Reduzir esforço lesivo"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Corrigir causa: dor, febre, acidose, hipóxia (Tratar)", "Ajustar suporte para ↓trabalho (Otimizar)", "Monitorar Vt real e ΔP (Vigilância)"]}
+        ]
       },
       {
         "name": "R4-E1 — AutoPEEP / PEEP intrínseca",
-        "desc": "Grave. Fluxo nao zera, PEEP intr > 5",
-        "assess": [
-          "Fluxo zerar, PEEP intr ≤ 5"
-        ],
-        "interv": [
-          "Checar secrecao, tubo, filtro; reduzir FR, TE (I:E 1:3-1:5); broncoespasmo"
-        ],
-        "block": "R4-E — VM: Obstrucao e aprisionamento",
-        "goals": [
-          "Fluxo zerar, PEEP intr ≤ 5"
-        ],
-        "phases": []
+        "desc": "Grave. Fluxo não zera, PEEP intrínseca > 5",
+        "assess": ["Fluxo zerar", "PEEP intrínseca ≤ 5"],
+        "interv": ["Checar: secreção, tubo dobrado, filtro (Imediato)", "Reduzir FR, aumentar TE (I:E 1:3-1:5) (Ventilação)", "Tratar resistência e broncoespasmo (Causa)"],
+        "block": "🌪️ BLOCO R4-E — VM: Obstrução e aprisionamento",
+        "goals": ["Fluxo zerar", "PEEP intrínseca ≤ 5"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Checar: secreção, tubo dobrado, filtro (Imediato)", "Reduzir FR, aumentar TE (I:E 1:3-1:5) (Ventilação)", "Tratar resistência e broncoespasmo (Causa)"]}
+        ]
       },
       {
-        "name": "R4-E2 — Hiperinsuflacao com choque",
-        "desc": "Critico. PAM cai, taquicardia, aprisionamento",
-        "assess": [
-          "Reverter urgente"
-        ],
-        "interv": [
-          "Aumentar TE, reduzir Vt; grave: desconexao controlada"
-        ],
-        "block": "R4-E — VM: Obstrucao e aprisionamento",
-        "goals": [
-          "Reverter urgente"
-        ],
-        "phases": []
+        "name": "R4-E2 — Hiperinsuflação com choque",
+        "desc": "Crítico. PAM cai, taquicardia, aprisionamento grave",
+        "assess": ["Reverter hiperinsuflação urgente"],
+        "interv": ["Aumentar TE, reduzir Vt (Urgente)", "Se grave: desconexão controlada (Emergência)", "Monitorar barotrauma (Vigilância)"],
+        "block": "🌪️ BLOCO R4-E — VM: Obstrução e aprisionamento",
+        "goals": ["Reverter hiperinsuflação urgente"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Aumentar TE, reduzir Vt (Urgente)", "Se grave: desconexão controlada (Emergência)", "Monitorar barotrauma (Vigilância)"]}
+        ]
       },
       {
         "name": "R4-E3 — Broncoespasmo em VM",
-        "desc": "Grave. Sibilos, PIP ↑ Pplat normal, hipercapnia",
-        "assess": [
-          "Reduzir resistencia"
-        ],
-        "interv": [
-          "FR menor, TE maior; broncodilatador; reavaliar curva fluxo"
-        ],
-        "block": "R4-E — VM: Obstrucao e aprisionamento",
-        "goals": [
-          "Reduzir resistencia"
-        ],
-        "phases": []
+        "desc": "Grave. Sibilos, PIP ↑ Pplatô normal, hipercapnia",
+        "assess": ["Reduzir resistência", "Melhorar VA"],
+        "interv": ["FR menor, TE maior (Ventilação)", "Broncodilatador com equipe (Farmacológico)", "Reavaliar curva fluxo (Seriado)"],
+        "block": "🌪️ BLOCO R4-E — VM: Obstrução e aprisionamento",
+        "goals": ["Reduzir resistência", "Melhorar VA"],
+        "phases": [
+          {"timeframe": "1-2h", "interv": ["FR menor, TE maior (Ventilação)", "Broncodilatador com equipe (Farmacológico)", "Reavaliar curva fluxo (Seriado)"]}
+        ]
       },
       {
         "name": "R4-E4 — DPOC exacerbado",
         "desc": "Grave. DPOC + acidose + autoPEEP",
-        "assess": [
-          "pH ≥ 7,25, reduzir aprisionamento"
-        ],
-        "interv": [
-          "TE prolongado I:E 1:3-1:5; permissiva se pH OK; desmame precoce"
-        ],
-        "block": "R4-E — VM: Obstrucao e aprisionamento",
-        "goals": [
-          "pH ≥ 7,25, reduzir aprisionamento"
-        ],
-        "phases": []
+        "assess": ["pH ≥ 7,25", "Reduzir aprisionamento"],
+        "interv": ["TE prolongado I:E 1:3-1:5 (Estratégia)", "Aceitar permissiva se pH OK (Protocolo)", "Planejar desmame precoce (Estratégia)"],
+        "block": "🌪️ BLOCO R4-E — VM: Obstrução e aprisionamento",
+        "goals": ["pH ≥ 7,25", "Reduzir aprisionamento"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["TE prolongado I:E 1:3-1:5 (Estratégia)", "Aceitar permissiva se pH OK (Protocolo)", "Planejar desmame precoce (Estratégia)"]}
+        ]
       },
       {
-        "name": "R4-E5 — Asma grave / status asmatico",
-        "desc": "Critico. Resistencia extrema, risco barotrauma",
-        "assess": [
-          "Evitar barotrauma, pH toleravel"
-        ],
-        "interv": [
-          "Exp longa: FR baixa, TE max; broncodilatacao + MgSO4"
-        ],
-        "block": "R4-E — VM: Obstrucao e aprisionamento",
-        "goals": [
-          "Evitar barotrauma, pH toleravel"
-        ],
-        "phases": []
+        "name": "R4-E5 — Asma grave / status asmático",
+        "desc": "Crítico. Resistência extrema, risco barotrauma",
+        "assess": ["Evitar barotrauma", "pH tolerável"],
+        "interv": ["Expiração longa: FR baixa, TE máximo (Protocolo)", "Broncodilatação agressiva + MgSO4 (Farmacológico)", "Monitorar barotrauma contínuo (Vigilância)"],
+        "block": "🌪️ BLOCO R4-E — VM: Obstrução e aprisionamento",
+        "goals": ["Evitar barotrauma", "pH tolerável"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Expiração longa: FR baixa, TE máximo (Protocolo)", "Broncodilatação agressiva + MgSO4 (Farmacológico)", "Monitorar barotrauma contínuo (Vigilância)"]}
+        ]
       },
       {
-        "name": "R4-E6 — Obstrucao TOT/TQT",
-        "desc": "Critico. PIP sobe subito, Vt cai, dessaturacao",
-        "assess": [
-          "Restabelecer patencia"
-        ],
-        "interv": [
-          "Checar circuito/tubo, aspirar; ventilar manual; broncoscopia/troca se necessario"
-        ],
-        "block": "R4-E — VM: Obstrucao e aprisionamento",
-        "goals": [
-          "Restabelecer patencia"
-        ],
-        "phases": []
+        "name": "R4-E6 — Obstrução TOT/TQT",
+        "desc": "Crítico. PIP sobe súbito, Vt cai, dessaturação",
+        "assess": ["Restabelecer patência imediata"],
+        "interv": ["Checar circuito/tubo, aspirar (Urgente)", "Ventilar manual se necessário (Resgate)", "Se não resolve: broncoscopia/troca (Emergência)"],
+        "block": "🌪️ BLOCO R4-E — VM: Obstrução e aprisionamento",
+        "goals": ["Restabelecer patência imediata"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Checar circuito/tubo, aspirar (Urgente)", "Ventilar manual se necessário (Resgate)", "Se não resolve: broncoscopia/troca (Emergência)"]}
+        ]
       },
       {
-        "name": "R4-F1 — Disfuncao diafragmatica",
-        "desc": "Grave. MIP < -20/-30, eco excursao < 10 mm",
-        "assess": [
-          "Recuperar forca"
-        ],
-        "interv": [
-          "Eco seriada; evitar ventilacao excessiva; TRE diarios; TMI progressivo"
-        ],
-        "block": "R4-F — VM: Neuro / sedacao / diafragma",
-        "goals": [
-          "Recuperar forca"
-        ],
-        "phases": []
+        "name": "R4-F1 — Disfunção diafragmática",
+        "desc": "Grave. MIP < -20/-30, eco: excursão < 10 mm",
+        "assess": ["Recuperar força diafragmática"],
+        "interv": ["Ecografia seriada (Diagnóstico)", "Evitar ventilação excessiva (Proteção)", "TRE diários quando estável (Estimular)", "TMI progressivo (Diário)"],
+        "block": "🧠 BLOCO R4-F — VM: Neuro, sedação e diafragma",
+        "goals": ["Recuperar força diafragmática"],
+        "phases": [
+          {"timeframe": "5-14 dias", "interv": ["Ecografia seriada (Diagnóstico)", "Evitar ventilação excessiva (Proteção)", "TRE diários quando estável (Estimular)", "TMI progressivo (Diário)"]}
+        ]
       },
       {
-        "name": "R4-F2 — VIDD (lesao diafragma)",
-        "desc": "Grave. VM passiva prolongada ou esforco excessivo",
-        "assess": [
-          "Prevenir lesao, ativar diafragma"
-        ],
-        "interv": [
-          "Evitar super/subassistencia; desmame precoce; TRE + mobilizacao"
-        ],
-        "block": "R4-F — VM: Neuro / sedacao / diafragma",
-        "goals": [
-          "Prevenir lesao, ativar diafragma"
-        ],
-        "phases": []
+        "name": "R4-F2 — VIDD (lesão diafragma por VM)",
+        "desc": "Grave. VM passiva prolongada ou esforço excessivo",
+        "assess": ["Prevenir lesão", "Ativar diafragma"],
+        "interv": ["Evitar super/subassistência (Ajuste fino)", "Desmame precoce (Estratégia)", "TRE + mobilização (Diário)"],
+        "block": "🧠 BLOCO R4-F — VM: Neuro, sedação e diafragma",
+        "goals": ["Prevenir lesão", "Ativar diafragma"],
+        "phases": [
+          {"timeframe": "Contínuo", "interv": ["Evitar super/subassistência (Ajuste fino)", "Desmame precoce (Estratégia)", "TRE + mobilização (Diário)"]}
+        ]
       },
       {
-        "name": "R4-F3 — Delirium / agitacao",
-        "desc": "Grave. CAM-ICU+, risco autoextubacao",
-        "assess": [
-          "Controlar delirium"
-        ],
-        "interv": [
-          "Sedacao minima; bundle A-F; mobilizacao precoce"
-        ],
-        "block": "R4-F — VM: Neuro / sedacao / diafragma",
-        "goals": [
-          "Controlar delirium"
-        ],
-        "phases": []
+        "name": "R4-F3 — Delirium / agitação",
+        "desc": "Grave. CAM-ICU+, risco autoextubação",
+        "assess": ["Controlar delirium"],
+        "interv": ["Sedação mínima com equipe (Farmacológico)", "Protocolo A-F Bundle (Protocolo)", "Mobilização precoce (Diário)"],
+        "block": "🧠 BLOCO R4-F — VM: Neuro, sedação e diafragma",
+        "goals": ["Controlar delirium"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Sedação mínima com equipe (Farmacológico)", "Protocolo A-F Bundle (Protocolo)", "Mobilização precoce (Diário)"]}
+        ]
       },
       {
-        "name": "R4-F4 — Sedacao profunda",
+        "name": "R4-F4 — Sedação profunda",
         "desc": "Moderado. RASS -4/-5, VM passiva",
-        "assess": [
-          "Reduzir sedacao"
-        ],
-        "interv": [
-          "Despertar diario; RASS alvo -1 a 0; TRE quando despertar"
-        ],
-        "block": "R4-F — VM: Neuro / sedacao / diafragma",
-        "goals": [
-          "Reduzir sedacao"
-        ],
-        "phases": []
+        "assess": ["Reduzir sedação"],
+        "interv": ["Despertar diário (Protocolo)", "RASS alvo -1 a 0 (Meta)", "TRE quando despertar (Progressivo)"],
+        "block": "🧠 BLOCO R4-F — VM: Neuro, sedação e diafragma",
+        "goals": ["Reduzir sedação"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Despertar diário (Protocolo)", "RASS alvo -1 a 0 (Meta)", "TRE quando despertar (Progressivo)"]}
+        ]
       },
       {
-        "name": "R4-F5 — Polineuropatia critico",
-        "desc": "Grave. MRC < 48, desmame dificil",
-        "assess": [
-          "Recuperar funcao"
-        ],
-        "interv": [
-          "Mobilizacao 2x/dia; eletroestimulacao; TMI diario"
-        ],
-        "block": "R4-F — VM: Neuro / sedacao / diafragma",
-        "goals": [
-          "Recuperar funcao"
-        ],
-        "phases": []
+        "name": "R4-F5 — Polineuropatia do crítico",
+        "desc": "Grave. MRC < 48, desmame difícil",
+        "assess": ["Recuperar função muscular"],
+        "interv": ["Mobilização 2x/dia (Intensivo)", "Eletroestimulação (Se disponível)", "TMI diário (Respiratório)"],
+        "block": "🧠 BLOCO R4-F — VM: Neuro, sedação e diafragma",
+        "goals": ["Recuperar função muscular"],
+        "phases": [
+          {"timeframe": "14-30 dias", "interv": ["Mobilização 2x/dia (Intensivo)", "Eletroestimulação (Se disponível)", "TMI diário (Respiratório)"]}
+        ]
       },
       {
-        "name": "R4-G1 — Pneumotorax",
-        "desc": "Critico. MV abolido, PIP alto, hipotensao",
-        "assess": [
-          "Drenagem urgente"
-        ],
-        "interv": [
-          "Chamar equipe URGENTE; RX torax; preparar drenagem; reduzir pressoes"
-        ],
-        "block": "R4-G — VM: Complicacoes e emergencias",
-        "goals": [
-          "Drenagem urgente"
-        ],
-        "phases": []
+        "name": "R4-G1 — Pneumotórax",
+        "desc": "Crítico. MV abolido, PIP alto, hipotensão",
+        "assess": ["Drenagem urgente"],
+        "interv": ["Chamar equipe URGENTE (Imediato)", "RX tórax urgente (Diagnóstico)", "Preparar drenagem (Antecipar)", "Reduzir pressões (Temporário)"],
+        "block": "⚠️ BLOCO R4-G — VM: Complicações e emergências",
+        "goals": ["Drenagem urgente"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Chamar equipe URGENTE (Imediato)", "RX tórax urgente (Diagnóstico)", "Preparar drenagem (Antecipar)", "Reduzir pressões (Temporário)"]}
+        ]
       },
       {
         "name": "R4-G2 — PAVM suspeita",
-        "desc": "Grave. Febre, secrecao purulenta, infiltrado",
-        "assess": [
-          "Facilitar diagnostico"
-        ],
-        "interv": [
-          "Aspirado; higiene otimizada; cabeceira 30-45°"
-        ],
-        "block": "R4-G — VM: Complicacoes e emergencias",
-        "goals": [
-          "Facilitar diagnostico"
-        ],
-        "phases": []
+        "desc": "Grave. Febre, secreção purulenta, infiltrado",
+        "assess": ["Facilitar diagnóstico e tratamento precoce"],
+        "interv": ["Coleta aspirado (Diagnóstico)", "Higiene otimizada (Intensificar)", "Cabeceira 30-45° (Prevenção)", "Posicionamento terapêutico (Contínuo)"],
+        "block": "⚠️ BLOCO R4-G — VM: Complicações e emergências",
+        "goals": ["Facilitar diagnóstico e tratamento precoce"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Coleta aspirado (Diagnóstico)", "Higiene otimizada (Intensificar)", "Cabeceira 30-45° (Prevenção)", "Posicionamento terapêutico (Contínuo)"]}
+        ]
       },
       {
-        "name": "R4-G3 — Autoextubacao",
-        "desc": "Critico. Tubo saiu",
-        "assess": [
-          "Avaliar reintubacao"
-        ],
-        "interv": [
-          "O₂ mascara/HFNC/VNI; avaliar SpO₂, FR, esforco; decidir com equipe"
-        ],
-        "block": "R4-G — VM: Complicacoes e emergencias",
-        "goals": [
-          "Avaliar reintubacao"
-        ],
-        "phases": []
+        "name": "R4-G3 — Autoextubação",
+        "desc": "Crítico. Tubo saiu",
+        "assess": ["Avaliar reintubação"],
+        "interv": ["O₂: máscara/HFNC/VNI (Urgente)", "Avaliar: SpO₂, FR, esforço (Imediato)", "Decidir com equipe (Discussão)"],
+        "block": "⚠️ BLOCO R4-G — VM: Complicações e emergências",
+        "goals": ["Avaliar reintubação"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["O₂: máscara/HFNC/VNI (Urgente)", "Avaliar: SpO₂, FR, esforço (Imediato)", "Decidir com equipe (Discussão)"]}
+        ]
       },
       {
-        "name": "R4-G4 — Desconexao circuito",
-        "desc": "Critico. Alarme, dessaturacao",
-        "assess": [
-          "Reconectar"
-        ],
-        "interv": [
-          "Reconectar imediato; verificar fixacao; MRA se colapso"
-        ],
-        "block": "R4-G — VM: Complicacoes e emergencias",
-        "goals": [
-          "Reconectar"
-        ],
-        "phases": []
+        "name": "R4-G4 — Desconexão circuito",
+        "desc": "Crítico. Alarme, dessaturação",
+        "assess": ["Reconectar e estabilizar"],
+        "interv": ["Reconectar imediato (Urgente)", "Verificar fixação (Checar)", "MRA se colapso (Se indicado)", "Reavaliar mecânica (Pós-evento)"],
+        "block": "⚠️ BLOCO R4-G — VM: Complicações e emergências",
+        "goals": ["Reconectar e estabilizar"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Reconectar imediato (Urgente)", "Verificar fixação (Checar)", "MRA se colapso (Se indicado)", "Reavaliar mecânica (Pós-evento)"]}
+        ]
       },
       {
-        "name": "R4-G5 — Instabilidade hemodinamica",
-        "desc": "Critico. PAM < 65, FC > 120 apos VM",
-        "assess": [
-          "Identificar causa"
-        ],
-        "interv": [
-          "Suspeitar hiperinsuflacao, pneumotorax; reduzir PEEP/Vt; RX"
-        ],
-        "block": "R4-G — VM: Complicacoes e emergencias",
-        "goals": [
-          "Identificar causa"
-        ],
-        "phases": []
+        "name": "R4-G5 — Instabilidade hemodinâmica em VM",
+        "desc": "Crítico. PAM < 65, FC > 120 após VM",
+        "assess": ["Identificar e tratar causa"],
+        "interv": ["Suspeitar: hiperinsuflação, pneumotórax (Investigar)", "Reduzir PEEP/Vt (Testar)", "RX urgente (Diagnóstico)", "Alinhar com equipe (Suporte)"],
+        "block": "⚠️ BLOCO R4-G — VM: Complicações e emergências",
+        "goals": ["Identificar e tratar causa"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Suspeitar: hiperinsuflação, pneumotórax (Investigar)", "Reduzir PEEP/Vt (Testar)", "RX urgente (Diagnóstico)", "Alinhar com equipe (Suporte)"]}
+        ]
       },
       {
         "name": "R4-G6 — PCR em VM",
-        "desc": "Critico. Sem pulso, apneia",
-        "assess": [
-          "RCP imediato"
-        ],
-        "interv": [
-          "Codigo azul; ventilar manual 100%; auxiliar compressoes"
-        ],
-        "block": "R4-G — VM: Complicacoes e emergencias",
-        "goals": [
-          "RCP imediato"
-        ],
-        "phases": []
-      },
-      {
-        "name": "R4-G7 — Dessaturacao subita",
-        "desc": "Critico. SpO₂ cai rapido",
-        "assess": [
-          "Identificar causa"
-        ],
-        "interv": [
-          "DOPE: Deslocamento, Obstrucao, Pneumotorax, Equipment; aspirar; RX"
-        ],
-        "block": "R4-G — VM: Complicacoes e emergencias",
-        "goals": [
-          "Identificar causa"
-        ],
-        "phases": []
-      },
-      {
-        "name": "R4-H1 — Dependencia de via aerea artificial",
-        "desc": "Grave. TOT/TQT, manutencao patencia e protecao",
-        "assess": [
-          "Manutencao patencia e protecao da via aerea"
-        ],
-        "interv": [
-          "Medir Pcuff 6/6h; fixacao segura 12/12h; higiene oral 8-12h; auscultar turno",
-          "Trocar fixacao diario; avaliar indicacao TQT; aspiracao traqueal tecnica asséptica",
-          "Cuff-leak test (TOT); avaliar tosse voluntaria, PCF > 60 L/min"
-        ],
-        "block": "R4-H — Manejo via aerea artificial",
-        "goals": [
-          "Curto prazo: cuff 20-30, fixacao, higiene oral, auscultar",
-          "Medio prazo: trocar fixacao, avaliar TQT",
-          "Pre-decannula: cuff-leak, avaliar tosse"
-        ],
+        "desc": "Crítico. Sem pulso, apneia",
+        "assess": ["RCP imediato"],
+        "interv": ["Código azul (URGENTE)", "Ventilar manual 100% (RCP)", "Auxiliar compressões (Suporte)", "Pós-RCP: ajustar VM (Após ROSC)"],
+        "block": "⚠️ BLOCO R4-G — VM: Complicações e emergências",
+        "goals": ["RCP imediato"],
         "phases": [
-          {
-            "timeframe": "Curto prazo",
-            "interv": [
-              "Cuff 20-30 cmH₂O; fixacao segura; higiene oral 8-12h; auscultar por turno"
-            ]
-          },
-          {
-            "timeframe": "Medio prazo",
-            "interv": [
-              "Trocar fixacao diario; avaliar indicacao TQT; aspiracao traqueal tecnica asséptica"
-            ]
-          },
-          {
-            "timeframe": "Pre-decannula",
-            "interv": [
-              "Cuff-leak test (TOT); avaliar tosse voluntaria, PCF > 60 L/min"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["Código azul (URGENTE)", "Ventilar manual 100% (RCP)", "Auxiliar compressões (Suporte)", "Pós-RCP: ajustar VM (Após ROSC)"]}
         ]
       },
       {
-        "name": "R4-H2 — Manter vias aereas pervias",
-        "desc": "Grave. Secrecoes, obstrucao, desobstrucao",
-        "assess": [
-          "Umidificacao e aspiracao",
-          "Tosse assistida e mobilizacao",
-          "Pre-extubacao: tosse, PCF > 60"
-        ],
-        "interv": [
-          "HME ou umidificador; aspiracao indicada (roncos, ↑Ppico, ↓SpO₂)",
-          "Instilacao SF 5-10 mL se espessa; tosse assistida 2-3x/dia; mobilizacao"
-        ],
-        "block": "R4-H — Manejo via aerea artificial",
-        "goals": [
-          "Umidificacao 32-34°C; aspiracao sob demanda",
-          "Tosse assistida; mobilizacao; drenagem postural",
-          "Pre-extubacao: tosse, PCF > 60"
-        ],
+        "name": "R4-G7 — Dessaturação súbita",
+        "desc": "Crítico. SpO₂ cai rápido",
+        "assess": ["Identificar causa sistematicamente"],
+        "interv": ["DOPE: Deslocamento, Obstrução, Pneumotórax, Equipment (Sistemático)", "Aumentar FiO₂ (Temporário)", "Aspirar, checar tubo (Verificar)", "RX se não resolve (Investigar)"],
+        "block": "⚠️ BLOCO R4-G — VM: Complicações e emergências",
+        "goals": ["Identificar causa sistematicamente"],
         "phases": [
-          {
-            "timeframe": "Manutencao diaria",
-            "interv": [
-              "HME ou umidificador 32-34°C; aspiracao sob demanda (roncos, ↑Ppico, ↓SpO₂)"
-            ]
-          },
-          {
-            "timeframe": "Higiene bronquica",
-            "interv": [
-              "Instilacao SF 5-10 mL se espessa; tosse assistida 2-3x/dia; mobilizacao"
-            ]
-          },
-          {
-            "timeframe": "Pre-extubacao",
-            "interv": [
-              "Avaliar tosse voluntaria, PCF > 60 L/min"
-            ]
-          }
+          {"timeframe": "Imediato", "interv": ["DOPE: Deslocamento, Obstrução, Pneumotórax, Equipment (Sistemático)", "Aumentar FiO₂ (Temporário)", "Aspirar, checar tubo (Verificar)", "RX se não resolve (Investigar)"]}
         ]
       },
       {
-        "name": "R4-H3 — Secrecao purulenta/hematica",
-        "desc": "Grave. Purulenta ou hematica",
-        "assess": [
-          "Purulenta: comunicar medico, cultura, higiene 4-6x/dia",
-          "Hematica: aspiracao delicada, pressao baixa, comunicar se > 50ml"
-        ],
-        "interv": [
-          "ATB se PAVM; nebulizacao SF 3%; evitar SF se hematica"
-        ],
-        "block": "R4-H — Manejo via aerea artificial",
-        "goals": [
-          "Purulenta: comunicar medico, cultura, higiene 4-6x/dia",
-          "Hematica: aspiracao delicada, pressao baixa, comunicar se > 50ml"
-        ],
-        "phases": []
+        "name": "R4-H1 — Dependência de via aérea artificial",
+        "desc": "Grave. Paciente com TOT ou TQT, necessita manutenção da patência e proteção das vias aéreas",
+        "assess": ["Manter VAA pérvia e funcionante", "Prevenir obstrução por secreções", "Garantir pressão de cuff adequada (20-30 cmH₂O)"],
+        "interv": ["Medir pressão de cuff: meta 20-30 cmH₂O (6/6h ou após manipulação)", "Fixação segura: TOT com fita/cadarço, anotar cm na rima (12/12h)", "Higiene oral: Clorexidina 0.12%. Aspirar orofaringe antes de desinsuflar cuff (8/8h)", "Cuff-leak test antes de extubação: leak < 110 mL = risco estridor"],
+        "block": "🛡️ BLOCO R4-H — Manejo de via aérea artificial (TOT/TQT)",
+        "goals": ["Manter VAA pérvia e funcionante", "Prevenir obstrução por secreções", "Garantir pressão de cuff adequada (20-30 cmH₂O)", "Prevenir deslocamento/extubação acidental"],
+        "phases": [
+          {"timeframe": "0-24h", "interv": ["Medir pressão de cuff: meta 20-30 cmH₂O (20-25 ideal). Se < 20: risco aspiração. Se > 30: isquemia traqueal (6/6h ou após manipulação)", "Fixação segura: TOT fixado com fita/cadarço, anotar cm na rima. TQT com cadarços/velcro. Revisar 2x/dia (12/12h)", "Higiene oral: Clorexidina 0.12% ou protocolo institucional. Aspirar orofaringe antes de desinsuflar cuff (8/8h ou 12/12h)", "Auscultar: verificar entrada bilateral de ar. Se ↓ MV unilateral → suspeitar intubação seletiva ou obstrução (Cada turno)"]},
+          {"timeframe": "1-7 dias", "interv": ["Trocar fixação: 1x/dia ou se sujo/frouxo. Evitar mobilização excessiva do tubo (Diário)", "Avaliar indicação TQT: se previsão VM > 7-10 dias, desmame difícil ou necessidade VAA prolongada (Discussão equipe)", "Aspiração traqueal: técnica asséptica, sistema fechado preferível (SDRA). Evitar aspiração de rotina (Conforme necessidade)"]},
+          {"timeframe": "Pré-retirada", "interv": ["Cuff-leak test (TOT): desinsuflar cuff, medir volume expirado. Leak < 110 mL = risco estridor pós-extubação (Antes extubação)", "Avaliar tosse: força e eficácia. Pico de fluxo > 60 L/min favorável (Avaliação funcional)"]}
+        ]
       },
       {
-        "name": "R5-A1 — Criterios desmame nao atingidos",
-        "desc": "Moderado. P/F < 150, PEEP > 8-10, instavel, febril, sedado",
-        "assess": [
-          "Atingir criterios pre-TRE"
-        ],
-        "interv": [
-          "Otimizar oxigenacao; reduzir sedacao RASS -1 a 0; estabilizar hemodinamica"
-        ],
-        "block": "R5-A — Desmame e TRE",
-        "goals": [
-          "Atingir criterios pre-TRE"
-        ],
-        "phases": []
+        "name": "R4-H2 — Manter vias aéreas pérvias",
+        "desc": "Grave. Acúmulo de secreções, obstrução parcial, necessidade de desobstrução ativa",
+        "assess": ["Desobstruir vias aéreas", "Prevenir rolha de secreção", "Otimizar umidificação"],
+        "interv": ["Umidificação: HME (nariz artificial) em paciente estável. Umidificador aquecido se secreção espessa (Contínuo)", "Aspiração traqueal: sob demanda (ausculta, ↑ Ppico, ↓ SpO₂, tosse ineficaz)", "Tosse assistida: hiperinsuflação manual + compressão torácica (2-3x/dia)", "Mobilização: sentar, ortostatismo, deambular se possível (Diário)"],
+        "block": "🛡️ BLOCO R4-H — Manejo de via aérea artificial (TOT/TQT)",
+        "goals": ["Desobstruir vias aéreas", "Prevenir rolha de secreção", "Otimizar umidificação", "Garantir clearance efetivo após retirada de VAA"],
+        "phases": [
+          {"timeframe": "0-24h", "interv": ["Umidificação adequada: HME em paciente estável. Umidificador aquecido se secreção espessa/volumosa. Meta: 32-34°C, 100% umidade (Contínuo)", "Aspiração traqueal: indicações: ausculta com roncos, ↑ Ppico, ↓ SpO₂, tosse ineficaz. Sistema fechado (SDRA/PEEP alto) (Sob demanda)", "Instilação SF 0.9%: 5-10 mL se secreção muito espessa/ressecada (Quando necessário)"]},
+          {"timeframe": "1-7 dias", "interv": ["Tosse assistida: hiperinsuflação manual (ambú) + compressão torácica sincronizada (2-3x/dia)", "Mobilização: sentar, ortostatismo, deambular se possível. Melhora drenagem postural (Diário)", "Drenagem postural: decúbitos alternados, Trendelenburg se tolerado (Mudança de decúbito 2/2h)"]},
+          {"timeframe": "Pré-extubação", "interv": ["Avaliar tosse: força (forte/moderada/fraca/ausente), volume de secreção. Se tosse fraca + secreção volumosa = risco de reintubação (Avaliação)"]}
+        ]
       },
       {
-        "name": "R5-A1 EXP — Dependencia VM sem criterios desmame",
-        "desc": "Grave. Nao preenche criterios para TRE",
-        "assess": [
-          "Checklist diario; otimizacao ventilatoria; sedacao minima; desmame suporte",
-          "Avaliar PImax/PEmax quando RASS ≥ -1; TMI; mobilizacao; considerar TQT > 14-21 dias"
-        ],
-        "interv": [
-          "VM protetora; despertar diario; reduzir FiO₂/PEEP progressivo"
-        ],
-        "block": "R5-A — Desmame e TRE",
-        "goals": [
-          "Checklist diario; otimizacao ventilatoria; sedacao minima; desmame suporte",
-          "Avaliar PImax/PEmax quando RASS ≥ -1; TMI; mobilizacao; considerar TQT > 14-21 dias"
-        ],
-        "phases": []
+        "name": "R4-H3 — Secreção purulenta / hemática",
+        "desc": "Grave. Secreção amarelada/esverdeada/fétida (purulenta) ou hemática/hemoptise",
+        "assess": ["Comunicar equipe", "Adaptar técnica de higiene brônquica"],
+        "interv": ["Secreção purulenta: comunicar médico imediatamente (suspeita PAVM/infecção) (URGENTE)", "Colher amostra para cultura (Antes ATB se possível)", "Higiene brônquica intensiva: 4-6x/dia (Protocolo)", "Aspiração delicada se hemática: pressão negativa baixa (-80 a -100 mmHg)"],
+        "block": "🛡️ BLOCO R4-H — Manejo de via aérea artificial (TOT/TQT)",
+        "goals": ["Comunicar equipe", "Adaptar técnica de higiene brônquica"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["Secreção purulenta: comunicar médico imediatamente (suspeita PAVM/infecção) (URGENTE)", "Colher amostra para cultura (aspirado traqueal) (Antes ATB se possível)", "Higiene brônquica intensiva: 4-6x/dia, clearance rigoroso (Protocolo)", "Nebulização SF 3% para fluidificar (Pré-fisio)"]},
+          {"timeframe": "0-24h (hemática)", "interv": ["Aspiração delicada: pressão negativa baixa (-80 a -100 mmHg) (Cuidadosa)", "Evitar instilação SF (pode piorar sangramento) (Contraindicado)", "Profundidade controlada (não forçar) (Técnica)", "Comunicar médico se hemoptise volumosa (> 50ml) (Urgente)", "Investigar causa: trauma? coagulopatia? lesão brônquica? (Avaliar)"]}
+        ]
+      },
+      {
+        "name": "R5-A1 — Critérios desmame não atingidos",
+        "desc": "Moderado. PaO₂/FiO₂ < 150, PEEP > 8-10, instável, febril, sedado",
+        "assess": ["Atingir critérios pré-TRE"],
+        "interv": ["Otimizar oxigenação (Ver R4)", "Reduzir sedação RASS -1 a 0 (Despertar)", "Estabilizar hemodinâmica (Equipe)", "Reavaliar critérios diariamente (Checklist)"],
+        "block": "🎯 BLOCO R5-A — Desmame e TRE",
+        "goals": ["Atingir critérios pré-TRE"],
+        "phases": [
+          {"timeframe": "24-72h", "interv": ["Otimizar oxigenação (Ver R4)", "Reduzir sedação RASS -1 a 0 (Despertar)", "Estabilizar hemodinâmica (Equipe)", "Reavaliar critérios diariamente (Checklist)"]}
+        ]
+      },
+      {
+        "name": "R5-A1E — Dependência de VM sem critérios de desmame",
+        "desc": "Grave. Paciente em VM invasiva que não preenche critérios para TRE: PaO₂/FiO₂ < 150-200, PEEP > 8-10, FiO₂ > 0.4-0.5, instabilidade hemodinâmica, febre > 38°C, sedação profunda, agitação/delirium, distúrbios metabólicos, anemia grave",
+        "assess": ["Identificar barreiras ao desmame", "Otimizar ventilação protetora enquanto aguarda estabilização", "Prevenir complicações"],
+        "interv": ["Checklist diário de critérios de desmame (toda manhã)", "VM protetora rigorosa: Vt 4-6 mL/kg PBW, Pplatô ≤ 30, ΔP < 15", "Sedação mínima: RASS alvo -1 a 0. SAT diário", "Desmame progressivo: reduzir FiO₂ e depois PEEP (Diário)", "TMI: POWERbreathe 30-50% PImáx, 2-3 séries (2x/dia)"],
+        "block": "🎯 BLOCO R5-A — Desmame e TRE",
+        "goals": ["Identificar barreiras ao desmame", "Otimizar ventilação protetora", "Prevenir complicações", "Progredir em direção aos critérios de desmame", "Evitar dependência ventilatória prolongada"],
+        "phases": [
+          {"timeframe": "0-24h", "interv": ["Checklist diário de critérios de desmame (toda manhã): PaO₂/FiO₂ > 150-200? PEEP ≤ 8? FiO₂ ≤ 0.4-0.5? Estável? Afebril (T < 38°C)? RASS -1 a +1? Tosse efetiva? pH > 7.30? Secreção manejável?", "Otimização ventilatória: Vt 4-6 mL/kg PBW, Pplatô ≤ 30, ΔP < 15. Reduzir FiO₂ sempre que SpO₂ > 92-96% (Ajuste contínuo)", "Sedação mínima: RASS alvo -1 a 0. Interrupção diária de sedação (SAT) (Diário)", "Hemodinâmica: desmame de vasopressor. Corrigir volemia, tratar causa de choque (Contínuo)", "Controle infeccioso: investigar foco se febre. Higiene oral rigorosa. Cabeceira 30-45° (Contínuo)", "Correção metabólica: corrigir acidose, eletrólitos, anemia se Hb < 7-8 (Quando identificado)"]},
+          {"timeframe": "1-7 dias", "interv": ["Desmame de suporte: reduzir FiO₂ progressivamente. Meta: FiO₂ ≤ 0.4, PEEP ≤ 8 (Diário)", "Avaliação força respiratória: quando RASS ≥ -1 → medir PImáx e PEmáx. Se PImáx < -20/-30 → TMI obrigatório", "TMI: POWERbreathe/Threshold 30-50% PImáx, 2-3 séries 10-15 rep (2x/dia)", "Mobilização precoce: sedestação → ortostatismo → marcha → deambulação (1-2x/dia)", "Despertar diário + TRE: SAT + SBT. Testar 5 min respiração espontânea (Tentativa diária)", "Higiene brônquica: aspiração sob demanda. Se secreção abundante → 3x/dia (Conforme necessidade)"]},
+          {"timeframe": "> 7 dias", "interv": ["Considerar traqueostomia: se previsão VM > 14-21 dias. Benefícios: ↓ sedação, ↑ conforto, facilita desmame (Discussão multidisciplinar)", "Desmame prolongado estruturado: TRE progressivos 30 min → 1h → 2h → 4h → noite toda. TMI 2x/dia (Protocolo)", "Suporte nutricional: 20-25 kcal/kg, 1.2-2 g proteína/kg. Evitar sobrealimentação (Contínuo)", "Prevenção de complicações: profilaxia TEV, úlcera pressão, PAV bundle (Contínuo)"]}
+        ]
       },
       {
         "name": "R5-A2 — TRE indicado",
-        "desc": "Leve. P/F > 150, PEEP ≤ 8, estavel, acordado",
-        "assess": [
-          "Realizar TRE"
-        ],
-        "interv": [
-          "Tubo-T ou PS 5-7; 30-120 min; monitorar FR, Vt, RSBI, SpO₂",
-          "Sucesso: FR<35, RSBI<105, SpO₂>90%; Falha: reconectar"
-        ],
-        "block": "R5-A — Desmame e TRE",
-        "goals": [
-          "Realizar TRE"
-        ],
-        "phases": []
+        "desc": "Leve. PaO₂/FiO₂ > 150, PEEP ≤ 8, estável, acordado",
+        "assess": ["Realizar TRE com segurança"],
+        "interv": ["Método: Tubo-T ou PS 5-7 (Protocolo)", "Duração: 30-120 min (Observar)", "Monitorar: FR, Vt, RSBI, SpO₂, FC, esforço (Contínuo)", "SUCESSO: FR < 35, RSBI < 105, SpO₂ > 90% (Critérios)", "FALHA: FR > 35, dessaturação → reconectar (Interromper)"],
+        "block": "🎯 BLOCO R5-A — Desmame e TRE",
+        "goals": ["Realizar TRE com segurança"],
+        "phases": [
+          {"timeframe": "30-120 min", "interv": ["Método: Tubo-T ou PS 5-7 (Protocolo)", "Duração: 30-120 min (Observar)", "Monitorar: FR, Vt, RSBI, SpO₂, FC, esforço (Contínuo)", "SUCESSO: FR < 35, RSBI < 105, SpO₂ > 90% (Critérios)", "FALHA: FR > 35, dessaturação → reconectar (Interromper)"]}
+        ]
       },
       {
         "name": "R5-A3 — TRE falhou",
-        "desc": "Grave. FR > 35, dessaturacao, esforco ↑",
-        "assess": [
-          "Fortalecer para novo TRE"
-        ],
-        "interv": [
-          "Reconectar; investigar MIP/MEP, secrecao; TMI; mobilizacao; novo TRE 24-48h"
-        ],
-        "block": "R5-A — Desmame e TRE",
-        "goals": [
-          "Fortalecer para novo TRE"
-        ],
-        "phases": []
+        "desc": "Grave. Não tolerou: FR > 35, dessaturação, esforço ↑",
+        "assess": ["Fortalecer para novo TRE"],
+        "interv": ["Reconectar: repouso (Imediato)", "Investigar: fraqueza MIP/MEP, secreção, sobrecarga (Diagnóstico)", "TMI: POWERbreathe 30-50% MIP (2x/dia)", "Mobilização progressiva (2x/dia)", "Novo TRE em 24-48h (Planejar)"],
+        "block": "🎯 BLOCO R5-A — Desmame e TRE",
+        "goals": ["Fortalecer para novo TRE"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Reconectar: repouso (Imediato)", "Investigar: fraqueza MIP/MEP, secreção, sobrecarga (Diagnóstico)", "TMI: POWERbreathe 30-50% MIP (2x/dia)", "Mobilização progressiva (2x/dia)", "Higiene otimizada (PRN)", "Novo TRE em 24-48h (Planejar)"]}
+        ]
       },
       {
         "name": "R5-A4 — Desmame prolongado",
-        "desc": "Grave. Multiplas falhas, VM > 7-14 dias",
-        "assess": [
-          "Desmame progressivo"
-        ],
-        "interv": [
-          "TRE 30→60→120 min; TMI 2x/dia; mobilizacao; TQT se > 10-14 dias"
-        ],
-        "block": "R5-A — Desmame e TRE",
-        "goals": [
-          "Desmame progressivo"
-        ],
-        "phases": []
+        "desc": "Grave. Múltiplas falhas, VM > 7-14 dias",
+        "assess": ["Desmame progressivo estruturado"],
+        "interv": ["TRE progressivos 30→60→120 min (Diário)", "TMI diário obrigatório (2x/dia)", "Mobilização intensiva (2-3x/dia)", "Considerar TQT se VM > 10-14 dias (Discutir)", "Corrigir: anemia, desnutrição, eletrólitos (Suporte)"],
+        "block": "🎯 BLOCO R5-A — Desmame e TRE",
+        "goals": ["Desmame progressivo estruturado"],
+        "phases": [
+          {"timeframe": "7-21 dias", "interv": ["TRE progressivos 30→60→120 min (Diário)", "TMI diário obrigatório (2x/dia)", "Mobilização intensiva (2-3x/dia)", "Considerar TQT se VM > 10-14 dias (Discutir)", "Corrigir: anemia, desnutrição, eletrólitos (Suporte)"]}
+        ]
       },
       {
         "name": "R5-A5 — RSBI elevado",
-        "desc": "Grave. RSBI > 105",
-        "assess": [
-          "RSBI < 105"
-        ],
-        "interv": [
-          "TMI para ↑Vt ↓FR; controlar drive; higiene bronquica; remedir antes TRE"
-        ],
-        "block": "R5-A — Desmame e TRE",
-        "goals": [
-          "RSBI < 105"
-        ],
-        "phases": []
+        "desc": "Grave. RSBI > 105 (FR/Vt em L)",
+        "assess": ["RSBI < 105"],
+        "interv": ["TMI para ↑Vt ↓FR (Diário)", "Controlar drive: dor, febre, ansiedade (Tratar)", "Higiene brônquica (PRN)", "Remedir antes TRE (Reavaliar)"],
+        "block": "🎯 BLOCO R5-A — Desmame e TRE",
+        "goals": ["RSBI < 105"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["TMI para ↑Vt ↓FR (Diário)", "Controlar drive: dor, febre, ansiedade (Tratar)", "Higiene brônquica (PRN)", "Remedir antes TRE (Reavaliar)"]}
+        ]
       },
       {
-        "name": "R5-A6 — Dependencia ventilatoria cronica/irreversivel",
-        "desc": "Moderado. VM > 30 dias, multiplas falhas, sem perspectiva",
-        "assess": [
-          "Otimizar qualidade de vida"
-        ],
-        "interv": [
-          "Considerar TQT, VM domiciliar; prevenir complicacoes; mobilizacao maxima; discutir metas"
-        ],
-        "block": "R5-A — Desmame e TRE",
-        "goals": [
-          "Otimizar qualidade de vida"
-        ],
-        "phases": []
+        "name": "R5-A6 — Dependência ventilatória crônica / irreversível",
+        "desc": "Moderado. VM > 30 dias, múltiplas falhas TRE, doença neuromuscular progressiva, DPOC terminal, sem perspectiva de desmame",
+        "assess": ["Otimizar qualidade de vida", "Minimizar complicações"],
+        "interv": ["Considerar TQT se ainda não tem (↑ conforto, ↓ espaço morto) (Discutir)", "Avaliar critérios para VM domiciliar (Se estável)", "Mobilização máxima possível (1-2x/dia)", "Higiene brônquica rigorosa (3x/dia)", "Reunião multidisciplinar + família (metas realistas) (Semanal)"],
+        "block": "🎯 BLOCO R5-A — Desmame e TRE",
+        "goals": ["Otimizar qualidade de vida", "Minimizar complicações"],
+        "phases": [
+          {"timeframe": "Longo prazo", "interv": ["Considerar TQT se ainda não tem (↑ conforto, ↓ espaço morto) (Discutir com equipe)", "Avaliar critérios para VM domiciliar (se quadro estável) (Se apropriado)", "Prevenir complicações: atelectasia, pneumonia, úlceras pressão (Contínuo)", "Mobilização máxima possível (cadeira, ortostatismo se capaz) (1-2x/dia)", "Higiene brônquica rigorosa (3x/dia)"]},
+          {"timeframe": "Quando apropriado", "interv": ["Reunião multidisciplinar + família (metas realistas) (Semanal/quinzenal)", "Discutir cuidados paliativos se doença terminal (Se indicado)", "Planejar alta para long-care facility ou home care (Se estável)", "Treinar cuidadores (se alta domiciliar) (Pré-alta)"]}
+        ]
       },
       {
-        "name": "R5-B1 — Extubacao bem-sucedida",
-        "desc": "Leve. TRE sucesso, primeiras 48h",
-        "assess": [
-          "Prevenir reintubacao"
-        ],
-        "interv": [
-          "O₂ titular; HFNC profilatico se risco; higiene precoce; monitorar estridor"
-        ],
-        "block": "R5-B — Pos-extubacao",
-        "goals": [
-          "Prevenir reintubacao"
-        ],
-        "phases": []
+        "name": "R5-B1 — Extubação bem-sucedida",
+        "desc": "Leve. TRE sucesso, extubado, primeiras 48h",
+        "assess": ["Prevenir reintubação"],
+        "interv": ["O₂: cateter/máscara conforme SpO₂ (Titular)", "HFNC profilático se alto risco (Estratégia)", "Higiene brônquica precoce (Sessões)", "Monitorar: SpO₂, FR, esforço, estridor (Intensivo)", "Mobilização e sentar (2-3x/dia)"],
+        "block": "🎊 BLOCO R5-B — Pós-extubação",
+        "goals": ["Prevenir reintubação"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["O₂: cateter/máscara conforme SpO₂ (Titular)", "HFNC profilático se alto risco (Estratégia)", "Higiene brônquica precoce (Sessões)", "Monitorar: SpO₂, FR, esforço, estridor (Intensivo)", "Mobilização e sentar (2-3x/dia)", "Nebulização se estridor (Se indicado)"]}
+        ]
       },
       {
-        "name": "R5-B2 — Estridor pos-extubacao",
-        "desc": "Grave. Som agudo, esforco ↑, edema glotico",
-        "assess": [
-          "Reduzir edema"
-        ],
-        "interv": [
-          "Sentado; O₂; nebulizacao adrenalina + corticoide; preparar reintubacao"
-        ],
-        "block": "R5-B — Pos-extubacao",
-        "goals": [
-          "Reduzir edema"
-        ],
-        "phases": []
+        "name": "R5-B2 — Estridor pós-extubação",
+        "desc": "Grave. Som agudo, esforço ↑, edema glótico",
+        "assess": ["Reduzir edema glótico"],
+        "interv": ["Posição sentada (Imediato)", "O₂ suplementar (Titular)", "Nebulização adrenalina + corticoide (Urgente)", "Monitorar resposta (Contínuo)", "Preparar reintubação (Se piora)"],
+        "block": "🎊 BLOCO R5-B — Pós-extubação",
+        "goals": ["Reduzir edema glótico"],
+        "phases": [
+          {"timeframe": "2-6h", "interv": ["Posição sentada (Imediato)", "O₂ suplementar (Titular)", "Nebulização adrenalina + corticoide (Urgente)", "Monitorar resposta (Contínuo)", "Preparar reintubação (Se piora)"]}
+        ]
       },
       {
-        "name": "R5-B3 — Insuf. respiratoria pos-extubacao",
-        "desc": "Critico. SpO₂ < 90%, FR > 30, fadiga < 48h",
-        "assess": [
-          "Evitar reintubacao"
-        ],
-        "interv": [
-          "HFNC 50-60 L/min; VNI se hipercapnia/falha; FALHA → reintubar"
-        ],
-        "block": "R5-B — Pos-extubacao",
-        "goals": [
-          "Evitar reintubacao"
-        ],
-        "phases": []
+        "name": "R5-B3 — Insuficiência respiratória pós-extubação",
+        "desc": "Crítico. SpO₂ < 90%, FR > 30, esforço, fadiga < 48h",
+        "assess": ["Evitar reintubação"],
+        "interv": ["HFNC: 50-60 L/min, FiO₂ alta (Primeira linha)", "VNI se hipercapnia ou falha HFNC (Escalonar)", "Higiene brônquica (PRN)", "FALHA → reintubação (Não atrasar)"],
+        "block": "🎊 BLOCO R5-B — Pós-extubação",
+        "goals": ["Evitar reintubação"],
+        "phases": [
+          {"timeframe": "0-2h", "interv": ["HFNC: 50-60 L/min, FiO₂ alta (Primeira linha)", "VNI se hipercapnia ou falha HFNC (Escalonar)", "Higiene brônquica (PRN)", "Monitorar 1-2h: resposta ou piora (Decisivo)", "FALHA → reintubação (Não atrasar)"]}
+        ]
       },
       {
-        "name": "R5-B4 — Reintubacao",
-        "desc": "Critico. Falha suporte, IOT < 48-72h",
-        "assess": [
-          "IOT segura"
-        ],
-        "interv": [
-          "Pre-oxigenacao; auxiliar equipe; pos-IOT VM protetora"
-        ],
-        "block": "R5-B — Pos-extubacao",
-        "goals": [
-          "IOT segura"
-        ],
-        "phases": []
+        "name": "R5-B4 — Reintubação",
+        "desc": "Crítico. Falha suporte, IOT novamente < 48-72h",
+        "assess": ["IOT segura"],
+        "interv": ["Pré-oxigenação máxima (Antes IOT)", "Auxiliar equipe via aérea (Suporte)", "Pós-IOT: VM protetora (Protocolo R4)", "Investigar causa falha (Aprender)"],
+        "block": "🎊 BLOCO R5-B — Pós-extubação",
+        "goals": ["IOT segura"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Pré-oxigenação máxima (Antes IOT)", "Auxiliar equipe via aérea (Suporte)", "Pós-IOT: VM protetora (Protocolo R4)", "Investigar causa falha (Aprender)"]}
+        ]
       },
       {
-        "name": "R5-B5 — Alto risco reintubacao",
-        "desc": "Moderado. Idade > 65, comorbidades, TRE limite",
-        "assess": [
-          "Profilaxia"
-        ],
-        "interv": [
-          "HFNC profilatico; higiene 3-4x/dia; monitorizacao reforcada"
-        ],
-        "block": "R5-B — Pos-extubacao",
-        "goals": [
-          "Profilaxia"
-        ],
-        "phases": []
+        "name": "R5-B5 — Alto risco reintubação",
+        "desc": "Moderado. Idade > 65, comorbidades, fraqueza, TRE limítrofe",
+        "assess": ["Profilaxia reintubação"],
+        "interv": ["HFNC profilático imediato (Estratégia)", "Higiene intensiva 3-4x/dia (Prevenção)", "Monitorização reforçada (Contínuo)", "Mobilização e posicionamento (Frequente)"],
+        "block": "🎊 BLOCO R5-B — Pós-extubação",
+        "goals": ["Profilaxia reintubação"],
+        "phases": [
+          {"timeframe": "48h", "interv": ["HFNC profilático imediato (Estratégia)", "Higiene intensiva 3-4x/dia (Prevenção)", "Monitorização reforçada (Contínuo)", "Mobilização e posicionamento (Frequente)"]}
+        ]
       },
       {
-        "name": "R5-C1 — Indicacao TQT",
-        "desc": "Moderado. VM prevista > 14-21 dias",
-        "assess": [
-          "Facilitar desmame, conforto"
-        ],
-        "interv": [
-          "Discutir timing; pos-TQT higiene via canula; progressao cuff → desinflado → valvula → cap"
-        ],
-        "block": "R5-C — Traqueostomia",
-        "goals": [
-          "Facilitar desmame, conforto"
-        ],
-        "phases": []
+        "name": "R5-C1 — Indicação TQT",
+        "desc": "Moderado. VM prevista > 14-21 dias, desmame prolongado",
+        "assess": ["Facilitar desmame", "Conforto"],
+        "interv": ["Discutir timing com equipe (Planejamento)", "Pós-TQT: higiene via cânula (Protocolo)", "Progressão: cuff inflado → desinflado → válvula → cap (Gradual)"],
+        "block": "🔧 BLOCO R5-C — Traqueostomia",
+        "goals": ["Facilitar desmame", "Conforto"],
+        "phases": [
+          {"timeframe": "Eletivo", "interv": ["Discutir timing com equipe (Planejamento)", "Pós-TQT: higiene via cânula (Protocolo)", "Progressão: cuff inflado → desinflado → válvula → cap (Gradual)"]}
+        ]
       },
       {
         "name": "R5-C2 — Desmame traqueostomizado",
-        "desc": "Moderado. Criterios OK, TQT presente",
-        "assess": [
-          "Progressao ate decanulacao"
-        ],
-        "interv": [
-          "VM → PSV baixa → CPAP; desinflar cuff; valvula Passy-Muir; cap/oclusao"
-        ],
-        "block": "R5-C — Traqueostomia",
-        "goals": [
-          "Progressao ate decanulacao"
-        ],
-        "phases": []
+        "desc": "Moderado. Critérios OK, TQT presente",
+        "assess": ["Progressão até decanulação"],
+        "interv": ["Etapa 1: VM → PSV baixa → CPAP (Gradual)", "Etapa 2: Desinflar cuff (se tolera) (Teste)", "Etapa 3: Válvula fala Passy-Muir (Progressão)", "Etapa 4: Cap/oclusão por períodos (Final)", "Critérios decanulação: tosse OK, SpO₂ estável (Avaliar)"],
+        "block": "🔧 BLOCO R5-C — Traqueostomia",
+        "goals": ["Progressão até decanulação"],
+        "phases": [
+          {"timeframe": "5-14 dias", "interv": ["Etapa 1: VM → PSV baixa → CPAP (Gradual)", "Etapa 2: Desinflar cuff (se tolera) (Teste)", "Etapa 3: Válvula fala Passy-Muir (Progressão)", "Etapa 4: Cap/oclusão por períodos (Final)", "Critérios decanulação: tosse OK, SpO₂ estável (Avaliar)"]}
+        ]
       },
       {
-        "name": "R5-C3 — Obstrucao/deslocamento TQT",
-        "desc": "Critico. SpO₂ cai, PIP alto, enfisema subcutaneo",
-        "assess": [
-          "Restabelecer via aerea"
-        ],
-        "interv": [
-          "Aspirar; checar posicionamento; trocar canula se obstruida"
-        ],
-        "block": "R5-C — Traqueostomia",
-        "goals": [
-          "Restabelecer via aerea"
-        ],
-        "phases": []
+        "name": "R5-C3 — Obstrução / deslocamento TQT",
+        "desc": "Crítico. SpO₂ cai, PIP alto, enfisema subcutâneo",
+        "assess": ["Restabelecer via aérea"],
+        "interv": ["Aspirar (Urgente)", "Checar posicionamento (Verificar)", "Se obstruída: trocar cânula (Emergência)", "Chamar equipe se necessário (Suporte)"],
+        "block": "🔧 BLOCO R5-C — Traqueostomia",
+        "goals": ["Restabelecer via aérea"],
+        "phases": [
+          {"timeframe": "Imediato", "interv": ["Aspirar (Urgente)", "Checar posicionamento (Verificar)", "Se obstruída: trocar cânula (Emergência)", "Chamar equipe se necessário (Suporte)"]}
+        ]
       },
       {
-        "name": "R5-C4 — Decanulacao",
-        "desc": "Leve. Tolera cap 24h, tosse eficaz",
-        "assess": [
-          "Remover TQT"
-        ],
-        "interv": [
-          "Cap 24h OK, PCF > 60-160; decanular; monitorar 24-48h"
-        ],
-        "block": "R5-C — Traqueostomia",
-        "goals": [
-          "Remover TQT"
-        ],
-        "phases": []
+        "name": "R5-C4 — Decanulação",
+        "desc": "Leve. Tolera cap 24h, tosse eficaz, SpO₂ estável",
+        "assess": ["Remover TQT com segurança"],
+        "interv": ["Confirmar: cap 24h OK, PCF > 60-160 (Checklist)", "Decanular e ocluir ostoma (Procedimento)", "Monitorar 24-48h: SpO₂, estridor (Vigilância)", "Higiene brônquica suporte (Pós-decanulação)"],
+        "block": "🔧 BLOCO R5-C — Traqueostomia",
+        "goals": ["Remover TQT com segurança"],
+        "phases": [
+          {"timeframe": "Eletivo", "interv": ["Confirmar: cap 24h OK, PCF > 60-160 (Checklist)", "Decanular e ocluir ostoma (Procedimento)", "Monitorar 24-48h: SpO₂, estridor (Vigilância)", "Higiene brônquica suporte (Pós-decanulação)"]}
+        ]
       },
       {
         "name": "R5-D1 — MIP/MEP fracos",
         "desc": "Grave. MIP < -20/-30, MEP < +30/+40",
-        "assess": [
-          "MIP > -30, MEP > +40"
-        ],
-        "interv": [
-          "TMI POWERbreathe 30-50% MIP 2x/dia; TME se MEP fraco; reavaliar 5-7 dias"
-        ],
-        "block": "R5-D — Biomarcadores e preditores",
-        "goals": [
-          "MIP > -30, MEP > +40"
-        ],
-        "phases": []
+        "assess": ["MIP > -30", "MEP > +40"],
+        "interv": ["Medir MIP/MEP (Inicial e a cada 3-5 dias)", "TMI: POWERbreathe 30-50% MIP (2x/dia, 10-15 rep)", "TME: carga 30-50% MEP (1-2x/dia se MEP fraco)", "Mobilização global (2x/dia)"],
+        "block": "📊 BLOCO R5-D — Biomarcadores e preditores",
+        "goals": ["MIP > -30", "MEP > +40"],
+        "phases": [
+          {"timeframe": "5-10 dias", "interv": ["Medir MIP/MEP (Inicial e a cada 3-5 dias)", "TMI: POWERbreathe 30-50% MIP (2x/dia, 10-15 rep)", "TME: carga 30-50% MEP (1-2x/dia se MEP fraco)", "Mobilização global (2x/dia)", "Reavaliar (A cada 5-7 dias)"]}
+        ]
       },
       {
         "name": "R5-D2 — PCF baixo",
-        "desc": "Grave. PCF < 60 inutil, < 160 risco",
-        "assess": [
-          "PCF > 160"
-        ],
-        "interv": [
-          "Treino tosse; tosse assistida; TME; PCF<60: tosse mecanica"
-        ],
-        "block": "R5-D — Biomarcadores e preditores",
-        "goals": [
-          "PCF > 160"
-        ],
-        "phases": []
+        "desc": "Grave. PCF < 60 (inútil), < 160 (risco)",
+        "assess": ["PCF > 160 (ideal > 270)"],
+        "interv": ["Medir PCF (A cada 48-72h)", "Treino tosse: inspiração → pausa → expiração explosiva (Sessões)", "Tosse assistida manual (Se necessário)", "TME para força expiratória (1-2x/dia)", "Se PCF < 60: tosse mecânica (Obrigatório)"],
+        "block": "📊 BLOCO R5-D — Biomarcadores e preditores",
+        "goals": ["PCF > 160 (ideal > 270)"],
+        "phases": [
+          {"timeframe": "5-10 dias", "interv": ["Medir PCF (A cada 48-72h)", "Treino tosse: inspiração → pausa → expiração explosiva (Sessões)", "Tosse assistida manual (Se necessário)", "TME para força expiratória (1-2x/dia)", "Se PCF < 60: tosse mecânica (Obrigatório)"]}
+        ]
       },
       {
         "name": "R5-D3 — RSBI elevado",
-        "desc": "Grave. RSBI > 105",
-        "assess": [
-          "RSBI < 105"
-        ],
-        "interv": [
-          "TMI para ↑Vt; controlar drive; remedir antes TRE"
-        ],
-        "block": "R5-D — Biomarcadores e preditores",
-        "goals": [
-          "RSBI < 105"
-        ],
-        "phases": []
+        "desc": "Grave. RSBI > 105 (FR/Vt em L)",
+        "assess": ["RSBI < 105 (ideal < 80)"],
+        "interv": ["Medir: FR / Vt(L) após 1 min (Antes TRE)", "Estratégia: ↑Vt + ↓FR (Dupla)", "TMI para aumentar Vt (2x/dia)", "Controlar drive: dor, febre, ansiedade (Tratar)"],
+        "block": "📊 BLOCO R5-D — Biomarcadores e preditores",
+        "goals": ["RSBI < 105 (ideal < 80)"],
+        "phases": [
+          {"timeframe": "3-7 dias", "interv": ["Medir: FR / Vt(L) após 1 min (Antes TRE)", "Estratégia: ↑Vt + ↓FR (Dupla)", "TMI para aumentar Vt (2x/dia)", "Controlar drive: dor, febre, ansiedade (Tratar)", "Remedir antes TRE (Reavaliar)"]}
+        ]
       },
       {
         "name": "R5-D4 — P0.1 elevado (drive alto)",
         "desc": "Moderado. P0.1 > 4-6 cmH₂O",
-        "assess": [
-          "P0.1 entre 2-4"
-        ],
-        "interv": [
-          "Medir P0.1; investigar dor, febre, acidose, hipoxemia; tratar causas"
-        ],
-        "block": "R5-D — Biomarcadores e preditores",
-        "goals": [
-          "P0.1 entre 2-4"
-        ],
-        "phases": []
+        "assess": ["P0.1 entre 2-4"],
+        "interv": ["Medir P0.1 no ventilador (Se disponível)", "Investigar: dor, febre, acidose, hipoxemia (Diagnóstico)", "Tratar causas (Específico)", "Ajustar suporte temporário (Conforto)"],
+        "block": "📊 BLOCO R5-D — Biomarcadores e preditores",
+        "goals": ["P0.1 entre 2-4"],
+        "phases": [
+          {"timeframe": "24-48h", "interv": ["Medir P0.1 no ventilador (Se disponível)", "Investigar: dor, febre, acidose, hipoxemia (Diagnóstico)", "Tratar causas (Específico)", "Ajustar suporte temporário (Conforto)"]}
+        ]
       },
       {
-        "name": "R5-D5 — Excursao diafragmatica reduzida",
-        "desc": "Grave. Excursao < 10 mm",
-        "assess": [
-          "Excursao > 10 mm"
-        ],
-        "interv": [
-          "Eco diafragmatica; TMI progressivo; evitar ventilacao excessiva; reavaliar 5-7 dias"
-        ],
-        "block": "R5-D — Biomarcadores e preditores",
-        "goals": [
-          "Excursao > 10 mm"
-        ],
-        "phases": []
+        "name": "R5-D5 — Excursão diafragmática reduzida",
+        "desc": "Grave. Excursão < 10 mm (normal > 10-18)",
+        "assess": ["Excursão > 10 mm"],
+        "interv": ["Eco diafragmática (Inicial e seriado)", "TMI carga progressiva (2x/dia)", "Evitar ventilação excessiva (Ajuste)", "TRE diários (Quando critérios)"],
+        "block": "📊 BLOCO R5-D — Biomarcadores e preditores",
+        "goals": ["Excursão > 10 mm"],
+        "phases": [
+          {"timeframe": "7-14 dias", "interv": ["Eco diafragmática (Inicial e seriado)", "TMI carga progressiva (2x/dia)", "Evitar ventilação excessiva (Ajuste)", "TRE diários (Quando critérios)", "Reavaliar eco (A cada 5-7 dias)"]}
+        ]
       },
       {
-        "name": "R5-D6 — Espessamento diafragmatico reduzido",
-        "desc": "Grave. TFdi < 20%",
-        "assess": [
-          "TFdi > 20%"
-        ],
-        "interv": [
-          "TFdi = [(Ei-Ee)/Ee]×100; TMI; TRE progressivos; reavaliar seriado"
-        ],
-        "block": "R5-D — Biomarcadores e preditores",
-        "goals": [
-          "TFdi > 20%"
-        ],
-        "phases": []
+        "name": "R5-D6 — Espessamento diafragmático reduzido",
+        "desc": "Grave. TFdi < 20% (normal > 20-30%)",
+        "assess": ["TFdi > 20%"],
+        "interv": ["TFdi = [(Ei - Ee) / Ee] × 100 (Cálculo)", "TMI com carga (2x/dia)", "TRE progressivos (Diário)", "Mobilização global (2x/dia)"],
+        "block": "📊 BLOCO R5-D — Biomarcadores e preditores",
+        "goals": ["TFdi > 20%"],
+        "phases": [
+          {"timeframe": "7-14 dias", "interv": ["TFdi = [(Ei - Ee) / Ee] × 100 (Cálculo)", "TMI com carga (2x/dia)", "TRE progressivos (Diário)", "Mobilização global (2x/dia)", "Reavaliar TFdi (Seriado)"]}
+        ]
       },
       {
-        "name": "R5-D7 — Indices integrados",
-        "desc": "Moderado. CROP < 13, IWI < 25",
-        "assess": [
-          "Melhorar preditores"
-        ],
-        "interv": [
-          "CROP = Cdin×MIP×(PaO₂/PAO₂)/FR >13; IWI >25; fortalecer + otimizar"
-        ],
-        "block": "R5-D — Biomarcadores e preditores",
-        "goals": [
-          "Melhorar preditores"
-        ],
-        "phases": []
+        "name": "R5-D7 — Índices integrados",
+        "desc": "Moderado. CROP < 13, IWI < 25, MIP/RSBI baixo",
+        "assess": ["Melhorar índices preditores"],
+        "interv": ["CROP = Cdin × MIP × (PaO₂/PAO₂) / FR (>13) (Calcular)", "IWI = Integrated Weaning Index (>25) (Calcular)", "Fortalecer + otimizar oxigenação + controlar drive (Global)", "Usar com avaliação clínica (Integrado)"],
+        "block": "📊 BLOCO R5-D — Biomarcadores e preditores",
+        "goals": ["Melhorar índices preditores"],
+        "phases": [
+          {"timeframe": "5-10 dias", "interv": ["CROP = Cdin × MIP × (PaO₂/PAO₂) / FR (>13) (Calcular)", "IWI = Integrated Weaning Index (>25) (Calcular)", "MIP/RSBI: quanto maior, melhor (Calcular)", "Fortalecer + otimizar oxigenação + controlar drive (Global)", "Usar com avaliação clínica (Integrado)"]}
+        ]
       }
     ]
   },
