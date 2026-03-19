@@ -29,7 +29,7 @@ export async function computeVMIndices(params: {
     })
 
     if (!vmValidation.success) {
-      return { error: 'Parâmetros inválidos', details: vmValidation.error.errors }
+      return { error: 'Parâmetros inválidos', details: vmValidation.error.issues }
     }
 
     // Computar índices

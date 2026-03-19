@@ -88,7 +88,7 @@ export function NeuroExperience({
                 backgroundColor: 'rgba(10, 10, 10, 0.9)',
                 border: '1px solid rgba(255,255,255,0.2)',
               }}
-              formatter={(value) => formatTooltipValue(value)}
+              formatter={(value) => formatTooltipValue((value ?? 0) as string | number)}
             />
             <Line
               type="monotone"
