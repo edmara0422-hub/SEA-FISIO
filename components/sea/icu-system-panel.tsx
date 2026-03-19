@@ -120,8 +120,8 @@ export function ICUSystemPanel() {
         </div>
       </div>
 
-      {/* System selector — compact wrap grid */}
-      <div className="flex flex-wrap gap-1.5">
+      {/* System selector — 2-col grid */}
+      <div className="grid grid-cols-2 gap-1.5">
         {filteredSystems.map((system) => {
           const active = system.id === activeSystem?.id
 
@@ -129,19 +129,19 @@ export function ICUSystemPanel() {
             <button
               key={system.id}
               onClick={() => setActiveSystemId(system.id)}
-              className={`flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-all ${
+              className={`flex w-full items-center gap-1.5 rounded-[0.7rem] border px-2 py-1.5 text-left transition-all ${
                 active
-                  ? 'border-white/20 bg-white/12 shadow-[0_4px_14px_rgba(0,0,0,0.22)]'
-                  : 'border-white/8 bg-black/16 hover:border-white/14 hover:bg-white/6'
+                  ? 'border-white/20 bg-white/10'
+                  : 'border-white/8 bg-transparent hover:border-white/14 hover:bg-white/4'
               }`}
             >
-              <SystemGlyph path={system.icon} color={active ? system.color : 'rgba(255,255,255,0.46)'} />
-              <span className={`text-[10px] font-medium ${active ? 'text-white/90' : 'text-white/56'}`}>
+              <SystemGlyph path={system.icon} color={active ? system.color : 'rgba(255,255,255,0.36)'} />
+              <span className={`min-w-0 flex-1 truncate text-[10px] font-medium ${active ? 'text-white/88' : 'text-white/50'}`}>
                 {system.name}
               </span>
               <span
-                className="rounded-full px-1.5 py-px text-[9px] font-semibold"
-                style={{ color: active ? system.color : 'rgba(255,255,255,0.3)', background: active ? `${system.color}18` : 'transparent' }}
+                className="shrink-0 text-[9px] font-semibold"
+                style={{ color: active ? system.color : 'rgba(255,255,255,0.28)' }}
               >
                 {system.problems.length}
               </span>
@@ -152,7 +152,7 @@ export function ICUSystemPanel() {
 
       {/* Active system content */}
       {activeSystem ? (
-        <div className="rounded-[1.6rem] p-3 md:p-4">
+        <div>
 
           {/* Compact header */}
           <div className="mb-3 flex items-center gap-2">
@@ -169,14 +169,14 @@ export function ICUSystemPanel() {
           </div>
 
           {/* Blocks */}
-          <div className="space-y-2">
+          <div className="space-y-3">
             {groupedProblems.map(({ block, problems }) => (
-              <div key={block} className="chrome-panel rounded-[1.2rem] p-3">
-                <div className="mb-2 flex items-center justify-between gap-2">
+              <div key={block}>
+                <div className="mb-1.5 flex items-center justify-between gap-2 px-0.5">
                   <p className="text-[9px] font-semibold uppercase tracking-[0.18em]" style={{ color: activeSystem.color }}>
                     {block}
                   </p>
-                  <span className="rounded-full border border-white/10 px-2 py-px text-[9px] text-white/40">
+                  <span className="text-[9px] text-white/30">
                     {problems.length}
                   </span>
                 </div>
@@ -189,7 +189,7 @@ export function ICUSystemPanel() {
                       <div
                         key={problem.name}
                         className={`rounded-[0.9rem] border transition-all ${
-                          open ? 'border-white/14 bg-white/[0.04]' : 'border-white/7 bg-black/12'
+                          open ? 'border-white/14 bg-white/[0.03]' : 'border-white/8 bg-transparent'
                         }`}
                       >
                         <button
