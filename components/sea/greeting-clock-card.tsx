@@ -78,9 +78,9 @@ export default function BusinessClock({
               </div>
             ) : null}
 
-            <div className="hidden h-3.5 w-px bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.24)_50%,transparent_100%)] md:block" />
+            <div className="h-3.5 w-px bg-[linear-gradient(180deg,transparent_0%,rgba(255,255,255,0.24)_50%,transparent_100%)]" />
 
-            <div className="hidden sm:flex items-center gap-1.5 text-xs text-white/62">
+            <div className="flex items-center gap-1.5 text-xs text-white/62">
               <CalendarDays className="h-3 w-3 text-white/56" />
               <span className="uppercase tracking-[0.16em]">{dateLabel}</span>
             </div>
