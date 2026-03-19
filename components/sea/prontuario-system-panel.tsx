@@ -10,7 +10,6 @@ import {
   Brain,
   CheckCircle2,
   Cloud,
-  Eye,
   FileText,
   HeartPulse,
   Loader2,
@@ -938,15 +937,15 @@ function ActionButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 rounded-[0.8rem] border px-2.5 py-1.5 text-[9px] font-semibold uppercase tracking-[0.14em] transition-all ${active
+      className={`inline-flex items-center gap-1 rounded-[0.6rem] border px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.12em] transition-all ${active
           ? 'border-white/18 bg-white/12 text-white'
           : 'border-white/10 bg-black/18 text-white/62 hover:border-white/16 hover:text-white'
         }`}
     >
-      <Icon className="h-3.5 w-3.5" />
+      <Icon className="h-3 w-3" />
       <span>{label}</span>
       {typeof badge === 'number' && badge > 0 ? (
-        <span className="rounded-full border border-white/12 px-1.5 py-0.5 text-[9px] text-white/74">
+        <span className="rounded-full border border-white/12 px-1 py-0.5 text-[7px] text-white/74">
           {badge}
         </span>
       ) : null}
@@ -2188,20 +2187,20 @@ export function ProntuarioSystemPanel() {
                   {records.length} ativos
                 </span>
               </div>
-              <h3 className="text-[1.45rem] font-semibold text-white/92">Pacientes e referencia clinica</h3>
-              <div className="mt-3 flex flex-wrap gap-2">
+              <h3 className="text-[1rem] font-semibold text-white/92">Pacientes e referencia clinica</h3>
+              <div className="mt-2 flex flex-wrap gap-1.5">
                 {Object.entries(recordBadges.viaCounts).map(([key, count]) =>
                   count > 0 ? (
                     <span
                       key={key}
-                      className="rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]"
+                      className="rounded-full border px-1.5 py-0.5 text-[7px] font-semibold uppercase tracking-[0.12em]"
                       style={{
                         borderColor: VIA_BADGE_STYLES[key]?.border ?? 'rgba(255,255,255,0.12)',
                         background: VIA_BADGE_STYLES[key]?.background ?? 'rgba(255,255,255,0.05)',
                         color: VIA_BADGE_STYLES[key]?.color ?? 'rgba(255,255,255,0.72)',
                       }}
                     >
-                      {VIA_BADGE_STYLES[key]?.label ?? key}: {count}
+                      {VIA_BADGE_STYLES[key]?.label ?? key}
                     </span>
                   ) : null,
                 )}
@@ -4896,15 +4895,15 @@ export function ProntuarioSystemPanel() {
 
                     {/* Nome + diagnóstico */}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-sm font-semibold text-white/90">{recordTitle(record)}</p>
-                      <p className="truncate text-[11px] text-white/48">{recordSubtitle(record)}</p>
+                      <p className="truncate text-[9px] font-semibold text-white/90">{recordTitle(record)}</p>
+                      <p className="truncate text-[8px] text-white/48">{recordSubtitle(record)}</p>
                     </div>
 
                     {/* Badges afastados do nome */}
-                    <div className="flex shrink-0 items-center gap-1.5">
+                    <div className="flex shrink-0 items-center gap-0.5">
                       {cardStatus ? (
                         <span
-                          className="rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em]"
+                          className="rounded-full border px-1 py-px text-[6px] font-semibold uppercase tracking-[0.08em]"
                           style={{ borderColor: cardStatus.border, background: cardStatus.background, color: cardStatus.color }}
                         >
                           {cardStatus.label}
@@ -4912,7 +4911,7 @@ export function ProntuarioSystemPanel() {
                       ) : null}
                       {cardVia ? (
                         <span
-                          className="rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em]"
+                          className="rounded-full border px-1 py-px text-[6px] font-semibold uppercase tracking-[0.08em]"
                           style={{ borderColor: cardVia.border, background: cardVia.background, color: cardVia.color }}
                         >
                           {cardVia.label}
@@ -4920,7 +4919,7 @@ export function ProntuarioSystemPanel() {
                       ) : null}
                       {showDays ? (
                         <span
-                          className="rounded-full border px-2 py-0.5 text-[8px] font-semibold uppercase tracking-[0.12em]"
+                          className="rounded-full border px-1 py-px text-[6px] font-semibold uppercase tracking-[0.08em]"
                           style={{ borderColor: `${showDays.color}40`, background: `${showDays.color}14`, color: showDays.color }}
                         >
                           {showDays.label}
@@ -4928,28 +4927,21 @@ export function ProntuarioSystemPanel() {
                       ) : null}
                     </div>
 
-                    {/* 3 botões com espaço entre eles */}
-                    <div className="flex shrink-0 items-center gap-2.5">
+                    {/* Botões ação */}
+                    <div className="flex shrink-0 items-center gap-1.5">
                       <button
                         onClick={() => openRecord(record.id)}
-                        className="chrome-subtle flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/62 hover:text-white"
-                        title="Visualizar"
-                      >
-                        <Eye className="h-3.5 w-3.5" />
-                      </button>
-                      <button
-                        onClick={() => openRecord(record.id)}
-                        className="chrome-subtle flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/62 hover:text-white"
+                        className="chrome-subtle flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-white/12 text-white/62 hover:text-white"
                         title="Editar"
                       >
-                        <PencilLine className="h-3.5 w-3.5" />
+                        <PencilLine className="h-3 w-3" />
                       </button>
                       <button
                         onClick={() => archiveRecord(record.id)}
-                        className="flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#facc1530] bg-[#facc150d] text-[#fde68a] hover:bg-[#facc1520]"
+                        className="flex h-6 w-6 items-center justify-center rounded-[0.5rem] border border-[#facc1530] bg-[#facc150d] text-[#fde68a] hover:bg-[#facc1520]"
                         title="Arquivo"
                       >
-                        <Archive className="h-3.5 w-3.5" />
+                        <Archive className="h-3 w-3" />
                       </button>
                     </div>
 
