@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useLayoutEffect, useState, useCallback, startTransition } from 'react'
+import { ReactNode, useLayoutEffect, useState, useCallback, startTransition, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { BottomNav } from '@/components/sea/bottom-nav'
@@ -16,6 +16,18 @@ const ExplorePageClient = dynamic(
   { ssr: false }
 )
 
+// Preload sub-route chunks in background so navigation is instant
+function usePreloadRoutes() {
+  useEffect(() => {
+    const id = setTimeout(() => {
+      import('@/components/sea/conteudos-page-client')
+      import('@/components/sea/sistemas-page-client')
+      import('@/components/sea/explore-page-client')
+    }, 1500)
+    return () => clearTimeout(id)
+  }, [])
+}
+
 let splashShownForRuntime = false
 
 type Tab = 'home' | 'explore' | 'other'
@@ -29,6 +41,14 @@ function pathToTab(p: string): Tab {
 export function MainShell({ children }: { children: ReactNode }) {
   const pathname = usePathname()
   const router = useRouter()
+  usePreloadRoutes()
+
+  // Prefetch Next.js routes so server response is instant
+  useEffect(() => {
+    router.prefetch('/explore')
+    router.prefetch('/explore/conteudos')
+    router.prefetch('/explore/sistemas')
+  }, [router])
   const [showSplash, setShowSplash] = useState<boolean | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>(() => pathToTab(pathname))
   // Track if Home/Explore were ever visited so we mount them lazily
