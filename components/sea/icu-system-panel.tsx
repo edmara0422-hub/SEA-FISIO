@@ -130,20 +130,6 @@ export function ICUSystemPanel() {
 
   return (
     <div className="space-y-5">
-      <div className="grid gap-3 md:grid-cols-3">
-        <div className="chrome-panel rounded-[1.45rem] p-4">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">Sistemas ICU</p>
-          <p className="mt-3 text-2xl font-semibold text-white/92">{ICU_REFERENCE_SYSTEMS.length}</p>
-        </div>
-        <div className="chrome-panel rounded-[1.45rem] p-4">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">Problemas totais</p>
-          <p className="mt-3 text-2xl font-semibold text-white/92">{totalProblems}</p>
-        </div>
-        <div className="chrome-panel rounded-[1.45rem] p-4">
-          <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">Filtro ativo</p>
-          <p className="mt-3 text-2xl font-semibold text-white/92">{visibleProblems}</p>
-        </div>
-      </div>
 
       <div className="chrome-panel rounded-[0.9rem] p-1.5">
         <div className="relative">
