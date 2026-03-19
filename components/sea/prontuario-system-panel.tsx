@@ -2358,8 +2358,8 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                   </div>
 
-                  {/* Linha única compacta */}
-                  <div className="grid grid-cols-10 gap-2">
+                  {/* 5 + 5 */}
+                  <div className="grid grid-cols-5 gap-2">
                     <FieldShell label="Lt">
                       <input
                         className={INPUT_CLASS_SM}
