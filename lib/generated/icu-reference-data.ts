@@ -7100,1069 +7100,1087 @@ export const ICU_REFERENCE_SYSTEMS = [
     "icon": "M11.42 15.17L4.277 12.936C3.486 12.7 3 11.94 3 11.11V4.89c0-.83.486-1.59 1.277-1.756l7.14-2.234a.75.75 0 01.477 1.423L4.5 6.11v4.78l6.398 2.034a.75.75 0 11-.476 1.424zM21 3a.75.75 0 00-1.5 0v2.25H18a.75.75 0 000 1.5h1.5v4.25H18a.75.75 0 000 1.5h1.5V21a.75.75 0 001.5 0v-2.25H21a.75.75 0 000-1.5h-1.5V7.5H21a.75.75 0 000-1.5h-1.5V3z",
     "color": "#34d399",
     "problems": [
-      {
-        "name": "6.0.P1 — Hipoventilacao e queda volumes pos-operatorios",
-        "desc": "Grave. FR superficial, padrao curto, dor impedindo inspiracao, SpO2 cai",
-        "assess": [],
-        "interv": [
-          "Avaliacao por sessao: SpO2, FR, padrao, dor EVA, ausculta, secrecao, tolerancia postural, linhas/drenos",
-          "Reexpansao padrao ouro: inspiracoes profundas lentas+pausa 2-3s, expansao segmentar bases, espironetro incentivo",
-          "Controlar dor EVA ≤4 durante terapia",
-          "Estrategia tosse e limpeza: tosse protegida, huffing, ciclo ativo, tecnicas assistidas se PCF baixo",
-          "Mobilizacao precoce: cabeceira→sedestacao leito→beira leito→poltrona→ortostatismo→marcha 3-5m→10-20m→corredor"
-        ],
-        "block": "6.0 — Base Transversal Perioperatorio",
-        "goals": [
-          "Restaurar padrao ventilatorio mais profundo",
-          "Prevenir atelectasia basal"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        {
+            "name": "6.0.P1 — Hipoventilação e queda de volumes pós-operatórios",
+            "desc": "Grave. FR superficial, padrão 'curto', ↓ expansão torácica, ↓ CV/ventilometria, dor impedindo inspiração profunda, SpO₂ cai com mobilização simples",
+            "block": "🏥 6.0 — BASE TRANSVERSAL DO PERIOPERATÓRIO",
+            "goals": [
+                "Vt > 5-8 mL/kg ao respirar profundo",
+                "SpO₂ ≥ 94% em ar ambiente em repouso",
+                "Expansibilidade torácica simétrica e adequada"
+            ],
+            "assess": [
+                "Ventilometria: Vt, CV quando possível",
+                "SpO₂ em repouso e ao esforço",
+                "Cirtometria axilar e xifoidiana",
+                "Ausculta: MV simétrico, ausência de crepitações basais"
+            ],
             "interv": [
-              "Avaliacao",
-              "Reexpansao",
-              "Dor",
-              "Tosse",
-              "Mobilizacao"
+                "Incentivo inspiratório: coach2 ou Flutter",
+                "Expansão costal manual e diafragmática",
+                "Sniff test e inspirações fracionadas para ganho de volume",
+                "Posicionamento: Fowler 30-45° para otimizar excursão diafragmática",
+                "Solicitar analgesia antes da sessão para permitir inspiração profunda"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.0.P2 — Tosse ineficaz e risco retencao secrecao",
-        "desc": "Grave. Tosse dolorosa ou fraca, PCF <270 ineficaz, <160 grave",
-        "assess": [],
-        "interv": [
-          "Tecnicas tosse protegida e assistida conforme criterio"
-        ],
-        "block": "6.0 — Base Transversal Perioperatorio",
-        "goals": [
-          "Garantir tosse funcional ou alternativa eficaz"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.0.P2 — Tosse ineficaz e risco de retenção de secreção",
+            "desc": "Grave. Tosse dolorosa ou fraca, secreção presente com eliminação ruim, ausculta com roncos/estertores, PCF < 270 L/min = tosse ineficaz, < 160 L/min = grave",
+            "block": "🏥 6.0 — BASE TRANSVERSAL DO PERIOPERATÓRIO",
+            "goals": [
+                "PCF ≥ 270 L/min ou tosse eficaz com suporte",
+                "Ausculta limpa sem roncos persistentes",
+                "Eliminação adequada de secreção sem aspiração"
+            ],
+            "assess": [
+                "PCF (Peak Cough Flow) com fluxômetro",
+                "Ausculta: roncos, estertores, crepitações",
+                "Capacidade de tosse voluntária e força expiratória",
+                "SpO₂ antes e após higiene brônquica"
+            ],
             "interv": [
-              "Tosse protegida",
-              "Assistida"
+                "Suporte manual de incisão durante tosse (travesseiro/mãos)",
+                "Técnica de huff (expiração forçada) como alternativa à tosse explosiva",
+                "Drenagem autogênica para mobilização de secreção",
+                "Cough Assist (insuflador-exsuflador) se PCF < 160 L/min",
+                "Analgesia adequada como pré-requisito para tosse eficaz"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.0.P3 — Atelectasia basal dependente / risco pneumonia",
-        "desc": "Grave. ↓ MV bases, crepitações, imagem, SpO2/O2",
-        "assess": [],
-        "interv": [
-          "Reexpansao dirigida às bases",
-          "Mobilizacao precoce"
-        ],
-        "block": "6.0 — Base Transversal Perioperatorio",
-        "goals": [
-          "Prevenir atelectasia basal"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.0.P3 — Atelectasia basal dependente / risco de pneumonia",
+            "desc": "Grave. ↓ MV bases, crepitações, imagem sugestiva, queda de SpO₂ ou aumento de necessidade de O₂, paciente restrito ao leito",
+            "block": "🏥 6.0 — BASE TRANSVERSAL DO PERIOPERATÓRIO",
+            "goals": [
+                "Reexpansão das bases pulmonares",
+                "SpO₂ ≥ 94% sem aumento de suporte de O₂",
+                "Ausculta com MV presente nas bases"
+            ],
+            "assess": [
+                "Ausculta: MV nas bases (axilares, posteriores)",
+                "SpO₂ e necessidade de O₂ suplementar",
+                "RX de tórax quando disponível",
+                "Cirtometria e expansão das bases"
+            ],
             "interv": [
-              "Reexpansao",
-              "Mobilizacao"
+                "Drenagem postural: decúbito lateral sobre o lado afetado",
+                "Vibrocompressão segmentar basal",
+                "EPAP/CPAP para recrutamento alveolar",
+                "Deambulação precoce como recurso de expansão pulmonar",
+                "Mobilização e mudanças frequentes de decúbito"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.0.P4 — Dor pos-operatoria limitante para respiracao e mobilizacao",
-        "desc": "Grave. EVA ≥6 repouso ou ≥4 ao mobilizar",
-        "assess": [],
-        "interv": [
-          "Gestao funcional dor integrada à mobilizacao"
-        ],
-        "block": "6.0 — Base Transversal Perioperatorio",
-        "goals": [
-          "Controlar dor EVA ≤4 durante terapia"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.0.P4 — Dor pós-operatória limitante para respiração e mobilização",
+            "desc": "Grave. EVA ≥ 6 em repouso ou ≥ 4 ao mobilizar, 'proteção' do tronco/abdome/esterno, incapaz de tossir/respirar fundo",
+            "block": "🏥 6.0 — BASE TRANSVERSAL DO PERIOPERATÓRIO",
+            "goals": [
+                "EVA ≤ 3 em repouso e ≤ 4 ao mobilizar",
+                "Respiração profunda e tosse sem espasmo álgico",
+                "Participação ativa nas sessões sem interrupção por dor"
+            ],
+            "assess": [
+                "EVA em repouso e ao mobilizar (escala numérica/FACES)",
+                "Localização e padrão da dor: incisão, referida, muscular",
+                "Analgesia atual: tipo, dose, horário, pico de efeito",
+                "Guarding: proteção e espasmo à palpação"
+            ],
             "interv": [
-              "Gestao dor"
+                "Coordenar com enfermagem para analgesia 30-60 min antes",
+                "TENS analgésico na região da incisão",
+                "Suporte manual da incisão durante tosse e transferências",
+                "Posicionamento anti-álgico entre sessões",
+                "Educação sobre suporte da incisão durante atividades"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.0.P5 — Intolerancia postural e instabilidade ao ortostatismo",
-        "desc": "Moderado. Queda PA ao sentar/levantar, taquicardia, tontura, dessaturacao",
-        "assess": [],
-        "interv": [
-          "Progressao postural monitorizada"
-        ],
-        "block": "6.0 — Base Transversal Perioperatorio",
-        "goals": [
-          "Tolerar mudancas posturais progressivas"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.0.P5 — Intolerância postural e instabilidade ao ortostatismo",
+            "desc": "Moderado. Queda de PA com sentar/levantar, taquicardia desproporcional, tontura/síncope, dessaturação ao sentar",
+            "block": "🏥 6.0 — BASE TRANSVERSAL DO PERIOPERATÓRIO",
+            "goals": [
+                "Tolerar sedestação > 10 min sem sintomas",
+                "Ortostatismo sem queda de PA sintomática",
+                "SpO₂ ≥ 92% durante mudanças posturais"
+            ],
+            "assess": [
+                "PA em decúbito, sentado e em pé (1 e 3 min)",
+                "FC ao repouso e ao sentar/levantar",
+                "Sintomas: tontura, escurecimento, náusea, síncope",
+                "SpO₂ durante mudanças posturais"
+            ],
             "interv": [
-              "Progressao"
+                "Verticalização gradual: 30° → 45° → 60° → 90° → beira do leito",
+                "Exercícios de bombeamento de panturrilha antes de levantar",
+                "Meias elásticas de compressão antes de sentar/levantar",
+                "Hidratação adequada (comunicar equipe)",
+                "Pausas e monitorização a cada etapa da verticalização"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.0.P6 — Alto risco tromboembolico por imobilismo",
-        "desc": "Grave. Pos-op+baixa mobilidade+edema",
-        "assess": [],
-        "interv": [
-          "Prevencao ativa: bomba panturrilha, mobilizacao precoce possivel, exercicios ativos leito, elevacao MMII quando indicado"
-        ],
-        "block": "6.0 — Base Transversal Perioperatorio",
-        "goals": [
-          "Prevenir TVP e complicacoes tromboembolicas"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.0.P6 — Alto risco tromboembólico por imobilismo",
+            "desc": "Grave. Pós-op + baixa mobilidade + edema, tempo prolongado em decúbito, risco adicional (obesidade, idade, câncer, etc.)",
+            "block": "🏥 6.0 — BASE TRANSVERSAL DO PERIOPERATÓRIO",
+            "goals": [
+                "Deambulação precoce em < 24-48h quando clearance médico",
+                "Exercícios de MMII realizados ≥ 3x/dia",
+                "Zero eventos de TVP/TEP durante internação"
+            ],
+            "assess": [
+                "Wells score para TVP",
+                "Edema de MMII: perimetria, calor, dor à palpação",
+                "Anticoagulação prescrita e profilaxia mecânica",
+                "Caprini score para risco tromboembólico pós-op"
+            ],
             "interv": [
-              "Bomba",
-              "Mobilizacao",
-              "Exercicios"
+                "Exercícios de bombeamento de tornozelo 10x/h acordado",
+                "Compressão pneumática intermitente quando em repouso",
+                "Mobilização passiva e ativa de MMII 3x/dia",
+                "Deambulação precoce assim que clearance médico",
+                "Educação sobre sinais de alerta de TVP/TEP"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.0.P7 — Perda funcional acelerada (descondicionamento pos-op)",
-        "desc": "Moderado. Dificuldade sentar/levantar, fraqueza global, medo",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce como tratamento",
-          "PARADA: SpO2 <88-90% sustentada, hipotensao sintomatica/queda PA importante, dor EVA ≥7 ou piora subita, arritmia/sintomas importantes, sangramento ativo ou instabilidade"
-        ],
-        "block": "6.0 — Base Transversal Perioperatorio",
-        "goals": [
-          "Prevenir descondicionamento e perda funcional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.0.P7 — Perda funcional acelerada (descondicionamento pós-op)",
+            "desc": "Moderado. Dificuldade para sentar/levantar, fraqueza global e medo de mobilizar, permanência prolongada em leito",
+            "block": "🏥 6.0 — BASE TRANSVERSAL DO PERIOPERATÓRIO",
+            "goals": [
+                "Sentar na beira do leito nas primeiras 24h",
+                "Ortostatismo nas primeiras 24-48h quando clearance",
+                "Deambulação no corredor em < 48h pós-op"
+            ],
+            "assess": [
+                "Tempo em decúbito desde a cirurgia",
+                "Capacidade funcional pré-operatória (baseline)",
+                "MRC de MMII e tronco no pós-op precoce",
+                "Medo de mobilizar: identificar barreiras"
+            ],
             "interv": [
-              "Mobilizacao precoce"
+                "Mobilização precoce: protocolo ERAS (Enhanced Recovery After Surgery)",
+                "Exercícios ativos de MMII D0-D1 pós-op",
+                "Sentar na beira do leito D1: estimulação funcional e motivacional",
+                "Deambulação progressiva: metros aumentados a cada sessão",
+                "Educação prévia sobre importância da mobilização precoce"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.1.P1 — Hipoventilacao por dor abdominal (splinting)",
-        "desc": "Grave. Respiracao superficial, incapacidade inspirar profundo",
-        "assess": [],
-        "interv": [
-          "Respiração diafragmatica dirigida+expansao basal: mao/feedback tátil abdome lateral, inspiracoes lentas pausa, bases e expansao posterior",
-          "Garantir tosse protegida eficaz sem panico da incisao",
-          "Sentar fora leito e marcha curta se tolerar"
-        ],
-        "block": "6.1 — Pos-operatorio Abdominal",
-        "goals": [
-          "Ativar diafragma e bases pulmonares"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.1.P1 — Hipoventilação por dor abdominal (splinting)",
+            "desc": "Grave. Respiração superficial, incapacidade de inspirar profundo, queda de volumes/atelectasia basal",
+            "block": "🔪 6.1 — PÓS-OPERATÓRIO ABDOMINAL",
+            "goals": [
+                "Expansão das bases pulmonares sem proteção álgica",
+                "SpO₂ ≥ 94% em ar ambiente",
+                "Vt > 5-8 mL/kg com suporte de analgesia"
+            ],
+            "assess": [
+                "Cirtometria axilar e xifoidiana",
+                "Ventilometria: Vt, CV",
+                "SpO₂ e FR",
+                "EVA ao inspirar profundo e tossir"
+            ],
             "interv": [
-              "Diafragmatica",
-              "Tosse protegida",
-              "Mobilizacao"
+                "Suporte manual da incisão abdominal durante exercícios respiratórios",
+                "Incentivo inspiratório: coach2, threshold",
+                "Posição semi-Fowler/Fowler para relaxar parede abdominal",
+                "Expansão basal manual e diafragmática",
+                "Analgesia prévia como pré-requisito para eficácia da fisioterapia"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.1.P2 — Tosse ineficaz por dor/incisao",
-        "desc": "Grave. Medo de tossir, secrecao retida",
-        "assess": [],
-        "interv": [
-          "Tosse protegida/huffing: travesseiro na incisao, huffing antes tosse forte, fracionar huff→pausa→tosse"
-        ],
-        "block": "6.1 — Pos-operatorio Abdominal",
-        "goals": [
-          "Garantir tosse protegida e eficaz"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.1.P2 — Tosse ineficaz por dor/incisão",
+            "desc": "Grave. Medo de tossir, secreção retida, ausculta com roncos/estertores",
+            "block": "🔪 6.1 — PÓS-OPERATÓRIO ABDOMINAL",
+            "goals": [
+                "Tosse eficaz com suporte da incisão",
+                "Ausculta limpa sem roncos persistentes",
+                "Eliminação de secreção sem aspiração"
+            ],
+            "assess": [
+                "PCF com fluxômetro",
+                "Ausculta: roncos, estertores",
+                "Medo e comportamento de evitação da tosse",
+                "Secreção presente e capacidade de eliminar"
+            ],
             "interv": [
-              "Tosse protegida",
-              "Huffing"
+                "Ensinar técnica de suporte da incisão com travesseiro/mãos",
+                "Técnica de huff como alternativa menos dolorosa",
+                "Progressão gradual: huff → tosse assistida → tosse voluntária",
+                "Analgesia preventiva antes das sessões",
+                "Exercícios de respiração profunda antes da tosse para aumentar volume"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.1.P3 — Disfuncao diafragmatica pos-op (abdome alto)",
-        "desc": "Moderado. Padrao apical, baixa excursao abdominal",
-        "assess": [],
-        "interv": [
-          "Treino diafragmatico especifico",
-          "Reducao padrao apical compensatorio"
-        ],
-        "block": "6.1 — Pos-operatorio Abdominal",
-        "goals": [
-          "Recuperar funcao diafragmatica"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.1.P3 — Disfunção diafragmática pós-op (abdome alto)",
+            "desc": "Moderado. Padrão apical, baixa excursão abdominal, dispneia ao mínimo esforço",
+            "block": "🔪 6.1 — PÓS-OPERATÓRIO ABDOMINAL",
+            "goals": [
+                "Retorno do padrão diafragmático normal em repouso",
+                "Excursão abdominal visível na inspiração",
+                "Dispneia ≤ Borg 3 em atividades leves"
+            ],
+            "assess": [
+                "Observação do padrão respiratório: apical vs diafragmático",
+                "Excursão abdominal: mão do terapeuta sente movimento",
+                "Ausculta: predominância de MV nas bases vs ápices",
+                "SpO₂ e FR ao esforço leve (sentar, deambular)"
+            ],
             "interv": [
-              "Treino diafragmatico"
+                "Reeducação diafragmática em decúbito, depois sentado",
+                "Respiração abdominal com biofeedback (mão no abdome)",
+                "Sniff nasal para ativação diafragmática reflexa",
+                "Estimulação sensorial da parede abdominal para facilitar ativação",
+                "Progressão: decúbito → sentado → em pé → marcha"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.1.P4 — Intolerancia à mobilizacao por hipotensao, dor e nausea",
-        "desc": "Moderado. Tontura ao sentar, instabilidade postural",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce com progressao real: sentar→poltrona→ortostatismo→marcha 3-5m→10-20m, meta passos/dia quando aplicavel"
-        ],
-        "block": "6.1 — Pos-operatorio Abdominal",
-        "goals": [
-          "Melhorar tolerancia postural"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.1.P4 — Intolerância à mobilização por hipotensão, dor e náusea",
+            "desc": "Moderado. Tontura ao sentar, instabilidade postural, progressão travada",
+            "block": "🔪 6.1 — PÓS-OPERATÓRIO ABDOMINAL",
+            "goals": [
+                "Sentar na beira do leito > 5 min sem sintomas",
+                "Tolerar ortostatismo > 3 min sem tontura",
+                "Deambulação no corredor em < 48h pós-op"
+            ],
+            "assess": [
+                "PA, FC, SpO₂ ao sentar e ao ficar em pé",
+                "Náusea: escala verbal e medicação antiemética prescrita",
+                "Sintomas: tontura, escurecimento, pré-síncope",
+                "Volemia: balanço hídrico e medicações"
+            ],
             "interv": [
-              "Progressao"
+                "Verticalização gradual com monitorização multiparamétrica",
+                "Solicitar antiemético quando náusea limita mobilização",
+                "Suspender e retornar ao leito se PA cair sintomaticamente",
+                "Exercícios de bombeamento antes de levantar",
+                "Progressão de 1 degrau por vez: cabeça elevada → beira leito → pé"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.1.P5 — Risco ileo e perda funcional por imobilismo",
-        "desc": "Moderado. Restricao leito, dor+sedacao",
-        "assess": [],
-        "interv": [
-          "Transferencias com protecao abdominal: levantar sem alavancar abdome, log-roll para sair cama (laparotomia)",
-          "Ventilometria e reavaliacao quando disponivel",
-          "PARADA: dor incapacitante, nausea intensa, hipotensao sintomatica, dessaturacao sustentada"
-        ],
-        "block": "6.1 — Pos-operatorio Abdominal",
-        "goals": [
-          "Prevenir ileo e descondicionamento"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.1.P5 — Risco de íleo e perda funcional por imobilismo",
+            "desc": "Moderado. Restrição ao leito, dor + sedação, redução de mobilidade",
+            "block": "🔪 6.1 — PÓS-OPERATÓRIO ABDOMINAL",
+            "goals": [
+                "Deambulação precoce para estimular peristaltismo",
+                "Prevenção de atelectasia e descondicionamento",
+                "Saída do leito em < 24h quando clearance médico"
+            ],
+            "assess": [
+                "Ruídos hidroaéreos: presentes, diminuídos ou ausentes",
+                "Distensão abdominal e eliminação de flatos/fezes",
+                "Tempo total em decúbito desde cirurgia",
+                "Presença de íleo: clínica + imagem"
+            ],
             "interv": [
-              "Transferencias protegidas"
+                "Deambulação precoce D1: principal estímulo para peristaltismo",
+                "Massagem abdominal em sentido horário quando tolerado",
+                "Mudanças de decúbito frequentes",
+                "Exercícios de MMII em leito quando não deambulando",
+                "Comunicar ausência de ruídos e distensão à equipe médica"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.2.P1 — Atelectasia e hipoventilacao segmentar/lobar",
-        "desc": "Grave. RX/USG colapso, ↓ MV ausculta, SpO2 cai",
-        "assess": [],
-        "interv": [
-          "Avaliacao por sessao: SpO2 repouso/esforco, FR, ausculta, dor, expansibilidade, secrecao, dreno",
-          "Reexpansao direcionada: inspiracoes profundas+pausa 2-3s, expansao segmentar manual bases e hemitórax operado, espironetro, suspiros 10-15 rep/serie varias/dia",
-          "Garantir tosse eficaz ou assistida, controlar dor",
-          "Sentar fora leito, ortostatismo/marcha curta"
-        ],
-        "block": "6.2 — Pos-operatorio Cirurgia Toracica",
-        "goals": [
-          "Reexpandir pulmao operado"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.2.P1 — Atelectasia e hipoventilação segmentar/lobar",
+            "desc": "Grave. RX/USG com colapso parcial, ↓ MV à ausculta, SpO₂ cai em repouso ou esforço mínimo, padrão ventilatório superficial por dor",
+            "block": "🫁 6.2 — PÓS-OPERATÓRIO DE CIRURGIA TORÁCICA",
+            "goals": [
+                "Reexpansão radiológica da área colapsada",
+                "SpO₂ ≥ 94% sem aumento de FiO₂",
+                "Ausculta com MV presente nos segmentos afetados"
+            ],
+            "assess": [
+                "Ausculta: MV segmentar bilateral",
+                "RX/TC/USG: localização e extensão da atelectasia",
+                "SpO₂ e necessidade de O₂",
+                "Cirtometria e expansibilidade do hemitórax operado"
+            ],
             "interv": [
-              "Avaliacao",
-              "Reexpansao",
-              "Tosse",
-              "Dor",
-              "Mobilizacao"
+                "Drenagem postural para o segmento afetado",
+                "Vibrocompressão segmentar sobre a área colapsada",
+                "EPAP para recrutamento alveolar",
+                "Respiração com lábios franzidos para manutenção do PEEP",
+                "Deambulação precoce como recurso de expansão pulmonar"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.2.P2 — Dor toracica limitante (incisao+dreno)",
-        "desc": "Grave. EVA ≥6, respiracao curta, tosse inibida",
-        "assess": [],
-        "interv": [
-          "Controle dor para permitir funcao: posicionamento, travesseiro contenção toracica durante tosse, coordenar analgesia antes fisio"
-        ],
-        "block": "6.2 — Pos-operatorio Cirurgia Toracica",
-        "goals": [
-          "Controlar dor para permitir funcao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.2.P2 — Dor torácica limitante (incisão + dreno)",
+            "desc": "Grave. EVA ≥ 6, respiração curta e rápida, tosse inibida por medo/dor, proteção antálgica do hemitórax",
+            "block": "🫁 6.2 — PÓS-OPERATÓRIO DE CIRURGIA TORÁCICA",
+            "goals": [
+                "EVA ≤ 3 ao repouso e ≤ 4 durante fisioterapia",
+                "Inspiração profunda sem espasmo álgico",
+                "Tosse eficaz com suporte da incisão"
+            ],
+            "assess": [
+                "EVA ao repouso, respiração profunda e tosse",
+                "Proteção antálgica: padrão assimétrico, imobilidade do hemitórax",
+                "Analgesia atual (bloco peridural torácico, PCA, EV)",
+                "Impacto na ventilação: FR, SpO₂, volumes"
+            ],
             "interv": [
-              "Dor"
+                "Analgesia preventiva: solicitar 30-60 min antes da sessão",
+                "Suporte manual da incisão e do dreno durante tosse",
+                "Técnica de huff antes da tosse",
+                "TENS na região da incisão para analgesia local",
+                "Ensinar posição de proteção da incisão durante mobilização"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.2.P3 — Tosse ineficaz e retencao secrecao",
-        "desc": "Grave. Roncos/estertores, PCF <270/<160",
-        "assess": [],
-        "interv": [
-          "Tosse e higiene: huffing, tosse assistida manualmente, ciclo ativo, drenagem postural seletiva se tolerar",
-          "Se PCF <160 ou falha: auxilio mecanico tosse se disponivel, VNI associada"
-        ],
-        "block": "6.2 — Pos-operatorio Cirurgia Toracica",
-        "goals": [
-          "Garantir tosse eficaz ou assistida"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.2.P3 — Tosse ineficaz e retenção de secreção",
+            "desc": "Grave. Roncos/estertores, secreção presente com dificuldade de eliminar, PCF < 270 L/min = ineficaz, PCF < 160 L/min = risco grave",
+            "block": "🫁 6.2 — PÓS-OPERATÓRIO DE CIRURGIA TORÁCICA",
+            "goals": [
+                "PCF ≥ 270 L/min ou tosse eficaz com suporte",
+                "Ausculta sem roncos persistentes",
+                "Eliminação de secreção sem aspiração frequente"
+            ],
+            "assess": [
+                "PCF com fluxômetro",
+                "Ausculta: roncos, estertores, crepitações",
+                "Características da secreção: volume, viscosidade, cor",
+                "SpO₂ antes e após higiene brônquica"
+            ],
             "interv": [
-              "Tecnicas",
-              "Auxilio se grave"
+                "Suporte bilateral das costelas durante tosse",
+                "Técnica de huff → tosse assistida → tosse voluntária",
+                "Drenagem autogênica para mobilização",
+                "Cough Assist se PCF < 160 L/min",
+                "Analgesia como pré-requisito fundamental para tosse eficaz"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.2.P4 — Dreno toracico limitando mobilidade e padrao respiratorio",
-        "desc": "Moderado. Medo movimentar, padrao assimetrico",
-        "assess": [],
-        "interv": [
-          "Educacao seguranca com dreno",
-          "Mobilizacao gradual com dreno protegido"
-        ],
-        "block": "6.2 — Pos-operatorio Cirurgia Toracica",
-        "goals": [
-          "Mobilizar com dreno de forma segura"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.2.P4 — Dreno torácico limitando mobilidade e padrão respiratório",
+            "desc": "Moderado. Medo de movimentar, padrão ventilatório assimétrico, limitação funcional importante por receio/posição",
+            "block": "🫁 6.2 — PÓS-OPERATÓRIO DE CIRURGIA TORÁCICA",
+            "goals": [
+                "Mobilização segura com dreno sem intercorrências",
+                "Padrão ventilatório simétrico apesar do dreno",
+                "Participação ativa em exercícios e deambulação com dreno"
+            ],
+            "assess": [
+                "Função do dreno: oscilação, drenagem, fuga aérea",
+                "Posicionamento do dreno em relação à mobilização",
+                "Medo e comportamento de evitação por causa do dreno",
+                "Limitação real vs percebida da mobilização"
+            ],
             "interv": [
-              "Educacao",
-              "Mobilizacao"
+                "Educação sobre mobilização segura com dreno",
+                "Organização do sistema de drenos para mobilização",
+                "Exercícios respiratórios ipsilaterais ao dreno",
+                "Deambulação com dreno em mão/suporte específico",
+                "Estimular atividade do ombro ipsilateral para prevenir dor e rigidez"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.2.P5 — Hipoxemia pos-resseccao pulmonar",
-        "desc": "Grave. SpO2 <92% ar ambiente, O2 suplementar",
-        "assess": [],
-        "interv": [
-          "Oxigenoterapia e suporte: ajustar O2 SpO2 alvo ≥92%",
-          "Se hipoxemia persistente ou padrao ruim: considerar VNI suporte reexpansao"
-        ],
-        "block": "6.2 — Pos-operatorio Cirurgia Toracica",
-        "goals": [
-          "Melhorar oxigenacao"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.2.P5 — Hipoxemia pós-ressecção pulmonar",
+            "desc": "Grave. SpO₂ < 92% em ar ambiente, necessidade de O₂ suplementar, dessaturação ao sentar/levantar",
+            "block": "🫁 6.2 — PÓS-OPERATÓRIO DE CIRURGIA TORÁCICA",
+            "goals": [
+                "SpO₂ ≥ 92% em repouso com O₂ mínimo",
+                "SpO₂ ≥ 90% durante mobilização com O₂ ajustado",
+                "Redução progressiva do suporte de O₂"
+            ],
+            "assess": [
+                "SpO₂ em repouso e durante atividade",
+                "FiO₂ necessária e tipo de suporte (cateter, máscara, VNI)",
+                "PaO₂/FiO₂ quando gasometria disponível",
+                "Reserva pulmonar pós-ressecção (comunicar com cirurgião)"
+            ],
             "interv": [
-              "O2",
-              "VNI se indicado"
+                "Mobilização com O₂ suplementar e monitorização contínua de SpO₂",
+                "Ajuste de fluxo antes de esforço",
+                "Posicionamento do lado não operado para baixo (pulmão saudável dependente)",
+                "Progressão criteriosa: SpO₂ como parâmetro de carga",
+                "Exercícios respiratórios para maximizar função pulmonar residual"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.2.P6 — Perda expansibilidade hemitórax operado",
-        "desc": "Moderado. Assimetria ventilatoria, hipomobilidade costal",
-        "assess": [],
-        "interv": [
-          "Treino diafragmatico e redistribuicao padrao: feedback manual abdome e bases, reduzir padrao apical"
-        ],
-        "block": "6.2 — Pos-operatorio Cirurgia Toracica",
-        "goals": [
-          "Recuperar simetria ventilatoria"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.2.P6 — Perda de expansibilidade do hemitórax operado",
+            "desc": "Moderado. Assimetria ventilatória visível/palpável, hipomobilidade costal, padrão apical compensatório",
+            "block": "🫁 6.2 — PÓS-OPERATÓRIO DE CIRURGIA TORÁCICA",
+            "goals": [
+                "Cirtometria simétrica ou redução de assimetria ≥ 50%",
+                "Mobilidade costal ipsilateral visível e palpável",
+                "Padrão respiratório simétrico em repouso"
+            ],
+            "assess": [
+                "Cirtometria axilar: diferença entre lados",
+                "Palpação da mobilidade costal ipsilateral",
+                "Observação visual: movimento paradoxal ou restrição unilateral",
+                "SpO₂ e padrão ventilatório"
+            ],
             "interv": [
-              "Diafragmatico"
+                "Expansão costal manual ipsilateral ao hemitórax operado",
+                "Exercícios unilaterais de expansão costal (mão no lado operado)",
+                "Decúbito lateral contralateral para favorecer expansão do lado operado",
+                "Mobilização ativa do ombro ipsilateral para liberar mobilidade costal",
+                "Progressão: expansão manual → ativo-assistida → ativa"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.2.P7 — Intolerancia ao esforco e mobilizacao precoce",
-        "desc": "Moderado. Taquicardia/dessaturacao ao sentar, dispneia desproporcional",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce=tratamento respiratorio: sedestacao→poltrona→ortostatismo→marcha 3-5m→10-20m→corredor",
-          "Marcha=uma das melhores tecnicas reexpansao",
-          "PARADA: SpO2 <88-90% sustentada, dispneia intensa ou fadiga extrema, dor toracica subita diferente incisional, aumento debito aereo dreno, instabilidade hemodinamica"
-        ],
-        "block": "6.2 — Pos-operatorio Cirurgia Toracica",
-        "goals": [
-          "Melhorar tolerancia ao esforco"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.2.P7 — Intolerância ao esforço e à mobilização precoce",
+            "desc": "Moderado. Taquicardia/desaturação ao sentar, dispneia desproporcional ao esforço, fadiga precoce",
+            "block": "🫁 6.2 — PÓS-OPERATÓRIO DE CIRURGIA TORÁCICA",
+            "goals": [
+                "Sentar na beira do leito > 15 min sem sintomas",
+                "Deambulação 50m com O₂ se necessário",
+                "SpO₂ ≥ 90% e Borg ≤ 5 durante deambulação"
+            ],
+            "assess": [
+                "Borg ao sentar e ao deambular",
+                "SpO₂ e FC durante atividade",
+                "Tempo máximo tolerado em cada posição",
+                "Reserva funcional pré-operatória"
+            ],
             "interv": [
-              "Mobilizacao",
-              "Marcha"
+                "Sessões curtas e frequentes (2-3x/dia)",
+                "Progressão lenta: beira do leito → ortostase → marcha curta → corredor",
+                "Monitorização contínua de SpO₂ e Borg durante esforço",
+                "O₂ suplementar de suporte durante treino quando necessário",
+                "Treino de endurance progressivo conforme tolerância"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.3.P1 — Atelectasia e hipoventilacao pos-CEC",
-        "desc": "Grave. RX bases colapsadas, SpO2 cai sem O2",
-        "assess": [],
-        "interv": [
-          "Checklist seguranca por sessao: FC, PA, SpO2, ritmo, dor, arritmia, esterno dor/estalo/instabilidade?",
-          "Reexpansao: inspiracoes profundas lentas+pausa, expansao basal manual, espironetro, suspiros",
-          "Garantir tosse protegida eficaz, sentar fora leito, ortostatismo com seguranca",
-          "Controlar dor. Nao gerar instabilidade hemodinamica nem sobrecarga cardiaca"
-        ],
-        "block": "6.3 — Pos-operatorio Cirurgia Cardiaca",
-        "goals": [
-          "Reexpandir pulmoes, prevenir pneumonia"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.3.P1 — Atelectasia e hipoventilação pós-CEC",
+            "desc": "Grave. RX com bases colapsadas, ↓ MV basal bilateral, SpO₂ cai sem O₂, respiração superficial",
+            "block": "❤️ 6.3 — PÓS-OPERATÓRIO DE CIRURGIA CARDÍACA",
+            "goals": [
+                "Reexpansão das bases pulmonares em 24-48h",
+                "SpO₂ ≥ 94% em ar ambiente",
+                "Ausculta com MV presente nas bases bilateralmente"
+            ],
+            "assess": [
+                "Ausculta: MV nas bases axilares e posteriores",
+                "RX de tórax: bases, derrame pleural, atelectasia",
+                "SpO₂ em repouso e ao esforço",
+                "Cirtometria basal bilateral"
+            ],
             "interv": [
-              "Checklist",
-              "Reexpansao",
-              "Tosse",
-              "Dor"
+                "Fisioterapia respiratória basal: expansão, drenagem postural",
+                "Incentivo inspiratório basal e diafragmático",
+                "Deambulação precoce D1 pós-extubação",
+                "Posicionamento: Fowler e decúbito lateral alternado",
+                "EPAP/CPAP quando SpO₂ < 92% com cateter de O₂"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.3.P2 — Dor esternal limitando respiracao, tosse e mobilidade",
-        "desc": "Grave. EVA ≥6, tosse inibida",
-        "assess": [],
-        "interv": [
-          "Gestao dor especifica para esterno"
-        ],
-        "block": "6.3 — Pos-operatorio Cirurgia Cardiaca",
-        "goals": [
-          "Controlar dor para respiracao profunda"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.3.P2 — Dor esternal limitando respiração, tosse e mobilidade",
+            "desc": "Grave. EVA ≥ 6, tosse inibida, paciente evita expandir tórax ou mover tronco",
+            "block": "❤️ 6.3 — PÓS-OPERATÓRIO DE CIRURGIA CARDÍACA",
+            "goals": [
+                "EVA ≤ 3 ao repouso e ≤ 4 durante fisioterapia",
+                "Inspiração profunda sem espasmo álgico esternal",
+                "Tosse eficaz com suporte do esterno"
+            ],
+            "assess": [
+                "EVA ao repouso e ao respirar fundo/tossir",
+                "Proteção antálgica do tórax: padrão assimétrico, restrição",
+                "Analgesia atual: tipo, dose, horário",
+                "Guarding esternal: tensão à palpação"
+            ],
             "interv": [
-              "Dor"
+                "Suporte manual do esterno com AMBAS as mãos durante tosse ('coração')",
+                "Técnica de huff antes da tosse",
+                "TENS paraesternal para analgesia",
+                "Ensinar suporte esternal com almofada em casa",
+                "Coordenar analgesia preventiva antes das sessões"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.3.P3 — Tosse ineficaz e retencao secrecao",
-        "desc": "Grave. Roncos/estertores, PCF <270/<160",
-        "assess": [],
-        "interv": [
-          "Tosse protegida: travesseiro/almofada contra esterno, huff antes tosse",
-          "Se fraca: assistencia manual, ciclo ativo"
-        ],
-        "block": "6.3 — Pos-operatorio Cirurgia Cardiaca",
-        "goals": [
-          "Garantir tosse protegida e eficaz"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.3.P3 — Tosse ineficaz e retenção de secreção",
+            "desc": "Grave. Roncos/estertores, dificuldade de expectorar, PCF < 270 L/min = ineficaz, PCF < 160 L/min = alto risco",
+            "block": "❤️ 6.3 — PÓS-OPERATÓRIO DE CIRURGIA CARDÍACA",
+            "goals": [
+                "PCF ≥ 270 L/min com suporte manual do esterno",
+                "Ausculta limpa nas bases em 24-48h",
+                "Eliminação de secreção sem aspiração recorrente"
+            ],
+            "assess": [
+                "PCF com fluxômetro",
+                "Ausculta bilateral: roncos, estertores",
+                "Características da secreção",
+                "Capacidade de segurar o esterno durante tosse"
+            ],
             "interv": [
-              "Tosse protegida"
+                "Ensinar imobilização manual do esterno com ambas as mãos",
+                "Progressão: huff → tosse assistida com esterno → tosse voluntária",
+                "Drenagem autogênica para mobilização de secreção basal",
+                "Cough Assist quando PCF < 160 L/min",
+                "Aspiração naso/orotraqueal somente quando necessário"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.3.P4 — Instabilidade hemodinamica ao esforco inicial",
-        "desc": "Critico. Queda PA ao sentar/levantar, taquicardia excessiva, arritmias",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce com monitoramento: sentar leito→poltrona→ortostatismo→marcha 3-5m→progressao diaria corredor",
-          "Durante: monitorar FC, PA, SpO2, sintomas, Borg, sinais fadiga cardiaca",
-          "O2/suporte: SpO2 ≥92%, VNI se hipoxemia persistente ou fadiga respiratoria"
-        ],
-        "block": "6.3 — Pos-operatorio Cirurgia Cardiaca",
-        "goals": [
-          "Mobilizar sem gerar instabilidade hemodinamica"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.3.P4 — Instabilidade hemodinâmica ao esforço inicial",
+            "desc": "Crítico. Queda de PA ao sentar/levantar, taquicardia excessiva, arritmias com esforço leve, baixa reserva funcional",
+            "block": "❤️ 6.3 — PÓS-OPERATÓRIO DE CIRURGIA CARDÍACA",
+            "goals": [
+                "Ortostatismo sem queda de PA sintomática",
+                "FC ≤ 110 bpm em repouso e ≤ 130 bpm ao esforço leve",
+                "Ausência de arritmias sintomáticas durante mobilização"
+            ],
+            "assess": [
+                "PA e FC em decúbito, sentado e em pé (1 e 3 min)",
+                "ECG/telemetria: presença de arritmias durante mobilização",
+                "Fração de ejeção (FE) pré-operatória e pós-op se disponível",
+                "Borg ao sentar e deambular"
+            ],
             "interv": [
-              "Monitoramento",
-              "Progressao"
+                "Verticalização gradual com monitorização de PA, FC, SpO₂",
+                "Comunicar arritmias novas ou piora hemodinâmica imediatamente",
+                "Borg 11-13 como parâmetro de intensidade",
+                "Pausas a cada 2-3 min nas primeiras sessões",
+                "Progressão de distância de marcha conforme tolerância hemodinâmica"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.3.P5 — Risco deiscencia esternal",
-        "desc": "Critico. Dor, estalos, instabilidade ao mover MMSS/tronco",
-        "assess": [],
-        "interv": [
-          "Educacao protecao esternal: nao empurrar com bracos para levantar, nao puxar grades/corrimãos, nao abrir bracos abducao forçada, usar mais MMII e tronco neutro, tossir sempre protegido"
-        ],
-        "block": "6.3 — Pos-operatorio Cirurgia Cardiaca",
-        "goals": [
-          "Consolidar protecao esternal automatica"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.3.P5 — Risco de deiscência esternal",
+            "desc": "Crítico. Dor, estalos, instabilidade ao mover MMSS/tronco, tosse forte sem proteção, uso inadequado de braços para empurrar/puxar",
+            "block": "❤️ 6.3 — PÓS-OPERATÓRIO DE CIRURGIA CARDÍACA",
+            "goals": [
+                "Zero episódios de deiscência ou instabilidade esternal",
+                "Domínio das precauções esternais pelo paciente e família",
+                "Tosse com suporte adequado do esterno em todas as situações"
+            ],
+            "assess": [
+                "Palpação do esterno: mobilidade, crepitação, dor localizada",
+                "Observação durante movimentos de MMSS: estalos, queixa",
+                "Avaliação da técnica de suporte do paciente",
+                "Risco aumentado: osteoporose, DPOC, obesidade, reoperação"
+            ],
             "interv": [
-              "Educacao"
+                "Ensinar e treinar precauções esternais: NÃO usar MMSS para empurrar/puxar",
+                "Transferências esternalmente seguras: sem apoio em MMSS",
+                "Tosse com suporte manual bilateral do esterno",
+                "Evitar movimentos de MMSS acima da cabeça nas primeiras 6-8 semanas",
+                "Comunicar qualquer estalos ou dor nova ao cirurgião imediatamente"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.3.P6 — Intolerancia ao exercicio e descondicionamento precoce",
-        "desc": "Moderado. Fadiga precoce, dispneia minimos esforcos",
-        "assess": [],
-        "interv": [
-          "Prescricao intensidade seguranca cardiaca: Borg 2-4",
-          "Evitar Valsalva, contracoes isometricas sustentadas intensas, picos FC nao planejados",
-          "PARADA: dor toracica tipica, queda PA importante, arritmia sustentada, dispneia intensa ou tontura, SpO2 <88-90% sustentada, sinais instabilidade esternal"
-        ],
-        "block": "6.3 — Pos-operatorio Cirurgia Cardiaca",
-        "goals": [
-          "Melhorar tolerancia sem arritmia/hipotensao"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.3.P6 — Intolerância ao exercício e descondicionamento precoce",
+            "desc": "Moderado. Fadiga precoce, dispneia aos mínimos esforços, marcha muito limitada inicialmente",
+            "block": "❤️ 6.3 — PÓS-OPERATÓRIO DE CIRURGIA CARDÍACA",
+            "goals": [
+                "Marcha 100m sem descanso em D3-D5 pós-op",
+                "Borg ≤ 4 ao deambular no corredor",
+                "Subir 1 lance de escadas antes da alta hospitalar"
+            ],
+            "assess": [
+                "Teste de caminhada de corredor: distância e sintomas",
+                "Borg e FC durante deambulação",
+                "SpO₂ durante esforço",
+                "Capacidade pré-operatória para comparação"
+            ],
             "interv": [
-              "Borg 2-4",
-              "Criterios parada"
+                "Protocolo de reabilitação cardíaca fase 1: escalonamento progressivo",
+                "Marcha no corredor com aumento diário de distância",
+                "Monitorização de PA, FC, SpO₂ e Borg em cada sessão",
+                "Escada: 1 lance antes da alta com supervisão",
+                "Orientações para fase domiciliar (fase 2)"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.4.P1 — Instabilidade hemodinamica pos-operatoria",
-        "desc": "Critico. PAM limitrofe/DVA, hipotensao ao sentar/levantar",
-        "assess": [],
-        "interv": [
-          "Checklist pre-mobilizacao obrigatorio: PA, FC, SpO2, sintomas, sitio cirurgico sangramento? hematoma? dor?, perfusao periferica, regra carga/movimento, drenos/curativos protegidos"
-        ],
-        "block": "6.4 — Pos-operatorio Cirurgia Vascular",
-        "goals": [
-          "Mobilizar com seguranca hemodinamica"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.4.P1 — Instabilidade hemodinâmica pós-operatória",
+            "desc": "Crítico. PAM limítrofe/uso recente de DVA, hipotensão ao sentar/levantar, taquicardia desproporcional, lactato elevado/sinais de hipoperfusão",
+            "block": "🩸 6.4 — PÓS-OPERATÓRIO DE CIRURGIA VASCULAR",
+            "goals": [
+                "PAM ≥ 65 sustentada sem DVA antes de mobilizar",
+                "Ortostatismo sem queda de PA sintomática",
+                "Sinais de hipoperfusão ausentes durante mobilização"
+            ],
+            "assess": [
+                "PA e FC a cada intervenção: pré, durante, pós",
+                "Lactato sérico nas últimas 6h",
+                "Diurese e balanço hídrico",
+                "DVA em uso: tipo, dose, tendência"
+            ],
             "interv": [
-              "Checklist"
+                "Aplicar critérios de segurança: PAM ≥ 65, DVA estável (não em ajuste)",
+                "Mobilização passiva apenas quando hemodinâmica instável",
+                "Elevação gradual da cabeceira como primeiro passo",
+                "Monitorização contínua de PA durante qualquer posição vertical",
+                "Comunicar qualquer queda de PA ou piora ao médico imediatamente"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.4.P2 — Risco sangramento ou complicacao sitio cirurgico",
-        "desc": "Grave. Cirurgia recente, drenos ativos, hematoma/edema",
-        "assess": [],
-        "interv": [
-          "Protecao vascular: evitar compressao direta local operado, dobras/extensoes excessivas sobre anastomose, posicionar membro, observar isquemia durante e apos"
-        ],
-        "block": "6.4 — Pos-operatorio Cirurgia Vascular",
-        "goals": [
-          "Proteger sitio cirurgico e anastomose"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.4.P2 — Risco de sangramento ou complicação no sítio cirúrgico",
+            "desc": "Grave. Cirurgia recente, drenos ativos, dor local importante, hematoma/edema no local operado",
+            "block": "🩸 6.4 — PÓS-OPERATÓRIO DE CIRURGIA VASCULAR",
+            "goals": [
+                "Mobilização segura sem comprometer a cicatriz/anastomose",
+                "Monitorização do sítio cirúrgico antes e após sessões",
+                "Identificação precoce de sangramento ou hematoma"
+            ],
+            "assess": [
+                "Inspeção do sítio cirúrgico: curativo, drenagem, hematoma",
+                "Volume de drenos nas últimas 6-12h",
+                "Dor localizada crescente (possível hematoma)",
+                "Anticoagulação em uso e nível terapêutico"
+            ],
             "interv": [
-              "Protecao"
+                "Evitar movimentos que aumentem tensão na anastomose",
+                "Checklist visual do sítio antes e após cada sessão",
+                "NÃO realizar manobras de alta pressão intra-abdominal",
+                "Comunicar aumento de sangramento, hematoma crescente",
+                "Compressão do membro quando indicado (com cuidado em revascularização)"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.4.P3 — Perfusao periferica limitrofe membro operado",
-        "desc": "Critico. Extremidade fria/palida/cianotica, pulsos diminuidos",
-        "assess": [],
-        "interv": [
-          "Monitorizacao continua perfusao",
-          "Posicionamento adequado membro"
-        ],
-        "block": "6.4 — Pos-operatorio Cirurgia Vascular",
-        "goals": [
-          "Manter boa perfusao periferica"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.4.P3 — Perfusão periférica limítrofe no membro operado",
+            "desc": "Crítico. Extremidade fria/pálida/cianótica, dor isquêmica, diminuição de pulsos periféricos, enchimento capilar lento",
+            "block": "🩸 6.4 — PÓS-OPERATÓRIO DE CIRURGIA VASCULAR",
+            "goals": [
+                "Monitorização ativa de sinais isquêmicos durante sessões",
+                "Zero exercícios que aumentem demanda metabólica em membro isquêmico",
+                "Comunicação imediata de deterioração de perfusão à equipe"
+            ],
+            "assess": [
+                "Inspeção: cor (pálida/cianótica), temperatura (fria)",
+                "Pulso tibial posterior e dorsal do pé (palpação/Doppler)",
+                "Tempo de enchimento capilar: > 3 seg = alterado",
+                "Dor isquêmica (claudicação de repouso)"
+            ],
             "interv": [
-              "Monitorizacao",
-              "Posicionamento"
+                "PARAR qualquer exercício com dor isquêmica crescente no membro",
+                "Posicionamento: membro em posição declive leve para melhorar perfusão",
+                "NÃO elevar membro isquêmico acima do nível do coração",
+                "COMUNICAR IMEDIATAMENTE à equipe médica qualquer piora de perfusão",
+                "Exercícios apenas nos membros com perfusão adequada"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.4.P4 — Dor e protecao antalgica limitando mobilizacao",
-        "desc": "Grave. EVA ≥6, evita mover ou apoiar",
-        "assess": [],
-        "interv": [
-          "Gestao dor especifica"
-        ],
-        "block": "6.4 — Pos-operatorio Cirurgia Vascular",
-        "goals": [
-          "Controlar dor para permitir mobilizacao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.4.P4 — Dor e proteção antálgica limitando mobilização",
+            "desc": "Grave. EVA ≥ 6, evita movimentar ou apoiar, postura de proteção do membro",
+            "block": "🩸 6.4 — PÓS-OPERATÓRIO DE CIRURGIA VASCULAR",
+            "goals": [
+                "EVA ≤ 3 durante mobilização",
+                "Participação ativa nas sessões sem interrupção por dor",
+                "Distinção entre dor isquêmica e dor incisional"
+            ],
+            "assess": [
+                "EVA em repouso e ao mobilizar",
+                "Caráter da dor: isquêmica (queimação/cãibra) vs incisional (aguda)",
+                "Localização: incisão vs membro distalmente",
+                "Analgesia atual e eficácia"
+            ],
             "interv": [
-              "Dor"
+                "Analgesia preventiva 30 min antes das sessões",
+                "TENS analgésico na região incisional (NÃO em área isquêmica)",
+                "Diferenciação e manejo específico conforme tipo de dor",
+                "Comunicar dor isquêmica crescente à equipe como urgência",
+                "Progressão da mobilização dentro do limiar de dor tolerável"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.4.P5 — Restricao carga ou movimento (pos-amputacoes/revascularizacoes)",
-        "desc": "Grave. Ordem medica, risco falha sutura/anastomose",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce progressao cautelosa: cabeceira→sedestacao→poltrona→ortostatismo→marcha curta→progressao diaria",
-          "Sempre monitorando PA, FC, tontura/dor/isquemia",
-          "Treino transferencias e marcha adaptada: muitas vezes andador, descarga parcial ou protecao total"
-        ],
-        "block": "6.4 — Pos-operatorio Cirurgia Vascular",
-        "goals": [
-          "Manter funcao membro operado dentro restricoes"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.4.P5 — Restrição de carga ou de movimento após amputações/revascularizações",
+            "desc": "Grave. Ordem médica explícita, risco de falha de sutura/anastomose, dor ao apoio/movimento",
+            "block": "🩸 6.4 — PÓS-OPERATÓRIO DE CIRURGIA VASCULAR",
+            "goals": [
+                "Cumprir restrições sem violações",
+                "Deambulação com dispositivo adequado dentro dos limites",
+                "Progressão para carga total conforme protocolo"
+            ],
+            "assess": [
+                "Restrição prescrita: NWB ou carga limitada",
+                "Tipo de cirurgia: amputação, bypass, revascularização",
+                "Estado do coto (amputação): cicatrização, edema, forma",
+                "Capacidade de MMSS para uso de dispositivos de marcha"
+            ],
             "interv": [
-              "Progressao",
-              "Transferencias",
-              "Marcha"
+                "Treino de marcha com dispositivo dentro da restrição",
+                "Modelagem do coto pós-amputação: bandagem em 8",
+                "Exercícios de MMSS e core sem afetar membro operado",
+                "Dessensibilização progressiva do coto",
+                "Orientação sobre dispositivo de marcha e progressão de carga"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.4.P6 — Alto risco tromboembolico e complicacoes pulmonares",
-        "desc": "Grave. Cirurgia vascular+imobilismo+doenca base",
-        "assess": [],
-        "interv": [
-          "Prevencao ativa: bomba panturrilha, exercicios ativos leito, mobilizacao precoce, elevacao membro se indicado"
-        ],
-        "block": "6.4 — Pos-operatorio Cirurgia Vascular",
-        "goals": [
-          "Prevenir atelectasia, trombose, perda funcional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.4.P6 — Alto risco tromboembólico e de complicações pulmonares",
+            "desc": "Grave. Cirurgia vascular + imobilismo + doença de base, edema de MMII, baixa mobilidade nas primeiras 48-72h",
+            "block": "🩸 6.4 — PÓS-OPERATÓRIO DE CIRURGIA VASCULAR",
+            "goals": [
+                "Exercícios de MMII realizados ≥ 3x/dia",
+                "Deambulação precoce em < 48h quando clearance",
+                "Ausculta pulmonar sem atelectasia"
+            ],
+            "assess": [
+                "Wells score para TVP",
+                "Edema de MMII, calor local, dor à palpação",
+                "SpO₂ e ausculta pulmonar",
+                "Anticoagulação prescrita"
+            ],
             "interv": [
-              "Bomba",
-              "Mobilizacao"
+                "Exercícios de bombeamento de tornozelo 10x/h",
+                "Mobilização passiva e ativa de MMII",
+                "Fisioterapia respiratória preventiva",
+                "Deambulação precoce dentro das restrições cirúrgicas",
+                "Compressão pneumática intermitente quando indicado"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.4.P7 — Perda funcional importante (pos-amputacoes)",
-        "desc": "Grave. Incapaz transferir/ortostatismo, desequilibrio, medo",
-        "assess": [],
-        "interv": [
-          "Caso amputacoes: dor fantasma, desequilibrio severo, perda referencia corporal",
-          "Planejamento: posicionamento coto, treino rolar/sentar/transferir, fortalecer MMSS/tronco/membro remanescente, preparar ortostatismo e reabilitacao protetica"
-        ],
-        "block": "6.4 — Pos-operatorio Cirurgia Vascular",
-        "goals": [
-          "Garantir transferencias seguras"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.4.P7 — Perda funcional importante (principalmente após amputações)",
+            "desc": "Grave. Incapaz de transferir/ortostatismo, desequilíbrio postural, medo de cair/insegurança",
+            "block": "🩸 6.4 — PÓS-OPERATÓRIO DE CIRURGIA VASCULAR",
+            "goals": [
+                "Transferências independentes com adaptação ao novo esquema corporal",
+                "Ortostatismo unipodal estável > 30s",
+                "Marcha com andador/muleta no corredor"
+            ],
+            "assess": [
+                "Capacidade de transferência leito-cadeira",
+                "Ortostatismo unipodal: tempo e qualidade",
+                "Equilíbrio dinâmico: peso-a-peso, perturbações",
+                "Estado emocional: aceitação, medo, motivação"
+            ],
             "interv": [
-              "Posicionamento",
-              "Treino",
-              "Fortalecimento"
+                "Treino de transferências: adaptação sem apoio no membro amputado",
+                "Treino de equilíbrio unipodal progressivo",
+                "Marcha com andador → muleta unilateral conforme progressão",
+                "Suporte psicológico integrado à reabilitação funcional",
+                "Preparação para protetização quando indicada"
             ]
-          },
-          {
-            "timeframe": "Ate alta",
+        },
+        {
+            "name": "6.5.P1 — Rebaixamento do nível de consciência / flutuação neurológica",
+            "desc": "Crítico. Glasgow < 15, sonolência excessiva, dificuldade de manter atenção, flutuações ao longo do dia",
+            "block": "🧠 6.5 — PÓS-OPERATÓRIO DE NEUROCIRURGIA",
+            "goals": [
+                "Mobilização passiva segura preservando alinhamento",
+                "Prevenção de complicações do imobilismo",
+                "Progressão de estimulação conforme nível de consciência"
+            ],
+            "assess": [
+                "GCS: olhos, motor, verbal — com tendência ao longo do tempo",
+                "Causa: tumor, hematoma, edema cerebral, hidrocefalia",
+                "Variação de GCS entre turnos",
+                "Reflexos e tônus nos MMSS e MMII"
+            ],
             "interv": [
-              "Plano continuidade"
+                "Mobilização passiva de todos os segmentos 2x/dia",
+                "Estimulação sensorial multimodal quando GCS estável",
+                "Posicionamento terapêutico: evitar posturas patológicas",
+                "Fisioterapia respiratória: higiene brônquica e expansão",
+                "COMUNICAR imediatamente qualquer queda de GCS"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.5.P1 — Rebaixamento nivel consciencia / flutuacao neurologica",
-        "desc": "Critico. Glasgow <15, sonolencia, flutuacoes",
-        "assess": [],
-        "interv": [
-          "Checklist neurologico pre-sessao: consciencia Glasgow/comando, pupilas/sinais piora, cefaleia/nausea/vomitos, PA perfusao cerebral, dreno ventricular? PIC? colar/colete?",
-          "Posicionamento terapeutico: cabeceira 30°, cabeca alinhada, sem rotacao/hiperflexao, evitar compressao jugular"
-        ],
-        "block": "6.5 — Pos-operatorio Neurocirurgia",
-        "goals": [
-          "Proteger cerebro: nao aumentar PIC"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "6.5.P2 — Déficit motor focal ou global (hemiparesia, tetraparesia)",
+            "desc": "Grave. Assimetria de força, incapacidade de sustentar tronco, dificuldade para sentar, ficar em pé ou andar",
+            "block": "🧠 6.5 — PÓS-OPERATÓRIO DE NEUROCIRURGIA",
+            "goals": [
+                "Ativar recrutamento voluntário nos membros afetados",
+                "Realizar transferências com assistência moderada",
+                "Integrar membro afetado em atividades funcionais"
+            ],
+            "assess": [
+                "MRC por grupo muscular bilateral",
+                "Fugl-Meyer quando possível",
+                "Controle de tronco: tempo de sedestação sem apoio",
+                "Padrões sinérgicos e espasticidade"
+            ],
             "interv": [
-              "Checklist",
-              "Posicionamento"
+                "Treino de ativação seletiva: isometria → contra gravidade",
+                "Facilitação neuroproprioceptiva: Bobath, PNF",
+                "Treino orientado a tarefas funcionais",
+                "FES para ativação de extensores de punho/dorsiflexores",
+                "Posicionamento anti-espástico entre sessões"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.5.P2 — Deficit motor focal ou global",
-        "desc": "Grave. Assimetria forca, incapaz sustentar tronco",
-        "assess": [],
-        "interv": [
-          "Posicionamento adequado, ventilacao e tosse eficazes",
-          "Iniciar mobilizacao extremamente segura e gradual",
-          "Estimulacao motora e postural basica",
-          "Mobilizacao neurologica em camadas: decubito→sedestacao leito→beira leito→prancha→ortostatismo→primeiros passos",
-          "Treino controle tronco, treino motor membros ativo-assistido→ativo→resistido leve"
-        ],
-        "block": "6.5 — Pos-operatorio Neurocirurgia",
-        "goals": [
-          "Garantir posicionamento, ventilacao, tosse"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "6.5.P3 — Alteração do controle postural e risco extremo de queda",
+            "desc": "Crítico. Instabilidade importante em sedestação ou ortostatismo, desvio de eixo corporal, pusher syndrome, ataxia",
+            "block": "🧠 6.5 — PÓS-OPERATÓRIO DE NEUROCIRURGIA",
+            "goals": [
+                "Sedestação estável sem apoio > 1 min",
+                "Ortostatismo com apoio seguro",
+                "Zero quedas durante sessões"
+            ],
+            "assess": [
+                "Tempo de sedestação sem apoio",
+                "Scale for Contraversive Pushing (pusher syndrome)",
+                "Berg Balance Scale quando cooperativo",
+                "Ataxia: dedo-nariz, calcanhar-joelho"
+            ],
             "interv": [
-              "Posicionamento",
-              "Mobilizacao segura"
+                "Sedestação com supervisão próxima e superfície larga",
+                "Treino de reações de equilíbrio com feedback visual e tátil",
+                "Abordagem de pusher: estimulação do lado contralesional",
+                "Treino de marcha com andador e supervisão constante",
+                "Precauções de queda: protocolo de segurança máximo"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.5.P4 — Risco de aumento da pressão intracraniana (PIC)",
+            "desc": "Crítico. Edema cerebral, hidrocefalia, drenos, cefaleia, náusea, vômitos, rebaixamento neurológico progressivo",
+            "block": "🧠 6.5 — PÓS-OPERATÓRIO DE NEUROCIRURGIA",
+            "goals": [
+                "Mobilização segura sem elevar PIC",
+                "Zero manobras de Valsalva durante sessões",
+                "Identificação precoce de sinais de herniação"
+            ],
+            "assess": [
+                "Sinais de PIC elevada: cefaleia intensa, vômitos, anisocoria, bradicardia + hipertensão",
+                "Nível de consciência: variação",
+                "PIC monitor quando disponível (valor e tendência)",
+                "Posição da cabeceira prescrita pelo neurocirurgião"
+            ],
             "interv": [
-              "Camadas",
-              "Controle tronco",
-              "Motor"
+                "Manter cabeceira 30° conforme prescrição",
+                "EVITAR: Valsalva, tosse forçada, posição de Trendelenburg",
+                "Mobilização passiva suave sem manobras de pressão",
+                "Fisioterapia respiratória SUAVE: sem huffing agressivo",
+                "COMUNICAR IMEDIATAMENTE piora neurológica ou cefaleia súbita"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.5.P3 — Alteracao controle postural e risco extremo queda",
-        "desc": "Critico. Instabilidade sedestacao/ortostatismo, pusher, ataxia",
-        "assess": [],
-        "interv": [
-          "Progredir sedestacao→ortostatismo→primeiros passos se permitido",
-          "Reduzir risco aspiracao, quedas, perda funcional grave"
-        ],
-        "block": "6.5 — Pos-operatorio Neurocirurgia",
-        "goals": [
-          "Progredir com seguranca"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.5.P5 — Restrição de mobilidade por tipo de cirurgia (principalmente coluna)",
+            "desc": "Crítico. Ordem de: não flexionar/rotacionar, usar colar/colete, risco de instabilidade estrutural",
+            "block": "🧠 6.5 — PÓS-OPERATÓRIO DE NEUROCIRURGIA",
+            "goals": [
+                "Cumprir todas as restrições sem violações",
+                "Mobilização segura dentro dos limites prescritos",
+                "Progressão conforme protocolo do neurocirurgião"
+            ],
+            "assess": [
+                "Restrições específicas por cirurgia e nível",
+                "Dispositivo de imobilização em uso",
+                "Função neurológica: segmentos preservados e restritos",
+                "Capacidade do paciente de compreender e cumprir"
+            ],
             "interv": [
-              "Progressao"
+                "Técnica de log roll para mudanças de decúbito em coluna",
+                "Transferências respeitando alinhamento espinhal",
+                "Exercícios dos segmentos liberados",
+                "Educação do paciente e família sobre restrições",
+                "Verificar com cirurgião antes de qualquer avanço de mobilidade"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.5.P4 — Risco aumento pressao intracraniana (PIC)",
-        "desc": "Critico. Edema cerebral, hidrocefalia, drenos",
-        "assess": [],
-        "interv": [
-          "Posicionamento rigoroso",
-          "Evitar manobras que aumentem PIC",
-          "PARADA/ALERTA: piora consciencia, cefaleia subita intensa, nausea/vomitos jato, queda forca, alteracao pupilar, PA muito elevada ou baixa"
-        ],
-        "block": "6.5 — Pos-operatorio Neurocirurgia",
-        "goals": [
-          "Nao aumentar PIC"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "6.5.P6 — Déficit respiratório associado (hipoventilação, tosse fraca)",
+            "desc": "Grave. Rebaixamento de consciência, tosse ineficaz, secreção retida, SpO₂ instável",
+            "block": "🧠 6.5 — PÓS-OPERATÓRIO DE NEUROCIRURGIA",
+            "goals": [
+                "SpO₂ ≥ 94% com suporte mínimo",
+                "Higiene brônquica eficaz sem aspiração recorrente",
+                "Prevenção de pneumonia aspirativa"
+            ],
+            "assess": [
+                "SpO₂ e FR contínuas",
+                "PCF e capacidade de tosse",
+                "Ausculta: roncos, estertores",
+                "Proteção de via aérea: deglutição e reflexo de tosse"
+            ],
             "interv": [
-              "Posicionamento",
-              "Criterios parada"
+                "Fisioterapia respiratória: vibrocompressão, drenagem postural",
+                "Cough Assist quando PCF < 160 L/min",
+                "Aspiração nasotraqueal quando necessário",
+                "Posicionamento lateral para prevenir broncoaspiração",
+                "Comunicar risco de aspiração à equipe para avaliação de deglutição"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.5.P5 — Restricao mobilidade por tipo cirurgia (principalmente coluna)",
-        "desc": "Critico. Nao flexionar/rotacionar, colar/colete",
-        "assess": [],
-        "interv": [
-          "Caso coluna: rolar em bloco, sentar em bloco, levantar em bloco, colar/colete, restricoes flexao/rotacao/carga"
-        ],
-        "block": "6.5 — Pos-operatorio Neurocirurgia",
-        "goals": [
-          "Mobilizar respeitando restricoes coluna"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "6.5.P7 — Alteração cognitiva/comportamental interferindo na reabilitação",
+            "desc": "Moderado. Agitação, confusão, desinibição, falta de adesão às orientações",
+            "block": "🧠 6.5 — PÓS-OPERATÓRIO DE NEUROCIRURGIA",
+            "goals": [
+                "Realizar sessões de 15-20 min com cooperação mínima",
+                "Reduzir comportamentos de risco durante mobilização",
+                "Adaptar abordagem às limitações cognitivas"
+            ],
+            "assess": [
+                "CAM-ICU para delirium",
+                "Observação de comportamentos de risco: levanta sem chamar, agitação",
+                "GCS e flutuação cognitiva",
+                "Medicação psicotrópica em uso"
+            ],
             "interv": [
-              "Tecnica bloco"
+                "Sessões curtas em ambiente calmo e sem estímulos excessivos",
+                "Abordagem diretiva com comandos simples",
+                "Proteção e supervisão constante durante mobilização",
+                "Comunicar agitação à equipe para manejo farmacológico quando necessário",
+                "Orientação cognitiva: luz, relógio, voz familiar"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.5.P6 — Deficit respiratorio associado",
-        "desc": "Grave. Rebaixamento consciencia, tosse fraca, SpO2 instavel",
-        "assess": [],
-        "interv": [
-          "Seguranca respiratoria: se tosse fraca ou rebaixamento→priorizar posicionamento, higiene bronquica, VNI/CNAF se indicado"
-        ],
-        "block": "6.5 — Pos-operatorio Neurocirurgia",
-        "goals": [
-          "Garantir ventilacao e tosse eficazes"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "6.6.P1 — Dependência de ventilação mecânica / falha de desmame",
+            "desc": "Crítico. VM prolongada, SBT falho, fraqueza respiratória (VIDD/PImáx baixo), secreção e tosse ineficaz",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "Desmame progressivo do ventilador com sucesso",
+                "PImáx > -20 a -30 cmH₂O como critério de extubação",
+                "PCF ≥ 160 L/min (com suporte) para proteção da via aérea pós-extubação"
+            ],
+            "assess": [
+                "PImáx, PEmáx, PEEP espontânea",
+                "SBT: duração tolerada, FR, Vt, SpO₂",
+                "Índice de tobin (FR/Vt): < 105 = favorável",
+                "Capacidade de tosse e secreção: PCF e volume de aspiração"
+            ],
             "interv": [
-              "Respiratoria"
+                "Treino muscular inspiratório com threshold",
+                "Protocolo de desmame gradual: SBT progressivo",
+                "Higiene brônquica: vibrocompressão, Cough Assist",
+                "Fisioterapia motora para reverter ICU-AW",
+                "Comunicar prontidão para extubação baseada em critérios objetivos"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.5.P7 — Alteracao cognitiva/comportamental interferindo reabilitacao",
-        "desc": "Moderado. Agitacao, confusao, desinibicao",
-        "assess": [],
-        "interv": [
-          "Estrategias comportamentais e cognitivas"
-        ],
-        "block": "6.5 — Pos-operatorio Neurocirurgia",
-        "goals": [
-          "Melhorar adesao à reabilitacao"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.6.P2 — Instabilidade hemodinâmica com baixa tolerância à mobilização",
+            "desc": "Crítico. PAM < 65 ou DVA em ajuste recente, queda de PA ao elevar cabeceira/sentar, lactato elevado/hipoperfusão",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "PAM ≥ 65 sustentada antes de mobilizar",
+                "Tolerância à cabeceira 30° → 45° → 60°",
+                "Progressão para sedestação assim que hemodinâmica estabilizar"
+            ],
+            "assess": [
+                "PAM, DVA: tipo, dose, tendência (em alta ou queda?)",
+                "Lactato e diurese",
+                "PA ao elevar cabeceira progressivamente",
+                "Sinais de hipoperfusão: livedo, fria, confusa"
+            ],
             "interv": [
-              "Estrategias"
+                "Mobilização passiva em leito quando PAM < 65",
+                "Elevação gradual da cabeceira quando PAM ≥ 65 e estável",
+                "Critérios de parada: queda de PAM > 20% ou sintomas",
+                "EENM de MMII para manutenção de função sem esforço cardiovascular",
+                "Comunicação diária com médico sobre elegibilidade"
             ]
-          },
-          {
-            "timeframe": "Ate alta",
+        },
+        {
+            "name": "6.6.P3 — Hipoxemia / complacência baixa / risco de lesão pulmonar induzida pelo ventilador",
+            "desc": "Crítico. FiO₂ alta, PEEP elevada, PaO₂/FiO₂ reduzida, ΔP elevado/Pplatô alto, SDRA/lesão pulmonar",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "PaO₂/FiO₂ > 200 com melhora progressiva",
+                "Redução de FiO₂ e PEEP conforme melhora",
+                "Prevenção de VILI e progressão de lesão pulmonar"
+            ],
+            "assess": [
+                "Mecânica ventilatória: Vt, PEEP, Pplatô, ΔP, driving pressure",
+                "PaO₂/FiO₂: tendência nas últimas 12-24h",
+                "Posição do paciente e estratégia de recrutamento em uso",
+                "Imagem: TC/RX para extensão de lesão"
+            ],
             "interv": [
-              "Plano reabilitacao neurologica",
-              "Orientações seguranca"
+                "Prona 16h/dia se P/F < 150 com avaliação de candidatura",
+                "Posicionamento em lateral 135° como alternativa",
+                "Higiene brônquica para reduzir resistência e melhorar mecânica",
+                "Mobilização passiva preservando mecânica ventilatória",
+                "NUNCA desconectar do ventilador sem técnica adequada de desconexão segura"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P1 — Dependencia ventilacao mecanica / falha desmame",
-        "desc": "Critico. VM prolongada, SBT falho, VIDD, PImax baixo",
-        "assess": [],
-        "interv": [
-          "Triagem seguranca antes de tocar: respiratorio, hemodinamico, neurologico, dispositivos",
-          "Estrategia respiratoria UTI: VM protetora Vt/PBW, ΔP Pplato, PEEP, assincronias; higiene bronquica por criterio",
-          "Garantir higiene eficaz, minimizar sedacao/imobilismo",
-          "Mobilizacao minima segura mesmo em VM",
-          "Desmame por fisio quando estabiliza: avaliar padrao, reserva, PImax, tosse PCF, consciencia"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Proteger pulmao, manter ventilacao segura"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.6.P4 — Secreção abundante e incapacidade de clearance",
+            "desc": "Grave. Aspiração frequente, roncos difusos/atelectasias recorrentes, tosse fraca (PCF baixo) ou sedação",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "Redução da frequência de aspiração",
+                "Ausculta com menos roncos/estertores",
+                "Higiene brônquica eficaz com técnicas fisioterapêuticas"
+            ],
+            "assess": [
+                "Volume e características da aspiração (frequência, volume, cor)",
+                "Ausculta: roncos, estertores, crepitações",
+                "PCF quando cooperativo",
+                "RX: atelectasias recorrentes?"
+            ],
             "interv": [
-              "Triagem",
-              "VM protetora",
-              "Higiene",
-              "Mobilizacao"
+                "Vibrocompressão manual e elétrica para mobilizar secreção",
+                "Drenagem postural e Trendelenburg modificado",
+                "Cough Assist (insuflador-exsuflador) quando extubado",
+                "Hiperinsuflação com ambu (bag-squeezing) quando intubado",
+                "Higiene oral com clorexidina 0,12% para reduzir flora oral"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "6.6.P5 — Sedação profunda, delirium e incapacidade de participação",
+            "desc": "Grave. RASS -3 a -5 prolongado, delirium hiperativo/hipoativo, flutuação cognitiva importante",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "Alvo RASS -1 a 0 quando possível (protocolo ABCDEF)",
+                "Mobilização com participação mínima do paciente",
+                "Progressão de sedação conforme redução clínica"
+            ],
+            "assess": [
+                "RASS: nível atual e tendência",
+                "CAM-ICU: delirium presente/ausente",
+                "Flutuação ao longo do dia",
+                "Causa do delirium: hipóxia, dor, privação de sono, infecção"
+            ],
             "interv": [
-              "Desmame"
+                "Comunicar equipe sobre candidatura para redução de sedação",
+                "Mobilização durante janela de despertar",
+                "Protocolo ABCDEF: integrar fisioterapia ao despertar diário",
+                "Orientação cognitiva durante sessões",
+                "Estimulação sensorial: voz, música, toque"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P2 — Instabilidade hemodinamica com baixa tolerancia mobilizacao",
-        "desc": "Critico. PAM <65 ou DVA, queda PA ao elevar cabeceira/sentar",
-        "assess": [],
-        "interv": [
-          "Progressao muito cautelosa",
-          "Monitorizacao intensiva"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Mobilizar com seguranca hemodinamica"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.6.P6 — Fraqueza adquirida na UTI (ICU-AW) e perda funcional severa",
+            "desc": "Crítico. MRC < 48, incapaz de sustentar tronco, incapaz de sentar/ortostatismo, descondicionamento grave",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "MRC-sum ≥ 48 ao final da fase aguda",
+                "Sedestação beira do leito > 5 min",
+                "Marcha com dispositivo antes da alta da UTI"
+            ],
+            "assess": [
+                "MRC-sum quando cooperativo (6 grupos bilaterais: 0-60)",
+                "Tempo de sustentação contra gravidade por segmento",
+                "Fadiga: tempo máximo de atividade antes de parar",
+                "Perimetria de coxa (atrofia)"
+            ],
             "interv": [
-              "Progressao",
-              "Monitorizacao"
+                "EENM de quadríceps e tibial anterior em sedados/imobilizados",
+                "Cicloergômetro passivo-ativo em leito",
+                "Fortalecimento ativo contra gravidade quando RASS ≥ -1",
+                "Mobilização progressiva: passivo → ativo-assistido → ativo → funcional",
+                "Protocolo de mobilização precoce estruturado com metas diárias"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P3 — Hipoxemia / complacencia baixa / risco VILI",
-        "desc": "Critico. FiO2 alta, PEEP elevada, PaO2/FiO2 reduzida",
-        "assess": [],
-        "interv": [
-          "VM protetora rigorosa",
-          "Otimizacao PEEP"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Proteger pulmao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.6.P7 — Dor, dispositivos e barreiras mecânicas à mobilização",
+            "desc": "Moderado. Muitos cateteres, drenos, curativos complexos, medo da equipe/paciente de mobilizar, restrição excessiva por 'segurança'",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "Realizar mobilização segura com todos os dispositivos presentes",
+                "Treinar equipe no manejo de dispositivos durante fisioterapia",
+                "Reduzir barreiras percebidas à mobilização"
+            ],
+            "assess": [
+                "Inventário de dispositivos: linhas, drenos, VM, cateteres",
+                "Medo da equipe e do paciente de mobilizar",
+                "Restrições médicas formais vs percebidas",
+                "Frequência atual de mobilização por outros profissionais"
+            ],
             "interv": [
-              "VM protetora",
-              "PEEP"
+                "Mapa de dispositivos pré-mobilização",
+                "Checklist de segurança: linhas com folga, alarmes, monitor portátil",
+                "Treino da equipe de enfermagem para mobilização com dispositivos",
+                "Educação médica: mobilização precoce como standard of care",
+                "Documentar e reportar barreiras para melhoria do serviço"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P4 — Secrecao abundante e incapacidade clearance",
-        "desc": "Grave. Aspiracao frequente, tosse fraca ou sedacao",
-        "assess": [],
-        "interv": [
-          "Higiene bronquica baseada criterio clinico"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Garantir higiene bronquica eficaz"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "6.6.P8 — Risco tromboembólico, úlceras e complicações do imobilismo",
+            "desc": "Grave. Leito prolongado, edema, hipoperfusão, nutrição/albumina baixa quando disponível",
+            "block": "🏥 6.6 — PÓS-OPERATÓRIO COMPLEXO EM UTI",
+            "goals": [
+                "Mudança de decúbito a cada 2h",
+                "Pele íntegra sem novas lesões por pressão",
+                "Zero eventos de TVP/TEP durante internação"
+            ],
+            "assess": [
+                "Braden scale para úlcera de pressão",
+                "Wells score e Caprini para TVP",
+                "Inspeção de pele: sacro, calcâneos, occipital, escápulas",
+                "Anticoagulação prescrita e profilaxia mecânica"
+            ],
             "interv": [
-              "Higiene"
+                "Mudança de decúbito programada a cada 2h (equipe de enfermagem)",
+                "Posicionamento com coxins para proteger proeminências ósseas",
+                "Exercícios de bombeamento de MMII 10x/h",
+                "Compressão pneumática intermitente bilateral",
+                "EENM para manutenção do tônus vascular muscular em imobilizados"
             ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P5 — Sedacao profunda, delirium e incapacidade participacao",
-        "desc": "Grave. RASS -3 a -5 prolongado, delirium",
-        "assess": [],
-        "interv": [
-          "Coordenacao com equipe reducao sedacao",
-          "Janelas de despertar"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Minimizar efeitos sedacao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Coordenacao",
-              "Janelas"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P6 — Fraqueza adquirida UTI (ICU-AW) e perda funcional severa",
-        "desc": "Critico. MRC <48, incapaz sustentar tronco",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce em camadas: 0 posicionamento/mudanca decubito/passiva/prevencao contraturas; 1 cabeceira 30-60° sedestacao leito ativo-assistido cicloergometro; 2 beira leito treino tronco sit-to-stand; 3 prancha ortostatismo marcha estacionaria; 4 marcha 3-5m→10-20m→corredor",
-          "Forca e funcao: reavaliar MRC meta ≥48, sedestacao, STS nivel assistencia, resistencia progressiva quando seguro, tarefas funcionais"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Evitar deterioracao adicional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Camadas 0-2"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Camadas 3-4",
-              "Forca funcao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P7 — Dor, dispositivos e barreiras mecanicas mobilizacao",
-        "desc": "Moderado. Muitos cateteres, drenos, medo equipe/paciente",
-        "assess": [],
-        "interv": [
-          "Manejo dispositivos: organizar linhas antes, plano quem segura o que, checar TQT/TOT drenos curativos, reduzir medo com rotina padronizada"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Viabilizar mobilizacao apesar dispositivos"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Organizacao",
-              "Rotina"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "6.6.P8 — Risco tromboembolico, ulceras e complicacoes imobilismo",
-        "desc": "Grave. Leito prolongado, edema, hipoperfusao",
-        "assess": [],
-        "interv": [
-          "Mobilizacao precoce como estrategia preventiva maxima",
-          "PARADA UTI: queda PAM significativa ou sintomas, dessaturacao sustentada, taquiarritmia sustentada, aumento trabalho respiratorio, dor intensa ou agitacao perigosa, intercorrencia dispositivo"
-        ],
-        "block": "6.6 — Pos-operatorio Complexo UTI",
-        "goals": [
-          "Prevenir complicacoes imobilismo"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
-            "interv": [
-              "Mobilizacao precoce"
-            ]
-          }
-        ]
-      }
+        }
     ]
   },
   {
@@ -8171,637 +8189,627 @@ export const ICU_REFERENCE_SYSTEMS = [
     "icon": "M15.362 5.214A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751H10.5",
     "color": "#f97316",
     "problems": [
-      {
-        "name": "7.1.P1 — Hipoperfusao sistemica e intolerancia extrema ao esforco",
-        "desc": "Critico. PAM < 65 ou uso de DVA, lactato elevado, extremidades frias",
-        "assess": [],
-        "interv": [
-          "REGRA: NUNCA mobilizar guiado por vontade; guiado por PERFUSAO",
-          "Checklist: PAM, lactato, DVA, SpO2, sintomas",
-          "Mobilizacao por camadas: Instavel=só posicionamento+passiva+isometricos (Camada 0)",
-          "Parcialmente estavel=sedestacao no leito (Camada 1)",
-          "Estavel=beira-leito→poltrona (Camada 2)",
-          "Preservacao muscular: isometricos globais, ativo-assistidos, EENM",
-          "PARADA: queda PAM >10-20%, dessaturacao, taquicardia, tontura, palidez"
-        ],
-        "block": "7.1 — Sepse / Choque Septico",
-        "goals": [
-          "Nao piorar perfusao",
-          "Iniciar mobilizacao minima segura"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        {
+            "name": "7.1.P1 — Hipoperfusão sistêmica e intolerância extrema ao esforço",
+            "desc": "Crítico. PAM < 65 ou uso de DVA, lactato elevado, extremidades frias, TEC lento, queda de PA ao mínimo movimento",
+            "block": "🚨 7.1 — SEPSE / CHOQUE SÉPTICO",
+            "goals": [
+                "PAM ≥ 65 sustentada antes de qualquer mobilização",
+                "Lactato em queda (< 2 mmol/L) como critério de progressão",
+                "Mobilização passiva segura dentro da instabilidade"
+            ],
+            "assess": [
+                "PAM e DVA: tipo, dose e tendência",
+                "Lactato sérico e tendência nas últimas 6h",
+                "TEC e temperatura das extremidades",
+                "SpO₂ e sinais de hipoperfusão: livedo, oligúria, confusão"
+            ],
             "interv": [
-              "Mobilizacao por camadas conforme estabilidade",
-              "Preservacao muscular prioritária"
+                "Critérios de segurança: PAM ≥ 65, dose DVA estável ou em redução",
+                "Apenas mobilização passiva em leito quando critérios não atingidos",
+                "Elevação gradual de cabeceira como primeiro passo (30° → 45°)",
+                "EENM passivo de MMII para manutenção de função sem esforço cardiovascular",
+                "Comunicar imediatamente deterioração hemodinâmica à equipe médica"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.1.P2 — Insuficiencia respiratoria associada",
-        "desc": "Critico. SpO2 <92%, FR >30, PaO2/FiO2 reduzido, VM/VNI/CNAF",
-        "assess": [],
-        "interv": [
-          "Se VM: manter VM protetora, evitar ΔP e Pplato elevados",
-          "Posicionamento: cabeceira 30°, decubitos alternados",
-          "Se acordado: exercicios respiratorios leves, sem fadigar"
-        ],
-        "block": "7.1 — Sepse / Choque Septico",
-        "goals": [
-          "Garantir oxigenacao e ventilacao adequadas"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.1.P2 — Insuficiência respiratória associada",
+            "desc": "Crítico. SpO₂ < 92% mesmo em O₂, FR > 30, PaO₂/FiO₂ reduzido, uso de VM, VNI ou CNAF",
+            "block": "🚨 7.1 — SEPSE / CHOQUE SÉPTICO",
+            "goals": [
+                "SpO₂ ≥ 92% com suporte mínimo",
+                "PaO₂/FiO₂ em melhora progressiva",
+                "Suporte ventilatório adequado sem piora de lesão pulmonar"
+            ],
+            "assess": [
+                "SpO₂ e FiO₂ necessária",
+                "PaO₂/FiO₂ tendência nas últimas 12h",
+                "Mecânica ventilatória: Vt, PEEP, ΔP em ventilados",
+                "FR e uso de musculatura acessória em não intubados"
+            ],
             "interv": [
-              "VM protetora",
-              "Posicionamento estrategico"
+                "VM protetora: Vt 6 mL/kg, PEEP adequada, ΔP < 15 cmH₂O",
+                "Posicionamento em prona se P/F < 150 com candidatura clínica",
+                "Higiene brônquica: vibrocompressão, aspiração",
+                "CPAP/VNI em não intubados quando indicado",
+                "NUNCA desconectar do ventilador sem técnica segura de desconexão"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.1.P3 — Rebaixamento do nivel de consciencia / encefalopatia septica",
-        "desc": "Critico. Delirium, confusao, Glasgow flutuante",
-        "assess": [],
-        "interv": [
-          "Estimulos cognitivos e motores",
-          "Mobilizacao como estimulo neurologico"
-        ],
-        "block": "7.1 — Sepse / Choque Septico",
-        "goals": [
-          "Recuperar nivel minimo de interacao e comando"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.1.P3 — Rebaixamento do nível de consciência / encefalopatia séptica",
+            "desc": "Crítico. Delirium, confusão, sonolência, Glasgow flutuante, incapacidade de cooperar",
+            "block": "🚨 7.1 — SEPSE / CHOQUE SÉPTICO",
+            "goals": [
+                "Mobilização passiva segura durante rebaixamento",
+                "Prevenção de complicações do imobilismo sem piora neurológica",
+                "Progressão de estimulação conforme melhora da consciência"
+            ],
+            "assess": [
+                "GCS e tendência ao longo do tempo",
+                "CAM-ICU para delirium",
+                "Causa do rebaixamento: encefalopatia séptica vs outros",
+                "Proteção de via aérea: reflexo de tosse e deglutição"
+            ],
             "interv": [
-              "Estimulos graduais",
-              "Reducao de sedacao quando seguro"
+                "Mobilização passiva de todos os segmentos 2x/dia",
+                "Estimulação sensorial multimodal: voz, toque, luz",
+                "Posicionamento anti-aspirativo: cabeceira 30-45°",
+                "Orientação cognitiva em períodos de maior alerta",
+                "Comunicar qualquer queda de GCS imediatamente"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.1.P4 — Catabolismo muscular acelerado e perda de forca precoce",
-        "desc": "Critico. Queda rapida de forca, MRC <48",
-        "assess": [],
-        "interv": [
-          "Preservacao muscular prioritária (micro-sessoes multiplas/dia)",
-          "Fortalecimento progressivo quando estavel"
-        ],
-        "block": "7.1 — Sepse / Choque Septico",
-        "goals": [
-          "Preservar massa e ativacao muscular"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.1.P4 — Catabolismo muscular acelerado e perda de força precoce",
+            "desc": "Crítico. Queda rápida de força, incapaz de sustentar tronco, MRC < 48 em poucos dias",
+            "block": "🚨 7.1 — SEPSE / CHOQUE SÉPTICO",
+            "goals": [
+                "Iniciar mobilização ativa precoce assim que hemodinâmica estável",
+                "EENM precoce para reduzir perda de massa muscular",
+                "MRC monitorado para detectar deterioração e planejar progressão"
+            ],
+            "assess": [
+                "MRC-sum quando cooperativo",
+                "Tempo em decúbito desde a admissão",
+                "Albumina e pré-albumina quando disponível",
+                "Tempo de VM e sedação (fatores de risco para ICU-AW)"
+            ],
             "interv": [
-              "Isometricos, ativo-assistidos, EENM"
+                "EENM de quadríceps e tibial anterior em sedados",
+                "Cicloergômetro passivo em leito quando disponível",
+                "Mobilização ativa precoce assim que RASS ≥ -2 e hemodinâmica estável",
+                "Nutrição adequada: proteína ≥ 1.2-1.5 g/kg/dia (comunicar nutricionista)",
+                "Progressão: passivo → ativo-assistido → ativo → funcional"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.1.P5 — Risco tromboembólico e de complicações do imobilismo",
+            "desc": "Grave. Inflamação sistêmica + repouso + edema + VM + sedação + DVA",
+            "block": "🚨 7.1 — SEPSE / CHOQUE SÉPTICO",
+            "goals": [
+                "Exercícios de MMII realizados ≥ 2x/dia",
+                "Mudança de decúbito a cada 2h",
+                "Pele íntegra sem novas lesões por pressão"
+            ],
+            "assess": [
+                "Wells score e presença de edema assimétrico",
+                "Braden scale para úlcera de pressão",
+                "Anticoagulação prescrita",
+                "Dispositivos de compressão em uso"
+            ],
             "interv": [
-              "Fortalecimento progressivo"
+                "Exercícios de bombeamento de MMII 10x/h quando acordado",
+                "Compressão pneumática intermitente bilateral",
+                "Mudança de decúbito programada a cada 2h",
+                "Inspeção de pele a cada 4h: sacro, calcâneos, occipital",
+                "Posicionamento com coxins protetores em proeminências ósseas"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.1.P5 — Risco tromboembolico e complicacoes do imobilismo",
-        "desc": "Grave. Inflamacao+repouso, edema, VM, sedacao, DVA",
-        "assess": [],
-        "interv": [
-          "Mobilizacao minima segura",
-          "Mudancas de decubito frequentes"
-        ],
-        "block": "7.1 — Sepse / Choque Septico",
-        "goals": [
-          "Evitar colapso pulmonar e rigidez articular"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.2.P1 — Hipoxemia grave",
+            "desc": "Crítico. PaO₂/FiO₂ < 200, shunt pulmonar importante, necessidade de FiO₂ > 60%",
+            "block": "🫁 7.2 — SEPSE + SDRA / INSUFICIÊNCIA RESPIRATÓRIA GRAVE",
+            "goals": [
+                "PaO₂/FiO₂ > 200 com melhora progressiva",
+                "FiO₂ ≤ 60% mantendo SpO₂ ≥ 92%",
+                "Prevenção de progressão para SDRA grave"
+            ],
+            "assess": [
+                "PaO₂/FiO₂: valor e tendência nas últimas 12-24h",
+                "SpO₂ e FiO₂ necessária",
+                "RX/TC: extensão de lesão",
+                "PEEP atual e Pplatô"
+            ],
             "interv": [
-              "Mobilizacao minima",
-              "Mudanca de decubito"
+                "Prona 16h/dia se P/F < 150 com avaliação clínica",
+                "Posicionamento lateral 135° como alternativa à prona",
+                "PEEP adequada conforme estratégia ventilatória do médico",
+                "Higiene brônquica para reduzir resistência e melhora de V/Q",
+                "Minimizar manipulações que causem desrecrutamento alveolar"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.2.P1 — Hipoxemia grave",
-        "desc": "Critico. PaO2/FiO2 <200, FiO2 >60%",
-        "assess": [],
-        "interv": [
-          "VM PROTETORA: Vt protetor por PBW, Pplato, ΔP",
-          "Ajustar PEEP por oxigenacao, mecanica, recrutabilidade",
-          "Posicionamento: prona quando indicado, laterais, cabeceira"
-        ],
-        "block": "7.2 — Sepse + SDRA / Insuf. Respiratoria Grave",
-        "goals": [
-          "Manter oxigenacao com minima lesao pulmonar"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.2.P2 — Shunt pulmonar e complacência baixa",
+            "desc": "Crítico. Complacência < 30 mL/cmH₂O, shunt refratário, áreas de consolidação extensa",
+            "block": "🫁 7.2 — SEPSE + SDRA / INSUFICIÊNCIA RESPIRATÓRIA GRAVE",
+            "goals": [
+                "Complacência em melhora (> 30-40 mL/cmH₂O)",
+                "Redução de ΔP conforme melhora",
+                "Recrutamento alveolar de áreas colapsadas"
+            ],
+            "assess": [
+                "Complacência estática e dinâmica (em ventilados)",
+                "ΔP (driving pressure) alvo < 15 cmH₂O",
+                "Resposta ao PEEP trial",
+                "Imagem: extensão de consolidação vs áreas aeradas"
+            ],
             "interv": [
-              "VM protetora",
-              "PEEP otimizada",
-              "Posicionamento"
+                "Estratégia protetora: Vt 6 mL/kg peso predito",
+                "Posicionamento em prona para recrutamento das regiões dorsais",
+                "Não realizar manobras de recrutamento sem prescrição médica",
+                "Posicionamento lateral para redistribuição do fluxo",
+                "Comunicar mudanças de complacência à equipe"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.2.P2 — Shunt pulmonar e complacencia baixa",
-        "desc": "Critico. Complacencia <30 mL/cmH2O, shunt refratario",
-        "assess": [],
-        "interv": [
-          "Ajuste fino de PEEP",
-          "Posicionamento terapeutico"
-        ],
-        "block": "7.2 — Sepse + SDRA / Insuf. Respiratoria Grave",
-        "goals": [
-          "Recrutar sem hiperinsuflar"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.2.P3 — Dependência de VM/VNI/CNAF",
+            "desc": "Crítico. Incapaz de manter oxigenação sem suporte, falha de desmame repetida",
+            "block": "🫁 7.2 — SEPSE + SDRA / INSUFICIÊNCIA RESPIRATÓRIA GRAVE",
+            "goals": [
+                "SBT progressivo com sucesso",
+                "PImáx > -20 cmH₂O como critério de extubação",
+                "Tolerância a VNI/CNAF pós-extubação sem reintubação"
+            ],
+            "assess": [
+                "PImáx, PEmáx",
+                "Índice de Tobin (FR/Vt): < 105 = favorável",
+                "SBT: duração tolerada, FR, SpO₂, Vt",
+                "Capacidade de tosse e clearance de secreção"
+            ],
             "interv": [
-              "PEEP monitorizada",
-              "Posicionamento estrategico"
+                "Treino muscular inspiratório com threshold entre SBTs",
+                "Higiene brônquica rigorosa antes do SBT",
+                "Fisioterapia motora para reverter fraqueza global (ICU-AW)",
+                "Sentar na beira do leito e ortostatismo durante janela de desmame",
+                "Comunicar prontidão baseada em critérios objetivos"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.2.P3 — Dependencia de VM/VNI/CNAF",
-        "desc": "Critico. Incapaz de manter oxigenacao sem suporte",
-        "assess": [],
-        "interv": [
-          "Preservacao de funcao diafragmatica (prevenir VIDD)",
-          "Desmame gradual de parametros"
-        ],
-        "block": "7.2 — Sepse + SDRA / Insuf. Respiratoria Grave",
-        "goals": [
-          "Nao perder musculatura respiratoria"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.2.P4 — Alto risco de VIDD (disfunção diafragmática induzida pelo ventilador)",
+            "desc": "Grave. VM prolongada, sedação profunda, ausência de esforço respiratório",
+            "block": "🫁 7.2 — SEPSE + SDRA / INSUFICIÊNCIA RESPIRATÓRIA GRAVE",
+            "goals": [
+                "Preservar esforço respiratório mínimo durante VM",
+                "PImáx monitorado para detectar deterioração precoce",
+                "Redução de sedação para permitir esforço espontâneo"
+            ],
+            "assess": [
+                "PImáx a cada 48-72h",
+                "USG diafragmático quando disponível: espessura e excursão",
+                "Modo ventilatório: controlado (alto risco) vs assisto-controlado",
+                "RASS e nível de sedação atual"
+            ],
             "interv": [
-              "Preservar atividade diafragmatica"
+                "Comunicar equipe sobre risco de VIDD e necessidade de ajuste de sedação",
+                "Treino de esforço inspiratório durante SBT",
+                "Threshold IMT quando extubado ou em weaning",
+                "Mobilização ativa precoce para reduzir atrofia global",
+                "Posicionamento: Fowler para otimizar excursão diafragmática"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.2.P5 — Secreção e necessidade de higiene brônquica",
+            "desc": "Grave. Secreção abundante, roncos difusos, atelectasias recorrentes",
+            "block": "🫁 7.2 — SEPSE + SDRA / INSUFICIÊNCIA RESPIRATÓRIA GRAVE",
+            "goals": [
+                "Redução de frequência de aspiração",
+                "Ausculta com menos roncos e estertores",
+                "Atelectasias em regressão na imagem"
+            ],
+            "assess": [
+                "Volume e características da aspiração",
+                "Ausculta: roncos, estertores, crepitações",
+                "RX: atelectasias recorrentes",
+                "PCF quando cooperativo"
+            ],
             "interv": [
-              "Desmame gradual"
+                "Vibrocompressão manual e mecânica",
+                "Drenagem postural conforme localização da atelectasia",
+                "Bag-squeezing (hiperinsuflação manual) quando intubado",
+                "Cough Assist pós-extubação se PCF < 160 L/min",
+                "Higiene oral com clorexidina 0,12% para reduzir flora"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.2.P4 — Alto risco de VIDD",
-        "desc": "Grave. VM prolongada, sedacao profunda",
-        "assess": [],
-        "interv": [
-          "Minimizar sedacao quando possivel",
-          "Preservar atividade diafragmatica",
-          "Desmame: avaliar padrao, forca PImax, tosse PCF, consciencia"
-        ],
-        "block": "7.2 — Sepse + SDRA / Insuf. Respiratoria Grave",
-        "goals": [
-          "Nao perder completamente musculatura respiratoria"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.2.P6 — Intolerância à mobilização por reserva respiratória mínima",
+            "desc": "Grave. Dessaturação ao mínimo movimento, taquipneia importante, fadiga respiratória precoce",
+            "block": "🫁 7.2 — SEPSE + SDRA / INSUFICIÊNCIA RESPIRATÓRIA GRAVE",
+            "goals": [
+                "SpO₂ ≥ 88-90% durante mobilização com FiO₂ ajustada",
+                "Tolerar cabeceira a 60° sem dessaturação",
+                "Progredir mobilização conforme melhora da troca gasosa"
+            ],
+            "assess": [
+                "SpO₂ ao elevar cabeceira e ao mobilizar",
+                "FR ao esforço e recuperação",
+                "Borg ao esforço mínimo",
+                "Correlação com P/F e FiO₂ necessária"
+            ],
             "interv": [
-              "Minimizar sedacao",
-              "Preservar diafragma"
+                "Mobilização com FiO₂ aumentada preventivamente",
+                "SpO₂ < 88% = critério de parada imediata",
+                "Progressão muito gradual: 10% de aumento por sessão",
+                "EENM em leito como alternativa ao exercício ativo",
+                "Comunicar cada deterioração de SpO₂ durante mobilização"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.3.P1 — Miocardiopatia séptica e baixo débito",
+            "desc": "Crítico. Fração de ejeção reduzida, sinais de baixo débito, uso de inotrópicos, lactato elevado persistente",
+            "block": "🫀 7.3 — SEPSE COM DISFUNÇÃO CARDÍACA E/OU RENAL",
+            "goals": [
+                "PAM ≥ 65 com dose mínima de inotrópico/vasopressor",
+                "Lactato em queda como critério de progressão",
+                "Mobilização passiva segura durante fase de instabilidade"
+            ],
+            "assess": [
+                "Ecocardiografia: FE, movimentação de parede, FEVE",
+                "Inotrópicos em uso: tipo, dose, tendência",
+                "Lactato e clearance de lactato",
+                "Perfusão periférica: TEC, temperatura, diurese"
+            ],
             "interv": [
-              "Avaliar desmame",
-              "Mobilizacao precoce"
+                "Mobilização passiva somente quando PAM ≥ 65 e lactato em queda",
+                "EENM como alternativa ao exercício ativo em pacientes com baixo débito",
+                "Elevação gradual de cabeceira como primeiro passo",
+                "Monitorização contínua de PA durante qualquer intervenção",
+                "Progredir somente com melhora documentada da função cardíaca"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.2.P5 — Secrecao e necessidade de higiene bronquica",
-        "desc": "Grave. Secrecao abundante, atelectasias recorrentes",
-        "assess": [],
-        "interv": [
-          "Higiene bronquica so se houver secrecao, criteriosa",
-          "Evitar fisioterapia agressiva"
-        ],
-        "block": "7.2 — Sepse + SDRA / Insuf. Respiratoria Grave",
-        "goals": [
-          "Manter vias aereas pervias sem lesao adicional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.3.P2 — Dependência de diálise",
+            "desc": "Grave. Hemodiálise ou diálise peritoneal em curso, anúria/oligúria, uremia",
+            "block": "🫀 7.3 — SEPSE COM DISFUNÇÃO CARDÍACA E/OU RENAL",
+            "goals": [
+                "Mobilização segura sem comprometer o acesso de diálise",
+                "Exercícios realizados no período entre diálises (melhor tolerância)",
+                "Manutenção de função muscular durante período de dependência de diálise"
+            ],
+            "assess": [
+                "Acesso de diálise: tipo, localização, permeabilidade",
+                "Período de diálise vs janela disponível para fisioterapia",
+                "Estado hemodinâmico pós-diálise (hipotensão frequente)",
+                "Uremia: sintomas como cãibras, fadiga, encefalopatia urêmica"
+            ],
             "interv": [
-              "Higiene por criterio clinico"
+                "Fisioterapia preferencialmente no meio do período interdialítico",
+                "Evitar exercícios com o membro do acesso dialítico",
+                "Exercícios de amplitude para prevenção de complicações de acesso",
+                "Monitorização de PA: hipotensão pós-diálise é comum",
+                "Comunicar equipe sobre horários de diálise para coordenar sessões"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.2.P6 — Intolerancia à mobilizacao por reserva respiratoria minima",
-        "desc": "Grave. Dessaturacao ao minimo movimento, taquipneia, fadiga",
-        "assess": [],
-        "interv": [
-          "Progressao muito gradual de mobilizacao",
-          "Mobilizacao como parte do tratamento respiratorio"
-        ],
-        "block": "7.2 — Sepse + SDRA / Insuf. Respiratoria Grave",
-        "goals": [
-          "Melhorar tolerancia à mobilizacao"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.3.P3 — Variações abruptas de volume e balanço hídrico",
+            "desc": "Grave. Sobrecarga hídrica ou hipovolemia, balanço hídrico muito positivo ou muito negativo",
+            "block": "🫀 7.3 — SEPSE COM DISFUNÇÃO CARDÍACA E/OU RENAL",
+            "goals": [
+                "Mobilização adaptada ao estado volêmico atual",
+                "Zero manobras que piorem instabilidade hemodinâmica por volemia",
+                "Comunicação com equipe antes de mobilizar em instabilidade volêmica"
+            ],
+            "assess": [
+                "Balanço hídrico: positivo (sobrecarga) ou negativo (depleção)",
+                "Edema periférico e pulmonar",
+                "Pressão venosa jugular e sinais de congestão",
+                "PA e FC: ortostase por hipovolemia vs sobrecarga"
+            ],
             "interv": [
-              "Progressao cautelosa",
-              "Integracao respiratoria"
+                "Verificar balanço hídrico atual com equipe antes da sessão",
+                "Hipovitemia: ortostase com cuidado → meias compressivas + posição lenta",
+                "Sobrecarga: sentar pode melhorar dispneia (reduz pré-carga)",
+                "Exercícios de MMII em leito quando instabilidade volêmica",
+                "Comunicar alterações durante sessão imediatamente"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.3.P1 — Miocardiopatia septica e baixo debito",
-        "desc": "Critico. FE reduzida, inotropicos, lactato persistente",
-        "assess": [],
-        "interv": [
-          "Nao roubar debito cardiaco",
-          "Mobilizar longe de dialise quando possivel",
-          "Sessoes curtas, frequentes",
-          "Evitar ortostatismo precoce sem reserva",
-          "Monitorizacao hemodinamica continua"
-        ],
-        "block": "7.3 — Sepse com Disfuncao Cardiaca e/ou Renal",
-        "goals": [
-          "Nao provocar hipotensao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.3.P4 — Intolerância extrema ao ortostatismo",
+            "desc": "Grave. Queda de PA > 20 mmHg ao sentar, síncope, tontura importante, incapacidade de manter postura vertical",
+            "block": "🫀 7.3 — SEPSE COM DISFUNÇÃO CARDÍACA E/OU RENAL",
+            "goals": [
+                "Tolerar sedestação > 5 min sem síncope",
+                "Ortostatismo sem queda de PA sintomática",
+                "Progressão de verticalização conforme melhora da função cardíaca/renal"
+            ],
+            "assess": [
+                "PA em decúbito e ao sentar (1 e 3 min)",
+                "Sintomas: tontura, escurecimento, náusea, pré-síncope",
+                "Causa predominante: hipovolemia vs autonômica vs cardíaca",
+                "Medicação hipotensora em uso"
+            ],
             "interv": [
-              "Mobilizacao por camadas",
-              "Monitorizacao continua"
+                "Verticalização em etapas: 30° → 45° → 60° → 90° → beira do leito",
+                "Exercícios de bombeamento de panturrilha antes de levantar",
+                "Meias elásticas e bandagem abdominal",
+                "Monitorização PA a cada mudança de posição",
+                "Critério de parada: queda de PAS > 20 mmHg ou sintomas"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.3.P2 — Dependencia de dialise",
-        "desc": "Grave. Hemodialise ou diálise peritoneal, anuria/oliguria",
-        "assess": [],
-        "interv": [
-          "Mobilizar longe de dialise sempre que possivel",
-          "Coordenar com nefrologia"
-        ],
-        "block": "7.3 — Sepse com Disfuncao Cardiaca e/ou Renal",
-        "goals": [
-          "Mobilizar sem interferir com procedimento dialitico"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.3.P5 — Arritmias e instabilidade elétrica",
+            "desc": "Crítico. Arritmias frequentes, necessidade de ajuste de drogas, risco de parada cardíaca",
+            "block": "🫀 7.3 — SEPSE COM DISFUNÇÃO CARDÍACA E/OU RENAL",
+            "goals": [
+                "Mobilização somente com telemetria confirmando ritmo estável",
+                "Zero manobras que precipitem arritmias",
+                "Comunicação imediata de arritmia nova ou piora durante sessão"
+            ],
+            "assess": [
+                "Tipo de arritmia: FA, TV, EV frequentes, bloqueios",
+                "Telemetria/ECG antes da sessão",
+                "Medicações antiarrítmicas em uso e dose atual",
+                "Critérios de parada: FC > 130 ou < 40, TV, FV"
+            ],
             "interv": [
-              "Timing em relacao à dialise"
+                "Verificar telemetria antes de iniciar mobilização",
+                "Critérios de segurança: ritmo sinusal ou arritmia estável controlada",
+                "Parar imediatamente se nova arritmia ou sintomas",
+                "FC como parâmetro de esforço (com cuidado em FA)",
+                "Comunicar qualquer arritmia nova à equipe antes de continuar"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.3.P3 — Variacoes abruptas de volume e balanco hidrico",
-        "desc": "Grave. Sobrecarga ou hipovolemia",
-        "assess": [],
-        "interv": [
-          "Avaliar volemia antes de mobilizar",
-          "Adaptar intensidade conforme estado volêmico"
-        ],
-        "block": "7.3 — Sepse com Disfuncao Cardiaca e/ou Renal",
-        "goals": [
-          "Nao provocar hipotensao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.4.P1 — Delirium hiperativo ou hipoativo",
+            "desc": "Grave. CAM-ICU positivo, agitação psicomotora ou letargia extrema, flutuação de consciência",
+            "block": "🧠 7.4 — SEPSE COM DISFUNÇÃO NEUROLÓGICA",
+            "goals": [
+                "Mobilização passiva segura durante delirium",
+                "Reduzir fatores contribuintes: privação de sono, imobilidade, dor",
+                "Progressão conforme melhora cognitiva"
+            ],
+            "assess": [
+                "CAM-ICU a cada turno",
+                "RASS e nível de sedação",
+                "Causa do delirium: hipóxia, dor, privação de sono, infecção, drogas",
+                "Segurança: risco de retirar dispositivos (tubo, linhas)"
+            ],
             "interv": [
-              "Avaliacao pre-sessao",
-              "Dosagem individualizada"
+                "Protocolo ABCDEF: integrar fisioterapia ao despertar diário",
+                "Mobilização durante janela de menor confusão",
+                "Orientação cognitiva: luz, relógio, voz familiar",
+                "Exercícios simples com comandos claros e repetitivos",
+                "Supervisão constante: risco de retirar dispositivos durante agitação"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.3.P4 — Intolerancia extrema ao ortostatismo",
-        "desc": "Grave. Queda PA >20 mmHg ao sentar, sincope, tontura",
-        "assess": [],
-        "interv": [
-          "Progressao muito cautelosa de postura",
-          "Prancha ortostatica quando disponivel"
-        ],
-        "block": "7.3 — Sepse com Disfuncao Cardiaca e/ou Renal",
-        "goals": [
-          "Manter alguma verticalizacao progressiva"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.4.P2 — Encefalopatia séptica",
+            "desc": "Crítico. Rebaixamento de consciência, Glasgow < 13, resposta lentificada, confusão",
+            "block": "🧠 7.4 — SEPSE COM DISFUNÇÃO NEUROLÓGICA",
+            "goals": [
+                "Mobilização passiva segura sem agravar quadro neurológico",
+                "Prevenção de complicações do imobilismo",
+                "Progressão conforme melhora do GCS"
+            ],
+            "assess": [
+                "GCS: tendência ao longo do tempo",
+                "Causa: encefalopatia séptica vs outra (meningite, TCE)",
+                "Proteção de via aérea: reflexo de tosse e deglutição",
+                "Sinais focais: hemiparesia, anisocoria"
+            ],
             "interv": [
-              "Progressao gradual",
-              "Prancha ortostatica"
+                "Mobilização passiva completa de todos os segmentos",
+                "Posicionamento anti-aspirativo: cabeceira 30-45°",
+                "Estimulação sensorial leve durante mobilização",
+                "COMUNICAR imediatamente qualquer queda de GCS",
+                "Fisioterapia respiratória: higiene brônquica e expansão"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.3.P5 — Arritmias e instabilidade eletrica",
-        "desc": "Critico. Arritmias frequentes, risco de parada",
-        "assess": [],
-        "interv": [
-          "Monitorizacao cardiaca durante sessao",
-          "Interromper ao primeiro sinal de arritmia sustentada"
-        ],
-        "block": "7.3 — Sepse com Disfuncao Cardiaca e/ou Renal",
-        "goals": [
-          "Preservar funcao minima sem desencadear arritmia"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "7.4.P3 — Flutuação cognitiva importante",
+            "desc": "Moderado. Períodos de lucidez alternados com confusão, incapacidade de manter atenção",
+            "block": "🧠 7.4 — SEPSE COM DISFUNÇÃO NEUROLÓGICA",
+            "goals": [
+                "Realizar sessões nos períodos de maior lucidez",
+                "Exercícios simples com retenção mínima",
+                "Reduzir confusão identificando e tratando causas reversíveis"
+            ],
+            "assess": [
+                "Mapeamento dos períodos de maior lucidez ao longo do dia",
+                "Fatores precipitantes: privação de sono, dor, hipóxia, medicações",
+                "Escala CAM-ICU e RASS",
+                "Impacto na capacidade de participar na fisioterapia"
+            ],
             "interv": [
-              "Monitorizacao obrigatoria",
-              "Criterios de parada"
+                "Agendar sessões nos períodos de maior alerta (geralmente manhã)",
+                "Comandos simples, um de cada vez",
+                "Ambiente calmo: luz, temperatura, redução de ruído",
+                "Orientação cognitiva no início de cada sessão",
+                "Comunicar flutuações à equipe para ajuste de protocolo"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.4.P1 — Delirium hiperativo ou hipoativo",
-        "desc": "Grave. CAM-ICU positivo, agitacao ou letargia extrema",
-        "assess": [],
-        "interv": [
-          "Posicionamento terapeutico: mudancas de decubito, estimulos",
-          "Estimulos motores simples: passiva, ativo-assistida",
-          "Sedestacao assistida precoce",
-          "Treino de controle de tronco"
-        ],
-        "block": "7.4 — Sepse com Disfuncao Neurologica",
-        "goals": [
-          "Melhorar nivel de alerta",
-          "Preservar padrao motor basico"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.4.P4 — Risco de broncoaspiração",
+            "desc": "Crítico. Rebaixamento de consciência, ausência de reflexo de tosse, disfagia",
+            "block": "🧠 7.4 — SEPSE COM DISFUNÇÃO NEUROLÓGICA",
+            "goals": [
+                "Zero episódios de broncoaspiração durante sessões",
+                "Higiene brônquica eficaz sem risco aspirativo",
+                "Avaliação de deglutição quando GCS ≥ 13"
+            ],
+            "assess": [
+                "Reflexo de tosse e engasgo",
+                "GCS: proteção de via aérea adequada?",
+                "Ausculta pulmonar: sinais de aspiração",
+                "Avaliação de deglutição quando possível (Fonoaudiologia)"
+            ],
             "interv": [
-              "Estimulos sensoriais e motores",
-              "Sedestacao precoce"
+                "Manter cabeceira ≥ 30-45° em todo momento",
+                "Aspiração orotraqueal antes de qualquer mobilização",
+                "Fisioterapia respiratória antes de alimentação (quando se alimenta)",
+                "Comunicar risco à equipe para indicação de sonda ou proteção de via aérea",
+                "Posicionamento lateral quando sedado ou GCS baixo"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.4.P2 — Encefalopatia septica",
-        "desc": "Critico. Rebaixamento consciencia, Glasgow <13",
-        "assess": [],
-        "interv": [
-          "Estimulos cognitivos e motores graduais",
-          "Reducao de sedacao quando seguro (com equipe)"
-        ],
-        "block": "7.4 — Sepse com Disfuncao Neurologica",
-        "goals": [
-          "Melhorar nivel de alerta"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.4.P5 — Falta de comando motor voluntário",
+            "desc": "Grave. Incapaz de seguir comandos simples, sem movimento voluntário organizado",
+            "block": "🧠 7.4 — SEPSE COM DISFUNÇÃO NEUROLÓGICA",
+            "goals": [
+                "Mobilização passiva segura em todos os segmentos",
+                "Preservar ADM articular durante ausência de comando motor",
+                "Progressão para ativo assim que surgir resposta motora"
+            ],
+            "assess": [
+                "Resposta a comandos: abrir olhos, apertar mão, levantar dedo",
+                "Presença de movimentos reflexos vs voluntários",
+                "Tônus e reflexos nos MMSS e MMII",
+                "GCS motor: flexão vs extensão vs nenhum"
+            ],
             "interv": [
-              "Estimulos multiplos/dia",
-              "Colaboracao com equipe"
+                "Mobilização passiva completa 2x/dia: todos os segmentos",
+                "Posicionamento terapêutico anti-contratura",
+                "Estimulação neuroproprioceptiva: vibração, toque, tração",
+                "EENM para estimulação motora em ausência de atividade voluntária",
+                "Progressão para ativo-assistido assim que surgir resposta motora mínima"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.4.P3 — Flutuacao cognitiva importante",
-        "desc": "Moderado. Periodos de lucidez alternados com confusao",
-        "assess": [],
-        "interv": [
-          "Aproveitar janelas de melhor consciencia para treino"
-        ],
-        "block": "7.4 — Sepse com Disfuncao Neurologica",
-        "goals": [
-          "Melhorar nivel de alerta"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.5.P1 — ICU-AW (fraqueza adquirida na UTI)",
+            "desc": "Crítico. MRC < 48, incapaz de sustentar tronco, incapaz de levantar braços ou pernas contra gravidade",
+            "block": "🧱 7.5 — SEPSE PROLONGADA, ICU-AW E PICS",
+            "goals": [
+                "MRC-sum ≥ 48 (critério de resolução de ICU-AW)",
+                "Sedestação beira do leito > 5 min",
+                "Marcha com dispositivo antes da alta da UTI"
+            ],
+            "assess": [
+                "MRC-sum: 6 grupos musculares bilaterais (máx 60)",
+                "Dinamometria de preensão",
+                "Tempo em decúbito desde admissão",
+                "Albumina e estado nutricional"
+            ],
             "interv": [
-              "Treino oportunístico"
+                "Fortalecimento ativo contra gravidade conforme MRC disponível",
+                "EENM de quadríceps e tibial anterior",
+                "Progressão: passivo → ativo-assistido → ativo → resistido → funcional",
+                "Nutrição hiperenergética e hiperproteica (comunicar nutricionista)",
+                "Protocolo de mobilização precoce estruturado com metas diárias"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.4.P4 — Risco de broncoaspiracao",
-        "desc": "Critico. Rebaixamento consciencia, ausencia reflexo tosse, disfagia",
-        "assess": [],
-        "interv": [
-          "Posicionamento protetor de vias aereas",
-          "Cabeceira elevada minimo 30°",
-          "Higiene oral rigorosa"
-        ],
-        "block": "7.4 — Sepse com Disfuncao Neurologica",
-        "goals": [
-          "Evitar regressao neurologica funcional"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.5.P2 — VIDD (disfunção diafragmática induzida pelo ventilador)",
+            "desc": "Crítico. Falha de desmame repetida, PImáx muito baixo, incapaz de gerar esforço respiratório",
+            "block": "🧱 7.5 — SEPSE PROLONGADA, ICU-AW E PICS",
+            "goals": [
+                "PImáx > -20 cmH₂O como mínimo para extubação",
+                "SBT progressivo com duração crescente",
+                "Extubação e tolerância a VNI/CNAF pós-extubação"
+            ],
+            "assess": [
+                "PImáx a cada 48-72h (tendência)",
+                "Espessura diafragmática ao USG (quando disponível)",
+                "Índice de Tobin durante SBT",
+                "Duração do SBT antes da falha"
+            ],
             "interv": [
-              "Posicionamento continuo",
-              "Higiene oral"
+                "Treino muscular inspiratório com threshold (IMT)",
+                "Reduzir sedação para permitir esforço respiratório espontâneo",
+                "Ventilação com modos que preservem esforço: PSV, PAV",
+                "Protocolo de SBT progressivo com metas de duração",
+                "Fisioterapia motora integrada para reverter ICU-AW global"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.4.P5 — Falta de comando motor voluntario",
-        "desc": "Grave. Incapaz de seguir comandos, sem movimento organizado",
-        "assess": [],
-        "interv": [
-          "Mobilizacao passiva preservando padroes",
-          "Estimulos para despertar comando motor"
-        ],
-        "block": "7.4 — Sepse com Disfuncao Neurologica",
-        "goals": [
-          "Preservar padrao motor basico"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "7.5.P3 — Incapacidade funcional grave",
+            "desc": "Crítico. Dependência total para todas as AVDs, incapaz de sentar sem suporte máximo",
+            "block": "🧱 7.5 — SEPSE PROLONGADA, ICU-AW E PICS",
+            "goals": [
+                "Sentar na beira do leito > 5 min com assistência mínima",
+                "Transferência leito-cadeira com assistência de 2 pessoas",
+                "Início de marcha com dispositivo e assistência máxima"
+            ],
+            "assess": [
+                "FIM motor: transferências, marcha, AVDs",
+                "MRC-sum e força por segmento",
+                "Tempo de tolerância em sedestação",
+                "Número de pessoas necessárias para transferência"
+            ],
             "interv": [
-              "Passiva",
-              "Estimulos terapeuticos"
+                "Progressão de mobilização: passivo → beira leito → cadeira → ortostase → marcha",
+                "Treino de sit-to-stand com superfície alta e apoio",
+                "Transferência com equipe e equipamentos adequados",
+                "Treino de AVDs básicas: alimentação, higiene com adaptações",
+                "Cicloergômetro como complemento ao treino funcional"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.5.P1 — ICU-AW",
-        "desc": "Critico. MRC <48, incapaz de sustentar tronco",
-        "assess": [],
-        "interv": [
-          "Protocolo por camadas: 0 passivo/isometrico, 1 sedestacao leito, 2 beira-leito, 3 ortostatismo assistido, 4 primeiros passos, 5 marcha progressiva",
-          "Fortalecimento progressivo",
-          "Treino funcional real: tarefas, nao so exercicios",
-          "Reavaliacoes seriadas: MRC, funcao, tolerancia"
-        ],
-        "block": "7.5 — Sepse Prolongada, ICU-AW e PICS",
-        "goals": [
-          "Recuperar sentar, ficar em pe, andar",
-          "MRC ≥48"
-        ],
-        "phases": [
-          {
-            "timeframe": "Progressivo (semanas)",
+        },
+        {
+            "name": "7.5.P4 — Intolerância ao esforço e fadiga precoce",
+            "desc": "Grave. Incapaz de sustentar atividade por mais de 1-2 minutos, taquicardia/dispneia desproporcional",
+            "block": "🧱 7.5 — SEPSE PROLONGADA, ICU-AW E PICS",
+            "goals": [
+                "Tolerância ao esforço de 5-10 min sem parada por fadiga",
+                "Borg ≤ 5 ao final das sessões",
+                "Progressão de resistência de 10% por sessão"
+            ],
+            "assess": [
+                "Tempo máximo de atividade antes de parar por fadiga",
+                "FC e SpO₂ durante esforço",
+                "Borg ao esforço e recuperação",
+                "Causa predominante: muscular, cardíaca, respiratória ou central"
+            ],
             "interv": [
-              "Mobilizacao por camadas",
-              "Fortalecimento",
-              "Treino funcional"
+                "Sessões curtas e frequentes (2-3x/dia) vs 1 sessão longa",
+                "Interval training: esforço curto + pausa + esforço",
+                "Progressão gradual de tempo e intensidade",
+                "Identificar causa predominante de fadiga e tratar",
+                "Treino aeróbico leve: cicloergômetro, marcha com suporte"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.5.P2 — VIDD",
-        "desc": "Critico. Falha desmame repetida, PImax muito baixo",
-        "assess": [],
-        "interv": [
-          "Treino musculatura inspiratoria quando possivel",
-          "Mobilizacao como estimulo ventilatorio",
-          "Desmame gradual e protocolado"
-        ],
-        "block": "7.5 — Sepse Prolongada, ICU-AW e PICS",
-        "goals": [
-          "Recuperar forca respiratoria"
-        ],
-        "phases": [
-          {
-            "timeframe": "Progressivo (semanas)",
+        },
+        {
+            "name": "7.5.P5 — Disautonomia pós-séptica",
+            "desc": "Moderado. Variações importantes de PA/FC ao mudar de postura, intolerância postural persistente",
+            "block": "🧱 7.5 — SEPSE PROLONGADA, ICU-AW E PICS",
+            "goals": [
+                "Tolerar ortostatismo > 10 min sem sintomas",
+                "PA estável durante mudanças posturais",
+                "Progressão para deambulação sem limitação autonômica"
+            ],
+            "assess": [
+                "PA e FC em decúbito, sentado e em pé",
+                "Sintomas ortostáticos: tontura, fadiga, palpitações",
+                "Variabilidade de FC (quando disponível)",
+                "Histórico de sepse, COVID, trauma como causa"
+            ],
             "interv": [
-              "TMI",
-              "Mobilizacao integrada"
+                "Verticalização gradual e progressiva",
+                "Meias compressivas e bandagem abdominal",
+                "Exercícios de MMII antes de levantar (bombeamento)",
+                "Hidratação adequada antes das sessões",
+                "Comunicar padrão de disautonomia à equipe para manejo farmacológico"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.5.P3 — Incapacidade funcional grave",
-        "desc": "Critico. Dependencia total para todas AVDs",
-        "assess": [],
-        "interv": [
-          "Progressao funcional por niveis",
-          "Meta: independencia em pelo menos transferencias"
-        ],
-        "block": "7.5 — Sepse Prolongada, ICU-AW e PICS",
-        "goals": [
-          "Recuperar sentar, ficar em pe, andar"
-        ],
-        "phases": [
-          {
-            "timeframe": "Progressivo (semanas)",
+        },
+        {
+            "name": "7.5.P6 — PICS (síndrome pós-cuidados intensivos)",
+            "desc": "Grave. Combinação de fraqueza física + déficit cognitivo + sintomas psicológicos (ansiedade, depressão, TEPT)",
+            "block": "🧱 7.5 — SEPSE PROLONGADA, ICU-AW E PICS",
+            "goals": [
+                "Abordagem multiprofissional integrada para PICS",
+                "Melhora progressiva de força física como componente primário",
+                "Reconhecimento e encaminhamento de sintomas psicológicos"
+            ],
+            "assess": [
+                "PICS screening: físico (MRC, marcha), cognitivo (MMSE, MoCA), psicológico (PHQ-9, GAD-7, PCL-5)",
+                "Qualidade de vida pré-UTI vs atual",
+                "Suporte familiar disponível",
+                "Acesso a serviços de reabilitação pós-alta"
+            ],
             "interv": [
-              "Progressao por niveis"
+                "Programa de reabilitação multiprofissional integrado",
+                "Fisioterapia: progressão de força, endurance e função",
+                "Psicologia: triagem e suporte para ansiedade/depressão/TEPT",
+                "Terapia ocupacional: retorno às AVDs e atividades significativas",
+                "Educação do paciente e família sobre PICS e expectativas de recuperação"
             ]
-          }
-        ]
-      },
-      {
-        "name": "7.5.P4 — Intolerancia ao esforco e fadiga precoce",
-        "desc": "Grave. Incapaz de sustentar atividade >1-2 min",
-        "assess": [],
-        "interv": [
-          "Treino de tolerancia progressivo",
-          "Micro-sessoes frequentes > sessoes longas",
-          "Reavaliacoes seriadas da tolerancia"
-        ],
-        "block": "7.5 — Sepse Prolongada, ICU-AW e PICS",
-        "goals": [
-          "Melhorar tolerancia ao esforco"
-        ],
-        "phases": [
-          {
-            "timeframe": "Progressivo (semanas)",
-            "interv": [
-              "Progressao gradual",
-              "Micro-sessoes"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "7.5.P5 — Disautonomia pos-septica",
-        "desc": "Moderado. Variacoes PA/FC ao mudar postura",
-        "assess": [],
-        "interv": [
-          "Treino de ortostatismo gradual",
-          "Prancha ortostatica quando necessario"
-        ],
-        "block": "7.5 — Sepse Prolongada, ICU-AW e PICS",
-        "goals": [
-          "Recuperar tolerancia postural"
-        ],
-        "phases": [
-          {
-            "timeframe": "Progressivo (semanas)",
-            "interv": [
-              "Ortostatismo gradual"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "7.5.P6 — PICS",
-        "desc": "Grave. Fraqueza + deficit cognitivo + ansiedade, depressao, TEPT",
-        "assess": [],
-        "interv": [
-          "Abordagem multidisciplinar: fisio + TO + psico + nutricao",
-          "Treino funcional contextualizado",
-          "Educacao e suporte ao paciente e familia",
-          "Plano de rehabilitacao pos-alta"
-        ],
-        "block": "7.5 — Sepse Prolongada, ICU-AW e PICS",
-        "goals": [
-          "Retomar independencia minima"
-        ],
-        "phases": [
-          {
-            "timeframe": "Longo prazo",
-            "interv": [
-              "Multidisciplinar",
-              "Treino realista",
-              "Continuidade"
-            ]
-          }
-        ]
-      }
+        }
     ]
   },
   {
@@ -8810,670 +8818,628 @@ export const ICU_REFERENCE_SYSTEMS = [
     "icon": "M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z",
     "color": "#e879f9",
     "problems": [
-      {
-        "name": "8.1.P1 — Hipoventilacao + atelectasia dependente (bases)",
-        "desc": "Grave. Padrao superficial, SpO2 <92%, hipercapnia",
-        "assess": [],
-        "interv": [
-          "Posicionamento obrigatorio: cabeceira 45-60°, decubitos laterais alternados",
-          "Reexpansao dirigida: respiracao lenta nasal + pausa 2-3s (3 series 8-10 rep, 2-3x/dia)",
-          "Se dessatura ao esforco: considerar CNAF ou VNI durante mobilizacao",
-          "Desmame progressivo de oxigenio"
-        ],
-        "block": "8.1 — Obesidade",
-        "goals": [
-          "Manter SpO2 ≥92% com FiO2 em queda"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        {
+            "name": "8.1.P1 — Hipoventilação + atelectasia dependente (bases)",
+            "desc": "Grave. Padrão ventilatório superficial, ↓ MV em bases, SpO₂ < 92% em ar ambiente, hipercapnia quando disponível",
+            "block": "🫁 8.1 — OBESIDADE / OBESIDADE MÓRBIDA",
+            "goals": [
+                "SpO₂ ≥ 94% em ar ambiente ou com O₂ mínimo",
+                "Expansão basal bilateral adequada",
+                "Redução de atelectasias dependentes com posicionamento e mobilização"
+            ],
+            "assess": [
+                "Ausculta: MV nas bases axilares e posteriores",
+                "SpO₂ em repouso e ao esforço",
+                "Cirtometria basal bilateral",
+                "Capacidade ventilatória: CV e PIM quando possível"
+            ],
             "interv": [
-              "Posicionamento",
-              "Reexpansao dirigida"
+                "Posicionamento semi-Fowler 30-45° de rotina (reduz pressão abdominal no diafragma)",
+                "VNI: CPAP/BiPAP especialmente noturno para SAHOS",
+                "Fisioterapia respiratória basal: drenagem postural lateral",
+                "EPAP para recrutamento alveolar",
+                "Deambulação precoce: mais efetiva para expansão e hematose"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.1.P2 — Alto risco de falha de desmame / reintubação",
+            "desc": "Grave. VM prolongada, falha de SBT, PImáx baixo, tosse ineficaz, obesidade como fator de risco adicional",
+            "block": "🫁 8.1 — OBESIDADE / OBESIDADE MÓRBIDA",
+            "goals": [
+                "SBT progressivo com melhora da tolerância",
+                "PImáx > -20 cmH₂O",
+                "VNI/CPAP eficaz pós-extubação para prevenir reintubação"
+            ],
+            "assess": [
+                "PImáx, PEmáx, índice de Tobin",
+                "SBT: duração tolerada, FR, SpO₂, Vt",
+                "Tosse e clearance de secreção: PCF",
+                "IMC e circunferência cervical (risco de apneia obstrutiva)"
+            ],
             "interv": [
-              "Desmame O2"
+                "Treino muscular inspiratório com threshold entre SBTs",
+                "Posicionamento reverso de Trendelenburg (30°) para aumentar CRF",
+                "VNI pós-extubação preventiva em obesos de alto risco",
+                "Higiene brônquica rigorosa pré-SBT",
+                "Comunicar prontidão para extubação com critérios objetivos"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.1.P2 — Alto risco de falha de desmame / reintubacao",
-        "desc": "Grave. VM prolongada, falha SBT, PImax baixo, tosse ineficaz",
-        "assess": [],
-        "interv": [
-          "Fortalecimento musculatura respiratoria quando possivel",
-          "Otimizacao mecanica com posicionamento",
-          "Mobilizacao precoce como suporte ao desmame"
-        ],
-        "block": "8.1 — Obesidade",
-        "goals": [
-          "Preparar para desmame sustentavel"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.1.P3 — Baixa tolerância postural e ao esforço",
+            "desc": "Moderado. Dispneia/dessaturação ao sentar, taquicardia desproporcional, fadiga precoce, intolerância ao ortostatismo",
+            "block": "🫁 8.1 — OBESIDADE / OBESIDADE MÓRBIDA",
+            "goals": [
+                "Tolerância ao ortostatismo > 5 min",
+                "SpO₂ ≥ 92% durante deambulação",
+                "Borg ≤ 5 ao andar no corredor"
+            ],
+            "assess": [
+                "SpO₂ ao sentar, ao ficar em pé e durante marcha",
+                "Borg ao esforço",
+                "FC e PA ao ortostatismo",
+                "Tempo máximo tolerado em cada posição"
+            ],
             "interv": [
-              "TMI",
-              "Posicionamento",
-              "Mobilizacao precoce"
+                "Verticalização gradual com O₂ suplementar quando necessário",
+                "Sessões curtas e frequentes (2-3x/dia)",
+                "Deambulação com suporte e monitorização de SpO₂",
+                "Progressão lenta de distância e tempo",
+                "Cicloergômetro como alternativa quando marcha limitada"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.1.P3 — Baixa tolerancia postural e ao esforco",
-        "desc": "Moderado. Dispneia/dessaturacao ao sentar, taquicardia, fadiga",
-        "assess": [],
-        "interv": [
-          "Progressao postural gradual monitorizada",
-          "Treino funcional: sit-to-stand assistido, marcha fracionada, intervalos longos",
-          "Borg alvo 3-4/10"
-        ],
-        "block": "8.1 — Obesidade",
-        "goals": [
-          "Tolerar cabeceira ≥45°, sedestacao ≥20 min"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "8.1.P4 — Barreira mecânica para mobilização e alto risco de lesão por pressão",
+            "desc": "Moderado. Necessidade de múltiplas pessoas para mobilização, equipamentos especiais, áreas de hiperemia/lesão",
+            "block": "🫁 8.1 — OBESIDADE / OBESIDADE MÓRBIDA",
+            "goals": [
+                "Mobilização segura com equipe e equipamentos adequados",
+                "Pele íntegra sem novas lesões por pressão",
+                "Mudança de decúbito a cada 2h com dispositivos corretos"
+            ],
+            "assess": [
+                "IMC e distribuição de peso (onde apoiar para mobilizar)",
+                "Inspeção de pele: dobras, sacro, calcâneos, regiões de contato",
+                "Equipamentos disponíveis: cama bariátrica, lençol deslizante, guindaste",
+                "Número de pessoas necessárias para mobilização segura"
+            ],
             "interv": [
-              "Progressao postural"
+                "Solicitar equipe de 2-3 pessoas para mobilização",
+                "Cama bariátrica e lençol de transferência deslizante",
+                "Coxins especiais em proeminências ósseas e dobras cutâneas",
+                "Higiene das dobras cutâneas: umidade = risco de lesão",
+                "Guindaste bariátrico para transferências quando disponível"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.2.P1 — Fraqueza global e baixa reserva fisiológica",
+            "desc": "Grave. MRC < 48, incapaz de sustentar tronco, fadiga precoce, sarcopenia evidente",
+            "block": "🧓 8.2 — IDOSO FRÁGIL / SARCOPENIA / RISCO DE QUEDA",
+            "goals": [
+                "MRC-sum ≥ 48 ao final da internação",
+                "Sentar e levantar sem assistência máxima",
+                "Marcha com dispositivo de forma funcional"
+            ],
+            "assess": [
+                "MRC-sum e dinamometria de preensão",
+                "Clinical Frailty Scale (CFS) pré-morbido",
+                "Índice de Barthel pré-internação",
+                "Perimetria de coxa (sarcopenia)"
+            ],
             "interv": [
-              "Treino funcional",
-              "Marcha fracionada"
+                "Fortalecimento de baixa carga e alta repetição",
+                "EENM para preservar massa muscular em imobilizados",
+                "Treino de sit-to-stand progressivo (superfície alta → normal)",
+                "Treino de marcha com progressão de distância",
+                "Nutrição: proteína ≥ 1.2-1.5 g/kg/dia adaptada à função renal"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.1.P4 — Barreira mecanica e alto risco lesao por pressao",
-        "desc": "Moderado. Multiplas pessoas, equipamentos especiais, hiperemia",
-        "assess": [],
-        "interv": [
-          "Planejar numero de pessoas, rota de tubos/drenos, cadeira/cinto/guincho",
-          "Progressao: sedestacao beira-leito → ortostatismo assistido → transferencia → marcha 3-10m",
-          "PARADA: SpO2 <88%, queda PAM >20%, dispneia intensa, tontura, fadiga extrema"
-        ],
-        "block": "8.1 — Obesidade",
-        "goals": [
-          "Iniciar mobilizacao fora do leito com seguranca logistica"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-48h",
+        },
+        {
+            "name": "8.2.P2 — Delirium / déficit cognitivo funcional",
+            "desc": "Grave. CAM-ICU positivo, confusão, desorientação, flutuação de consciência",
+            "block": "🧓 8.2 — IDOSO FRÁGIL / SARCOPENIA / RISCO DE QUEDA",
+            "goals": [
+                "Realizar mobilização segura durante delirium",
+                "Reduzir fatores contribuintes ao delirium: imobilidade, privação de sono",
+                "Progressão conforme melhora cognitiva"
+            ],
+            "assess": [
+                "CAM-ICU a cada turno",
+                "RASS e nível de sedação",
+                "Horário de maior lucidez",
+                "Risco de retirar dispositivos durante agitação"
+            ],
             "interv": [
-              "Planejamento obrigatorio",
-              "Progressao em camadas"
+                "Protocolo ABCDEF da UTI: integrar fisioterapia",
+                "Mobilização durante janela de maior lucidez",
+                "Orientação cognitiva: luz natural, relógio, objetos familiares",
+                "Presença de familiares durante sessões de fisioterapia",
+                "Supervisão constante: risco de queda e retirada de dispositivos"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.2.P1 — Fraqueza global e baixa reserva fisiologica",
-        "desc": "Grave. MRC <48, fadiga precoce, sarcopenia evidente",
-        "assess": [],
-        "interv": [
-          "Dosagem: sessoes curtas e frequentes (10-20 min, 2x/dia), evitar exaustao",
-          "Treino funcional real: sit-to-stand repetido, transferencia cama↔cadeira, marcha com andador/bengala",
-          "Progressao de forca funcional"
-        ],
-        "block": "8.2 — Idoso Fragil / Sarcopenia / Risco Queda",
-        "goals": [
-          "Manter sedestacao segura ≥30 min, ortostatismo ≥1-2 min"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.2.P3 — Instabilidade postural e medo de cair",
+            "desc": "Grave. Desequilíbrio em sedestação/ortostatismo, medo de mobilizar, histórico de quedas",
+            "block": "🧓 8.2 — IDOSO FRÁGIL / SARCOPENIA / RISCO DE QUEDA",
+            "goals": [
+                "Berg Balance Scale ≥ 45 para marcha segura",
+                "Zero quedas durante internação",
+                "Retorno ao nível funcional pré-internação quando possível"
+            ],
+            "assess": [
+                "Berg Balance Scale",
+                "TUG (Timed Up and Go)",
+                "Falls Efficacy Scale (FES-I)",
+                "Histórico de quedas pré-internação: frequência e local"
+            ],
             "interv": [
-              "Sessoes curtas frequentes",
-              "Treino funcional"
+                "Protocolo de prevenção de quedas: cama baixa, grades, iluminação",
+                "Treino de equilíbrio progressivo: sentado → em pé → perturbação",
+                "Fortalecimento de quadríceps e tibial anterior",
+                "Revisão de calçados e ambiente domiciliar para alta",
+                "Dispositivo de marcha adequado ao perfil funcional"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.3.P1 — Fadiga central e periférica",
+            "desc": "Moderado. Fadiga desproporcional ao esforço, exaustão precoce, sensação de fadiga persistente em repouso",
+            "block": "🧬 8.3 — ONCOLÓGICO / CAQUEXIA / NEUTROPENIA",
+            "goals": [
+                "Identificar limiar de fadiga individual e planejar sessões",
+                "Reduzir fadiga com exercício de intensidade adequada",
+                "Melhora da qualidade de vida relacionada à fadiga"
+            ],
+            "assess": [
+                "FACIT-Fatigue ou escala de fadiga de Schwartz",
+                "Correlação com tratamento oncológico atual (quimio/radio)",
+                "Hemoglobina (fadiga por anemia)",
+                "Sonolência diurna e ciclo sono-vigília"
+            ],
             "interv": [
-              "Sit-to-stand com ≤1 pessoa"
+                "Exercício aeróbico de intensidade moderada: reduz fadiga oncológica",
+                "Sessões curtas e frequentes respeitando limiar de fadiga",
+                "Priorizar atividades funcionais de maior significado para o paciente",
+                "Gerenciamento de energia: pacing e conservação de energia",
+                "Encaminhar para hematologia se Hb < 8 g/dL (anemia limitante)"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.2.P2 — Delirium / deficit cognitivo funcional",
-        "desc": "Grave. CAM-ICU positivo, confusao, desorientacao",
-        "assess": [],
-        "interv": [
-          "Cognitivo-motor: comandos simples, rotina fixa, mesmos exercicios todos os dias",
-          "Mobilizacao como intervencao anti-delirium",
-          "≥2 transferencias/dia com tecnica"
-        ],
-        "block": "8.2 — Idoso Fragil / Sarcopenia / Risco Queda",
-        "goals": [
-          "Realizar transferencias/dia, reduzir delirium com rotina"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.3.P2 — Perda acelerada de força e massa muscular (caquexia)",
+            "desc": "Grave. Perda de peso importante, sarcopenia visível, MRC baixo e em queda",
+            "block": "🧬 8.3 — ONCOLÓGICO / CAQUEXIA / NEUTROPENIA",
+            "goals": [
+                "Estabilizar perda muscular e iniciar recuperação quando possível",
+                "MRC-sum em manutenção ou melhora",
+                "Função nas AVDs preservada ao máximo"
+            ],
+            "assess": [
+                "MRC-sum e dinamometria",
+                "Peso corporal e IMC (tendência)",
+                "Perimetria de coxa e panturrilha",
+                "Albumina e pré-albumina sérica"
+            ],
             "interv": [
-              "Rotina estruturada",
-              "Mobilizacao terapeutica"
+                "Exercício resistido progressivo de baixa carga e alta repetição",
+                "EENM para estimulação anabólica em imobilizados",
+                "Nutrição hiperenergética e hiperproteica (comunicar nutricionista/oncologista)",
+                "Treino funcional adaptado à capacidade atual",
+                "Suporte psicológico para manutenção da motivação"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.2.P3 — Instabilidade postural e medo de cair",
-        "desc": "Grave. Desequilibrio, medo de mobilizar, historico quedas",
-        "assess": [],
-        "interv": [
-          "Equilibrio: alcances em sedestacao e ortostatismo, mudanca de base, reacoes de protecao",
-          "Treino de virar, parar, retomar eixo",
-          "Plano de prevencao de quedas",
-          "PARADA: hipotensao ortostatica sintomatica, dessaturacao, confusao/agitacao com risco"
-        ],
-        "block": "8.2 — Idoso Fragil / Sarcopenia / Risco Queda",
-        "goals": [
-          "Melhorar equilibrio estatico e dinamico basico"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.3.P3 — Dor / metástase óssea / risco de fratura",
+            "desc": "Grave. Dor óssea importante, metástase confirmada, risco de fratura patológica",
+            "block": "🧬 8.3 — ONCOLÓGICO / CAQUEXIA / NEUTROPENIA",
+            "goals": [
+                "Mobilização segura sem comprometer osso comprometido",
+                "EVA ≤ 4 durante sessões com analgesia adequada",
+                "Identificar restrições de carga por metástase"
+            ],
+            "assess": [
+                "Localização das metástases ósseas",
+                "Escala de Mirels para risco de fratura patológica",
+                "EVA em repouso e ao mobilizar",
+                "Restrições médicas por metástase"
+            ],
             "interv": [
-              "Treino equilibrio",
-              "Treino funcional"
+                "Consultar oncologista/ortopedista sobre restrições antes de mobilizar",
+                "Evitar carga axial em osso com metástase de alto risco",
+                "Exercícios de baixo impacto: água, cicloergômetro",
+                "TENS e crioterapia para analgesia",
+                "Nunca realizar mobilização passiva forçada em área de metástase"
             ]
-          },
-          {
-            "timeframe": "Ate alta",
+        },
+        {
+            "name": "8.3.P4 — Risco infeccioso (neutropenia)",
+            "desc": "Grave. Neutrófilos < 1000/mm³, uso de equipamentos compartilhados, risco de infecção",
+            "block": "🧬 8.3 — ONCOLÓGICO / CAQUEXIA / NEUTROPENIA",
+            "goals": [
+                "Mobilização segura sem exposição a agentes infecciosos",
+                "Exercício em ambiente controlado de neutropenia",
+                "Manutenção de função sem aumentar risco infeccioso"
+            ],
+            "assess": [
+                "Neutrófilos absolutos (valor atual)",
+                "Grau de neutropenia: leve (1000-1500), moderado (500-1000), grave (< 500)",
+                "Febre: temperatura nas últimas 24h",
+                "Presença de isolamento prescrito"
+            ],
             "interv": [
-              "Marcha assistida diaria",
-              "Prevencao quedas"
+                "Higienização das mãos rigorosa antes e durante a sessão",
+                "Equipamentos individuais ou desinfectados entre pacientes",
+                "Máscara cirúrgica quando neutrófilos < 500",
+                "Exercícios no próprio leito/quarto quando em isolamento",
+                "Suspender exercício se febre > 38°C ou neutrófilos < 100"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.3.P1 — Fadiga central e periferica",
-        "desc": "Moderado. Fadiga desproporcional, exaustao precoce",
-        "assess": [],
-        "interv": [
-          "Intensidade: Borg alvo 2-3/10, series curtas, pausas longas",
-          "Manter sedestacao diaria, ortostatismo se possivel"
-        ],
-        "block": "8.3 — Oncologico / Caquexia / Neutropenia",
-        "goals": [
-          "Evitar perda funcional adicional, nao piorar pos-sessao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.4.P1 — Fraqueza muscular e miopatia induzida por corticoide/imobilismo",
+            "desc": "Grave. Uso prolongado de corticoide, MRC < 48, fraqueza proximal acentuada",
+            "block": "🧬 8.4 — IMUNOSSUPRIMIDO (TRANSPLANTE, CORTICOIDE ALTO)",
+            "goals": [
+                "MRC proximal ≥ 3 para sentar-levantar sem compensação",
+                "Reversão da miopatia com fortalecimento progressivo",
+                "Independência em AVDs básicas"
+            ],
+            "assess": [
+                "MRC proximal: deltoides, bíceps, quadríceps, glúteos",
+                "Padrão de fraqueza: proximal > distal (miopatia corticosteroide)",
+                "Dose e duração de corticoide",
+                "CK sérica quando disponível (miopatia grave: CK elevada)"
+            ],
             "interv": [
-              "Dosagem leve",
-              "Minimo funcional"
+                "Fortalecimento de proximal: agachamento, elevação de braços",
+                "Exercício resistido de baixa carga: risco de fratura com carga alta em osteoporose",
+                "Progressão gradual e cuidadosa de carga",
+                "EENM de quadríceps e deltoides para potencializar ganho",
+                "Comunicar necessidade de redução de dose de corticoide quando possível"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.3.P2 — Perda acelerada de forca e massa (caquexia)",
-        "desc": "Grave. Perda de peso, sarcopenia visivel, MRC em queda",
-        "assess": [],
-        "interv": [
-          "Preservacao de funcao existente",
-          "Foco funcional: transferencias, marcha curta, AVDs"
-        ],
-        "block": "8.3 — Oncologico / Caquexia / Neutropenia",
-        "goals": [
-          "Evitar perda funcional adicional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.4.P2 — Alto risco infeccioso durante mobilização e uso de equipamentos",
+            "desc": "Crítico. Imunossupressão importante, risco de infecção oportunista",
+            "block": "🧬 8.4 — IMUNOSSUPRIMIDO (TRANSPLANTE, CORTICOIDE ALTO)",
+            "goals": [
+                "Mobilização segura sem exposição infecciosa",
+                "Higiene rigorosa em todos os contatos e equipamentos",
+                "Zero infecções relacionadas à fisioterapia"
+            ],
+            "assess": [
+                "Grau de imunossupressão: medicamentos, CD4 quando disponível",
+                "Presença de isolamento prescrito",
+                "Sinais de infecção: febre, calafrios, taquicardia",
+                "Acesso venoso central: cuidados e sinais de infecção"
+            ],
             "interv": [
-              "Preservacao"
+                "Higiene de mãos com álcool gel antes e após cada contato",
+                "Equipamentos individuais ou desinfectados",
+                "Máscara cirúrgica do fisioterapeuta em imunossuprimidos graves",
+                "Exercícios no leito quando em isolamento de proteção",
+                "Suspender imediatamente se febre > 38°C ou sinais de infecção"
             ]
-          },
-          {
-            "timeframe": "Medio prazo",
+        },
+        {
+            "name": "8.4.P3 — Baixa tolerância ao esforço por doença de base e catabolismo",
+            "desc": "Moderado. Fadiga precoce, dispneia aos mínimos esforços, dessaturação fácil",
+            "block": "🧬 8.4 — IMUNOSSUPRIMIDO (TRANSPLANTE, CORTICOIDE ALTO)",
+            "goals": [
+                "Borg ≤ 4 em atividades básicas",
+                "SpO₂ ≥ 92% durante exercício leve",
+                "Melhora progressiva da tolerância ao esforço"
+            ],
+            "assess": [
+                "Borg ao sentar, ficar em pé e deambular",
+                "SpO₂ durante atividade",
+                "FC de repouso e ao esforço",
+                "Causa de intolerância: pulmão (transplante pulmonar), cardíaca (coração), renal"
+            ],
             "interv": [
-              "Treino funcional"
+                "Exercício de intensidade baixa a moderada",
+                "Borg 11-13 como parâmetro de intensidade",
+                "Treino aeróbico: cicloergômetro, marcha progressiva",
+                "Intervalo de repouso adequado entre séries",
+                "Adaptação específica ao tipo de transplante"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.3.P3 — Dor / metastase ossea / risco de fratura",
-        "desc": "Grave. Dor ossea, metastase confirmada, risco fratura patologica",
-        "assess": [],
-        "interv": [
-          "Seguranca ossea: evitar impacto, torcoes bruscas, respeitar dor mecanica"
-        ],
-        "block": "8.3 — Oncologico / Caquexia / Neutropenia",
-        "goals": [
-          "Mobilizar com seguranca ossea"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
+        },
+        {
+            "name": "8.5.P1 — Instabilidade hemodinâmica pós-diálise (hipotensão, fadiga)",
+            "desc": "Grave. Hipotensão após diálise, fadiga extrema, tontura, náusea",
+            "block": "🩸 8.5 — RENAL CRÔNICO / HEMODIÁLISE",
+            "goals": [
+                "Fisioterapia no período interdialítico (melhor tolerância)",
+                "PA estável durante sessões de exercício",
+                "Reduzir sintomas pós-diálise com exercício intra-dialítico"
+            ],
+            "assess": [
+                "PA antes e após diálise (hipotensão pós é comum)",
+                "Horário de diálise e disponibilidade para fisioterapia",
+                "Sintomas pós-diálise: tontura, náusea, fadiga",
+                "Balanço hídrico da última sessão de diálise"
+            ],
             "interv": [
-              "Criterios de seguranca"
+                "Agendar fisioterapia no meio do período interdialítico",
+                "Exercício intra-dialítico de baixa intensidade: reduz hipotensão pós",
+                "Monitorização de PA antes de iniciar após diálise",
+                "Hidratação adequada no período interdialítico",
+                "Comunicar hipotensões recorrentes à equipe de nefrologia"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.3.P4 — Risco infeccioso (neutropenia)",
-        "desc": "Grave. Neutrofilos <1000/mm3",
-        "assess": [],
-        "interv": [
-          "EPIs, equipamento individual, higiene rigorosa"
-        ],
-        "block": "8.3 — Oncologico / Caquexia / Neutropenia",
-        "goals": [
-          "Mobilizar sem intercorrencia infecciosa"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
+        },
+        {
+            "name": "8.5.P2 — Fraqueza muscular e cãibras",
+            "desc": "Moderado. MRC baixo, cãibras frequentes, miopatia urêmica",
+            "block": "🩸 8.5 — RENAL CRÔNICO / HEMODIÁLISE",
+            "goals": [
+                "Reduzir frequência e intensidade de cãibras",
+                "MRC de MMII ≥ 3 para marcha independente",
+                "Melhora da capacidade funcional pré-diálise"
+            ],
+            "assess": [
+                "MRC por grupo muscular (MMII: quadríceps, tibial ant., tríceps sural)",
+                "Frequência e localização das cãibras",
+                "Dinamometria de preensão",
+                "Eletrólitos: cálcio, magnésio, potássio (relação com cãibras)"
+            ],
             "interv": [
-              "Controle de infeccao"
+                "Exercício de baixa intensidade: reduz cãibras e melhora função muscular",
+                "Fortalecimento progressivo de MMII",
+                "Alongamento de panturrilha para prevenção de cãibras",
+                "Comunicar cãibras frequentes à equipe para ajuste eletrolítico",
+                "Exercício intra-dialítico: reduz sintomas e melhora função"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.4.P1 — Fraqueza muscular e miopatia por corticoide/imobilismo",
-        "desc": "Grave. Corticoide prolongado, MRC <48, fraqueza proximal",
-        "assess": [],
-        "interv": [
-          "Borg alvo 3-4/10",
-          "Sessoes 15-25 min, 1-2x/dia",
-          "Priorizar funcional > forca isolada",
-          "Progressao: sedestacao ativa → ortostatismo assistido → transferencia → marcha fracionada"
-        ],
-        "block": "8.4 — Imunossuprimido",
-        "goals": [
-          "Evitar perda adicional de forca funcional"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.5.P3 — Restrição mecânica por FAV/cateter",
+            "desc": "Moderado. Presença de fístula arteriovenosa ou cateter de diálise, risco de dano ao acesso",
+            "block": "🩸 8.5 — RENAL CRÔNICO / HEMODIÁLISE",
+            "goals": [
+                "Exercício seguro sem comprometer o acesso de diálise",
+                "Preservar função da FAV para diálise",
+                "Mobilização adequada do membro contralateral"
+            ],
+            "assess": [
+                "Localização da FAV: braquiocefálica ou radiocefálica",
+                "Sinais de FAV funcionante: frêmito e sopro",
+                "Cateter: tipo e localização",
+                "Restrições médicas específicas para o membro com acesso"
+            ],
             "interv": [
-              "Dosagem controlada"
+                "NUNCA medir PA, fazer torniquete ou IV no membro da FAV",
+                "Evitar exercícios de alta intensidade no membro da FAV",
+                "Exercícios de preensão leve no membro da FAV quando indicado pelo nefrologista",
+                "Fortalecer e mobilizar os demais segmentos sem restrição",
+                "Proteger acesso com cuidado durante transferências e exercícios"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.6.P1 — Restrição ventilatória por ascite / derrame pleural",
+            "desc": "Grave. Ascite volumosa, derrame pleural, dispneia em repouso ou esforço mínimo, padrão ventilatório restritivo",
+            "block": "🫃 8.6 — HEPÁTICO (CIRROSE, ASCITE, ENCEFALOPATIA)",
+            "goals": [
+                "SpO₂ ≥ 94% com suporte mínimo",
+                "Redução da dispneia com posicionamento e drenagem quando indicado",
+                "Manutenção de expansibilidade torácica"
+            ],
+            "assess": [
+                "SpO₂ em repouso e ao esforço",
+                "Cirtometria: padrão restritivo",
+                "Grau de ascite: distensão abdominal visível",
+                "Derrame pleural: ausculta e RX quando disponível"
+            ],
             "interv": [
-              "Transferir com ≤1 pessoa",
-              "Marcha curta diaria"
+                "Posicionamento: Fowler alto para reduzir pressão diafragmática",
+                "Fisioterapia respiratória após drenagem de ascite ou toracocentese",
+                "Exercícios respiratórios de expansão costal",
+                "Deambulação precoce quando SpO₂ estável",
+                "Comunicar necessidade de drenagem quando compromete função respiratória"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.4.P2 — Alto risco infeccioso durante mobilizacao",
-        "desc": "Critico. Imunossupressao importante",
-        "assess": [],
-        "interv": [
-          "EPIs, equipamentos dedicados, higienizacao rigorosa antes/depois",
-          "Evitar circular por areas de risco"
-        ],
-        "block": "8.4 — Imunossuprimido",
-        "goals": [
-          "Mobilizacao diaria sem intercorrencia infecciosa"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.6.P2 — Encefalopatia hepática → risco de queda / baixa adesão",
+            "desc": "Crítico. Confusão, desorientação, alteração de comportamento, risco de queda elevado",
+            "block": "🫃 8.6 — HEPÁTICO (CIRROSE, ASCITE, ENCEFALOPATIA)",
+            "goals": [
+                "Zero quedas durante internação",
+                "Mobilização passiva segura durante encefalopatia",
+                "Progressão conforme melhora da função hepática"
+            ],
+            "assess": [
+                "Grau de encefalopatia hepática (West Haven): 1 (leve) a 4 (coma)",
+                "Ammonia sérica quando disponível",
+                "CAM-ICU para delirium associado",
+                "Comportamento de risco: levanta sem chamar, agitação"
+            ],
             "interv": [
-              "Seguranca biologica"
+                "Protocolo de prevenção de quedas: cama baixa, grades, tapetes antiderrapantes",
+                "Supervisão constante durante ortostatismo e marcha",
+                "Mobilização durante horários de maior lucidez",
+                "Tratar causa: lactulose, rifaximina (comunicar hepatologia)",
+                "Estimulação cognitiva leve durante sessões: orientação, conversação"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.4.P3 — Baixa tolerancia ao esforco por doenca de base",
-        "desc": "Moderado. Fadiga precoce, dispneia, dessaturacao facil",
-        "assess": [],
-        "interv": [
-          "Monitorizacao rigorosa durante mobilizacao",
-          "Progressao gradual de intensidade",
-          "PARADA: SpO2 <88-90% sustentado, fadiga extrema, tontura, taquicardia ou hipotensao desproporcionais"
-        ],
-        "block": "8.4 — Imunossuprimido",
-        "goals": [
-          "Tolerar sedestacao ≥30 min, ortostatismo ≥1-2 min, SpO2 ≥92%"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.6.P3 — Sarcopenia importante",
+            "desc": "Grave. Perda de massa muscular acentuada, MRC baixo, fraqueza global",
+            "block": "🫃 8.6 — HEPÁTICO (CIRROSE, ASCITE, ENCEFALOPATIA)",
+            "goals": [
+                "Estabilizar perda muscular e iniciar recuperação",
+                "MRC-sum ≥ 48 ao final da fase aguda",
+                "Treino funcional: sit-to-stand, marcha"
+            ],
+            "assess": [
+                "MRC-sum e dinamometria de preensão",
+                "Perimetria de coxa (sarcopenia)",
+                "Índice MELD para gravidade da cirrose",
+                "Estado nutricional: albumina, pré-albumina (atenção: baixa em cirrose)"
+            ],
             "interv": [
-              "Monitorizacao"
+                "Exercício resistido de baixa carga e alta repetição",
+                "EENM em imobilizados",
+                "Nutrição adaptada: proteína 1.2-1.5 g/kg/dia (mito antigo: restrição não é indicada)",
+                "Treino funcional: sentar-levantar, marcha progressiva",
+                "Suporte nutricional especializado em hepatologia"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.7.P1 — Dor intensa limitante",
+            "desc": "Crítico. EVA ≥ 7, dor que impede mobilização e ADM, necessidade de analgesia pesada",
+            "block": "🔥 8.7 — QUEIMADOS",
+            "goals": [
+                "EVA ≤ 5 durante procedimentos com analgesia adequada",
+                "Participação ativa nas sessões de fisioterapia",
+                "ADM mantida apesar da dor"
+            ],
+            "assess": [
+                "EVA ao repouso e durante procedimentos",
+                "Esquema analgésico atual: tipo, dose, horário",
+                "Janela de maior efeito analgésico",
+                "Comportamento de proteção e evitação de movimento"
+            ],
             "interv": [
-              "Progressao controlada"
+                "Coordenar com enfermagem para analgesia preventiva: morfina/ketamina 30 min antes",
+                "Fisioterapia na janela de maior efeito analgésico",
+                "TENS para modulação da dor localizada",
+                "Técnicas de distração: música, realidade virtual quando disponível",
+                "Educação do paciente sobre importância de manter mobilidade apesar da dor"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.5.P1 — Instabilidade hemodinamica pos-dialise",
-        "desc": "Grave. Hipotensao apos dialise, fadiga extrema, tontura",
-        "assess": [],
-        "interv": [
-          "Timing: preferir antes da dialise ou ≥4-6h apos, conforme resposta",
-          "Manter sedestacao ≥30 min, ortostatismo ≥1-2 min sem sintomas",
-          "Evitar sincope, queda, hipotensao sintomatica"
-        ],
-        "block": "8.5 — Renal Cronico / Hemodialise",
-        "goals": [
-          "Realizar mobilizacao fora do pico de hipotensao pos-dialise"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.7.P2 — Risco extremo de contraturas e rigidez",
+            "desc": "Crítico. Queimadura profunda, imobilização, áreas articulares afetadas",
+            "block": "🔥 8.7 — QUEIMADOS",
+            "goals": [
+                "Manter ADM articular completa nas articulações afetadas",
+                "Prevenir contraturas com posicionamento e mobilização",
+                "Órteses de posicionamento para manutenção de ganho"
+            ],
+            "assess": [
+                "Localização e profundidade das queimaduras",
+                "ADM de todas as articulações afetadas (goniometria)",
+                "Sinais de contratura incipiente: limitação progressiva de ADM",
+                "Grau de comprometimento articular (dérmico vs subdérmico)"
+            ],
             "interv": [
-              "Timing em relacao à dialise"
+                "Mobilização passiva e ativa-assistida 2-3x/dia em todas as articulações afetadas",
+                "Posicionamento anti-deformidade: extensão de cotovelo, abdução de ombro, extensão de joelho, dorsiflexão",
+                "Órteses de posicionamento noturno e entre sessões",
+                "Alongamento sustentado em amplitude final",
+                "Técnica de bandagem elástica para controle de cicatriz hipertrófica"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.7.P3 — Perda funcional global",
+            "desc": "Grave. Incapacidade para AVDs, dependência total, perda de mobilidade",
+            "block": "🔥 8.7 — QUEIMADOS",
+            "goals": [
+                "Retorno a AVDs básicas com adaptações",
+                "Transferências com assistência moderada",
+                "Marcha funcional com ou sem dispositivo"
+            ],
+            "assess": [
+                "FIM motor: alimentação, higiene, vestir-se, transferências",
+                "ADM funcional para AVDs",
+                "Força dos segmentos não queimados",
+                "Impacto psicológico: aceitação, motivação"
+            ],
             "interv": [
-              "Transferir com supervisao minima",
-              "Marcha curta diaria"
+                "Treino de AVDs com adaptações e dispositivos de auxílio",
+                "Treino de transferências progressivo",
+                "Marcha precoce quando área plantar preservada",
+                "Adaptação de equipamentos para preensão e manipulação",
+                "Terapia ocupacional integrada para AVDs e reintegração"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.5.P2 — Fraqueza muscular e caimbras",
-        "desc": "Moderado. MRC baixo, caimbras frequentes, miopatia uremica",
-        "assess": [],
-        "interv": [
-          "Borg alvo 3/10, sessoes curtas com pausas longas"
-        ],
-        "block": "8.5 — Renal Cronico / Hemodialise",
-        "goals": [
-          "Melhorar forca funcional sem desencadear caimbras"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
+        },
+        {
+            "name": "8.7.P4 — Comprometimento respiratório (inalação, secreção, VM)",
+            "desc": "Crítico. Queimadura de vias aéreas, VM, secreção carbonácea, insuficiência respiratória",
+            "block": "🔥 8.7 — QUEIMADOS",
+            "goals": [
+                "Desobstrução eficaz da via aérea superior e inferior",
+                "SpO₂ ≥ 92% com suporte adequado",
+                "Prevenção de pneumonia e atelectasia"
+            ],
+            "assess": [
+                "Tipo de lesão por inalação: supraglótica vs subglótica",
+                "SpO₂ e FiO₂ necessária",
+                "Secreção: volume, cor, viscosidade (secreção carbonácea = lesão grave)",
+                "PCF e capacidade de tosse quando extubado"
+            ],
             "interv": [
-              "Dose de exercicio controlada"
+                "Aspiração frequente: secreção carbonácea obstrui via aérea rapidamente",
+                "Umidificação aquecida adequada para mobilizar secreção",
+                "Fisioterapia respiratória intensiva: vibrocompressão, drenagem",
+                "Cough Assist pós-extubação quando PCF < 160 L/min",
+                "Posicionamento: decúbito ventral ou lateral para drenagem postural"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.5.P3 — Restricao mecanica por FAV/cateter",
-        "desc": "Moderado. Fistula arteriovenosa ou cateter de dialise",
-        "assess": [],
-        "interv": [
-          "Nao tracionar, nao apoiar peso, nao comprimir FAV/cateter"
-        ],
-        "block": "8.5 — Renal Cronico / Hemodialise",
-        "goals": [
-          "Mobilizar sem comprometer acesso vascular"
-        ],
-        "phases": [
-          {
-            "timeframe": "Continuo",
+        },
+        {
+            "name": "8.8.P1 — Dispneia refratária",
+            "desc": "Crítico. Dispneia em repouso, refratária a tratamento, sofrimento respiratório",
+            "block": "🕊️ 8.8 — PALIATIVO / FIM DE VIDA",
+            "goals": [
+                "Redução do sofrimento respiratório com técnicas paliativas",
+                "Posicionamento de conforto respiratório",
+                "Suporte à família durante crise de dispneia"
+            ],
+            "assess": [
+                "Intensidade da dispneia: escala modificada de Borg ou MRC",
+                "Causa: derrame pleural, pneumonia, progressão tumoral, fadiga muscular respiratória",
+                "Resposta a opioides/ansiolíticos (abordagem paliativa)",
+                "Impacto no sofrimento e qualidade de vida"
+            ],
             "interv": [
-              "Protecao de acesso"
+                "Posicionamento de conforto: Fowler alto ou lateral com travesseiros",
+                "Fluxo de ar: ventilador facial ou corrente de ar fresco",
+                "Técnicas de relaxamento: respiração lenta e controlada",
+                "Presença tranquilizadora: comunicação e toque terapêutico",
+                "Comunicar necessidade de ajuste de opioides/ansiolíticos à equipe médica"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.6.P1 — Restricao ventilatoria por ascite / derrame pleural",
-        "desc": "Grave. Ascite volumosa, derrame, dispneia repouso/esforco minimo",
-        "assess": [],
-        "interv": [
-          "Mecanica respiratoria: cabeceira elevada, treino leve (pausas inspiratorias, controle)"
-        ],
-        "block": "8.6 — Hepatico (Cirrose, Ascite, Encefalopatia)",
-        "goals": [
-          "Manter SpO2 ≥92%, sedestacao segura diaria"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.8.P2 — Dor e desconforto postural",
+            "desc": "Crítico. Dor importante, desconforto em decúbito, úlceras de pressão, rigidez",
+            "block": "🕊️ 8.8 — PALIATIVO / FIM DE VIDA",
+            "goals": [
+                "Redução do sofrimento físico com posicionamento de conforto",
+                "Prevenção de novas úlceras de pressão",
+                "Mobilidade passiva para reduzir rigidez e desconforto"
+            ],
+            "assess": [
+                "Localização e intensidade da dor",
+                "Presença e grau de úlceras de pressão",
+                "Posições de conforto identificadas pelo paciente",
+                "Capacidade de comunicar desconforto"
+            ],
             "interv": [
-              "Treino respiratorio leve"
+                "Posicionamento de conforto individualizado com colchão adequado",
+                "Mudança de posição frequente mas delicada: conforto > protocolo rígido",
+                "Mobilização passiva suave para reduzir rigidez",
+                "Cuidados com úlceras: curativos e desbridamento com equipe",
+                "Massagem de conforto em áreas não comprometidas"
             ]
-          }
-        ]
-      },
-      {
-        "name": "8.6.P2 — Encefalopatia hepatica → risco de queda / baixa adesao",
-        "desc": "Critico. Confusao, desorientacao, alteracao comportamento",
-        "assess": [],
-        "interv": [
-          "Seguranca neurologica: nunca mobilizar sozinho, comandos simples e repetidos, ambiente controlado"
-        ],
-        "block": "8.6 — Hepatico (Cirrose, Ascite, Encefalopatia)",
-        "goals": [
-          "Prevenir queda, broncoaspiracao"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
+        },
+        {
+            "name": "8.8.P3 — Perda funcional com sofrimento",
+            "desc": "Crítico. Dependência total, incapacidade funcional completa, sofrimento associado",
+            "block": "🕊️ 8.8 — PALIATIVO / FIM DE VIDA",
+            "goals": [
+                "Manter máxima qualidade de vida possível dentro das limitações",
+                "Prevenção de sofrimento adicional durante intervenções",
+                "Suporte ao paciente e família no processo de fim de vida"
+            ],
+            "assess": [
+                "Objetivos do cuidado: cura vs conforto vs suporte",
+                "Capacidade de comunicação e expressão de desejo",
+                "Escala POS (Palliative Outcomes Scale)",
+                "Sofrimento total: físico, emocional, espiritual, social"
+            ],
             "interv": [
-              "Comandos simples",
-              "Ambiente controlado"
+                "Fisioterapia paliativa: foco em conforto e qualidade de vida",
+                "Mobilização somente quando desejada pelo paciente e traz benefício",
+                "Presença e comunicação terapêutica durante sessões",
+                "Suporte à família: orientações de cuidado e luto antecipatório",
+                "Trabalho integrado com equipe de cuidados paliativos"
             ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Ortostatismo assistido diario",
-              "Marcha curta com supervisao"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.6.P3 — Sarcopenia importante",
-        "desc": "Grave. Perda de massa muscular, MRC baixo",
-        "assess": [],
-        "interv": [
-          "Treino funcional: transferencias, marcha curta, sedestacao ativa"
-        ],
-        "block": "8.6 — Hepatico (Cirrose, Ascite, Encefalopatia)",
-        "goals": [
-          "Aumentar tolerancia postural"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Treino funcional"
-            ]
-          },
-          {
-            "timeframe": "Ate alta",
-            "interv": [
-              "Plano continuidade",
-              "Prevencao quedas"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.7.P1 — Dor intensa limitante",
-        "desc": "Critico. EVA ≥7, dor impede mobilizacao e ADM",
-        "assess": [],
-        "interv": [
-          "ADM terapeutica diaria, associada a analgesia, curativos quando possivel",
-          "Manter funcao minima dos segmentos nao afetados"
-        ],
-        "block": "8.7 — Queimados",
-        "goals": [
-          "Realizar ADM com dor controlada"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "ADM + analgesia"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.7.P2 — Risco extremo de contraturas e rigidez",
-        "desc": "Critico. Queimadura profunda, areas articulares afetadas",
-        "assess": [],
-        "interv": [
-          "Posicionamento anti-contratura, orteses quando indicadas",
-          "ADM diaria estruturada",
-          "ADM progressiva com meta funcional"
-        ],
-        "block": "8.7 — Queimados",
-        "goals": [
-          "ADM diaria estruturada, posicionamento anti-contratura"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Posicionamento continuo"
-            ]
-          },
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "ADM progressiva"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.7.P3 — Perda funcional global",
-        "desc": "Grave. Incapacidade para AVDs, dependencia total",
-        "assess": [],
-        "interv": [
-          "Sedestacao e ortostatismo conforme estabilidade",
-          "Treino funcional: transferencias, marcha progressiva, AVDs"
-        ],
-        "block": "8.7 — Queimados",
-        "goals": [
-          "Sedestacao e ortostatismo, iniciar treino funcional basico"
-        ],
-        "phases": [
-          {
-            "timeframe": "3-7 dias",
-            "interv": [
-              "Treino funcional"
-            ]
-          },
-          {
-            "timeframe": "Ate alta",
-            "interv": [
-              "Plano intensivo ambulatorial"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.7.P4 — Comprometimento respiratorio (inalacao, secrecao, VM)",
-        "desc": "Critico. Queimadura vias aereas, VM, secrecao carbonacea",
-        "assess": [],
-        "interv": [
-          "Higiene bronquica criteriosa",
-          "VM protetora se necessario",
-          "PARADA: dor intratavel, instabilidade hemodinamica, dessaturacao"
-        ],
-        "block": "8.7 — Queimados",
-        "goals": [
-          "Manter vias aereas pervias e oxigenacao adequada"
-        ],
-        "phases": [
-          {
-            "timeframe": "0-72h",
-            "interv": [
-              "Higiene bronquica",
-              "VM protetora"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.8.P1 — Dispneia refrataria",
-        "desc": "Critico. Dispneia em repouso, refrataria a tratamento",
-        "assess": [],
-        "interv": [
-          "Conforto respiratorio: posicionamento, O2 se necessario, tecnicas leves de controle ventilatorio",
-          "Reduzir dispneia, dor, ansiedade corporal"
-        ],
-        "block": "8.8 — Paliativo / Fim de Vida",
-        "goals": [
-          "Priorizar conforto, dignidade, controle de sintomas"
-        ],
-        "phases": [
-          {
-            "timeframe": "Sempre",
-            "interv": [
-              "Conforto respiratorio"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.8.P2 — Dor e desconforto postural",
-        "desc": "Critico. Dor importante, desconforto em decubito, ulceras, rigidez",
-        "assess": [],
-        "interv": [
-          "Mudanca de decubito, ajustes posturais, mobilidade para higiene/conforto"
-        ],
-        "block": "8.8 — Paliativo / Fim de Vida",
-        "goals": [
-          "Priorizar conforto, dignidade, controle de sintomas"
-        ],
-        "phases": [
-          {
-            "timeframe": "Sempre",
-            "interv": [
-              "Conforto motor",
-              "Dignidade"
-            ]
-          }
-        ]
-      },
-      {
-        "name": "8.8.P3 — Perda funcional com sofrimento",
-        "desc": "Critico. Dependencia total, sofrimento associado",
-        "assess": [],
-        "interv": [
-          "Foco exclusivo em conforto e dignidade",
-          "PARADA: qualquer sinal de sofrimento adicional"
-        ],
-        "block": "8.8 — Paliativo / Fim de Vida",
-        "goals": [
-          "Reduzir dispneia, dor, ansiedade corporal"
-        ],
-        "phases": [
-          {
-            "timeframe": "Sempre",
-            "interv": [
-              "Humanizacao",
-              "Criterios de parada absolutos"
-            ]
-          }
-        ]
-      }
+        }
     ]
   }
+
 ] as const
