@@ -152,7 +152,7 @@ export function ICUSystemPanel() {
 
       {/* Active system content */}
       {activeSystem ? (
-        <div className="chrome-board rounded-[1.6rem] p-3 md:p-4">
+        <div className="rounded-[1.6rem] p-3 md:p-4">
 
           {/* Compact header */}
           <div className="mb-3 flex items-center gap-2">
