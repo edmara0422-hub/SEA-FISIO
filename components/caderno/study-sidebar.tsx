@@ -23,6 +23,7 @@ interface StudySidebarProps {
   onTutorInputChange: (v: string) => void
   isTutorLoading: boolean
   onSendTutor: (q: string) => void
+  videoUrls?: { title: string; url: string }[]
 }
 
 const TABS: { id: SidebarTool; icon: React.ComponentType<{ className?: string }>; label: string }[] = [
@@ -39,6 +40,7 @@ export function StudySidebar({
   tutorHistory, onTutorHistoryChange,
   tutorInput, onTutorInputChange,
   isTutorLoading, onSendTutor,
+  videoUrls = [],
 }: StudySidebarProps) {
   function handleClearTutor() {
     onTutorHistoryChange([])
@@ -176,11 +178,27 @@ export function StudySidebar({
           )}
 
           {activeTool === 'review' && (
-            <motion.div key="review" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }} className="space-y-2">
+            <motion.div key="review" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }} className="space-y-3">
               <p className="mb-3 text-[9px] uppercase tracking-[0.32em] text-white/28">Vídeos do tópico</p>
-              <p className="text-[12px] leading-relaxed text-white/28">
-                Nenhum vídeo neste tópico ainda.
-              </p>
+              {videoUrls.length > 0 ? (
+                videoUrls.map((v, i) => (
+                  <div key={i} className="space-y-2">
+                    <p className="text-[11px] font-semibold text-white/60">{v.title}</p>
+                    <video
+                      src={v.url}
+                      controls
+                      playsInline
+                      preload="metadata"
+                      className="w-full rounded-[0.9rem]"
+                      style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+                    />
+                  </div>
+                ))
+              ) : (
+                <p className="text-[12px] leading-relaxed text-white/28">
+                  Nenhum vídeo neste tópico ainda.
+                </p>
+              )}
             </motion.div>
           )}
 

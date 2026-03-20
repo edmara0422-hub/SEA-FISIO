@@ -196,6 +196,13 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
               },
             ],
           },
+          {
+            id: 'M1-T1-video-1',
+            type: 'video',
+            title: 'O Cérebro: Servo do Corpo',
+            url: 'https://qvvqbngiwqfuxsbgcxtc.supabase.co/storage/v1/object/public/videos/SEA%20FISIO/O_Cerebro__Servo_do_Corpo.mp4',
+            duration: '',
+          },
         ],
       },
     ],

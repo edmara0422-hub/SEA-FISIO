@@ -180,6 +180,9 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
                           onTutorInputChange={setTutorInput}
                           isTutorLoading={isTutorLoading}
                           onSendTutor={(q) => handleAskTutor(q)}
+                          videoUrls={topic.blocks
+                            .filter((b): b is Extract<typeof b, { type: 'video' }> => b.type === 'video' && !!b.url)
+                            .map((b) => ({ title: b.title, url: b.url }))}
                         />
                       </div>
                       <div className={(activeSidebarTool === 'summary' || activeSidebarTool === 'tutor') ? 'order-2 xl:order-1 space-y-8 min-w-0' : 'hidden'}>
