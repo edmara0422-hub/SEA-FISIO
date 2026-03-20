@@ -1,9 +1,18 @@
 'use client'
 
 import { useRef, useState, useEffect, useCallback } from 'react'
+import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Play, FileText, Cpu, Paperclip, ListChecks, ChevronLeft, ChevronRight, Layers } from 'lucide-react'
 import type { ContentBlock } from '@/types/caderno'
+
+const NeuroPumpSim = dynamic(() => import('@/components/experience/neuro-pump-sim').then(m => m.NeuroPumpSim), { ssr: false })
+const NeuroActionPotentialSim = dynamic(() => import('@/components/experience/neuro-action-potential-sim').then(m => m.NeuroActionPotentialSim), { ssr: false })
+
+const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
+  'neuro-pump': NeuroPumpSim,
+  'neuro-action-potential': NeuroActionPotentialSim,
+}
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
   if (block.type === 'text')       return <TextBlock block={block} />
@@ -126,31 +135,49 @@ function VideoBlock({ block }: { block: Extract<ContentBlock, { type: 'video' }>
 // ── Simulation ────────────────────────────────────────────────────────────────
 
 function SimulationBlock({ block }: { block: Extract<ContentBlock, { type: 'simulation' }> }) {
+  const [open, setOpen] = useState(false)
+  const Comp = SIM_REGISTRY[block.simulationId]
+
   return (
-    <div
-      className="flex items-center justify-between gap-3 rounded-[0.9rem] px-4 py-3"
-      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
-    >
-      <div className="flex items-center gap-3">
-        <div
-          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.6rem]"
-          style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)' }}
-        >
-          <Cpu className="h-4 w-4 text-white/50" />
-        </div>
-        <div>
-          <p className="text-[12px] font-semibold text-white/72">{block.title}</p>
-          {block.description && (
-            <p className="text-[10px] text-white/38">{block.description}</p>
-          )}
-        </div>
-      </div>
-      <span
-        className="shrink-0 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.16em]"
-        style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.40)' }}
+    <div className="space-y-2">
+      <button
+        onClick={() => Comp && setOpen(!open)}
+        className="flex w-full items-center justify-between gap-3 rounded-[0.9rem] px-4 py-3 transition-colors hover:bg-white/[0.04]"
+        style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
       >
-        Em breve
-      </span>
+        <div className="flex items-center gap-3">
+          <div
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.6rem]"
+            style={{ background: open ? 'rgba(45,212,191,0.12)' : 'rgba(255,255,255,0.06)', border: `1px solid ${open ? 'rgba(45,212,191,0.22)' : 'rgba(255,255,255,0.10)'}` }}
+          >
+            <Cpu className="h-4 w-4" style={{ color: open ? 'rgba(45,212,191,0.80)' : 'rgba(255,255,255,0.50)' }} />
+          </div>
+          <div className="text-left">
+            <p className="text-[12px] font-semibold text-white/72">{block.title}</p>
+            {block.description && (
+              <p className="text-[10px] text-white/38">{block.description}</p>
+            )}
+          </div>
+        </div>
+        <span
+          className="shrink-0 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.16em]"
+          style={{
+            background: open ? 'rgba(45,212,191,0.10)' : Comp ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.03)',
+            border: `1px solid ${open ? 'rgba(45,212,191,0.20)' : 'rgba(255,255,255,0.10)'}`,
+            color: open ? 'rgba(45,212,191,0.70)' : Comp ? 'rgba(255,255,255,0.50)' : 'rgba(255,255,255,0.25)',
+          }}
+        >
+          {open ? 'Fechar' : Comp ? 'Abrir' : 'Em breve'}
+        </span>
+      </button>
+      {open && Comp && (
+        <div
+          className="overflow-hidden rounded-[1rem]"
+          style={{ border: '1px solid rgba(45,212,191,0.12)', height: 'clamp(240px, 50vw, 360px)' }}
+        >
+          <Comp className="h-full w-full" />
+        </div>
+      )}
     </div>
   )
 }
