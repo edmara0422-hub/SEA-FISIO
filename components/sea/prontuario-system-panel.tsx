@@ -2119,25 +2119,18 @@ export function ProntuarioSystemPanel() {
   }
 
   const archiveRecord = (id: string) => {
-    setRecords((prev) => {
-      const target = prev.find((record) => record.id === id)
-      if (!target) return prev
-      setArchive((current) => [{ ...target, updatedAt: nowIso() }, ...current])
-      return prev.filter((record) => record.id !== id)
-    })
-
-    if (selectedId === id) {
-      setSelectedId(null)
-    }
+    const target = records.find((r) => r.id === id)
+    if (!target) return
+    setRecords((prev) => prev.filter((r) => r.id !== id))
+    setArchive((prev) => [{ ...target, updatedAt: nowIso() }, ...prev])
+    if (selectedId === id) setSelectedId(null)
   }
 
   const restoreRecord = (id: string) => {
-    setArchive((prev) => {
-      const target = prev.find((record) => record.id === id)
-      if (!target) return prev
-      setRecords((current) => [{ ...target, updatedAt: nowIso() }, ...current])
-      return prev.filter((record) => record.id !== id)
-    })
+    const target = archive.find((r) => r.id === id)
+    if (!target) return
+    setArchive((prev) => prev.filter((r) => r.id !== id))
+    setRecords((prev) => [{ ...target, updatedAt: nowIso() }, ...prev])
     setView('records')
   }
 
