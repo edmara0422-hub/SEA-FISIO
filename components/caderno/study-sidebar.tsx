@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Bot, Send, Loader2, ScanText, Play, PenLine, TrendingUp, Sparkles,
@@ -181,19 +181,7 @@ export function StudySidebar({
             <motion.div key="review" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }} className="space-y-3">
               <p className="mb-3 text-[9px] uppercase tracking-[0.32em] text-white/28">Vídeos do tópico</p>
               {videoUrls.length > 0 ? (
-                videoUrls.map((v, i) => (
-                  <div key={i} className="space-y-2">
-                    <p className="text-[11px] font-semibold text-white/60">{v.title}</p>
-                    <video
-                      src={v.url}
-                      controls
-                      playsInline
-                      preload="metadata"
-                      className="w-full rounded-[0.9rem]"
-                      style={{ border: '1px solid rgba(255,255,255,0.08)' }}
-                    />
-                  </div>
-                ))
+                videoUrls.map((v, i) => <LazyVideo key={i} title={v.title} url={v.url} />)
               ) : (
                 <p className="text-[12px] leading-relaxed text-white/28">
                   Nenhum vídeo neste tópico ainda.
@@ -271,5 +259,46 @@ function PerformancePanel({ topicId }: { topicId: string }) {
         Marque o tópico como lido no caderno para avançar no progresso.
       </p>
     </>
+  )
+}
+
+// ── Lazy Video ────────────────────────────────────────────────────────────────
+
+function LazyVideo({ title, url }: { title: string; url: string }) {
+  const [open, setOpen] = useState(false)
+
+  return (
+    <div className="space-y-2">
+      <p className="text-[11px] font-semibold text-white/60">{title}</p>
+      {open ? (
+        <video
+          src={url}
+          controls
+          autoPlay
+          playsInline
+          preload="none"
+          className="w-full rounded-[0.9rem]"
+          style={{ border: '1px solid rgba(255,255,255,0.08)' }}
+        />
+      ) : (
+        <button
+          onClick={() => setOpen(true)}
+          className="group relative flex w-full flex-col items-center justify-center gap-2 overflow-hidden rounded-[0.9rem]"
+          style={{
+            background: 'rgba(255,255,255,0.03)',
+            border: '1px solid rgba(255,255,255,0.08)',
+            aspectRatio: '16/9',
+          }}
+        >
+          <div
+            className="flex h-11 w-11 items-center justify-center rounded-full transition-transform group-hover:scale-110"
+            style={{ background: 'rgba(255,255,255,0.12)', border: '1px solid rgba(255,255,255,0.20)' }}
+          >
+            <Play className="h-5 w-5 translate-x-0.5 text-white/80" />
+          </div>
+          <span className="text-[10px] text-white/30">Toque para reproduzir</span>
+        </button>
+      )}
+    </div>
   )
 }

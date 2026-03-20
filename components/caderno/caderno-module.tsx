@@ -189,7 +189,7 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
                         {topic.blocks.length === 0 ? (
                           <SkeletonDocument />
                         ) : (
-                          topic.blocks.map((block) => <CadernoBlock key={block.id} block={block} />)
+                          topic.blocks.filter((b) => b.type !== 'video').map((block) => <CadernoBlock key={block.id} block={block} />)
                         )}
                       </div>
                     </div>
