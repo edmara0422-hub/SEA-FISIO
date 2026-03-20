@@ -1375,10 +1375,10 @@ export function ProntuarioSystemPanel() {
   }, [archive, hydrated, records])
 
   useEffect(() => {
-    if (selectedId && !records.some((record) => record.id === selectedId)) {
+    if (selectedId && !records.some((record) => record.id === selectedId) && !archive.some((record) => record.id === selectedId)) {
       setSelectedId(null)
     }
-  }, [records, selectedId])
+  }, [records, archive, selectedId])
 
   const tabContentRef = useRef<HTMLDivElement>(null)
 
@@ -1387,7 +1387,10 @@ export function ProntuarioSystemPanel() {
     tabContentRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
   }, [activeTab])
 
-  const currentRecord = records.find((record) => record.id === selectedId) ?? null
+  const currentRecord = records.find((record) => record.id === selectedId)
+    ?? archive.find((record) => record.id === selectedId)
+    ?? null
+  const isViewingArchived = currentRecord ? archive.some((r) => r.id === currentRecord.id) : false
 
   const recordBadges = useMemo(() => {
     const viaCounts = {
