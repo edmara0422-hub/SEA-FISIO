@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Sparkles, Clock } from 'lucide-react'
+import { Sparkles, Clock, ChevronDown, Brain } from 'lucide-react'
 import { CADERNO_CONTENT } from '@/data/caderno-content'
 import { useCadernoStore } from '@/lib/stores/cadernoStore'
 import { CadernoBlock } from '@/components/caderno/caderno-block'
@@ -15,6 +15,7 @@ type SidebarTool = 'summary' | 'tutor' | 'review' | 'notes' | 'performance'
 export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
   const module = CADERNO_CONTENT.find((m) => m.moduleId === moduleId)
 
+  const [openTopicId, setOpenTopicId]               = useState<string | null>(null)
   const [activeTopicId, setActiveTopicId]         = useState<string>('')
   const [activeSidebarTool, setActiveSidebarTool] = useState<SidebarTool>('summary')
   const [tutorHistory, setTutorHistory]           = useState<Record<string, TutorMessage[]>>({})
