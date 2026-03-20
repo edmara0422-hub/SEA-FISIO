@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState, useEffect, useCallback } from 'react'
 import { motion } from 'framer-motion'
-import { Play, FileText, Cpu, Paperclip, ListChecks } from 'lucide-react'
+import { Play, FileText, Cpu, Paperclip, ListChecks, ChevronLeft, ChevronRight, Layers } from 'lucide-react'
 import type { ContentBlock } from '@/types/caderno'
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
@@ -11,6 +11,7 @@ export function CadernoBlock({ block }: { block: ContentBlock }) {
   if (block.type === 'video')      return <VideoBlock block={block} />
   if (block.type === 'simulation') return <SimulationBlock block={block} />
   if (block.type === 'attachment') return <AttachmentBlock block={block} />
+  if (block.type === 'slides')     return <SlidesBlock block={block} />
   return null
 }
 
@@ -171,5 +172,128 @@ function AttachmentBlock({ block }: { block: Extract<ContentBlock, { type: 'atta
         <p className="text-[10px] uppercase text-white/30">{block.fileType}</p>
       </div>
     </a>
+  )
+}
+
+// ── Slides ────────────────────────────────────────────────────────────────────
+
+function SlidesBlock({ block }: { block: Extract<ContentBlock, { type: 'slides' }> }) {
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const [current, setCurrent] = useState(0)
+  const total = block.slides.length
+
+  const syncIndex = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const idx = Math.round(el.scrollLeft / el.clientWidth)
+    setCurrent(Math.min(idx, total - 1))
+  }, [total])
+
+  useEffect(() => {
+    const el = scrollRef.current
+    if (!el) return
+    el.addEventListener('scrollend', syncIndex)
+    el.addEventListener('scroll', syncIndex)
+    return () => { el.removeEventListener('scrollend', syncIndex); el.removeEventListener('scroll', syncIndex) }
+  }, [syncIndex])
+
+  const go = (dir: -1 | 1) => {
+    const el = scrollRef.current
+    if (!el) return
+    const next = Math.max(0, Math.min(current + dir, total - 1))
+    el.scrollTo({ left: next * el.clientWidth, behavior: 'smooth' })
+    setCurrent(next)
+  }
+
+  return (
+    <div className="space-y-2">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Layers className="h-3.5 w-3.5 shrink-0 text-white/30" />
+          <h4 className="text-[12px] font-semibold text-white/70">{block.title}</h4>
+        </div>
+        <span className="text-[9px] font-mono tabular-nums text-white/30">
+          {current + 1}/{total}
+        </span>
+      </div>
+
+      {/* Carousel */}
+      <div className="relative">
+        <div
+          ref={scrollRef}
+          className="flex snap-x snap-mandatory overflow-x-auto scrollbar-none"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {block.slides.map((slide, i) => (
+            <div
+              key={i}
+              className="min-w-full snap-center px-1"
+            >
+              <div
+                className="rounded-[1.2rem] p-4"
+                style={{
+                  background: 'rgba(255,255,255,0.025)',
+                  border: '1px solid rgba(255,255,255,0.07)',
+                  minHeight: '10rem',
+                }}
+              >
+                <p className="mb-3 text-[11px] font-bold uppercase tracking-[0.18em] text-white/60">
+                  {slide.title}
+                </p>
+                <ul className="space-y-1.5">
+                  {slide.bullets.map((b, j) => (
+                    <li key={j} className="flex items-start gap-2">
+                      <span className="mt-1.5 h-1 w-1 shrink-0 rounded-full bg-white/25" />
+                      <span className="text-[11px] leading-relaxed text-white/55">{b}</span>
+                    </li>
+                  ))}
+                </ul>
+                {slide.highlight && (
+                  <div
+                    className="mt-3 rounded-[0.7rem] px-3 py-2"
+                    style={{ background: 'rgba(45,212,191,0.06)', border: '1px solid rgba(45,212,191,0.14)' }}
+                  >
+                    <p className="text-[10px] italic leading-relaxed text-teal-300/70">{slide.highlight}</p>
+                  </div>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Nav arrows */}
+        {current > 0 && (
+          <button
+            onClick={() => go(-1)}
+            className="absolute left-1 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full border border-white/12 bg-black/60 text-white/60 backdrop-blur-sm"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </button>
+        )}
+        {current < total - 1 && (
+          <button
+            onClick={() => go(1)}
+            className="absolute right-1 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full border border-white/12 bg-black/60 text-white/60 backdrop-blur-sm"
+          >
+            <ChevronRight className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Dots */}
+      <div className="flex justify-center gap-1">
+        {block.slides.map((_, i) => (
+          <div
+            key={i}
+            className="h-1 rounded-full transition-all duration-200"
+            style={{
+              width: i === current ? '12px' : '4px',
+              background: i === current ? 'rgba(45,212,191,0.70)' : 'rgba(255,255,255,0.15)',
+            }}
+          />
+        ))}
+      </div>
+    </div>
   )
 }
