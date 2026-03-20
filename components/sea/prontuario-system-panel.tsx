@@ -2305,24 +2305,24 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="flex flex-wrap gap-2">
+                <div className="flex items-center justify-center gap-1.5">
                   {isViewingArchived ? (
                     <>
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#facc1530] bg-[#facc150d] px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.14em] text-[#fde68a]">
+                      <span className="inline-flex items-center gap-1 rounded-[0.7rem] border border-[#facc1530] bg-[#facc150d] px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.10em] text-[#fde68a]">
                         <Archive className="h-3 w-3" /> Arquivado
                       </span>
                       <button
                         onClick={() => { restoreRecord(currentRecord.id); setSelectedId(currentRecord.id) }}
-                        className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                        className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.10em] text-white/72"
                       >
-                        <RotateCcw className="h-4 w-4" />
+                        <RotateCcw className="h-3 w-3" />
                         Restaurar
                       </button>
                       <button
                         onClick={() => { deletePermanently(currentRecord.id); setSelectedId(null) }}
-                        className="inline-flex items-center gap-2 rounded-[1rem] border border-[#f8717130] bg-[#f8717110] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fca5a5]"
+                        className="inline-flex items-center gap-1 rounded-[0.7rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.10em] text-[#fca5a5]"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-3 w-3" />
                         Apagar
                       </button>
                     </>
@@ -2330,23 +2330,23 @@ export function ProntuarioSystemPanel() {
                     <>
                       <button
                         onClick={saveAndClose}
-                        className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                        className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.10em] text-white/72"
                       >
-                        <Save className="h-4 w-4" />
+                        <Save className="h-3 w-3" />
                         Salvar
                       </button>
                       <button
                         onClick={() => archiveRecord(currentRecord.id)}
-                        className="inline-flex items-center gap-2 rounded-[1rem] border border-[#facc1530] bg-[#facc150d] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fde68a]"
+                        className="inline-flex items-center gap-1 rounded-[0.7rem] border border-[#facc1530] bg-[#facc150d] px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.10em] text-[#fde68a]"
                       >
-                        <Archive className="h-4 w-4" />
+                        <Archive className="h-3 w-3" />
                         Arquivar
                       </button>
                       <button
                         onClick={() => deleteActiveRecord(currentRecord.id)}
-                        className="inline-flex items-center gap-2 rounded-[1rem] border border-[#f8717130] bg-[#f8717110] px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#fca5a5]"
+                        className="inline-flex items-center gap-1 rounded-[0.7rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.10em] text-[#fca5a5]"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-3 w-3" />
                         Apagar
                       </button>
                     </>
