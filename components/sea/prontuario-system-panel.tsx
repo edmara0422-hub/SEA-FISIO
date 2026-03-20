@@ -2174,7 +2174,7 @@ export function ProntuarioSystemPanel() {
 
   return (
     <div className="space-y-5">
-      <div className="chrome-board rounded-[1.8rem] p-5 md:p-6">
+      <div className="chrome-board rounded-[1.8rem] p-3 md:p-6">
         <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
             <div className="chrome-subtle flex h-14 w-14 items-center justify-center rounded-[1.2rem]">
@@ -2285,7 +2285,7 @@ export function ProntuarioSystemPanel() {
           </div>
         ) : currentRecord ? (
           <div className="space-y-5">
-            <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+            <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3">
                   <button
@@ -2347,7 +2347,7 @@ export function ProntuarioSystemPanel() {
             <div ref={tabContentRef} />
             {activeTab === 'dados' ? (
               <div className="space-y-5">
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                       Identificacao / Antropometria
@@ -2517,7 +2517,7 @@ export function ProntuarioSystemPanel() {
 
                 <div className="grid gap-5 xl:grid-cols-[1.1fr_0.9fr]">
                   <div className="space-y-5">
-                    <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                    <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                       <div className="space-y-4">
                         <FieldShell label="Historia clinica">
                           <AutoGrowTextarea
@@ -2536,7 +2536,7 @@ export function ProntuarioSystemPanel() {
                       </div>
                     </div>
 
-                    <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                    <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                       <div className="mb-4 flex items-center justify-between gap-3">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">Laboratorio</p>
                         <button
@@ -2632,7 +2632,7 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   <div className="space-y-5">
-                    <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                    <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                       <div className="mb-4 flex items-center justify-between gap-3">
                         <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">Exames de imagem</p>
                         <button
@@ -2722,7 +2722,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'neuro' ? (
               <div className="space-y-5">
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Avaliacao neurologica
                   </p>
@@ -2772,7 +2772,7 @@ export function ProntuarioSystemPanel() {
                 </div>
 
                 <div className="grid gap-5 xl:grid-cols-2">
-                  <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                     <div className="mb-4 flex items-center justify-between gap-3">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">Sedativos</p>
                       <button
@@ -2834,7 +2834,7 @@ export function ProntuarioSystemPanel() {
                     </div>
                   </div>
 
-                  <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                     <div className="mb-4 flex items-center justify-between gap-3">
                       <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">BNM</p>
                       <button
@@ -2897,7 +2897,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <FieldShell label="Observacoes neurologicas">
                     <AutoGrowTextarea
                       value={currentRecord.neurologico}
@@ -2911,7 +2911,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'cardio' ? (
               <div className="space-y-5">
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Hemodinamica / DVA
                   </p>
@@ -2952,7 +2952,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">Drogas vasoativas</p>
                     <button
@@ -3014,7 +3014,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <FieldShell label="Avaliacao cardiovascular">
                     <AutoGrowTextarea
                       value={currentRecord.cardiovascular}
@@ -3028,7 +3028,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'resp' ? (
               <div className="space-y-5">
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Via aerea / avaliacao pulmonar / secrecao
                   </p>
@@ -3084,7 +3084,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Eventos de via aerea
                   </p>
@@ -3158,7 +3158,7 @@ export function ProntuarioSystemPanel() {
                   )}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Gasometria
                   </p>
@@ -3362,7 +3362,7 @@ export function ProntuarioSystemPanel() {
                 ) : null}
 
                 {currentRecord.gasometrias?.length ? (
-                  <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                     <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                       Historico de gasometria · {currentRecord.gasometrias.length}
                     </p>
@@ -3405,7 +3405,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 ) : null}
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Ventilacao mecanica
                   </p>
@@ -3934,7 +3934,7 @@ export function ProntuarioSystemPanel() {
                 )}
 
                 {currentRecord.vmHist?.length ? (
-                  <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                  <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                     <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                       Historico VM · {currentRecord.vmHist.length}
                     </p>
@@ -3975,7 +3975,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 ) : null}
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <button
                     type="button"
                     onClick={() => setCollapsedPeep((v) => !v)}
@@ -4054,7 +4054,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <div className="flex items-center justify-between gap-2">
                     <button
                       type="button"
@@ -4184,7 +4184,7 @@ export function ProntuarioSystemPanel() {
                   const phaseDone = (p: number) => activePhase > p
 
                   return (
-                    <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                    <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                       {/* Header */}
                       <div className="mb-3 flex items-center justify-center gap-2 flex-wrap">
                         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Parametros de Desmame</p>
@@ -4328,7 +4328,7 @@ export function ProntuarioSystemPanel() {
                   )
                 })()}
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Protocolo VM especifico
                   </p>
@@ -4388,7 +4388,7 @@ export function ProntuarioSystemPanel() {
                   ) : null}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <button
                     type="button"
                     onClick={() => setCollapsedProna((v) => !v)}
@@ -4614,7 +4614,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'motora' ? (
               <div className="space-y-5">
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <FieldShell label="Avaliacao motora / funcional">
                     <AutoGrowTextarea
                       value={currentRecord.motora}
@@ -4624,7 +4624,7 @@ export function ProntuarioSystemPanel() {
                   </FieldShell>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">MRC</p>
                     <div className="flex items-center gap-2">
@@ -4690,7 +4690,7 @@ export function ProntuarioSystemPanel() {
                   )}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">PERME</p>
                     <div className="flex items-center gap-2">
@@ -4746,7 +4746,7 @@ export function ProntuarioSystemPanel() {
                   )}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-4">
+                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">IMS</p>
                     <div className="flex items-center gap-2">
@@ -4803,7 +4803,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'percepcao' ? (
               <div className="space-y-5">
-                <div className="chrome-panel rounded-[1.5rem] p-4 md:p-5">
+                <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <div className="space-y-4">
                     <FieldShell label="Percepcao do plantao">
                       <AutoGrowTextarea

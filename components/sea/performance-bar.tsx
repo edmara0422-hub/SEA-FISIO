@@ -130,7 +130,7 @@ export function PerformanceBar() {
       C 34 ${110 - fidelity * 0.4}, 58 ${102 - nps * 0.35}, 88 ${100 - fidelity * 0.25}
       S 150 ${88 - responses * 0.18}, 188 ${82 - structured * 0.16}
       S 250 ${76 - fidelity * 0.14}, 290 ${66 - nps * 0.12}
-      S 354 ${70 - responses * 0.1}, 420 ${58 - fidelity * 0.08}`
+      S 354 ${70 - responses * 0.1}, 414 ${58 - fidelity * 0.08}`
   }, [state.fidelity, state.mode, state.nps, state.responses, state.structured])
 
   return (
@@ -219,7 +219,7 @@ export function PerformanceBar() {
                 <span>{state.mode === 'clean' ? 'Standby' : 'Realtime'}</span>
               </div>
 
-              <svg viewBox="0 0 420 140" className="relative h-40 w-full">
+              <svg viewBox="-2 -8 432 156" className="relative h-40 w-full overflow-visible">
                 <defs>
                   <linearGradient id="dashStroke" x1="0%" y1="0%" x2="100%" y2="0%">
                     <stop offset="0%"   stopColor="rgba(45,212,191,0.30)" />
@@ -233,7 +233,7 @@ export function PerformanceBar() {
                 </defs>
 
                 <path
-                  d={`${pulsePath} L 420 140 L 0 140 Z`}
+                  d={`${pulsePath} L 414 140 L 0 140 Z`}
                   fill="url(#dashFill)"
                   opacity="0.7"
                 />
@@ -246,14 +246,14 @@ export function PerformanceBar() {
                   strokeLinejoin="round"
                 />
                 <motion.circle
-                  cx="420"
+                  cx="414"
                   cy={finalPulseY}
                   r="5.5"
                   fill="rgba(45,212,191,1)"
                   initial={{ opacity: 0.45, scale: 0.9 }}
                   animate={{ opacity: [0.42, 1, 0.42], scale: [0.9, 1.18, 0.9] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-                  style={{ transformOrigin: `420px ${finalPulseY}px` }}
+                  style={{ transformOrigin: `414px ${finalPulseY}px` }}
                 />
                 {[72, 164, 256, 348].map((x) => (
                   <line
