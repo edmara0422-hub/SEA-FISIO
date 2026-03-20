@@ -396,6 +396,59 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
+            id: 'M1-T2-sim-tube',
+            type: 'simulation',
+            title: 'Formação do Tubo Neural',
+            simulationId: 'neuro-tube',
+            description: 'Animação: placa neural → sulco → tubo → crista neural migrando',
+          },
+          {
+            id: 'M1-T2-sim-synapse',
+            type: 'simulation',
+            title: 'Densidade Sináptica ao Longo da Vida',
+            simulationId: 'neuro-synapse-timeline',
+            description: 'Gráfico interativo: sinaptogênese → poda → mielinização → estabilidade',
+          },
+          {
+            id: 'M1-T2-slides-periodos',
+            type: 'slides',
+            title: 'Períodos Críticos e Relevância Clínica',
+            slides: [
+              {
+                title: 'Períodos Críticos / Sensíveis',
+                bullets: [
+                  'Janelas temporais em que o cérebro é maximamente responsivo a estímulos específicos',
+                  'Visão binocular: primeiros 2 anos — privação causa ambliopia irreversível',
+                  'Linguagem: pico até 5–7 anos — após essa janela, aquisição é muito mais difícil',
+                  'Motricidade fina: moldada nos primeiros anos por interação sensório-motora',
+                  'Após o período crítico, o circuito se estabiliza — a plasticidade diminui drasticamente',
+                ],
+                highlight: 'O que não é estimulado na janela certa pode não se desenvolver plenamente.',
+              },
+              {
+                title: 'Falhas no Neurodesenvolvimento',
+                bullets: [
+                  'Defeitos de fechamento do tubo neural → anencefalia, espinha bífida',
+                  'Falha na migração neuronal → lissencefalia (córtex liso, sem giros)',
+                  'Déficit na poda sináptica → implicado no Transtorno do Espectro Autista',
+                  'Mielinização incompleta → disfunção executiva, TDAH',
+                  'Lesão perinatal → paralisia cerebral (PC), alvo central da fisioterapia neuropediátrica',
+                ],
+              },
+              {
+                title: 'Relevância para Fisioterapia',
+                bullets: [
+                  'Intervenção precoce aproveita janelas de plasticidade máxima',
+                  'Estimulação sensório-motora guiada pode redirecionar circuitos em formação',
+                  'Na PC, a fisioterapia trabalha com o que o neurodesenvolvimento preservou',
+                  'Conhecer a timeline é essencial para definir metas realistas de reabilitação',
+                  'O cérebro infantil é plástico mas não infinitamente — timing importa',
+                ],
+                highlight: 'Compreender o neurodesenvolvimento é a base para toda intervenção neurológica precoce.',
+              },
+            ],
+          },
+          {
             id: 'M1-T2-slides-marcos',
             type: 'slides',
             title: 'Marcos Pós-Natais',

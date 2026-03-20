@@ -8,10 +8,14 @@ import type { ContentBlock } from '@/types/caderno'
 
 const NeuroPumpSim = dynamic(() => import('@/components/experience/neuro-pump-sim').then(m => m.NeuroPumpSim), { ssr: false })
 const NeuroActionPotentialSim = dynamic(() => import('@/components/experience/neuro-action-potential-sim').then(m => m.NeuroActionPotentialSim), { ssr: false })
+const NeuroTubeSim = dynamic(() => import('@/components/experience/neuro-tube-sim').then(m => m.NeuroTubeSim), { ssr: false })
+const NeuroSynapseTimelineSim = dynamic(() => import('@/components/experience/neuro-synapse-timeline-sim').then(m => m.NeuroSynapseTimelineSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
   'neuro-action-potential': NeuroActionPotentialSim,
+  'neuro-tube': NeuroTubeSim,
+  'neuro-synapse-timeline': NeuroSynapseTimelineSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
