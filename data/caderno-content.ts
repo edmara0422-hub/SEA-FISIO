@@ -205,6 +205,214 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M1-T2',
+        title: 'Neurodesenvolvimento',
+        blocks: [
+          {
+            id: 'M1-T2-slides-intro',
+            type: 'slides',
+            title: 'Decisões Moleculares que Constroem o Cérebro',
+            slides: [
+              {
+                title: 'O que é Neurodesenvolvimento',
+                bullets: [
+                  'Processo de formação e maturação do SN, da 3ª semana de gestação até o início da vida adulta',
+                  'Não é crescimento passivo nem proliferação desordenada',
+                  'Coreografia molecular rigorosamente orquestrada',
+                  'Transforma uma camada de células ectodérmicas em ~86 bilhões de neurônios + número equivalente de glia',
+                  'Interconectados por trilhões de sinapses',
+                ],
+                highlight: 'O neurodesenvolvimento é uma sequência de decisões moleculares que transformam uma única camada de células no órgão mais complexo do universo conhecido.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T2-slides-neurulacao',
+            type: 'slides',
+            title: 'Indução e Neurulação (Semanas 3–4)',
+            slides: [
+              {
+                title: 'O Sinalizador',
+                bullets: [
+                  'Após fecundação e formação do disco embrionário, o SN começa a ser "escrito"',
+                  'A notocorda (bastão de células mesodérmicas) libera Sonic Hedgehog (SHH)',
+                  'SHH inibe a BMP-4, forçando o ectoderma a se diferenciar',
+                ],
+              },
+              {
+                title: 'Placa → Tubo → Crista',
+                bullets: [
+                  'O sinal força o ectoderma a se espessar → Placa Neural',
+                  'A placa se dobra em sulco que se fecha → Tubo Neural (futuro SNC)',
+                  'Células nas bordas formam a Crista Neural → migram para criar o SNP (nervos e gânglios)',
+                ],
+                highlight: 'Semanas 3–4: o primeiro corte irreversível — define encéfalo, medula e hierarquia estrutural.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T2-slides-vesiculas',
+            type: 'slides',
+            title: 'Arquitetura das Vesículas (Semanas 4–6)',
+            slides: [
+              {
+                title: 'De 3 para 5 Vesículas',
+                bullets: [
+                  'O tubo neural não cresce por igual — a parte frontal se expande em 3 vesículas primárias',
+                  'Que se subdividem em 5 vesículas secundárias',
+                ],
+              },
+              {
+                title: 'As 5 Vesículas',
+                bullets: [
+                  'Telencéfalo — hemisférios cerebrais e córtex',
+                  'Diencéfalo — tálamo e hipotálamo (comando hormonal)',
+                  'Mesencéfalo — reflexos visuais e auditivos',
+                  'Metencéfalo — ponte e cerebelo (equilíbrio e coordenação)',
+                  'Mielencéfalo — bulbo (respiração e batimentos cardíacos)',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M1-T2-slides-proliferacao',
+            type: 'slides',
+            title: 'Proliferação e Migração',
+            slides: [
+              {
+                title: 'A Explosão Celular',
+                bullets: [
+                  '250.000 neurônios fabricados por minuto no pico da neurogênese',
+                  'Produz muito mais neurônios que o necessário',
+                  '30–70% morrem por apoptose (morte celular programada)',
+                  'Falha em receber fatores tróficos = morte celular',
+                ],
+                highlight: 'Seleção, não expansão — o cérebro elimina o que não é necessário.',
+              },
+              {
+                title: 'Migração via Glia Radial',
+                bullets: [
+                  'Glia radial funciona como "andaime" ou trilho para neurônios recém-nascidos',
+                  'Neurônios escalam as fibras gliais para chegar ao topo do córtex',
+                  'Formação de camadas de dentro para fora (inside-out)',
+                  'Se o "trilho" falha → malformações corticais graves',
+                ],
+                highlight: 'Erro = camada errada, função errada. Arquitetura define função.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T2-slides-conectividade',
+            type: 'slides',
+            title: 'Conectividade e Refinamento',
+            slides: [
+              {
+                title: 'Sinaptogênese (0–3 anos)',
+                bullets: [
+                  'Criação de trilhões de sinapses entre neurônios',
+                  '10.000+ sinapses por neurônio',
+                  'Fase exploratória: alta instabilidade e custo energético',
+                  'Liberdade alta + custo alto',
+                ],
+              },
+              {
+                title: 'Poda Sináptica (3–10 anos)',
+                bullets: [
+                  'O cérebro produz conexões em excesso e depois "corta" as não usadas',
+                  '≈70% das sinapses são eliminadas',
+                  'Competição por atividade e metabolismo',
+                  'Microglia marca e elimina sinapses fracas',
+                  'No autismo, acredita-se em falha nesse processo de limpeza',
+                ],
+                highlight: 'Eficiência sobre quantidade — esculpido por células imunes.',
+              },
+              {
+                title: 'Mielinização (20–25 anos)',
+                bullets: [
+                  'Neurônios encapados com mielina (gordura isolante)',
+                  'Células de Schwann (SNP) e Oligodendrócitos (SNC) envolvem axônios',
+                  'Acelera condução saltatória em até 100x',
+                  'Reduz custo energético por sinal',
+                  'Última área: córtex pré-frontal (julgamento e controle de impulsos)',
+                  'Explica a impulsividade na adolescência',
+                ],
+                highlight: 'Regime de eficiência vs. flexibilidade — mielina reduz plasticidade.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T2-slides-timeline',
+            type: 'slides',
+            title: 'Linha do Tempo Completa',
+            slides: [
+              {
+                title: 'Tubo Neural (3ª–4ª semana)',
+                bullets: [
+                  'Define encéfalo e medula',
+                  'Estabelece eixos rostro-caudal e dorso-ventral',
+                  'Cria hierarquia estrutural',
+                ],
+                highlight: 'Arquitetura antes da experiência.',
+              },
+              {
+                title: 'Neurogênese & Apoptose (2º trimestre)',
+                bullets: [
+                  'Produção massiva e eliminação seletiva de neurônios',
+                  'Produz muito mais que necessário',
+                  '30–70% morrem por apoptose',
+                  'Falha em receber fatores tróficos = morte',
+                ],
+                highlight: 'Seleção, não expansão.',
+              },
+              {
+                title: 'Sinaptogênese → Poda (0–10 anos)',
+                bullets: [
+                  'Trilhões de sinapses formadas (0–3 anos)',
+                  'Alta instabilidade e custo energético',
+                  'Eliminação de sinapses fracas pela microglia (3–10 anos)',
+                ],
+              },
+              {
+                title: 'Adolescência (11–20 anos)',
+                bullets: [
+                  'Maturação descompassada: emoção vs. razão',
+                  'Sistema límbico hiper-reativo',
+                  'Pré-frontal ainda maturando',
+                  'Pertencimento social = prioridade biológica',
+                ],
+                highlight: 'Emoção > razão (adaptativo, não defeito).',
+              },
+              {
+                title: 'Mielinização → Adulto (20–25+ anos)',
+                bullets: [
+                  'Otimização de circuitos pré-frontais pela bainha de mielina',
+                  'Circuitos estabilizados — mudança exige mais energia',
+                  'Identidade = circuito vencedor',
+                  'Alta eficiência, baixo ruído, alto custo de mudança',
+                ],
+                highlight: 'Estabilidade sináptica.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T2-slides-marcos',
+            type: 'slides',
+            title: 'Marcos Pós-Natais',
+            slides: [
+              {
+                title: 'Desenvolvimento Motor',
+                bullets: [
+                  'Ao nascer: reflexos primitivos (sucção, marcha reflexa)',
+                  'Reflexos devem desaparecer para dar lugar a movimentos voluntários',
+                  'Direção céfalo-caudal: da cabeça para os pés',
+                  'Direção próximo-distal: do centro para as pontas',
+                ],
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
