@@ -169,13 +169,6 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             simulationId: 'neuro-action-potential',
             description: 'Gráfico interativo das fases: repouso → despolarização → repolarização',
           },
-          {
-            id: 'M1-T1-video',
-            type: 'video',
-            title: 'O Organismo e o Sistema Nervoso',
-            url: '',
-            duration: '',
-          },
         ],
       },
     ],

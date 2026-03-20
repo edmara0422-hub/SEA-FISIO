@@ -93,66 +93,112 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
     }
   }
 
-  return (
-    <div className="flex flex-col gap-4">
+  function openTopic(id: string) {
+    const isOpen = openTopicId === id
+    setOpenTopicId(isOpen ? null : id)
+    if (!isOpen) { setActiveTopicId(id); setActiveSidebarTool('summary') }
+  }
 
-      {/* Topic tabs — só quando há mais de 1 tópico */}
-      {module.topics.length > 1 && (
-        <div className="flex gap-1.5 overflow-x-auto pb-0.5">
-          {module.topics.map((topic, i) => {
-            const active = topic.id === resolvedTopicId
-            return (
-              <button
-                key={topic.id}
-                onClick={() => { setActiveTopicId(topic.id); setActiveSidebarTool('summary') }}
-                className="flex shrink-0 items-center gap-2 rounded-full px-3.5 py-1.5 transition-all"
+  return (
+    <div className="flex flex-col gap-3">
+      {module.topics.map((topic, i) => {
+        const isOpen = openTopicId === topic.id
+        const slideCount = topic.blocks.reduce((n, b) => n + (b.type === 'slides' ? b.slides.length : 0), 0)
+        const simCount = topic.blocks.filter((b) => b.type === 'simulation').length
+
+        return (
+          <div key={topic.id}>
+            {/* ── Card fechado ── */}
+            <button
+              onClick={() => openTopic(topic.id)}
+              className="flex w-full items-center gap-3 rounded-[1.3rem] px-4 py-3.5 text-left transition-all"
+              style={{
+                border: `1px solid ${isOpen ? 'rgba(45,212,191,0.20)' : 'rgba(255,255,255,0.08)'}`,
+                background: isOpen
+                  ? 'linear-gradient(160deg, rgba(45,212,191,0.04) 0%, rgba(0,0,0,0) 100%)'
+                  : 'rgba(255,255,255,0.025)',
+              }}
+            >
+              {/* Número */}
+              <span
+                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.6rem] font-mono text-[10px] font-bold"
                 style={{
-                  background: active ? 'rgba(255,255,255,0.09)' : 'rgba(255,255,255,0.03)',
-                  border: `1px solid ${active ? 'rgba(255,255,255,0.14)' : 'rgba(255,255,255,0.06)'}`,
-                  color: active ? 'rgba(255,255,255,0.84)' : 'rgba(255,255,255,0.36)',
+                  background: isOpen ? 'rgba(45,212,191,0.14)' : 'rgba(255,255,255,0.06)',
+                  color: isOpen ? 'rgba(45,212,191,0.85)' : 'rgba(255,255,255,0.40)',
+                  border: `1px solid ${isOpen ? 'rgba(45,212,191,0.24)' : 'rgba(255,255,255,0.08)'}`,
                 }}
               >
-                <span className="font-mono text-[8px] font-bold tracking-[0.14em]">
-                  {String(i + 1).padStart(2, '0')}
-                </span>
-                <span className="text-[10px] font-semibold">{topic.title}</span>
-              </button>
-            )
-          })}
-        </div>
-      )}
+                {String(i + 1).padStart(2, '0')}
+              </span>
 
-      {/* Main layout: sidebar primeiro no mobile, documento em xl */}
-      <div className="grid gap-5 xl:grid-cols-[1fr_256px]">
+              {/* Info */}
+              <div className="min-w-0 flex-1">
+                <p className="text-[8px] font-semibold uppercase tracking-[0.22em]" style={{ color: isOpen ? 'rgba(45,212,191,0.60)' : 'rgba(255,255,255,0.28)' }}>
+                  {moduleId} Neuro
+                </p>
+                <p className="truncate text-[12px] font-semibold" style={{ color: isOpen ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.65)' }}>
+                  {topic.title}
+                </p>
+                {!isOpen && (
+                  <p className="mt-0.5 text-[9px] text-white/25">
+                    {slideCount ? `${slideCount} slides` : ''}
+                    {simCount ? ` · ${simCount} simulações` : ''}
+                    {topic.blocks.some((b) => b.type === 'video') ? ' · vídeo' : ''}
+                  </p>
+                )}
+              </div>
 
-        {/* Sidebar — order-1 mobile, order-2 desktop */}
-        <div className="order-1 xl:order-2">
-          <StudySidebar
-            topicId={resolvedTopicId}
-            topicTitle={activeTopic.title}
-            moduleId={moduleId}
-            activeTool={activeSidebarTool}
-            onToolChange={setActiveSidebarTool}
-            tutorHistory={tutorHistory[resolvedTopicId] ?? []}
-            onTutorHistoryChange={(msgs) => setTutorHistory((h) => ({ ...h, [resolvedTopicId]: msgs }))}
-            tutorInput={tutorInput}
-            onTutorInputChange={setTutorInput}
-            isTutorLoading={isTutorLoading}
-            onSendTutor={(q) => handleAskTutor(q)}
-          />
-        </div>
+              {/* Arrow */}
+              <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.2 }}>
+                <ChevronDown className="h-4 w-4" style={{ color: isOpen ? 'rgba(45,212,191,0.60)' : 'rgba(255,255,255,0.25)' }} />
+              </motion.div>
+            </button>
 
-        {/* Caderno — só visível em sumário e IA tutor, sem card wrapper */}
-        <div className={(activeSidebarTool === 'summary' || activeSidebarTool === 'tutor') ? 'order-2 xl:order-1 space-y-8 min-w-0' : 'hidden'}>
-          {activeTopic.blocks.length === 0 ? (
-            <SkeletonDocument />
-          ) : (
-            activeTopic.blocks.map((block) => <CadernoBlock key={block.id} block={block} />)
-          )}
-        </div>
-      </div>
+            {/* ── Conteúdo expandido ── */}
+            <AnimatePresence>
+              {isOpen && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                  className="overflow-hidden"
+                >
+                  <div className="mt-3 space-y-5">
+                    {/* Main layout: sidebar + content */}
+                    <div className="grid gap-5 xl:grid-cols-[1fr_256px]">
+                      <div className="order-1 xl:order-2">
+                        <StudySidebar
+                          topicId={topic.id}
+                          topicTitle={topic.title}
+                          moduleId={moduleId}
+                          activeTool={activeSidebarTool}
+                          onToolChange={setActiveSidebarTool}
+                          tutorHistory={tutorHistory[topic.id] ?? []}
+                          onTutorHistoryChange={(msgs) => setTutorHistory((h) => ({ ...h, [topic.id]: msgs }))}
+                          tutorInput={tutorInput}
+                          onTutorInputChange={setTutorInput}
+                          isTutorLoading={isTutorLoading}
+                          onSendTutor={(q) => handleAskTutor(q)}
+                        />
+                      </div>
+                      <div className={(activeSidebarTool === 'summary' || activeSidebarTool === 'tutor') ? 'order-2 xl:order-1 space-y-8 min-w-0' : 'hidden'}>
+                        {topic.blocks.length === 0 ? (
+                          <SkeletonDocument />
+                        ) : (
+                          topic.blocks.map((block) => <CadernoBlock key={block.id} block={block} />)
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        )
+      })}
 
-      {/* Floating popup — Portal para escapar de transforms do Framer Motion */}
+      {/* Floating popup */}
       {selectionPopup && typeof document !== 'undefined' && createPortal(
         <AnimatePresence>
           <motion.button
