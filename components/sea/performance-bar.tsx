@@ -47,26 +47,26 @@ export function PerformanceBar() {
       {
         label: 'Detratores',
         value: state.detractors,
-        fill: 'linear-gradient(180deg, rgba(255,80,80,0.90) 0%, rgba(200,30,30,0.55) 50%, rgba(120,10,10,0.20) 100%)',
-        glow: 'rgba(255,60,60,0.28)',
-        accent: 'rgba(255,100,100,0.70)',
-        border: 'rgba(255,80,80,0.22)',
+        fill: 'linear-gradient(180deg, rgba(251,113,133,0.90) 0%, rgba(190,50,60,0.55) 50%, rgba(100,20,30,0.20) 100%)',
+        glow: 'rgba(251,113,133,0.28)',
+        accent: 'rgba(255,140,150,0.75)',
+        border: 'rgba(251,113,133,0.22)',
       },
       {
         label: 'Neutros',
         value: state.neutral,
-        fill: 'linear-gradient(180deg, rgba(255,200,60,0.90) 0%, rgba(200,140,20,0.55) 50%, rgba(120,80,10,0.20) 100%)',
-        glow: 'rgba(255,190,40,0.25)',
-        accent: 'rgba(255,210,80,0.70)',
-        border: 'rgba(255,200,60,0.22)',
+        fill: 'linear-gradient(180deg, rgba(250,204,21,0.90) 0%, rgba(200,160,10,0.55) 50%, rgba(120,90,5,0.20) 100%)',
+        glow: 'rgba(250,204,21,0.25)',
+        accent: 'rgba(253,224,71,0.75)',
+        border: 'rgba(250,204,21,0.22)',
       },
       {
         label: 'Promotores',
         value: state.promoters,
-        fill: 'linear-gradient(180deg, rgba(60,220,140,0.90) 0%, rgba(20,170,90,0.55) 50%, rgba(10,90,40,0.20) 100%)',
-        glow: 'rgba(40,210,120,0.28)',
-        accent: 'rgba(80,230,160,0.70)',
-        border: 'rgba(60,220,140,0.22)',
+        fill: 'linear-gradient(180deg, rgba(45,212,191,0.90) 0%, rgba(20,160,140,0.55) 50%, rgba(10,80,70,0.20) 100%)',
+        glow: 'rgba(45,212,191,0.28)',
+        accent: 'rgba(94,234,212,0.75)',
+        border: 'rgba(45,212,191,0.22)',
       },
     ],
     [state.detractors, state.neutral, state.promoters]
@@ -151,11 +151,11 @@ export function PerformanceBar() {
             <div className="sea-dark-glass flex h-12 w-12 items-center justify-center rounded-[1.1rem] border border-white/12">
               <Activity className="h-5 w-5 text-white/76" />
             </div>
-            <div className="flex flex-wrap gap-2">
-              <ActionButton icon={Sparkles} label="Modo demo" onClick={activateDemo} />
-              <ActionButton icon={BarChart3} label="Calcular" onClick={calculateMetrics} />
-              <ActionButton icon={RotateCcw} label="Atualizar" onClick={refreshDemo} />
-              <ActionButton icon={Trash2} label="Apagar" onClick={clearDashboard} />
+            <div className="flex gap-1.5">
+              <ActionButton icon={Sparkles} label="Demo" onClick={activateDemo} />
+              <ActionButton icon={BarChart3} label="Calc" onClick={calculateMetrics} />
+              <ActionButton icon={RotateCcw} label="Att" onClick={refreshDemo} />
+              <ActionButton icon={Trash2} label="Limpar" onClick={clearDashboard} />
             </div>
             <h3 className="text-base font-semibold tracking-[0.18em] text-white md:text-[1.55rem]">
               DASH
@@ -288,7 +288,7 @@ function ActionButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex items-center justify-center gap-1.5 rounded-[0.9rem] border border-white/12 px-2.5 py-1.5 text-[10px] font-semibold text-white/84 transition hover:text-white md:text-[11px]"
+      className="inline-flex items-center justify-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold text-white/84 transition hover:text-white md:text-[10px]"
       style={{
         background:
           'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(10,10,12,0.92) 52%, rgba(3,3,4,0.985) 100%)',
