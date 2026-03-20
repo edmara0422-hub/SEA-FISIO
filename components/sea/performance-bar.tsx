@@ -55,10 +55,10 @@ export function PerformanceBar() {
       {
         label: 'Neutros',
         value: state.neutral,
-        fill: 'linear-gradient(180deg, rgba(250,204,21,0.90) 0%, rgba(200,160,10,0.55) 50%, rgba(120,90,5,0.20) 100%)',
-        glow: 'rgba(250,204,21,0.25)',
-        accent: 'rgba(253,224,71,0.75)',
-        border: 'rgba(250,204,21,0.22)',
+        fill: 'linear-gradient(180deg, rgba(234,179,8,0.75) 0%, rgba(180,130,10,0.45) 50%, rgba(100,70,5,0.18) 100%)',
+        glow: 'rgba(234,179,8,0.20)',
+        accent: 'rgba(250,204,21,0.60)',
+        border: 'rgba(234,179,8,0.18)',
       },
       {
         label: 'Promotores',
@@ -222,13 +222,13 @@ export function PerformanceBar() {
               <svg viewBox="0 0 420 140" className="relative h-40 w-full">
                 <defs>
                   <linearGradient id="dashStroke" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%"   stopColor="rgba(60,220,140,0.30)" />
-                    <stop offset="50%"  stopColor="rgba(120,240,180,0.95)" />
-                    <stop offset="100%" stopColor="rgba(60,220,140,0.25)" />
+                    <stop offset="0%"   stopColor="rgba(45,212,191,0.30)" />
+                    <stop offset="50%"  stopColor="rgba(94,234,212,0.95)" />
+                    <stop offset="100%" stopColor="rgba(45,212,191,0.25)" />
                   </linearGradient>
                   <linearGradient id="dashFill" x1="0%" y1="0%" x2="0%" y2="100%">
-                    <stop offset="0%"   stopColor="rgba(60,220,140,0.22)" />
-                    <stop offset="100%" stopColor="rgba(60,220,140,0)" />
+                    <stop offset="0%"   stopColor="rgba(45,212,191,0.22)" />
+                    <stop offset="100%" stopColor="rgba(45,212,191,0)" />
                   </linearGradient>
                 </defs>
 
@@ -249,7 +249,7 @@ export function PerformanceBar() {
                   cx="420"
                   cy={finalPulseY}
                   r="5.5"
-                  fill="rgba(80,230,160,1)"
+                  fill="rgba(45,212,191,1)"
                   initial={{ opacity: 0.45, scale: 0.9 }}
                   animate={{ opacity: [0.42, 1, 0.42], scale: [0.9, 1.18, 0.9] }}
                   transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
