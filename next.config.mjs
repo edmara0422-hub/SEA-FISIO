@@ -21,6 +21,8 @@ const nextConfig = {
   ...(isCapacitorBuild && {
     output: 'export',
     trailingSlash: true,
+    typescript: { ignoreBuildErrors: true },
+    eslint: { ignoreDuringBuilds: true },
   }),
 
   // Keep heavy server-only packages OUT of the browser bundle
