@@ -59,7 +59,7 @@ const areaData = {
 export function AreaPageClient() {
   const params = useParams()
   const router = useRouter()
-  const slug = params.slug as string
+  const slug = (params?.slug ?? '') as string
 
   const area = areaData[slug as keyof typeof areaData]
 
