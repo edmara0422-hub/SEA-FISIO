@@ -13,7 +13,7 @@ export function BottomNav({
   const pathname = usePathname()
 
   const isHome = pathname === '/sea' || pathname === '/home' || pathname === '/'
-  const isExplore = pathname === '/explore' || pathname.startsWith('/explore/')
+  const isExplore = pathname === '/explore' || (pathname?.startsWith('/explore/') ?? false)
 
   const tabClass = (active: boolean) =>
     `flex items-center justify-center gap-2 rounded-[1.3rem] px-6 py-4 text-sm font-semibold tracking-[0.16em] transition-colors duration-200 ${
