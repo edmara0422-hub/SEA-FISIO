@@ -8,11 +8,13 @@ import {
   ArrowLeft,
   BookOpen,
   Brain,
+  Copy,
   Eye,
   CheckCircle2,
   Cloud,
   FileText,
   HeartPulse,
+  Link2,
   Loader2,
   PencilLine,
   Plus,
@@ -21,6 +23,7 @@ import {
   Trash2,
   WifiOff,
   Wind,
+  X,
   Zap,
 } from 'lucide-react'
 import { ICUSystemPanel } from '@/components/sea/icu-system-panel'
@@ -1321,24 +1324,54 @@ export function ProntuarioSystemPanel() {
   const [collapsedDesmame, setCollapsedDesmame] = useState(true)
   const [collapsedProna, setCollapsedProna] = useState(true)
   const [syncStatus, setSyncStatus] = useState<'idle' | 'syncing' | 'saved' | 'offline' | 'error'>('idle')
+  const [showSyncModal, setShowSyncModal] = useState(false)
+  const [syncCodeInput, setSyncCodeInput] = useState('')
+  const [importingSync, setImportingSync] = useState(false)
+  const [syncCopied, setSyncCopied] = useState(false)
+
+  // Returns current session_id, creating one if needed
+  function getOrCreateSessionId(): string {
+    let id = localStorage.getItem('sea-session-id')
+    if (!id) { id = generateId(); localStorage.setItem('sea-session-id', id) }
+    return id
+  }
 
   useEffect(() => {
-    try {
-      const storedRecords = localStorage.getItem(STORAGE_KEYS.records)
-      const storedArchive = localStorage.getItem(STORAGE_KEYS.archive)
+    const loadData = async () => {
+      try {
+        // 1. Load from localStorage first (fast, always available)
+        const storedRecords = localStorage.getItem(STORAGE_KEYS.records)
+        const storedArchive = localStorage.getItem(STORAGE_KEYS.archive)
+        let localRecords: ICURecord[] = storedRecords
+          ? (JSON.parse(storedRecords) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+          : []
+        let localArchive: ICURecord[] = storedArchive
+          ? (JSON.parse(storedArchive) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+          : []
 
-      if (storedRecords) {
-        setRecords((JSON.parse(storedRecords) as Array<Partial<ICURecord>>).map((record) => normalizeRecord(record)))
+        // 2. Try to load from Supabase — picks up data saved on another device with same session_id
+        if (supabase) {
+          const sessionId = getOrCreateSessionId()
+          const { data } = await supabase.from('icu_sessions').select('records,archive').eq('session_id', sessionId).maybeSingle()
+          if (data?.records) {
+            localRecords = (data.records as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+            localArchive = ((data.archive ?? []) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+            // Keep localStorage in sync
+            localStorage.setItem(STORAGE_KEYS.records, JSON.stringify(localRecords))
+            localStorage.setItem(STORAGE_KEYS.archive, JSON.stringify(localArchive))
+          }
+        }
+
+        setRecords(localRecords)
+        setArchive(localArchive)
+      } catch {
+        setRecords([])
+        setArchive([])
+      } finally {
+        setHydrated(true)
       }
-      if (storedArchive) {
-        setArchive((JSON.parse(storedArchive) as Array<Partial<ICURecord>>).map((record) => normalizeRecord(record)))
-      }
-    } catch {
-      setRecords([])
-      setArchive([])
-    } finally {
-      setHydrated(true)
     }
+    loadData()
   }, [])
 
   useEffect(() => {
