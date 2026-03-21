@@ -1389,11 +1389,7 @@ export function ProntuarioSystemPanel() {
     setSyncStatus('syncing')
     const timer = setTimeout(async () => {
       try {
-        const sessionId = (() => {
-          let id = localStorage.getItem('sea-session-id')
-          if (!id) { id = generateId(); localStorage.setItem('sea-session-id', id) }
-          return id
-        })()
+        const sessionId = getOrCreateSessionId()
         const { error } = await supabase!.from('icu_sessions').upsert({
           session_id: sessionId,
           records: records,
@@ -2144,6 +2140,34 @@ export function ProntuarioSystemPanel() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // Import data from another device's session
+  const importSession = async () => {
+    const code = syncCodeInput.trim()
+    if (!code || !supabase) return
+    setImportingSync(true)
+    try {
+      const { data } = await supabase.from('icu_sessions').select('records,archive').eq('session_id', code).maybeSingle()
+      if (data?.records) {
+        const imported = (data.records as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+        const importedArchive = ((data.archive ?? []) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+        // Switch this device to use the imported session_id
+        localStorage.setItem('sea-session-id', code)
+        localStorage.setItem(STORAGE_KEYS.records, JSON.stringify(imported))
+        localStorage.setItem(STORAGE_KEYS.archive, JSON.stringify(importedArchive))
+        setRecords(imported)
+        setArchive(importedArchive)
+        setShowSyncModal(false)
+        setSyncCodeInput('')
+      } else {
+        alert('Código não encontrado ou sem dados.')
+      }
+    } catch {
+      alert('Erro ao importar. Verifique o código e tente novamente.')
+    } finally {
+      setImportingSync(false)
+    }
+  }
+
   const openRecord = (id: string) => {
     setSelectedId(id)
     setActiveTab('dados')
@@ -2262,11 +2286,66 @@ export function ProntuarioSystemPanel() {
                 <Cloud className="h-2.5 w-2.5" />Erro
               </span>
             )}
+            <ActionButton icon={Link2} label="Sincronizar" active={showSyncModal} onClick={() => setShowSyncModal(v => !v)} />
             <ActionButton icon={Archive} label="Arquivo" badge={archive.length} active={view === 'archive'} onClick={() => setView(view === 'archive' ? 'records' : 'archive')} />
             <ActionButton icon={BookOpen} label="Ref." active={view === 'reference'} onClick={() => setView(view === 'reference' ? 'records' : 'reference')} />
             <ActionButton icon={Plus} label="Adicionar" onClick={addRecord} />
           </div>
         </div>
+
+        {/* Sync modal — share session code between devices */}
+        {showSyncModal && (
+          <div className="chrome-panel rounded-[1.2rem] p-4 space-y-3">
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold text-white/72">Sincronizar entre dispositivos</p>
+              <button onClick={() => setShowSyncModal(false)} className="text-white/38 hover:text-white/72 transition-colors">
+                <X className="h-3.5 w-3.5" />
+              </button>
+            </div>
+            <div className="space-y-1">
+              <p className="text-[10px] text-white/48">Código deste dispositivo — copie e cole no outro aparelho para usar os mesmos dados:</p>
+              <div className="flex items-center gap-2">
+                <code className="flex-1 truncate rounded-[0.6rem] border border-white/10 bg-black/20 px-2.5 py-1.5 text-[10px] text-[#60a5fa] font-mono">
+                  {typeof window !== 'undefined' ? (localStorage.getItem('sea-session-id') ?? '—') : '—'}
+                </code>
+                <button
+                  onClick={() => {
+                    const id = localStorage.getItem('sea-session-id')
+                    if (id) {
+                      navigator.clipboard.writeText(id).then(() => {
+                        setSyncCopied(true)
+                        setTimeout(() => setSyncCopied(false), 2000)
+                      })
+                    }
+                  }}
+                  className="flex items-center gap-1 rounded-[0.6rem] border border-white/10 bg-white/5 px-2.5 py-1.5 text-[10px] text-white/72 hover:bg-white/10 transition-colors"
+                >
+                  {syncCopied ? <CheckCircle2 className="h-3 w-3 text-[#4ade80]" /> : <Copy className="h-3 w-3" />}
+                  {syncCopied ? 'Copiado' : 'Copiar'}
+                </button>
+              </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-[10px] text-white/48">Ou cole aqui o código de outro dispositivo para importar os dados dele:</p>
+              <div className="flex items-center gap-2">
+                <input
+                  value={syncCodeInput}
+                  onChange={e => setSyncCodeInput(e.target.value)}
+                  placeholder="Cole o código aqui..."
+                  className="flex-1 rounded-[0.6rem] border border-white/10 bg-black/20 px-2.5 py-1.5 text-[10px] text-white placeholder:text-white/28 outline-none focus:border-white/20"
+                />
+                <button
+                  onClick={importSession}
+                  disabled={!syncCodeInput.trim() || importingSync}
+                  className="flex items-center gap-1 rounded-[0.6rem] border border-[#60a5fa30] bg-[#60a5fa0a] px-2.5 py-1.5 text-[10px] font-semibold text-[#60a5fa] hover:bg-[#60a5fa18] transition-colors disabled:opacity-40"
+                >
+                  {importingSync ? <Loader2 className="h-3 w-3 animate-spin" /> : <Link2 className="h-3 w-3" />}
+                  Importar
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {view === 'reference' ? (
           <ICUSystemPanel />
