@@ -1,0 +1,63 @@
+{
+  "name": "Sistema de Estudo Avançado - SEA",
+  "short_name": "SEA",
+  "description": "Plataforma educacional avançada para simulações clínicas e análise de dados de saúde",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "icons": [
+    {
+      "src": "/icon-light-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-dark-32x32.png",
+      "sizes": "32x32",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/placeholder.jpg",
+      "sizes": "540x720",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "/placeholder.jpg",
+      "sizes": "1280x720",
+      "type": "image/jpeg",
+      "form_factor": "wide"
+    }
+  ],
+  "categories": ["medical", "education", "health"],
+  "shortcuts": [
+    {
+      "name": "Calculadora de VM",
+      "short_name": "VM",
+      "description": "Acesse a calculadora de ventilação mecânica",
+      "url": "/sistemas/calculadora-vm",
+      "icons": [{ "src": "/icon-light-32x32.png", "sizes": "96x96" }]
+    },
+    {
+      "name": "Prontuário",
+      "short_name": "Prontuário",
+      "description": "Gerenciar prontuários eletrônicos",
+      "url": "/sistemas/prontuario",
+      "icons": [{ "src": "/icon-light-32x32.png", "sizes": "96x96" }]
+    }
+  ],
+  "preferences_related_applications": false
+}

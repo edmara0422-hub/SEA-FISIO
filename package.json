@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev --hostname 0.0.0.0 --port ${PORT:-3000} & node scripts/dev-warmup.mjs",
     "build": "next build",
-    "build:cap": "CAPACITOR_BUILD=true next build && npx cap sync ios",
+    "build:cap": "mv app/api app/_api && NODE_OPTIONS='--max-old-space-size=8192' CAPACITOR_BUILD=true next build; mv app/_api app/api && npx cap sync ios",
     "start": "next start --hostname 0.0.0.0 --port ${PORT:-3000}",
     "typecheck": "tsc --noEmit --incremental false",
     "lint": "npm run typecheck"
