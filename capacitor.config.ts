@@ -3,29 +3,30 @@ import type { CapacitorConfig } from '@capacitor/cli';
 // ─── MODOS DE USO ────────────────────────────────────────────────────────────
 //
 // DEV (rede local, cabo USB):
-//   Mantém server.url apontando pro Mac (IP local da rede de casa).
-//   Funciona só conectado ao mesmo Wi-Fi que o Mac.
+//   server.url aponta pro Mac. Funciona só no Wi-Fi de casa.
+//   Comando: npm run dev  →  cabo USB  →  Xcode Run
 //
-// PRODUÇÃO (fora de casa, sem depender do Mac):
-//   1. Faça deploy no Vercel: `vercel --prod`  (ou `npx vercel`)
-//   2. Troque server.url pela URL do Vercel (ex: https://sea-fisio.vercel.app)
-//   3. npx cap sync ios → build no Xcode → instalar no iPhone
-//   Assim o app funciona em qualquer lugar com internet.
+// PRODUÇÃO (funciona em qualquer lugar, sem depender do Mac):
+//   1. npm run build:cap        ← gera pasta out/ e sincroniza com iOS
+//   2. Abre Xcode → Product → Run (ou Archive para distribuir)
+//   O app fica embutido no iPhone. Funciona em qualquer rede ou dados móveis.
+//   Obs: funcionalidades de IA (chat) ficam indisponíveis no modo estático.
 //
 // ─────────────────────────────────────────────────────────────────────────────
 
-const DEV_SERVER_URL = 'http://192.168.18.9:3000';       // Mac na rede de casa
-const PROD_SERVER_URL = '';                               // ← cole a URL Vercel aqui
+// true = usa arquivos embutidos no app (produção, funciona em qualquer lugar)
+// false = carrega do servidor Next.js local (dev, só no Wi-Fi de casa)
+const PRODUCTION_MODE = false;
 
-const isProd = !!PROD_SERVER_URL;
+const DEV_SERVER_URL = 'http://192.168.18.9:3000';
 
 const config: CapacitorConfig = {
   appId: 'com.seafisio.app',
   appName: 'SEA Fisio',
   webDir: 'out',
-  server: isProd
-    ? { url: PROD_SERVER_URL, cleartext: false }
-    : { url: DEV_SERVER_URL, cleartext: true },
+  ...(PRODUCTION_MODE ? {} : {
+    server: { url: DEV_SERVER_URL, cleartext: true },
+  }),
   ios: {
     contentInset: 'automatic',
     preferredContentMode: 'mobile',
