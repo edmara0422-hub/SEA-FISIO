@@ -4,6 +4,10 @@ const withBundleAnalyzer = bundleAnalyzer({
   enabled: process.env.ANALYZE === 'true',
 })
 
+// Ativado com: CAPACITOR_BUILD=true npm run build:cap
+// Gera pasta out/ para embutir no app iOS (funciona fora de casa, sem servidor)
+const isCapacitorBuild = process.env.CAPACITOR_BUILD === 'true'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   devIndicators: false,
@@ -12,6 +16,12 @@ const nextConfig = {
 
   compress: true,
   productionBrowserSourceMaps: false,
+
+  // Modo export estático para Capacitor — pasta out/ embutida no iOS
+  ...(isCapacitorBuild && {
+    output: 'export',
+    trailingSlash: true,
+  }),
 
   // Keep heavy server-only packages OUT of the browser bundle
   serverExternalPackages: [
@@ -43,23 +53,25 @@ const nextConfig = {
     ],
   },
 
-  // Cache GLB 3D models and static assets aggressively
-  async headers() {
-    return [
-      {
-        source: '/:file*.glb',
-        headers: [
-          { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
-        ],
-      },
-      {
-        source: '/(.*)',
-        headers: [
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-        ],
-      },
-    ]
-  },
+  // Cache GLB 3D models e assets estáticos (apenas no modo servidor)
+  ...(!isCapacitorBuild && {
+    async headers() {
+      return [
+        {
+          source: '/:file*.glb',
+          headers: [
+            { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+          ],
+        },
+        {
+          source: '/(.*)',
+          headers: [
+            { key: 'X-Content-Type-Options', value: 'nosniff' },
+          ],
+        },
+      ]
+    },
+  }),
 }
 
 export default withBundleAnalyzer(nextConfig)
