@@ -32,7 +32,7 @@ let splashShownForRuntime = false
 
 type Tab = 'home' | 'explore' | 'other'
 
-function pathToTab(p: string): Tab {
+function pathToTab(p: string | null): Tab {
   if (p === '/sea' || p === '/home' || p === '/') return 'home'
   if (p === '/explore') return 'explore'
   return 'other'
