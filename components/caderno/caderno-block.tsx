@@ -217,7 +217,7 @@ function SimulationBlock({ block }: { block: Extract<ContentBlock, { type: 'simu
       {open && Comp && (
         <div
           className="overflow-hidden rounded-[1rem]"
-          style={{ border: '1px solid rgba(45,212,191,0.12)', height: 'clamp(240px, 50vw, 360px)' }}
+          style={{ border: '1px solid rgba(45,212,191,0.12)' }}
         >
           <Comp className="h-full w-full" />
         </div>
