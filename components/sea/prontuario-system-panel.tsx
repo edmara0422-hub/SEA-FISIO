@@ -941,15 +941,15 @@ function ActionButton({
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-1 rounded-[0.6rem] border px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.12em] transition-all ${active
+      title={label}
+      className={`relative inline-flex items-center justify-center rounded-[0.6rem] border p-1.5 transition-all ${active
           ? 'border-white/18 bg-white/12 text-white'
           : 'border-white/10 bg-black/18 text-white/62 hover:border-white/16 hover:text-white'
         }`}
     >
-      <Icon className="h-3 w-3" />
-      <span>{label}</span>
+      <Icon className="h-3.5 w-3.5" />
       {typeof badge === 'number' && badge > 0 ? (
-        <span className="rounded-full border border-white/12 px-1 py-0.5 text-[7px] text-white/74">
+        <span className="absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white/20 text-[7px] font-bold text-white">
           {badge}
         </span>
       ) : null}

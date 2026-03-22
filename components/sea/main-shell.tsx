@@ -33,8 +33,9 @@ let splashShownForRuntime = false
 type Tab = 'home' | 'explore' | 'other'
 
 function pathToTab(p: string | null): Tab {
-  if (p === '/sea' || p === '/home' || p === '/') return 'home'
-  if (p === '/explore') return 'explore'
+  const s = p?.replace(/\/$/, '') ?? ''
+  if (s === '/sea' || s === '/home' || s === '' || s === '/sea/index') return 'home'
+  if (s === '/explore') return 'explore'
   return 'other'
 }
 
