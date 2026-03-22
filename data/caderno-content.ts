@@ -466,6 +466,263 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M1-T3',
+        title: 'Base Celular e Fisiológica',
+        blocks: [
+          {
+            id: 'M1-T3-slides-excitabilidade',
+            type: 'slides',
+            title: 'O Que é Uma Célula Excitável?',
+            slides: [
+              {
+                title: 'Célula Excitável — Definição',
+                bullets: [
+                  'Nem toda célula viva é capaz de gerar sinais elétricos rápidos',
+                  'Uma célula excitável é aquela cuja membrana consegue alterar rapidamente seu potencial elétrico em resposta a estímulos físicos ou químicos',
+                  'Exemplos: neurônios, fibras musculares, células secretoras especializadas',
+                  'O neurônio não é especial porque "pensa" — é especial porque transmite variação elétrica rapidamente e a longa distância',
+                ],
+                highlight: 'Excitabilidade nasce de: membrana isolante + gradientes iônicos + canais reguláveis.',
+              },
+              {
+                title: 'A Base Física da Excitabilidade',
+                bullets: [
+                  '1. Membrana Isolante — separação de cargas (capacitor biológico)',
+                  '2. Gradientes Iônicos — mantidos ativamente pela bomba Na⁺/K⁺-ATPase',
+                  '3. Canais Iônicos — reguláveis por voltagem ou ligante',
+                  'A membrana lipídica funciona como um capacitor: separa cargas, armazena diferença de potencial e permite descargas controladas',
+                  'Sem qualquer uma dessas três propriedades, não existe sinal elétrico',
+                ],
+                highlight: 'A membrana como capacitor biológico — o fundamento de toda sinalização neural.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T3-slides-estrutura-sn',
+            type: 'slides',
+            title: 'Estrutura Celular do Sistema Nervoso',
+            slides: [
+              {
+                title: 'Dois Tipos Fundamentais de Células',
+                bullets: [
+                  'Neurônios — unidades sinalizadoras básicas do sistema nervoso',
+                  'Neuróglia (glia) — células de suporte que auxiliam e protegem os neurônios',
+                  'A neuróglia representa mais da metade do peso encefálico',
+                  'Pode haver 10 a 50 vezes mais neuróglia do que neurônios',
+                  'O neurônio é a unidade funcional: menor estrutura que realiza as funções do sistema',
+                ],
+                highlight: 'Neurônios + Neuróglia = os dois pilares celulares do sistema nervoso.',
+              },
+              {
+                title: 'O Cérebro como Sistema Regulatório',
+                bullets: [
+                  'Não é uma "máquina de pensamento" — é um sistema regulatório distribuído',
+                  'Neurônios recebem estímulos, conduzem potenciais de ação e transmitem sinais',
+                  'Neuróglia fornece suporte físico e bioquímico essencial',
+                  'Ambos os tipos celulares são indispensáveis para o funcionamento neural',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M1-T3-slides-neuronio',
+            type: 'slides',
+            title: 'O Neurônio: Unidade Funcional',
+            slides: [
+              {
+                title: 'Corpo Celular (Soma)',
+                bullets: [
+                  'Centro metabólico do neurônio — essencial para o bem-estar celular',
+                  'Núcleo com DNA: molde para toda a síntese proteica',
+                  'Retículo Endoplasmático: síntese de proteínas e lipídios',
+                  'Mitocôndrias: produção de ATP — energia para o neurônio',
+                  'Aparelho de Golgi: processamento e empacotamento de proteínas',
+                ],
+                highlight: 'O soma é o "centro de comando" — sem ele, o neurônio morre.',
+              },
+              {
+                title: 'Dendritos — Receptores de Sinais',
+                bullets: [
+                  'Processos finos e ramificados que recebem informação de células vizinhas',
+                  'Aumentam a área de superfície → comunicação com muitos outros neurônios',
+                  'Variam de um único dendrito até ramificações de incrível complexidade',
+                  'Espinhos dendríticos: variam de finos até formato de cogumelo',
+                  'Espinhos podem alterar tamanho e formato em resposta a sinais (plasticidade)',
+                ],
+                highlight: 'Dendritos no SNC podem funcionar como compartimentos independentes — enviando sinais bidirecionais.',
+              },
+              {
+                title: 'Funções Dendríticas por Localização',
+                bullets: [
+                  'SNP: receber informação de entrada e transferir para região integradora',
+                  'SNC: função mais complexa — espinhos como compartimentos independentes',
+                  'Espinhos dendríticos enviam sinais de ida e volta com outros neurônios',
+                  'Muitos contêm polirribossomos e podem produzir suas próprias proteínas',
+                  'Plasticidade dendrítica: base celular da aprendizagem e memória',
+                ],
+              },
+              {
+                title: 'Axônio — Condutor de Informação',
+                bullets: [
+                  'Forma, número e comprimento variam entre neurônios',
+                  'Maioria dos neurônios periféricos: único axônio originado do cone axonal',
+                  'Comprimento: de mais de 1 metro até poucos micrômetros',
+                  'Função primária: transmitir sinais elétricos de saída até as células-alvo',
+                  'Na porção distal: sinal elétrico → secreção de molécula mensageira (neurotransmissor)',
+                ],
+                highlight: 'O axônio NÃO possui ribossomos nem RE — proteínas são transportadas do soma via transporte axonal.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T3-sim-anatomy',
+            type: 'simulation',
+            title: 'Anatomia Interativa do Neurônio',
+            simulationId: 'neuro-neuron-anatomy',
+            description: 'Explore soma, dendritos, axônio, mielina, terminais — clique para detalhes',
+          },
+          {
+            id: 'M1-T3-slides-transporte',
+            type: 'slides',
+            title: 'Transporte Axonal',
+            slides: [
+              {
+                title: 'Transporte Lento — Fluxo Axoplasmático',
+                bullets: [
+                  'Velocidade: 0,2 – 2,5 mm/dia',
+                  'Transporta enzimas e proteínas do citoesqueleto',
+                  'Componentes que não são consumidos rapidamente',
+                  'Movimento por fluxo citoplasmático contínuo',
+                ],
+              },
+              {
+                title: 'Transporte Rápido — Via Microtúbulos',
+                bullets: [
+                  'Velocidade: até 400 mm/dia (≈ 15,75 polegadas/dia)',
+                  'Utiliza proteínas motoras (cinesina e dineína) sobre microtúbulos',
+                  'Transporta organelas: mitocôndrias, vesículas sinápticas',
+                  'O transporte rápido é 160× mais rápido que o lento!',
+                  'Essencial para entregar componentes vitais aos terminais axonais distantes',
+                ],
+                highlight: '160× — transporte rápido vs. lento. Sem microtúbulos, o terminal sináptico morre.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T3-sim-transport',
+            type: 'simulation',
+            title: 'Transporte Axonal: Lento vs. Rápido',
+            simulationId: 'neuro-axon-transport',
+            description: 'Comparação visual: fluxo axoplasmático vs. transporte por microtúbulos (160×)',
+          },
+          {
+            id: 'M1-T3-slides-conducao',
+            type: 'slides',
+            title: 'Condução Saltatória e Mielina',
+            slides: [
+              {
+                title: 'Bainha de Mielina',
+                bullets: [
+                  'Isolante lipídico que envolve axônios em segmentos (internodos)',
+                  'SNC: formada por oligodendrócitos (1 célula → até 50 axônios)',
+                  'SNP: formada por células de Schwann (1 célula → 1 internodo)',
+                  'Entre os segmentos: nós de Ranvier — gaps com canais iônicos expostos',
+                  'A mielina impede a dissipação da corrente iônica ao longo do axônio',
+                ],
+                highlight: 'Mielina = velocidade + eficiência energética. Doenças desmielinizantes (ex: esclerose múltipla) destroem essa vantagem.',
+              },
+              {
+                title: 'Condução Saltatória vs. Contínua',
+                bullets: [
+                  'Saltatória (mielinizada): sinal "salta" entre nós de Ranvier — até 120 m/s',
+                  'Contínua (não-mielinizada): despolarização ponto a ponto — 0,5 a 2 m/s',
+                  'Saltatória é ≈60× mais rápida e gasta menos energia (menos canais ativados)',
+                  'Nós de Ranvier: concentração de canais de Na⁺ voltagem-dependentes',
+                  'Entre os nós: corrente passiva (eletrotônica) sob a mielina',
+                ],
+                highlight: 'Condução saltatória: velocidade de 120 m/s com economia energética — evolução em ação.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T3-sim-saltatory',
+            type: 'simulation',
+            title: 'Condução Saltatória vs. Contínua',
+            simulationId: 'neuro-saltatory-conduction',
+            description: 'Compare a velocidade: mielinizada (120 m/s) vs. não-mielinizada (2 m/s)',
+          },
+          {
+            id: 'M1-T3-slides-classificacao',
+            type: 'slides',
+            title: 'Classificação dos Neurônios',
+            slides: [
+              {
+                title: 'Classificação Funcional',
+                bullets: [
+                  'Sensoriais (aferentes): conduzem potenciais de ação em direção ao SNC',
+                  'Motores (eferentes): conduzem do SNC para músculos ou glândulas',
+                  'Interneurônios: conduzem de um neurônio para outro dentro do SNC',
+                ],
+              },
+              {
+                title: 'Classificação Estrutural',
+                bullets: [
+                  'Multipolares: vários dendritos + 1 axônio longo — tipo mais comum no SNC',
+                  'Pseudounipolares: corpo celular lateral em processo único em T (neurônios sensoriais)',
+                  'Bipolares: 1 axônio + 1 dendrito — retina e epitélio olfatório',
+                  'Anaxônicos: sem axônio identificável, dendritos difusos — células amácrinas na retina',
+                ],
+                highlight: 'Estrutura define função: a forma de cada neurônio é adaptada ao seu papel no circuito.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T3-slides-neuroglia',
+            type: 'slides',
+            title: 'Neuróglia — Células de Suporte',
+            slides: [
+              {
+                title: 'Neuróglia do SNC',
+                bullets: [
+                  'Oligodendrócitos: produzem mielina no SNC (1 célula → até 50 axônios)',
+                  'Astrócitos: sustentação, barreira hematoencefálica, regulação de K⁺, captação de neurotransmissores',
+                  'Microglia: fagocitose, poda sináptica, resposta inflamatória — o "sistema imune" do SNC',
+                  'Células ependimárias: revestem ventrículos, cílios circulam o LCR',
+                ],
+              },
+              {
+                title: 'Neuróglia do SNP',
+                bullets: [
+                  'Células de Schwann: produzem mielina no SNP (1 célula → 1 internodo)',
+                  'Participam na regeneração axonal — formam tubos de regeneração',
+                  'Células Satélite (anfícitos): envolvem corpos celulares nos gânglios',
+                  'Regulação do microambiente ganglionar e suporte nutricional',
+                ],
+              },
+              {
+                title: 'Funções Integradas da Neuróglia',
+                bullets: [
+                  'Formação e permeabilidade da barreira hematoencefálica',
+                  'Fagocitose de substâncias estranhas e debris celulares',
+                  'Produção e circulação de líquido cerebrospinal (LCR)',
+                  'Formação de bainha de mielina ao redor dos axônios',
+                  'Apesar de não transmitirem sinais elétricos a longa distância, comunicam-se com neurônios',
+                  'Fornecem suporte físico e bioquímico indispensável',
+                ],
+                highlight: 'Neuróglia: >50% do peso encefálico, 10–50× mais numerosas que neurônios — o sistema nervoso NÃO funciona sem elas.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T3-sim-glia',
+            type: 'simulation',
+            title: 'Ecossistema Neuroglial Interativo',
+            simulationId: 'neuro-glia-ecosystem',
+            description: 'Explore os 6 tipos de neuroglia: astrócitos, oligodendrócitos, microglia, ependimárias, Schwann e satélite',
+          },
+        ],
+      },
     ],
   },
   {

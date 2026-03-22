@@ -10,12 +10,20 @@ const NeuroPumpSim = dynamic(() => import('@/components/experience/neuro-pump-si
 const NeuroActionPotentialSim = dynamic(() => import('@/components/experience/neuro-action-potential-sim').then(m => m.NeuroActionPotentialSim), { ssr: false })
 const NeuroTubeSim = dynamic(() => import('@/components/experience/neuro-tube-sim').then(m => m.NeuroTubeSim), { ssr: false })
 const NeuroSynapseTimelineSim = dynamic(() => import('@/components/experience/neuro-synapse-timeline-sim').then(m => m.NeuroSynapseTimelineSim), { ssr: false })
+const NeuroNeuronAnatomySim = dynamic(() => import('@/components/experience/neuro-neuron-anatomy-sim').then(m => m.NeuroNeuronAnatomySim), { ssr: false })
+const NeuroGliaEcosystemSim = dynamic(() => import('@/components/experience/neuro-glia-ecosystem-sim').then(m => m.NeuroGliaEcosystemSim), { ssr: false })
+const NeuroAxonTransportSim = dynamic(() => import('@/components/experience/neuro-axon-transport-sim').then(m => m.NeuroAxonTransportSim), { ssr: false })
+const NeuroSaltatoryConductionSim = dynamic(() => import('@/components/experience/neuro-saltatory-conduction-sim').then(m => m.NeuroSaltatoryConductionSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
   'neuro-action-potential': NeuroActionPotentialSim,
   'neuro-tube': NeuroTubeSim,
   'neuro-synapse-timeline': NeuroSynapseTimelineSim,
+  'neuro-neuron-anatomy': NeuroNeuronAnatomySim,
+  'neuro-glia-ecosystem': NeuroGliaEcosystemSim,
+  'neuro-axon-transport': NeuroAxonTransportSim,
+  'neuro-saltatory-conduction': NeuroSaltatoryConductionSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
