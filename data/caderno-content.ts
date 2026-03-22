@@ -923,7 +923,204 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
   {
     moduleId: 'M2',
     topics: [
-      { id: 'M2-T1', title: 'Pneumo / VM', blocks: [] },
+      {
+        id: 'M2-T1',
+        title: 'Anatomofisiologia Respiratória',
+        blocks: [
+          {
+            id: 'M2-T1-slides-respiracao',
+            type: 'slides',
+            title: 'O Que é Respiração?',
+            slides: [
+              {
+                title: 'Quatro Processos da Respiração',
+                bullets: [
+                  '1. Ventilação: movimento de entrada e saída de ar dos pulmões',
+                  '2. Hematose (respiração externa): troca gasosa entre ar alveolar e sangue nos capilares pulmonares',
+                  '3. Transporte: O₂ e CO₂ carregados pelo sangue (hemoglobina e plasma)',
+                  '4. Respiração interna: troca gasosa entre sangue e tecidos',
+                  'Esses 4 processos são distintos porém interdependentes',
+                ],
+                highlight: 'A respiração supre o O₂ para produção de ATP e elimina o CO₂ — ligação direta com respiração celular.',
+              },
+              {
+                title: 'Hematose Alveolar',
+                bullets: [
+                  'Ponto central da respiração: alvéolos ⇄ capilares pulmonares',
+                  'O₂ difunde do ar alveolar para o sangue (PO₂: 104 → 40 mmHg)',
+                  'CO₂ difunde do sangue para o ar alveolar (PCO₂: 45 → 40 mmHg)',
+                  'Difusão por gradiente de pressão parcial (Lei de Fick)',
+                  'Membrana respiratória: apenas 0,2 µm de espessura',
+                ],
+              },
+              {
+                title: 'Transporte de O₂ no Sangue',
+                bullets: [
+                  'Hemoglobina (Hb): proteína com 4 sítios de ligação ao O₂',
+                  'Hb + 4O₂ ⇄ Hb(O₂)₄ — reação reversível',
+                  '98,5% do O₂ transportado ligado à Hb',
+                  '1,5% dissolvido no plasma',
+                  'CO₂ transportado: 7% dissolvido, 23% ligado à Hb, 70% como HCO₃⁻',
+                ],
+                highlight: 'Sem hemoglobina, o sangue carregaria apenas 1,5% do O₂ necessário.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T1-slides-funcoes',
+            type: 'slides',
+            title: 'Além da Respiração: 5 Funções Extras',
+            slides: [
+              {
+                title: 'Funções Adicionais do Sistema Respiratório',
+                bullets: [
+                  '1. Regulação do pH sanguíneo — alterando níveis de CO₂ (tampão bicarbonato)',
+                  '2. Produção de mediadores químicos — ECA (enzima conversora da angiotensina) → regulação da PA',
+                  '3. Produção da voz — passagem do ar pelas pregas vocais gera som',
+                  '4. Olfação — moléculas do ar alcançam epitélio olfatório na cavidade nasal',
+                  '5. Proteção — barreiras contra microrganismos e partículas',
+                ],
+                highlight: 'O pulmão não é apenas para respirar — é órgão endócrino, imunológico e regulador de pH.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T1-slides-componentes',
+            type: 'slides',
+            title: 'Componentes do Sistema Respiratório',
+            slides: [
+              {
+                title: 'Estruturas Anatômicas',
+                bullets: [
+                  'Nariz externo e cavidade nasal: filtração, aquecimento, umidificação',
+                  'Faringe: via comum para ar e alimento (naso, oro e laringofaringe)',
+                  'Laringe: pregas vocais + epiglote (proteção contra aspiração)',
+                  'Traqueia: 16-20 anéis cartilaginosos em C, epitélio mucociliar',
+                  'Brônquios: ramificação dicotômica em 23 gerações',
+                  'Pulmões: direito (3 lobos) e esquerdo (2 lobos + incisura cardíaca)',
+                ],
+              },
+              {
+                title: 'Músculos da Respiração',
+                bullets: [
+                  'Diafragma: principal músculo inspiratório (inervação: nervo frênico C3-C5)',
+                  'Intercostais externos: elevam as costelas na inspiração',
+                  'Intercostais internos: auxiliam na expiração forçada',
+                  'Músculos acessórios: escalenos, esternocleidomastóideo (inspiração forçada)',
+                  'Abdominais: reto, oblíquos, transverso (expiração forçada/tosse)',
+                ],
+                highlight: 'A expiração em repouso é PASSIVA — retorno elástico dos pulmões. Apenas a inspiração requer contração muscular ativa.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T1-sim-system',
+            type: 'simulation',
+            title: 'Sistema Respiratório Interativo',
+            simulationId: 'respiratory-system',
+            description: 'Explore nariz, faringe, laringe, traqueia, brônquios e alvéolos — com fluxo de O₂ e CO₂ animado',
+          },
+          {
+            id: 'M2-T1-slides-zonas',
+            type: 'slides',
+            title: 'Classificação Funcional: Zonas',
+            slides: [
+              {
+                title: 'Zona Condutora',
+                bullets: [
+                  'Do nariz até os bronquíolos terminais',
+                  'Função: movimento, limpeza, aquecimento e umidificação do ar',
+                  'NÃO realiza troca gasosa — apenas conduz',
+                  'Constitui o "espaço morto anatômico" (~150 mL)',
+                  'Epitélio pseudoestratificado colunar ciliado com células caliciformes',
+                ],
+              },
+              {
+                title: 'Zona Respiratória',
+                bullets: [
+                  'Bronquíolos respiratórios → ductos alveolares → sacos alveolares → alvéolos',
+                  'Local da hematose: troca gasosa entre ar e sangue',
+                  '300-500 milhões de alvéolos nos dois pulmões',
+                  'Superfície total de troca: ~70 m² (tamanho de quadra de tênis)',
+                  'Pneumócitos tipo I (troca gasosa) e tipo II (surfactante)',
+                ],
+                highlight: 'Zona condutora = passagem e limpeza. Zona respiratória = hematose. São funcionalmente complementares.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T1-sim-exchange',
+            type: 'simulation',
+            title: 'Hematose Alveolar',
+            simulationId: 'respiratory-gas-exchange',
+            description: 'Visualize a difusão de O₂ e CO₂ através da membrana respiratória — com pressões parciais reais',
+          },
+          {
+            id: 'M2-T1-slides-defesa',
+            type: 'slides',
+            title: 'Mecanismos de Defesa Respiratória',
+            slides: [
+              {
+                title: '1ª Barreira: Nariz e Nasofaringe',
+                bullets: [
+                  'Pelos nasais (vibrissas): filtram partículas grossas',
+                  'Muco: cobre septo e conchas nasais — aprisiona partículas e patógenos',
+                  'Imunoglobulina A (IgA): primeira linha de defesa imunológica',
+                  'Aquecimento: ar frio → temperatura corporal em milissegundos',
+                  'Umidificação: ar seco → saturação de vapor (~100% umidade)',
+                ],
+              },
+              {
+                title: '2ª Barreira: Aparato Mucociliar',
+                bullets: [
+                  'Epitélio colunar pseudoestratificado ciliado',
+                  'Células caliciformes produzem muco (camada gel + sol)',
+                  'Cílios batem a 600-900 batimentos/min',
+                  'Movimento rápido ascendente: "escada rolante mucociliar"',
+                  'Transporta muco + partículas presas até a faringe (deglutição ou expectoração)',
+                  'Fumo e poluição paralisam os cílios → comprometimento grave da defesa',
+                ],
+              },
+              {
+                title: '3ª Barreira: Defesa Bioquímica/Imunológica',
+                bullets: [
+                  'IgA: predominante nas mucosas — neutraliza patógenos na superfície',
+                  'IgG: opsonização e ativação do complemento',
+                  'IgM: resposta primária a novos patógenos',
+                  'Macrófagos alveolares: "células de poeira" — fagocitose no alvéolo',
+                  'Surfactante: além de reduzir tensão superficial, tem propriedades antimicrobianas',
+                ],
+                highlight: '3 barreiras integradas: física (pelos/muco) + mecânica (cílios) + bioquímica (imunoglobulinas + macrófagos).',
+              },
+            ],
+          },
+          {
+            id: 'M2-T1-sim-defense',
+            type: 'simulation',
+            title: 'Sistema de Defesa Respiratória',
+            simulationId: 'respiratory-defense',
+            description: 'Veja patógenos sendo capturados pelas 3 barreiras: nasal, mucociliar e imunológica — filtre por camada',
+          },
+          {
+            id: 'M2-T1-slides-sintese',
+            type: 'slides',
+            title: 'Síntese do Capítulo',
+            slides: [
+              {
+                title: 'A Respiração como Processo Vital',
+                bullets: [
+                  'Não é apenas "inspirar e expirar" — são 4 processos integrados',
+                  'Ventilação → Hematose → Transporte → Troca tecidual',
+                  'O sistema tem dupla classificação: condutor (limpeza) + respiratório (troca)',
+                  '3 camadas de defesa protegem contra invasão e contaminação',
+                  'O pulmão produz ECA, regula pH e participa do sistema imunológico',
+                ],
+                highlight: 'Compreender anatomia e fisiologia respiratória é pré-requisito para toda intervenção em fisioterapia pneumofuncional.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {

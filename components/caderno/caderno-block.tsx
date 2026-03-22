@@ -18,6 +18,9 @@ const NeuroNeuronTypesSim = dynamic(() => import('@/components/experience/neuro-
 const NeuroMetabolicChainSim = dynamic(() => import('@/components/experience/neuro-metabolic-chain-sim').then(m => m.NeuroMetabolicChainSim), { ssr: false })
 const NeuroBHESim = dynamic(() => import('@/components/experience/neuro-bhe-sim').then(m => m.NeuroBHESim), { ssr: false })
 const NeuroGliaSupportSim = dynamic(() => import('@/components/experience/neuro-glia-support-sim').then(m => m.NeuroGliaSupportSim), { ssr: false })
+const RespiratorySystemSim = dynamic(() => import('@/components/experience/respiratory-system-sim').then(m => m.RespiratorySystemSim), { ssr: false })
+const RespiratoryGasExchangeSim = dynamic(() => import('@/components/experience/respiratory-gas-exchange-sim').then(m => m.RespiratoryGasExchangeSim), { ssr: false })
+const RespiratoryDefenseSim = dynamic(() => import('@/components/experience/respiratory-defense-sim').then(m => m.RespiratoryDefenseSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
@@ -32,6 +35,9 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'neuro-metabolic-chain': NeuroMetabolicChainSim,
   'neuro-bhe': NeuroBHESim,
   'neuro-glia-support': NeuroGliaSupportSim,
+  'respiratory-system': RespiratorySystemSim,
+  'respiratory-gas-exchange': RespiratoryGasExchangeSim,
+  'respiratory-defense': RespiratoryDefenseSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
