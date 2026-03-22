@@ -16,7 +16,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 // true = usa arquivos embutidos no app (produção, funciona em qualquer lugar)
 // false = carrega do servidor Next.js local (dev, só no Wi-Fi de casa)
-const PRODUCTION_MODE = false;
+const PRODUCTION_MODE = true;
 
 const DEV_SERVER_URL = 'http://192.168.18.9:3000';
 
