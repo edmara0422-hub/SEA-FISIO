@@ -118,7 +118,7 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
 
   const draw = useCallback((ctx: CanvasRenderingContext2D, w: number, h: number) => {
     const st = stateRef.current
-    const S = Math.min(w / 750, h / 500)
+    const S = Math.min(w / 680, h / 500)
 
     ctx.fillStyle = COL_BG
     ctx.fillRect(0, 0, w, h)
@@ -138,26 +138,26 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
     const expand = isInhale ? breathT * 0.10 : (isExhale ? (1 - breathT) * 0.10 : (st.breathCycle < 0.5 ? 0.10 : 0))
     st.volumeMl = Math.round(2400 + expand * 5000)
 
-    // layout centers
-    const cx = w * 0.38
-    const topY = 18 * S
+    // layout centers — zoomed in
+    const cx = w * 0.36
+    const topY = 10 * S
 
-    // key Y positions
+    // key Y positions — bigger structures
     const noseY = topY
-    const noseH = 38 * S
+    const noseH = 44 * S
     const pharY = noseY + noseH + 4
-    const pharH = 28 * S
+    const pharH = 32 * S
     const larY = pharY + pharH + 4
-    const larH = 26 * S
+    const larH = 30 * S
     const traY = larY + larH + 3
-    const traH = 62 * S
+    const traH = 72 * S
     const bifY = traY + traH
-    const bronchLen = 52 * S
-    const bronchSpread = 75 * S
+    const bronchLen = 58 * S
+    const bronchSpread = 82 * S
 
-    const lungTop = bifY - 8
-    const lungW = 105 * S * (1 + expand)
-    const lungH = 140 * S * (1 + expand * 0.8)
+    const lungTop = bifY - 10
+    const lungW = 120 * S * (1 + expand)
+    const lungH = 160 * S * (1 + expand * 0.8)
     const lungCenterY = lungTop + lungH * 0.45
 
     const regions: typeof regionsRef.current = []
@@ -182,140 +182,139 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
 
     // ═══════════════════ LUNGS ═══════════════════
     const isLungHi = hoveredPart === 'lungs' || selectedPart === 'lungs'
-    const lungBase = lungTop + lungH // bottom of both lungs
+    const lungBase = lungTop + lungH
     const lungStroke = isLungHi ? 'rgba(45, 212, 191, 0.4)' : COL_LUNG_STROKE
+    const lungFillR = isLungHi ? 'rgba(45, 212, 191, 0.14)' : COL_LUNG_R
+    const lungFillL = isLungHi ? 'rgba(45, 212, 191, 0.12)' : COL_LUNG_L
 
-    // ── RIGHT LUNG (3 lobes — wider)
-    const rlx = cx + bronchSpread * 0.55 // medial edge
-    const rrx = rlx + lungW              // lateral edge
+    // medial edges
+    const rlx = cx + bronchSpread * 0.45
+    const llx = cx - bronchSpread * 0.45
+    const lW2 = lungW * 0.93
+
+    // ── RIGHT LUNG — smooth rounded shape (like a bean/oval)
+    const rCx = rlx + lungW * 0.48  // center x of right lung
+    const rCy = lungCenterY          // center y
     ctx.beginPath()
-    // apex (top)
-    ctx.moveTo(rlx + 2, lungTop + 8)
-    // lateral border going down — big convex curve
+    // start at top-center (rounded apex, NO beak)
+    ctx.moveTo(rCx, lungTop + 6)
+    // top → right lateral (smooth round)
     ctx.bezierCurveTo(
-      rlx + lungW * 0.6, lungTop - 4,
-      rrx + 4, lungTop + lungH * 0.25,
-      rrx + 2, lungCenterY
+      rCx + lungW * 0.45, lungTop + 2,
+      rlx + lungW + 4, lungTop + lungH * 0.2,
+      rlx + lungW + 2, rCy
     )
-    // continue lateral down to base
+    // right lateral → bottom (wide round base)
     ctx.bezierCurveTo(
-      rrx + 2, lungCenterY + lungH * 0.35,
-      rrx - lungW * 0.1, lungBase - 4,
-      rlx + lungW * 0.5, lungBase
+      rlx + lungW + 2, rCy + lungH * 0.32,
+      rlx + lungW * 0.75, lungBase + 4,
+      rCx, lungBase + 2
     )
-    // base (flat/slightly curved bottom)
+    // bottom → left medial (flat-ish base)
     ctx.bezierCurveTo(
-      rlx + lungW * 0.15, lungBase + 2,
-      rlx - 2, lungBase - 8,
-      rlx - 2, lungBase - lungH * 0.18
+      rlx + lungW * 0.1, lungBase + 2,
+      rlx - 4, lungBase - lungH * 0.08,
+      rlx - 2, rCy + lungH * 0.15
     )
-    // medial border going back up
+    // left medial → back to top (straight medial border)
     ctx.bezierCurveTo(
-      rlx - 2, lungTop + lungH * 0.3,
-      rlx, lungTop + 12,
-      rlx + 2, lungTop + 8
+      rlx - 2, rCy - lungH * 0.2,
+      rlx + lungW * 0.05, lungTop + 10,
+      rCx, lungTop + 6
     )
     ctx.closePath()
-    ctx.fillStyle = isLungHi ? 'rgba(45, 212, 191, 0.14)' : COL_LUNG_R
+    ctx.fillStyle = lungFillR
     ctx.fill()
     ctx.strokeStyle = lungStroke
-    ctx.lineWidth = 1.5
+    ctx.lineWidth = 1.8
     ctx.stroke()
 
-    // fissures right (horizontal + oblique)
+    // fissures right (subtle)
     ctx.beginPath()
-    ctx.moveTo(rlx + 5, lungCenterY - lungH * 0.08)
-    ctx.quadraticCurveTo(rlx + lungW * 0.5, lungCenterY - lungH * 0.04, rrx - 8, lungCenterY + lungH * 0.02)
-    ctx.strokeStyle = 'rgba(45, 212, 191, 0.14)'
-    ctx.lineWidth = 1
+    ctx.moveTo(rlx + 6, rCy - lungH * 0.06)
+    ctx.quadraticCurveTo(rCx, rCy - lungH * 0.02, rlx + lungW - 8, rCy + lungH * 0.04)
+    ctx.strokeStyle = 'rgba(45, 212, 191, 0.1)'
+    ctx.lineWidth = 0.8
     ctx.stroke()
     ctx.beginPath()
-    ctx.moveTo(rlx + 8, lungCenterY + lungH * 0.16)
-    ctx.quadraticCurveTo(rlx + lungW * 0.5, lungCenterY + lungH * 0.22, rrx - 10, lungCenterY + lungH * 0.26)
+    ctx.moveTo(rlx + 10, rCy + lungH * 0.16)
+    ctx.quadraticCurveTo(rCx, rCy + lungH * 0.2, rlx + lungW - 12, rCy + lungH * 0.22)
     ctx.stroke()
 
     // lobe labels right
-    ctx.font = `500 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
+    ctx.font = `500 ${Math.max(6, 7.5 * S)}px ${FONT_MONO}`
     ctx.textAlign = 'center'
-    ctx.fillStyle = 'rgba(45, 212, 191, 0.28)'
-    ctx.fillText('Sup', rlx + lungW * 0.5, lungCenterY - lungH * 0.18)
-    ctx.fillText('Méd', rlx + lungW * 0.5, lungCenterY + lungH * 0.1)
-    ctx.fillText('Inf', rlx + lungW * 0.5, lungCenterY + lungH * 0.36)
+    ctx.fillStyle = 'rgba(45, 212, 191, 0.22)'
+    ctx.fillText('Sup', rCx, rCy - lungH * 0.17)
+    ctx.fillText('Méd', rCx, rCy + lungH * 0.08)
+    ctx.fillText('Inf', rCx, rCy + lungH * 0.34)
 
-    // ── LEFT LUNG (2 lobes + cardiac notch — slightly narrower)
-    const lW2 = lungW * 0.92  // left lung slightly smaller
-    const llx = cx - bronchSpread * 0.55 // medial edge
-    const llxL = llx - lW2               // lateral edge
-    const notchY = lungCenterY + lungH * 0.12  // cardiac notch starts here
-    const notchDepth = lW2 * 0.28               // how deep the notch goes
-
+    // ── LEFT LUNG — same smooth shape, slightly smaller, tiny medial indent
+    const lCx = llx - lW2 * 0.48
+    const lCy = lungCenterY
     ctx.beginPath()
-    // apex (top)
-    ctx.moveTo(llx - 2, lungTop + 8)
-    // lateral border going down
+    // start at top-center (rounded apex)
+    ctx.moveTo(lCx, lungTop + 6)
+    // top → left lateral
     ctx.bezierCurveTo(
-      llx - lW2 * 0.6, lungTop - 4,
-      llxL - 4, lungTop + lungH * 0.25,
-      llxL - 2, lungCenterY
+      lCx - lW2 * 0.45, lungTop + 2,
+      llx - lW2 - 4, lungTop + lungH * 0.2,
+      llx - lW2 - 2, lCy
     )
-    // continue lateral down to base
+    // left lateral → bottom
     ctx.bezierCurveTo(
-      llxL - 2, lungCenterY + lungH * 0.35,
-      llxL + lW2 * 0.1, lungBase - 4,
-      llx - lW2 * 0.5, lungBase
+      llx - lW2 - 2, lCy + lungH * 0.32,
+      llx - lW2 * 0.75, lungBase + 4,
+      lCx, lungBase + 2
     )
-    // base (flat bottom — same as right lung)
+    // bottom → right medial
     ctx.bezierCurveTo(
-      llx - lW2 * 0.15, lungBase + 2,
-      llx + 2, lungBase - 5,
-      llx + 2, lungBase - lungH * 0.12
+      llx - lW2 * 0.1, lungBase + 2,
+      llx + 4, lungBase - lungH * 0.08,
+      llx + 2, lCy + lungH * 0.2
     )
-    // medial border going up — with cardiac notch indentation
+    // small cardiac notch indent (subtle, just a slight curve inward)
     ctx.bezierCurveTo(
-      llx + 2, notchY + lungH * 0.2,
-      llx + 2, notchY + lungH * 0.05,
-      llx + notchDepth, notchY
+      llx + 6, lCy + lungH * 0.08,
+      llx + 6, lCy - lungH * 0.02,
+      llx + 2, lCy - lungH * 0.1
     )
-    // cardiac notch curve (indentation toward medial)
+    // medial → back to top
     ctx.bezierCurveTo(
-      llx + notchDepth * 0.6, notchY - lungH * 0.06,
-      llx + 4, notchY - lungH * 0.1,
-      llx + 2, notchY - lungH * 0.15
-    )
-    // continue medial border up to apex
-    ctx.bezierCurveTo(
-      llx, lungTop + lungH * 0.25,
-      llx - 2, lungTop + 12,
-      llx - 2, lungTop + 8
+      llx, lCy - lungH * 0.25,
+      llx - lW2 * 0.05, lungTop + 10,
+      lCx, lungTop + 6
     )
     ctx.closePath()
-    ctx.fillStyle = isLungHi ? 'rgba(45, 212, 191, 0.12)' : COL_LUNG_L
+    ctx.fillStyle = lungFillL
     ctx.fill()
     ctx.strokeStyle = lungStroke
-    ctx.lineWidth = 1.5
+    ctx.lineWidth = 1.8
     ctx.stroke()
 
-    // fissure left (oblique)
+    // fissure left (subtle oblique)
     ctx.beginPath()
-    ctx.moveTo(llx - 5, lungCenterY + lungH * 0.02)
-    ctx.quadraticCurveTo(llx - lW2 * 0.5, lungCenterY + lungH * 0.1, llxL + 10, lungCenterY + lungH * 0.18)
-    ctx.strokeStyle = 'rgba(45, 212, 191, 0.14)'
-    ctx.lineWidth = 1
+    ctx.moveTo(llx - 6, lCy + lungH * 0.02)
+    ctx.quadraticCurveTo(lCx, lCy + lungH * 0.08, llx - lW2 + 10, lCy + lungH * 0.14)
+    ctx.strokeStyle = 'rgba(45, 212, 191, 0.1)'
+    ctx.lineWidth = 0.8
     ctx.stroke()
-
-    // cardiac notch heart symbol
-    ctx.font = `${Math.max(12, 16 * S)}px sans-serif`
-    ctx.textAlign = 'center'
-    ctx.fillStyle = 'rgba(244, 63, 94, 0.2)'
-    ctx.fillText('♥', llx + notchDepth * 0.5, notchY + 5)
 
     // lobe labels left
-    ctx.font = `500 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
-    ctx.fillStyle = 'rgba(45, 212, 191, 0.28)'
-    ctx.fillText('Sup', llx - lW2 * 0.5, lungCenterY - lungH * 0.12)
-    ctx.fillText('Inf', llx - lW2 * 0.5, lungCenterY + lungH * 0.32)
+    ctx.font = `500 ${Math.max(6, 7.5 * S)}px ${FONT_MONO}`
+    ctx.fillStyle = 'rgba(45, 212, 191, 0.22)'
+    ctx.fillText('Sup', lCx, lCy - lungH * 0.12)
+    ctx.fillText('Inf', lCx, lCy + lungH * 0.28)
 
-    regions.push({ part: 'lungs', x: llxL - 5, y: lungTop, w: (rrx + 5) - (llxL - 5), h: lungH + 5 })
+    // lung side labels
+    ctx.font = `600 ${Math.max(7, 8 * S)}px ${FONT_MONO}`
+    ctx.fillStyle = 'rgba(45, 212, 191, 0.15)'
+    ctx.fillText('D', rCx, lungTop + 18)
+    ctx.fillText('E', lCx, lungTop + 18)
+
+    const llxL = llx - lW2
+    const rrx = rlx + lungW
+    regions.push({ part: 'lungs', x: llxL - 5, y: lungTop, w: (rrx + 5) - (llxL - 5), h: lungH + 8 })
 
     // ═══════════════════ DIAPHRAGM ═══════════════════
     const isDiaHi = hoveredPart === 'diaphragm' || selectedPart === 'diaphragm'
@@ -686,12 +685,12 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
 
     // clusters in both lungs
     const alvPositions = [
-      { x: rlx + lungW * 0.2, y: lungCenterY - lungH * 0.12, n: 6 },
-      { x: rlx + lungW * 0.55, y: lungCenterY + lungH * 0.15, n: 6 },
-      { x: rlx + lungW * 0.3, y: lungCenterY + lungH * 0.35, n: 5 },
-      { x: llx - lW2 * 0.25, y: lungCenterY - lungH * 0.08, n: 6 },
-      { x: llx - lW2 * 0.55, y: lungCenterY + lungH * 0.12, n: 6 },
-      { x: llx - lW2 * 0.35, y: lungCenterY + lungH * 0.32, n: 5 },
+      { x: rCx - lungW * 0.1, y: rCy - lungH * 0.1, n: 6 },
+      { x: rCx + lungW * 0.15, y: rCy + lungH * 0.15, n: 6 },
+      { x: rCx - lungW * 0.05, y: rCy + lungH * 0.32, n: 5 },
+      { x: lCx + lW2 * 0.1, y: lCy - lungH * 0.06, n: 6 },
+      { x: lCx - lW2 * 0.1, y: lCy + lungH * 0.13, n: 6 },
+      { x: lCx + lW2 * 0.05, y: lCy + lungH * 0.3, n: 5 },
     ]
     for (const ap of alvPositions) drawAlvCluster(ap.x, ap.y, ap.n)
 
@@ -723,8 +722,8 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
       { x: cx, y: bifY },
     ]
 
-    const leftPath = [...centerPath, leftEnd, { x: llx - lW2 * 0.35, y: lungCenterY }]
-    const rightPath = [...centerPath, rightEnd, { x: rlx + lungW * 0.3, y: lungCenterY }]
+    const leftPath = [...centerPath, leftEnd, { x: lCx, y: lCy }]
+    const rightPath = [...centerPath, rightEnd, { x: rCx, y: rCy }]
 
     for (const p of st.particles) {
       const path = p.side === 'left' ? leftPath : (p.side === 'right' ? rightPath : centerPath)
