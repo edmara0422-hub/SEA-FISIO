@@ -5,7 +5,6 @@ import { useEffect, useRef, useCallback, useState } from 'react'
 /* ─────────────────────── types ─────────────────────── */
 
 interface RespiratoryBronchialTreeSimProps { className?: string }
-type ZoneFilter = 'all' | 'conducting' | 'transition' | 'respiratory'
 
 /* ─────────────────────── constants ─────────────────────── */
 
@@ -13,327 +12,428 @@ const FPS = 30
 const FRAME_MS = 1000 / FPS
 const COL_BG = 'rgba(2, 6, 12, 0.94)'
 const COL_GRID = 'rgba(255, 255, 255, 0.02)'
-const COL_TEXT_DIM = 'rgba(255, 255, 255, 0.3)'
+const COL_TEXT_DIM = 'rgba(255, 255, 255, 0.30)'
+const COL_CONDUCT = 'rgba(45, 212, 191,'
+const COL_RESP = 'rgba(250, 204, 21,'
 const FONT_MONO = '"SF Mono", "Fira Code", "Cascadia Code", ui-monospace, monospace'
 
-const ZONE_COLORS = {
-  conducting: { main: 'rgba(45, 212, 191, VAL)', dim: 'rgba(45, 212, 191, 0.08)' },
-  transition: { main: 'rgba(167, 139, 250, VAL)', dim: 'rgba(167, 139, 250, 0.06)' },
-  respiratory: { main: 'rgba(250, 204, 21, VAL)', dim: 'rgba(250, 204, 21, 0.05)' },
-}
-
-function getZone(gen: number): 'conducting' | 'transition' | 'respiratory' {
-  if (gen <= 16) return 'conducting'
-  if (gen <= 19) return 'transition'
-  return 'respiratory'
-}
-
-function zoneCol(zone: string, alpha: number): string {
-  const base = zone === 'conducting' ? '45, 212, 191' : zone === 'transition' ? '167, 139, 250' : '250, 204, 21'
-  return `rgba(${base}, ${alpha})`
-}
-
-function lerp(a: number, b: number, t: number) { return a + (b - a) * t }
+// generation definitions (matching the classic Weibel diagram)
+const GEN_DEFS = [
+  { gen: 0,  name: 'Traqueia',                 zone: 'c' },
+  { gen: 1,  name: 'Brônquio',                 zone: 'c' },
+  { gen: 2,  name: '',                          zone: 'c' },
+  { gen: 3,  name: 'Bronquíolos',              zone: 'c' },
+  { gen: 4,  name: '',                          zone: 'c' },
+  { gen: 5,  name: 'Bronquíolos terminais',    zone: 'c' },
+  // skip 6-14 (shown as dashed)
+  { gen: 15, name: 'Bronquíolos de transição',  zone: 'r', zp: 0 },
+  { gen: 16, name: '',                           zone: 'r', zp: 1 },
+  { gen: 17, name: 'Bronquíolos respiratórios', zone: 'r', zp: 2 },
+  { gen: 18, name: '',                           zone: 'r', zp: 3 },
+  { gen: 19, name: '',                           zone: 'r', zp: 4 },
+  { gen: 20, name: 'Ductos alveolares',         zone: 'r', zp: 5 },
+  { gen: 21, name: '',                           zone: 'r', zp: 6 },
+  { gen: 22, name: '',                           zone: 'r', zp: 7 },
+  { gen: 23, name: 'Sacos alveolares',          zone: 'r', zp: 8 },
+]
 
 /* ─────────────────────── component ─────────────────────── */
 
 export function RespiratoryBronchialTreeSim({ className }: RespiratoryBronchialTreeSimProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const [zoneFilter, setZoneFilter] = useState<ZoneFilter>('all')
+  const [hoveredGen, setHoveredGen] = useState<number | null>(null)
   const stRef = useRef({ t: 0, last: 0 })
+  const rowYRef = useRef<{ gen: number; y: number; h: number }[]>([])
 
   const draw = useCallback((ctx: CanvasRenderingContext2D, w: number, h: number) => {
     const st = stRef.current
-    const S = Math.min(w / 720, h / 520)
+    const S = Math.min(w / 740, h / 540)
 
     ctx.fillStyle = COL_BG; ctx.fillRect(0, 0, w, h)
     ctx.strokeStyle = COL_GRID; ctx.lineWidth = 0.5
     const gs = 26 * S
-    for (let x = 0; x < w; x += gs) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke() }
-    for (let y = 0; y < h; y += gs) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke() }
+    for (let gx = 0; gx < w; gx += gs) { ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, h); ctx.stroke() }
+    for (let gy = 0; gy < h; gy += gs) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke() }
 
-    const cx = w * 0.5
-    const treeTop = 15 * S
-    const treeBot = h - 55 * S
-    const treeH = treeBot - treeTop
+    // layout
+    const marginL = 110 * S   // left labels area
+    const marginR = 65 * S    // right gen numbers
+    const treeL = marginL     // tree drawing starts
+    const treeR = w - marginR // tree drawing ends
+    const treeCx = (treeL + treeR) / 2 // center of tree
+    const treeW = treeR - treeL
 
-    // ── ZONE BACKGROUND BANDS
-    const z1Bot = treeTop + treeH * 0.58  // gen 0-16
-    const z2Bot = treeTop + treeH * 0.74  // gen 17-19
-    const z3Bot = treeBot                  // gen 20-23
+    const topY = 20 * S
+    const botY = h - 15 * S
+    const totalH = botY - topY
 
-    const zones = [
-      { top: treeTop, bot: z1Bot, zone: 'conducting', label: 'ZONA CONDUTORA', sub: 'Gerações 0 – 16', desc: 'Condução • Filtração • Aquecimento' },
-      { top: z1Bot, bot: z2Bot, zone: 'transition', label: 'ZONA DE TRANSIÇÃO', sub: 'Gerações 17 – 19', desc: 'Bronquíolos respiratórios iniciais' },
-      { top: z2Bot, bot: z3Bot, zone: 'respiratory', label: 'ZONA RESPIRATÓRIA', sub: 'Gerações 20 – 23', desc: 'Ductos • Sacos • Alvéolos • TROCA GASOSA' },
-    ]
+    // visible rows: 15 generations shown (6 conducting + skip + 9 respiratory)
+    const rows = GEN_DEFS.length // 15
+    const rowH = totalH / rows
+    const rowYs: typeof rowYRef.current = []
 
-    for (const z of zones) {
-      const show = zoneFilter === 'all' || zoneFilter === z.zone
-      ctx.fillStyle = show ? ZONE_COLORS[z.zone as keyof typeof ZONE_COLORS].dim : 'rgba(255,255,255,0.005)'
-      ctx.fillRect(0, z.top, w, z.bot - z.top)
+    // ── ZONE BACKGROUNDS
+    // conducting zone: gen 0-5 (rows 0-5)
+    const condBot = topY + 6 * rowH
+    ctx.fillStyle = `${COL_CONDUCT} 0.03)`
+    ctx.fillRect(0, topY, w, condBot - topY)
 
-      // zone label (left margin)
-      ctx.save()
-      ctx.translate(16, (z.top + z.bot) / 2)
-      ctx.rotate(-Math.PI / 2)
-      ctx.font = `700 ${Math.max(7, 8 * S)}px ${FONT_MONO}`
-      ctx.textAlign = 'center'
-      ctx.fillStyle = show ? zoneCol(z.zone, 0.5) : 'rgba(255,255,255,0.08)'
-      ctx.fillText(z.label, 0, 0)
-      ctx.restore()
+    // skip zone indicator
+    const skipTop = condBot
+    const skipBot = condBot + rowH * 0 // We'll draw dashed lines instead
 
-      // sub/desc (right margin)
-      ctx.font = `600 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
-      ctx.textAlign = 'right'
-      ctx.fillStyle = show ? zoneCol(z.zone, 0.35) : 'rgba(255,255,255,0.06)'
-      ctx.fillText(z.sub, w - 12, (z.top + z.bot) / 2 - 5)
-      ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
-      ctx.fillStyle = show ? zoneCol(z.zone, 0.22) : 'rgba(255,255,255,0.04)'
-      ctx.fillText(z.desc, w - 12, (z.top + z.bot) / 2 + 7)
+    // respiratory zone: gen 15-23 (rows 6-14)
+    const respTop = topY + 6 * rowH
+    ctx.fillStyle = `${COL_RESP} 0.025)`
+    ctx.fillRect(0, respTop, w, botY - respTop)
 
-      // zone border
-      if (z.zone !== 'conducting') {
-        ctx.beginPath(); ctx.moveTo(30, z.top); ctx.lineTo(w - 30, z.top)
-        ctx.strokeStyle = zoneCol(z.zone, 0.1); ctx.lineWidth = 0.5; ctx.setLineDash([4, 4]); ctx.stroke(); ctx.setLineDash([])
-      }
-    }
-
-    // ── RECURSIVE TREE DRAWING
-    // We visually draw ~12 levels but label them to represent 23 real generations
-    // depth → real generation mapping
-    const depthToGen = [0, 1, 2, 3, 5, 8, 12, 16, 17, 18, 20, 22, 23]
-
-    const drawBranch = (x1: number, y1: number, angle: number, length: number, depth: number, parentWidth: number) => {
-      if (depth > 12) return
-
-      const gen = depthToGen[Math.min(depth, depthToGen.length - 1)]
-      const zone = getZone(gen)
-      const show = zoneFilter === 'all' || zoneFilter === zone
-
-      const x2 = x1 + Math.cos(angle) * length
-      const y2 = y1 + Math.sin(angle) * length
-
-      // width decreases with depth (anatomically: trachea 12mm → bronchiole <1mm → alveolar duct ~0.3mm)
-      const bw = Math.max(0.4, parentWidth * 0.72)
-
-      ctx.globalAlpha = show ? 1 : 0.08
-
-      // ── draw branch segment
-      ctx.beginPath()
-      ctx.moveTo(x1, y1); ctx.lineTo(x2, y2)
-      ctx.strokeStyle = zoneCol(zone, show ? (0.5 - depth * 0.025) : 0.08)
-      ctx.lineWidth = bw
-      ctx.lineCap = 'round'
-      ctx.stroke()
-
-      // ── cartilage rings on thick branches (gen 0-8)
-      if (gen <= 8 && bw > 1.5) {
-        const dx = x2 - x1, dy = y2 - y1
-        const segLen = Math.sqrt(dx * dx + dy * dy)
-        const perp = Math.atan2(dy, dx) + Math.PI / 2
-        const ringN = Math.max(2, Math.floor(segLen / (8 * S)))
-        for (let r = 1; r < ringN; r++) {
-          const t = r / ringN
-          const rx = lerp(x1, x2, t), ry = lerp(y1, y2, t)
-          ctx.beginPath()
-          ctx.moveTo(rx + Math.cos(perp) * bw * 0.4, ry + Math.sin(perp) * bw * 0.4)
-          ctx.lineTo(rx - Math.cos(perp) * bw * 0.4, ry - Math.sin(perp) * bw * 0.4)
-          ctx.strokeStyle = zoneCol(zone, 0.15)
-          ctx.lineWidth = 1; ctx.stroke()
-        }
-      }
-
-      // ── smooth muscle bands on bronchioles (gen 12-16)
-      if (gen >= 12 && gen <= 16 && bw > 0.8) {
-        ctx.beginPath()
-        ctx.moveTo(x1, y1); ctx.lineTo(x2, y2)
-        ctx.strokeStyle = 'rgba(244, 63, 94, 0.08)'
-        ctx.lineWidth = bw + 2; ctx.stroke()
-      }
-
-      // ── alveoli at terminal branches (gen >= 20)
-      if (gen >= 20 && depth >= 10) {
-        const alvCount = 5 + Math.floor(Math.random() * 3)
-        for (let a = 0; a < alvCount; a++) {
-          const aa = (a / alvCount) * Math.PI * 2 + depth
-          const ar = (2 + Math.sin(st.t * 0.8 + a) * 0.5) * S
-          const ax = x2 + Math.cos(aa) * ar * 2.2
-          const ay = y2 + Math.sin(aa) * ar * 2.2
-
-          ctx.beginPath(); ctx.arc(ax, ay, ar, 0, Math.PI * 2)
-          ctx.fillStyle = zoneCol('respiratory', show ? 0.08 : 0.02)
-          ctx.fill()
-          ctx.strokeStyle = zoneCol('respiratory', show ? 0.3 : 0.05)
-          ctx.lineWidth = 0.5; ctx.stroke()
-        }
-      }
-
-      ctx.globalAlpha = 1
-
-      // ── recurse
-      if (depth < 12) {
-        // spread decreases with depth (anatomical: wide split at carina, narrow at bronchioles)
-        const spread = depth === 0 ? 0.42 : (0.35 - depth * 0.012)
-        const nextLen = length * (0.72 - depth * 0.01)
-
-        // right side slightly more vertical (anatomically correct)
-        const rightBias = depth === 0 ? -0.05 : 0
-
-        drawBranch(x2, y2, angle - spread + rightBias, nextLen, depth + 1, bw)
-        drawBranch(x2, y2, angle + spread, nextLen, depth + 1, bw)
-      }
-    }
-
-    // ── TRACHEA (gen 0) — special: vertical tube with C-rings
-    const traLen = treeH * 0.18
-    const traTop2 = treeTop + 5
-    const traBif = traTop2 + traLen
-    const traW = 6 * S
-
-    const showConduct = zoneFilter === 'all' || zoneFilter === 'conducting'
-    ctx.globalAlpha = showConduct ? 1 : 0.08
-
-    // trachea tube
+    // zone divider
     ctx.beginPath()
-    ctx.moveTo(cx - traW, traTop2); ctx.lineTo(cx - traW, traBif)
-    ctx.moveTo(cx + traW, traTop2); ctx.lineTo(cx + traW, traBif)
-    ctx.strokeStyle = zoneCol('conducting', 0.45); ctx.lineWidth = 1.5; ctx.stroke()
+    ctx.moveTo(15, respTop); ctx.lineTo(w - 15, respTop)
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 0.5
+    ctx.setLineDash([4, 4]); ctx.stroke(); ctx.setLineDash([])
 
-    // C-rings
-    const ringN = 8
-    for (let r = 0; r < ringN; r++) {
-      const ry = traTop2 + 4 + r * (traLen - 8) / (ringN - 1)
-      ctx.beginPath()
-      ctx.arc(cx, ry, traW * 0.85, -0.5, Math.PI + 0.5)
-      ctx.strokeStyle = zoneCol('conducting', 0.2); ctx.lineWidth = 2.5 * S; ctx.stroke()
+    // ── ZONE LABELS (far left, vertical)
+    ctx.save()
+    ctx.translate(14, topY + (condBot - topY) / 2)
+    ctx.rotate(-Math.PI / 2)
+    ctx.font = `700 ${Math.max(7, 9 * S)}px ${FONT_MONO}`
+    ctx.textAlign = 'center'
+    ctx.fillStyle = `${COL_CONDUCT} 0.55)`
+    ctx.fillText('VIAS AÉREAS DE CONDUÇÃO', 0, 0)
+    ctx.restore()
+
+    ctx.save()
+    ctx.translate(14, respTop + (botY - respTop) / 2)
+    ctx.rotate(-Math.PI / 2)
+    ctx.font = `700 ${Math.max(7, 9 * S)}px ${FONT_MONO}`
+    ctx.textAlign = 'center'
+    ctx.fillStyle = `${COL_RESP} 0.55)`
+    ctx.fillText('ZONA RESPIRATÓRIA — ÁCINOS', 0, 0)
+    ctx.restore()
+
+    // ── RIGHT COLUMN HEADERS
+    ctx.font = `700 ${Math.max(7, 8 * S)}px ${FONT_MONO}`
+    ctx.textAlign = 'center'
+    const zColX = w - 35 * S
+    const zpColX = w - 12 * S
+    ctx.fillStyle = COL_TEXT_DIM
+    ctx.fillText('Z', zColX, topY - 5)
+    ctx.fillText("Z'", zpColX, topY - 5)
+
+    // ── DRAW THE BIFURCATING TREE ──
+    // The tree is drawn as a single continuous branching structure
+    // Each generation level corresponds to a Y position
+    // Branches split at each level
+
+    // We track branch endpoints: at each gen, store all x positions
+    // Gen 0: 1 branch at center
+    // Gen 1: 2 branches
+    // Gen 2: 4 branches
+    // etc.
+
+    // For visual clarity, max visible branches ~64 (gen 5 = 32 branches, that's enough)
+    // After the skip, we continue from gen 15 with same visual density
+
+    const genYPos: number[] = [] // Y position for each row
+
+    for (let i = 0; i < rows; i++) {
+      genYPos.push(topY + (i + 0.5) * rowH)
+      rowYs.push({ gen: GEN_DEFS[i].gen, y: topY + i * rowH, h: rowH })
+    }
+    rowYRef.current = rowYs
+
+    // build branch positions per visual level
+    type BranchSet = number[] // x positions of branches at this level
+    const branchSets: BranchSet[] = []
+
+    // conducting zone (gen 0-5): actually bifurcate
+    // gen 0: 1 branch
+    branchSets.push([treeCx])
+    // gen 1-5: each bifurcates
+    for (let g = 1; g <= 5; g++) {
+      const prev = branchSets[g - 1]
+      const next: number[] = []
+      // spread for this generation
+      const spread = (treeW * 0.4) / Math.pow(2, g) * 0.85
+      for (const px of prev) {
+        next.push(px - spread)
+        next.push(px + spread)
+      }
+      branchSets.push(next)
     }
 
-    // trachea label
-    ctx.font = `700 ${Math.max(8, 9 * S)}px ${FONT_MONO}`
-    ctx.textAlign = 'center'
-    ctx.fillStyle = zoneCol('conducting', showConduct ? 0.5 : 0.08)
-    ctx.fillText('TRAQUEIA', cx, traTop2 - 4)
-    ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
-    ctx.fillStyle = zoneCol('conducting', showConduct ? 0.3 : 0.05)
-    ctx.fillText('Geração 0 • Ø12mm', cx, traTop2 + traLen + 14)
-
-    // carina
-    ctx.beginPath(); ctx.arc(cx, traBif + 2, 3 * S, 0, Math.PI)
-    ctx.fillStyle = zoneCol('conducting', 0.25); ctx.fill()
-
-    ctx.globalAlpha = 1
-
-    // ── BIFURCATION → RECURSIVE TREE
-    const bifLen = treeH * 0.12
-    // right bronchus (wider, more vertical)
-    drawBranch(cx, traBif, Math.PI / 2 - 0.4, bifLen * 1.05, 0, 5 * S)
-    // left bronchus
-    drawBranch(cx, traBif, Math.PI / 2 + 0.45, bifLen, 0, 4.5 * S)
-
-    // ── AIR PARTICLES flowing through tree
-    const particleN = 12
-    for (let i = 0; i < particleN; i++) {
-      const pPhase = ((st.t * 0.4 + i * 0.08) % 1)
-
-      // follow trachea then split
-      let px: number, py: number
-      if (pPhase < 0.25) {
-        const t = pPhase / 0.25
-        px = cx + Math.sin(st.t * 3 + i * 2) * 2
-        py = lerp(traTop2 - 5, traBif, t)
-      } else {
-        const t = (pPhase - 0.25) / 0.75
-        const side = i % 2 === 0 ? -1 : 1
-        const angle = Math.PI / 2 + side * (0.4 + t * 0.2)
-        const dist = t * treeH * 0.4
-        px = cx + Math.cos(angle) * dist + Math.sin(st.t * 2 + i) * (3 + t * 8)
-        py = traBif + Math.sin(angle) * dist
+    // respiratory zone (gen 15-23): continue from where conducting left off
+    // We restart with same visual positions as gen 5 (32 branches)
+    // and keep splitting but with tighter spacing
+    let respBranches = [...branchSets[5]]
+    const respSets: BranchSet[] = [respBranches]
+    for (let rg = 1; rg <= 8; rg++) {
+      const prev = respSets[rg - 1]
+      const next: number[] = []
+      const spread = (treeW * 0.3) / Math.pow(2, 5 + rg) * 1.2
+      for (const px of prev) {
+        next.push(px - spread)
+        next.push(px + spread)
       }
+      // limit visible branches to prevent clutter
+      if (next.length > 128) {
+        // subsample
+        const step = Math.ceil(next.length / 128)
+        const sampled: number[] = []
+        for (let i = 0; i < next.length; i += step) sampled.push(next[i])
+        respSets.push(sampled)
+      } else {
+        respSets.push(next)
+      }
+    }
 
-      if (py > treeTop && py < treeBot) {
-        const zone = py < z1Bot ? 'conducting' : py < z2Bot ? 'transition' : 'respiratory'
-        const show2 = zoneFilter === 'all' || zoneFilter === zone
-        if (show2) {
-          const g = ctx.createRadialGradient(px, py, 0, px, py, 5)
-          g.addColorStop(0, zoneCol(zone, 0.3)); g.addColorStop(1, 'transparent')
-          ctx.fillStyle = g; ctx.fillRect(px - 6, py - 6, 12, 12)
-          ctx.beginPath(); ctx.arc(px, py, 1.5, 0, Math.PI * 2)
-          ctx.fillStyle = zoneCol(zone, 0.8); ctx.fill()
+    // ── DRAW CONDUCTING BRANCHES (gen 0-5)
+    for (let g = 0; g <= 5; g++) {
+      const branches = branchSets[g]
+      const y = genYPos[g]
+      const prevY = g > 0 ? genYPos[g - 1] : y - rowH * 0.5
+      const prevBranches = g > 0 ? branchSets[g - 1] : [treeCx]
+      const isHi = hoveredGen === GEN_DEFS[g].gen
+
+      // line width decreases with generation
+      const lw = Math.max(1, (5 - g * 0.7) * S)
+
+      // draw connections from parent to children
+      for (let b = 0; b < branches.length; b++) {
+        const bx = branches[b]
+        const parentIdx = Math.floor(b / 2)
+        const parentX = prevBranches[Math.min(parentIdx, prevBranches.length - 1)]
+
+        // vertical from parent level to this level
+        if (g > 0) {
+          ctx.beginPath()
+          ctx.moveTo(parentX, prevY + 2)
+          ctx.lineTo(parentX, prevY + rowH * 0.3)
+          ctx.lineTo(bx, y - rowH * 0.15)
+          ctx.lineTo(bx, y + 2)
+          ctx.strokeStyle = isHi ? `${COL_CONDUCT} 0.75)` : `${COL_CONDUCT} 0.4)`
+          ctx.lineWidth = lw
+          ctx.lineCap = 'round'; ctx.lineJoin = 'round'
+          ctx.stroke()
+        } else {
+          // trachea: single straight line
+          ctx.beginPath()
+          ctx.moveTo(bx, y - rowH * 0.35)
+          ctx.lineTo(bx, y + rowH * 0.15)
+          ctx.strokeStyle = isHi ? `${COL_CONDUCT} 0.75)` : `${COL_CONDUCT} 0.45)`
+          ctx.lineWidth = lw * 1.5
+          ctx.stroke()
+
+          // C-rings on trachea
+          for (let r = 0; r < 3; r++) {
+            const ry = y - rowH * 0.25 + r * rowH * 0.15
+            ctx.beginPath()
+            ctx.arc(bx, ry, lw * 1.2, -0.6, Math.PI + 0.6)
+            ctx.strokeStyle = `${COL_CONDUCT} 0.15)`
+            ctx.lineWidth = 2 * S; ctx.stroke()
+          }
         }
       }
     }
 
-    // ── GENERATION SCALE (right-center column)
-    const scaleX = w - 55 * S
-    const scaleTop = treeTop + 10
-    const scaleBot = treeBot - 5
-    const scaleH = scaleBot - scaleTop
-
-    // scale line
-    ctx.beginPath(); ctx.moveTo(scaleX, scaleTop); ctx.lineTo(scaleX, scaleBot)
-    ctx.strokeStyle = 'rgba(255,255,255,0.06)'; ctx.lineWidth = 1; ctx.stroke()
-
-    // generation ticks
-    const genTicks = [
-      { gen: 0, label: 'Traqueia', y: 0 },
-      { gen: 1, label: 'Brônquios Princ.', y: 0.08 },
-      { gen: 2, label: 'Lobares', y: 0.13 },
-      { gen: 3, label: 'Segmentares', y: 0.18 },
-      { gen: 8, label: 'Bronquíolos', y: 0.35 },
-      { gen: 16, label: 'B. Terminais', y: 0.56 },
-      { gen: 17, label: 'B. Respiratórios', y: 0.62 },
-      { gen: 20, label: 'Ductos Alv.', y: 0.78 },
-      { gen: 23, label: 'Sacos Alv.', y: 0.95 },
-    ]
-
-    for (const tick of genTicks) {
-      const ty = scaleTop + tick.y * scaleH
-      const zone = getZone(tick.gen)
-      const show3 = zoneFilter === 'all' || zoneFilter === zone
-
-      // tick mark
-      ctx.beginPath(); ctx.moveTo(scaleX - 4, ty); ctx.lineTo(scaleX + 4, ty)
-      ctx.strokeStyle = show3 ? zoneCol(zone, 0.4) : 'rgba(255,255,255,0.04)'
-      ctx.lineWidth = 1.5; ctx.stroke()
-
-      // gen number
-      ctx.font = `700 ${Math.max(8, 10 * S)}px ${FONT_MONO}`
-      ctx.textAlign = 'right'
-      ctx.fillStyle = show3 ? zoneCol(zone, 0.6) : 'rgba(255,255,255,0.06)'
-      ctx.fillText(`${tick.gen}`, scaleX - 8, ty + 4)
-
-      // name
-      ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
-      ctx.textAlign = 'left'
-      ctx.fillStyle = show3 ? zoneCol(zone, 0.35) : 'rgba(255,255,255,0.04)'
-      ctx.fillText(tick.label, scaleX + 8, ty + 3)
+    // ── SKIP INDICATOR (dashed lines from gen 5 to gen 15)
+    const skipFromY = genYPos[5] + rowH * 0.15
+    const skipToY = genYPos[6] - rowH * 0.15
+    const skipBranches = branchSets[5]
+    // only draw a few dashed lines (subsample)
+    const skipSample = Math.min(skipBranches.length, 16)
+    const skipStep = Math.max(1, Math.floor(skipBranches.length / skipSample))
+    for (let i = 0; i < skipBranches.length; i += skipStep) {
+      const bx = skipBranches[i]
+      ctx.beginPath()
+      ctx.moveTo(bx, skipFromY)
+      ctx.lineTo(bx, skipToY)
+      ctx.strokeStyle = `${COL_CONDUCT} 0.15)`
+      ctx.lineWidth = 1
+      ctx.setLineDash([3, 5]); ctx.stroke(); ctx.setLineDash([])
     }
 
-    // ── STATS BAR
-    const statY = h - 20 * S
+    // skip label
+    ctx.font = `500 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
+    ctx.textAlign = 'center'
+    ctx.fillStyle = COL_TEXT_DIM
+    ctx.fillText('· · · gerações 6–14 · · ·', treeCx, (skipFromY + skipToY) / 2 + 3)
+
+    // ── DRAW RESPIRATORY BRANCHES (gen 15-23)
+    for (let rg = 0; rg <= 8; rg++) {
+      const rowIdx = 6 + rg // index in GEN_DEFS
+      if (rowIdx >= GEN_DEFS.length) break
+      const branches = respSets[rg]
+      const y = genYPos[rowIdx]
+      const prevY = rg > 0 ? genYPos[rowIdx - 1] : genYPos[5] // connect from conducting
+      const prevBranches = rg > 0 ? respSets[rg - 1] : branchSets[5]
+      const isHi = hoveredGen === GEN_DEFS[rowIdx].gen
+
+      const lw = Math.max(0.5, (2.5 - rg * 0.2) * S)
+
+      // draw branches
+      for (let b = 0; b < branches.length; b++) {
+        const bx = branches[b]
+        const parentIdx = Math.floor(b / 2)
+        const parentX = prevBranches[Math.min(parentIdx, prevBranches.length - 1)]
+
+        ctx.beginPath()
+        ctx.moveTo(parentX, prevY + 2)
+        ctx.lineTo(bx, y + 2)
+        ctx.strokeStyle = isHi ? `${COL_RESP} 0.7)` : `${COL_RESP} 0.3)`
+        ctx.lineWidth = lw
+        ctx.lineCap = 'round'
+        ctx.stroke()
+
+        // alveoli on gen 20+ (small circles attached to branches)
+        if (GEN_DEFS[rowIdx].gen >= 20) {
+          const alvN = GEN_DEFS[rowIdx].gen >= 22 ? 3 : 2
+          for (let a = 0; a < alvN; a++) {
+            const side = a % 2 === 0 ? -1 : 1
+            const aOff = (a + 1) * 2.5 * S * side
+            const ay = y - 1 + a * 1.5
+            const ar = (1.5 + Math.sin(st.t * 0.6 + b + a) * 0.3) * S
+
+            ctx.beginPath(); ctx.arc(bx + aOff, ay, ar, 0, Math.PI * 2)
+            ctx.fillStyle = isHi ? `${COL_RESP} 0.12)` : `${COL_RESP} 0.04)`
+            ctx.fill()
+            ctx.strokeStyle = isHi ? `${COL_RESP} 0.45)` : `${COL_RESP} 0.15)`
+            ctx.lineWidth = 0.4; ctx.stroke()
+          }
+        }
+
+        // alveolar sacs at gen 23 (grape-like cluster at bottom)
+        if (GEN_DEFS[rowIdx].gen === 23 && b % 2 === 0) {
+          const sacN = 5
+          for (let sa = 0; sa < sacN; sa++) {
+            const saa = (sa / sacN) * Math.PI + Math.PI
+            const sar = (2.5 + Math.sin(st.t * 0.5 + sa) * 0.3) * S
+            const sax = bx + Math.cos(saa) * sar * 2
+            const say = y + 4 + Math.sin(saa) * sar * 1.5 + sar
+
+            ctx.beginPath(); ctx.arc(sax, say, sar, 0, Math.PI * 2)
+            ctx.fillStyle = isHi ? `${COL_RESP} 0.15)` : `${COL_RESP} 0.05)`
+            ctx.fill()
+            ctx.strokeStyle = isHi ? `${COL_RESP} 0.5)` : `${COL_RESP} 0.2)`
+            ctx.lineWidth = 0.5; ctx.stroke()
+          }
+        }
+      }
+    }
+
+    // ── LEFT LABELS (structure names)
+    ctx.textAlign = 'right'
+    const labelX = marginL - 10 * S
+
+    for (let i = 0; i < GEN_DEFS.length; i++) {
+      const g = GEN_DEFS[i]
+      if (!g.name) continue
+      const y = genYPos[i]
+      const isHi = hoveredGen === g.gen
+      const isResp = g.zone === 'r'
+
+      ctx.font = `${isHi ? '700' : '600'} ${Math.max(7, 8.5 * S)}px ${FONT_MONO}`
+      ctx.fillStyle = isHi
+        ? (isResp ? `${COL_RESP} 0.9)` : `${COL_CONDUCT} 0.9)`)
+        : (isResp ? `${COL_RESP} 0.5)` : `${COL_CONDUCT} 0.45)`)
+      ctx.fillText(g.name, labelX, y + 4)
+
+      // connector line from label to tree
+      const nearestBranch = i <= 5 ? branchSets[i] : respSets[i - 6]
+      if (nearestBranch && nearestBranch.length > 0) {
+        const firstBx = nearestBranch[0]
+        ctx.beginPath()
+        ctx.moveTo(labelX + 5, y)
+        ctx.lineTo(firstBx - 5, y)
+        ctx.strokeStyle = isHi
+          ? (isResp ? `${COL_RESP} 0.2)` : `${COL_CONDUCT} 0.15)`)
+          : 'rgba(255,255,255,0.03)'
+        ctx.lineWidth = 0.5
+        ctx.setLineDash([2, 3]); ctx.stroke(); ctx.setLineDash([])
+      }
+    }
+
+    // ── RIGHT COLUMN: Z and Z' numbers
+    ctx.textAlign = 'center'
+
+    for (let i = 0; i < GEN_DEFS.length; i++) {
+      const g = GEN_DEFS[i]
+      const y = genYPos[i]
+      const isHi = hoveredGen === g.gen
+      const isResp = g.zone === 'r'
+
+      // Z (generation number)
+      ctx.font = `${isHi ? '700' : '600'} ${Math.max(8, 10 * S)}px ${FONT_MONO}`
+      ctx.fillStyle = isHi
+        ? (isResp ? `${COL_RESP} 0.9)` : `${COL_CONDUCT} 0.8)`)
+        : (isResp ? `${COL_RESP} 0.4)` : `${COL_CONDUCT} 0.35)`)
+      ctx.fillText(`${g.gen}`, zColX, y + 4)
+
+      // Z' (respiratory zone generation, only for zone 'r')
+      if ('zp' in g && g.zp !== undefined) {
+        ctx.fillStyle = isHi ? `${COL_RESP} 0.8)` : `${COL_RESP} 0.3)`
+        ctx.fillText(`${g.zp}`, zpColX, y + 4)
+      }
+
+      // row hover highlight
+      if (isHi) {
+        ctx.fillStyle = isResp ? `${COL_RESP} 0.04)` : `${COL_CONDUCT} 0.04)`
+        ctx.fillRect(0, topY + i * rowH, w, rowH)
+      }
+
+      // subtle row line
+      ctx.beginPath()
+      ctx.moveTo(treeL, topY + i * rowH); ctx.lineTo(w - 10, topY + i * rowH)
+      ctx.strokeStyle = 'rgba(255,255,255,0.02)'; ctx.lineWidth = 0.5; ctx.stroke()
+    }
+
+    // ── AIR FLOW PARTICLES (subtle, flowing down through the tree)
+    const pN = 10
+    for (let i = 0; i < pN; i++) {
+      const pPhase = ((st.t * 0.3 + i * 0.1) % 1)
+      const rowFloat = pPhase * (rows - 1)
+      const rowIdx2 = Math.floor(rowFloat)
+      const rowFrac = rowFloat - rowIdx2
+
+      // pick a branch at this level
+      const set = rowIdx2 <= 5 ? branchSets[rowIdx2] : respSets[Math.min(rowIdx2 - 6, respSets.length - 1)]
+      if (!set || set.length === 0) continue
+      const branchIdx = i % set.length
+      const bx = set[branchIdx]
+      const py = genYPos[rowIdx2] ? lerp(genYPos[rowIdx2], genYPos[Math.min(rowIdx2 + 1, rows - 1)] ?? genYPos[rowIdx2], rowFrac) : 0
+      if (py === 0) continue
+
+      const px = bx + Math.sin(st.t * 3 + i * 2) * 2
+
+      const zone = rowIdx2 <= 5 ? 'c' : 'r'
+      const col = zone === 'c' ? COL_CONDUCT : COL_RESP
+
+      const g = ctx.createRadialGradient(px, py, 0, px, py, 4 * S)
+      g.addColorStop(0, `${col} 0.25)`); g.addColorStop(1, `${col} 0)`)
+      ctx.fillStyle = g; ctx.fillRect(px - 5, py - 5, 10, 10)
+      ctx.beginPath(); ctx.arc(px, py, 1.5 * S, 0, Math.PI * 2)
+      ctx.fillStyle = `${col} 0.7)`; ctx.fill()
+    }
+
+    // ── BOTTOM STATS
     ctx.font = `600 ${Math.max(8, 10 * S)}px ${FONT_MONO}`
     ctx.textAlign = 'center'
-    const stats2 = [
-      { v: '23', l: 'Gerações', c: zoneCol('conducting', 0.6) },
-      { v: '2²³', l: 'Ramificações', c: zoneCol('transition', 0.6) },
-      { v: '70-100m²', l: 'Área Alveolar', c: zoneCol('respiratory', 0.6) },
-      { v: '300-500M', l: 'Alvéolos', c: zoneCol('respiratory', 0.6) },
+    const statY2 = h - 5
+    const stats = [
+      { v: '23 gerações', c: `${COL_CONDUCT} 0.5)` },
+      { v: '2²³ ≈ 8M ramificações', c: `${COL_CONDUCT} 0.4)` },
+      { v: '300–500M alvéolos', c: `${COL_RESP} 0.5)` },
+      { v: 'Área: 70–100 m²', c: `${COL_RESP} 0.5)` },
     ]
-    const sw = (w - 60) / stats2.length
-    for (let i = 0; i < stats2.length; i++) {
-      const sx = 30 + i * sw + sw / 2
-      ctx.fillStyle = stats2[i].c; ctx.fillText(stats2[i].v, sx, statY)
-      ctx.font = `500 ${Math.max(5, 6.5 * S)}px ${FONT_MONO}`
-      ctx.fillStyle = COL_TEXT_DIM; ctx.fillText(stats2[i].l, sx, statY + 12)
-      ctx.font = `600 ${Math.max(8, 10 * S)}px ${FONT_MONO}`
+    const stW = (w - 40) / stats.length
+    for (let i = 0; i < stats.length; i++) {
+      ctx.fillStyle = stats[i].c
+      ctx.fillText(stats[i].v, 20 + i * stW + stW / 2, statY2)
     }
 
-    // HUD
-    ctx.font = `600 ${Math.max(9, 10 * S)}px ${FONT_MONO}`
-    ctx.textAlign = 'left'
-    ctx.fillStyle = COL_TEXT_DIM; ctx.fillText('TRACHEOBRONCHIAL.TREE', 35, h - 8)
-  }, [zoneFilter])
+    function lerp(a2: number, b2: number, t2: number) { return a2 + (b2 - a2) * t2 }
+  }, [hoveredGen])
 
   useEffect(() => {
     const c = canvasRef.current; if (!c) return
@@ -354,24 +454,38 @@ export function RespiratoryBronchialTreeSim({ className }: RespiratoryBronchialT
     return () => cancelAnimationFrame(raf)
   }, [draw])
 
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    const c = canvasRef.current; if (!c) return
+    const r = c.getBoundingClientRect()
+    const my = e.clientY - r.top
+    let found: number | null = null
+    for (const row of rowYRef.current) {
+      if (my >= row.y && my <= row.y + row.h) { found = row.gen; break }
+    }
+    setHoveredGen(found)
+  }, [])
+
+  const activeGen = hoveredGen !== null ? GEN_DEFS.find(g => g.gen === hoveredGen) : null
+
   return (
     <div className={`relative w-full ${className ?? ''}`}>
-      <canvas ref={canvasRef} className="w-full rounded-2xl" style={{ aspectRatio: '16/9', background: COL_BG }} />
-      <div className="absolute top-3 right-3 flex gap-1">
-        {([
-          { id: 'all' as ZoneFilter, label: 'Todas' },
-          { id: 'conducting' as ZoneFilter, label: 'Condutora' },
-          { id: 'transition' as ZoneFilter, label: 'Transição' },
-          { id: 'respiratory' as ZoneFilter, label: 'Respiratória' },
-        ]).map(m => (
-          <button key={m.id} onClick={() => setZoneFilter(m.id)}
-            className={`px-2 py-1 rounded-lg text-[8px] font-semibold uppercase tracking-wider transition-all ${
-              zoneFilter === m.id ? 'bg-white/10 text-white/80 border border-white/20' : 'text-white/30 hover:text-white/50 border border-transparent'
-            }`}>
-            {m.label}
-          </button>
-        ))}
-      </div>
+      <canvas ref={canvasRef} className="w-full rounded-2xl"
+        style={{ aspectRatio: '16/10', background: COL_BG }}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={() => setHoveredGen(null)} />
+      {activeGen && activeGen.name && (
+        <div className="absolute bottom-3 left-3 right-3 rounded-xl border border-white/10 bg-black/80 backdrop-blur-md px-4 py-2.5" style={{ pointerEvents: 'none' }}>
+          <div className="flex items-center gap-3">
+            <span className="text-[13px] font-bold" style={{ color: activeGen.zone === 'c' ? `${COL_CONDUCT} 0.9)` : `${COL_RESP} 0.9)` }}>
+              Geração {activeGen.gen}
+            </span>
+            <span className="text-[11px] font-semibold text-white/80">{activeGen.name}</span>
+            <span className="text-[9px] text-white/40 ml-auto">
+              {activeGen.zone === 'c' ? 'Zona Condutora' : 'Zona Respiratória'}
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
