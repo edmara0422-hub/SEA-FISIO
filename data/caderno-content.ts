@@ -1761,6 +1761,90 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T6',
+        title: 'Volumes e Capacidades Pulmonares',
+        blocks: [
+          {
+            id: 'M2-T6-slides-volumes',
+            type: 'slides',
+            title: 'Os 4 Volumes Pulmonares',
+            slides: [
+              {
+                title: 'Volume Corrente e Reservas',
+                bullets: [
+                  'Volume Corrente (VC): ~500 mL — volume inspirado/expirado em cada respiração normal tranquila',
+                  'Volume de Reserva Inspiratória (VRI): ~3.000 mL — volume EXTRA inspirável além do VC',
+                  'Volume de Reserva Expiratória (VRE): ~1.100 mL — volume EXTRA expirável além do VC',
+                  'Volume Residual (VR): ~1.200 mL — permanece nos pulmões MESMO após expiração máxima',
+                  'VR NÃO pode ser medido por espirometria (pulmão nunca esvazia completamente)',
+                ],
+                highlight: 'Os 4 volumes são medidas fundamentais. VC × frequência = ventilação minuto (~6 L/min em repouso).',
+              },
+            ],
+          },
+          {
+            id: 'M2-T6-slides-capacidades',
+            type: 'slides',
+            title: 'As 4 Capacidades Pulmonares',
+            slides: [
+              {
+                title: 'Capacidades = Soma de 2+ Volumes',
+                bullets: [
+                  'Capacidade Inspiratória (CI): VC + VRI = ~3.500 mL — máximo inspirável do nível expiratório normal',
+                  'Capacidade Residual Funcional (CRF): VRE + VR = ~2.300 mL — volume nos pulmões após expiração normal',
+                  'Capacidade Vital (CV): VRI + VC + VRE = ~4.600 mL — máximo de ar mobilizável',
+                  'Capacidade Pulmonar Total (CPT): CV + VR = ~5.800 mL — TODO o ar que os pulmões comportam',
+                ],
+                highlight: 'CV é a medida clínica mais importante na espirometria. CV reduzida indica doença restritiva.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T6-slides-espacos',
+            type: 'slides',
+            title: 'Espaços Mortos',
+            slides: [
+              {
+                title: 'Ar Que Não Participa da Troca',
+                bullets: [
+                  'Espaço Morto Anatômico: ~150 mL — volume nas vias condutoras (nariz → bronquíolos terminais)',
+                  'Espaço Morto Alveolar: ~0 mL em pessoa normal — alvéolos ventilados mas não perfundidos',
+                  'Espaço Morto Fisiológico = Anatômico + Alveolar — em pessoa saudável ≈ anatômico',
+                  'Em doença pulmonar: espaço morto fisiológico pode ser até 10× o anatômico (1-2 L)',
+                  'Alvéolos não funcionantes (sem fluxo sanguíneo) aumentam o espaço morto alveolar',
+                ],
+                highlight: 'Ventilação alveolar efetiva = (VC - espaço morto) × frequência = (500-150) × 12 = 4.200 mL/min.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T6-slides-circulacao',
+            type: 'slides',
+            title: 'Circulação Pulmonar',
+            slides: [
+              {
+                title: 'Sistêmica vs. Pulmonar',
+                bullets: [
+                  'Circulação Sistêmica: alta pressão (120/80 mmHg) — distribui sangue oxigenado ao corpo',
+                  'Circulação Pulmonar: BAIXA pressão (25/10 mmHg) — leva sangue aos pulmões para hematose',
+                  'Artéria pulmonar: sangue DESOXIGENADO (VD → pulmões)',
+                  'Veias pulmonares: sangue OXIGENADO (pulmões → AE)',
+                  'Baixa pressão pulmonar: evita edema, facilita troca gasosa',
+                ],
+                highlight: 'A circulação pulmonar opera com 1/5 da pressão sistêmica — design otimizado para troca gasosa sem edema.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T6-sim-volumes',
+            type: 'simulation',
+            title: 'Espirometria — Volumes e Capacidades',
+            simulationId: 'respiratory-volumes',
+            description: 'Traçado espirométrico em tempo real com 4 volumes e 4 capacidades — clique para destacar cada um',
+          },
+        ],
+      },
     ],
   },
   {
