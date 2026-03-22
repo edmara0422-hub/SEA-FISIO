@@ -1402,6 +1402,115 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T3',
+        title: 'Mecânica Respiratória',
+        blocks: [
+          {
+            id: 'M2-T3-slides-ciclo',
+            type: 'slides',
+            title: 'Dinâmica do Ciclo Ventilatório',
+            slides: [
+              {
+                title: 'Inspiração — Processo ATIVO',
+                bullets: [
+                  'Músculos inspiratórios contraem (diafragma principal)',
+                  'Volume torácico e alveolar AUMENTA',
+                  'Pressão alveolar DIMINUI (fica negativa)',
+                  'P.alveolar < P.atmosférica → ar ENTRA nos pulmões',
+                  'Volume corrente: ~500 mL de ar inspirado',
+                ],
+                highlight: 'Inspiração = contração muscular ativa. Sem contração, não há entrada de ar.',
+              },
+              {
+                title: 'Expiração — Processo PASSIVO',
+                bullets: [
+                  'Músculos inspiratórios RELAXAM',
+                  'Retração elástica dos pulmões e da caixa torácica',
+                  'Volume torácico e alveolar DIMINUI',
+                  'Pressão alveolar AUMENTA (fica positiva)',
+                  'P.alveolar > P.atmosférica → ar SAI dos pulmões',
+                ],
+                highlight: 'Expiração em repouso é PASSIVA — não requer contração muscular. Apenas a expiração forçada (tosse, exercício) usa músculos.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T3-slides-pressoes',
+            type: 'slides',
+            title: 'Pressões Respiratórias',
+            slides: [
+              {
+                title: 'Pressão Pleural',
+                bullets: [
+                  'Pressão do líquido no espaço entre pleura visceral e parietal',
+                  'Normalmente NEGATIVA (sucção que mantém pulmões expandidos)',
+                  'Início da inspiração: -5 cmH₂O',
+                  'Durante inspiração normal: -7,5 cmH₂O (mais negativa)',
+                  'A expansão da caixa torácica cria pressão mais negativa → puxa pulmões',
+                ],
+              },
+              {
+                title: 'Pressão Alveolar',
+                bullets: [
+                  'Pressão do ar dentro dos alvéolos',
+                  'Com glote aberta e sem fluxo: igual à P.atmosférica (0 cmH₂O)',
+                  'Inspiração: -1 cmH₂O (ligeiramente negativa → ar entra)',
+                  'Expiração: +1 cmH₂O (positiva → empurra 500mL em 2-3 segundos)',
+                  'O gradiente de pressão é PEQUENO: apenas ±1 cmH₂O move meio litro de ar',
+                ],
+                highlight: 'Apenas 1 cmH₂O de diferença é suficiente para mover 500mL de ar — a engenharia pulmonar é extraordinariamente eficiente.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T3-slides-musculos',
+            type: 'slides',
+            title: 'Músculos Respiratórios',
+            slides: [
+              {
+                title: 'Músculos Inspiratórios',
+                bullets: [
+                  'Diafragma (C3-C5): PRINCIPAL músculo inspiratório. Movimento crânio-caudal',
+                  'Intercostais Externos (T1-T12): elevam as costelas. Movimento ântero-posterior',
+                  'Escalenos: elevam as duas primeiras costelas (acessório)',
+                  'Esternocleidomastóideo (ECM): eleva o esterno (acessório)',
+                  'Serráteis Anteriores: elevam várias costelas (acessório)',
+                ],
+                highlight: 'Diafragma = 75% do trabalho inspiratório. Lesão do nervo frênico (C3-C5) = paralisia diafragmática.',
+              },
+              {
+                title: 'Músculos Expiratórios',
+                bullets: [
+                  'Em repouso: expiração é PASSIVA (retração elástica)',
+                  'Expiração FORÇADA usa músculos ativamente:',
+                  'Reto Abdominal: puxa costelas inferiores para baixo + comprime abdômen contra diafragma',
+                  'Intercostais Internos: puxam a caixa torácica para baixo',
+                  'Oblíquos e Transverso do Abdômen: comprimem conteúdo abdominal',
+                ],
+              },
+              {
+                title: 'Mecanismo Integrado',
+                bullets: [
+                  'Inspiração: diafragma desce + costelas sobem → ↑ volume → ↓ pressão → ar entra',
+                  'Expiração: diafragma sobe + costelas descem → ↓ volume → ↑ pressão → ar sai',
+                  'Lei de Boyle: P × V = constante (a mesma massa de gás)',
+                  'O pulmão NÃO se expande sozinho — é puxado pela caixa torácica via pleura',
+                  'O acoplamento pleural é essencial: pneumotórax rompe essa ligação → pulmão colapsa',
+                ],
+                highlight: 'Lei de Boyle: ↑Volume = ↓Pressão. ↓Volume = ↑Pressão. Toda a ventilação depende dessa relação.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T3-sim-ventilation',
+            type: 'simulation',
+            title: 'Mecânica Ventilatória Interativa',
+            simulationId: 'respiratory-ventilation',
+            description: 'Ciclo completo: caixa torácica expandindo/retraindo, diafragma subindo/descendo, fluxo de ar, pressões em tempo real',
+          },
+        ],
+      },
     ],
   },
   {

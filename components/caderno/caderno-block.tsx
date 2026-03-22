@@ -23,6 +23,7 @@ const RespiratoryGasExchangeSim = dynamic(() => import('@/components/experience/
 const RespiratoryDefenseSim = dynamic(() => import('@/components/experience/respiratory-defense-sim').then(m => m.RespiratoryDefenseSim), { ssr: false })
 const RespiratoryMembraneSim = dynamic(() => import('@/components/experience/respiratory-membrane-sim').then(m => m.RespiratoryMembraneSim), { ssr: false })
 const RespiratoryCoughSim = dynamic(() => import('@/components/experience/respiratory-cough-sim').then(m => m.RespiratoryCoughSim), { ssr: false })
+const RespiratoryVentilationSim = dynamic(() => import('@/components/experience/respiratory-ventilation-sim').then(m => m.RespiratoryVentilationSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
@@ -42,6 +43,7 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'respiratory-defense': RespiratoryDefenseSim,
   'respiratory-membrane': RespiratoryMembraneSim,
   'respiratory-cough': RespiratoryCoughSim,
+  'respiratory-ventilation': RespiratoryVentilationSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
