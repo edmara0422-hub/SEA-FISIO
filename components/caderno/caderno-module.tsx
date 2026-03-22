@@ -12,6 +12,14 @@ import type { TutorMessage } from '@/types/caderno'
 
 type SidebarTool = 'summary' | 'tutor' | 'review' | 'notes' | 'performance'
 
+const MODULE_NAMES: Record<string, string> = {
+  M1: 'Neuro',
+  M2: 'Pneumo/VM',
+  M3: 'Cardio',
+  M4: 'Trauma',
+  M5: 'UTI',
+}
+
 export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
   const module = CADERNO_CONTENT.find((m) => m.moduleId === moduleId)
 
@@ -134,7 +142,7 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
               {/* Info */}
               <div className="min-w-0 flex-1">
                 <p className="text-[8px] font-semibold uppercase tracking-[0.22em]" style={{ color: isOpen ? 'rgba(45,212,191,0.60)' : 'rgba(255,255,255,0.28)' }}>
-                  {moduleId} Neuro
+                  {moduleId} {MODULE_NAMES[moduleId] ?? moduleId}
                 </p>
                 <p className="truncate text-[12px] font-semibold" style={{ color: isOpen ? 'rgba(255,255,255,0.90)' : 'rgba(255,255,255,0.65)' }}>
                   {topic.title}
