@@ -1121,6 +1121,294 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T2',
+        title: 'Zona Condutora e Respiratória',
+        blocks: [
+          {
+            id: 'M2-T2-slides-nariz',
+            type: 'slides',
+            title: 'Nariz e Cavidade Nasal',
+            slides: [
+              {
+                title: 'Estrutura do Nariz',
+                bullets: [
+                  'Nariz externo: cartilagem hialina + osso nasal + extensões frontal e maxilar',
+                  'Cavidade nasal: estende-se das narinas (externas) até as coanas (aberturas para faringe)',
+                  'Vestíbulo: parte anterior, epitélio escamoso estratificado contínuo com a pele',
+                  'Septo nasal: divisória — parte anterior cartilaginosa, posterior óssea (vômer + etmoide)',
+                  'Palato duro: separa cavidade nasal da oral',
+                ],
+              },
+              {
+                title: '5 Funções da Cavidade Nasal',
+                bullets: [
+                  '1. Passagem de ar — permanece aberta mesmo com boca cheia de comida',
+                  '2. Filtração — pelos no vestíbulo capturam partículas; conchas tornam fluxo turbulento',
+                  '3. Aquecimento e umidificação — sangue aquecido nas conchas + muco + lágrimas do canal nasolacrimal',
+                  '4. Olfato — células receptoras olfatórias na parte superior',
+                  '5. Ressonância vocal — cavidade nasal e seios paranasais são câmaras de ressonância',
+                ],
+                highlight: 'Conchas nasais: 3 cristas ósseas que triplicam a área de superfície e criam fluxo turbulento para máximo contato com a mucosa.',
+              },
+              {
+                title: 'Conchas e Meatos',
+                bullets: [
+                  'Conchas Superior, Média e Inferior — modificam paredes laterais da cavidade nasal',
+                  'Abaixo de cada concha: meato (passagem) — superior, médio e inferior',
+                  'Aumentam turbulência do ar inspirado → maior contato com mucosa',
+                  'Mucosa: epitélio colunar pseudoestratificado ciliado com células caliciformes',
+                  'Muco captura resíduos → cílios movem muco até faringe → deglutido',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T2-slides-faringe',
+            type: 'slides',
+            title: 'Faringe — Via Comum',
+            slides: [
+              {
+                title: 'Nasofaringe (Somente AR)',
+                bullets: [
+                  'Atrás das coanas, acima do palato mole',
+                  'Úvula: extensão do palato mole — impede alimento de entrar na nasofaringe',
+                  'Epitélio: colunar pseudoestratificado ciliado com caliciformes',
+                  'Tubas auditivas: abrem-se aqui para equalizar pressão na orelha média',
+                  'Tonsila faríngea (adenoide): defesa contra infecções',
+                ],
+              },
+              {
+                title: 'Orofaringe e Laringofaringe',
+                bullets: [
+                  'Orofaringe: do palato mole até epiglote — AR + ALIMENTO passam aqui',
+                  'Epitélio: escamoso estratificado úmido (proteção contra abrasão)',
+                  'Tonsilas palatinas e linguais nas fauces',
+                  'Laringofaringe: da epiglote ao esôfago — BIFURCAÇÃO final',
+                  'Anterior → Laringe (via aérea) | Posterior → Esôfago (via digestiva)',
+                ],
+                highlight: 'Deglutição: língua empurra → palato mole fecha nasofaringe → epiglote fecha laringe → alimento vai pro esôfago.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T2-slides-laringe',
+            type: 'slides',
+            title: 'Laringe — 9 Cartilagens',
+            slides: [
+              {
+                title: 'Cartilagens Não-Pareadas (3)',
+                bullets: [
+                  'Tireoide: formato de escudo, maior cartilagem (pomo de Adão). Hialina',
+                  'Cricoide: formato de anel completo, base da laringe. Hialina',
+                  'Epiglote: aba livre que fecha a glote na deglutição. ÚNICA cartilagem ELÁSTICA',
+                ],
+              },
+              {
+                title: 'Cartilagens Pareadas (3 pares = 6)',
+                bullets: [
+                  'Aritenoides (2): formato de concha, articulam com cricoide. Movem pregas vocais',
+                  'Corniculadas (2): formato de corno, sobre as aritenoides',
+                  'Cuneiformes (2): formato de cunha, na membrana mucosa anterior às corniculadas',
+                ],
+              },
+              {
+                title: '4 Funções da Laringe',
+                bullets: [
+                  '1. Manter passagem livre — cartilagens tireoide e cricoide sustentam via aérea aberta',
+                  '2. Proteção na deglutição — epiglote fecha a abertura da laringe',
+                  '3. Fonação — pregas vocais vibram com passagem do ar; amplitude = intensidade, frequência = tom',
+                  '4. Limpeza mucociliar — epitélio ciliado produz muco que captura detritos',
+                ],
+                highlight: 'Homens: pregas vocais maiores → voz mais grave. Sem laringe: possível produzir som com vibração do esôfago.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T2-slides-traqueia',
+            type: 'slides',
+            title: 'Traqueia — Anéis em C',
+            slides: [
+              {
+                title: 'Estrutura da Traqueia',
+                bullets: [
+                  '15-20 anéis de cartilagem hialina em formato de "C"',
+                  'Parede anterior/lateral: cartilagem sustenta via aérea aberta',
+                  'Parede posterior: SEM cartilagem — membrana elástica + músculo traqueal',
+                  'Músculo traqueal: contrai na tosse → estreita diâmetro → ar move mais rápido',
+                  'Esôfago localizado logo atrás da parede posterior',
+                ],
+              },
+              {
+                title: 'Dimensões e Carina',
+                bullets: [
+                  'Diâmetro: ~12mm | Comprimento: 10-12cm',
+                  'Bifurcação: nível da 5ª vértebra torácica (T5)',
+                  'Carina: cartilagem mais inferior, forma "quilha" que separa brônquios principais',
+                  'Mucosa da carina: MUITO sensível — estimula reflexo de tosse intenso',
+                  'Partículas abaixo da carina NÃO estimulam esse reflexo tão intenso',
+                ],
+                highlight: 'Fumantes: epitélio traqueal se transforma em escamoso estratificado → perda de cílios e caliciformes → função de limpeza destruída.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T2-slides-reflexos',
+            type: 'slides',
+            title: 'Reflexos de Proteção',
+            slides: [
+              {
+                title: 'Espirro e Tosse',
+                bullets: [
+                  'Espirro: receptores nasais/nasofaringe → velocidade até 150 km/h',
+                  'Tosse: 5 fases — 1) Irritativa 2) Inspiratória (~2,5L) 3) Compressiva (glote fecha, pressão ↑300mmHg)',
+                  '4) Expulsiva (glote abre, ar até 160 km/h) 5) Relaxamento',
+                  'Tosse reflexa (involuntária) vs. voluntária | Produtiva vs. seca',
+                  'Receptores mais sensíveis: laringe > traqueia > brônquios',
+                ],
+              },
+              {
+                title: 'Outros Mecanismos',
+                bullets: [
+                  'Broncoconstrição: contração da musculatura lisa brônquica, reduz passagem de ar',
+                  'Reflexo epiglótico: interrompe ventilação brevemente durante deglutição',
+                  'Na asma: contrações da musculatura lisa → ↓diâmetro → ↑resistência → ↓fluxo',
+                  'Tratamento: albuterol relaxa musculatura lisa dos bronquíolos terminais',
+                  'Exercício: diâmetro ↑ → resistência ↓ → volume de ar ↑',
+                ],
+                highlight: 'Asma grave: movimento de ar tão restrito que pode ser fatal. Medicamentos broncodilatadores são essenciais.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T2-sim-cough',
+            type: 'simulation',
+            title: 'Reflexo da Tosse — 5 Fases',
+            simulationId: 'respiratory-cough',
+            description: 'Visualize as 5 fases: irritação → inspiração → compressão (glote fecha) → expulsão (160 km/h) → relaxamento',
+          },
+          {
+            id: 'M2-T2-slides-arvore',
+            type: 'slides',
+            title: 'Árvore Traqueobronquial — 23 Gerações',
+            slides: [
+              {
+                title: 'Divisões da Árvore Bronquial',
+                bullets: [
+                  'Brônquios principais: traqueia divide-se em D (mais vertical/largo) e E',
+                  'Brônquios lobares (secundários): D tem 3, E tem 2',
+                  'Brônquios segmentares (terciários): suprem segmentos broncopulmonares (10D + 9E)',
+                  'Bronquíolos: <1mm diâmetro, se subdividem até bronquíolos terminais',
+                  'Total: ~16 gerações de ramificação da traqueia aos bronquíolos terminais',
+                ],
+                highlight: 'Brônquio D mais vertical e largo → substâncias aspiradas se alojam mais facilmente no lado direito.',
+              },
+              {
+                title: 'Mudanças nas Paredes',
+                bullets: [
+                  'Brônquios principais: cartilagens em C + musculatura lisa',
+                  'Brônquios lobares: placas de cartilagem substituem anéis em C',
+                  'À medida que diminuem: cartilagem ↓, musculatura lisa ↑',
+                  'Bronquíolos terminais: SEM cartilagem, camada muscular proeminente',
+                  'Relaxamento/contração da musculatura lisa → modifica fluxo aéreo',
+                ],
+              },
+              {
+                title: '3 Zonas Funcionais',
+                bullets: [
+                  'Zona Condutora (gerações 0-16): condução, filtração, aquecimento — SEM troca gasosa',
+                  'Zona de Transição (gerações 17-19): bronquíolos respiratórios, primeiros alvéolos',
+                  'Zona Respiratória (gerações 20-23): ductos alveolares, sacos alveolares — TROCA GASOSA',
+                  'Total: 2²³ = ~8 milhões de vias terminais',
+                  'Área de superfície alveolar: 70-100 m²',
+                ],
+                highlight: '23 gerações: da traqueia (Ø12mm) até alvéolos (Ø250µm) — 300-500 milhões de unidades de troca.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T2-sim-tree',
+            type: 'simulation',
+            title: 'Árvore Traqueobronquial — 23 Gerações',
+            simulationId: 'respiratory-bronchial-tree',
+            description: 'Visualize as 23 gerações com zonas condutora, de transição e respiratória — filtre por zona',
+          },
+          {
+            id: 'M2-T2-slides-alveolo',
+            type: 'slides',
+            title: 'Alvéolos e Membrana Respiratória',
+            slides: [
+              {
+                title: 'Estrutura dos Alvéolos',
+                bullets: [
+                  '300-500 milhões nos dois pulmões',
+                  'Diâmetro: ~250 µm | Área total: 70-100 m² (quadra de tênis)',
+                  'Pneumócitos tipo I: células finas escamosas — 90% da superfície — TROCA GASOSA',
+                  'Pneumócitos tipo II: células cuboides — produzem SURFACTANTE pulmonar',
+                  'Surfactante: reduz tensão superficial → facilita expansão na inspiração',
+                ],
+              },
+              {
+                title: 'Membrana Respiratória — 6 Camadas',
+                bullets: [
+                  '1. Fluido alveolar (surfactante)',
+                  '2. Epitélio alveolar (pneumócito tipo I)',
+                  '3. Membrana basal do epitélio',
+                  '4. Espaço intersticial',
+                  '5. Membrana basal do endotélio',
+                  '6. Endotélio capilar',
+                ],
+                highlight: 'Espessura total: ~0,5 µm. Difusão ∝ Área × ΔP / Espessura (Lei de Fick).',
+              },
+              {
+                title: 'Limpeza na Zona Respiratória',
+                bullets: [
+                  'Epitélio dos alvéolos NÃO é ciliado',
+                  'Macrófagos alveolares ("células de poeira"): fagocitam detritos na superfície',
+                  'Macrófagos migram para vasos linfáticos ou bronquíolos terminais',
+                  'Nos bronquíolos: ficam retidos no muco → "varridos" até a faringe',
+                  'Fibras elásticas ao redor: expansão na inspiração, retração na expiração',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T2-sim-membrane',
+            type: 'simulation',
+            title: 'Membrana Respiratória — 6 Camadas',
+            simulationId: 'respiratory-membrane',
+            description: 'Visualize as 6 camadas da membrana com O₂ e CO₂ difundindo — hover em cada camada para detalhes',
+          },
+          {
+            id: 'M2-T2-slides-pulmoes',
+            type: 'slides',
+            title: 'Pulmões — Anatomia Macroscópica',
+            slides: [
+              {
+                title: 'Estrutura dos Pulmões',
+                bullets: [
+                  'Formato cônico: base no diafragma, ápice ~2,5cm acima da clavícula',
+                  'Pulmão Direito: 3 lobos (sup, méd, inf) — 2 fissuras — 10 segmentos — ~620g',
+                  'Pulmão Esquerdo: 2 lobos (sup, inf) — 1 fissura — 9 segmentos — ~565g',
+                  'Incisura cardíaca: acomodação do coração no pulmão esquerdo',
+                  'Hilo: região medial onde entram/saem brônquios, vasos, nervos, linfáticos',
+                ],
+              },
+              {
+                title: 'Divisões Funcionais',
+                bullets: [
+                  'Lobos: separados por fissuras profundas, supridos por brônquios lobares',
+                  'Segmentos broncopulmonares: 10D + 9E, separados por septos de tecido conectivo',
+                  'Segmentos podem ser removidos cirurgicamente sem comprometer o restante',
+                  'Lóbulos: subdivisão dos segmentos, supridos por bronquíolos',
+                  'Pulmões muito elásticos — quando inflados, expelem ar e retornam ao estado original',
+                ],
+                highlight: 'Capacidade total: ~6L. Frequência respiratória em repouso: ~15 rpm. Volume corrente: ~500 mL.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
