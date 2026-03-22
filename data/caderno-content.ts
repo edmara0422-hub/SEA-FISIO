@@ -1953,6 +1953,166 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T8',
+        title: 'Semiologia Pulmonar',
+        blocks: [
+          {
+            id: 'M2-T8-slides-dispneia',
+            type: 'slides',
+            title: 'Dispneia — Classificação',
+            slides: [
+              {
+                title: 'Graus de Dispneia',
+                bullets: [
+                  'Grandes esforços: dispneia apenas em atividades intensas (corrida, escada)',
+                  'Médios esforços: dispneia em atividades moderadas (caminhada rápida)',
+                  'Pequenos esforços: dispneia em atividades leves (vestir-se, caminhar devagar)',
+                  'Repouso: dispneia SEM qualquer esforço — gravidade máxima',
+                ],
+              },
+              {
+                title: 'Tipos Especiais de Dispneia',
+                bullets: [
+                  'Dispneia Paroxística Noturna: episódio súbito durante o sono (insuficiência cardíaca)',
+                  'Ortopneia: piora em decúbito dorsal, melhora sentado/em pé (↑ retorno venoso → congestão pulmonar)',
+                  'Trepopneia: piora em decúbito lateral específico',
+                  'Platipneia: piora sentado/em pé, melhora deitado (rara, shunt intracardíaco)',
+                ],
+                highlight: 'Dispneia é SUBJETIVA — é o que o paciente sente. Não depende apenas da SpO₂ ou gasometria.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T8-slides-inspecao',
+            type: 'slides',
+            title: 'Inspeção do Tórax',
+            slides: [
+              {
+                title: 'Inspeção Estática',
+                bullets: [
+                  'Expressão do paciente: sinais de angústia, desconforto, uso de musculatura acessória',
+                  'Estrutura do tórax: simetria, deformidades (barril, escavatum, carinatum)',
+                  'Características anatômicas: formato, postura, posicionamento preferencial',
+                ],
+              },
+              {
+                title: 'Inspeção Dinâmica',
+                bullets: [
+                  'Frequência Respiratória: normal 12-20 irpm. Taquipneia >20, bradipneia <12',
+                  'Sincronismo: coordenação tóraco-abdominal (respiração paradoxal = fadiga)',
+                  'Ritmo: regular ou irregular (Cheyne-Stokes, Biot, Kussmaul)',
+                  'Tipo respiratório: torácico (costal), abdominal (diafragmático), misto',
+                  'Tiragem: retração intercostal, subcostal, supraclavicular = esforço aumentado',
+                  'Expansibilidade: simétrica ou assimétrica',
+                ],
+                highlight: 'Tiragem + uso de acessórios + respiração paradoxal = sinais de insuficiência respiratória.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T8-slides-espirometria',
+            type: 'slides',
+            title: 'Espirometria — Distúrbios Ventilatórios',
+            slides: [
+              {
+                title: 'Parâmetros Principais',
+                bullets: [
+                  'CVF (Capacidade Vital Forçada): volume máximo exalado com esforço máximo',
+                  'VEF₁ (Vol. Expiratório Forçado 1s): volume exalado no 1º segundo da CVF',
+                  'VEF₁/CVF: relação — principal índice para classificar o distúrbio',
+                  'PFE (Pico de Fluxo Expiratório): fluxo máximo durante a manobra',
+                  'FEF₂₅₋₇₅%: fluxo médio (sensível para pequenas vias aéreas)',
+                ],
+              },
+              {
+                title: 'Distúrbio Obstrutivo (DVO)',
+                bullets: [
+                  'VEF₁/CVF REDUZIDA (< LIN — Limite Inferior da Normalidade)',
+                  'Estreitamento de vias aéreas → resistência ao fluxo ↑',
+                  'Curva volume-tempo: ascensão LENTA, achatada',
+                  'Curva fluxo-volume: concavidade característica (scooped out)',
+                  'Exemplos: DPOC, asma, bronquite crônica, bronquiectasias',
+                ],
+              },
+              {
+                title: 'Distúrbio Restritivo (DVR)',
+                bullets: [
+                  'VEF₁/CVF NORMAL ou aumentada',
+                  'CVF REDUZIDA — pulmão não consegue expandir adequadamente',
+                  'CPT reduzida (confirmação definitiva requer pletismografia)',
+                  'Curva volume-tempo: curva CURTA (menos volume total)',
+                  'Exemplos: fibrose pulmonar, doenças neuromusculares, cifoescoliose',
+                ],
+                highlight: 'Obstrutivo = dificuldade de SAÍDA do ar (VEF₁/CVF↓). Restritivo = dificuldade de ENTRADA (CVF↓, ratio normal).',
+              },
+            ],
+          },
+          {
+            id: 'M2-T8-sim-spirometry',
+            type: 'simulation',
+            title: 'Espirometria — Curvas Volume-Tempo e Fluxo-Volume',
+            simulationId: 'respiratory-spirometry',
+            description: 'Compare padrões Normal × Obstrutivo × Restritivo com curvas SVG, parâmetros calculados e toggle entre visualizações',
+          },
+          {
+            id: 'M2-T8-slides-manovac',
+            type: 'slides',
+            title: 'Manovacuometria e Peak Flow',
+            slides: [
+              {
+                title: 'PImáx — Pressão Inspiratória Máxima',
+                bullets: [
+                  'Avalia força dos músculos INSPIRATÓRIOS (diafragma)',
+                  'Técnica: expiração até VR → esforço inspiratório máximo contra válvula',
+                  'Normal: -80 a -120 cmH₂O',
+                  'Fraqueza: -70 a -45 cmH₂O',
+                  'Fadiga: -45 a -25 cmH₂O | Falência: < -20 cmH₂O',
+                ],
+              },
+              {
+                title: 'PEmáx — Pressão Expiratória Máxima',
+                bullets: [
+                  'Avalia força dos músculos EXPIRATÓRIOS (abdominais)',
+                  'Técnica: inspiração até CPT → esforço expiratório máximo contra válvula',
+                  'Importante para avaliar capacidade de TOSSE e eliminação de secreções',
+                  '3 repetições → considerar MAIOR valor',
+                  'PEmáx baixa = risco de retenção de secreções',
+                ],
+              },
+              {
+                title: 'Peak Flow (PFE)',
+                bullets: [
+                  'Pico de fluxo expiratório — velocidade máxima do ar na expiração forçada',
+                  'Técnica: inspirar profundamente → soprar o mais forte e rápido possível',
+                  '3 medições → anotar MAIOR valor ou média',
+                  'Uso clínico: monitorização de asma, resposta ao broncodilatador',
+                  'Em VM: PFT > 60 L/min indica força adequada para desmame',
+                ],
+                highlight: 'PImáx avalia diafragma. PEmáx avalia tosse. Peak flow monitora asma. Os três são ferramentas essenciais do fisioterapeuta.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T8-slides-ventilometria',
+            type: 'slides',
+            title: 'Ventilometria e VVM',
+            slides: [
+              {
+                title: 'Ventilação Voluntária Máxima (VVM)',
+                bullets: [
+                  'Reflete: cooperação, potência de via aérea, força muscular, expansão pulmonar',
+                  'Técnica: respirar o mais rápido e profundamente possível por 12-15 segundos',
+                  'Resultado extrapolado para 1 minuto (L/min)',
+                  'Avalia capacidade de resposta ventilatória sob demanda',
+                  'Valores de referência: CVL normal = 65-75 mL/Kg',
+                ],
+                highlight: 'VVM reduzida = limitação ventilatória ao exercício. Fundamental para prescrição de exercícios.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
