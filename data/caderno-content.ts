@@ -1845,6 +1845,114 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T7',
+        title: 'Oxigenoterapia',
+        blocks: [
+          {
+            id: 'M2-T7-slides-fundamentos',
+            type: 'slides',
+            title: 'Fundamentos da Oxigenoterapia',
+            slides: [
+              {
+                title: 'Definição e Objetivo',
+                bullets: [
+                  'Definição: administrar O₂ em FiO₂ > 21% (acima da atmosférica)',
+                  'Objetivo: aumentar SaO₂ > 90%, corrigindo hipoxemia',
+                  'FiO₂ atmosférica normal: 21% (fração inspirada de oxigênio)',
+                  'Meta terapêutica: SaO₂ entre 92-96% (maioria dos pacientes)',
+                  'Em DPOC: meta SaO₂ 88-92% (evitar supressão do drive hipóxico)',
+                ],
+                highlight: 'Oxigenoterapia NÃO é "quanto mais, melhor". Hiperóxia causa toxicidade pulmonar e supressão ventilatória.',
+              },
+              {
+                title: 'Definições Importantes',
+                bullets: [
+                  'Hipoxemia: redução de O₂ no sangue arterial (PaO₂ < 80 mmHg)',
+                  'Hipóxia: redução de O₂ nos tecidos — consequência da hipoxemia',
+                  'Disóxia: O₂ celular insuficiente para fosforilação oxidativa (produção de ATP)',
+                  'Hiperoxemia: aumento excessivo de O₂ no sangue arterial (PaO₂ > 120 mmHg)',
+                  'Hiperóxia: excesso de O₂ nos tecidos → toxicidade por radicais livres',
+                ],
+              },
+              {
+                title: 'Causas de Hipoxemia',
+                bullets: [
+                  'Altitude: pressão barométrica reduzida → ↓PiO₂',
+                  'Distúrbios de difusão: espessamento da membrana alvéolo-capilar (edema, fibrose)',
+                  'Alteração da relação V/Q: desequilíbrio ventilação-perfusão',
+                  'Shunt: sangue passa pelo pulmão sem realizar hematose',
+                  'Redução do débito cardíaco: ↓fluxo sanguíneo pulmonar',
+                ],
+                highlight: 'Sintomas: agitação, irritabilidade, dispneia, confusão mental, cianose, taquicardia, taquipneia.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T7-slides-dispositivos',
+            type: 'slides',
+            title: 'Classificação dos Dispositivos',
+            slides: [
+              {
+                title: 'Baixo Fluxo — FiO₂ Variável',
+                bullets: [
+                  'Cânula Nasal: 1-6 L/min → FiO₂ 24-44%. Cada 1L/min ≈ +4% FiO₂',
+                  'Máscara Facial Simples: 5-10 L/min → FiO₂ 40-60%. Mín. 5L (evitar reinalação CO₂)',
+                  'Máscara com Reservatório: 10-15 L/min → FiO₂ 60-100%. Válvulas unidirecionais',
+                  'Bolsa Reanimadora (AMBÚ): 15 L/min → FiO₂ 21-100%. Ventilação manual de emergência',
+                  'Característica: FiO₂ VARIÁVEL, depende do padrão respiratório do paciente',
+                ],
+              },
+              {
+                title: 'Alto Fluxo — FiO₂ Controlada',
+                bullets: [
+                  'Máscara de Venturi: FiO₂ PRECISA (24-50%). Princípio Venturi: mescla O₂ com ar ambiente',
+                  'Peças coloridas: Azul=24%, Amarelo=28%, Laranja=31%, Vermelho=35%, Rosa=40%, Roxo=50%',
+                  'Dispositivo de ESCOLHA para DPOC com hipercapnia — evita supressão do drive hipóxico',
+                  'Cateter Nasal de Alto Fluxo: até 60 L/min, FiO₂ 21-100%, aquecido e umidificado',
+                  'Alto fluxo gera PEEP ~2-5 cmH₂O, reduz espaço morto, melhora mucociliar',
+                ],
+                highlight: 'Venturi = DPOC. Alto Fluxo = alternativa à VNI. Baixo Fluxo = maioria dos casos de hipoxemia leve-moderada.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T7-sim-devices',
+            type: 'simulation',
+            title: 'Dispositivos de Oxigenoterapia',
+            simulationId: 'respiratory-oxytherapy',
+            description: 'Explore todos os dispositivos: cânula nasal, máscaras, Venturi, alto fluxo — com fluxos, FiO₂ e indicações',
+          },
+          {
+            id: 'M2-T7-slides-venturi',
+            type: 'slides',
+            title: 'Máscara de Venturi — Detalhes',
+            slides: [
+              {
+                title: 'Princípio de Funcionamento',
+                bullets: [
+                  'O₂ sob pressão passa por um orifício estreito (jato)',
+                  'Cria zona de baixa pressão que ASPIRA ar ambiente (efeito Venturi)',
+                  'Mistura O₂ puro + ar ambiente = FiO₂ precisa e constante',
+                  'Tamanho do orifício determina a FiO₂: menor orifício = mais ar aspirado = menor FiO₂',
+                  'Independe do padrão respiratório do paciente (diferença do baixo fluxo)',
+                ],
+              },
+              {
+                title: 'Peças e Manejo Clínico',
+                bullets: [
+                  'Azul: 24% (3L/min) — início em DPOC grave',
+                  'Amarelo: 28% (6L/min) — DPOC moderado',
+                  'Laranja: 31% (8L/min) | Vermelho: 35% (10L/min)',
+                  'Rosa: 40% (12L/min) | Roxo: 50% (15L/min)',
+                  'Se SaO₂ não melhora: trocar para peça com maior FiO₂',
+                ],
+                highlight: 'Em DPOC com CO₂ retido: SEMPRE iniciar com FiO₂ baixa (24-28%) e titular conforme gasometria.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
