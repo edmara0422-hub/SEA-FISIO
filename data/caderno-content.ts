@@ -1652,6 +1652,115 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T5',
+        title: 'Controle Respiratório',
+        blocks: [
+          {
+            id: 'M2-T5-slides-centros',
+            type: 'slides',
+            title: 'Centro Respiratório no Tronco Cerebral',
+            slides: [
+              {
+                title: 'Grupo Respiratório Dorsal (GRD)',
+                bullets: [
+                  'Localização: porção dorsal do bulbo (Núcleo do Trato Solitário — NTS)',
+                  'Responsável principalmente pela INSPIRAÇÃO',
+                  'Gera o "sinal em rampa": inicia fraco, eleva-se por ~2 segundos',
+                  'Após 2s: interrompe abruptamente → expiração passiva por ~3 segundos',
+                  'NTS recebe aferências dos nervos vago (X) e glossofaríngeo (IX)',
+                ],
+                highlight: 'O ritmo básico da respiração é gerado no GRD do bulbo — inspiração de 2s + expiração de 3s = 12 ciclos/min.',
+              },
+              {
+                title: 'Grupo Respiratório Ventral (GRV)',
+                bullets: [
+                  'Localização: ventrolateral do bulbo',
+                  'Encarregado basicamente da EXPIRAÇÃO',
+                  'Contém neurônios inspiratórios E expiratórios',
+                  'Inativo durante respiração tranquila (expiração é passiva)',
+                  'Ativo na expiração FORÇADA: tosse, exercício, sopro',
+                ],
+              },
+              {
+                title: 'Centro Pneumotáxico (Ponte)',
+                bullets: [
+                  'Localização: dorsalmente no núcleo parabraquial da ponte superior',
+                  'Controla o "ponto de desligamento" da rampa inspiratória',
+                  'Sinal intenso → ↑frequência (30-40/min) — inspiração curta',
+                  'Sinal débil → ↓frequência (3-5/min) — inspiração longa',
+                  'Função: modular duração da fase inspiratória do ciclo',
+                ],
+                highlight: 'Centro pneumotáxico = "freio" da inspiração. Controla quanto tempo o GRD fica ativo.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T5-slides-hering',
+            type: 'slides',
+            title: 'Reflexo de Hering-Breuer',
+            slides: [
+              {
+                title: 'Mecanismo de Proteção Pulmonar',
+                bullets: [
+                  'Receptores de estiramento nas paredes musculares de brônquios e bronquíolos',
+                  'Sinais transmitidos via nervos vagos até o GRD no bulbo',
+                  'Ativado quando volume corrente > 1,5L (3× o normal)',
+                  'NÃO é ativado na respiração tranquila normal',
+                  'Resposta: "desativa" a rampa inspiratória → interrompe inspiração',
+                ],
+                highlight: 'Hering-Breuer: reflexo protetor contra distensão excessiva dos pulmões. Só ativado em volumes muito altos (>1,5L).',
+              },
+            ],
+          },
+          {
+            id: 'M2-T5-slides-quimio',
+            type: 'slides',
+            title: 'Quimiorreceptores',
+            slides: [
+              {
+                title: 'Quimiorreceptores Centrais',
+                bullets: [
+                  'Localização: porção ventral do bulbo',
+                  'Principal estímulo: aumento de H⁺ (acidose) no líquor (LCR)',
+                  'CO₂ cruza a BHE → CO₂ + H₂O → H₂CO₃ → H⁺ + HCO₃⁻',
+                  'H⁺ estimula diretamente os quimiorreceptores centrais',
+                  'São o principal regulador TÔNICO da ventilação',
+                ],
+                highlight: 'CO₂ é o principal regulador da ventilação em condições normais — via conversão em H⁺ no LCR.',
+              },
+              {
+                title: 'Quimiorreceptores Periféricos',
+                bullets: [
+                  'Corpos carotídeos: bifurcação da artéria carótida comum → nervo glossofaríngeo (IX)',
+                  'Corpos aórticos: arco aórtico → nervo vago (X)',
+                  'Principal estímulo: diminuição de PaO₂ (hipoxemia)',
+                  'Ativação significativa quando PaO₂ < 60 mmHg',
+                  'Também respondem a ↑PCO₂ e ↑H⁺, mas são secundários nisso',
+                ],
+                highlight: 'Periféricos = sensor de O₂. Centrais = sensor de CO₂/H⁺. Juntos garantem homeostase dos gases sanguíneos.',
+              },
+              {
+                title: 'Controle Voluntário vs. Automático',
+                bullets: [
+                  'Automático: centros no bulbo e ponte — opera 24h sem consciência',
+                  'Voluntário: córtex cerebral pode sobrepor temporariamente (fala, canto, mergulho)',
+                  'Limitação: controle voluntário NÃO supera o drive metabólico indefinidamente',
+                  'Exemplo: é impossível se matar prendendo a respiração — acúmulo de CO₂ vence',
+                  'Integração: quimiorreceptores + mecanorreceptores + córtex → resposta ventilatória final',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T5-sim-control',
+            type: 'simulation',
+            title: 'Controle Neural da Respiração',
+            simulationId: 'respiratory-control',
+            description: 'Córtex, ponte, bulbo (GRD/GRV), quimiorreceptores centrais/periféricos, Hering-Breuer — clique para detalhes',
+          },
+        ],
+      },
     ],
   },
   {
