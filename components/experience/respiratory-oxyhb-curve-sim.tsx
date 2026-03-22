@@ -47,7 +47,7 @@ export function RespiratoryOxyHbCurveSim({ className }: RespiratoryOxyHbCurveSim
     for (let gy = 0; gy < h; gy += gs) { ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(w, gy); ctx.stroke() }
 
     // graph area
-    const gL = 80 * S, gR = w * 0.62, gT = 65 * S, gB = h - 55 * S
+    const gL = 80 * S, gR = w * 0.62, gT = 95 * S, gB = h - 45 * S
     const gW = gR - gL, gH = gB - gT
 
     // PO₂ range: 0-120 mmHg, SaO₂ range: 0-100%
@@ -244,7 +244,7 @@ export function RespiratoryOxyHbCurveSim({ className }: RespiratoryOxyHbCurveSim
     }
 
     // ═══ RIGHT PANEL ═══
-    const rpX = w * 0.66, rpY = 70 * S
+    const rpX = w * 0.66, rpY = 95 * S
 
     ctx.font = `700 ${Math.max(10, 12 * S)}px ${FONT_MONO}`
     ctx.textAlign = 'left'
