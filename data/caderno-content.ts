@@ -1327,13 +1327,6 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
-            id: 'M2-T2-sim-tree',
-            type: 'simulation',
-            title: 'Árvore Traqueobronquial — 23 Gerações',
-            simulationId: 'respiratory-bronchial-tree',
-            description: 'Visualize as 23 gerações com zonas condutora, de transição e respiratória — filtre por zona',
-          },
-          {
             id: 'M2-T2-slides-alveolo',
             type: 'slides',
             title: 'Alvéolos e Membrana Respiratória',

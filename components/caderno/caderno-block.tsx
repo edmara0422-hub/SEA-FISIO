@@ -21,7 +21,6 @@ const NeuroGliaSupportSim = dynamic(() => import('@/components/experience/neuro-
 const RespiratorySystemSim = dynamic(() => import('@/components/experience/respiratory-system-sim').then(m => m.RespiratorySystemSim), { ssr: false })
 const RespiratoryGasExchangeSim = dynamic(() => import('@/components/experience/respiratory-gas-exchange-sim').then(m => m.RespiratoryGasExchangeSim), { ssr: false })
 const RespiratoryDefenseSim = dynamic(() => import('@/components/experience/respiratory-defense-sim').then(m => m.RespiratoryDefenseSim), { ssr: false })
-const RespiratoryBronchialTreeSim = dynamic(() => import('@/components/experience/respiratory-bronchial-tree-sim').then(m => m.RespiratoryBronchialTreeSim), { ssr: false })
 const RespiratoryMembraneSim = dynamic(() => import('@/components/experience/respiratory-membrane-sim').then(m => m.RespiratoryMembraneSim), { ssr: false })
 const RespiratoryCoughSim = dynamic(() => import('@/components/experience/respiratory-cough-sim').then(m => m.RespiratoryCoughSim), { ssr: false })
 
@@ -41,7 +40,6 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'respiratory-system': RespiratorySystemSim,
   'respiratory-gas-exchange': RespiratoryGasExchangeSim,
   'respiratory-defense': RespiratoryDefenseSim,
-  'respiratory-bronchial-tree': RespiratoryBronchialTreeSim,
   'respiratory-membrane': RespiratoryMembraneSim,
   'respiratory-cough': RespiratoryCoughSim,
 }
