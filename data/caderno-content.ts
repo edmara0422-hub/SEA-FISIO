@@ -2113,6 +2113,11 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T9',
+        title: 'Patologias Respiratórias',
+        blocks: [],
+      },
     ],
   },
   {
