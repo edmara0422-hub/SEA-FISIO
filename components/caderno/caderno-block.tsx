@@ -24,6 +24,7 @@ const RespiratoryDefenseSim = dynamic(() => import('@/components/experience/resp
 const RespiratoryMembraneSim = dynamic(() => import('@/components/experience/respiratory-membrane-sim').then(m => m.RespiratoryMembraneSim), { ssr: false })
 const RespiratoryCoughSim = dynamic(() => import('@/components/experience/respiratory-cough-sim').then(m => m.RespiratoryCoughSim), { ssr: false })
 const RespiratoryVentilationSim = dynamic(() => import('@/components/experience/respiratory-ventilation-sim').then(m => m.RespiratoryVentilationSim), { ssr: false })
+const RespiratoryOxyHbCurveSim = dynamic(() => import('@/components/experience/respiratory-oxyhb-curve-sim').then(m => m.RespiratoryOxyHbCurveSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
@@ -44,6 +45,7 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'respiratory-membrane': RespiratoryMembraneSim,
   'respiratory-cough': RespiratoryCoughSim,
   'respiratory-ventilation': RespiratoryVentilationSim,
+  'respiratory-oxyhb-curve': RespiratoryOxyHbCurveSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {

@@ -1511,6 +1511,147 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T4',
+        title: 'Difusão e Transporte de Gases',
+        blocks: [
+          {
+            id: 'M2-T4-slides-difusao',
+            type: 'slides',
+            title: 'Leis da Difusão Gasosa',
+            slides: [
+              {
+                title: 'Lei de Fick',
+                bullets: [
+                  'Quantidade de gás que difunde é PROPORCIONAL à área de superfície da membrana',
+                  'E INVERSAMENTE proporcional à espessura da membrana',
+                  'Membrana respiratória: ~70-100 m² de área × 0,5 µm de espessura',
+                  'Design evolutivo otimizado: máxima área, mínima espessura',
+                  'Edema pulmonar: ↑ espessura → ↓ difusão → hipoxemia',
+                ],
+                highlight: 'Fick: Difusão ∝ (Área × ΔP × Solubilidade) / (Espessura × √Peso Molecular)',
+              },
+              {
+                title: 'Lei de Henry e Coeficiente de Difusão',
+                bullets: [
+                  'Henry: quantidade de gás dissolvido é proporcional à pressão parcial',
+                  'Diferença de pressão parcial = motor da difusão',
+                  'ΔPO₂ = 104 (alveolar) - 40 (venoso) = 64 mmHg',
+                  'ΔPCO₂ = 45 (venoso) - 40 (alveolar) = 5 mmHg',
+                  'Coeficiente de difusão: depende da solubilidade e peso molecular',
+                ],
+              },
+              {
+                title: 'CO₂ vs O₂: Velocidade de Difusão',
+                bullets: [
+                  'CO₂ difunde ~20× mais rápido que O₂ (alta solubilidade)',
+                  'Por isso, mesmo com ΔP pequeno (5 mmHg), CO₂ se equilibra facilmente',
+                  'O₂ difunde ~2× mais rápido que N₂',
+                  'Tempo de equilíbrio nos capilares: ~0,25 s (sangue fica ~0,75 s)',
+                  'Há reserva funcional: mesmo em exercício, equilíbrio é alcançado',
+                ],
+                highlight: 'CO₂ difunde 20× mais rápido que O₂ — por isso, a retenção de CO₂ só ocorre em falha ventilatória grave.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T4-slides-transporte-o2',
+            type: 'slides',
+            title: 'Transporte de O₂',
+            slides: [
+              {
+                title: 'Duas Formas de Transporte',
+                bullets: [
+                  'O₂ DISSOLVIDO no plasma: PaO₂ × 0,003 = 0,3 vol% (apenas 1,5% do total)',
+                  'O₂ LIGADO à Hemoglobina: 98,5% do total — forma oxi-hemoglobina (HbO₂)',
+                  'Cada molécula de Hb liga até 4 moléculas de O₂',
+                  'HbA (adultos): 2 cadeias α + 2 cadeias β',
+                  'HbF (fetal): 2 cadeias α + 2 cadeias γ — maior afinidade pelo O₂',
+                ],
+                highlight: 'Sem hemoglobina, o sangue carregaria apenas 0,3 vol% de O₂ — insuficiente para a vida.',
+              },
+              {
+                title: 'Curva de Dissociação da Oxi-Hemoglobina',
+                bullets: [
+                  'Formato SIGMOIDE: cooperatividade positiva (ligação de 1 O₂ facilita as próximas)',
+                  'P50 = 26-27 mmHg: PO₂ na qual Hb está 50% saturada (referência)',
+                  'Pulmões (PO₂ ~100 mmHg): SaO₂ ~97-98% — carga eficiente',
+                  'Tecidos (PO₂ ~40 mmHg): SaO₂ ~75% — liberação de ~22-23% do O₂',
+                  'Equação de Hill: SaO₂ = PO₂ⁿ / (P50ⁿ + PO₂ⁿ), n ≈ 2,7',
+                ],
+                highlight: 'O formato sigmoide é genial: platô no topo protege contra variações da PO₂ alveolar; parte íngreme facilita liberação nos tecidos.',
+              },
+              {
+                title: 'Desvios da Curva',
+                bullets: [
+                  'DESVIO DIREITA (Efeito Bohr): ↑P50, ↓afinidade → FACILITA LIBERAÇÃO nos tecidos',
+                  'Causas: ↑temperatura, ↑PCO₂, ↑H⁺ (↓pH), ↑2,3-DPG',
+                  'Ocorre nos tecidos metabolicamente ativos — exatamente onde O₂ é mais necessário',
+                  'DESVIO ESQUERDA (Haldane): ↓P50, ↑afinidade → FACILITA CAPTAÇÃO nos pulmões',
+                  'Causas: ↓temperatura, ↓PCO₂, ↓H⁺ (↑pH), HbF, monóxido de carbono (CO)',
+                ],
+              },
+              {
+                title: 'Graus de Hipoxemia',
+                bullets: [
+                  'Normal: PaO₂ 80-100 mmHg',
+                  'Hipoxemia Leve: PaO₂ 60-80 mmHg',
+                  'Hipoxemia Moderada: PaO₂ 40-60 mmHg',
+                  'Hipoxemia Grave: PaO₂ 20-40 mmHg',
+                  'Abaixo de 60 mmHg: SaO₂ cai rapidamente (parte íngreme da curva)',
+                ],
+                highlight: 'PaO₂ < 60 mmHg é o limiar crítico: a partir daí, pequenas quedas de PO₂ causam grandes quedas de saturação.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T4-sim-oxyhb',
+            type: 'simulation',
+            title: 'Curva de Dissociação Oxi-Hemoglobina',
+            simulationId: 'respiratory-oxyhb-curve',
+            description: 'Equação de Hill real • Desvios Bohr/Haldane • Hover para ver SaO₂ em qualquer PO₂ • Pontos arterial/venoso',
+          },
+          {
+            id: 'M2-T4-slides-transporte-co2',
+            type: 'slides',
+            title: 'Transporte de CO₂',
+            slides: [
+              {
+                title: 'Três Formas de Transporte',
+                bullets: [
+                  'CO₂ DISSOLVIDO no plasma (~8%): coeficiente 0,063 vol%/mmHg — muito mais solúvel que O₂',
+                  'CARBAMINO-HEMOGLOBINA (~12%): CO₂ liga-se à Hb formando HbCO₂',
+                  'BICARBONATO HCO₃⁻ (~80%): PRINCIPAL forma de transporte',
+                  'Reação: CO₂ + H₂O ⇄ H₂CO₃ ⇄ HCO₃⁻ + H⁺',
+                  'Catalisada pela anidrase carbônica dentro das hemácias',
+                ],
+                highlight: '80% do CO₂ viaja como bicarbonato (HCO₃⁻) — conecta diretamente a ventilação ao equilíbrio ácido-base.',
+              },
+              {
+                title: 'Mecanismo do Bicarbonato',
+                bullets: [
+                  'CO₂ entra na hemácia → anidrase carbônica acelera reação (10.000×)',
+                  'CO₂ + H₂O → H₂CO₃ (ácido carbônico, instável)',
+                  'H₂CO₃ → HCO₃⁻ + H⁺ (dissociação rápida)',
+                  'HCO₃⁻ sai da hemácia para o plasma (troca por Cl⁻ — shift de cloreto)',
+                  'H⁺ é tamponado pela própria hemoglobina (Hb atua como tampão)',
+                ],
+              },
+              {
+                title: 'Integração Ventilação × Ácido-Base',
+                bullets: [
+                  'Hiperventilação → ↓PCO₂ → ↓H⁺ → alcalose respiratória',
+                  'Hipoventilação → ↑PCO₂ → ↑H⁺ → acidose respiratória',
+                  'O pulmão é o regulador RÁPIDO do pH sanguíneo',
+                  'Rim é o regulador LENTO (horas/dias) — reabsorve/excreta HCO₃⁻',
+                  'pH normal: 7,35-7,45 | PaCO₂ normal: 35-45 mmHg',
+                ],
+                highlight: 'Ventilação = controle rápido do pH. Toda alteração ventilatória tem consequência ácido-base imediata.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
