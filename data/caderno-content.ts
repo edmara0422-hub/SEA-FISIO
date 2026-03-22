@@ -678,6 +678,13 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
+            id: 'M1-T3-sim-types',
+            type: 'simulation',
+            title: 'Tipos Estruturais de Neurônios',
+            simulationId: 'neuro-neuron-types',
+            description: 'Visualize multipolar, pseudounipolar, bipolar e anaxônico — clique para detalhes',
+          },
+          {
             id: 'M1-T3-slides-neuroglia',
             type: 'slides',
             title: 'Neuróglia — Células de Suporte',
@@ -720,6 +727,194 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             title: 'Ecossistema Neuroglial Interativo',
             simulationId: 'neuro-glia-ecosystem',
             description: 'Explore os 6 tipos de neuroglia: astrócitos, oligodendrócitos, microglia, ependimárias, Schwann e satélite',
+          },
+        ],
+      },
+      {
+        id: 'M1-T4',
+        title: 'Suporte, Nutrição e Proteção',
+        blocks: [
+          {
+            id: 'M1-T4-slides-fundamento',
+            type: 'slides',
+            title: 'Princípio Fundamental',
+            slides: [
+              {
+                title: 'O Cérebro Não É Um Processador Abstrato',
+                bullets: [
+                  'Os tratados clássicos (Guyton & Hall, Kandel, Purves, Bear) convergem:',
+                  'O cérebro é um órgão biológico — metabolicamente caro, altamente vulnerável',
+                  'Dependente de suprimento contínuo de O₂ e glicose',
+                  'Pensar, decidir, aprender e regular emoção NÃO são propriedades "mágicas" da mente',
+                  'São efeitos emergentes de uma cadeia de suporte metabólico',
+                ],
+                highlight: 'Não existe "vontade" forte o suficiente para superar falta de O₂ ou glicose. Não existe "força mental" capaz de substituir ATP.',
+              },
+              {
+                title: 'A Cadeia Metabólica Neural',
+                bullets: [
+                  'O₂ + Glicose → ATP (fosforilação oxidativa)',
+                  'ATP → Gradientes iônicos (Na⁺/K⁺-ATPase)',
+                  'Gradientes → Potencial de Ação',
+                  'Potencial de Ação → Função Neural',
+                  'Quebrou qualquer elo → o sistema colapsa',
+                ],
+                highlight: 'Função cerebral não é produto da vontade. É produto de viabilidade metabólica.',
+              },
+              {
+                title: 'Os Números da Dependência',
+                bullets: [
+                  'Cérebro = 2% do peso corporal total',
+                  'Consome 20% de todo o O₂ do organismo',
+                  'Consome 25% de toda a glicose circulante',
+                  '60–80% do ATP cerebral vai para as bombas iônicas (Attwell & Laughlin, 2001)',
+                  'Sem reserva significativa de glicose ou O₂ — dependência contínua do sangue',
+                ],
+                highlight: 'O cérebro é o órgão mais caro do corpo — e não tem reserva.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T4-sim-chain',
+            type: 'simulation',
+            title: 'Cadeia Metabólica Neural',
+            simulationId: 'neuro-metabolic-chain',
+            description: 'Visualize a cadeia O₂→ATP→Gradientes→PA→Função — clique para quebrar um elo e ver o colapso',
+          },
+          {
+            id: 'M1-T4-slides-bhe',
+            type: 'slides',
+            title: 'Barreira Hematoencefálica (BHE)',
+            slides: [
+              {
+                title: 'O Que é a BHE',
+                bullets: [
+                  'Não é uma "parede" — é uma interface regulatória ativa',
+                  'Formada por células endoteliais altamente especializadas nos capilares cerebrais',
+                  'Junções apertadas (tight junctions) entre células endoteliais',
+                  'Pericitos e pés astrocitários completam a barreira',
+                  'Forma a unidade neurovascular junto com neurônios e glia',
+                ],
+                highlight: 'A BHE é a fronteira inteligente entre o sangue e o tecido neural.',
+              },
+              {
+                title: 'O Que Passa e o Que Não Passa',
+                bullets: [
+                  '✓ PASSA: O₂ (difusão livre), glicose (GLUT-1), aminoácidos essenciais (transportadores)',
+                  '✓ PASSA: Hormônios lipofílicos, moléculas pequenas e apolares',
+                  '✕ BLOQUEIA: Patógenos (bactérias, vírus), toxinas circulantes',
+                  '✕ BLOQUEIA: Moléculas grandes, proteínas plasmáticas, maioria dos fármacos',
+                  'Por isso muitos medicamentos não chegam ao cérebro — desafio farmacológico',
+                ],
+              },
+              {
+                title: 'Quando a BHE Falha',
+                bullets: [
+                  'Danos à BHE → entrada de substâncias neurotóxicas',
+                  'Edema cerebral: acúmulo de líquido no tecido neural',
+                  'Neuroinflamação: ativação descontrolada de micróglia',
+                  'Presente em: esclerose múltipla, AVC, trauma craniano, meningite',
+                  'Comprometimento funcional pode ser irreversível',
+                ],
+                highlight: 'BHE intacta = proteção. BHE comprometida = neurotoxicidade, edema, inflamação.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T4-sim-bhe',
+            type: 'simulation',
+            title: 'Barreira Hematoencefálica Interativa',
+            simulationId: 'neuro-bhe',
+            description: 'Veja moléculas passando ou sendo bloqueadas — alterne entre BHE íntegra e danificada',
+          },
+          {
+            id: 'M1-T4-slides-glia',
+            type: 'slides',
+            title: 'Glia: A Infraestrutura Invisível',
+            slides: [
+              {
+                title: 'Glia NÃO São Células Auxiliares Passivas',
+                bullets: [
+                  'Historicamente subestimadas — "cola" neural',
+                  'Na realidade: sistemas ativos de suporte sem os quais neurônios NÃO funcionam',
+                  'Representam >50% do peso encefálico',
+                  '10 a 50× mais numerosas que neurônios',
+                  'A função neural é emergência de um sistema INTEGRADO neurônio-glia',
+                ],
+                highlight: 'Sem glia funcional, o neurônio mais "inteligente" colapsa.',
+              },
+              {
+                title: 'Astrócitos — O Sistema de Suporte Metabólico',
+                bullets: [
+                  'Regulação do K⁺ extracelular (previne hiperexcitabilidade)',
+                  'Recaptação de glutamato (previne excitotoxicidade)',
+                  'Fornecimento de lactato como combustível para neurônios',
+                  'Manutenção do pH extracelular',
+                  'Pés astrocitários formam parte da BHE',
+                  'Sem astrócitos: K⁺ acumula → crises epilépticas, glutamato mata neurônios',
+                ],
+                highlight: 'Astrócitos: do capilar ao neurônio — a ponte metabólica essencial.',
+              },
+              {
+                title: 'Oligodendrócitos e Schwann — Eficiência',
+                bullets: [
+                  'Oligodendrócitos (SNC): 1 célula mieliniza até 50 axônios',
+                  'Células de Schwann (SNP): 1 célula → 1 internodo',
+                  'Mielina: isolante lipídico que permite condução saltatória',
+                  'Sem mielina: velocidade cai de 120 m/s para ~2 m/s',
+                  'Esclerose múltipla: destruição autoimune da mielina do SNC',
+                ],
+              },
+              {
+                title: 'Micróglia — Vigilância e Manutenção',
+                bullets: [
+                  'Sistema imune residente do SNC',
+                  'Vigilância contínua: monitora o microambiente 24h',
+                  'Fagocitose: remove debris celulares e patógenos',
+                  'Poda sináptica: marca e elimina sinapses fracas no desenvolvimento',
+                  'Resposta inflamatória: ativação em lesão ou infecção',
+                  'Ativação crônica: associada a doenças neurodegenerativas (Alzheimer, Parkinson)',
+                ],
+                highlight: 'Micróglia: zeladora, guardiã e escultora do cérebro.',
+              },
+            ],
+          },
+          {
+            id: 'M1-T4-sim-support',
+            type: 'simulation',
+            title: 'Rede de Suporte Glial',
+            simulationId: 'neuro-glia-support',
+            description: 'Veja astrócitos alimentando neurônios, oligodendrócitos mielinizando e micróglia podando — filtre por tipo',
+          },
+          {
+            id: 'M1-T4-slides-sintese',
+            type: 'slides',
+            title: 'Síntese: Infraestrutura como Pré-Requisito',
+            slides: [
+              {
+                title: 'Conclusão do Capítulo',
+                bullets: [
+                  'Função cerebral NÃO é produto da vontade — é produto de viabilidade metabólica',
+                  'Sem oxigênio, glicose, barreira e glia, não há cognição, decisão ou comportamento',
+                  'O₂ + Glicose → ATP → Gradientes → PA → Função → Comportamento',
+                  'A BHE protege mas também limita: desafio para tratamentos farmacológicos',
+                  'Glia é infraestrutura ativa, não passiva — co-protagonista da função neural',
+                ],
+                highlight: 'Não existe função neural sem infraestrutura. O cérebro é um órgão biológico, não uma abstração.',
+              },
+              {
+                title: 'Relevância Clínica',
+                bullets: [
+                  'AVC: interrupção de O₂ → morte neuronal em minutos',
+                  'Hipoglicemia severa: sem glicose → convulsões, coma',
+                  'Esclerose múltipla: perda de mielina → déficit motor e cognitivo',
+                  'Meningite: BHE comprometida → neuroinflamação grave',
+                  'Alzheimer: micróglia cronicamente ativada → neurodegeneração',
+                  'Entender infraestrutura = entender vulnerabilidades do SN',
+                ],
+                highlight: 'Para o fisioterapeuta: conhecer a infraestrutura neural é saber ONDE e POR QUE o sistema falha.',
+              },
+            ],
           },
         ],
       },

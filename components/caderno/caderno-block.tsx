@@ -14,6 +14,10 @@ const NeuroNeuronAnatomySim = dynamic(() => import('@/components/experience/neur
 const NeuroGliaEcosystemSim = dynamic(() => import('@/components/experience/neuro-glia-ecosystem-sim').then(m => m.NeuroGliaEcosystemSim), { ssr: false })
 const NeuroAxonTransportSim = dynamic(() => import('@/components/experience/neuro-axon-transport-sim').then(m => m.NeuroAxonTransportSim), { ssr: false })
 const NeuroSaltatoryConductionSim = dynamic(() => import('@/components/experience/neuro-saltatory-conduction-sim').then(m => m.NeuroSaltatoryConductionSim), { ssr: false })
+const NeuroNeuronTypesSim = dynamic(() => import('@/components/experience/neuro-neuron-types-sim').then(m => m.NeuroNeuronTypesSim), { ssr: false })
+const NeuroMetabolicChainSim = dynamic(() => import('@/components/experience/neuro-metabolic-chain-sim').then(m => m.NeuroMetabolicChainSim), { ssr: false })
+const NeuroBHESim = dynamic(() => import('@/components/experience/neuro-bhe-sim').then(m => m.NeuroBHESim), { ssr: false })
+const NeuroGliaSupportSim = dynamic(() => import('@/components/experience/neuro-glia-support-sim').then(m => m.NeuroGliaSupportSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
@@ -24,6 +28,10 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'neuro-glia-ecosystem': NeuroGliaEcosystemSim,
   'neuro-axon-transport': NeuroAxonTransportSim,
   'neuro-saltatory-conduction': NeuroSaltatoryConductionSim,
+  'neuro-neuron-types': NeuroNeuronTypesSim,
+  'neuro-metabolic-chain': NeuroMetabolicChainSim,
+  'neuro-bhe': NeuroBHESim,
+  'neuro-glia-support': NeuroGliaSupportSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
