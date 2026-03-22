@@ -152,8 +152,8 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
     const traY = larY + larH + 3
     const traH = 62 * S
     const bifY = traY + traH
-    const bronchLen = 48 * S
-    const bronchSpread = 68 * S
+    const bronchLen = 52 * S
+    const bronchSpread = 75 * S
 
     const lungTop = bifY - 8
     const lungW = 105 * S * (1 + expand)
@@ -686,11 +686,12 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
 
     // clusters in both lungs
     const alvPositions = [
-      { x: rlx + lungW * 0.15, y: lungCenterY - lungH * 0.15, n: 6 },
-      { x: rlx + lungW * 0.45, y: lungCenterY + lungH * 0.2, n: 5 },
-      { x: rlx + lungW * 0.2, y: lungCenterY + lungH * 0.35, n: 5 },
-      { x: llx - lungW * 0.2, y: lungCenterY - lungH * 0.1, n: 6 },
-      { x: llx - lungW * 0.45, y: lungCenterY + lungH * 0.15, n: 5 },
+      { x: rlx + lungW * 0.2, y: lungCenterY - lungH * 0.12, n: 6 },
+      { x: rlx + lungW * 0.55, y: lungCenterY + lungH * 0.15, n: 6 },
+      { x: rlx + lungW * 0.3, y: lungCenterY + lungH * 0.35, n: 5 },
+      { x: llx - lW2 * 0.25, y: lungCenterY - lungH * 0.08, n: 6 },
+      { x: llx - lW2 * 0.55, y: lungCenterY + lungH * 0.12, n: 6 },
+      { x: llx - lW2 * 0.35, y: lungCenterY + lungH * 0.32, n: 5 },
     ]
     for (const ap of alvPositions) drawAlvCluster(ap.x, ap.y, ap.n)
 
@@ -722,7 +723,7 @@ export function RespiratorySystemSim({ className }: RespiratorySystemSimProps) {
       { x: cx, y: bifY },
     ]
 
-    const leftPath = [...centerPath, leftEnd, { x: llx - lungW * 0.3, y: lungCenterY }]
+    const leftPath = [...centerPath, leftEnd, { x: llx - lW2 * 0.35, y: lungCenterY }]
     const rightPath = [...centerPath, rightEnd, { x: rlx + lungW * 0.3, y: lungCenterY }]
 
     for (const p of st.particles) {
