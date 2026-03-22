@@ -131,33 +131,63 @@ export function RespiratoryVolumesSim({ className }: RespiratoryVolumesSimProps)
     ctx.fillText('Volume (mL)', 0, 0); ctx.restore()
 
     // ── GENERATE TRACE ──
-    const cycleLen = 400
+    // Padrão clássico de espirometria mostrando TODOS os volumes:
+    //
+    // 1. Respiração normal ×2          → mostra VC (2300↔2800)
+    // 2. Inspiração MÁXIMA             → mostra VRI (2800→5800 = CPT)
+    // 3. Pausa no topo                 → CPT = 5800
+    // 4. Expiração MÁXIMA completa     → mostra CV inteira (5800→1200)
+    //    passa por VRE (2300→1200) e para no VR (1200)
+    // 5. Pausa embaixo                 → VR = 1200 (não desce mais)
+    // 6. Inspira de volta ao normal    → mostra que VR fica preso
+    // 7. Respiração normal ×2          → volta ao VC
+    //
+    const cycleLen = 320
     const ph = (s.trace.length % cycleLen) / cycleLen
+    // phase label for annotations
+    let phaseLabel = ''
 
     let vol: number
-    if (ph < 0.26) {
-      // 3 tidal breaths
-      const tp = (ph / 0.26) * 3, tc = tp % 1
-      const tv = tc < 0.3 ? ez(tc / 0.3) : tc < 0.45 ? 1 : tc < 0.75 ? 1 - ez((tc - 0.45) / 0.3) : 0
-      vol = lerp(L_CRF, L_VC, tv)
-    } else if (ph < 0.36) {
-      // max inspiration
-      vol = lerp(L_VC, L_CPT, ez((ph - 0.26) / 0.10))
-    } else if (ph < 0.40) {
-      vol = L_CPT
-    } else if (ph < 0.55) {
-      // max expiration all the way down
-      vol = lerp(L_CPT, L_VR, ez((ph - 0.40) / 0.15))
-    } else if (ph < 0.59) {
-      vol = L_VR
-    } else if (ph < 0.67) {
-      // back to CRF
-      vol = lerp(L_VR, L_CRF, ez((ph - 0.59) / 0.08))
-    } else {
+    if (ph < 0.15) {
       // 2 tidal breaths
-      const tp = ((ph - 0.67) / 0.33) * 2, tc = tp % 1
-      const tv = tc < 0.3 ? ez(tc / 0.3) : tc < 0.45 ? 1 : tc < 0.75 ? 1 - ez((tc - 0.45) / 0.3) : 0
+      const tp = (ph / 0.15) * 2, tc = tp % 1
+      const tv = tc < 0.3 ? ez(tc / 0.3) : tc < 0.5 ? 1 : tc < 0.8 ? 1 - ez((tc - 0.5) / 0.3) : 0
       vol = lerp(L_CRF, L_VC, tv)
+      phaseLabel = 'VC'
+    } else if (ph < 0.27) {
+      // MAX INSPIRATION: from normal insp level (2800) up to CPT (5800)
+      vol = lerp(L_VC, L_CPT, ez((ph - 0.15) / 0.12))
+      phaseLabel = '↑ VRI'
+    } else if (ph < 0.32) {
+      // hold at CPT
+      vol = L_CPT
+      phaseLabel = 'CPT = 5800'
+    } else if (ph < 0.52) {
+      // MAX EXPIRATION: from CPT (5800) down through CRF, past VRE, to VR (1200)
+      const t = ez((ph - 0.32) / 0.20)
+      vol = lerp(L_CPT, L_VR, t)
+      // label depends on where we are
+      const currentV = lerp(L_CPT, L_VR, t)
+      if (currentV > L_CRF) phaseLabel = '↓ CV'
+      else phaseLabel = '↓ VRE'
+    } else if (ph < 0.58) {
+      // hold at VR — this is the floor, can't go lower
+      vol = L_VR
+      phaseLabel = 'VR = 1200 (mínimo)'
+    } else if (ph < 0.68) {
+      // inspire back up to CRF level
+      vol = lerp(L_VR, L_CRF, ez((ph - 0.58) / 0.10))
+      phaseLabel = '↑ retorno'
+    } else if (ph < 0.72) {
+      // brief pause at CRF
+      vol = L_CRF
+      phaseLabel = 'CRF = 2300'
+    } else {
+      // 2 tidal breaths to close
+      const tp = ((ph - 0.72) / 0.28) * 2, tc = tp % 1
+      const tv = tc < 0.3 ? ez(tc / 0.3) : tc < 0.5 ? 1 : tc < 0.8 ? 1 - ez((tc - 0.5) / 0.3) : 0
+      vol = lerp(L_CRF, L_VC, tv)
+      phaseLabel = 'VC'
     }
 
     s.trace.push(vol)
@@ -179,10 +209,13 @@ export function RespiratoryVolumesSim({ className }: RespiratoryVolumesSimProps)
     ctx.beginPath(); ctx.arc(cx2, cy2, 4.5, 0, Math.PI * 2)
     ctx.fillStyle = 'rgba(45, 212, 191, 0.9)'; ctx.fill()
 
-    // current volume number near top-left of graph
+    // current volume + phase label
     ctx.font = `700 ${Math.max(10, 13 * S)}px ${FONT}`
     ctx.textAlign = 'left'; ctx.fillStyle = 'rgba(45, 212, 191, 0.7)'
     ctx.fillText(`${Math.round(vol)} mL`, gL + 8, gT + 18)
+    ctx.font = `600 ${Math.max(7, 9 * S)}px ${FONT}`
+    ctx.fillStyle = 'rgba(45, 212, 191, 0.45)'
+    ctx.fillText(phaseLabel, gL + 8, gT + 33)
 
     // ════════ CAPACITY BRACKETS (far right, outside graph) ════════
     const brkX = gR + 12 * S
