@@ -75,35 +75,59 @@ export function RespiratoryVolumesSim({ className }: RespiratoryVolumesSimProps)
     const volToY = (vol: number) => gB - (vol / CPT) * gH
 
     // ── generate breathing trace
-    // Pattern: 3 normal breaths → 1 max inspiration → 1 max expiration → return to normal
-    const cycleLen = 600 // frames per full pattern
+    // Classic spirometry pattern showing ALL volumes clearly:
+    // 1) Normal tidal breathing (VC) × 3
+    // 2) Maximum inspiration (up to CPT = VRI zone)
+    // 3) Maximum expiration (down to VR)
+    // 4) Return to normal tidal level
+    // 5) Normal tidal × 2
+    const cycleLen = 420
     const phase = (s.traceHistory.length % cycleLen) / cycleLen
+    const ez = (t: number) => t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2
+
+    // Normal tidal oscillates between CRF (2300) and CRF+VC (2800)
+    const tidalBase = LVRE // 2300 = end-expiratory level
+    const tidalPeak = LVC  // 2800 = end-inspiratory level
 
     let currentVol: number
-    if (phase < 0.45) {
-      // normal tidal breathing (3 cycles)
-      const tidPhase = (phase / 0.45) * 3
+    if (phase < 0.30) {
+      // 3 normal tidal breaths
+      const tidPhase = (phase / 0.30) * 3
       const tidCycle = tidPhase % 1
-      const tidVal = tidCycle < 0.4 ? Math.sin((tidCycle / 0.4) * Math.PI) : (tidCycle < 0.6 ? Math.sin(Math.PI) * (1 - (tidCycle - 0.4) / 0.2) : 0)
-      currentVol = LVRE + tidVal * VC * 0.95
-    } else if (phase < 0.55) {
-      // max inspiration
-      const t = (phase - 0.45) / 0.1
-      currentVol = lerp(LVRE, LVRI, t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
-    } else if (phase < 0.62) {
-      // hold at max
+      let tidVal: number
+      if (tidCycle < 0.35) tidVal = ez(tidCycle / 0.35)           // inspire up
+      else if (tidCycle < 0.45) tidVal = 1                         // brief hold
+      else if (tidCycle < 0.80) tidVal = 1 - ez((tidCycle - 0.45) / 0.35) // expire down
+      else tidVal = 0                                               // brief pause
+      currentVol = lerp(tidalBase, tidalPeak, tidVal)
+    } else if (phase < 0.40) {
+      // MAX INSPIRATION: from tidal peak (2800) up to CPT (5800)
+      const t = ez((phase - 0.30) / 0.10)
+      currentVol = lerp(tidalPeak, LVRI, t)
+    } else if (phase < 0.44) {
+      // hold at CPT
       currentVol = LVRI
-    } else if (phase < 0.75) {
-      // max expiration
-      const t = (phase - 0.62) / 0.13
-      currentVol = lerp(LVRI, VR + 50, t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
-    } else if (phase < 0.82) {
-      // hold at min
-      currentVol = VR + 50
+    } else if (phase < 0.58) {
+      // MAX EXPIRATION: from CPT (5800) all the way down to VR (1200)
+      const t = ez((phase - 0.44) / 0.14)
+      currentVol = lerp(LVRI, LVR, t)
+    } else if (phase < 0.62) {
+      // hold at VR
+      currentVol = LVR
+    } else if (phase < 0.72) {
+      // return to tidal base (CRF level)
+      const t = ez((phase - 0.62) / 0.10)
+      currentVol = lerp(LVR, tidalBase, t)
     } else {
-      // return to normal
-      const t = (phase - 0.82) / 0.18
-      currentVol = lerp(VR + 50, LVRE, t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2)
+      // 2 more normal tidal breaths
+      const tidPhase = ((phase - 0.72) / 0.28) * 2
+      const tidCycle = tidPhase % 1
+      let tidVal: number
+      if (tidCycle < 0.35) tidVal = ez(tidCycle / 0.35)
+      else if (tidCycle < 0.45) tidVal = 1
+      else if (tidCycle < 0.80) tidVal = 1 - ez((tidCycle - 0.45) / 0.35)
+      else tidVal = 0
+      currentVol = lerp(tidalBase, tidalPeak, tidVal)
     }
 
     s.traceHistory.push(currentVol)
@@ -240,23 +264,42 @@ export function RespiratoryVolumesSim({ className }: RespiratoryVolumesSimProps)
     ctx.fillStyle = COL_TEXT_DIM
     ctx.fillText('Anatômico: 150mL  •  Alveolar: ≈0mL (normal)  •  Fisiológico = Anat + Alv', 15, dsY + 12)
 
-    // ── phase labels on trace
-    ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
+    // ── KEY LEVEL LINES with labels (horizontal dashed lines at important levels)
+    const keyLevels = [
+      { vol: LVRI, label: 'CPT', sub: `${CPT} mL`, color: 'rgba(167, 139, 250, 0.4)' },
+      { vol: LVC, label: 'Nível insp. normal', sub: `${LVC} mL`, color: 'rgba(34, 211, 238, 0.25)' },
+      { vol: LVRE, label: 'Nível exp. normal (CRF)', sub: `${CRF} mL`, color: 'rgba(250, 204, 21, 0.3)' },
+      { vol: LVR, label: 'Volume Residual', sub: `${VR} mL`, color: 'rgba(244, 63, 94, 0.3)' },
+    ]
+    for (const kl of keyLevels) {
+      const ky = volToY(kl.vol)
+      ctx.beginPath(); ctx.moveTo(gL + 1, ky); ctx.lineTo(gR - 1, ky)
+      ctx.strokeStyle = kl.color; ctx.lineWidth = 0.8
+      ctx.setLineDash([4, 4]); ctx.stroke(); ctx.setLineDash([])
+    }
+
+    // ── phase annotations on trace
+    ctx.font = `600 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
     ctx.textAlign = 'center'
     const traceLen = s.traceHistory.length
-    if (traceLen > 50) {
-      // find where max inspiration happens
-      const maxIdx = s.traceHistory.indexOf(Math.max(...s.traceHistory))
-      if (maxIdx > 10 && maxIdx < traceLen - 10) {
-        const mx = gL + (maxIdx / traceLen) * gW
-        ctx.fillStyle = 'rgba(45, 212, 191, 0.3)'
-        ctx.fillText('Insp. Máx', mx, volToY(LVRI) - 8)
+    if (traceLen > 100) {
+      // find max and min in trace
+      let maxVal = 0, minVal = CPT, maxIdx = 0, minIdx = 0
+      for (let i = 0; i < traceLen; i++) {
+        if (s.traceHistory[i] > maxVal) { maxVal = s.traceHistory[i]; maxIdx = i }
+        if (s.traceHistory[i] < minVal) { minVal = s.traceHistory[i]; minIdx = i }
       }
-      const minIdx = s.traceHistory.indexOf(Math.min(...s.traceHistory))
-      if (minIdx > 10 && minIdx < traceLen - 10) {
+      if (maxVal > tidalPeak + 500) {
+        const mx = gL + (maxIdx / traceLen) * gW
+        ctx.fillStyle = 'rgba(167, 139, 250, 0.5)'
+        ctx.fillText('← CPT', mx + 20, volToY(LVRI) - 6)
+        ctx.fillText(`${CPT} mL`, mx + 20, volToY(LVRI) + 4)
+      }
+      if (minVal < tidalBase - 500) {
         const mx = gL + (minIdx / traceLen) * gW
-        ctx.fillStyle = 'rgba(244, 63, 94, 0.3)'
-        ctx.fillText('Exp. Máx', mx, volToY(VR) + 14)
+        ctx.fillStyle = 'rgba(244, 63, 94, 0.5)'
+        ctx.fillText('← VR', mx + 18, volToY(LVR) + 12)
+        ctx.fillText(`${VR} mL`, mx + 18, volToY(LVR) + 22)
       }
     }
   }, [highlight])
