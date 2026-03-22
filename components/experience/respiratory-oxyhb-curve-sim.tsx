@@ -244,62 +244,52 @@ export function RespiratoryOxyHbCurveSim({ className }: RespiratoryOxyHbCurveSim
     }
 
     // ═══ RIGHT PANEL ═══
-    const rpX = w * 0.66, rpY = 95 * S
+    const rpX = w * 0.66
 
-    ctx.font = `700 ${Math.max(10, 12 * S)}px ${FONT_MONO}`
+    // title
+    ctx.font = `700 ${Math.max(9, 11 * S)}px ${FONT_MONO}`
     ctx.textAlign = 'left'
-    ctx.fillStyle = 'rgba(255,255,255,0.7)'
-    ctx.fillText('Curva de Dissociação', rpX, rpY)
-    ctx.fillText('Oxi-Hemoglobina', rpX, rpY + 16)
+    ctx.fillStyle = 'rgba(255,255,255,0.6)'
+    ctx.fillText('Curva de Dissociação', rpX, gT)
+    ctx.fillText('Oxi-Hemoglobina', rpX, gT + 14 * S)
 
-    // equation
-    ctx.font = `600 ${Math.max(7, 8 * S)}px ${FONT_MONO}`
+    ctx.font = `600 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
     ctx.fillStyle = COL_NORMAL
-    ctx.fillText('Hb + 4O₂ ⇄ Hb(O₂)₄', rpX, rpY + 38)
-
-    // Hill equation
-    ctx.font = `500 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
+    ctx.fillText('Hb + 4O₂ ⇄ Hb(O₂)₄', rpX, gT + 32 * S)
+    ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
     ctx.fillStyle = COL_TEXT_DIM
-    ctx.fillText('SaO₂ = PO₂ⁿ / (P50ⁿ + PO₂ⁿ)', rpX, rpY + 55)
-    ctx.fillText('n ≈ 2.7 (cooperatividade)', rpX, rpY + 68)
-
-    // shift explanations
-    const shiftY = rpY + 95
-    ctx.font = `700 ${Math.max(8, 9 * S)}px ${FONT_MONO}`
+    ctx.fillText('SaO₂ = PO₂ⁿ / (P50ⁿ + PO₂ⁿ)', rpX, gT + 45 * S)
+    ctx.fillText('n ≈ 2.7 (cooperatividade)', rpX, gT + 56 * S)
 
     // right shift
+    const shiftY = gT + 78 * S
+    ctx.font = `700 ${Math.max(7, 8 * S)}px ${FONT_MONO}`
     ctx.fillStyle = COL_RIGHT
-    ctx.fillText('→ Desvio DIREITA (Efeito Bohr)', rpX, shiftY)
-    ctx.font = `500 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
-    ctx.fillStyle = 'rgba(244, 63, 94, 0.5)'
-    const rightLines = ['↑ Temperatura', '↑ PCO₂ / ↑ H⁺ (↓pH)', '↑ 2,3-DPG', '→ ↑P50 → Facilita LIBERAÇÃO nos tecidos']
-    rightLines.forEach((l, i) => ctx.fillText(l, rpX, shiftY + 14 + i * 12))
+    ctx.fillText('→ Desvio DIREITA (Bohr)', rpX, shiftY)
+    ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
+    ctx.fillStyle = 'rgba(244, 63, 94, 0.45)'
+    const rightLines = ['↑ Temp, ↑ PCO₂, ↑ H⁺, ↑ 2,3-DPG', '↑P50 → Facilita LIBERAÇÃO']
+    rightLines.forEach((l, i) => ctx.fillText(l, rpX, shiftY + 12 + i * 11))
 
     // left shift
-    const leftY = shiftY + 14 + rightLines.length * 12 + 18
-    ctx.font = `700 ${Math.max(8, 9 * S)}px ${FONT_MONO}`
+    const leftY = shiftY + 12 + rightLines.length * 11 + 14
+    ctx.font = `700 ${Math.max(7, 8 * S)}px ${FONT_MONO}`
     ctx.fillStyle = COL_LEFT
     ctx.fillText('← Desvio ESQUERDA (Haldane)', rpX, leftY)
-    ctx.font = `500 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
-    ctx.fillStyle = 'rgba(34, 211, 238, 0.5)'
-    const leftLines = ['↓ Temperatura', '↓ PCO₂ / ↓ H⁺ (↑pH)', 'HbF (fetal) / CO', '→ ↓P50 → Facilita CAPTAÇÃO nos pulmões']
-    leftLines.forEach((l, i) => ctx.fillText(l, rpX, leftY + 14 + i * 12))
+    ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
+    ctx.fillStyle = 'rgba(34, 211, 238, 0.45)'
+    const leftLines = ['↓ Temp, ↓ PCO₂, ↓ H⁺, HbF', '↓P50 → Facilita CAPTAÇÃO']
+    leftLines.forEach((l, i) => ctx.fillText(l, rpX, leftY + 12 + i * 11))
 
     // O₂ dissolved
-    const dissY = leftY + 14 + leftLines.length * 12 + 18
-    ctx.font = `600 ${Math.max(7, 8 * S)}px ${FONT_MONO}`
-    ctx.fillStyle = 'rgba(250, 204, 21, 0.6)'
-    ctx.fillText('O₂ Dissolvido = PaO₂ × 0,003', rpX, dissY)
-    ctx.font = `500 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
+    const dissY = leftY + 12 + leftLines.length * 11 + 14
+    ctx.font = `600 ${Math.max(6, 7 * S)}px ${FONT_MONO}`
+    ctx.fillStyle = 'rgba(250, 204, 21, 0.5)'
+    ctx.fillText('O₂ diss. = PaO₂ × 0,003', rpX, dissY)
+    ctx.font = `500 ${Math.max(5, 6 * S)}px ${FONT_MONO}`
     ctx.fillStyle = COL_TEXT_DIM
-    ctx.fillText('100 × 0,003 = 0,3 vol% (apenas 1,5%)', rpX, dissY + 13)
-    ctx.fillText('98,5% do O₂ → ligado à Hb', rpX, dissY + 26)
-
-    // HUD
-    ctx.font = `600 ${Math.max(9, 10 * S)}px ${FONT_MONO}`
-    ctx.textAlign = 'left'
-    ctx.fillStyle = COL_TEXT_DIM; ctx.fillText('OXYHEMOGLOBIN.CURVE', 12, h - 8)
-    ctx.fillStyle = 'rgba(45, 212, 191, 0.4)'; ctx.fillText('▸ EQUAÇÃO DE HILL', 12, h - 22)
+    ctx.fillText('= 0,3 vol% (1,5% do total)', rpX, dissY + 11)
+    ctx.fillText('98,5% → ligado à Hb', rpX, dissY + 22)
   }, [mode, hoverPO2])
 
   useEffect(() => {
