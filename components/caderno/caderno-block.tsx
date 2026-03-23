@@ -63,6 +63,7 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'respiratory-vmi-ventilator': RespiratoryVmiVentilatorSim,
   'respiratory-vmi-peep': RespiratoryVmiPeepSim,
   'respiratory-vmi-mechanics': RespiratoryVmiMechanicsSim,
+  'respiratory-vmi-asynchrony': RespiratoryVmiAsynchronySim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
