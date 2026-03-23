@@ -510,7 +510,7 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
 
     frameRef.current = requestAnimationFrame(draw)
     return () => cancelAnimationFrame(frameRef.current)
-  }, [wave, paused, viewMode, siMode, p1p2Mode, activeLabel])
+  }, [wave, paused, viewMode, siMode, p1p2Mode, triggerMode, activeLabel])
 
   return (
     <div className={`rounded-xl overflow-hidden bg-[#111] ${className ?? ''}`}>
