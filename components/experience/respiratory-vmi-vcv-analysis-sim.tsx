@@ -174,8 +174,8 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
   const flowLabels = [
     { num: 1, name: 'Disparo', x: cx(0.04), desc: 'Deflexão negativa que dispara o ciclo' },
     { num: 2, name: 'Pico Fluxo Insp.', x: cx(0.15), desc: `Fluxo constante = ${flowSet} L/min (onda quadrada)` },
-    { num: 3, name: 'Ciclagem', x: cx(tInsp), desc: 'Fluxo cai a zero — fim da inspiração' },
-    { num: 4, name: 'Pico Fluxo Exp.', x: cx(tInsp + tPause + 0.1), desc: 'Pico negativo — expiração passiva' },
+    { num: 3, name: 'Ciclagem', x: cx(tInsp - 0.08), desc: 'Fluxo cai a zero — fim da inspiração' },
+    { num: 4, name: 'Pico Fluxo Exp.', x: cx(tInsp + tPause + 0.35), desc: 'Pico negativo — expiração passiva' },
     { num: 5, name: 'Const. Tempo τ', x: cx(tInsp + tPause + tExp * 0.5), desc: 'Decaimento exponencial (τ = R × C)' },
   ]
 
@@ -628,23 +628,51 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
 
       {/* Legend */}
       <div className="p-3 bg-black/40 border-t border-white/10">
-        {viewMode === 'normal' && (
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
-            {pressureLabelsWithPause.map(l => (
-              <div key={l.num} className="flex items-start gap-1.5">
-                <span className="shrink-0 w-5 h-5 rounded-full bg-yellow-500/20 text-yellow-300 flex items-center justify-center font-bold text-[10px]">{l.num}</span>
-                <div>
-                  <span className="text-white/80 font-semibold">{l.name}</span>
-                  <p className="text-white/40 leading-tight">{l.desc}</p>
-                </div>
+        {(viewMode === 'normal' || viewMode === 'noPause') && (
+          <div className="space-y-3 text-[10px]">
+            {/* Pressão */}
+            <div>
+              <p className="text-yellow-400 font-bold text-[11px] mb-1">Pressão (cmH₂O)</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+                {(viewMode === 'noPause'
+                  ? pressureLabelsWithPause.filter(l => l.num !== 6 && l.num !== 7)
+                  : pressureLabelsWithPause
+                ).map(l => (
+                  <div key={l.num} className="flex items-start gap-1">
+                    <span className="shrink-0 w-4 h-4 rounded-full bg-yellow-500/30 text-yellow-300 flex items-center justify-center font-bold text-[9px]">{l.num}</span>
+                    <span className="text-white/70">{l.name}</span>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+            {/* Fluxo */}
+            <div>
+              <p className="text-pink-400 font-bold text-[11px] mb-1">Fluxo (L/min)</p>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
+                {flowLabels.map(l => (
+                  <div key={l.num} className="flex items-start gap-1">
+                    <span className="shrink-0 w-4 h-4 rounded-full bg-pink-500/30 text-pink-300 flex items-center justify-center font-bold text-[9px]">{l.num}</span>
+                    <span className="text-white/70">{l.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Volume */}
+            <div>
+              <p className="text-green-400 font-bold text-[11px] mb-1">Volume (mL)</p>
+              <div className="grid grid-cols-3 gap-1.5">
+                {volumeLabels.map(l => (
+                  <div key={l.num} className="flex items-start gap-1">
+                    <span className="shrink-0 w-4 h-4 rounded-full bg-green-500/30 text-green-300 flex items-center justify-center font-bold text-[9px]">{l.num}</span>
+                    <span className="text-white/70">{l.name}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {viewMode === 'noPause' && (
+              <p className="text-white/40 text-[9px]">⚠️ Sem Pausa: Não há platô — não é possível medir Pplatô nem Driving Pressure.</p>
+            )}
           </div>
-        )}
-        {viewMode === 'noPause' && (
-          <p className="text-white/50 text-xs">
-            <span className="text-yellow-400 font-bold">Sem Pausa:</span> Não há platô — pressão vai direto do pico para expiração. Não é possível medir Pplatô nem Driving Pressure.
-          </p>
         )}
         {viewMode === 'stressIndex' && (
           <div className="text-xs space-y-1">
