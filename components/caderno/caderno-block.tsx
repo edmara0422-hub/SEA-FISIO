@@ -47,6 +47,7 @@ const RespiratoryVmiPsvCyclingSim = dynamic(() => import('@/components/experienc
 const RespiratoryVmiVcvAnalysisSim = dynamic(() => import('@/components/experience/respiratory-vmi-vcv-analysis-sim').then(m => m.RespiratoryVmiVcvAnalysisSim), { ssr: false })
 const RespiratoryVmiPcvAnalysisSim = dynamic(() => import('@/components/experience/respiratory-vmi-pcv-analysis-sim').then(m => m.RespiratoryVmiPcvAnalysisSim), { ssr: false })
 const RespiratoryVmiPsvAnalysisSim = dynamic(() => import('@/components/experience/respiratory-vmi-psv-analysis-sim').then(m => m.RespiratoryVmiPsvAnalysisSim), { ssr: false })
+const RespiratoryVmiLoopsSim = dynamic(() => import('@/components/experience/respiratory-vmi-loops-sim').then(m => m.RespiratoryVmiLoopsSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
@@ -90,6 +91,7 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'respiratory-vmi-vcv-analysis': RespiratoryVmiVcvAnalysisSim,
   'respiratory-vmi-pcv-analysis': RespiratoryVmiPcvAnalysisSim,
   'respiratory-vmi-psv-analysis': RespiratoryVmiPsvAnalysisSim,
+  'respiratory-vmi-loops': RespiratoryVmiLoopsSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {

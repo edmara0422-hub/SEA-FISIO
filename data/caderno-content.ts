@@ -3255,6 +3255,13 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
+            id: 'M2-T13-sim-loops',
+            type: 'simulation',
+            title: 'Loops P×V e F×V — Análise Interativa',
+            simulationId: 'respiratory-vmi-loops',
+            description: 'Loop P×V (VCV triangular / PCV retangular) com histerese e WOB. Loop F×V (Normal / Restritivo / Obstrutivo) com auto-PEEP.',
+          },
+          {
             id: 'M2-T13-slides-formulas',
             type: 'slides',
             title: 'Cálculos e Fórmulas',
