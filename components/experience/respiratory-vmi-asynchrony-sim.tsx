@@ -89,79 +89,80 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
     switch (asyncType) {
 
       // ═══ DISPARO INEFICAZ ═══
-      // Ciclo 2 de cada 4: paciente tenta mas falha
+      // Esforço muscular inspiratório durante expiração que NÃO dispara o ventilador
+      // Na curva real: pequena deflexão negativa no fluxo e pressão DURANTE a fase expiratória
       case 'ineffective': {
-        if (cycleNum === 2) {
-          // Ciclo com disparo ineficaz — esforço sem ciclo
-          // Pequena deflexão negativa na pressão, sem fluxo significativo
-          const effortStart = 0.15
-          const effortDur = 0.3
+        const n = normalWave(ph)
+
+        if (cycleNum === 1 || cycleNum === 3) {
+          // Durante a EXPIRAÇÃO do ciclo normal, paciente faz esforço que falha
+          const effortStart = ti + te * 0.35  // no meio da expiração
+          const effortDur = 0.35
           if (ph > effortStart && ph < effortStart + effortDur) {
             const ef = (ph - effortStart) / effortDur
-            const effort = -2.5 * Math.sin(ef * Math.PI)  // deflexão de -2.5 cmH₂O
+            const effort = Math.sin(ef * Math.PI)
             return {
-              P: peep + effort,
-              F: effort * 1.5,  // pequeno fluxo oscilante
-              V: 8 * Math.sin(ef * Math.PI),  // volume mínimo
+              P: n.P - 2.5 * effort,           // deflexão negativa na pressão
+              F: n.F + 8 * effort,              // pequena deflexão positiva no fluxo (tenta inspirar)
+              V: n.V + 15 * effort,             // volume mínimo oscila
             }
           }
-          return { P: peep, F: 0, V: 0 }
+          return n
         }
-        return normalWave(ph)
+        return n
       }
 
       // ═══ DUPLO DISPARO ═══
-      // Ciclo 1 de cada 4: dois ciclos inspiratórios consecutivos
+      // Esforço inspiratório continua além do TI → segundo disparo sem expiração completa
+      // Volume se EMPILHA (air stacking) — segundo VC soma ao primeiro
       case 'double': {
-        if (cycleNum === 1) {
-          const halfCycle = cycleSec * 0.5
-          const miniTi = halfCycle * 0.55
-          const miniTe = halfCycle - miniTi
+        if (cycleNum === 1 || cycleNum === 3) {
+          // Primeiro ciclo encurtado + segundo ciclo empilhado
+          const ti1 = ti * 0.85
+          const gap = 0.15  // mini-expiração muito curta
+          const ti2 = ti * 0.85
+          const te2 = cycleSec - ti1 - gap - ti2
 
-          if (ph < halfCycle) {
-            // Primeiro ciclo (encurtado)
-            if (ph < miniTi) {
-              const frac = ph / miniTi
-              const rF = Math.min(ph / 0.06, 1)
-              const rs = smooth(rF)
-              return {
-                P: peep + (vc * 0.6 / 40) * frac + 8 * (flowPeak / 60) * rs,
-                F: flowPeak * 0.9 * rs * (1 - frac * 0.3),
-                V: vc * 0.6 * frac,
-              }
-            } else {
-              const ef = (ph - miniTi) / miniTe
-              const exp = Math.exp(-ef * 4)
-              return {
-                P: peep + (vc * 0.6 / 40) * exp + 1,
-                F: -flowPeak * 0.5 * exp,
-                V: vc * 0.6 * exp * 0.7 + vc * 0.18,  // não esvazia completamente!
-              }
+          if (ph < ti1) {
+            // 1ª inspiração normal
+            const frac = ph / ti1
+            const rF = Math.min(ph / 0.06, 1)
+            const rs = smooth(rF)
+            return {
+              P: peep + (vc / 40) * frac + 8 * (flowPeak / 60) * rs,
+              F: flowPeak * rs,
+              V: vc * frac,
+            }
+          } else if (ph < ti1 + gap) {
+            // Mini-expiração incompleta (fluxo mal cruza zero)
+            const ef = (ph - ti1) / gap
+            return {
+              P: peep + (vc / 40) * (1 - ef * 0.2),
+              F: -flowPeak * 0.4 * Math.sin(ef * Math.PI),
+              V: vc * (1 - ef * 0.15),  // quase não esvazia
+            }
+          } else if (ph < ti1 + gap + ti2) {
+            // 2ª inspiração — volume EMPILHA sobre o residual
+            const ph2 = ph - ti1 - gap
+            const frac = ph2 / ti2
+            const rF = Math.min(ph2 / 0.06, 1)
+            const rs = smooth(rF)
+            const residual = vc * 0.85  // volume que ficou do 1º ciclo
+            const vc2 = vc * 0.8
+            return {
+              P: peep + ((residual + vc2 * frac) / 40) + 8 * (flowPeak / 60) * rs,
+              F: flowPeak * 0.9 * rs,
+              V: residual + vc2 * frac,  // EMPILHAMENTO — volume vai acima do normal!
             }
           } else {
-            // Segundo ciclo (stacking — começa antes de esvaziar)
-            const ph2 = ph - halfCycle
-            const miniTi2 = miniTi
-            const miniTe2 = halfCycle - miniTi2
-            if (ph2 < miniTi2) {
-              const frac = ph2 / miniTi2
-              const rF = Math.min(ph2 / 0.06, 1)
-              const rs = smooth(rF)
-              const stackVol = vc * 0.18  // volume residual do primeiro ciclo
-              return {
-                P: peep + ((stackVol + vc * 0.55 * frac) / 40) + 8 * (flowPeak / 60) * rs,
-                F: flowPeak * 0.85 * rs * (1 - frac * 0.3),
-                V: stackVol + vc * 0.55 * frac,  // empilhamento!
-              }
-            } else {
-              const ef = (ph2 - miniTi2) / miniTe2
-              const exp = Math.exp(-ef * 3)
-              const peakV = vc * 0.18 + vc * 0.55
-              return {
-                P: peep + (peakV / 40) * exp,
-                F: -flowPeak * 0.65 * exp,
-                V: peakV * exp,
-              }
+            // Expiração do volume empilhado
+            const ef = (ph - ti1 - gap - ti2) / te2
+            const totalV = vc * 0.85 + vc * 0.8
+            const expD = Math.exp(-ef * te2 / 0.6)
+            return {
+              P: peep + (totalV / 40) * expD,
+              F: -flowPeak * 0.9 * expD,
+              V: totalV * expD,
             }
           }
         }
@@ -169,88 +170,119 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ DISPARO REVERSO ═══
-      // Contração reflexa durante a fase expiratória
+      // Contração diafragmática reflexa causada pela insuflação PASSIVA (ciclos controlados)
+      // Ocorre DURANTE a inspiração mecânica ou no final dela — NÃO na expiração
+      // Pode gerar duplo disparo se ocorre no final da inspiração
       case 'reverse': {
-        if (cycleNum === 2) {
-          const n = normalWave(ph)
-          // Adicionar esforço reflexo durante expiração
-          if (ph > ti + 0.3 && ph < ti + 0.3 + 0.5) {
-            const ef = (ph - ti - 0.3) / 0.5
-            const reflex = -3 * Math.sin(ef * Math.PI)  // esforço reflexo
+        const n = normalWave(ph)
+
+        if (cycleNum === 1 || cycleNum === 3) {
+          // Contração reflexa no FINAL da inspiração mecânica (~70-100% do TI)
+          const reflexStart = ti * 0.65
+          const reflexDur = ti * 0.45
+
+          if (ph > reflexStart && ph < reflexStart + reflexDur) {
+            const ef = (ph - reflexStart) / reflexDur
+            const reflex = Math.sin(ef * Math.PI)
+
             return {
-              P: n.P + reflex,
-              F: n.F + reflex * 8,  // perturbação no fluxo
-              V: n.V + 30 * Math.sin(ef * Math.PI),  // pequeno volume adicional
+              P: n.P + 4 * reflex,       // pico extra de pressão (esforço somado à máquina)
+              F: n.F + 15 * reflex,       // aumento de fluxo (contração soma ao ventilador)
+              V: n.V + 40 * (1 - Math.cos(ef * Math.PI)) / 2,  // volume extra
+            }
+          }
+
+          // Se o reflexo é forte, pode continuar como mini-inspiração na expiração precoce
+          if (ph > ti && ph < ti + 0.3) {
+            const ef = (ph - ti) / 0.3
+            const tail = 3 * Math.exp(-ef * 4) * (1 - ef)
+            return {
+              P: n.P + tail,
+              F: n.F + tail * 3,
+              V: n.V + 20 * Math.exp(-ef * 3),
             }
           }
           return n
         }
-        return normalWave(ph)
+        return n
       }
 
       // ═══ AUTODISPARO ═══
-      // Ciclo fantasma disparado por oscilação cardíaca
+      // Ventilador dispara SEM esforço do paciente — timing irregular
+      // Causas: oscilação cardíaca, vazamento, água no circuito, sensibilidade excessiva
+      // Ciclo normal mas com timing errado (antecipado) e sem esforço real
       case 'auto': {
-        if (cycleNum === 3) {
-          // Ciclo normal no início
-          if (ph < ti * 0.4) {
-            // Mini-ciclo automático (não há esforço real)
-            const frac = ph / (ti * 0.4)
-            const rF = Math.min(ph / 0.05, 1)
+        if (cycleNum === 2) {
+          // Ciclo AUTO: dispara precocemente, no meio da expiração do ciclo anterior
+          // Aparece como um ciclo extra com timing irregular
+          const autoTi = ti * 0.7  // ciclo mais curto
+          const autoTe = cycleSec - autoTi
+
+          if (ph < autoTi) {
+            const frac = ph / autoTi
+            const rF = Math.min(ph / 0.06, 1)
             const rs = smooth(rF)
             return {
-              P: peep + (vc * 0.25 / 40) * frac + 6 * (flowPeak * 0.5 / 60) * rs,
-              F: flowPeak * 0.4 * rs * (1 - frac * 0.5),
-              V: vc * 0.2 * frac,
+              P: peep + (vc * 0.6 / 40) * frac + 8 * (flowPeak * 0.7 / 60) * rs,
+              F: flowPeak * 0.7 * rs,
+              V: vc * 0.6 * frac,
             }
-          } else if (ph < ti * 0.4 + 0.3) {
-            // Rápida expiração do mini-volume
-            const ef = (ph - ti * 0.4) / 0.3
-            const exp = Math.exp(-ef * 5)
+          } else {
+            const ef = (ph - autoTi) / autoTe
+            const expD = Math.exp(-ef * autoTe / 0.5)
+            // Oscilações cardíacas visíveis na baseline
+            const cardiac = 0.6 * Math.sin(ef * autoTe * Math.PI * 5)
             return {
-              P: peep + (vc * 0.2 / 40) * exp,
-              F: -flowPeak * 0.3 * exp,
-              V: vc * 0.2 * exp,
+              P: peep + (vc * 0.6 / 40) * expD + cardiac,
+              F: -flowPeak * 0.5 * expD + cardiac * 2,
+              V: vc * 0.6 * expD,
             }
           }
-          // Oscilações cardíacas (causa)
-          const cardiacOsc = 0.8 * Math.sin((ph - ti * 0.4 - 0.3) * Math.PI * 6)
-          return { P: peep + cardiacOsc, F: cardiacOsc * 2, V: 3 * Math.abs(cardiacOsc) }
         }
-        return normalWave(ph)
+        // Ciclos normais mas com oscilações cardíacas na baseline
+        const n = normalWave(ph)
+        if (ph > ti) {
+          const cardiac = 0.5 * Math.sin(ph * Math.PI * 5)
+          return { P: n.P + cardiac, F: n.F + cardiac * 1.5, V: n.V }
+        }
+        return n
       }
 
       // ═══ CICLAGEM PREMATURA ═══
-      // Ti_vent muito curto — paciente ainda quer inspirar
+      // TI_vent < TI_neural — ventilador cicla ANTES do paciente terminar de inspirar
+      // Na curva: fluxo expiratório começa, mas paciente puxa de volta (esforço residual no fluxo)
+      // Volume menor que esperado
       case 'premature': {
         if (cycleNum === 1 || cycleNum === 3) {
-          const shortTi = ti * 0.55  // Ti muito curto
+          const shortTi = ti * 0.5  // TI muito curto
           const longTe = cycleSec - shortTi
+          const vcReduced = vc * 0.4  // volume reduzido pela ciclagem precoce
 
           if (ph < shortTi) {
             const frac = ph / shortTi
             const rF = Math.min(ph / 0.06, 1)
             const rs = smooth(rF)
             return {
-              P: peep + (vc * 0.45 / 40) * frac + 8 * (flowPeak / 60) * rs,
-              F: flowPeak * rs * (1 - frac * 0.2),
-              V: vc * 0.45 * frac,
+              P: peep + (vcReduced / 40) * frac + 8 * (flowPeak / 60) * rs,
+              F: flowPeak * rs,
+              V: vcReduced * frac,
             }
           } else {
             const ef = (ph - shortTi) / longTe
+            const expD = Math.exp(-ef * longTe / 0.5)
 
-            // Paciente ainda tenta inspirar por mais 0.4s após ciclagem
+            // Paciente CONTINUA tentando inspirar por ~0.5s após ciclagem
+            // Isso cria uma deflexão no fluxo (volta positivo brevemente) e queda na pressão
             let patientEffort = 0
-            if (ph < shortTi + 0.4) {
-              const pf = (ph - shortTi) / 0.4
-              patientEffort = -2.5 * Math.sin(pf * Math.PI)  // esforço inspiratório residual
+            if (ph < shortTi + 0.5) {
+              const pf = (ph - shortTi) / 0.5
+              patientEffort = Math.sin(pf * Math.PI)
             }
 
-            const exp = Math.exp(-ef * longTe / 0.5)
             return {
-              P: peep + (vc * 0.45 / 40) * exp + patientEffort,
-              F: -flowPeak * 0.6 * exp + patientEffort * 6,
-              V: vc * 0.45 * exp,
+              P: peep + (vcReduced / 40) * expD - 3 * patientEffort,  // queda de pressão pelo esforço
+              F: -flowPeak * 0.5 * expD + flowPeak * 0.3 * patientEffort,  // fluxo volta positivo!
+              V: vcReduced * expD + 30 * patientEffort,  // pequeno ganho de volume
             }
           }
         }
@@ -258,37 +290,50 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ CICLAGEM TARDIA ═══
-      // Ti_vent muito longo — paciente tenta expirar
+      // TI_vent > TI_neural — ventilador continua insuflando, paciente tenta expirar
+      // PSV com fluxo desacelerante — ciclagem em % baixa do pico (ex: 10%)
+      // Na curva: fluxo cai a zero e fica oscilando, pressão sobe acima do set
       case 'delayed': {
         if (cycleNum === 1 || cycleNum === 3) {
-          const longTi = ti * 1.6
+          const longTi = ti * 1.8  // TI muito longo
           const shortTe = cycleSec - longTi
+          const pcvPressure = 15  // pressão controlada tipo PSV
+
+          const peakF = flowPeak * 1.2
 
           if (ph < longTi) {
             const frac = ph / longTi
             const rF = Math.min(ph / 0.08, 1)
             const rs = smooth(rF)
 
-            // Paciente tenta expirar no final (a partir de ~60% do Ti)
-            let patientExpEffort = 0
-            if (frac > 0.6) {
-              const pf = (frac - 0.6) / 0.4
-              patientExpEffort = 3 * pf * pf  // pressão extra tentando expirar
+            // Fluxo desacelerante (PSV) — cai rápido
+            const flowDecay = peakF * Math.exp(-frac * longTi / 0.3)
+
+            // Paciente tenta EXPIRAR a partir de ~50% do TI
+            let expEffort = 0
+            if (frac > 0.45) {
+              const pf = (frac - 0.45) / 0.55
+              expEffort = pf * pf * 0.8  // esforço expiratório crescente
             }
 
-            const baseF = flowPeak * rs * Math.max(0.1, 1 - frac * 1.2)
-            return {
-              P: peep + (vc * 0.9 / 40) * Math.min(frac * 1.5, 1) + 8 * (flowPeak / 60) * rs * Math.max(0, 1 - frac * 1.5) + patientExpEffort,
-              F: Math.max(-5, baseF),
-              V: vc * 0.9 * (1 - Math.exp(-frac * 3)),
-            }
+            // Fluxo: cai e pode ficar negativo quando paciente tenta expirar
+            const F = flowDecay * rs - peakF * expEffort
+
+            // Pressão: mantida pelo ventilador mas com spike pela luta do paciente
+            const P = peep + pcvPressure * rs + 4 * expEffort
+
+            // Volume: sobe rápido e depois platô/leve queda
+            const V = vc * (1 - Math.exp(-frac * longTi / 0.35)) - vc * 0.1 * expEffort
+
+            return { P, F, V }
           } else {
+            // Expiração rápida (finalmente cicla)
             const ef = (ph - longTi) / shortTe
-            const exp = Math.exp(-ef * shortTe / 0.35)
+            const expD = Math.exp(-ef * shortTe / 0.3)
             return {
-              P: peep + (vc * 0.9 / 40) * exp,
-              F: -flowPeak * 0.8 * exp,
-              V: vc * 0.9 * exp,
+              P: peep + pcvPressure * Math.max(0, 1 - ((ph - longTi) / 0.08)),
+              F: -peakF * 0.8 * expD,
+              V: vc * 0.9 * expD,
             }
           }
         }
@@ -296,63 +341,78 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ FLUXO INSUFICIENTE (Flow Starvation) ═══
-      // VCV com fluxo baixo — concavidade na pressão
+      // VCV com fluxo constante (onda quadrada) mas BAIXO DEMAIS para a demanda
+      // ASSINATURA: concavidade (scooping) na curva de PRESSÃO durante inspiração
+      // A pressão sobe, depois CAI no meio (paciente puxa), e sobe novamente no final
       case 'flowStarve': {
-        const lowFlow = 28  // fluxo muito baixo
+        const lowFlow = 30  // fluxo baixo
 
-        if (ph < ti * 1.4) {
-          const frac = ph / (ti * 1.4)
+        // TI mais longo porque fluxo é baixo (TI = VC/Flow)
+        const tiLong = (vc / 1000) / (lowFlow / 60)
+        const teLong = cycleSec - tiLong
+
+        if (ph < tiLong) {
+          const frac = ph / tiLong
           const rF = Math.min(ph / 0.08, 1)
           const rs = smooth(rF)
 
-          // Pressão com concavidade (scooping) — paciente puxa mais do que o ventilador entrega
-          const demand = 3 * Math.sin(frac * Math.PI)  // esforço do paciente
-          const pE = (vc / 40) * frac
-          const pR = 8 * (lowFlow / 60) * rs
-          return {
-            P: peep + pE + pR - demand,  // CONCAVIDADE característica
-            F: lowFlow * rs,
-            V: vc * frac,
-          }
+          // Fluxo: constante (onda quadrada) — é VCV
+          const F = lowFlow * rs
+
+          // Volume: rampa linear (VCV normal)
+          const V = vc * frac
+
+          // Pressão: CONCAVIDADE — sobe no início, cai no meio, sobe no final
+          // Paciente faz esforço inspiratório vigoroso que "puxa" a pressão para baixo
+          const pElastic = (vc / 40) * frac
+          const pResistive = 8 * (lowFlow / 60) * rs
+          // Esforço do paciente: máximo no meio da inspiração
+          const demandDip = 6 * Math.sin(frac * Math.PI)  // concavidade forte
+          const P = peep + pElastic + pResistive - demandDip
+
+          return { P, F, V }
         } else {
-          const ef = (ph - ti * 1.4) / (cycleSec - ti * 1.4)
-          const exp = Math.exp(-ef * (cycleSec - ti * 1.4) / 0.5)
+          const ef = (ph - tiLong) / teLong
+          const expD = Math.exp(-ef * teLong / 0.5)
           return {
-            P: peep + (vc / 40) * exp,
-            F: -lowFlow * 0.8 * exp,
-            V: vc * exp,
+            P: peep + (vc / 40) * expD,
+            F: -lowFlow * 0.9 * expD,
+            V: vc * expD,
           }
         }
       }
 
       // ═══ FLUXO EXCESSIVO ═══
-      // Overshoot de pressão no início
+      // PCV/PSV com Rise Time muito curto ou pressão muito alta
+      // ASSINATURA: overshoot de pressão no início (pico > set pressure)
+      // Fluxo tem pico muito alto e desacelera bruscamente
       case 'flowExcess': {
-        const highFlow = 75
-        const shortTi = ti * 0.7
+        const highPressure = 22  // pressão alta
+        const peakF = 75  // fluxo pico muito alto
 
-        if (ph < shortTi) {
-          const frac = ph / shortTi
-          const rF = Math.min(ph / 0.04, 1)  // rise time muito curto
+        if (ph < ti) {
+          const frac = ph / ti
+          const rF = Math.min(ph / 0.03, 1)  // rise time MUITO curto
           const rs = smooth(rF)
 
-          // Overshoot de pressão no início (pico acima do platô)
-          const overshoot = frac < 0.15 ? 8 * Math.sin((frac / 0.15) * Math.PI) : 0
+          // Pressão: OVERSHOOT no início, depois estabiliza
+          const overshoot = frac < 0.12 ? 8 * Math.sin((frac / 0.12) * Math.PI) : 0
+          const P = peep + highPressure * rs + overshoot
 
-          const pE = (vc / 40) * frac
-          const pR = 8 * (highFlow / 60) * rs
-          return {
-            P: peep + pE + pR + overshoot,
-            F: highFlow * rs * (frac < 0.1 ? 1 : Math.exp(-(frac - 0.1) * 2)),
-            V: vc * (1 - Math.exp(-frac * 5)),
-          }
+          // Fluxo: pico altíssimo com desaceleração brusca (PCV)
+          const F = peakF * rs * Math.exp(-Math.max(0, frac - 0.05) * ti / 0.25)
+
+          // Volume: exponencial (PCV)
+          const V = vc * 1.1 * (1 - Math.exp(-frac * ti / 0.3))
+
+          return { P, F, V }
         } else {
-          const ef = (ph - shortTi) / (cycleSec - shortTi)
-          const exp = Math.exp(-ef * (cycleSec - shortTi) / 0.45)
+          const ef = (ph - ti) / te
+          const expD = Math.exp(-ef * te / 0.4)
           return {
-            P: peep + (vc / 40) * exp,
-            F: -highFlow * 0.6 * exp,
-            V: vc * exp,
+            P: peep + highPressure * Math.max(0, 1 - ((ph - ti) / 0.06)),
+            F: -peakF * 0.6 * expD,
+            V: vc * 1.1 * (1 - Math.exp(-1 * ti / 0.3)) * expD,
           }
         }
       }
