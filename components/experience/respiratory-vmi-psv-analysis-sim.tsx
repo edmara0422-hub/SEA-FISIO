@@ -53,51 +53,58 @@ export function RespiratoryVmiPsvAnalysisSim({ className }: { className?: string
     const ph = ((t % cycleSec) + cycleSec) % cycleSec
     let P = peep, F = 0, V = 0
 
-    // Patient trigger deflection (always in PSV)
+    /* PSV Physics: Same as PCV but cycling by FLOW %
+       F(t) = (PS/R) × exp(-t/τ), cycles when F drops to cyclingPct% of peak
+       R=8 cmH2O/(L/s), C=50 mL/cmH2O → τ = 0.4s */
+    const R_aw = 8
+    const C_rs = 0.05    // L/cmH2O
+    const tau_rc = R_aw * C_rs  // 0.4s
+    const peakFlowCalc = (ps / R_aw) * 60  // L/min
+    const vcCalc = ps * C_rs * 1000  // mL
+
+    // Patient trigger (always in PSV - 100% spontaneous)
     if (ph < trigDur) {
-      const f = ph / trigDur
-      P = peep - trigDepth * Math.sin(f * Math.PI)
-      F = -10 * Math.sin(f * Math.PI)
+      const f = Math.sin((ph / trigDur) * Math.PI)
+      P = peep - trigDepth * f
+      F = -10 * f
       return { P, F, V }
     }
 
     const effPh = ph - trigDur
 
     if (effPh >= 0 && effPh < tInsp) {
-      const frac = effPh / tInsp
-
-      // Pressure: rise time then plateau
+      // ═══ INSPIRATORY PHASE (PSV) ═══
+      // Pressure: rise time then plateau at PS
       if (effPh < riseTime) {
         const rf = effPh / riseTime
-        P = peep + (pinsp - peep) * rf * rf * (3 - 2 * rf)
+        P = peep + ps * (rf * rf * (3 - 2 * rf))
       } else {
         P = pinsp
       }
 
-      // Flow: decelerating — cycling at % of peak
-      const flowStart = Math.min(effPh / 0.04, 1)
-      const decayRate = cyclingPct === 10 ? 2.0 : cyclingPct === 40 ? 5.0 : 3.2
-      F = flowPeak * flowStart * Math.exp(-frac * decayRate)
+      // Flow: DECELERATING — starts at peak, decays exponentially
+      const tAfterRise = Math.max(effPh - riseTime * 0.5, 0)
+      const riseF = Math.min(effPh / 0.035, 1)
+      F = peakFlowCalc * riseF * Math.exp(-tAfterRise / tau_rc)
 
-      // Volume: curvilinear
-      V = vcTarget * tiAdjust * (1 - Math.exp(-frac * decayRate))
+      // Volume: curvilinear (1 - exp)
+      V = Math.min(vcCalc, vcCalc * (1 - Math.exp(-tAfterRise / tau_rc)))
 
     } else if (effPh >= 0) {
-      // Expiration
-      const expPh = effPh - tInsp
-      const expFrac = expPh / tExp
-      const tau = 0.3
+      // ═══ EXPIRATORY PHASE ═══
+      const expTime = effPh - tInsp
+      const vAtEnd = Math.min(vcCalc, vcCalc * (1 - Math.exp(-(tInsp - riseTime * 0.5) / tau_rc)))
 
-      F = -flowPeak * 0.65 * Math.exp(-expFrac / tau)
-      V = vcTarget * tiAdjust * Math.exp(-expFrac / tau) * 0.93
-      P = peep + 0.5 * Math.exp(-expFrac / (tau * 0.5))
-
+      P = peep + ps * 0.02 * Math.exp(-expTime / (tau_rc * 0.3))
       if (P < peep) P = peep
-      if (V < 0) V = 0
+
+      F = -(vAtEnd / 1000) / tau_rc * Math.exp(-expTime / tau_rc) * 60
+      V = vAtEnd * Math.exp(-expTime / tau_rc)
+      if (V < 5) V = 0
     }
 
     return { P, F, V }
-  }, [cycleSec, tInsp, tExp, peep, pinsp, riseTime, flowPeak, vcTarget, cyclingPct, tiAdjust])
+  }, [cycleSec, tInsp, tExp, peep, ps, pinsp, riseTime, cyclingPct, tiAdjust, trigDur, trigDepth])
 
   // Labels
   const pressureLabels = [

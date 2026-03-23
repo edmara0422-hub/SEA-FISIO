@@ -48,49 +48,63 @@ export function RespiratoryVmiPcvAnalysisSim({ className }: { className?: string
   const cx = (t: number) => t / ws
 
   const wave = useCallback((t: number) => {
+    /* PCV Physics: Pressure=constant → Flow decelerating → Volume curvilinear
+       F(t) = (PC/R) × exp(-t/τ) where τ = R×C
+       V(t) = PC×C × (1 - exp(-t/τ))
+       R=8 cmH2O/(L/s), C=50 mL/cmH2O → τ = 0.4s */
+    const R_aw = 8
+    const C_rs = 0.05    // 50 mL/cmH₂O = 0.05 L/cmH₂O
+    const tau_rc = R_aw * C_rs  // 0.4s
+    const peakFlow = (pc / R_aw) * 60  // L/min = (15/8)×60 = 112.5
+    const vcCalc = pc * C_rs * 1000    // mL = 15 × 0.05 × 1000 = 750 → cap at vcTarget
+
     const ph = ((t % cycleSec) + cycleSec) % cycleSec
     let P = peep, F = 0, V = 0
 
     // A/C trigger deflection
     if (triggerMode === 'ac' && ph < trigDur) {
-      const f = ph / trigDur
-      P = peep - trigDepth * Math.sin(f * Math.PI)
-      F = -8 * Math.sin(f * Math.PI)
+      const f = Math.sin((ph / trigDur) * Math.PI)
+      P = peep - trigDepth * f
+      F = -8 * f
       return { P, F, V }
     }
 
     const effPh = triggerMode === 'ac' ? ph - trigDur : ph
 
     if (effPh >= 0 && effPh < tInsp) {
-      const frac = effPh / tInsp
-
-      // Pressure: rapid rise (rise time) then plateau
+      // ═══ INSPIRATORY PHASE (PCV) ═══
+      // Pressure: rapid rise then FLAT plateau (square wave)
       if (effPh < riseTime) {
         const rf = effPh / riseTime
-        P = peep + (pinsp - peep) * rf * rf * (3 - 2 * rf) // smooth step
+        P = peep + pc * (rf * rf * (3 - 2 * rf))  // smooth S-curve rise
       } else {
-        P = pinsp
+        P = pinsp  // flat plateau
       }
 
-      // Flow: decelerating from peak
-      const flowStart = Math.min(effPh / 0.05, 1)
-      F = flowPeak * flowStart * Math.exp(-frac * 3.5)
+      // Flow: DECELERATING exponential from peak
+      // After rise time, F = peakFlow × exp(-(t-riseTime)/τ)
+      const tAfterRise = Math.max(effPh - riseTime * 0.5, 0)
+      const riseF = Math.min(effPh / 0.04, 1)  // sharp initial rise
+      F = peakFlow * riseF * Math.exp(-tAfterRise / tau_rc)
 
-      // Volume: exponential rise (curvilinear)
-      V = vcTarget * (1 - Math.exp(-frac * 3.5))
+      // Volume: curvilinear (1 - exp(-t/τ))
+      V = Math.min(vcTarget, vcCalc * (1 - Math.exp(-tAfterRise / tau_rc)))
 
     } else if (effPh >= 0) {
-      // Expiration
-      const expPh = effPh - tInsp
-      const expFrac = expPh / tExp
-      const tau = 0.35
+      // ═══ EXPIRATORY PHASE ═══
+      const expTime = effPh - tInsp
+      const vAtEndInsp = Math.min(vcTarget, vcCalc * (1 - Math.exp(-(tInsp - riseTime * 0.5) / tau_rc)))
 
-      F = -flowPeak * 0.7 * Math.exp(-expFrac / tau)
-      V = vcTarget * Math.exp(-expFrac / tau) * 0.95
-      P = peep + (pinsp - peep) * 0.05 * Math.exp(-expFrac / (tau * 0.6))
-
+      // Pressure drops sharply to PEEP
+      P = peep + pc * 0.03 * Math.exp(-expTime / (tau_rc * 0.3))
       if (P < peep) P = peep
-      if (V < 0) V = 0
+
+      // Flow: negative exponential
+      F = -(vAtEndInsp / 1000) / tau_rc * Math.exp(-expTime / tau_rc) * 60
+
+      // Volume: exponential decay
+      V = vAtEndInsp * Math.exp(-expTime / tau_rc)
+      if (V < 5) V = 0
     }
 
     return { P, F, V }

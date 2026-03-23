@@ -63,96 +63,95 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
   const pResistive = pPeak - pPlateau  // 8 cmH2O
   const drivingP = pPlateau - peep     // 17 cmH2O
 
-  /* ── Waveform generator ── */
+  /* ── Physics-based VCV waveform ──
+     Equation of Motion: Paw = PEEP + V/C + Flow×R
+     VCV: Flow=constant → V=linear → P=linear ramp
+     R (resistance) = 10 cmH2O/L/s, C (compliance) = 50 mL/cmH2O */
+  const R = 10                               // cmH2O/(L/s)
+  const C = 50                               // mL/cmH2O
+  const flowLps = flowSet / 60               // convert L/min to L/s
+  const pResCalc = flowLps * R               // resistive pressure = ~8.3 cmH2O
+  const pElastMax = (vcTarget / 1000) / (C / 1000) // elastic at full VC ≈ 9 cmH2O
+  // Ppeak = PEEP + pElastMax + pResCalc ≈ 5 + 9 + 8.3 = 22.3 → use actual values
+  const tau = (R * (C / 1000))               // expiratory time constant ≈ 0.5s
+
   const wave = useCallback((t: number) => {
     const ph = ((t % cycleSec) + cycleSec) % cycleSec
-    const ramp = (v: number, dur: number) => Math.min(v / dur, 1)
-
     let P = peep, F = 0, V = 0
 
-    // A/C mode: trigger deflection before inspiration (0.08s)
-    const trigDur = 0.08
-    const trigDepth = triggerMode === 'ac' ? 2.5 : 0  // cmH2O negative deflection
-    const trigFlowDip = triggerMode === 'ac' ? 8 : 0  // L/min negative
-
+    // A/C: patient effort deflection
+    const trigDur = 0.06
     if (triggerMode === 'ac' && ph < trigDur) {
-      // Patient effort deflection
-      const trigFrac = ph / trigDur
-      const bellCurve = Math.sin(trigFrac * Math.PI)
-      P = peep - trigDepth * bellCurve
-      F = -trigFlowDip * bellCurve
-      V = 0
+      const f = Math.sin((ph / trigDur) * Math.PI)
+      P = peep - 2.5 * f
+      F = -8 * f
       return { P, F, V }
     }
 
     const effPh = triggerMode === 'ac' ? ph - trigDur : ph
 
     if (effPh >= 0 && effPh < tInsp) {
-      // INSPIRATORY FLOW PHASE
+      // ═══ INSPIRATORY FLOW PHASE ═══
       const frac = effPh / tInsp
-      const riseF = Math.min(effPh / 0.06, 1)
 
+      // Flow: CONSTANT square wave (instant rise in ~30ms)
+      const riseF = Math.min(effPh / 0.03, 1)
       F = flowSet * riseF
 
-      // Volume: linear ramp (VCV)
-      V = vcTarget * frac
+      // Volume: LINEAR ramp (integral of constant flow)
+      V = vcTarget * frac * riseF
 
-      // Pressure: linear ramp from PEEP to Ppeak
-      // Stress Index morphology
+      // Pressure from Equation of Motion: P = PEEP + V/C + Flow×R
+      const pElast = (V / 1000) / (C / 1000)  // elastic component (grows linearly)
+      const pRes = (F / 60) * R                 // resistive component (constant)
+
       if (viewMode === 'stressIndex') {
-        const baseLin = peep + (pPeak - peep) * frac
+        // SI modifies the elastic component behavior
         if (siMode === 'ideal') {
-          P = baseLin
+          P = peep + pElast + pRes  // linear (SI=1)
         } else if (siMode === 'overdist') {
-          // SI > 1: concave (pressure accelerates upward)
-          P = peep + (pPeak - peep) * Math.pow(frac, 0.6)
+          // SI > 1: compliance DECREASES → concave upward (accelerating pressure)
+          P = peep + pElastMax * Math.pow(frac, 0.65) + pRes
         } else {
-          // SI < 1: convex (pressure decelerates)
-          P = peep + (pPeak - peep) * Math.pow(frac, 1.6)
+          // SI < 1: compliance INCREASES → convex (decelerating pressure)
+          P = peep + pElastMax * Math.pow(frac, 1.5) + pRes
         }
       } else {
-        // Normal: linear ramp (SI=1)
-        P = peep + (pPeak - peep) * frac
+        P = peep + pElast + pRes  // normal linear ramp
       }
 
     } else if (effPh >= 0 && effPh < tInsp + tPause) {
-      // INSPIRATORY PAUSE PHASE
+      // ═══ INSPIRATORY PAUSE ═══
+      // Flow = 0, Volume held, Pressure drops by resistive component
       F = 0
       V = vcTarget
 
+      const pauseTime = effPh - tInsp
+      const dropSpeed = 25  // fast drop from Ppeak to Pplateau
+
       if (viewMode === 'p1p2') {
-        const pauseFr = (effPh - tInsp) / Math.max(tPause, 0.01)
-        const p1 = pPlateau + (p1p2Mode === 'pendelluft' ? 4 : 1)
-        const p2 = pPlateau
-        // P1 decays to P2
-        P = p2 + (p1 - p2) * Math.exp(-pauseFr * 6)
+        const p1 = pPlateau + (p1p2Mode === 'pendelluft' ? 3.5 : 0.8)
+        P = pPlateau + (p1 - pPlateau) * Math.exp(-pauseTime * 8)
       } else {
-        // Immediate drop from Ppeak to Pplateau
-        const pauseFr = (effPh - tInsp) / Math.max(tPause, 0.01)
-        const dropDur = 0.15
-        if (pauseFr < dropDur) {
-          P = pPeak - (pPeak - pPlateau) * (pauseFr / dropDur)
-        } else {
-          P = pPlateau
-        }
+        // Sharp drop from Ppeak (with resistance) to Pplateau (without)
+        P = pPlateau + pResCalc * Math.exp(-pauseTime * dropSpeed)
       }
 
     } else if (effPh >= 0) {
-      // EXPIRATORY PHASE
-      const expPh = effPh - tInsp - tPause
-      const expFrac = expPh / tExp
-      const tau = 0.4 // time constant
+      // ═══ EXPIRATORY PHASE ═══
+      const expTime = effPh - tInsp - tPause
 
-      F = -flowSet * 0.8 * Math.exp(-expFrac / tau)
-      V = vcTarget * Math.exp(-expFrac / tau) * 0.95
-      P = peep + (pPlateau - peep) * Math.exp(-expFrac / (tau * 0.8))
+      // Passive expiration: exponential decay with time constant τ = R×C
+      F = -(vcTarget / 1000) / tau * Math.exp(-expTime / tau) * 60  // L/min
+      V = vcTarget * Math.exp(-expTime / tau)
+      P = peep + (pPlateau - peep) * Math.exp(-expTime / tau)
 
-      if (V < 0) V = 0
+      if (V < 5) V = 0
       if (P < peep) P = peep
     }
 
     return { P, F, V }
-  }, [viewMode, siMode, p1p2Mode, triggerMode, tInsp, tPause, tExp, cycleSec, peep, pPeak, pPlateau, vcTarget, flowSet])
+  }, [viewMode, siMode, p1p2Mode, triggerMode, tInsp, tPause, cycleSec, peep, pPlateau, pPeak, vcTarget, flowSet, pResCalc, pElastMax, tau, R, C, tExp])
 
   /* ── Label positions as fraction of windowSec ──
      cycleSec=4s, windowSec=~8.8s, tInsp=1s, tPause=0.32s, tExp=2.68s
