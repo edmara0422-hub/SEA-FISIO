@@ -34,7 +34,7 @@ const C = {
 export function RespiratoryVmiLoopsSim({ className }: { className?: string }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [loopType, setLoopType] = useState<LoopType>('pv-vcv')
-  const animRef = useRef(0)
+  const frameRef = useRef(0)
   const progressRef = useRef(0)
 
   // VCV params
