@@ -137,9 +137,9 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
         }
       }
 
-    } else {
+    } else if (effPh >= 0) {
       // EXPIRATORY PHASE
-      const expPh = ph - tInsp - tPause
+      const expPh = effPh - tInsp - tPause
       const expFrac = expPh / tExp
       const tau = 0.4 // time constant
 
