@@ -379,8 +379,8 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
 
           // Stress Index special drawing
           if (gi === 0 && viewMode === 'stressIndex') {
-            const siStartX = toX(cycleOffset + 0.08)
-            const siEndX = toX(cycleOffset + 0.24)
+            const siStartX = toX(cycleOffset + cx(0.1))
+            const siEndX = toX(cycleOffset + cx(tInsp - 0.05))
             const siMidX = (siStartX + siEndX) / 2
 
             // Highlight region
@@ -401,8 +401,8 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
 
           // P1/P2 special markers
           if (gi === 0 && viewMode === 'p1p2') {
-            const p1X = toX(cycleOffset + 0.25)
-            const p2X = toX(cycleOffset + 0.33)
+            const p1X = toX(cycleOffset + cx(tInsp + 0.03))
+            const p2X = toX(cycleOffset + cx(tInsp + tPause * 0.85))
             const p1Val = p1p2Mode === 'pendelluft' ? pPlateau + 4 : pPlateau + 1
             const p1Y = toY(p1Val, g.min, g.max, gTop)
             const p2Y = toY(pPlateau, g.min, g.max, gTop)
