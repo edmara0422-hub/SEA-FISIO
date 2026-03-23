@@ -34,6 +34,14 @@ const RespiratoryVmiVentilatorSim = dynamic(() => import('@/components/experienc
 const RespiratoryVmiPeepSim = dynamic(() => import('@/components/experience/respiratory-vmi-peep-sim').then(m => m.RespiratoryVmiPeepSim), { ssr: false })
 const RespiratoryVmiMechanicsSim = dynamic(() => import('@/components/experience/respiratory-vmi-mechanics-sim').then(m => m.RespiratoryVmiMechanicsSim), { ssr: false })
 const RespiratoryVmiAsynchronySim = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.RespiratoryVmiAsynchronySim), { ssr: false })
+const AsyncIneffectiveSim = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncIneffectiveSim), { ssr: false })
+const AsyncDoubleSim      = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncDoubleSim), { ssr: false })
+const AsyncReverseSim     = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncReverseSim), { ssr: false })
+const AsyncAutoSim        = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncAutoSim), { ssr: false })
+const AsyncPrematureSim   = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncPrematureSim), { ssr: false })
+const AsyncDelayedSim     = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncDelayedSim), { ssr: false })
+const AsyncFlowStarveSim  = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncFlowStarveSim), { ssr: false })
+const AsyncFlowExcessSim  = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncFlowExcessSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
@@ -64,6 +72,14 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'respiratory-vmi-peep': RespiratoryVmiPeepSim,
   'respiratory-vmi-mechanics': RespiratoryVmiMechanicsSim,
   'respiratory-vmi-asynchrony': RespiratoryVmiAsynchronySim,
+  'async-ineffective': AsyncIneffectiveSim,
+  'async-double': AsyncDoubleSim,
+  'async-reverse': AsyncReverseSim,
+  'async-auto': AsyncAutoSim,
+  'async-premature': AsyncPrematureSim,
+  'async-delayed': AsyncDelayedSim,
+  'async-flow-starve': AsyncFlowStarveSim,
+  'async-flow-excess': AsyncFlowExcessSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {

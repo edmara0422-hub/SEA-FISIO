@@ -31,13 +31,14 @@ const ASYNC_INFO: Record<AsyncType, { label: string; short: string; color: strin
 
 const smooth = (t: number) => t * t * (3 - 2 * t)
 
-export function RespiratoryVmiAsynchronySim({ className }: { className?: string }) {
+export function RespiratoryVmiAsynchronySim({ className, fixedType }: { className?: string; fixedType?: AsyncType }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const frameRef  = useRef(0)
   const timeRef   = useRef(0)
 
-  const [asyncType, setAsyncType] = useState<AsyncType>('ineffective')
+  const [asyncType, setAsyncType] = useState<AsyncType>(fixedType ?? 'ineffective')
   const [paused, setPaused]       = useState(false)
+  const isFixed = !!fixedType
 
   const peep = 5
   const rr   = 15
@@ -554,25 +555,27 @@ export function RespiratoryVmiAsynchronySim({ className }: { className?: string 
 
   return (
     <div className={`flex flex-col gap-2 ${className ?? ''}`}>
-      {/* Type selector — 2 rows */}
-      <div className="grid grid-cols-4 gap-1 px-1">
-        {types.map(t => {
-          const inf = ASYNC_INFO[t]
-          const active = asyncType === t
-          return (
-            <button key={t} onClick={() => setAsyncType(t)}
-              className={`px-1.5 py-1.5 rounded text-[8px] font-bold tracking-wider transition-colors border ${
-                active ? 'border-white/15' : 'border-white/5 hover:border-white/10'
-              }`}
-              style={active ? { backgroundColor: `${inf.color}18`, color: inf.color } : { color: 'rgba(255,255,255,0.3)' }}
-            >
-              {inf.short}
-            </button>
-          )
-        })}
-      </div>
+      {/* Type selector — only when not fixed */}
+      {!isFixed && (
+        <div className="grid grid-cols-4 gap-1 px-1">
+          {types.map(t => {
+            const inf = ASYNC_INFO[t]
+            const active = asyncType === t
+            return (
+              <button key={t} onClick={() => setAsyncType(t)}
+                className={`px-1.5 py-1.5 rounded text-[8px] font-bold tracking-wider transition-colors border ${
+                  active ? 'border-white/15' : 'border-white/5 hover:border-white/10'
+                }`}
+                style={active ? { backgroundColor: `${inf.color}18`, color: inf.color } : { color: 'rgba(255,255,255,0.3)' }}
+              >
+                {inf.short}
+              </button>
+            )
+          })}
+        </div>
+      )}
 
-      {/* Pause button */}
+      {/* Pause + label */}
       <div className="flex items-center gap-2 px-1">
         <button onClick={() => setPaused(!paused)}
           className="px-2 py-1 rounded text-[10px] font-semibold bg-white/[0.03] border border-white/8 text-white/40 hover:text-white/70"
@@ -608,3 +611,13 @@ export function RespiratoryVmiAsynchronySim({ className }: { className?: string 
     </div>
   )
 }
+
+/* ── Individual exports for each asynchrony type ── */
+export const AsyncIneffectiveSim = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="ineffective" />
+export const AsyncDoubleSim      = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="double" />
+export const AsyncReverseSim     = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="reverse" />
+export const AsyncAutoSim        = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="auto" />
+export const AsyncPrematureSim   = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="premature" />
+export const AsyncDelayedSim     = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="delayed" />
+export const AsyncFlowStarveSim  = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="flowStarve" />
+export const AsyncFlowExcessSim  = ({ className }: { className?: string }) => <RespiratoryVmiAsynchronySim className={className} fixedType="flowExcess" />
