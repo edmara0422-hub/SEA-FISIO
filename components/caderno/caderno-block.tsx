@@ -44,6 +44,7 @@ const AsyncFlowStarveSim  = dynamic(() => import('@/components/experience/respir
 const AsyncFlowExcessSim  = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncFlowExcessSim), { ssr: false })
 const RespiratoryVmiStressIndexSim = dynamic(() => import('@/components/experience/respiratory-vmi-stress-index-sim').then(m => m.RespiratoryVmiStressIndexSim), { ssr: false })
 const RespiratoryVmiPsvCyclingSim = dynamic(() => import('@/components/experience/respiratory-vmi-psv-cycling-sim').then(m => m.RespiratoryVmiPsvCyclingSim), { ssr: false })
+const RespiratoryVmiVcvAnalysisSim = dynamic(() => import('@/components/experience/respiratory-vmi-vcv-analysis-sim').then(m => m.RespiratoryVmiVcvAnalysisSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
@@ -84,6 +85,7 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'async-flow-excess': AsyncFlowExcessSim,
   'respiratory-vmi-stress-index': RespiratoryVmiStressIndexSim,
   'respiratory-vmi-psv-cycling': RespiratoryVmiPsvCyclingSim,
+  'respiratory-vmi-vcv-analysis': RespiratoryVmiVcvAnalysisSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
