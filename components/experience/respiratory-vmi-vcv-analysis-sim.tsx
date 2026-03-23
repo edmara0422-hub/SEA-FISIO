@@ -298,27 +298,34 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
         const cycleOffset = (firstCycleStart - t0) / windowSec
 
         if (cycleOffset >= 0 && cycleOffset < 0.7) {
+          // Determine which labels to show based on mode
           let labels: typeof pressureLabelsWithPause = []
-          if (gi === 0) {
-            labels = viewMode === 'noPause'
-              ? pressureLabelsWithPause.filter(l => l.num !== 6 && l.num !== 7)
-              : pressureLabelsWithPause
-          } else if (gi === 1) {
-            labels = flowLabels
-          } else {
-            labels = volumeLabels
-          }
+          const showLabels = (() => {
+            // Stress Index & P1/P2: only show on pressure graph
+            if (viewMode === 'stressIndex' || viewMode === 'p1p2') {
+              if (gi !== 0) return false
+            }
+            return true
+          })()
 
-          // Special labels for P1/P2 mode
-          if (gi === 0 && viewMode === 'p1p2') {
-            labels = [
-              { num: 1, name: 'PEEP', x: 0.02, desc: '' },
-              { num: 2, name: 'P1', x: 0.26, desc: 'Pressão no ponto de ciclagem' },
-              { num: 3, name: 'P2', x: 0.32, desc: 'Pressão após acomodação (stress relaxation)' },
-            ]
-          }
+          if (showLabels) {
+            if (gi === 0) {
+              if (viewMode === 'p1p2') {
+                labels = [
+                  { num: 1, name: 'P1', x: 0.26, desc: 'Pressão no ponto de ciclagem' },
+                  { num: 2, name: 'P2', x: 0.32, desc: 'Pressão após acomodação' },
+                ]
+              } else {
+                labels = viewMode === 'noPause'
+                  ? pressureLabelsWithPause.filter(l => l.num !== 6 && l.num !== 7)
+                  : pressureLabelsWithPause
+              }
+            } else if (gi === 1) {
+              labels = flowLabels
+            } else {
+              labels = volumeLabels
+            }
 
-          if (viewMode !== 'stressIndex' || gi !== 0) {
             labels.forEach(lb => {
               const lx = toX(cycleOffset + lb.x)
               if (lx < pad.left || lx > W - pad.right) return
@@ -328,35 +335,36 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
               const val = w[g.key]
               const ly = toY(val, g.min, g.max, gTop)
 
-              // Label number circle
-              const radius = 10
-              const labelY = ly - 18
+              // Smaller label circle
+              const radius = 7
+              const labelY = ly - 14
               const isActive = activeLabel === lb.num * 10 + gi
 
               ctx.beginPath()
               ctx.arc(lx, labelY, radius, 0, Math.PI * 2)
-              ctx.fillStyle = isActive ? COLORS.highlight : COLORS.labelBg
+              ctx.fillStyle = isActive ? COLORS.highlight : g.color
+              ctx.globalAlpha = 0.9
               ctx.fill()
-              ctx.strokeStyle = isActive ? '#fff' : g.color
-              ctx.lineWidth = 1.5
-              ctx.stroke()
+              ctx.globalAlpha = 1
 
-              ctx.fillStyle = '#fff'
-              ctx.font = 'bold 11px system-ui'
+              ctx.fillStyle = '#000'
+              ctx.font = 'bold 9px system-ui'
               ctx.textAlign = 'center'
-              ctx.fillText(String(lb.num), lx, labelY + 4)
+              ctx.fillText(String(lb.num), lx, labelY + 3)
 
-              // Connector line
-              ctx.strokeStyle = 'rgba(255,255,255,0.3)'
-              ctx.lineWidth = 0.8
+              // Thin connector
+              ctx.strokeStyle = g.color
+              ctx.globalAlpha = 0.4
+              ctx.lineWidth = 0.6
               ctx.beginPath()
               ctx.moveTo(lx, labelY + radius)
               ctx.lineTo(lx, ly)
               ctx.stroke()
+              ctx.globalAlpha = 1
 
-              // Small dot on curve
+              // Dot on curve
               ctx.beginPath()
-              ctx.arc(lx, ly, 3, 0, Math.PI * 2)
+              ctx.arc(lx, ly, 2.5, 0, Math.PI * 2)
               ctx.fillStyle = g.color
               ctx.fill()
             })
@@ -542,7 +550,7 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
               : 'bg-white/5 text-white/60 hover:bg-white/10'
           }`}
         >
-          {triggerMode === 'cmv' ? 'CMV (Tempo)' : 'A/C (Sensibilidade)'}
+          {triggerMode === 'cmv' ? 'CC (Tempo/JT)' : 'A/C (Sensibilidade)'}
         </button>
 
         <div className="w-px bg-white/10 mx-1" />
