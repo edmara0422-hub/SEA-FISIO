@@ -70,10 +70,27 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
 
     let P = peep, F = 0, V = 0
 
-    if (ph < tInsp) {
+    // A/C mode: trigger deflection before inspiration (0.08s)
+    const trigDur = 0.08
+    const trigDepth = triggerMode === 'ac' ? 2.5 : 0  // cmH2O negative deflection
+    const trigFlowDip = triggerMode === 'ac' ? 8 : 0  // L/min negative
+
+    if (triggerMode === 'ac' && ph < trigDur) {
+      // Patient effort deflection
+      const trigFrac = ph / trigDur
+      const bellCurve = Math.sin(trigFrac * Math.PI)
+      P = peep - trigDepth * bellCurve
+      F = -trigFlowDip * bellCurve
+      V = 0
+      return { P, F, V }
+    }
+
+    const effPh = triggerMode === 'ac' ? ph - trigDur : ph
+
+    if (effPh >= 0 && effPh < tInsp) {
       // INSPIRATORY FLOW PHASE
-      const frac = ph / tInsp
-      const riseF = Math.min(ph / 0.06, 1)
+      const frac = effPh / tInsp
+      const riseF = Math.min(effPh / 0.06, 1)
 
       F = flowSet * riseF
 
