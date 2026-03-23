@@ -178,41 +178,60 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ DISPARO REVERSO ═══
-      // Contração diafragmática reflexa causada pela insuflação PASSIVA (ciclos controlados)
-      // Ocorre DURANTE a inspiração mecânica ou no final dela — NÃO na expiração
-      // Pode gerar duplo disparo se ocorre no final da inspiração
+      // Ventilação CONTROLADA (PCV) — paciente sedado/paralisado
+      // Insuflação mecânica CAUSA contração diafragmática reflexa
+      // Reflexo ocorre no FINAL da inspiração mecânica (~60-90% do TI)
+      // Na curva: perturbação no fluxo (bump secundário), queda na pressão (Pmus negativo)
+      // Pode gerar duplo disparo quando reflexo ocorre no final do TI
       case 'reverse': {
-        const n = normalWave(ph)
+        // Base: PCV controlado (pressão constante, fluxo desacelerante)
+        const pcvP = 18  // pressão controlada
+        const cest = 40
+        const tau = 0.35
+        const peakF = (pcvP / 10) * 60  // fluxo pico PCV
 
-        if (cycleNum === 1 || cycleNum === 3) {
-          // Contração reflexa no FINAL da inspiração mecânica (~70-100% do TI)
-          const reflexStart = ti * 0.65
-          const reflexDur = ti * 0.45
+        if (ph < ti) {
+          const frac = ph / ti
+          const rF = Math.min(ph / 0.07, 1)
+          const rs = smooth(rF)
 
-          if (ph > reflexStart && ph < reflexStart + reflexDur) {
-            const ef = (ph - reflexStart) / reflexDur
-            const reflex = Math.sin(ef * Math.PI)
+          // PCV base: pressão constante, fluxo desacelerante
+          let P = peep + pcvP * rs
+          let F = peakF * rs * Math.exp(-Math.max(0, ph - 0.07) / tau)
+          let V = pcvP * cest * (1 - Math.exp(-ph / tau))
 
-            return {
-              P: n.P + 4 * reflex,       // pico extra de pressão (esforço somado à máquina)
-              F: n.F + 15 * reflex,       // aumento de fluxo (contração soma ao ventilador)
-              V: n.V + 40 * (1 - Math.cos(ef * Math.PI)) / 2,  // volume extra
-            }
+          // Reflexo diafragmático em ciclos 1 e 3 (60-95% do TI)
+          if ((cycleNum === 1 || cycleNum === 3) && frac > 0.55 && frac < 0.95) {
+            const rf = (frac - 0.55) / 0.40
+            const reflex = Math.sin(rf * Math.PI)
+            P -= 4 * reflex              // queda na pressão (Pmus negativo)
+            F += 18 * reflex             // bump secundário no fluxo (contração puxa ar)
+            V += 35 * (1 - Math.cos(rf * Math.PI)) / 2  // volume extra
           }
 
-          // Se o reflexo é forte, pode continuar como mini-inspiração na expiração precoce
-          if (ph > ti && ph < ti + 0.3) {
-            const ef = (ph - ti) / 0.3
-            const tail = 3 * Math.exp(-ef * 4) * (1 - ef)
-            return {
-              P: n.P + tail,
-              F: n.F + tail * 3,
-              V: n.V + 20 * Math.exp(-ef * 3),
-            }
+          return { P, F, V }
+        } else {
+          // Expiração PCV
+          const ef = (ph - ti) / te
+          const vEnd = pcvP * cest * (1 - Math.exp(-ti / tau))
+          const expD = Math.exp(-ef * te / 0.45)
+
+          let P = peep + pcvP * Math.max(0, 1 - ((ph - ti) / 0.07))
+          if (ph - ti > 0.07) P = peep
+          let F = -peakF * 0.6 * expD
+          let V = vEnd * expD
+
+          // Em ciclos 1 e 3: reflexo pode causar mini-esforço na expiração precoce
+          if ((cycleNum === 1 || cycleNum === 3) && ph < ti + 0.35) {
+            const rf = (ph - ti) / 0.35
+            const tail = 3 * Math.exp(-rf * 5)
+            P -= tail
+            F += tail * 5
+            V += 15 * Math.exp(-rf * 4)
           }
-          return n
+
+          return { P, F, V }
         }
-        return n
       }
 
       // ═══ AUTODISPARO ═══
