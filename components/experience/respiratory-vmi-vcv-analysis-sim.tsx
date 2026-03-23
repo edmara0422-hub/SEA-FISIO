@@ -319,8 +319,8 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
             if (gi === 0) {
               if (viewMode === 'p1p2') {
                 labels = [
-                  { num: 1, name: 'P1', x: 0.26, desc: 'Pressão no ponto de ciclagem' },
-                  { num: 2, name: 'P2', x: 0.32, desc: 'Pressão após acomodação' },
+                  { num: 1, name: 'P1', x: cx(tInsp + 0.03), desc: 'Pressão no ponto de ciclagem' },
+                  { num: 2, name: 'P2', x: cx(tInsp + tPause * 0.85), desc: 'Pressão após acomodação' },
                 ]
               } else {
                 labels = viewMode === 'noPause'
@@ -443,7 +443,7 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
           if (gi === 0 && (viewMode === 'normal')) {
             const dpStartY = toY(peep, g.min, g.max, gTop)
             const dpEndY = toY(pPlateau, g.min, g.max, gTop)
-            const dpX = toX(cycleOffset + 0.38)
+            const dpX = toX(cycleOffset + cx(tInsp + tPause + tExp * 0.25))
 
             // Double arrow
             ctx.strokeStyle = '#ef4444'
@@ -467,7 +467,7 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
             // Resistive component annotation
             const resStartY = toY(pPlateau, g.min, g.max, gTop)
             const resEndY = toY(pPeak, g.min, g.max, gTop)
-            const resX = toX(cycleOffset + 0.26)
+            const resX = toX(cycleOffset + cx(tInsp + 0.02))
 
             ctx.strokeStyle = '#f59e0b'
             ctx.lineWidth = 1.2
