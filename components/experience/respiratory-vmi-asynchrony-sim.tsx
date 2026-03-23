@@ -89,22 +89,24 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
     switch (asyncType) {
 
       // ═══ DISPARO INEFICAZ ═══
-      // Esforço muscular inspiratório durante expiração que NÃO dispara o ventilador
-      // Na curva real: pequena deflexão negativa no fluxo e pressão DURANTE a fase expiratória
+      // Esforço muscular inspiratório que NÃO dispara o ventilador
+      // Pressão cai BEM ABAIXO do PEEP (Pmus negativo forte: -8 a -10 cmH₂O)
+      // Fluxo: pequena deflexão positiva que não atinge limiar de trigger
+      // Ref: Simulador Xlung — pressão vai de PEEP(5) até -5/-8 cmH₂O
       case 'ineffective': {
         const n = normalWave(ph)
 
         if (cycleNum === 1 || cycleNum === 3) {
-          // Durante a EXPIRAÇÃO do ciclo normal, paciente faz esforço que falha
-          const effortStart = ti + te * 0.35  // no meio da expiração
-          const effortDur = 0.35
+          // Esforço ineficaz no MEIO da expiração — queda grande na pressão
+          const effortStart = ti + te * 0.3
+          const effortDur = 0.45
           if (ph > effortStart && ph < effortStart + effortDur) {
             const ef = (ph - effortStart) / effortDur
             const effort = Math.sin(ef * Math.PI)
             return {
-              P: n.P - 2.5 * effort,           // deflexão negativa na pressão
-              F: n.F + 8 * effort,              // pequena deflexão positiva no fluxo (tenta inspirar)
-              V: n.V + 15 * effort,             // volume mínimo oscila
+              P: n.P - 10 * effort,             // queda FORTE: PEEP(5) → até -5 cmH₂O (Pmus ~ -10)
+              F: n.F + 12 * effort,             // deflexão positiva no fluxo (não atinge trigger)
+              V: n.V + 10 * effort,             // volume quase zero
             }
           }
           return n
@@ -113,55 +115,61 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ DUPLO DISPARO ═══
-      // Esforço inspiratório continua além do TI → segundo disparo sem expiração completa
-      // Volume se EMPILHA (air stacking) — segundo VC soma ao primeiro
+      // 2 ciclos inspiratórios em sequência SEM expiração completa entre eles
+      // Fluxo: 2 picos positivos com mini-dip entre eles (fluxo mal fica negativo)
+      // Pressão: 2 picos de pressão consecutivos
+      // Volume: EMPILHA — segundo soma ao primeiro, pico ~750-800mL (vs 450 normal)
       case 'double': {
         if (cycleNum === 1 || cycleNum === 3) {
-          // Primeiro ciclo encurtado + segundo ciclo empilhado
-          const ti1 = ti * 0.85
-          const gap = 0.15  // mini-expiração muito curta
-          const ti2 = ti * 0.85
-          const te2 = cycleSec - ti1 - gap - ti2
+          const ti1 = ti * 0.9          // 1ª inspiração quase normal
+          const gapDur = 0.20           // mini-expiração (muito curta — quase nada)
+          const ti2 = ti * 0.9          // 2ª inspiração
+          const te2 = cycleSec - ti1 - gapDur - ti2  // expiração final
+
+          const vc1 = vc               // volume 1º ciclo
+          const vc2 = vc * 0.7         // volume 2º ciclo (menor pq pulmão já cheio)
+          const cest = 40
 
           if (ph < ti1) {
-            // 1ª inspiração normal
+            // ── 1ª INSPIRAÇÃO (normal) ──
             const frac = ph / ti1
             const rF = Math.min(ph / 0.06, 1)
             const rs = smooth(rF)
             return {
-              P: peep + (vc / 40) * frac + 8 * (flowPeak / 60) * rs,
+              P: peep + (vc1 / cest) * frac + 8 * (flowPeak / 60) * rs,
               F: flowPeak * rs,
-              V: vc * frac,
+              V: vc1 * frac,
             }
-          } else if (ph < ti1 + gap) {
-            // Mini-expiração incompleta (fluxo mal cruza zero)
-            const ef = (ph - ti1) / gap
+          } else if (ph < ti1 + gapDur) {
+            // ── MINI-EXPIRAÇÃO (incompleta) ──
+            // Fluxo cruza zero brevemente e vai ligeiramente negativo
+            const ef = (ph - ti1) / gapDur
+            const miniExp = Math.sin(ef * Math.PI)
             return {
-              P: peep + (vc / 40) * (1 - ef * 0.2),
-              F: -flowPeak * 0.4 * Math.sin(ef * Math.PI),
-              V: vc * (1 - ef * 0.15),  // quase não esvazia
+              P: peep + (vc1 / cest) * (1 - ef * 0.1),
+              F: -flowPeak * 0.35 * miniExp,    // fluxo brevemente negativo
+              V: vc1 * (1 - ef * 0.10),         // esvazia só ~10%
             }
-          } else if (ph < ti1 + gap + ti2) {
-            // 2ª inspiração — volume EMPILHA sobre o residual
-            const ph2 = ph - ti1 - gap
-            const frac = ph2 / ti2
+          } else if (ph < ti1 + gapDur + ti2) {
+            // ── 2ª INSPIRAÇÃO (empilhamento) ──
+            const ph2 = ph - ti1 - gapDur
+            const frac2 = ph2 / ti2
             const rF = Math.min(ph2 / 0.06, 1)
             const rs = smooth(rF)
-            const residual = vc * 0.85  // volume que ficou do 1º ciclo
-            const vc2 = vc * 0.8
+            const residual = vc1 * 0.90         // 90% do 1º volume ainda no pulmão
             return {
-              P: peep + ((residual + vc2 * frac) / 40) + 8 * (flowPeak / 60) * rs,
-              F: flowPeak * 0.9 * rs,
-              V: residual + vc2 * frac,  // EMPILHAMENTO — volume vai acima do normal!
+              P: peep + ((residual + vc2 * frac2) / cest) + 8 * (flowPeak * 0.85 / 60) * rs,
+              F: flowPeak * 0.85 * rs,           // 2º pico de fluxo
+              V: residual + vc2 * frac2,         // EMPILHA: 405 + 315 = ~720mL!
             }
           } else {
-            // Expiração do volume empilhado
-            const ef = (ph - ti1 - gap - ti2) / te2
-            const totalV = vc * 0.85 + vc * 0.8
-            const expD = Math.exp(-ef * te2 / 0.6)
+            // ── EXPIRAÇÃO FINAL (volume empilhado sai) ──
+            const ef = (ph - ti1 - gapDur - ti2) / te2
+            const totalV = vc1 * 0.90 + vc2     // ~720mL total
+            const expD = Math.exp(-ef * te2 / 0.55)
             return {
-              P: peep + (totalV / 40) * expD,
-              F: -flowPeak * 0.9 * expD,
+              P: peep + (totalV / cest) * expD,
+              F: -flowPeak * 1.0 * expD,         // fluxo expiratório alto (volume grande)
               V: totalV * expD,
             }
           }
