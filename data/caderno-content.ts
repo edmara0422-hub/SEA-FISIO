@@ -3185,6 +3185,13 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
+            id: 'M2-T13-sim-pcv-analysis',
+            type: 'simulation',
+            title: 'PCV Análise Gráfica — Pressão, Fluxo e Volume',
+            simulationId: 'respiratory-vmi-pcv-analysis',
+            description: 'Curvas PCV com pontos legendados. Pressão quadrada, fluxo desacelerante, volume curvilíneo. CC vs A/C.',
+          },
+          {
             id: 'M2-T13-slides-psv',
             type: 'slides',
             title: 'PSV — Pressão de Suporte',
@@ -3213,11 +3220,11 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
-            id: 'M2-T13-sim-psv-cycling',
+            id: 'M2-T13-sim-psv-analysis',
             type: 'simulation',
-            title: 'PSV Ciclagem — 10%, 25%, 40%',
-            simulationId: 'respiratory-vmi-psv-cycling',
-            description: 'Ajuste o % de ciclagem e veja como Ti, I:E e o limiar de fluxo mudam em tempo real.',
+            title: 'PSV Análise Gráfica — Pressão, Fluxo e Volume',
+            simulationId: 'respiratory-vmi-psv-analysis',
+            description: 'Curvas PSV com pontos legendados. 100% espontânea. Ciclagem por fluxo (10%, 25%, 40%). Veja como % altera Ti.',
           },
           {
             id: 'M2-T13-slides-loops',

@@ -88,6 +88,8 @@ const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> 
   'respiratory-vmi-stress-index': RespiratoryVmiStressIndexSim,
   'respiratory-vmi-psv-cycling': RespiratoryVmiPsvCyclingSim,
   'respiratory-vmi-vcv-analysis': RespiratoryVmiVcvAnalysisSim,
+  'respiratory-vmi-pcv-analysis': RespiratoryVmiPcvAnalysisSim,
+  'respiratory-vmi-psv-analysis': RespiratoryVmiPsvAnalysisSim,
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
