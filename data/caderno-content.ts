@@ -3093,6 +3093,188 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T13',
+        title: 'Modalidades & Análise Gráfica',
+        blocks: [
+          {
+            id: 'M2-T13-slides-classificacao',
+            type: 'slides',
+            title: 'Classificação dos Modos Ventilatórios',
+            slides: [
+              {
+                title: 'Modos Controlados, Assistidos e Mistos',
+                bullets: [
+                  'Controlados: ventilador controla tudo (VCV, PCV) — paciente passivo',
+                  'Assistidos: paciente dispara, ventilador entrega suporte (A/C, PSV)',
+                  'Mistos: ciclos mandatórios + respirações espontâneas (APRV, híbridos)',
+                ],
+              },
+              {
+                title: 'Regra de Ouro do Disparo',
+                bullets: [
+                  'Paciente PASSIVO (sedado/curarizado): modo CONTROLADO → disparo por TEMPO (JT)',
+                  'Paciente ATIVO (drive respiratório): modo ASSISTIDO → disparo por SENSIBILIDADE',
+                  'Sensibilidade: Fluxo (2-4 L/min) ou Pressão (-0,5 a -2 cmH₂O)',
+                ],
+                highlight: 'Paciente ativo na VM? Disparo = Sensibilidade. Passivo? Disparo = Tempo.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T13-slides-vcv',
+            type: 'slides',
+            title: 'VCV — Volume Controlado',
+            slides: [
+              {
+                title: 'VCV — Características',
+                bullets: [
+                  'Volume Corrente é a variável CONTROLADA — entrega VC programado',
+                  'Fluxo CONSTANTE (onda quadrada) durante inspiração',
+                  'Pressão VARIÁVEL — depende da complacência e resistência do paciente',
+                  'Disparo: Tempo ou Fluxo ou Pressão | Ciclagem: Volume ou Tempo',
+                  'Parâmetros: VC (6-8 mL/kg), FR, Fluxo (40-60 L/min), PEEP, Sensibilidade, FiO₂',
+                ],
+                highlight: 'VCV: Volume garantido + Fluxo quadrado → Pressão varia. Risco de barotrauma se complacência cai.',
+              },
+              {
+                title: 'Análise Gráfica VCV',
+                bullets: [
+                  'Pressão × Tempo: ascensão progressiva até Pico, pausa para Platô',
+                  'Stress Index: SI=1 linear (ideal), SI>1 côncava (sobredistensão), SI<1 convexa (recrutamento)',
+                  'Fluxo × Tempo: onda QUADRADA constante (inspiração), exponencial (expiração)',
+                  'Volume × Tempo: rampa ascendente LINEAR',
+                  'Ppico = Resistência + Complacência | Pplatô = Complacência apenas',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T13-sim-stress-index',
+            type: 'simulation',
+            title: 'Stress Index — SI > 1, SI = 1, SI < 1',
+            simulationId: 'respiratory-vmi-stress-index',
+            description: 'Simulação interativa: alterne entre SI=1 (linear/ideal), SI>1 (côncava/sobredistensão) e SI<1 (convexa/recrutamento).',
+          },
+          {
+            id: 'M2-T13-slides-pcv',
+            type: 'slides',
+            title: 'PCV — Pressão Controlada',
+            slides: [
+              {
+                title: 'PCV — Características',
+                bullets: [
+                  'Pressão é a variável CONTROLADA — mantém pressão programada',
+                  'Fluxo DESACELERANTE — pico alto que cai progressivamente',
+                  'Volume VARIÁVEL — depende da complacência e resistência',
+                  'Disparo: Tempo (CMV) ou Sensibilidade (ACV) | Ciclagem: sempre por TEMPO (Tinsp)',
+                  'Parâmetros: PC (~15 cmH₂O acima PEEP), FR, Tinsp, PEEP, Rise Time, Sensibilidade, FiO₂',
+                ],
+                highlight: 'PCV: Pressão limitada + Fluxo desacelerante → Volume varia. ↓ Risco barotrauma, volume não garantido.',
+              },
+              {
+                title: 'Rise Time em PCV',
+                bullets: [
+                  'Rise Time (RT): tempo de subida até atingir a pressão determinada',
+                  'RT BAIXO → fluxo ALTO → Ti BAIXO → ↑ VC em PCV',
+                  'RT ALTO → fluxo BAIXO → Ti ALTO',
+                  'Rise Time NÃO altera o Tinsp em PCV',
+                  'Cuidado: Pinsp é diferente de Pressão Controlada (PC) — PC = Pinsp - PEEP',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T13-slides-psv',
+            type: 'slides',
+            title: 'PSV — Pressão de Suporte',
+            slides: [
+              {
+                title: 'PSV — Características',
+                bullets: [
+                  'Modo 100% ESPONTÂNEO — paciente dispara e controla FR e Ti',
+                  'Ventilador fornece pressão de suporte (PS) para auxiliar esforço',
+                  'Fluxo desacelerante — cicla quando fluxo cai a 25% do pico',
+                  'Disparo: sempre por SENSIBILIDADE | Ciclagem: sempre por FLUXO',
+                  'Ideal para desmame — requer drive respiratório preservado',
+                ],
+              },
+              {
+                title: 'Ciclagem em PSV (% do Fluxo de Pico)',
+                bullets: [
+                  'Quanto MAIOR o % de ciclagem → MENOR o Ti (cicla mais cedo)',
+                  'Quanto MENOR o % de ciclagem → MAIOR o Ti (cicla mais tarde)',
+                  '10%: ciclagem tardia → Ti aumentado → risco de assincronia',
+                  '25%: ciclagem padrão → Ti normal (recomendado)',
+                  '40%: ciclagem precoce → Ti diminuído → risco de assincronia',
+                ],
+                highlight: 'Padrão típico: 25% do fluxo de pico inspiratório.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T13-sim-psv-cycling',
+            type: 'simulation',
+            title: 'PSV Ciclagem — 10%, 25%, 40%',
+            simulationId: 'respiratory-vmi-psv-cycling',
+            description: 'Ajuste o % de ciclagem e veja como Ti, I:E e o limiar de fluxo mudam em tempo real.',
+          },
+          {
+            id: 'M2-T13-slides-loops',
+            type: 'slides',
+            title: 'Loops P-V e Interpretação',
+            slides: [
+              {
+                title: 'Alça Pressão-Volume (P-V)',
+                bullets: [
+                  'Gráfico que relaciona Pressão (X) com Volume (Y) durante um ciclo completo',
+                  'LIP (Lower Inflection Point): ponto de recrutamento alveolar',
+                  'UIP (Upper Inflection Point): início da hiperdistensão',
+                  'Complacência: inclinação da curva (ΔV/ΔP)',
+                  'Histerese: diferença entre curvas inspiratória e expiratória',
+                ],
+              },
+              {
+                title: 'Aplicação Clínica dos Loops',
+                bullets: [
+                  'PEEP ideal: acima do LIP (manter recrutamento)',
+                  'Pplatô seguro: abaixo do UIP (evitar hiperdistensão)',
+                  '↓ Complacência: curva achatada (SDRA, fibrose, edema)',
+                  '↑ Complacência: curva inclinada (DPOC, enfisema)',
+                  'Driving Pressure < 15 cmH₂O: melhor preditor de mortalidade em SDRA',
+                ],
+                highlight: 'PEEP acima do LIP + Pplatô abaixo do UIP = ventilação protetora otimizada.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T13-slides-formulas',
+            type: 'slides',
+            title: 'Cálculos e Fórmulas',
+            slides: [
+              {
+                title: 'Parâmetros Derivados das Curvas',
+                bullets: [
+                  'Cest = VC / (Pplatô − PEEP) | Normal: 50-100 mL/cmH₂O',
+                  'RAW = (Ppico − Pplatô) / Fluxo | Normal: 5-10 cmH₂O/L/s',
+                  'ΔP = Pplatô − PEEP | Meta: < 15 cmH₂O (ideal < 12)',
+                  'VM = VC × FR | Normal: 5-10 L/min (determina eliminação de CO₂)',
+                ],
+              },
+              {
+                title: 'Escolha do Modo Ventilatório',
+                bullets: [
+                  'Fase aguda / SDRA grave: VCV ou PCV — controle total, VC 6 mL/kg, Pplatô < 30',
+                  'Fase de melhora: A/C ou SIMV+PSV — paciente desperta, redução gradual FR',
+                  'Desmame: PSV — 100% espontâneo, PS progressivamente ↓, meta PS 5-8 cmH₂O',
+                  'TRE (Teste Respiratório Espontâneo): avaliar capacidade de extubação',
+                ],
+                highlight: 'Ventilação protetora: VC 6 mL/kg, Pplatô < 30, ΔP < 15, PEEP individualizada.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
