@@ -154,30 +154,35 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
     return { P, F, V }
   }, [viewMode, siMode, p1p2Mode, triggerMode, tInsp, tPause, tExp, cycleSec, peep, pPeak, pPlateau, vcTarget, flowSet])
 
-  /* ── Label data for each point ── */
+  /* ── Label positions as fraction of windowSec ──
+     cycleSec=4s, windowSec=~8.8s, tInsp=1s, tPause=0.32s, tExp=2.68s
+     Convert: time_in_cycle / windowSec = x */
+  const ws = cycleSec * 2.2  // windowSec
+  const cx = (cycleTime: number) => cycleTime / ws  // convert cycle time to window fraction
+
   const pressureLabelsWithPause = [
-    { num: 1, name: 'PEEP', x: 0.02, desc: 'Pressão expiratória final positiva' },
-    { num: 2, name: 'Disparo', x: 0.06, desc: 'Início da fase inspiratória' },
-    { num: 3, name: 'Componente Resistivo', x: 0.15, desc: 'Pressão gerada pela resistência das vias aéreas' },
-    { num: 4, name: 'Stress Index', x: 0.20, desc: 'Morfologia da rampa — avalia complacência' },
-    { num: 5, name: 'Pressão de Pico (VA)', x: 0.245, desc: 'Ppico = Resistiva + Elástica' },
-    { num: 6, name: 'Pressão de Platô', x: 0.30, desc: 'Pressão alveolar (pausa inspiratória)' },
-    { num: 7, name: 'Ciclagem', x: 0.33, desc: 'Transição inspiração → expiração' },
-    { num: 8, name: 'Driving Pressure', x: 0.55, desc: `ΔP = Platô - PEEP = ${drivingP} cmH₂O` },
+    { num: 1, name: 'PEEP', x: cx(-0.15), desc: 'Pressão expiratória final positiva' },
+    { num: 2, name: 'Disparo', x: cx(0.04), desc: 'Início da fase inspiratória' },
+    { num: 3, name: 'Comp. Resistivo', x: cx(0.35), desc: 'Pressão gerada pela resistência das vias aéreas' },
+    { num: 4, name: 'Stress Index', x: cx(0.6), desc: 'Morfologia da rampa — avalia complacência' },
+    { num: 5, name: 'Ppico (VA)', x: cx(tInsp - 0.02), desc: 'Ppico = Resistiva + Elástica' },
+    { num: 6, name: 'Pplatô', x: cx(tInsp + tPause * 0.5), desc: 'Pressão alveolar (pausa inspiratória)' },
+    { num: 7, name: 'Ciclagem', x: cx(tInsp + tPause), desc: 'Transição inspiração → expiração' },
+    { num: 8, name: 'Driving Pressure', x: cx(tInsp + tPause + tExp * 0.35), desc: `ΔP = Platô - PEEP = ${drivingP} cmH₂O` },
   ]
 
   const flowLabels = [
-    { num: 1, name: 'Disparo', x: 0.06, desc: 'Deflexão negativa que dispara o ciclo' },
-    { num: 2, name: 'Pico Fluxo Inspiratório', x: 0.10, desc: `Fluxo constante = ${flowSet} L/min (onda quadrada)` },
-    { num: 3, name: 'Ciclagem', x: 0.245, desc: 'Fluxo cai a zero — fim da inspiração' },
-    { num: 4, name: 'Pico Fluxo Expiratório', x: 0.27, desc: 'Pico negativo — expiração passiva' },
-    { num: 5, name: 'Constantes de Tempo Exp.', x: 0.60, desc: 'Decaimento exponencial (τ = R × C)' },
+    { num: 1, name: 'Disparo', x: cx(0.04), desc: 'Deflexão negativa que dispara o ciclo' },
+    { num: 2, name: 'Pico Fluxo Insp.', x: cx(0.15), desc: `Fluxo constante = ${flowSet} L/min (onda quadrada)` },
+    { num: 3, name: 'Ciclagem', x: cx(tInsp), desc: 'Fluxo cai a zero — fim da inspiração' },
+    { num: 4, name: 'Pico Fluxo Exp.', x: cx(tInsp + tPause + 0.1), desc: 'Pico negativo — expiração passiva' },
+    { num: 5, name: 'Const. Tempo τ', x: cx(tInsp + tPause + tExp * 0.5), desc: 'Decaimento exponencial (τ = R × C)' },
   ]
 
   const volumeLabels = [
-    { num: 1, name: 'Vti (Volume Entrada)', x: 0.15, desc: 'Rampa ascendente linear (fluxo constante)' },
-    { num: 2, name: 'Volume Corrente', x: 0.245, desc: `VC = ${vcTarget} mL (controlado — sempre igual)` },
-    { num: 3, name: 'Vte (Volume Saída)', x: 0.55, desc: 'Decaimento exponencial passivo' },
+    { num: 1, name: 'Vti (Entrada)', x: cx(tInsp * 0.45), desc: 'Rampa ascendente linear (fluxo constante)' },
+    { num: 2, name: 'VC (Pico)', x: cx(tInsp), desc: `VC = ${vcTarget} mL (controlado — sempre igual)` },
+    { num: 3, name: 'Vte (Saída)', x: cx(tInsp + tPause + tExp * 0.45), desc: 'Decaimento exponencial passivo' },
   ]
 
   /* ── Drawing ── */
@@ -301,8 +306,10 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
           // Determine which labels to show based on mode
           let labels: typeof pressureLabelsWithPause = []
           const showLabels = (() => {
-            // Stress Index & P1/P2: only show on pressure graph
-            if (viewMode === 'stressIndex' || viewMode === 'p1p2') {
+            // Stress Index: NO numbered labels at all (focus on SI only)
+            if (viewMode === 'stressIndex') return false
+            // P1/P2: only show on pressure graph
+            if (viewMode === 'p1p2') {
               if (gi !== 0) return false
             }
             return true
