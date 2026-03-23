@@ -208,44 +208,37 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ AUTODISPARO ═══
-      // Ventilador dispara SEM esforço do paciente — timing irregular
-      // Causas: oscilação cardíaca, vazamento, água no circuito, sensibilidade excessiva
-      // Ciclo normal mas com timing errado (antecipado) e sem esforço real
+      // Ventilador dispara REPETIDAMENTE sem esforço do paciente
+      // Vários disparos em sequência rápida — FR muito acima do programado
+      // Causas: sensibilidade excessiva, vazamento, água no circuito, oscilações cardíacas
       case 'auto': {
-        if (cycleNum === 2) {
-          // Ciclo AUTO: dispara precocemente, no meio da expiração do ciclo anterior
-          // Aparece como um ciclo extra com timing irregular
-          const autoTi = ti * 0.7  // ciclo mais curto
-          const autoTe = cycleSec - autoTi
+        // Subdivide o ciclo em mini-ciclos rápidos (3 disparos por ciclo normal)
+        const nAuto = 3
+        const miniCycle = cycleSec / nAuto
+        const miniTi = miniCycle * 0.35
+        const miniTe = miniCycle - miniTi
+        const miniPh = ((ph % miniCycle) + miniCycle) % miniCycle
+        const miniVc = vc * 0.35  // volumes menores porque cicla rápido
 
-          if (ph < autoTi) {
-            const frac = ph / autoTi
-            const rF = Math.min(ph / 0.06, 1)
-            const rs = smooth(rF)
-            return {
-              P: peep + (vc * 0.6 / 40) * frac + 8 * (flowPeak * 0.7 / 60) * rs,
-              F: flowPeak * 0.7 * rs,
-              V: vc * 0.6 * frac,
-            }
-          } else {
-            const ef = (ph - autoTi) / autoTe
-            const expD = Math.exp(-ef * autoTe / 0.5)
-            // Oscilações cardíacas visíveis na baseline
-            const cardiac = 0.6 * Math.sin(ef * autoTe * Math.PI * 5)
-            return {
-              P: peep + (vc * 0.6 / 40) * expD + cardiac,
-              F: -flowPeak * 0.5 * expD + cardiac * 2,
-              V: vc * 0.6 * expD,
-            }
+        if (miniPh < miniTi) {
+          const frac = miniPh / miniTi
+          const rF = Math.min(miniPh / 0.05, 1)
+          const rs = smooth(rF)
+          return {
+            P: peep + (miniVc / 40) * frac + 8 * (flowPeak * 0.6 / 60) * rs,
+            F: flowPeak * 0.6 * rs,
+            V: miniVc * frac,
+          }
+        } else {
+          const ef = (miniPh - miniTi) / miniTe
+          const expD = Math.exp(-ef * miniTe / 0.3)
+          const cardiac = 0.5 * Math.sin(ef * miniTe * Math.PI * 4)
+          return {
+            P: peep + (miniVc / 40) * expD + cardiac,
+            F: -flowPeak * 0.4 * expD + cardiac * 1.5,
+            V: miniVc * expD,
           }
         }
-        // Ciclos normais mas com oscilações cardíacas na baseline
-        const n = normalWave(ph)
-        if (ph > ti) {
-          const cardiac = 0.5 * Math.sin(ph * Math.PI * 5)
-          return { P: n.P + cardiac, F: n.F + cardiac * 1.5, V: n.V }
-        }
-        return n
       }
 
       // ═══ CICLAGEM PREMATURA ═══
