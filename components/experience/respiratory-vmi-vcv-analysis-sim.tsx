@@ -11,6 +11,7 @@ import { useRef, useEffect, useState, useCallback } from 'react'
 type ViewMode = 'normal' | 'noPause' | 'stressIndex' | 'p1p2'
 type SIMode = 'ideal' | 'overdist' | 'recruit'
 type P1P2Mode = 'normal' | 'pendelluft'
+type TriggerMode = 'cmv' | 'ac'  // CMV = tempo (JT), A/C = sensibilidade
 
 const COLORS = {
   pressure: '#fbbf24',   // amarelo
@@ -42,6 +43,7 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
   const [viewMode, setViewMode] = useState<ViewMode>('normal')
   const [siMode, setSiMode] = useState<SIMode>('ideal')
   const [p1p2Mode, setP1p2Mode] = useState<P1P2Mode>('normal')
+  const [triggerMode, setTriggerMode] = useState<TriggerMode>('cmv')
   const [paused, setPaused] = useState(false)
   const [activeLabel, setActiveLabel] = useState<number | null>(null)
 
