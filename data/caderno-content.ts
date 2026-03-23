@@ -2838,17 +2838,11 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
               },
             ],
           },
+          // ═══ DISPARO INEFICAZ ═══
           {
-            id: 'M2-T12-sim-asynchrony',
-            type: 'simulation',
-            title: 'Assincronias — 8 Tipos com Curvas Reais',
-            simulationId: 'respiratory-vmi-asynchrony',
-            description: 'Simulação interativa: Disparo Ineficaz, Duplo Disparo, Disparo Reverso, Autodisparo, Ciclagem Prematura, Ciclagem Tardia, Fluxo Insuficiente e Fluxo Excessivo.',
-          },
-          {
-            id: 'M2-T12-slides-disparo',
+            id: 'M2-T12-slides-ineffective',
             type: 'slides',
-            title: 'Assincronias de DISPARO',
+            title: 'Disparo Ineficaz',
             slides: [
               {
                 title: 'Disparo Ineficaz',
@@ -2860,6 +2854,21 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
                   'Correção: ajustar sensibilidade, ↓ TI, titular PEEP externa < auto-PEEP, ↓ PS no PSV',
                 ],
               },
+            ],
+          },
+          {
+            id: 'M2-T12-sim-ineffective',
+            type: 'simulation',
+            title: 'Curva — Disparo Ineficaz',
+            simulationId: 'async-ineffective',
+            description: 'Esforço do paciente sem ciclo — deflexão na pressão sem fluxo.',
+          },
+          // ═══ DUPLO DISPARO ═══
+          {
+            id: 'M2-T12-slides-double',
+            type: 'slides',
+            title: 'Duplo Disparo',
+            slides: [
               {
                 title: 'Duplo Disparo',
                 bullets: [
@@ -2871,6 +2880,21 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
                 ],
                 highlight: 'Duplo disparo → empilhamento aéreo (air stacking) → volutrauma',
               },
+            ],
+          },
+          {
+            id: 'M2-T12-sim-double',
+            type: 'simulation',
+            title: 'Curva — Duplo Disparo',
+            simulationId: 'async-double',
+            description: 'Dois ciclos consecutivos com empilhamento de volume (air stacking).',
+          },
+          // ═══ DISPARO REVERSO ═══
+          {
+            id: 'M2-T12-slides-reverse',
+            type: 'slides',
+            title: 'Disparo Reverso',
+            slides: [
               {
                 title: 'Disparo Reverso',
                 bullets: [
@@ -2881,6 +2905,21 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
                   'BNM em casos graves de SDRA',
                 ],
               },
+            ],
+          },
+          {
+            id: 'M2-T12-sim-reverse',
+            type: 'simulation',
+            title: 'Curva — Disparo Reverso',
+            simulationId: 'async-reverse',
+            description: 'Contração reflexa durante a fase expiratória — perturbação no fluxo.',
+          },
+          // ═══ AUTODISPARO ═══
+          {
+            id: 'M2-T12-slides-auto',
+            type: 'slides',
+            title: 'Autodisparo',
+            slides: [
               {
                 title: 'Autodisparo',
                 bullets: [
@@ -2893,9 +2932,17 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
-            id: 'M2-T12-slides-ciclagem',
+            id: 'M2-T12-sim-auto',
+            type: 'simulation',
+            title: 'Curva — Autodisparo',
+            simulationId: 'async-auto',
+            description: 'Ciclo fantasma disparado por oscilação cardíaca — sem esforço real.',
+          },
+          // ═══ CICLAGEM PREMATURA ═══
+          {
+            id: 'M2-T12-slides-premature',
             type: 'slides',
-            title: 'Assincronias de CICLAGEM',
+            title: 'Ciclagem Prematura',
             slides: [
               {
                 title: 'Ciclagem Prematura',
@@ -2908,6 +2955,21 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
                   'PSV: ↓ % de ciclagem ou ↑ PS ou ↑ Rise Time',
                 ],
               },
+            ],
+          },
+          {
+            id: 'M2-T12-sim-premature',
+            type: 'simulation',
+            title: 'Curva — Ciclagem Prematura',
+            simulationId: 'async-premature',
+            description: 'TI curto — esforço inspiratório residual na fase expiratória.',
+          },
+          // ═══ CICLAGEM TARDIA ═══
+          {
+            id: 'M2-T12-slides-delayed',
+            type: 'slides',
+            title: 'Ciclagem Tardia',
+            slides: [
               {
                 title: 'Ciclagem Tardia',
                 bullets: [
@@ -2923,9 +2985,17 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
-            id: 'M2-T12-slides-fluxo',
+            id: 'M2-T12-sim-delayed',
+            type: 'simulation',
+            title: 'Curva — Ciclagem Tardia',
+            simulationId: 'async-delayed',
+            description: 'TI prolongado — paciente tentando expirar durante inspiração mecânica.',
+          },
+          // ═══ FLUXO INSUFICIENTE ═══
+          {
+            id: 'M2-T12-slides-flowstarve',
             type: 'slides',
-            title: 'Assincronias de FLUXO',
+            title: 'Fluxo Insuficiente (Flow Starvation)',
             slides: [
               {
                 title: 'Fluxo Insuficiente (Flow Starvation)',
@@ -2940,6 +3010,21 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
                 ],
                 highlight: 'Concavidade na curva de pressão (scooping) = fluxo insuficiente. Assinatura patognomônica.',
               },
+            ],
+          },
+          {
+            id: 'M2-T12-sim-flowstarve',
+            type: 'simulation',
+            title: 'Curva — Fluxo Insuficiente',
+            simulationId: 'async-flow-starve',
+            description: 'Concavidade (scooping) na curva de pressão — demanda > oferta.',
+          },
+          // ═══ FLUXO EXCESSIVO ═══
+          {
+            id: 'M2-T12-slides-flowexcess',
+            type: 'slides',
+            title: 'Fluxo Excessivo',
+            slides: [
               {
                 title: 'Fluxo Excessivo',
                 bullets: [
@@ -2953,6 +3038,14 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
               },
             ],
           },
+          {
+            id: 'M2-T12-sim-flowexcess',
+            type: 'simulation',
+            title: 'Curva — Fluxo Excessivo',
+            simulationId: 'async-flow-excess',
+            description: 'Overshoot de pressão no início — fluxo/pressão alto demais.',
+          },
+          // ═══ IMPACTO CLÍNICO ═══
           {
             id: 'M2-T12-slides-impacto',
             type: 'slides',
@@ -2989,6 +3082,14 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
                 highlight: 'Assincronias são tratáveis: identificar tipo → corrigir parâmetros → tratar causa base.',
               },
             ],
+          },
+          // ═══ VISÃO GERAL (todos os tipos) ═══
+          {
+            id: 'M2-T12-sim-all',
+            type: 'simulation',
+            title: 'Todas as Assincronias — Seletor Completo',
+            simulationId: 'respiratory-vmi-asynchrony',
+            description: 'Compare todos os 8 tipos de assincronia com seletor de tipos.',
           },
         ],
       },
