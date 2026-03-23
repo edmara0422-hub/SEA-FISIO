@@ -2363,6 +2363,459 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T11',
+        title: 'VMI — Ventilação Mecânica Invasiva',
+        blocks: [
+          {
+            id: 'M2-T11-slides-objetivos',
+            type: 'slides',
+            title: 'Objetivos e Ciclo da VM',
+            slides: [
+              {
+                title: 'Objetivos da Ventilação Mecânica',
+                bullets: [
+                  'Manutenção da troca gasosa — garantir oxigenação adequada e remoção de CO₂',
+                  'Aliviar trabalho respiratório — reduzir esforço da musculatura respiratória',
+                  'Correção hipoxemia/hipercapnia — normalizar níveis gasométricos',
+                  'Reverter fadiga muscular — evitar e tratar falência muscular respiratória',
+                  'Reduzir desconforto — melhorar confort e dispneia do paciente',
+                  'Prevenir complicações — evitar barotrauma e lesões associadas',
+                ],
+              },
+              {
+                title: '4 Fases do Ciclo Ventilatório',
+                bullets: [
+                  '1. DISPARO — Início do ciclo: detecção do esforço (assistido) ou tempo programado (controlado)',
+                  '2. INSPIRAÇÃO — Ar entra nos pulmões por pressão positiva: entrega de VC ou atingir TI',
+                  '3. CICLAGEM — Transição inspiração → expiração: por volume, tempo, fluxo ou pressão',
+                  '4. EXPIRAÇÃO — Ar sai dos pulmões (PASSIVA): retração elástica até PEEP',
+                ],
+                highlight: 'Sequência contínua: 4 → 1 → 2 → 3 → 4 → ...',
+              },
+              {
+                title: 'Disparo (Trigger)',
+                bullets: [
+                  'Modo controlado: ventilador inicia pelo tempo programado',
+                  'Modo assistido: detecta esforço inspiratório do paciente',
+                  'Sensibilidade a pressão: −0,5 a −2 cmH₂O',
+                  'Sensibilidade a fluxo: 2 a 4 L/min',
+                ],
+              },
+              {
+                title: 'Ciclagem',
+                bullets: [
+                  'VCV: cicla por VOLUME — quando VC programado é entregue',
+                  'PCV: cicla por TEMPO — quando TI programado é atingido',
+                  'PSV: cicla por FLUXO — quando fluxo cai a 25% do pico',
+                  'Ciclagem por pressão: raramente usada, limite de segurança',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-sim-ventilator',
+            type: 'simulation',
+            title: 'Monitor de Ventilador Mecânico — VCV / PCV / PSV',
+            simulationId: 'respiratory-vmi-ventilator',
+            description: 'Simulação em tempo real com curvas de Pressão, Fluxo e Volume para VCV, PCV e PSV. Ajuste parâmetros e veja os efeitos.',
+          },
+          {
+            id: 'M2-T11-slides-modos',
+            type: 'slides',
+            title: 'Modos Ventilatórios — VCV, PCV, PSV',
+            slides: [
+              {
+                title: 'VCV — Volume Controlado',
+                bullets: [
+                  'Volume corrente FIXO — entrega o VC programado a cada ciclo',
+                  'Fluxo CONSTANTE (onda quadrada) durante a inspiração',
+                  'Pressão VARIA conforme complacência e resistência do paciente',
+                  'Vantagem: garante ventilação alveolar mínima',
+                  'Desvantagem: pressão pode subir se complacência cair',
+                  'Ciclagem: por VOLUME (quando VC é entregue)',
+                ],
+                highlight: 'VCV: Volume fixo + Fluxo quadrado → Pressão varia',
+              },
+              {
+                title: 'PCV — Pressão Controlada',
+                bullets: [
+                  'Pressão inspiratória FIXA (onda quadrada) — mantém PIP programada',
+                  'Fluxo DESACELERANTE — pico no início da inspiração, decai exponencialmente',
+                  'Volume VARIA conforme complacência e resistência do paciente',
+                  'Vantagem: limita pressão alveolar, melhor distribuição de gás',
+                  'Desvantagem: VC pode cair se complacência piorar',
+                  'Ciclagem: por TEMPO (quando TI é atingido)',
+                ],
+                highlight: 'PCV: Pressão fixa + Fluxo desacelerante → Volume varia',
+              },
+              {
+                title: 'PSV — Pressão de Suporte',
+                bullets: [
+                  'Modo de ventilação ESPONTÂNEA assistida',
+                  'Paciente DISPARA cada ciclo (sensibilidade)',
+                  'Ventilador entrega pressão de suporte programada',
+                  'Fluxo desacelerante — paciente controla FR, TI e VC',
+                  'Ciclagem: por FLUXO — quando cai a 25% do pico inspiratório',
+                  'Usado em desmame ventilatório e transição para extubação',
+                ],
+                highlight: 'PSV: Paciente dispara + PS fixa → Cicla por fluxo (25% do pico)',
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-co2o2',
+            type: 'slides',
+            title: 'Efeitos Vasculares de CO₂ e O₂',
+            slides: [
+              {
+                title: 'CO₂ — Efeitos Vasculares',
+                bullets: [
+                  'CO₂ alto (hipercapnia) → vasodilatação cerebral → ↑ fluxo sanguíneo cerebral',
+                  'CO₂ baixo (hipocapnia) → vasoconstrição cerebral → ↓ fluxo sanguíneo cerebral',
+                  'Na circulação pulmonar: CO₂ alto → vasodilatação local',
+                  'Hiperventilação excessiva → hipocapnia → isquemia cerebral',
+                ],
+              },
+              {
+                title: 'O₂ — Efeitos Vasculares',
+                bullets: [
+                  'O₂ alto (hiperóxia) → vasoconstrição cerebral',
+                  'O₂ baixo (hipoxemia) → vasodilatação cerebral',
+                  'Na circulação pulmonar: resposta OPOSTA ao sistêmico',
+                  'Hipóxia alveolar → vasoconstrição pulmonar hipóxica (mecanismo de Euler-Liljestrand)',
+                  'Hiperóxia → vasodilatação pulmonar',
+                ],
+                highlight: 'Sistêmico: CO₂↑ = vasodilata, O₂↑ = vasocontrai | Pulmonar: O₂↓ = vasocontrai (HPV)',
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-trigger-cycle',
+            type: 'slides',
+            title: 'Disparo, Ciclagem, TI e JT',
+            slides: [
+              {
+                title: 'Fórmulas do Ciclo Respiratório',
+                bullets: [
+                  'FR (f) = respiratory rate em bpm',
+                  'JT (tempo total) = 60 / FR segundos por ciclo',
+                  'Ex: FR = 15 bpm → JT = 60/15 = 4,00 s/ciclo',
+                  'TI (tempo inspiratório): tempo entre disparo e ciclagem',
+                  'TE (tempo expiratório): JT − TI',
+                  'Relação I:E = TI : TE (ex: 1:2, 1:3)',
+                ],
+              },
+              {
+                title: 'Trigger & Cycle — Controle',
+                bullets: [
+                  'Control = Ventilator-triggered: ventilador controla início (trigger) e término (cycle)',
+                  'Assistido = Patient-triggered: paciente inicia, ventilador completa o ciclo',
+                  'A FR é determinada pelo tempo entre cada trigger',
+                  'Sensibilidade: ajusta o limiar de detecção do esforço do paciente',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-sim-peep',
+            type: 'simulation',
+            title: 'PEEP — Recrutamento Alveolar Interativo',
+            simulationId: 'respiratory-vmi-peep',
+            description: 'Visualize alvéolos sendo recrutados conforme a PEEP aumenta. Alvéolos abertos respiram, colapsados mostram atelectasia.',
+          },
+          {
+            id: 'M2-T11-slides-peep',
+            type: 'slides',
+            title: 'PEEP — Conceitos e Efeitos',
+            slides: [
+              {
+                title: 'PEEP — Pressão Expiratória Final Positiva',
+                bullets: [
+                  'Mantém alvéolos abertos ao final da expiração → previne colapso e atelectasia',
+                  'Aumenta superfície de troca gasosa disponível (recrutamento)',
+                  'Redistribui edema alveolar para espaços intersticiais',
+                  'Torna a ventilação mais homogênea em zonas dependentes',
+                  'Diminui o shunt intrapulmonar (↑ oxigenação)',
+                ],
+              },
+              {
+                title: 'PEEP e Hemodinâmica',
+                bullets: [
+                  'PEEP ↑ → ↑ pressão intratorácica → ↓ retorno venoso → ↓ DC',
+                  'Principal mecanismo de comprometimento: ↓ retorno venoso pela ↑ PAD',
+                  'Também: ↓ contratilidade, ↑ pós-carga VD e VE, mediadores humorais',
+                  'Em SDRA: PEEP pode ↓ VS, ↓ DC, ↓ FC, ↑ RVS, ↑ RVP',
+                  'Individualizar: balancear recrutamento alveolar vs efeito hemodinâmico',
+                ],
+                highlight: 'PEEP elevada pode comprometer o DC — monitorar VS, DC e PAM ao ajustar.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-sim-mechanics',
+            type: 'simulation',
+            title: 'Mecânica Respiratória — Calculadora',
+            simulationId: 'respiratory-vmi-mechanics',
+            description: 'Calculadora interativa: ΔP (Driving Pressure), Cest, Cdyn, RAW. Ajuste Platô, Pico, PEEP, VC e Fluxo.',
+          },
+          {
+            id: 'M2-T11-slides-mechanics',
+            type: 'slides',
+            title: 'Pressões, Complacências e Resistência',
+            slides: [
+              {
+                title: 'ΔP (Driving Pressure)',
+                bullets: [
+                  'Fórmula: ΔP = Platô − PEEP',
+                  'Diferença entre pressão de platô e PEEP',
+                  'Representa a pressão necessária para ventilar os pulmões',
+                  'Alvo: < 15 cmH₂O (proteção pulmonar)',
+                  'Melhor preditor de mortalidade em SDRA',
+                ],
+                highlight: 'ΔP < 15 cmH₂O: associado a menor mortalidade em SDRA.',
+              },
+              {
+                title: 'Pressão Platô e Pressão de Pico',
+                bullets: [
+                  'Platô: pressão medida após pausa inspiratória — reflete pressão alveolar real',
+                  'Alvo Platô: < 30 cmH₂O (evitar barotrauma)',
+                  'Pico (PIP): pressão máxima no final da inspiração — inclui resistência VA + pressão alveolar',
+                  'Diferença Pico − Platô: reflete a resistência das vias aéreas (RAW)',
+                ],
+              },
+              {
+                title: 'Complacência Estática (Cest)',
+                bullets: [
+                  'Fórmula: Cest = VC / (Platô − PEEP)',
+                  'Componentes: Pulmão + Caixa Torácica',
+                  'Precisa de pausa inspiratória para medir',
+                  'Normal: > 50 mL/cmH₂O',
+                  'Cest baixa: ↓ distensibilidade (SDRA, fibrose, atelectasia, edema)',
+                ],
+              },
+              {
+                title: 'Complacência Dinâmica (Cdyn)',
+                bullets: [
+                  'Fórmula: Cdyn = VC / (Pico − PEEP)',
+                  'Inclui Vias Aéreas (não precisa pausa)',
+                  'Referência: ~10 mL/cmH₂O abaixo da Cest',
+                  'Cdyn baixa: indica ↑ resistência das vias aéreas (broncoespasmo, secreção)',
+                ],
+              },
+              {
+                title: 'RAW — Resistência das Vias Aéreas',
+                bullets: [
+                  'Fórmula: RAW = (Pico − Platô) / Fluxo (L/s)',
+                  'Normal: 7−10 cmH₂O/L/s',
+                  'RAW elevada: broncoconstrição, secreções, edema, tubo OT pequeno',
+                  'Atenção: Fluxo em L/min precisa ser dividido por 60 para converter em L/s',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-cardiopulmonar',
+            type: 'slides',
+            title: 'Interação Cardiopulmonar na VM',
+            slides: [
+              {
+                title: 'Pressão Intratorácica (PIT)',
+                bullets: [
+                  'Qualquer mudança na PIT interfere no retorno venoso ao VD e no fluxo do VE',
+                  '↑ PIT (pressão positiva): ↑ PAD, ↓ pressão transmural, ↓ retorno venoso',
+                  'Respiração espontânea: PIT negativa → favorece retorno venoso',
+                  'VM com pressão positiva: altera fundamentalmente a hemodinâmica cardíaca',
+                ],
+              },
+              {
+                title: 'Ventrículo Direito (VD)',
+                bullets: [
+                  'VM ↑ volumes pulmonares → ↑ RVP → ↑ pós-carga do VD',
+                  'Inspiração: ↓ retorno venoso → ↓ VS do VD → ↓ dimensões VD',
+                  'Expiração: ↑ retorno venoso → ↑ VS do VD → ↑ dimensões VD',
+                  'Parede livre fina: não adaptado para pressões elevadas',
+                  'Vulnerável a dissincronia e BRE',
+                ],
+              },
+              {
+                title: 'Ventrículo Esquerdo (VE)',
+                bullets: [
+                  'Alteração no retorno venoso do VD → altera pré-carga do VE',
+                  '↑ PIT pode reduzir enchimento VD → repercute no VS do VE',
+                  'VS do VE afetado por: volume sanguíneo, FR e VC',
+                  'Pressão positiva pode alterar geometria ventricular',
+                  'Um único ciclo com pressão positiva pode provocar variação no DC',
+                ],
+              },
+              {
+                title: 'Lei de Frank-Starling e Compensações',
+                bullets: [
+                  '↑ Pós-carga → aumenta contratilidade miocárdica',
+                  '↑ Pré-carga → recruta reserva contrátil (Lei de Frank-Starling)',
+                  'VM com pressão positiva: ↑ pressão pleural e ↓ pressão vascular pulmonar transmural',
+                  'Consequência: ↑ pós-carga VD, aumenta zonas de West 1 ou 2',
+                ],
+                highlight: 'Monitorar VS, DC e PAM ao ajustar parâmetros ventilatórios. PEEP elevada + hipovolemia = risco.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-p01',
+            type: 'slides',
+            title: 'P0.1 — Drive Respiratório',
+            slides: [
+              {
+                title: 'P0.1 — Pressão de Oclusão (100ms)',
+                bullets: [
+                  'Pressão de oclusão medida em 0,1 s após início do esforço inspiratório contra VA ocluída',
+                  'Avalia atividade do centro respiratório → diretamente relacionada ao estímulo neural',
+                  'Boa correlação com trabalho da respiração',
+                  'Valores de referência: 2 a 4 cmH₂O',
+                  'Normal/adulto saudável: 0,5 − 1,5 cmH₂O (~1 cmH₂O)',
+                ],
+              },
+              {
+                title: 'Interpretação do P0.1',
+                bullets: [
+                  '< 2 cmH₂O: drive diminuído — centro respiratório hipoestimulado',
+                  '> 4 cmH₂O: drive aumentado — risco de fadiga e falha no desmame',
+                  '> 3,5 cmH₂O: SUB-ASSISTÊNCIA — esforço excessivo, ↑ suporte',
+                  '< 1,6 cmH₂O: SOBRE-ASSISTÊNCIA — esforço insuficiente, ↓ suporte',
+                  'Início contração do ECMT: associado a P0.1 > 2,9 cmH₂O',
+                ],
+                highlight: 'P0.1 é não-invasivo, reprodutível e preditor de sucesso no desmame (< 4 cmH₂O).',
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-psili',
+            type: 'slides',
+            title: 'P-SILI — Lesão Autoinfligida',
+            slides: [
+              {
+                title: 'P-SILI — Patient Self-Inflicted Lung Injury',
+                bullets: [
+                  'Lesão pulmonar causada pelo esforço respiratório excessivo do próprio paciente durante VM',
+                  '4 mecanismos principais:',
+                  '1. Pressão transpulmonar aumentada → hiperdistensão regional',
+                  '2. Duplo disparo + Pendelluft → volutrauma por empilhamento aéreo',
+                  '3. Pressão pleural negativa → extravasamento capilar → edema pulmonar',
+                  '4. VIDD (miotrauma diafragmático) → fraqueza muscular → dificulta desmame',
+                ],
+                highlight: 'Ciclo vicioso: esforço excessivo → lesão → piora oxigenação → ↑ dependência de VM.',
+              },
+              {
+                title: 'Prevenção da P-SILI',
+                bullets: [
+                  'Monitorar esforço: P0.1, Pmusc, ΔPes, swing de pressão',
+                  'Ajustar PS/PEEP: evitar sub-assistência (esforço excessivo)',
+                  'Detectar assincronia: duplo disparo, reverse triggering',
+                  'Sedação apropriada: controlar drive respiratório quando necessário',
+                  'Ventilação protetora: VC baixo, Platô < 30, ΔP < 15',
+                  'Bloqueio neuromuscular: SDRA grave com assincronia refratária',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-vili',
+            type: 'slides',
+            title: 'VILI — Lesão Induzida pelo Ventilador',
+            slides: [
+              {
+                title: '6 Mecanismos da VILI',
+                bullets: [
+                  '1. Barotrauma: altas pressões → ruptura espaços aéreos → pneumotórax',
+                  '2. Volutrauma: VC alto → hiperdistensão alveolar (mais lesivo que pressão isolada)',
+                  '3. Atelectrauma: VM em baixos volumes → abertura/fechamento cíclicos de alvéolos',
+                  '4. Biotrauma: forças biofísicas → mediadores inflamatórios → lesão sistêmica (SIRS)',
+                  '5. Fratura por fadiga: altas FR → microfraturas progressivas no parênquima',
+                  '6. TI aumentado: piora V/Q, ↓ complacência, ↑ edema pulmonar',
+                ],
+              },
+              {
+                title: 'Ventilação Protetora — Prevenindo VILI',
+                bullets: [
+                  'VC: 6 mL/kg peso predito',
+                  'Platô: < 30 cmH₂O',
+                  'ΔP (Driving Pressure): < 15 cmH₂O',
+                  'PEEP: individualizada (ARDSnet ou decremental)',
+                  'FiO₂: menor possível (SpO₂ 88−95%)',
+                ],
+                highlight: 'VILI é prevenível. Driving Pressure é o melhor preditor de mortalidade em SDRA.',
+              },
+              {
+                title: 'Stress e Strain',
+                bullets: [
+                  'Stress (tensão mecânica): distribuição de forças por unidade de área de pulmão',
+                  'Strain (deformação): estiramento em relação ao estado de relaxamento (ΔV / V basal)',
+                  'Deformação excessiva → morte celular',
+                  'Pulmões doentes (SDRA): expansão heterogênea → concentração regional de forças',
+                  'VILI disparada por: tensões elevadas globais OU tensões locais pela heterogeneidade',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-esforco',
+            type: 'slides',
+            title: 'Esforço Muscular Respiratório',
+            slides: [
+              {
+                title: 'Pmusc, Pdi, Pes — Medidas de Esforço',
+                bullets: [
+                  'Pmusc: pressão dos músculos respiratórios = 0,75 × Pocc',
+                  'Normal: 3−15 cmH₂O | > 15: excessivo | < 3−5: insuficiente',
+                  'Pdi (transdiafragmática): Pdi = Pga − Pes (requer 2 cateteres)',
+                  'ΔPes (esofágica): monitoramento da interação paciente-ventilador',
+                  'Normal: −2 a −8 cmH₂O | < −8 a −12: excessivo | > −2 a −3: insuficiente',
+                ],
+              },
+              {
+                title: 'TFdi e Pocc',
+                bullets: [
+                  'TFdi (Thickening Fraction): fração de espessamento diafragmático por ultrassom',
+                  'Método não invasivo, à beira do leito',
+                  '< 15%: esforço insuficiente / disfunção diafragmática | > 15%: normal',
+                  'Pocc (pressão de oclusão): deflexão de pressão negativa durante oclusão expiratória',
+                  'Pmusc ≈ 0,75 × Pocc — desmascara o esforço da musculatura respiratória',
+                ],
+                highlight: 'Objetivo: detectar esforço excessivo (risco P-SILI) ou insuficiente (risco VIDD).',
+              },
+            ],
+          },
+          {
+            id: 'M2-T11-slides-parametros',
+            type: 'slides',
+            title: 'Parâmetros Ventilatórios — VMI',
+            slides: [
+              {
+                title: 'Parâmetros de Entrada',
+                bullets: [
+                  'FiO₂: fração inspirada de O₂ (21% a 100%)',
+                  'PEEP: pressão expiratória final positiva (0 a 20 cmH₂O típico)',
+                  'FR: frequência respiratória (6−30 rpm)',
+                  'Sensibilidade (Trigger): pressão (−0,5 a −2 cmH₂O) ou fluxo (2−4 L/min)',
+                  'PI: pressão inspiratória (determinada pela complacência)',
+                  'TI: tempo inspiratório (0,8 a 1,2 s)',
+                ],
+              },
+              {
+                title: 'Parâmetros de Saída e Derivados',
+                bullets: [
+                  'VC: volume corrente (450−500 mL, 6−8 mL/kg)',
+                  'Fluxo: velocidade do ar na via aérea (40−60 L/min)',
+                  'VM (volume minuto): VC × FR (5−8 L/min)',
+                  'Drive respiratório: comando cerebral à musculatura respiratória',
+                  'Auto-PEEP (intrínseca): pressão patológica por ar aprisionado (DPOC, asma)',
+                  'PEEP extrínseca: pressão positiva gerada pelo ventilador no final da expiração',
+                ],
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
