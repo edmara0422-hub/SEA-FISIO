@@ -152,7 +152,7 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
     }
 
     return { P, F, V }
-  }, [viewMode, siMode, p1p2Mode, tInsp, tPause, tExp, cycleSec, peep, pPeak, pPlateau, vcTarget, flowSet])
+  }, [viewMode, siMode, p1p2Mode, triggerMode, tInsp, tPause, tExp, cycleSec, peep, pPeak, pPlateau, vcTarget, flowSet])
 
   /* ── Label data for each point ── */
   const pressureLabelsWithPause = [
