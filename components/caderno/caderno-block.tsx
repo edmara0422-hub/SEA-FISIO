@@ -30,6 +30,9 @@ const RespiratoryVolumesSim = dynamic(() => import('@/components/experience/resp
 const RespiratoryOxytherapySim = dynamic(() => import('@/components/experience/respiratory-oxytherapy-sim').then(m => m.RespiratoryOxytherapySim), { ssr: false })
 const RespiratorySpirometrySim = dynamic(() => import('@/components/experience/respiratory-spirometry-sim').then(m => m.RespiratorySpirometrySim), { ssr: false })
 const RespiratoryVniModesSim = dynamic(() => import('@/components/experience/respiratory-vni-modes-sim').then(m => m.RespiratoryVniModesSim), { ssr: false })
+const RespiratoryVmiVentilatorSim = dynamic(() => import('@/components/experience/respiratory-vmi-ventilator-sim').then(m => m.RespiratoryVmiVentilatorSim), { ssr: false })
+const RespiratoryVmiPeepSim = dynamic(() => import('@/components/experience/respiratory-vmi-peep-sim').then(m => m.RespiratoryVmiPeepSim), { ssr: false })
+const RespiratoryVmiMechanicsSim = dynamic(() => import('@/components/experience/respiratory-vmi-mechanics-sim').then(m => m.RespiratoryVmiMechanicsSim), { ssr: false })
 
 const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
   'neuro-pump': NeuroPumpSim,
