@@ -2816,6 +2816,182 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
           },
         ],
       },
+      {
+        id: 'M2-T12',
+        title: 'Assincronias Paciente-Ventilador',
+        blocks: [
+          {
+            id: 'M2-T12-slides-intro',
+            type: 'slides',
+            title: 'O que são Assincronias?',
+            slides: [
+              {
+                title: 'Assincronia Paciente-Ventilador',
+                bullets: [
+                  'Incoordenação entre esforços/necessidades do paciente e o suporte do ventilador',
+                  'Prevalência: 25-80% dos pacientes ventilados mecanicamente',
+                  'Consequências: ↑ trabalho respiratório, desconforto, maior tempo de VM',
+                  'Risco de lesão pulmonar (VILI/P-SILI) e maior uso de sedação',
+                  'Detecção: análise de curvas de pressão, fluxo e volume',
+                ],
+                highlight: 'Assincronias são frequentes e subdiagnosticadas — monitorização contínua é essencial.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T12-sim-asynchrony',
+            type: 'simulation',
+            title: 'Assincronias — 8 Tipos com Curvas Reais',
+            simulationId: 'respiratory-vmi-asynchrony',
+            description: 'Simulação interativa: Disparo Ineficaz, Duplo Disparo, Disparo Reverso, Autodisparo, Ciclagem Prematura, Ciclagem Tardia, Fluxo Insuficiente e Fluxo Excessivo.',
+          },
+          {
+            id: 'M2-T12-slides-disparo',
+            type: 'slides',
+            title: 'Assincronias de DISPARO',
+            slides: [
+              {
+                title: 'Disparo Ineficaz',
+                bullets: [
+                  'Esforço do paciente NÃO inicia ciclo ventilatório',
+                  'Na curva: deflexão negativa na pressão SEM fluxo correspondente',
+                  'Fatores ventilador: mau ajuste de sensibilidade, TI prolongado',
+                  'Fatores paciente: ↑ FR muscular, depleção VC, hiperinsuflação (auto-PEEP)',
+                  'Correção: ajustar sensibilidade, ↓ TI, titular PEEP externa < auto-PEEP, ↓ PS no PSV',
+                ],
+              },
+              {
+                title: 'Duplo Disparo',
+                bullets: [
+                  'Dois ciclos ventilatórios consecutivos com intervalo muito curto',
+                  'Segundo ciclo antes da expiração completa do primeiro → empilhamento aéreo',
+                  'Fatores ventilador: TI muito curto vs tempo neural, VC baixo em VCV',
+                  'Fator paciente: alto drive neural',
+                  'Correção: ↑ TI (VCV/PCV) ou ↓ limiar de ciclagem (PSV), sedação em SDRA grave, PCV (volume variável)',
+                ],
+                highlight: 'Duplo disparo → empilhamento aéreo (air stacking) → volutrauma',
+              },
+              {
+                title: 'Disparo Reverso',
+                bullets: [
+                  'Contração muscular que ocorre DURANTE a expiração, como resposta reflexa à insuflação passiva',
+                  'Reflexo induzido pela distensão pulmonar',
+                  'Correção: ↓ Ti, ↓ FR, ↓ VC (minimizar distensão)',
+                  'Diminuir sedação para permitir respirações espontâneas',
+                  'BNM em casos graves de SDRA',
+                ],
+              },
+              {
+                title: 'Autodisparo',
+                bullets: [
+                  'Ventilador inicia ciclo SEM esforço do paciente',
+                  'Causas: sensibilidade excessiva, vazamento no sistema, água no circuito',
+                  'Fator paciente: oscilações de pressão/fluxo por batimentos cardíacos',
+                  'Correção: otimizar sensibilidade, corrigir vazamentos, remover condensados',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T12-slides-ciclagem',
+            type: 'slides',
+            title: 'Assincronias de CICLAGEM',
+            slides: [
+              {
+                title: 'Ciclagem Prematura',
+                bullets: [
+                  'TI do ventilador < TI neural do paciente — ventilador cicla antes',
+                  'Paciente continua esforço inspiratório após início da expiração',
+                  'Padrão restritivo (fibrose pulmonar) em PSV',
+                  'VCV: ↓ fluxo para ↑ TI, ↑ VC ou pausa inspiratória',
+                  'PCV: ↑ TI',
+                  'PSV: ↓ % de ciclagem ou ↑ PS ou ↑ Rise Time',
+                ],
+              },
+              {
+                title: 'Ciclagem Tardia',
+                bullets: [
+                  'TI do ventilador > TI neural — ventilador demora a ciclar',
+                  'Paciente tenta expirar enquanto ventilador ainda insufla',
+                  'Padrão obstrutivo (DPOC) em PSV — overshoot e fluxo excessivo',
+                  'VCV: ↑ fluxo inspiratório',
+                  'PCV: ↓ TI',
+                  'PSV: ↑ % de ciclagem, ↓ PS, ↑ ou ↓ Rise Time',
+                ],
+                highlight: 'Ciclagem tardia: PCV/PSV → ↓ PC ou ↓ PS ou ↑ Rise Time para reduzir fluxo.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T12-slides-fluxo',
+            type: 'slides',
+            title: 'Assincronias de FLUXO',
+            slides: [
+              {
+                title: 'Fluxo Insuficiente (Flow Starvation)',
+                bullets: [
+                  'Demanda ventilatória > fluxo ofertado pelo ventilador',
+                  'Curva de pressão com CONCAVIDADE (scooping) — assinatura clássica',
+                  'VCV: fluxo ajustado muito baixo',
+                  'PCV/PSV: pressão muito baixa ou Rise Time muito longo',
+                  'Correção VCV: ↑ fluxo inspiratório ou mudar para PCV/PSV (fluxo livre)',
+                  'Correção PCV/PSV: ↓ Rise Time e/ou ↑ pressões',
+                  'Tratar causa: dor, acidose, ansiedade, febre → ↑ demanda',
+                ],
+                highlight: 'Concavidade na curva de pressão (scooping) = fluxo insuficiente. Assinatura patognomônica.',
+              },
+              {
+                title: 'Fluxo Excessivo',
+                bullets: [
+                  'Fluxo/pressão aplicado excessivamente alto',
+                  'Overshoot de pressão no início da inspiração',
+                  'VCV: fluxo ajustado muito alto',
+                  'PCV/PSV: pressão muito alta ou Rise Time muito curto',
+                  'Correção VCV: ↓ fluxo inspiratório',
+                  'Correção PCV/PSV: ↓ pressão, ↑ Rise Time',
+                ],
+              },
+            ],
+          },
+          {
+            id: 'M2-T12-slides-impacto',
+            type: 'slides',
+            title: 'Impacto Clínico e Manejo',
+            slides: [
+              {
+                title: 'Impacto Clínico das Assincronias',
+                bullets: [
+                  '↑ Trabalho respiratório → fadiga muscular',
+                  'Desconforto, agitação → maior necessidade de sedação',
+                  'Maior tempo de VM → dificulta desmame',
+                  'Lesão pulmonar (VILI/P-SILI) → barotrauma, volutrauma',
+                  'Disfunção hemodinâmica → alteração PIT, retorno venoso, DC',
+                ],
+              },
+              {
+                title: 'Detecção e Monitorização',
+                bullets: [
+                  'Análise de curvas ventilatórias: pressão × fluxo × volume × tempo',
+                  'Inspeção visual do paciente e do ventilador',
+                  'Pressão esofágica (Pes): medida direta do esforço',
+                  'EAdi (atividade elétrica do diafragma): NAVA',
+                  'Ultrassonografia diafragmática: função e movimento',
+                ],
+              },
+              {
+                title: 'Estratégia Geral de Manejo',
+                bullets: [
+                  '1. Identificação precoce: monitorização contínua + vigilância clínica',
+                  '2. Ajuste de parâmetros: sensibilidade, fluxo, TI, ciclagem',
+                  '3. Tratar causa base: dor, febre, ansiedade, acidose, auto-PEEP',
+                  '4. Mudança de modo se necessário: PAV, NAVA, modos adaptativos',
+                ],
+                highlight: 'Assincronias são tratáveis: identificar tipo → corrigir parâmetros → tratar causa base.',
+              },
+            ],
+          },
+        ],
+      },
     ],
   },
   {
