@@ -3157,13 +3157,6 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             description: 'Curvas VCV com 8 pontos legendados (PEEP, Disparo, Resistivo, SI, Pico, Platô, Ciclagem, ΔP). Modos: Com/Sem Pausa, Stress Index (SI=1, >1, <1) e P1/P2 (Normal vs Pendelluft).',
           },
           {
-            id: 'M2-T13-sim-stress-index',
-            type: 'simulation',
-            title: 'Stress Index — SI > 1, SI = 1, SI < 1',
-            simulationId: 'respiratory-vmi-stress-index',
-            description: 'Simulação interativa: alterne entre SI=1 (linear/ideal), SI>1 (côncava/sobredistensão) e SI<1 (convexa/recrutamento).',
-          },
-          {
             id: 'M2-T13-slides-pcv',
             type: 'slides',
             title: 'PCV — Pressão Controlada',
