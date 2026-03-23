@@ -533,6 +533,20 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
 
         <div className="w-px bg-white/10 mx-1" />
 
+        {/* CMV vs A/C toggle */}
+        <button
+          onClick={() => setTriggerMode(triggerMode === 'cmv' ? 'ac' : 'cmv')}
+          className={`px-3 py-1.5 rounded-md text-xs font-bold transition-all ${
+            triggerMode === 'ac'
+              ? 'bg-cyan-500/30 text-cyan-300 ring-1 ring-cyan-500/50'
+              : 'bg-white/5 text-white/60 hover:bg-white/10'
+          }`}
+        >
+          {triggerMode === 'cmv' ? 'CMV (Tempo)' : 'A/C (Sensibilidade)'}
+        </button>
+
+        <div className="w-px bg-white/10 mx-1" />
+
         <button
           onClick={() => setPaused(!paused)}
           className="px-3 py-1.5 rounded-md text-xs font-bold bg-white/5 text-white/60 hover:bg-white/10"
