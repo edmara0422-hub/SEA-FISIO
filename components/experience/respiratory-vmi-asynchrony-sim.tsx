@@ -277,41 +277,52 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ CICLAGEM PREMATURA ═══
-      // TI_vent < TI_neural — ventilador cicla ANTES do paciente terminar de inspirar
-      // Na curva: fluxo expiratório começa, mas paciente puxa de volta (esforço residual no fluxo)
-      // Volume menor que esperado
+      // PSV — TI_vent < TI_neural — ventilador cicla ANTES do paciente terminar
+      // Após ciclagem: fluxo vai negativo MAS volta positivo (paciente ainda inspira)
+      // Pressão cai ABAIXO do PEEP (esforço inspiratório continua)
+      // Ref Xlung: PSV com Pmus ~7 cmH₂O, fluxo com "notch" positivo pós-ciclagem
       case 'premature': {
         if (cycleNum === 1 || cycleNum === 3) {
-          const shortTi = ti * 0.5  // TI muito curto
+          // PSV com ciclagem precoce
+          const psvP = 16                    // pressão suporte
+          const shortTi = ti * 0.55          // TI encurtado (ventilador cicla cedo)
           const longTe = cycleSec - shortTi
-          const vcReduced = vc * 0.4  // volume reduzido pela ciclagem precoce
+          const tauP = 0.3
+          const peakFP = (psvP / 10) * 60
 
           if (ph < shortTi) {
-            const frac = ph / shortTi
+            // Inspiração PSV normal (desacelerante)
             const rF = Math.min(ph / 0.06, 1)
             const rs = smooth(rF)
             return {
-              P: peep + (vcReduced / 40) * frac + 8 * (flowPeak / 60) * rs,
-              F: flowPeak * rs,
-              V: vcReduced * frac,
+              P: peep + psvP * rs,
+              F: peakFP * rs * Math.exp(-Math.max(0, ph - 0.06) / tauP),
+              V: psvP * 40 * (1 - Math.exp(-ph / tauP)),
             }
           } else {
+            // Pós-ciclagem — ventilador parou mas PACIENTE continua inspirando
             const ef = (ph - shortTi) / longTe
-            const expD = Math.exp(-ef * longTe / 0.5)
+            const vEnd = psvP * 40 * (1 - Math.exp(-shortTi / tauP))
+            const expD = Math.exp(-ef * longTe / 0.45)
 
-            // Paciente CONTINUA tentando inspirar por ~0.5s após ciclagem
-            // Isso cria uma deflexão no fluxo (volta positivo brevemente) e queda na pressão
-            let patientEffort = 0
+            // Esforço inspiratório residual do paciente (~0.5s após ciclagem)
+            let effort = 0
             if (ph < shortTi + 0.5) {
               const pf = (ph - shortTi) / 0.5
-              patientEffort = Math.sin(pf * Math.PI)
+              effort = Math.sin(pf * Math.PI)
             }
 
-            return {
-              P: peep + (vcReduced / 40) * expD - 3 * patientEffort,  // queda de pressão pelo esforço
-              F: -flowPeak * 0.5 * expD + flowPeak * 0.3 * patientEffort,  // fluxo volta positivo!
-              V: vcReduced * expD + 30 * patientEffort,  // pequeno ganho de volume
-            }
+            // Pressão: cai para PEEP e depois ABAIXO (esforço do paciente puxa)
+            const pDrop = ph - shortTi < 0.08 ? psvP * (1 - (ph - shortTi) / 0.08) : 0
+            const P = peep + pDrop - 6 * effort  // cai abaixo do PEEP!
+
+            // Fluxo: vai negativo (expiratório) MAS volta positivo pelo esforço
+            const F = -peakFP * 0.5 * expD + peakFP * 0.35 * effort
+
+            // Volume: começa a cair mas paciente puxa um pouco mais
+            const V = vEnd * expD + 40 * effort
+
+            return { P, F, V }
           }
         }
         return normalWave(ph)
