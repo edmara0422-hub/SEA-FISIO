@@ -253,7 +253,6 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
         const peakFA = (pcvP / 10) * 60
 
         if (autoPh < autoTi) {
-          const frac = autoPh / autoTi
           const rF = Math.min(autoPh / 0.06, 1)
           const rs = smooth(rF)
           return {
@@ -329,50 +328,57 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ CICLAGEM TARDIA ═══
-      // TI_vent > TI_neural — ventilador continua insuflando, paciente tenta expirar
-      // PSV com fluxo desacelerante — ciclagem em % baixa do pico (ex: 10%)
-      // Na curva: fluxo cai a zero e fica oscilando, pressão sobe acima do set
+      // PCV — TI_vent > TI_neural — ventilador mantém pressão, paciente quer expirar
+      // Fluxo CRUZA ZERO e fica NEGATIVO antes da ciclagem (paciente já expira)
+      // Pressão: SPIKE acima do set no final do TI (paciente empurra contra ventilador)
+      // Ref: tela de ventilador real PCV 21 cmH₂O
       case 'delayed': {
         if (cycleNum === 1 || cycleNum === 3) {
-          const longTi = ti * 1.8  // TI muito longo
+          const pcvSet = 18                  // pressão controlada set
+          const longTi = ti * 1.7            // TI muito longo
           const shortTe = cycleSec - longTi
-          const pcvPressure = 15  // pressão controlada tipo PSV
-
-          const peakF = flowPeak * 1.2
+          const tauD = 0.3
+          const peakFD = (pcvSet / 10) * 60
 
           if (ph < longTi) {
             const frac = ph / longTi
-            const rF = Math.min(ph / 0.08, 1)
+            const rF = Math.min(ph / 0.07, 1)
             const rs = smooth(rF)
 
-            // Fluxo desacelerante (PSV) — cai rápido
-            const flowDecay = peakF * Math.exp(-frac * longTi / 0.3)
+            // Fluxo desacelerante PCV — decai naturalmente
+            const flowBase = peakFD * rs * Math.exp(-Math.max(0, ph - 0.07) / tauD)
 
-            // Paciente tenta EXPIRAR a partir de ~50% do TI
-            let expEffort = 0
-            if (frac > 0.45) {
-              const pf = (frac - 0.45) / 0.55
-              expEffort = pf * pf * 0.8  // esforço expiratório crescente
+            // A partir de ~45% do TI: paciente quer expirar → fluxo CRUZA ZERO
+            let expPush = 0
+            if (frac > 0.40) {
+              const pf = (frac - 0.40) / 0.60
+              expPush = pf * pf  // esforço expiratório crescente
             }
 
-            // Fluxo: cai e pode ficar negativo quando paciente tenta expirar
-            const F = flowDecay * rs - peakF * expEffort
+            // Fluxo: decai e fica NEGATIVO (paciente expirando contra pressão positiva!)
+            const F = flowBase - peakFD * 0.7 * expPush
 
-            // Pressão: mantida pelo ventilador mas com spike pela luta do paciente
-            const P = peep + pcvPressure * rs + 4 * expEffort
+            // Pressão: set + SPIKE no final (paciente empurra → pressão sobe ACIMA do set)
+            const P = peep + pcvSet * rs + 5 * expPush
 
-            // Volume: sobe rápido e depois platô/leve queda
-            const V = vc * (1 - Math.exp(-frac * longTi / 0.35)) - vc * 0.1 * expEffort
+            // Volume: sobe rápido, platô, depois começa a CAIR (paciente expirando)
+            const vNatural = pcvSet * 40 * (1 - Math.exp(-ph / tauD))
+            const V = vNatural - vNatural * 0.15 * expPush
 
             return { P, F, V }
           } else {
-            // Expiração rápida (finalmente cicla)
+            // Expiração: finalmente cicla — fluxo expiratório alto e rápido
             const ef = (ph - longTi) / shortTe
+            const vEnd = pcvSet * 40 * (1 - Math.exp(-longTi / tauD)) * 0.85
             const expD = Math.exp(-ef * shortTe / 0.3)
+
+            // Pressão cai rapidamente para PEEP
+            const pDrop = ph - longTi < 0.07 ? (pcvSet + 5) * (1 - (ph - longTi) / 0.07) : 0
+
             return {
-              P: peep + pcvPressure * Math.max(0, 1 - ((ph - longTi) / 0.08)),
-              F: -peakF * 0.8 * expD,
-              V: vc * 0.9 * expD,
+              P: peep + pDrop,
+              F: -peakFD * 0.9 * expD,        // expiratório forte
+              V: vEnd * expD,
             }
           }
         }
