@@ -386,39 +386,44 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ FLUXO INSUFICIENTE (Flow Starvation) ═══
-      // VCV com fluxo constante (onda quadrada) mas BAIXO DEMAIS para a demanda
-      // ASSINATURA: concavidade (scooping) na curva de PRESSÃO durante inspiração
-      // A pressão sobe, depois CAI no meio (paciente puxa), e sobe novamente no final
+      // VCV — fluxo constante (onda quadrada) BAIXO DEMAIS para a demanda
+      // ASSINATURA PATOGNOMÔNICA: concavidade (scooping) na curva de PRESSÃO
+      // Pressão: sobe no início → CAI no meio (paciente puxa) → sobe no final
+      // Fluxo: constante (square wave) — não muda, é o ventilador entregando fixo
+      // Volume: rampa linear normal (VCV entrega o VC programado)
+      // Ref Xlung: setas vermelhas apontam para a concavidade na pressão
       case 'flowStarve': {
-        const lowFlow = 30  // fluxo baixo
+        const lowFlow = 30  // fluxo baixo demais
 
-        // TI mais longo porque fluxo é baixo (TI = VC/Flow)
-        const tiLong = (vc / 1000) / (lowFlow / 60)
-        const teLong = cycleSec - tiLong
+        // TI = VC/Flow (VCV: volume/fluxo determina o tempo)
+        const tiFS = Math.min((vc / 1000) / (lowFlow / 60), cycleSec * 0.55)
+        const teFS = cycleSec - tiFS
 
-        if (ph < tiLong) {
-          const frac = ph / tiLong
-          const rF = Math.min(ph / 0.08, 1)
+        if (ph < tiFS) {
+          const frac = ph / tiFS
+          const rF = Math.min(ph / 0.07, 1)
           const rs = smooth(rF)
 
-          // Fluxo: constante (onda quadrada) — é VCV
+          // Fluxo: CONSTANTE (onda quadrada VCV) — não muda!
           const F = lowFlow * rs
 
-          // Volume: rampa linear (VCV normal)
+          // Volume: rampa linear (VCV)
           const V = vc * frac
 
-          // Pressão: CONCAVIDADE — sobe no início, cai no meio, sobe no final
-          // Paciente faz esforço inspiratório vigoroso que "puxa" a pressão para baixo
+          // Pressão: CONCAVIDADE FORTE
+          // Base: elástica (sobe com volume) + resistiva (constante com fluxo)
           const pElastic = (vc / 40) * frac
           const pResistive = 8 * (lowFlow / 60) * rs
-          // Esforço do paciente: máximo no meio da inspiração
-          const demandDip = 6 * Math.sin(frac * Math.PI)  // concavidade forte
+          // Esforço do paciente: pico forte no meio → "puxa" pressão para baixo
+          // Forma de sino centrada no meio da inspiração
+          const demandDip = 8 * Math.sin(frac * Math.PI)  // concavidade pronunciada
           const P = peep + pElastic + pResistive - demandDip
 
           return { P, F, V }
         } else {
-          const ef = (ph - tiLong) / teLong
-          const expD = Math.exp(-ef * teLong / 0.5)
+          // Expiração normal
+          const ef = (ph - tiFS) / teFS
+          const expD = Math.exp(-ef * teFS / 0.5)
           return {
             P: peep + (vc / 40) * expD,
             F: -lowFlow * 0.9 * expD,
@@ -428,36 +433,47 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ FLUXO EXCESSIVO ═══
-      // PCV/PSV com Rise Time muito curto ou pressão muito alta
-      // ASSINATURA: overshoot de pressão no início (pico > set pressure)
-      // Fluxo tem pico muito alto e desacelera bruscamente
+      // PCV/PSV — Rise Time muito curto ou pressão muito alta
+      // ASSINATURA: OVERSHOOT de pressão no início (pico BEM ACIMA do set)
+      // Fluxo: pico altíssimo com desaceleração muito brusca
+      // Volume: sobe rápido (exponencial PCV)
+      // Ref Xlung: spike de pressão no início da inspiração
       case 'flowExcess': {
-        const highPressure = 22  // pressão alta
-        const peakF = 75  // fluxo pico muito alto
+        const setP = 20          // pressão set
+        const overshootP = 10    // overshoot de 10 cmH₂O acima do set!
+        const peakFE = 80        // fluxo pico muito alto
+        const tauE = 0.25        // desaceleração rápida
 
         if (ph < ti) {
           const frac = ph / ti
-          const rF = Math.min(ph / 0.03, 1)  // rise time MUITO curto
+          const rF = Math.min(ph / 0.03, 1)  // rise time MUITO curto (30ms)
           const rs = smooth(rF)
 
-          // Pressão: OVERSHOOT no início, depois estabiliza
-          const overshoot = frac < 0.12 ? 8 * Math.sin((frac / 0.12) * Math.PI) : 0
-          const P = peep + highPressure * rs + overshoot
+          // Pressão: rise rápido + OVERSHOOT + estabiliza no set
+          // Overshoot: pico rápido que decai exponencialmente para o set
+          const overshoot = overshootP * Math.exp(-Math.max(0, ph - 0.03) / 0.08)
+          const P = peep + setP * rs + (ph > 0.03 ? overshoot : overshootP * rs)
 
-          // Fluxo: pico altíssimo com desaceleração brusca (PCV)
-          const F = peakF * rs * Math.exp(-Math.max(0, frac - 0.05) * ti / 0.25)
+          // Fluxo: pico ALTÍSSIMO com desaceleração brusca
+          const F = peakFE * rs * Math.exp(-Math.max(0, ph - 0.03) / tauE)
 
-          // Volume: exponencial (PCV)
-          const V = vc * 1.1 * (1 - Math.exp(-frac * ti / 0.3))
+          // Volume: exponencial rápido (PCV com alta pressão)
+          const V = setP * 40 * (1 - Math.exp(-ph / tauE))
 
           return { P, F, V }
         } else {
+          // Expiração
           const ef = (ph - ti) / te
+          const vEnd = setP * 40 * (1 - Math.exp(-ti / tauE))
           const expD = Math.exp(-ef * te / 0.4)
+
+          // Pressão cai rápido de set+overshoot para PEEP
+          const pDrop = ph - ti < 0.06 ? setP * (1 - (ph - ti) / 0.06) : 0
+
           return {
-            P: peep + highPressure * Math.max(0, 1 - ((ph - ti) / 0.06)),
-            F: -peakF * 0.6 * expD,
-            V: vc * 1.1 * (1 - Math.exp(-1 * ti / 0.3)) * expD,
+            P: peep + pDrop,
+            F: -peakFE * 0.65 * expD,
+            V: vEnd * expD,
           }
         }
       }
