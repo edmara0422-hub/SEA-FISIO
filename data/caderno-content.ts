@@ -3150,6 +3150,13 @@ export const CADERNO_CONTENT: CadernoModuleContent[] = [
             ],
           },
           {
+            id: 'M2-T13-sim-vcv-analysis',
+            type: 'simulation',
+            title: 'VCV Análise Gráfica Completa — Pressão, Fluxo e Volume',
+            simulationId: 'respiratory-vmi-vcv-analysis',
+            description: 'Curvas VCV com 8 pontos legendados (PEEP, Disparo, Resistivo, SI, Pico, Platô, Ciclagem, ΔP). Modos: Com/Sem Pausa, Stress Index (SI=1, >1, <1) e P1/P2 (Normal vs Pendelluft).',
+          },
+          {
             id: 'M2-T13-sim-stress-index',
             type: 'simulation',
             title: 'Stress Index — SI > 1, SI = 1, SI < 1',
