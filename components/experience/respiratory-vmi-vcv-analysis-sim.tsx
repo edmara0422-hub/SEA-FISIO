@@ -115,20 +115,20 @@ export function RespiratoryVmiVcvAnalysisSim({ className }: { className?: string
         P = peep + (pPeak - peep) * frac
       }
 
-    } else if (ph < tInsp + tPause) {
+    } else if (effPh >= 0 && effPh < tInsp + tPause) {
       // INSPIRATORY PAUSE PHASE
       F = 0
       V = vcTarget
 
       if (viewMode === 'p1p2') {
-        const pauseFr = (ph - tInsp) / Math.max(tPause, 0.01)
+        const pauseFr = (effPh - tInsp) / Math.max(tPause, 0.01)
         const p1 = pPlateau + (p1p2Mode === 'pendelluft' ? 4 : 1)
         const p2 = pPlateau
         // P1 decays to P2
         P = p2 + (p1 - p2) * Math.exp(-pauseFr * 6)
       } else {
         // Immediate drop from Ppeak to Pplateau
-        const pauseFr = (ph - tInsp) / Math.max(tPause, 0.01)
+        const pauseFr = (effPh - tInsp) / Math.max(tPause, 0.01)
         const dropDur = 0.15
         if (pauseFr < dropDur) {
           P = pPeak - (pPeak - pPlateau) * (pauseFr / dropDur)
