@@ -235,35 +235,43 @@ export function RespiratoryVmiAsynchronySim({ className, fixedType }: { classNam
       }
 
       // ═══ AUTODISPARO ═══
-      // Ventilador dispara REPETIDAMENTE sem esforço do paciente
-      // Vários disparos em sequência rápida — FR muito acima do programado
+      // Ventilador dispara ciclos COMPLETOS sem esforço do paciente
+      // FR muito acima do programado — ciclos normais mas em excesso
       // Causas: sensibilidade excessiva, vazamento, água no circuito, oscilações cardíacas
+      // Ref Xlung: ciclos cheios com volumes/pressões normais, timing irregular
       case 'auto': {
-        // Subdivide o ciclo em mini-ciclos rápidos (3 disparos por ciclo normal)
-        const nAuto = 3
-        const miniCycle = cycleSec / nAuto
-        const miniTi = miniCycle * 0.35
-        const miniTe = miniCycle - miniTi
-        const miniPh = ((ph % miniCycle) + miniCycle) % miniCycle
-        const miniVc = vc * 0.35  // volumes menores porque cicla rápido
+        // FR efetiva ~2.5x o normal (ciclos completos mais rápidos)
+        const autoFactor = 2.5
+        const autoCycle = cycleSec / autoFactor
+        const autoTi = autoCycle * 0.32
+        const autoTe = autoCycle - autoTi
+        const autoPh = ((ph % autoCycle) + autoCycle) % autoCycle
 
-        if (miniPh < miniTi) {
-          const frac = miniPh / miniTi
-          const rF = Math.min(miniPh / 0.05, 1)
+        // PCV-style (pressão constante, fluxo desacelerante)
+        const pcvP = 15
+        const tauA = 0.3
+        const peakFA = (pcvP / 10) * 60
+
+        if (autoPh < autoTi) {
+          const frac = autoPh / autoTi
+          const rF = Math.min(autoPh / 0.06, 1)
           const rs = smooth(rF)
           return {
-            P: peep + (miniVc / 40) * frac + 8 * (flowPeak * 0.6 / 60) * rs,
-            F: flowPeak * 0.6 * rs,
-            V: miniVc * frac,
+            P: peep + pcvP * rs,
+            F: peakFA * rs * Math.exp(-Math.max(0, autoPh - 0.06) / tauA),
+            V: pcvP * 40 * (1 - Math.exp(-autoPh / tauA)),
           }
         } else {
-          const ef = (miniPh - miniTi) / miniTe
-          const expD = Math.exp(-ef * miniTe / 0.3)
-          const cardiac = 0.5 * Math.sin(ef * miniTe * Math.PI * 4)
+          const ef = (autoPh - autoTi) / autoTe
+          const vEnd = pcvP * 40 * (1 - Math.exp(-autoTi / tauA))
+          const expD = Math.exp(-ef * autoTe / 0.35)
+          // Oscilações cardíacas/ruído na baseline expiratória (causa do autodisparo)
+          const noise = 0.6 * Math.sin(ef * autoTe * Math.PI * 5) + 0.3 * Math.sin(ef * autoTe * Math.PI * 8.3)
+          const P = peep + (autoPh - autoTi < 0.06 ? pcvP * (1 - (autoPh - autoTi) / 0.06) : 0)
           return {
-            P: peep + (miniVc / 40) * expD + cardiac,
-            F: -flowPeak * 0.4 * expD + cardiac * 1.5,
-            V: miniVc * expD,
+            P: P + noise,
+            F: -peakFA * 0.55 * expD + noise * 2,
+            V: vEnd * expD,
           }
         }
       }
