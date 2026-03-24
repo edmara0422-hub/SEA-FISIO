@@ -14,7 +14,7 @@ export function TopBarSEA() {
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="sea-dark-glass mx-auto flex h-12 max-w-5xl items-center justify-between gap-3 rounded-[1.4rem] px-3 md:px-5">
+      <div className="sea-dark-glass mx-auto flex h-12 max-w-2xl items-center justify-between gap-3 rounded-[1.4rem] px-3 md:px-5">
         <div className="flex items-center gap-3">
           <div
             className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.7rem] border border-white/16"

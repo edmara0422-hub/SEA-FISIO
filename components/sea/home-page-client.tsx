@@ -21,7 +21,7 @@ export default function HomePageClient() {
       <TopBarSEA />
 
       <main className="relative z-10 px-4 pb-32 pt-20 md:px-8 md:pt-24">
-        <div className="mx-auto max-w-5xl space-y-3">
+        <div className="mx-auto max-w-2xl space-y-3">
           <BusinessClock variant="hero" showGreeting />
           <div className="pt-3">
           <SimulationsGrid />
