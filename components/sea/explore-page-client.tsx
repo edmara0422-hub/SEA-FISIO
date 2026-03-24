@@ -90,7 +90,7 @@ function Carousel3D() {
       <div
         ref={containerRef}
         className="relative select-none"
-        style={{ perspective: '1100px', perspectiveOrigin: '50% 45%', height: 'clamp(300px, 50vh, 520px)' }}
+        style={{ perspective: '1100px', perspectiveOrigin: '50% 45%', height: 'clamp(240px, 40vh, 380px)' }}
       >
         {CARDS.map((card, i) => {
           const offset = i - active
