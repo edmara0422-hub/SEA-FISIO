@@ -115,7 +115,7 @@ function Carousel3D() {
               animate={{
                 rotateY: isActive ? 0 : isRight ? 44 : -44,
                 x: isActive ? 0 : isRight ? '58%' : '-58%',
-                z: isActive ? 60 : -40,
+                z: isActive ? 0 : -40,
                 scale: isActive ? 1 : 0.82,
                 opacity: isActive ? 1 : 0.46,
               }}
