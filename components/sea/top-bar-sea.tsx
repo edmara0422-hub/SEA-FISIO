@@ -9,23 +9,23 @@ export function TopBarSEA() {
 
   return (
     <motion.header
-      className="fixed left-0 right-0 top-0 z-40 px-3 pt-3 md:px-6"
+      className="fixed left-0 right-0 top-0 z-40 px-2.5 pt-2.5 md:px-8"
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
-      <div className="sea-dark-glass mx-auto flex h-[4.8rem] max-w-7xl items-center justify-between gap-4 rounded-[1.9rem] px-4 md:px-6">
-        <div className="flex items-center gap-4">
+      <div className="sea-dark-glass mx-auto flex h-12 max-w-5xl items-center justify-between gap-3 rounded-[1.4rem] px-3 md:px-5">
+        <div className="flex items-center gap-3">
           <div
-            className="flex h-11 w-11 shrink-0 items-center justify-center rounded-[1.05rem] border border-white/16"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.7rem] border border-white/16"
             style={{
               background: shellBackground,
               boxShadow:
-                'inset 0 1px 0 rgba(255,255,255,0.12), 0 16px 32px rgba(0,0,0,0.38)',
+                'inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 20px rgba(0,0,0,0.38)',
             }}
           >
             <span
-              className="metal-text text-[0.8rem] font-semibold tracking-[0.32em]"
+              className="metal-text text-[0.6rem] font-semibold tracking-[0.32em]"
               style={{
                 fontFamily: 'Poppins, sans-serif',
                 paddingLeft: '0.32em',
@@ -36,35 +36,29 @@ export function TopBarSEA() {
             </span>
           </div>
 
-          <div>
-            <p
-              className="metal-text text-[10px] font-semibold uppercase tracking-[0.14em] text-white/74 md:text-[11px]"
-              style={{ fontFamily: 'Poppins, sans-serif' }}
-            >
-              Sistema de Estudo Avancado
-            </p>
-          </div>
+          <p
+            className="metal-text text-[9px] font-semibold uppercase tracking-[0.14em] text-white/74 md:text-[10px]"
+            style={{ fontFamily: 'Poppins, sans-serif' }}
+          >
+            Sistema de Estudo Avancado
+          </p>
         </div>
 
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 items-center gap-1.5">
           <button
             aria-label="Notificacoes"
-            className="flex h-11 w-11 items-center justify-center rounded-[1rem] border border-white/12 text-white/70 transition hover:text-white"
-            style={{
-              background: shellBackground,
-            }}
+            className="flex h-8 w-8 items-center justify-center rounded-[0.7rem] border border-white/12 text-white/70 transition hover:text-white"
+            style={{ background: shellBackground }}
           >
-            <Bell className="h-4 w-4" />
+            <Bell className="h-3.5 w-3.5" />
           </button>
 
           <button
             aria-label="Perfil"
-            className="flex h-11 w-11 items-center justify-center rounded-[1rem] border border-white/12 text-white/70 transition hover:text-white"
-            style={{
-              background: shellBackground,
-            }}
+            className="flex h-8 w-8 items-center justify-center rounded-[0.7rem] border border-white/12 text-white/70 transition hover:text-white"
+            style={{ background: shellBackground }}
           >
-            <User className="h-4 w-4" />
+            <User className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>

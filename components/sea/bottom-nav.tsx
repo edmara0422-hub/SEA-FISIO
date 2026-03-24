@@ -24,7 +24,7 @@ export function BottomNav({
   return (
     <motion.nav
       data-sea-bottom-nav="true"
-      className="fixed bottom-5 left-1/2 z-50 w-[min(32rem,calc(100vw-1.25rem))] -translate-x-1/2 px-2.5 md:px-8"
+      className="fixed bottom-5 left-0 right-0 z-50 px-2.5 md:px-8"
       initial={{ y: 70, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
