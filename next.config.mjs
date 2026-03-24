@@ -34,6 +34,22 @@ const nextConfig = {
     'yjs',
   ],
 
+  webpack(config) {
+    config.optimization.splitChunks = {
+      ...config.optimization.splitChunks,
+      cacheGroups: {
+        ...config.optimization.splitChunks?.cacheGroups,
+        threejs: {
+          test: /[\\/]node_modules[\\/](three|@react-three)[\\/]/,
+          name: 'three-vendor',
+          chunks: 'all',
+          priority: 20,
+        },
+      },
+    }
+    return config
+  },
+
   experimental: {
     // Tree-shake large UI packages — only import what's used
     optimizePackageImports: [

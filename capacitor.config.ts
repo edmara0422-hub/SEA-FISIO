@@ -30,7 +30,7 @@ const config: CapacitorConfig = {
   ios: {
     contentInset: 'automatic',
     preferredContentMode: 'mobile',
-    scheme: 'SEA Fisio',
+    // scheme removido — o default 'capacitor' evita o limite de 20MB do WKURLSchemeHandler custom
     allowsLinkPreview: false,
     scrollEnabled: true,
   },

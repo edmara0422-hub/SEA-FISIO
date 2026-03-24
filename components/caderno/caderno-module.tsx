@@ -4,11 +4,11 @@ import { useState, useEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Sparkles, Clock, ChevronDown, Brain } from 'lucide-react'
-import { CADERNO_CONTENT } from '@/data/caderno-content'
+import { loadModuleContent } from '@/data/caderno-content-loader'
 import { useCadernoStore } from '@/lib/stores/cadernoStore'
 import { CadernoBlock } from '@/components/caderno/caderno-block'
 import { StudySidebar } from '@/components/caderno/study-sidebar'
-import type { TutorMessage } from '@/types/caderno'
+import type { CadernoModuleContent, TutorMessage } from '@/types/caderno'
 
 type SidebarTool = 'summary' | 'tutor' | 'review' | 'notes' | 'performance'
 
@@ -21,7 +21,16 @@ const MODULE_NAMES: Record<string, string> = {
 }
 
 export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
-  const module = CADERNO_CONTENT.find((m) => m.moduleId === moduleId)
+  const [module, setModule] = useState<CadernoModuleContent | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
+
+  useEffect(() => {
+    setIsLoading(true)
+    loadModuleContent(moduleId).then((content) => {
+      setModule(content)
+      setIsLoading(false)
+    })
+  }, [moduleId])
 
   const [openTopicId, setOpenTopicId]               = useState<string | null>(null)
   const [activeTopicId, setActiveTopicId]         = useState<string>('')
@@ -60,6 +69,7 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
     }
   }, [])
 
+  if (isLoading) return <SkeletonDocument />
   if (!module) return null
 
   const resolvedTopicId = activeTopicId || module.topics[0]?.id || ''

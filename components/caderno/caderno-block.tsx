@@ -1,97 +1,27 @@
 'use client'
 
 import { useRef, useState, useEffect, useCallback } from 'react'
-import dynamic from 'next/dynamic'
 import { motion } from 'framer-motion'
 import { Play, FileText, Cpu, Paperclip, ListChecks, ChevronLeft, ChevronRight, Layers } from 'lucide-react'
 import type { ContentBlock } from '@/types/caderno'
 
-const NeuroPumpSim = dynamic(() => import('@/components/experience/neuro-pump-sim').then(m => m.NeuroPumpSim), { ssr: false })
-const NeuroActionPotentialSim = dynamic(() => import('@/components/experience/neuro-action-potential-sim').then(m => m.NeuroActionPotentialSim), { ssr: false })
-const NeuroTubeSim = dynamic(() => import('@/components/experience/neuro-tube-sim').then(m => m.NeuroTubeSim), { ssr: false })
-const NeuroSynapseTimelineSim = dynamic(() => import('@/components/experience/neuro-synapse-timeline-sim').then(m => m.NeuroSynapseTimelineSim), { ssr: false })
-const NeuroNeuronAnatomySim = dynamic(() => import('@/components/experience/neuro-neuron-anatomy-sim').then(m => m.NeuroNeuronAnatomySim), { ssr: false })
-const NeuroGliaEcosystemSim = dynamic(() => import('@/components/experience/neuro-glia-ecosystem-sim').then(m => m.NeuroGliaEcosystemSim), { ssr: false })
-const NeuroAxonTransportSim = dynamic(() => import('@/components/experience/neuro-axon-transport-sim').then(m => m.NeuroAxonTransportSim), { ssr: false })
-const NeuroSaltatoryConductionSim = dynamic(() => import('@/components/experience/neuro-saltatory-conduction-sim').then(m => m.NeuroSaltatoryConductionSim), { ssr: false })
-const NeuroNeuronTypesSim = dynamic(() => import('@/components/experience/neuro-neuron-types-sim').then(m => m.NeuroNeuronTypesSim), { ssr: false })
-const NeuroMetabolicChainSim = dynamic(() => import('@/components/experience/neuro-metabolic-chain-sim').then(m => m.NeuroMetabolicChainSim), { ssr: false })
-const NeuroBHESim = dynamic(() => import('@/components/experience/neuro-bhe-sim').then(m => m.NeuroBHESim), { ssr: false })
-const NeuroGliaSupportSim = dynamic(() => import('@/components/experience/neuro-glia-support-sim').then(m => m.NeuroGliaSupportSim), { ssr: false })
-const RespiratorySystemSim = dynamic(() => import('@/components/experience/respiratory-system-sim').then(m => m.RespiratorySystemSim), { ssr: false })
-const RespiratoryGasExchangeSim = dynamic(() => import('@/components/experience/respiratory-gas-exchange-sim').then(m => m.RespiratoryGasExchangeSim), { ssr: false })
-const RespiratoryDefenseSim = dynamic(() => import('@/components/experience/respiratory-defense-sim').then(m => m.RespiratoryDefenseSim), { ssr: false })
-const RespiratoryMembraneSim = dynamic(() => import('@/components/experience/respiratory-membrane-sim').then(m => m.RespiratoryMembraneSim), { ssr: false })
-const RespiratoryCoughSim = dynamic(() => import('@/components/experience/respiratory-cough-sim').then(m => m.RespiratoryCoughSim), { ssr: false })
-const RespiratoryVentilationSim = dynamic(() => import('@/components/experience/respiratory-ventilation-sim').then(m => m.RespiratoryVentilationSim), { ssr: false })
-const RespiratoryOxyHbCurveSim = dynamic(() => import('@/components/experience/respiratory-oxyhb-curve-sim').then(m => m.RespiratoryOxyHbCurveSim), { ssr: false })
-const RespiratoryControlSim = dynamic(() => import('@/components/experience/respiratory-control-sim').then(m => m.RespiratoryControlSim), { ssr: false })
-const RespiratoryVolumesSim = dynamic(() => import('@/components/experience/respiratory-volumes-sim').then(m => m.RespiratoryVolumesSim), { ssr: false })
-const RespiratoryOxytherapySim = dynamic(() => import('@/components/experience/respiratory-oxytherapy-sim').then(m => m.RespiratoryOxytherapySim), { ssr: false })
-const RespiratorySpirometrySim = dynamic(() => import('@/components/experience/respiratory-spirometry-sim').then(m => m.RespiratorySpirometrySim), { ssr: false })
-const RespiratoryVniModesSim = dynamic(() => import('@/components/experience/respiratory-vni-modes-sim').then(m => m.RespiratoryVniModesSim), { ssr: false })
-const RespiratoryVmiVentilatorSim = dynamic(() => import('@/components/experience/respiratory-vmi-ventilator-sim').then(m => m.RespiratoryVmiVentilatorSim), { ssr: false })
-const RespiratoryVmiPeepSim = dynamic(() => import('@/components/experience/respiratory-vmi-peep-sim').then(m => m.RespiratoryVmiPeepSim), { ssr: false })
-const RespiratoryVmiMechanicsSim = dynamic(() => import('@/components/experience/respiratory-vmi-mechanics-sim').then(m => m.RespiratoryVmiMechanicsSim), { ssr: false })
-const RespiratoryVmiAsynchronySim = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.RespiratoryVmiAsynchronySim), { ssr: false })
-const AsyncIneffectiveSim = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncIneffectiveSim), { ssr: false })
-const AsyncDoubleSim      = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncDoubleSim), { ssr: false })
-const AsyncReverseSim     = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncReverseSim), { ssr: false })
-const AsyncAutoSim        = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncAutoSim), { ssr: false })
-const AsyncPrematureSim   = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncPrematureSim), { ssr: false })
-const AsyncDelayedSim     = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncDelayedSim), { ssr: false })
-const AsyncFlowStarveSim  = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncFlowStarveSim), { ssr: false })
-const AsyncFlowExcessSim  = dynamic(() => import('@/components/experience/respiratory-vmi-asynchrony-sim').then(m => m.AsyncFlowExcessSim), { ssr: false })
-const RespiratoryVmiStressIndexSim = dynamic(() => import('@/components/experience/respiratory-vmi-stress-index-sim').then(m => m.RespiratoryVmiStressIndexSim), { ssr: false })
-const RespiratoryVmiPsvCyclingSim = dynamic(() => import('@/components/experience/respiratory-vmi-psv-cycling-sim').then(m => m.RespiratoryVmiPsvCyclingSim), { ssr: false })
-const RespiratoryVmiVcvAnalysisSim = dynamic(() => import('@/components/experience/respiratory-vmi-vcv-analysis-sim').then(m => m.RespiratoryVmiVcvAnalysisSim), { ssr: false })
-const RespiratoryVmiPcvAnalysisSim = dynamic(() => import('@/components/experience/respiratory-vmi-pcv-analysis-sim').then(m => m.RespiratoryVmiPcvAnalysisSim), { ssr: false })
-const RespiratoryVmiPsvAnalysisSim = dynamic(() => import('@/components/experience/respiratory-vmi-psv-analysis-sim').then(m => m.RespiratoryVmiPsvAnalysisSim), { ssr: false })
-const RespiratoryVmiLoopsSim = dynamic(() => import('@/components/experience/respiratory-vmi-loops-sim').then(m => m.RespiratoryVmiLoopsSim), { ssr: false })
+// Lazy-load simulation registries by area — only the relevant area is fetched
+type SimComponent = React.ComponentType<{ className?: string }>
+const simCache = new Map<string, SimComponent | null>()
 
-const SIM_REGISTRY: Record<string, React.ComponentType<{ className?: string }>> = {
-  'neuro-pump': NeuroPumpSim,
-  'neuro-action-potential': NeuroActionPotentialSim,
-  'neuro-tube': NeuroTubeSim,
-  'neuro-synapse-timeline': NeuroSynapseTimelineSim,
-  'neuro-neuron-anatomy': NeuroNeuronAnatomySim,
-  'neuro-glia-ecosystem': NeuroGliaEcosystemSim,
-  'neuro-axon-transport': NeuroAxonTransportSim,
-  'neuro-saltatory-conduction': NeuroSaltatoryConductionSim,
-  'neuro-neuron-types': NeuroNeuronTypesSim,
-  'neuro-metabolic-chain': NeuroMetabolicChainSim,
-  'neuro-bhe': NeuroBHESim,
-  'neuro-glia-support': NeuroGliaSupportSim,
-  'respiratory-system': RespiratorySystemSim,
-  'respiratory-gas-exchange': RespiratoryGasExchangeSim,
-  'respiratory-defense': RespiratoryDefenseSim,
-  'respiratory-membrane': RespiratoryMembraneSim,
-  'respiratory-cough': RespiratoryCoughSim,
-  'respiratory-ventilation': RespiratoryVentilationSim,
-  'respiratory-oxyhb-curve': RespiratoryOxyHbCurveSim,
-  'respiratory-control': RespiratoryControlSim,
-  'respiratory-volumes': RespiratoryVolumesSim,
-  'respiratory-oxytherapy': RespiratoryOxytherapySim,
-  'respiratory-spirometry': RespiratorySpirometrySim,
-  'respiratory-vni-modes': RespiratoryVniModesSim,
-  'respiratory-vmi-ventilator': RespiratoryVmiVentilatorSim,
-  'respiratory-vmi-peep': RespiratoryVmiPeepSim,
-  'respiratory-vmi-mechanics': RespiratoryVmiMechanicsSim,
-  'respiratory-vmi-asynchrony': RespiratoryVmiAsynchronySim,
-  'async-ineffective': AsyncIneffectiveSim,
-  'async-double': AsyncDoubleSim,
-  'async-reverse': AsyncReverseSim,
-  'async-auto': AsyncAutoSim,
-  'async-premature': AsyncPrematureSim,
-  'async-delayed': AsyncDelayedSim,
-  'async-flow-starve': AsyncFlowStarveSim,
-  'async-flow-excess': AsyncFlowExcessSim,
-  'respiratory-vmi-stress-index': RespiratoryVmiStressIndexSim,
-  'respiratory-vmi-psv-cycling': RespiratoryVmiPsvCyclingSim,
-  'respiratory-vmi-vcv-analysis': RespiratoryVmiVcvAnalysisSim,
-  'respiratory-vmi-pcv-analysis': RespiratoryVmiPcvAnalysisSim,
-  'respiratory-vmi-psv-analysis': RespiratoryVmiPsvAnalysisSim,
-  'respiratory-vmi-loops': RespiratoryVmiLoopsSim,
+async function resolveSimComponent(simId: string): Promise<SimComponent | null> {
+  if (simCache.has(simId)) return simCache.get(simId) ?? null
+
+  let registry: Record<string, SimComponent> | undefined
+  if (simId.startsWith('neuro-')) {
+    registry = (await import('./sim-registry-neuro')).NEURO_SIMS
+  } else if (simId.startsWith('respiratory-') || simId.startsWith('async-')) {
+    registry = (await import('./sim-registry-respiratory')).RESPIRATORY_SIMS
+  }
+
+  const comp = registry?.[simId] ?? null
+  simCache.set(simId, comp)
+  return comp
 }
 
 export function CadernoBlock({ block }: { block: ContentBlock }) {
@@ -216,12 +146,19 @@ function VideoBlock({ block }: { block: Extract<ContentBlock, { type: 'video' }>
 
 function SimulationBlock({ block }: { block: Extract<ContentBlock, { type: 'simulation' }> }) {
   const [open, setOpen] = useState(false)
-  const Comp = SIM_REGISTRY[block.simulationId]
+  const [Comp, setComp] = useState<SimComponent | null>(null)
+  const [resolved, setResolved] = useState(false)
+
+  useEffect(() => {
+    resolveSimComponent(block.simulationId).then((c) => { setComp(() => c); setResolved(true) })
+  }, [block.simulationId])
+
+  const available = resolved && Comp !== null
 
   return (
     <div className="space-y-2">
       <button
-        onClick={() => Comp && setOpen(!open)}
+        onClick={() => available && setOpen(!open)}
         className="flex w-full items-center justify-between gap-3 rounded-[0.9rem] px-4 py-3 transition-colors hover:bg-white/[0.04]"
         style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.08)' }}
       >
@@ -242,12 +179,12 @@ function SimulationBlock({ block }: { block: Extract<ContentBlock, { type: 'simu
         <span
           className="shrink-0 rounded-full px-2.5 py-1 text-[9px] font-semibold uppercase tracking-[0.16em]"
           style={{
-            background: open ? 'rgba(45,212,191,0.10)' : Comp ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.03)',
+            background: open ? 'rgba(45,212,191,0.10)' : available ? 'rgba(255,255,255,0.06)' : 'rgba(255,255,255,0.03)',
             border: `1px solid ${open ? 'rgba(45,212,191,0.20)' : 'rgba(255,255,255,0.10)'}`,
-            color: open ? 'rgba(45,212,191,0.70)' : Comp ? 'rgba(255,255,255,0.50)' : 'rgba(255,255,255,0.25)',
+            color: open ? 'rgba(45,212,191,0.70)' : available ? 'rgba(255,255,255,0.50)' : 'rgba(255,255,255,0.25)',
           }}
         >
-          {open ? 'Fechar' : Comp ? 'Abrir' : 'Em breve'}
+          {open ? 'Fechar' : available ? 'Abrir' : 'Em breve'}
         </span>
       </button>
       {open && Comp && (
