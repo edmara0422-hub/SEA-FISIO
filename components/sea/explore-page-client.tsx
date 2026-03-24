@@ -43,7 +43,7 @@ export default function ExplorePageClient() {
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
-      <main className="relative z-10 px-4 pb-36 pt-0 md:px-8 md:pt-0">
+      <main className="relative z-10 px-4 pb-36 -mt-4 md:px-8 md:-mt-6">
         <div className="mx-auto max-w-2xl space-y-5 md:space-y-10">
           <BusinessClock variant="hero" showGreeting />
           {ready
