@@ -2707,6 +2707,13 @@ export const M2_CONTENT: CadernoModuleContent = {
               },
             ],
           },
+          {
+            id: 'M2-T14-sim-cuff-leak',
+            type: 'simulation',
+            title: 'Simulador Cuff-Leak Test',
+            simulationId: 'respiratory-cuff-leak',
+            description: 'Volume × Tempo com cuff insuflado vs desinsuflado. Teste Negativo (seguro) vs Positivo (risco de estridor).',
+          },
         ],
       },
     ],
