@@ -1,0 +1,1 @@
+(globalThis.TURBOPACK||(globalThis.TURBOPACK=[])).push(["object"==typeof document?document.currentScript:void 0,12737,o=>{"use strict";o.s(["M3_CONTENT",0,{moduleId:"M3",topics:[{id:"M3-T1",title:"Cardio",blocks:[]}]}])}]);
