@@ -2339,7 +2339,14 @@ export const M2_CONTENT: CadernoModuleContent = {
             type: 'simulation',
             title: 'Loops P×V e F×V — Análise Interativa',
             simulationId: 'respiratory-vmi-loops',
-            description: 'Loop P×V (VCV triangular / PCV retangular) com histerese e WOB. Loop F×V (Normal / Restritivo / Obstrutivo) com auto-PEEP.',
+            description: 'Loop P×V com histerese e WOB. Loop F×V (Normal / Restritivo / Obstrutivo) com auto-PEEP.',
+          },
+          {
+            id: 'M2-T13-sim-peep-test',
+            type: 'simulation',
+            title: 'PEEP Test — Limitação de Fluxo Expiratório',
+            simulationId: 'respiratory-peep-test',
+            description: 'Reduza PEEP em 3 cmH₂O: sem limitação (fluxo aumenta) vs com limitação (fluxo não muda)',
           },
           {
             id: 'M2-T13-slides-formulas',
@@ -2364,6 +2371,332 @@ export const M2_CONTENT: CadernoModuleContent = {
                   'TRE (Teste Respiratório Espontâneo): avaliar capacidade de extubação',
                 ],
                 highlight: 'Ventilação protetora: VC 6 mL/kg, Pplatô < 30, ΔP < 15, PEEP individualizada.',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        id: 'M2-T14',
+        title: 'Desmame Ventilatório',
+        blocks: [
+          {
+            id: 'M2-T14-slides-classificacao',
+            type: 'slides',
+            title: 'Classificação dos Tipos de Desmame',
+            slides: [
+              {
+                title: 'O que é Desmame Ventilatório',
+                bullets: [
+                  'Processo de transição da ventilação mecânica para a respiração espontânea',
+                  'Classificado em 3 tipos com base no número de tentativas e tempo necessário',
+                  'Objetivo: retirar o suporte ventilatório o mais rápido e seguro possível',
+                ],
+                highlight: 'O desmame pode representar até 40-50% do tempo total de VM. Abreviá-lo reduz complicações.',
+              },
+              {
+                title: 'Desmame SIMPLES',
+                bullets: [
+                  'Sucesso no 1º TRE (Teste de Respiração Espontânea)',
+                  'Paciente permanece 48h fora da VM sem necessidade de reintubação',
+                  'Prevalência: ~70% dos casos',
+                  'Geralmente não necessitam de preditores complexos',
+                ],
+                highlight: '70% dos pacientes desmamam no primeiro TRE — a busca ativa diária é essencial.',
+              },
+              {
+                title: 'Desmame DIFÍCIL',
+                bullets: [
+                  'Falha no 1º TRE',
+                  'Necessita de até 3 TREs ou ≤ 7 dias após o primeiro TRE',
+                  'Prevalência: ~20% dos casos',
+                  'Requer avaliação cuidadosa das causas da falha',
+                ],
+              },
+              {
+                title: 'Desmame PROLONGADO',
+                bullets: [
+                  'Falha em > 3 TREs consecutivos',
+                  'Ou necessidade de > 7 dias de desmame após o primeiro TRE',
+                  'Prevalência: ~10% dos casos',
+                  'Pior prognóstico, maior morbidade',
+                ],
+                highlight: 'Simples 70% · Difícil 20% · Prolongado 10% — quanto mais prolongado, pior o desfecho.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T14-slides-conceitos',
+            type: 'slides',
+            title: 'Conceitos Fundamentais do Desmame',
+            slides: [
+              {
+                title: 'Busca Ativa Diária',
+                bullets: [
+                  'Triagem DIÁRIA identificando pacientes capazes de realizar o desmame',
+                  'Avaliação sistemática dos critérios de elegibilidade em todos os pacientes ventilados',
+                  'Deve ser realizada ao menos uma vez ao dia',
+                  'Reduz tempo de VM e complicações associadas',
+                ],
+              },
+              {
+                title: 'Despertar Diário',
+                bullets: [
+                  'Interrupção diária da sedação para avaliação do nível de consciência',
+                  'Permite avaliar a capacidade do paciente de manter drive respiratório',
+                  'Avalia proteção de vias aéreas (tosse, deglutição)',
+                  'Associado à busca ativa: SAT (Spontaneous Awakening Trial) + SBT',
+                ],
+                highlight: 'SAT + SBT combinados reduzem tempo de VM e mortalidade.',
+              },
+              {
+                title: 'Sucesso de Desmame vs. Sucesso de Extubação',
+                bullets: [
+                  'Sucesso de Desmame: paciente tolera o TRE (ainda conectado ao ventilador)',
+                  'Sucesso de Extubação: paciente extubado (ou desconectado se TQT) e NÃO reintubado em 48h',
+                  'TOT: prótese endolaríngea retirada com sucesso',
+                  'TQT: tolerou desconexão do ventilador por 48h',
+                ],
+                highlight: 'Sucesso no TRE ≠ sucesso na extubação. A avaliação de via aérea é etapa separada.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T14-slides-elegibilidade',
+            type: 'slides',
+            title: 'Critérios de Elegibilidade para Desmame',
+            slides: [
+              {
+                title: 'Busca Ativa — Critérios Obrigatórios',
+                bullets: [
+                  'O paciente deve atender a TODOS os critérios para ser elegível ao TRE',
+                  'Realizar a busca ativa DIÁRIA incluindo todos os seguintes',
+                  'A ausência de qualquer critério adia o TRE',
+                ],
+                highlight: 'TODOS os critérios devem ser atendidos simultaneamente.',
+              },
+              {
+                title: 'Oxigenação e Hemodinâmica',
+                bullets: [
+                  'Oxigenação adequada: PaO₂ ≥ 60 mmHg, FiO₂ ≤ 0,4 (40%), PEEP ≤ 5-8 cmH₂O',
+                  'Estabilidade hemodinâmica: boa perfusão tecidual',
+                  'Sem ou com doses baixas de vasopressores',
+                  'Ausência de ICC descompensada',
+                  'Ausência de arritmias graves',
+                ],
+              },
+              {
+                title: 'Causa, Drive e Balanço',
+                bullets: [
+                  'Resolução da causa: falência respiratória resolvida ou controlada',
+                  'Drive respiratório: paciente capaz de iniciar esforços inspiratórios espontâneos',
+                  'Balanço hídrico: zerado ou negativo nas últimas 24h',
+                  'Equilíbrio metabólico: ácido-básico e eletrolítico normais',
+                ],
+                highlight: 'Contraindicação relativa: adiar extubação quando houver transporte para exames programado.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T14-slides-tre',
+            type: 'slides',
+            title: 'TRE — Teste de Respiração Espontânea',
+            slides: [
+              {
+                title: 'O que é o TRE?',
+                bullets: [
+                  'Avalia a capacidade do paciente de manter ventilação espontânea adequada',
+                  'Sem o suporte total do ventilador',
+                  'Existem 5 formas principais de realizar o TRE',
+                  'Duração: 30-120 minutos (estudos recentes: 30 min podem ser suficientes)',
+                ],
+              },
+              {
+                title: 'Método 1: Tubo T',
+                bullets: [
+                  'Desconexão total do ventilador',
+                  'Paciente conectado a fonte de O₂ umidificado via TOT ou TQT',
+                  'Simula condição real pós-extubação',
+                  'Desvantagem: sem monitorização contínua, não compensa resistência do TOT',
+                ],
+              },
+              {
+                title: 'Método 2: PSV 5-8 cmH₂O + PEEP 5',
+                bullets: [
+                  'Pressão de suporte mínima — método MAIS UTILIZADO atualmente',
+                  'PS 5-8 cmH₂O compensa resistência do TOT',
+                  'PEEP 5 cmH₂O mantém recrutamento alveolar',
+                  'Monitorização contínua pelo ventilador — mais seguro',
+                ],
+                highlight: 'PSV é o método preferido: compensa o TOT, monitora continuamente e é mais seguro.',
+              },
+              {
+                title: 'Método 3: CPAP + ATC',
+                bullets: [
+                  'ATC = Automatic Tube Compensation',
+                  'Mede pressão no início e final do tubo a cada ciclo',
+                  'Calcula e compensa a resistência automaticamente',
+                  'Mais fisiológico — compensa variações (secreções, posição do TOT)',
+                  'Requer ventiladores modernos com essa tecnologia',
+                ],
+              },
+              {
+                title: 'Método 4: PS 0 + PEEP 5 (CPAP puro)',
+                bullets: [
+                  'PS = 0 (sem suporte pressórico na inspiração)',
+                  'PEEP = 5 cmH₂O mantém recrutamento',
+                  'Mais exigente que PSV (não compensa resistência do TOT)',
+                  'Equivale ao CPAP',
+                ],
+              },
+              {
+                title: 'Método 5: PS 0 + PEEP 0 (ZEEP)',
+                bullets: [
+                  'Teste MAIS EXIGENTE — sem qualquer suporte',
+                  'Apenas Bias Flow (fluxo contínuo)',
+                  'Risco de atelectasia e dessaturação',
+                  'Raramente utilizado',
+                ],
+                highlight: 'Preferir métodos que mantenham ao menos PEEP 5 cmH₂O. ZEEP = maior risco.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T14-slides-criterios-tre',
+            type: 'slides',
+            title: 'Critérios de Sucesso e Falha do TRE',
+            slides: [
+              {
+                title: 'Critérios de SUCESSO do TRE',
+                bullets: [
+                  'FR < 35 ipm',
+                  'SpO₂ > 90%',
+                  'FC < 140 bpm ou variação < 20%',
+                  'PAS 90-180 mmHg',
+                  'Sem sinais de desconforto respiratório',
+                  'Sem sudorese, agitação ou alteração do nível de consciência',
+                ],
+                highlight: 'Manter observação contínua por 30-120 minutos. Sucesso = elegível para extubação.',
+              },
+              {
+                title: 'Critérios de FALHA — Interromper TRE',
+                bullets: [
+                  'FR > 35 ipm por > 5 minutos',
+                  'SpO₂ < 90%',
+                  'FC > 140 bpm ou variação > 20%',
+                  'Arritmias graves',
+                  'PAS > 180 ou < 90 mmHg',
+                  'Sinais de desconforto respiratório',
+                  'Sudorese, agitação, alteração do nível de consciência',
+                ],
+                highlight: 'Na falha: retornar ao suporte anterior, investigar causa e reavaliar em 24h.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T14-slides-estrategias',
+            type: 'slides',
+            title: 'Estratégias para Otimizar o Desmame',
+            slides: [
+              {
+                title: 'Protocolo de Desmame',
+                bullets: [
+                  '1. Busca ativa diária',
+                  '2. Despertar diário (SAT)',
+                  '3. Redução gradual do suporte ventilatório',
+                  '4. TRE quando critérios atingidos',
+                  '5. Extubação se sucesso no TRE',
+                ],
+              },
+              {
+                title: 'Preparo do Paciente',
+                bullets: [
+                  'Fisioterapia respiratória e motora',
+                  'Mobilização precoce',
+                  'Controle hídrico (balanço negativo)',
+                  'Suporte nutricional adequado',
+                  'Manejo da dor',
+                ],
+              },
+              {
+                title: 'Causas Comuns de Falha no Desmame',
+                bullets: [
+                  'Fraqueza muscular respiratória (VIDD — Ventilator-Induced Diaphragmatic Dysfunction)',
+                  'Sobrecarga hídrica',
+                  'Disfunção cardíaca (weaning-induced cardiac failure)',
+                  'Broncoespasmo',
+                  'Secreções excessivas',
+                  'Delirium / agitação',
+                ],
+                highlight: 'Avaliação multidisciplinar: médico, fisio, enfermagem, nutrição, fono.',
+              },
+            ],
+          },
+          {
+            id: 'M2-T14-slides-cuff-leak',
+            type: 'slides',
+            title: 'Cuff-Leak Test — Teste de Vazamento do Balonete',
+            slides: [
+              {
+                title: 'O que é o Cuff-Leak Test?',
+                bullets: [
+                  'Avalia o risco de estridor pós-extubação por edema de laringe',
+                  'Mede a diferença entre volume inspirado e expirado com o cuff desinsuflado',
+                  'Realizado em modo VCV (volume controlado)',
+                ],
+              },
+              {
+                title: 'Como Realizar',
+                bullets: [
+                  '1. Aspirar secreções traqueais e orais',
+                  '2. Ajustar ventilador para VCV',
+                  '3. Com cuff inflado: registrar VCi e VCe (devem ser similares)',
+                  '4. Desinsuflar o cuff',
+                  '5. Registrar VCe durante 6 ciclos (VCe atinge platô após poucos ciclos)',
+                  '6. Se VCe < VCi em > 10% → teste POSITIVO',
+                ],
+              },
+              {
+                title: 'Interpretação',
+                bullets: [
+                  'NEGATIVO (tem vazamento): diferença > 110 mL ou > 10%',
+                  '→ BAIXA possibilidade de estridor pós-extubação',
+                  'POSITIVO (não tem vazamento): diferença < 110 mL ou < 10%',
+                  '→ PODEM desenvolver estridor pós-extubação',
+                ],
+                highlight: 'Sensibilidade 27% · Especificidade 88% · Alta especificidade: reconhece quem NÃO tem obstrução.',
+              },
+              {
+                title: 'Fatores de Risco para Estridor',
+                bullets: [
+                  'Intubação traumática',
+                  'VM > 6 dias',
+                  'Tubo com calibre largo',
+                  'Sexo feminino (pregas vocais mais finas, menos colágeno e ácido hialurônico)',
+                  'Reintubação após extubação não planejada',
+                ],
+              },
+              {
+                title: 'Diferenças Anatômicas — Sexo Feminino',
+                bullets: [
+                  'Pregas vocais mais finas',
+                  'Menor quantidade de colágeno nas pregas vocais',
+                  'Menor quantidade de ácido hialurônico',
+                  'Testosterona nos homens → músculos da laringe mais fortes',
+                  'Colágeno e ácido hialurônico conferem maior resistência nos homens',
+                ],
+                highlight: 'Mulheres têm maior risco de estridor pós-extubação por características anatômicas das pregas vocais.',
+              },
+              {
+                title: 'Limitações e Cuidados',
+                bullets: [
+                  'Baixa sensibilidade (27%) — pode não detectar todos os casos',
+                  'Alta especificidade (88%) — útil para identificar quem NÃO terá estridor',
+                  'Não é obrigatório para todos os pacientes',
+                  'Risco: aspiração de secreção contaminada acima do cuff',
+                  'Cuidado: aspirar secreções ANTES do teste',
+                  'Inalação com adrenalina: recomendada como coadjuvante, baixa evidência',
+                ],
               },
             ],
           },
