@@ -2562,13 +2562,6 @@ export const M2_CONTENT: CadernoModuleContent = {
             ],
           },
           {
-            id: 'M2-T14-sim-tre',
-            type: 'simulation',
-            title: 'Simulador TRE — Curvas de Ventilação em Tempo Real',
-            simulationId: 'respiratory-tre',
-            description: 'Curvas Paw×T, Fluxo×T, Volume×T com sinais vitais. Métodos: PSV, Tubo T, CPAP+ATC, ZEEP. Sucesso vs Falha.',
-          },
-          {
             id: 'M2-T14-slides-criterios-tre',
             type: 'slides',
             title: 'Critérios de Sucesso e Falha do TRE',

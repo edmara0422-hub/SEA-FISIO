@@ -35,6 +35,5 @@ export const RESPIRATORY_SIMS: Record<string, React.ComponentType<{ className?: 
   'respiratory-vmi-psv-analysis': d(() => import('@/components/experience/respiratory-vmi-psv-analysis-sim'), 'RespiratoryVmiPsvAnalysisSim'),
   'respiratory-vmi-loops': d(() => import('@/components/experience/respiratory-vmi-loops-sim'), 'RespiratoryVmiLoopsSim'),
   'respiratory-peep-test': d(() => import('@/components/experience/respiratory-peep-test-sim'), 'RespiratoryPeepTestSim'),
-  'respiratory-tre': d(() => import('@/components/experience/respiratory-tre-sim'), 'RespiratoryTreSim'),
   'respiratory-cuff-leak': d(() => import('@/components/experience/respiratory-cuff-leak-sim'), 'RespiratoryCuffLeakSim'),
 }
