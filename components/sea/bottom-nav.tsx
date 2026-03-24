@@ -17,32 +17,32 @@ export function BottomNav({
   const isExplore = p === '/explore' || p.startsWith('/explore/')
 
   const tabClass = (active: boolean) =>
-    `flex items-center justify-center gap-2 rounded-[1.3rem] px-6 py-4 text-sm font-semibold tracking-[0.16em] transition-colors duration-200 ${
+    `flex items-center justify-center gap-1.5 rounded-[1rem] px-5 py-2.5 text-xs font-semibold tracking-[0.16em] transition-colors duration-200 ${
       active ? 'chrome-active text-[#050505]' : 'text-white/82 hover:text-white'
     }`
 
   return (
     <motion.nav
       data-sea-bottom-nav="true"
-      className="fixed bottom-6 left-1/2 z-50 w-[min(30rem,calc(100vw-1.5rem))] -translate-x-1/2"
+      className="fixed bottom-5 left-1/2 z-50 w-[min(32rem,calc(100vw-1.25rem))] -translate-x-1/2 px-2.5 md:px-8"
       initial={{ y: 70, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
     >
       <div
-        className="grid grid-cols-2 gap-1.5 rounded-[1.85rem] border border-white/16 p-1.5 shadow-[0_24px_48px_rgba(0,0,0,0.36)] backdrop-blur-xl"
+        className="mx-auto grid max-w-5xl grid-cols-2 gap-1 rounded-[1.4rem] border border-white/16 p-1 shadow-[0_24px_48px_rgba(0,0,0,0.36)] backdrop-blur-xl"
         style={{
           background:
             'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
         }}
       >
         <button className={tabClass(isHome)} onClick={() => onSwitch?.('home')}>
-          <Home className="h-4 w-4" />
+          <Home className="h-3.5 w-3.5" />
           <span>HOME</span>
         </button>
 
         <button className={tabClass(isExplore)} onClick={() => onSwitch?.('explorar')}>
-          <Compass className="h-4 w-4" />
+          <Compass className="h-3.5 w-3.5" />
           <span>EXPLORAR</span>
         </button>
       </div>
