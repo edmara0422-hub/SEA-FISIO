@@ -32,114 +32,151 @@ export function RespiratoryVmiLoopsSim({ className }: { className?: string }) {
   const frameRef = useRef(0)
   const progressRef = useRef(0)
 
-  /* ── P×V generator ── */
+  /* ── P×V generator ──
+     Hysteresis: at the SAME volume, pressure is HIGHER during inspiration
+     than during expiration. So the inspiration limb sits to the RIGHT
+     and expiration limb to the LEFT. They meet at (PEEP,0) and (PIP,Vt).
+  */
   const generatePV = useCallback((steps: number) => {
     const pts: { x: number; y: number; phase: 'insp' | 'exp' }[] = []
     const n = Math.floor(steps / 2)
     const peep = 5, vt = 600, pip = 25
 
-    // Inspiration: sigmoid-like curve (lower limb)
+    // Inspiration (lower-right limb): volume 0→Vt
+    // p = PEEP + (PIP-PEEP) * (V/Vt)^0.7  → bows RIGHT (higher P at mid-V)
     for (let i = 0; i <= n; i++) {
       const f = i / n
-      // S-shaped compliance curve
-      const p = peep + (pip - peep) * f
-      const v = vt * (1 - Math.exp(-f * 3.2)) * (0.85 + 0.15 * f)
+      const v = vt * f
+      const p = peep + (pip - peep) * Math.pow(f, 0.7)
       pts.push({ x: p, y: v, phase: 'insp' })
     }
-    // Expiration: returns above inspiration (hysteresis)
+    // Expiration (upper-left limb): volume Vt→0
+    // p = PEEP + (PIP-PEEP) * (V/Vt)^1.4  → bows LEFT (lower P at mid-V)
     for (let i = 0; i <= n; i++) {
-      const f = i / n
-      const p = pip - (pip - peep) * f
-      // Expiration curve sits ABOVE inspiration at same pressure
-      const v = vt * Math.pow(1 - f, 0.55)
+      const f = i / n // 0=top(Vt), 1=bottom(0)
+      const vfrac = 1 - f
+      const v = vt * vfrac
+      const p = peep + (pip - peep) * Math.pow(vfrac, 1.4)
       pts.push({ x: p, y: v, phase: 'exp' })
     }
     return pts
   }, [])
 
-  /* ── F×V generators ── */
-  const generateFV = useCallback((type: 'normal' | 'obstruct' | 'restrict', steps: number) => {
-    const pts: { x: number; y: number; phase: 'insp' | 'exp' }[] = []
-    const n = Math.floor(steps / 2)
+  /* ── Linear interpolation for straight segments (inspiration) ── */
+  const linear = (pts: [number, number][], n: number, phase: 'insp' | 'exp') => {
+    const out: { x: number; y: number; phase: 'insp' | 'exp' }[] = []
+    for (let i = 0; i <= n; i++) {
+      const t = (i / n) * (pts.length - 1)
+      const idx = Math.min(Math.floor(t), pts.length - 2)
+      const f = t - idx
+      const x = pts[idx][0] + (pts[idx + 1][0] - pts[idx][0]) * f
+      const y = pts[idx][1] + (pts[idx + 1][1] - pts[idx][1]) * f
+      out.push({ x, y, phase })
+    }
+    return out
+  }
 
-    const vcUsed = type === 'restrict' ? 300 : type === 'obstruct' ? 450 : 500
-    const flowI = type === 'restrict' ? 40 : 50
-    const flowE = type === 'restrict' ? -80 : type === 'obstruct' ? -18 : -45
-    const autoPeepVol = type === 'obstruct' ? 70 : 0
-
-    // Inspiration: rapid rise then constant (VCV-like square wave)
+  /* ── Exponential decay curve for expiration ── */
+  const expCurve = (vStart: number, vEnd: number, peakFlow: number, n: number, tau: number) => {
+    const out: { x: number; y: number; phase: 'exp' }[] = []
     for (let i = 0; i <= n; i++) {
       const f = i / n
-      const ramp = Math.min(f * 12, 1)
-      const v = autoPeepVol + (vcUsed - autoPeepVol) * f
-      const fl = flowI * ramp * (1 - 0.05 * f) // slight droop
-      pts.push({ x: v, y: fl, phase: 'insp' })
+      const v = vStart + (vEnd - vStart) * f
+      const flow = peakFlow * Math.exp(-f * tau)
+      out.push({ x: v, y: flow, phase: 'exp' as const })
+    }
+    return out
+  }
+
+  const generateFV = useCallback((type: 'normal' | 'obstruct' | 'restrict') => {
+    // Key points: [volume, flow]
+    // Traced from real ventilator images
+
+    if (type === 'normal') {
+      // Inspiration: straight lines (like real ventilator)
+      const insp = linear([
+        [0, 0],        // 1. Disparo
+        [30, 95],      // 2. Pico insp (vertical rise)
+        [600, 35],     // straight descending ramp
+        [650, 12],     // 3. Ciclagem
+        [700, 0],      // crosses zero
+      ], 100, 'insp')
+
+      // Transition: vertical drop to peak exp
+      const drop = linear([
+        [700, 0],      // 4. Volume atingido
+        [685, -70],    // 5. Pico exp (nearly vertical)
+      ], 10, 'exp')
+
+      // Expiration: smooth exponential decay back to origin
+      const exp = expCurve(685, 0, -70, 100, 3.5)
+
+      return [...insp, ...drop, ...exp]
     }
 
-    // Expiration
-    for (let i = 0; i <= n; i++) {
-      const f = i / n
-      const v = vcUsed - (vcUsed - autoPeepVol) * f
+    if (type === 'obstruct') {
+      const insp = linear([
+        [0, 0],
+        [20, 24],
+        [420, 16],     // straight descending ramp
+        [450, 6],
+        [470, 0],
+      ], 100, 'insp')
 
-      let fl: number
-      if (type === 'obstruct') {
-        // Low peak, very slow decay, doesn't reach zero (auto-PEEP)
-        const peak = Math.min(f * 8, 1)
-        const decay = Math.exp(-f * 1.2)
-        fl = flowE * peak * decay
-        // Flow limitation: constant low flow (square root sign)
-        if (f > 0.12) fl = Math.max(fl, flowE * 0.35)
-      } else if (type === 'restrict') {
-        // Very high peak, returns very fast
-        const peak = Math.min(f * 10, 1)
-        fl = flowE * peak * Math.exp(-f * 3.5)
-      } else {
-        // Normal: moderate peak, exponential return to zero
-        const peak = Math.min(f * 8, 1)
-        fl = flowE * peak * Math.exp(-f * 2.5)
-      }
-      pts.push({ x: v, y: fl, phase: 'exp' })
+      // Exp: tiny drop then flat line (flow limitation), doesn't close
+      const drop = linear([[470, 0], [460, -8]], 8, 'exp')
+      // Very slow decay — almost flat
+      const exp = expCurve(460, 60, -8, 100, 0.3) // tau=0.3 = very slow, ends at vol=60 (auto-PEEP)
+
+      return [...insp, ...drop, ...exp]
     }
-    return pts
+
+    // Restrictive: diamond shape
+    const insp = linear([
+      [0, 0],
+      [15, 60],
+      [60, 65],        // peak
+      [150, 25],
+      [200, 0],        // small VC
+    ], 100, 'insp')
+
+    const drop = linear([[200, 0], [190, -95]], 8, 'exp')
+    const exp = expCurve(190, 0, -95, 100, 5) // tau=5 = very fast return (alta elastância)
+
+    return [...insp, ...drop, ...exp]
   }, [])
 
-  /* ── WOB generator (P×V with diagonal reference) ── */
+  /* ── WOB generator (P×V with diagonal reference) ──
+     Same hysteresis principle. WOB = area between curve and compliance diagonal.
+     More bowing = more work.
+     - normal: moderate hysteresis
+     - exp (bronchospasm): expiration bows further LEFT (more exp work)
+     - insp-exp (kinked ETT): both limbs bow further out (more total work)
+  */
   const generateWOB = useCallback((type: 'normal' | 'exp' | 'insp-exp', steps: number) => {
     const pts: { x: number; y: number; phase: 'insp' | 'exp' }[] = []
     const n = Math.floor(steps / 2)
     const peep = 5, vt = 500
+    const pip = type === 'insp-exp' ? 28 : type === 'exp' ? 22 : 20
 
-    let pip: number
-    if (type === 'exp') pip = 22 // bronchospasm: more exp resistance
-    else if (type === 'insp-exp') pip = 28 // kinked ETT: both increased
-    else pip = 20
+    // Inspiration exponents: lower = bows more RIGHT (more insp work)
+    const inspExp = type === 'insp-exp' ? 0.5 : 0.7
+    // Expiration exponents: higher = bows more LEFT (more exp work)
+    const expExp = type === 'exp' ? 2.0 : type === 'insp-exp' ? 1.8 : 1.4
 
+    // Inspiration (right limb)
     for (let i = 0; i <= n; i++) {
       const f = i / n
-      const p = peep + (pip - peep) * f
-      let v: number
-      if (type === 'insp-exp') {
-        // More bowing out on inspiration (increased insp work)
-        v = vt * Math.pow(f, 1.4)
-      } else {
-        v = vt * (1 - Math.exp(-f * 3)) * (0.88 + 0.12 * f)
-      }
+      const v = vt * f
+      const p = peep + (pip - peep) * Math.pow(f, inspExp)
       pts.push({ x: p, y: v, phase: 'insp' })
     }
+    // Expiration (left limb)
     for (let i = 0; i <= n; i++) {
       const f = i / n
-      let v: number, p: number
-      if (type === 'exp') {
-        // Expiratory limb bows outward more (increased exp work / bronchospasm)
-        p = pip - (pip - peep) * f
-        v = vt * Math.pow(1 - f, 0.35)
-      } else if (type === 'insp-exp') {
-        p = pip - (pip - peep) * f
-        v = vt * Math.pow(1 - f, 0.4)
-      } else {
-        p = pip - (pip - peep) * f
-        v = vt * Math.pow(1 - f, 0.55)
-      }
+      const vfrac = 1 - f
+      const v = vt * vfrac
+      const p = peep + (pip - peep) * Math.pow(vfrac, expExp)
       pts.push({ x: p, y: v, phase: 'exp' })
     }
     return pts
@@ -183,8 +220,11 @@ export function RespiratoryVmiLoopsSim({ className }: { className?: string }) {
       xAxis = 'Pressão (cmH₂O)'; yAxis = 'Volume (mL)'
     } else {
       const type = view === 'fv-restrict' ? 'restrict' : view === 'fv-obstruct' ? 'obstruct' : 'normal'
-      pts = generateFV(type, steps)
-      xMin = -30; xMax = 560; yMin = -100; yMax = 70
+      pts = generateFV(type)
+      xMin = 0
+      xMax = type === 'restrict' ? 240 : type === 'obstruct' ? 520 : 800
+      yMin = type === 'restrict' ? -120 : type === 'obstruct' ? -15 : -100
+      yMax = type === 'restrict' ? 80 : type === 'obstruct' ? 30 : 120
       title = view === 'fv-normal' ? 'Loop F × V — Normal' : view === 'fv-restrict' ? 'Loop F × V — Restritivo' : 'Loop F × V — Obstrutivo'
       xAxis = 'Volume (mL)'; yAxis = 'Fluxo (L/min)'
     }
@@ -320,30 +360,18 @@ export function RespiratoryVmiLoopsSim({ className }: { className?: string }) {
       })
       ctx.stroke()
 
-      // ── Direction arrows ──
-      const drawArrow = (arr: typeof pts, at: number, color: string) => {
-        if (at < 1 || at >= arr.length) return
-        const p0 = arr[at - 1], p1 = arr[at]
-        if (!p0 || !p1) return
-        const x0 = toX(p0.x), y0 = toY(p0.y), x1 = toX(p1.x), y1 = toY(p1.y)
-        const angle = Math.atan2(y1 - y0, x1 - x0)
-        ctx.save(); ctx.translate(x1, y1); ctx.rotate(angle)
-        ctx.fillStyle = color; ctx.beginPath()
-        ctx.moveTo(0, 0); ctx.lineTo(-10, -5); ctx.lineTo(-10, 5); ctx.closePath(); ctx.fill()
-        ctx.restore()
+      // Direction labels instead of arrows (arrows create visual artifacts on curves)
+      if (isFV) {
+        ctx.font = 'bold 9px system-ui'
+        ctx.fillStyle = C.insp; ctx.textAlign = 'left'
+        const inspMid = inspPts[Math.floor(inspPts.length * 0.4)]
+        if (inspMid) ctx.fillText('→', toX(inspMid.x) + 4, toY(inspMid.y) - 6)
+        ctx.fillStyle = C.exp
+        const expMid = expPts[Math.floor(expPts.length * 0.5)]
+        if (expMid) ctx.fillText('←', toX(expMid.x) - 10, toY(expMid.y) + 14)
       }
-      if (inspPts.length > 4) drawArrow(inspPts, Math.floor(inspPts.length * 0.5), C.insp)
-      if (expPts.length > 4) drawArrow(expPts, Math.floor(expPts.length * 0.5), C.exp)
 
-      // ── Animated dot ──
-      const totalPts = pts.length
-      const animIdx = Math.floor(progressRef.current * totalPts)
-      if (animIdx < totalPts) {
-        const ap = pts[animIdx]
-        ctx.beginPath(); ctx.arc(toX(ap.x), toY(ap.y), 5, 0, Math.PI * 2)
-        ctx.fillStyle = ap.phase === 'exp' ? C.exp : C.insp; ctx.fill()
-        ctx.strokeStyle = '#fff'; ctx.lineWidth = 1.5; ctx.stroke()
-      }
+      // (animated dot removed — clean loop like real ventilator)
 
       // ── Annotations ──
       ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'left'
@@ -366,14 +394,13 @@ export function RespiratoryVmiLoopsSim({ className }: { className?: string }) {
 
       if (view === 'fv-normal') {
         ctx.fillStyle = C.annotation
-        // Numbered markers
         const markers = [
-          { n: '1', label: 'Disparo', x: 10, y: 5 },
-          { n: '2', label: 'Pico fluxo insp', x: 80, y: 50 },
-          { n: '3', label: 'Ciclagem', x: 500, y: 5 },
-          { n: '4', label: 'Volume atingido', x: 500, y: -5 },
-          { n: '5', label: 'Pico fluxo exp', x: 420, y: -45 },
-          { n: '6', label: 'Constantes de tempo', x: 250, y: -5 },
+          { n: '1', label: 'Disparo', x: 0, y: 0 },
+          { n: '2', label: 'Pico fluxo insp', x: 30, y: 95 },
+          { n: '3', label: 'Ciclagem', x: 650, y: 12 },
+          { n: '4', label: 'Volume atingido', x: 700, y: 0 },
+          { n: '5', label: 'Pico fluxo exp', x: 680, y: -70 },
+          { n: '6', label: 'Constantes de tempo', x: 450, y: -28 },
         ]
         markers.forEach(m => {
           const mx = toX(m.x), my = toY(m.y)
@@ -383,16 +410,16 @@ export function RespiratoryVmiLoopsSim({ className }: { className?: string }) {
           ctx.fillStyle = C.annotation; ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center'
           ctx.fillText(m.n, mx, my + 3)
         })
-        // Legend
+        // Legend on the right side
         ctx.font = '9px system-ui'; ctx.textAlign = 'left'; ctx.fillStyle = C.annotation
-        const legendX = toX(20), legendY = toY(-35)
+        const legendX = W - pad.right - 135, legendY = pad.top + 10
         markers.forEach((m, i) => {
-          ctx.fillText(`${m.n} = ${m.label}`, legendX, legendY + i * 12)
+          ctx.fillText(`${m.n} = ${m.label}`, legendX, legendY + i * 13)
         })
         ctx.fillStyle = C.insp; ctx.font = 'bold 10px system-ui'
-        ctx.fillText('Fase Inspiratória', toX(150), toY(35))
+        ctx.fillText('Fase Inspiratória', toX(200), toY(60))
         ctx.fillStyle = C.exp
-        ctx.fillText('Fase Expiratória', toX(150), toY(-30))
+        ctx.fillText('Fase Expiratória', toX(200), toY(-40))
       }
 
       if (view === 'fv-obstruct') {
