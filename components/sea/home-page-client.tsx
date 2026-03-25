@@ -8,11 +8,11 @@ import { PerformanceBar } from '@/components/sea/performance-bar'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { TopBarSEA } from '@/components/sea/top-bar-sea'
 
-const SimulationsGrid = dynamic(
-  () => import('@/components/sea/simulations-grid').then((mod) => mod.SimulationsGrid),
+const SimulationsMarquee = dynamic(
+  () => import('@/components/sea/simulations-grid').then((mod) => mod.SimulationsMarquee),
   {
     ssr: false,
-    loading: () => <SimulationsFallback />,
+    loading: () => <div className="h-[clamp(210px,38vw,290px)] animate-pulse rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }} />,
   }
 )
 
@@ -29,8 +29,12 @@ export default function HomePageClient() {
             <BusinessClock variant="hero" showGreeting />
           </div>
 
-          {/* 3D Simulation Cards */}
-          <SimulationsGrid />
+        </div>
+
+        {/* 3D Simulations marquee — full width */}
+        <SimulationsMarquee />
+
+        <div className="mx-auto max-w-2xl px-4 md:px-8">
 
           {/* Performance */}
           <div className="mt-5">
@@ -42,19 +46,3 @@ export default function HomePageClient() {
   )
 }
 
-function SimulationsFallback() {
-  return (
-    <div className="grid grid-cols-2 gap-2.5">
-      <div className="col-span-2 rounded-[1.75rem] border border-white/8 p-5" style={{ height: 'clamp(260px, 42vw, 380px)', background: 'rgba(255,255,255,0.02)' }}>
-        <div className="h-5 w-40 rounded-full bg-white/8" />
-        <div className="mt-3 h-3 w-60 rounded-full bg-white/4" />
-      </div>
-      <div className="rounded-[1.75rem] border border-white/8 p-4" style={{ height: 'clamp(200px, 34vw, 280px)', background: 'rgba(255,255,255,0.02)' }}>
-        <div className="h-4 w-24 rounded-full bg-white/8" />
-      </div>
-      <div className="rounded-[1.75rem] border border-white/8 p-4" style={{ height: 'clamp(200px, 34vw, 280px)', background: 'rgba(255,255,255,0.02)' }}>
-        <div className="h-4 w-24 rounded-full bg-white/8" />
-      </div>
-    </div>
-  )
-}

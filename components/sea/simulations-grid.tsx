@@ -48,6 +48,76 @@ function useStaggeredMount(delays: number[]) {
 
 const spring = { type: 'spring', stiffness: 280, damping: 28 } as const
 
+// ── Marquee mode: same cards scrolling horizontally ──
+export function SimulationsMarquee() {
+  const pageVisible = usePageVisible()
+  const [neuroOn, cardioOn, pneumoOn] = useStaggeredMount([0, 200, 400])
+
+  const cardStyle = {
+    width: 'clamp(260px, 65vw, 340px)',
+    height: 'clamp(200px, 36vw, 280px)',
+    flexShrink: 0,
+  }
+
+  const neuroCard = (key: string) => (
+    <div key={key} className="relative overflow-hidden rounded-[1.5rem]" style={{ ...cardStyle, border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(160deg, rgba(45,212,191,0.03) 0%, rgba(0,0,0,0) 100%)' }}>
+      <div className="absolute inset-0">{neuroOn && pageVisible && <BrainHeroScene compact transparent />}</div>
+      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+        <div style={{ position: 'absolute', left: 0, right: 0, height: '2px', background: 'linear-gradient(90deg, transparent 10%, rgba(45,212,191,0.55) 30%, rgba(180,255,248,0.90) 50%, rgba(45,212,191,0.55) 70%, transparent 90%)', boxShadow: '0 0 8px 2px rgba(45,212,191,0.30)', animation: 'scanline 4s linear infinite' }} />
+      </div>
+      <style>{`@keyframes scanline { 0% { top: -60px } 100% { top: 100% } }`}</style>
+      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28" style={{ background: 'linear-gradient(to top, rgba(4,12,16,0.95) 0%, transparent 100%)' }} />
+      <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
+        <div>
+          <p className="text-[8px] uppercase tracking-[0.30em] text-teal-400/40 mb-1">Sistema Neural</p>
+          <div className="flex items-center gap-2"><Brain className="h-4 w-4 text-teal-400/60" /><span className="text-lg font-semibold text-teal-100/90">Neuro</span></div>
+        </div>
+      </div>
+    </div>
+  )
+
+  const cardioCard = (key: string) => (
+    <div key={key} className="relative overflow-hidden rounded-[1.5rem]" style={{ ...cardStyle, border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(160deg, rgba(180,30,40,0.04) 0%, rgba(0,0,0,0) 100%)' }}>
+      <div className="absolute inset-0">{cardioOn && pageVisible && <CardioHeroScene transparent />}</div>
+      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28" style={{ background: 'linear-gradient(to top, rgba(5,3,4,0.92) 0%, transparent 100%)' }} />
+      <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
+        <div>
+          <p className="text-[8px] uppercase tracking-[0.28em] text-white/30 mb-1">Cardio</p>
+          <div className="flex items-center gap-1.5"><HeartPulse className="h-3.5 w-3.5 text-rose-400/70" /><span className="text-base font-semibold text-white/88">Coração</span></div>
+        </div>
+        <span className="text-[8px] font-semibold uppercase tracking-[0.20em] px-2.5 py-1 rounded-full" style={{ background: 'rgba(204,17,32,0.12)', border: '1px solid rgba(204,17,32,0.22)', color: 'rgba(255,160,160,0.70)' }}>72 BPM</span>
+      </div>
+    </div>
+  )
+
+  const pneumoCard = (key: string) => (
+    <div key={key} className="relative overflow-hidden rounded-[1.5rem]" style={{ ...cardStyle, border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(160deg, rgba(30,120,180,0.04) 0%, rgba(0,0,0,0) 100%)' }}>
+      <div className="absolute inset-0">{pneumoOn && pageVisible && <PneumoHeroScene transparent />}</div>
+      <div className="pointer-events-none absolute bottom-0 inset-x-0 h-28" style={{ background: 'linear-gradient(to top, rgba(4,6,7,0.92) 0%, transparent 100%)' }} />
+      <div className="absolute bottom-0 inset-x-0 p-4 flex items-end justify-between">
+        <div>
+          <p className="text-[8px] uppercase tracking-[0.28em] text-white/30 mb-1">Pneumo</p>
+          <div className="flex items-center gap-1.5"><Wind className="h-3.5 w-3.5 text-cyan-400/70" /><span className="text-base font-semibold text-white/88">Pulmão</span></div>
+        </div>
+        <span className="text-[8px] font-semibold uppercase tracking-[0.20em] px-2.5 py-1 rounded-full" style={{ background: 'rgba(56,189,248,0.10)', border: '1px solid rgba(56,189,248,0.18)', color: 'rgba(150,230,255,0.70)' }}>PEEP 5</span>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="relative overflow-hidden" style={{ height: 'clamp(210px, 38vw, 290px)' }}>
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12" style={{ background: 'linear-gradient(to right, #020202, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12" style={{ background: 'linear-gradient(to left, #020202, transparent)' }} />
+      <div className="flex items-center gap-4 h-full" style={{ animation: 'sim-marquee 25s linear infinite', width: 'max-content' }}>
+        {neuroCard('n1')}{cardioCard('c1')}{pneumoCard('p1')}
+        {neuroCard('n2')}{cardioCard('c2')}{pneumoCard('p2')}
+      </div>
+      <style>{`@keyframes sim-marquee { 0% { transform: translateX(0) } 100% { transform: translateX(-50%) } }`}</style>
+    </div>
+  )
+}
+
+// ── Grid mode: original static layout ──
 export function SimulationsGrid() {
   const pageVisible = usePageVisible()
   const [neuroOn, cardioOn, pneumoOn] = useStaggeredMount([0, 200, 400])
