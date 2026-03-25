@@ -3229,6 +3229,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
+                {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia.startsWith('TQT')) && (
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Eventos de via aerea
@@ -3302,6 +3303,7 @@ export function ProntuarioSystemPanel() {
                     </div>
                   )}
                 </div>
+                )}
 
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
