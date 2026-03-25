@@ -1737,9 +1737,6 @@ export function ProntuarioSystemPanel() {
     if (isRE && currentRecord.dataTOT && !currentRecord.dataExtubacao) {
       a.push({ text: 'Via aerea em RE mas sem data de extubacao', color: '#facc15', action: 'Preencher data/hora da extubacao nos eventos' })
     }
-    if (currentRecord.dataExtubacao && currentRecord.horaExtubacao && !isRE && (isIntubated)) {
-      a.push({ text: 'Extubacao registrada mas via aerea ainda em TOT/TNT', color: '#fb923c', action: 'Alterar via aerea para RE-O2, RE-AA ou outra conforme prescricao' })
-    }
 
     // 3. P/F calculado → classificar SDRA
     if (calculations.pf && calculations.pf <= 300) {
