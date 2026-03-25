@@ -20,13 +20,28 @@ export default function HomePageClient() {
       <SeaBackdrop />
       <TopBarSEA />
 
-      <main className="relative z-10 px-4 pb-32 pt-20 md:px-8 md:pt-24">
-        <div className="mx-auto max-w-2xl space-y-3">
-          <BusinessClock variant="hero" showGreeting />
-          <div className="pt-3">
-          <SimulationsGrid />
+      <main className="relative z-10 px-4 pb-32 pt-[4.5rem] md:px-8 md:pt-20">
+        <div className="mx-auto max-w-2xl">
+
+          {/* Greeting + Clock */}
+          <div className="mb-6">
+            <BusinessClock variant="hero" showGreeting />
           </div>
-          <PerformanceBar />
+
+          {/* Divider subtle */}
+          <div className="mb-5 flex items-center gap-3">
+            <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 50%, transparent)' }} />
+            <span className="text-[8px] font-semibold uppercase tracking-[0.3em] text-white/16">Simulacoes</span>
+            <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 50%, transparent)' }} />
+          </div>
+
+          {/* 3D Simulation Cards */}
+          <SimulationsGrid />
+
+          {/* Performance */}
+          <div className="mt-5">
+            <PerformanceBar />
+          </div>
         </div>
       </main>
     </div>
