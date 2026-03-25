@@ -8,9 +8,12 @@ import { PerformanceBar } from '@/components/sea/performance-bar'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { TopBarSEA } from '@/components/sea/top-bar-sea'
 
-const SimulationMarquee = dynamic(
-  () => import('@/components/sea/simulation-marquee').then((m) => m.SimulationMarquee),
-  { ssr: false, loading: () => <div className="h-[clamp(140px,24vw,190px)] animate-pulse rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }} /> }
+const SimulationsGrid = dynamic(
+  () => import('@/components/sea/simulations-grid').then((mod) => mod.SimulationsGrid),
+  {
+    ssr: false,
+    loading: () => <SimulationsFallback />,
+  }
 )
 
 export default function HomePageClient() {
@@ -19,24 +22,15 @@ export default function HomePageClient() {
       <SeaBackdrop />
       <TopBarSEA />
 
-      <main className="relative z-10 pb-32 pt-28 md:pt-32">
-        <div className="mx-auto max-w-2xl px-4 md:px-8">
+      <main className="relative z-10 px-4 pb-32 pt-28 md:px-8 md:pt-32">
+        <div className="mx-auto max-w-2xl">
           {/* Greeting + Clock */}
           <div className="mb-8">
             <BusinessClock variant="hero" showGreeting />
           </div>
-        </div>
 
-        {/* ── 3D Marquee — single WebGL, all models ── */}
-        <SimulationMarquee />
-
-        <div className="mx-auto max-w-2xl px-4 md:px-8">
-          {/* Quick stats */}
-          <div className="mt-8 grid grid-cols-3 gap-2">
-            <QuickStat icon={BookOpen} label="Modulos" value="3" sub="Neuro · Cardio · Pneumo" />
-            <QuickStat icon={Cpu} label="Simulacoes" value="40+" sub="Interativas" />
-            <QuickStat icon={Brain} label="Topicos" value="14" sub="Conteudo clinico" />
-          </div>
+          {/* 3D Simulation Cards */}
+          <SimulationsGrid />
 
           {/* Performance */}
           <div className="mt-5">
@@ -48,14 +42,19 @@ export default function HomePageClient() {
   )
 }
 
-// ── Quick stat card ──
-function QuickStat({ icon: Icon, label, value, sub }: { icon: typeof BookOpen; label: string; value: string; sub: string }) {
+function SimulationsFallback() {
   return (
-    <div className="rounded-[1.2rem] border border-white/8 p-3 text-center" style={{ background: 'rgba(255,255,255,0.02)' }}>
-      <Icon className="mx-auto mb-1.5 h-4 w-4 text-white/25" />
-      <p className="text-lg font-bold text-white/80">{value}</p>
-      <p className="text-[8px] font-semibold uppercase tracking-[0.18em] text-white/30">{label}</p>
-      <p className="mt-0.5 text-[7px] text-white/18">{sub}</p>
+    <div className="grid grid-cols-2 gap-2.5">
+      <div className="col-span-2 rounded-[1.75rem] border border-white/8 p-5" style={{ height: 'clamp(260px, 42vw, 380px)', background: 'rgba(255,255,255,0.02)' }}>
+        <div className="h-5 w-40 rounded-full bg-white/8" />
+        <div className="mt-3 h-3 w-60 rounded-full bg-white/4" />
+      </div>
+      <div className="rounded-[1.75rem] border border-white/8 p-4" style={{ height: 'clamp(200px, 34vw, 280px)', background: 'rgba(255,255,255,0.02)' }}>
+        <div className="h-4 w-24 rounded-full bg-white/8" />
+      </div>
+      <div className="rounded-[1.75rem] border border-white/8 p-4" style={{ height: 'clamp(200px, 34vw, 280px)', background: 'rgba(255,255,255,0.02)' }}>
+        <div className="h-4 w-24 rounded-full bg-white/8" />
+      </div>
     </div>
   )
 }
