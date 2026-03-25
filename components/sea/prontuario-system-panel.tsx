@@ -2030,13 +2030,13 @@ export function ProntuarioSystemPanel() {
       ie: currentRecord.ie,
       ppico: currentRecord.ppico,
       pplato: currentRecord.pplato,
-      pmean: currentRecord.pmean,
+      pmean: currentRecord.pmean || '',
       ps: currentRecord.ps,
-      ipap: currentRecord.ipap,
-      epap: currentRecord.epap,
-      p01: currentRecord.p01,
-      pocc: currentRecord.pocc,
-      pmusc: calculations?.pmusc ? calculations.pmusc.toFixed(1) : currentRecord.pmusc,
+      ipap: currentRecord.ipap || '',
+      epap: currentRecord.epap || '',
+      p01: currentRecord.p01 || '',
+      pocc: currentRecord.pocc || '',
+      pmusc: calculations?.pmusc ? calculations.pmusc.toFixed(1) : (currentRecord.pmusc || ''),
       dp: calculations?.dp ? calculations.dp.toFixed(1) : '',
       cest: calculations?.cest ? calculations.cest.toFixed(1) : '',
       raw: calculations?.raw ? calculations.raw.toFixed(1) : '',
@@ -4207,26 +4207,65 @@ export function ProntuarioSystemPanel() {
                       )
                     })()}
                     <div className="space-y-2">
-                      {currentRecord.vmHist.map((entry, index) => (
-                        <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="min-w-0 flex-1">
-                              <p className="text-[11px] font-semibold text-white/86">
-                                {entry.modo || 'Sem modo'} · {formatDateTime(entry.ts)}
-                              </p>
-                              <p className="mt-0.5 text-[10px] text-white/44">
-                                VT {entry.vt || '--'} · FR {entry.fr || '--'} · PEEP {entry.peep || '--'} · FiO2 {entry.fio2 || '--'}
-                              </p>
-                              <p className="mt-0.5 text-[10px] text-white/36">
-                                DP {entry.dp || '--'} · Cest {entry.cest || '--'} · Raw {entry.raw || '--'} · Pmusc {entry.pmusc || '--'}
-                              </p>
+                      {currentRecord.vmHist.map((entry, index) => {
+                        // Build params list showing only filled values
+                        const params: Array<{ label: string; value: string; color?: string }> = []
+                        if (entry.vt) params.push({ label: 'VT', value: `${entry.vt} mL` })
+                        if (entry.vc) params.push({ label: 'VC', value: `${entry.vc} mL` })
+                        if (entry.ve) params.push({ label: 'VE', value: `${entry.ve} L/min` })
+                        if (entry.fr) params.push({ label: 'FR', value: entry.fr })
+                        if (entry.peep) params.push({ label: 'PEEP', value: entry.peep })
+                        if (entry.fio2) params.push({ label: 'FiO2', value: `${entry.fio2}%` })
+                        if (entry.ps) params.push({ label: 'PS', value: `${entry.ps} cmH₂O` })
+                        if (entry.fluxo) params.push({ label: 'Fluxo', value: `${entry.fluxo} L/min` })
+                        if (entry.trigger) params.push({ label: 'Trigger', value: entry.trigger })
+                        if (entry.ti) params.push({ label: 'TI', value: `${entry.ti}s` })
+                        if (entry.ie) params.push({ label: 'I:E', value: entry.ie })
+                        if (entry.ppico) params.push({ label: 'Ppico', value: `${entry.ppico} cmH₂O` })
+                        if (entry.pplato) params.push({ label: 'Pplatô', value: `${entry.pplato} cmH₂O` })
+                        if (entry.pmean) params.push({ label: 'Pmean', value: `${entry.pmean} cmH₂O` })
+                        if (entry.p01) params.push({ label: 'P0.1', value: entry.p01 })
+                        if (entry.pocc) params.push({ label: 'Pocc', value: entry.pocc })
+                        if (entry.ipap) params.push({ label: 'IPAP', value: entry.ipap })
+                        if (entry.epap) params.push({ label: 'EPAP', value: entry.epap })
+
+                        const calcs: Array<{ label: string; value: string; color?: string }> = []
+                        if (entry.dp) { const v = parseFloat(entry.dp); calcs.push({ label: 'DP', value: `${entry.dp}`, color: v > 15 ? '#f87171' : '#4ade80' }) }
+                        if (entry.cest) calcs.push({ label: 'Cest', value: entry.cest })
+                        if (entry.raw) calcs.push({ label: 'Raw', value: entry.raw })
+                        if (entry.pmusc) calcs.push({ label: 'Pmusc', value: entry.pmusc })
+
+                        return (
+                          <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0 flex-1">
+                                <p className="text-[11px] font-semibold text-white/86">
+                                  {entry.modo || 'Sem modo'} · {formatDateTime(entry.ts)}
+                                </p>
+                                <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
+                                  {params.map((p, pi) => (
+                                    <span key={pi} className="text-[10px] text-white/50">
+                                      <span className="text-white/30">{p.label}</span> {p.value}
+                                    </span>
+                                  ))}
+                                </div>
+                                {calcs.length > 0 && (
+                                  <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
+                                    {calcs.map((c, ci) => (
+                                      <span key={ci} className="text-[10px]" style={{ color: c.color || 'rgba(255,255,255,0.36)' }}>
+                                        <span className="text-white/30">{c.label}</span> {c.value}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                              <button onClick={() => deleteVM(index)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
+                                <Trash2 className="h-3 w-3" />
+                              </button>
                             </div>
-                            <button onClick={() => deleteVM(index)} className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
-                              <Trash2 className="h-3 w-3" />
-                            </button>
                           </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
                   </div>
                 ) : null}
