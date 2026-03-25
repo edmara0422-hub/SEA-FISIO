@@ -377,11 +377,14 @@ const SEDATIVE_OPTIONS = [
 
 const BNM_OPTIONS = ['', 'Cisatracurio', 'Rocuronio', 'Pancuronio', 'Atracurio', 'Vecuronio']
 
-type DrugTrend = 'manteve' | 'reduziu' | 'aumentou'
+type DrugTrend = 'manteve' | 'reduziu' | 'aumentou' | 'desligado'
 
 function calcDrugTrend(inicio: string, atual: string): DrugTrend | null {
   const i = parseFloat(inicio)
   const a = parseFloat(atual)
+  if (isNaN(i) && isNaN(a)) return null
+  // Se atual é 0 (ou vazio/NaN) e início > 0 → desligado
+  if (i > 0 && (isNaN(a) || a === 0)) return 'desligado'
   if (isNaN(i) || isNaN(a)) return null
   if (a < i) return 'reduziu'
   if (a > i) return 'aumentou'
@@ -418,6 +421,12 @@ function analiseDVA(inicio: string, atual: string): DrugAnalysis | null {
       indica: 'Escalonamento vasoativo. Indica instabilidade hemodinamica progressiva. Investigar: hipovolemia, sepse nao controlada, disfuncao miocardica, TEP ou tamponamento.',
       evolucao: 'Melhora: identificar e tratar causa, estabilizar PAM, considerar corticoide em choque refratario. Piora: choque refratario, disfuncao multiorganica, necessidade de suporte mecanico circulatorio.',
     },
+    desligado: {
+      label: 'DVA SUSPENSA',
+      color: '#22d3ee',
+      indica: 'Droga vasoativa desligada. Paciente sem suporte vasopressor. Estabilidade hemodinamica alcancada.',
+      evolucao: 'Monitorar PAM, FC, perfusao e lactato nas proximas 6-12h apos suspensao. Se hipotensao: reavaliar volemia e reintroduzir DVA.',
+    },
   }
   return { trend, ...map[trend] }
 }
@@ -444,6 +453,12 @@ function analiseSedativo(inicio: string, atual: string): DrugAnalysis | null {
       indica: 'Escalonamento de sedacao. Indicar agitacao, dor inadequadamente tratada, delirium hiperativo ou desconforto ventilatório.',
       evolucao: 'Melhora: identificar e tratar causa (dor, delirium, assincronia) para permitir reducao. Piora: sedacao profunda, imobilidade, piora da funcao pulmonar.',
     },
+    desligado: {
+      label: 'SEDATIVO SUSPENSO',
+      color: '#22d3ee',
+      indica: 'Sedativo desligado. Paciente sem sedacao continua. Avaliar nivel de consciencia, RASS, presenca de dor e risco de delirium de abstinencia.',
+      evolucao: 'Monitorar RASS, CAM-ICU, drive respiratorio. Se agitacao ou delirium: tratar causa antes de reintroduzir sedacao. Considerar dexmedetomidina se necessario.',
+    },
   }
   return { trend, ...map[trend] }
 }
@@ -469,6 +484,12 @@ function analiseBNM(inicio: string, atual: string): DrugAnalysis | null {
       color: '#f87171',
       indica: 'Escalonamento de BNM. Avaliar: assincronia grave, SDRA grave (P/F <150), hipertensao intracraniana ou instabilidade hemodinamica.',
       evolucao: 'Melhora: controle da causa base, reduzir para menor dose efetiva. Piora: bloqueio profundo prolongado → ICUAW, desmame prolongado.',
+    },
+    desligado: {
+      label: 'BNM SUSPENSO',
+      color: '#22d3ee',
+      indica: 'Bloqueio neuromuscular desligado. Retorno do tônus muscular e drive respiratorio. Monitorar TOF (deve normalizar 4/4), P0.1, Pocc.',
+      evolucao: 'Avaliar forca muscular (MRC), capacidade de trigger, presenca de assincronia. Risco de ICUAW se uso prolongado. Iniciar mobilizacao precoce.',
     },
   }
   return { trend, ...map[trend] }
