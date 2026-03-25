@@ -18,11 +18,11 @@ const SimulationsMarquee = dynamic(
 
 export default function HomePageClient() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
+    <div className="relative overflow-hidden bg-[#020202] text-white">
       <SeaBackdrop />
       <TopBarSEA />
 
-      <main className="relative z-10 px-4 pb-32 pt-28 md:px-8 md:pt-32">
+      <main className="relative z-10 px-4 pb-2 pt-28 md:px-8 md:pt-32">
         <div className="mx-auto max-w-2xl">
           {/* Greeting + Clock */}
           <div className="mb-8">
