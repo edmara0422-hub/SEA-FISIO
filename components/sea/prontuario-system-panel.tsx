@@ -1788,11 +1788,6 @@ export function ProntuarioSystemPanel() {
       }
     }
 
-    // 10. Balanço hidrico positivo → dificulta desmame
-    const bal24 = parseNumber(currentRecord.balanco24h)
-    if (bal24 > 500 && onVM) {
-      a.push({ text: `Balanco hidrico +${bal24}mL — dificulta desmame`, color: '#facc15', action: 'Considerar restricao hidrica ou diuretico antes do TRE' })
-    }
 
     return a
   }, [currentRecord, calculations])
