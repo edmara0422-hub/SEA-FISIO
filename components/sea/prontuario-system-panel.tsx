@@ -4635,6 +4635,58 @@ export function ProntuarioSystemPanel() {
                   }
                   const phaseDone = (p: number) => activePhase > p
 
+                  // ── Auto eligibility checklist ──
+                  const eligibility: Array<{ label: string; met: boolean | null; detail: string }> = []
+
+                  // 1. Causa reversível — não automático, precisa de avaliação clínica
+                  eligibility.push({ label: 'Causa reversivel', met: null, detail: 'Avaliacao clinica necessaria' })
+
+                  // 2. Hemodinâmica — DVA suspensa ou dose baixa
+                  const dvasSuspOrLow = !currentRecord.dvaList?.length || currentRecord.dvaList.every((d: DVAEntry) => !!d.suspensao || !d.dose || parseFloat(d.dose) === 0 || parseFloat(d.dose) <= 0.1)
+                  eligibility.push({ label: 'Hemodinamica estavel', met: dvasSuspOrLow, detail: dvasSuspOrLow ? 'Sem DVA ou dose baixa' : 'DVA em dose alta' })
+
+                  // 3. Neurológico — Glasgow >= 8 ou avaliação clínica
+                  const glasgowVal = calculations?.glasgow?.total ?? 0
+                  const neuroOk = glasgowVal >= 8
+                  eligibility.push({ label: 'Neurologico', met: glasgowVal > 0 ? neuroOk : null, detail: glasgowVal > 0 ? `Glasgow ${glasgowVal}${neuroOk ? '' : ' — rebaixado'}` : 'Nao avaliado' })
+
+                  // 4. Oxigenação — P/F >= 150 ou FiO2 <= 40 + PEEP <= 8
+                  const pfVal = calculations?.pf ?? 0
+                  const fio2Val = currentRecord.fio2 ? parseFloat(currentRecord.fio2) : 0
+                  const peepDesmVal = currentRecord.peep ? parseFloat(currentRecord.peep) : 0
+                  const oxOk = (pfVal >= 150) || (fio2Val > 0 && fio2Val <= 40 && peepDesmVal <= 8)
+                  eligibility.push({ label: 'Oxigenacao (P/F ≥ 150 ou FiO₂ ≤ 40%)', met: (pfVal > 0 || fio2Val > 0) ? oxOk : null, detail: pfVal > 0 ? `P/F ${pfVal.toFixed(0)}` : fio2Val > 0 ? `FiO₂ ${fio2Val}% PEEP ${peepDesmVal}` : 'Sem dados' })
+
+                  // 5. pH > 7.25
+                  const phVal = currentRecord.gasoPH ? parseFloat(currentRecord.gasoPH) : 0
+                  const phOk = phVal > 7.25
+                  eligibility.push({ label: 'pH > 7.25', met: phVal > 0 ? phOk : null, detail: phVal > 0 ? `pH ${phVal.toFixed(2)}` : 'Sem gasometria' })
+
+                  // 6. Mecânica respiratória — FR < 35
+                  const frDesmVal = currentRecord.fr ? parseFloat(currentRecord.fr) : 0
+                  eligibility.push({ label: 'FR < 35 irpm', met: frDesmVal > 0 ? frDesmVal < 35 : null, detail: frDesmVal > 0 ? `FR ${frDesmVal}` : 'Sem dados' })
+
+                  // 7. Hb adequada
+                  const lastLab = currentRecord.examesLabList?.[currentRecord.examesLabList.length - 1]
+                  const hbVal = lastLab?.hb ? parseFloat(lastLab.hb) : 0
+                  eligibility.push({ label: 'Hb ≥ 7 g/dL', met: hbVal > 0 ? hbVal >= 7 : null, detail: hbVal > 0 ? `Hb ${hbVal}` : 'Sem lab' })
+
+                  // 8. Balanço hídrico
+                  const bal = parseNumber(currentRecord.balanco24h)
+                  eligibility.push({ label: 'Balanco hidrico (≤ +500)', met: currentRecord.balanco24h ? bal <= 500 : null, detail: currentRecord.balanco24h ? `BH24 ${bal >= 0 ? '+' : ''}${bal}mL` : 'Sem dados' })
+
+                  // 9. Sedação
+                  const sedsSusp = !currentRecord.sedativos?.length || currentRecord.sedativos.every((s: SedativeEntry) => !!s.suspensao || !s.atual || parseFloat(s.atual) === 0)
+                  eligibility.push({ label: 'Sedacao suspensa ou minima', met: sedsSusp, detail: sedsSusp ? 'Sem sedacao continua' : 'Sedativos ativos' })
+
+                  // 10. Tosse / proteção VA
+                  const glasgowSuf = glasgowVal >= 9
+                  eligibility.push({ label: 'Protecao de VA (Glasgow ≥ 9, tosse)', met: glasgowVal > 0 ? glasgowSuf : null, detail: glasgowVal > 0 ? `Glasgow ${glasgowVal}` : 'Nao avaliado' })
+
+                  const metCount = eligibility.filter(e => e.met === true).length
+                  const totalAssessed = eligibility.filter(e => e.met !== null).length
+                  const allMet = metCount === totalAssessed && totalAssessed >= 6
+
                   return (
                     <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
                       {/* Header */}
@@ -4669,6 +4721,34 @@ export function ProntuarioSystemPanel() {
                           <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
                             ✓ Desconectado VM
                           </span>
+                        )}
+                      </div>
+
+                      {/* Eligibility checklist */}
+                      <div className="mb-3 rounded-[1rem] border border-white/8 bg-black/20 p-2.5">
+                        <div className="mb-2 flex items-center justify-between">
+                          <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/36">Elegibilidade automatica</p>
+                          <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{
+                            color: allMet ? '#4ade80' : metCount >= totalAssessed * 0.7 ? '#facc15' : '#f87171',
+                            borderColor: allMet ? '#4ade8030' : metCount >= totalAssessed * 0.7 ? '#facc1530' : '#f8717130',
+                            background: allMet ? '#4ade8010' : metCount >= totalAssessed * 0.7 ? '#facc1510' : '#f8717110',
+                          }}>
+                            {metCount}/{totalAssessed} criterios
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-x-3 gap-y-1">
+                          {eligibility.map((e, ei) => (
+                            <div key={ei} className="flex items-start gap-1.5">
+                              <span className="mt-0.5 text-[10px]">{e.met === true ? '✅' : e.met === false ? '❌' : '⬜'}</span>
+                              <div className="min-w-0">
+                                <p className="text-[9px] font-semibold" style={{ color: e.met === true ? 'rgba(74,222,128,0.8)' : e.met === false ? 'rgba(248,113,113,0.8)' : 'rgba(255,255,255,0.35)' }}>{e.label}</p>
+                                <p className="text-[8px] text-white/30">{e.detail}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        {allMet && (
+                          <p className="mt-2 text-center text-[10px] font-semibold text-[#4ade80]">✓ Todos os criterios atendidos — elegivel para TRE</p>
                         )}
                       </div>
 
