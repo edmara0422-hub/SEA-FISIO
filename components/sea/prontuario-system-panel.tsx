@@ -3467,20 +3467,28 @@ export function ProntuarioSystemPanel() {
                         placeholder="Ausculta, complacencia, infiltrado, expansao..."
                       />
                     </FieldShell>
-                    <FieldShell label="Aspecto secrecao">
+                    <FieldShell label="Cor secrecao">
                       <select className={INPUT_CLASS_SM} value={currentRecord.secrecao} onChange={(e) => setField('secrecao', e.target.value)}>
                         <option value="">Selecionar</option>
-                        <option value="Mucoide clara">Mucoide clara</option>
-                        <option value="Mucoide espessa">Mucoide espessa</option>
-                        <option value="Mucopurulenta">Mucopurulenta</option>
-                        <option value="Purulenta">Purulenta</option>
-                        <option value="Sanguinolenta">Sanguinolenta</option>
-                        <option value="Hemoptoica">Hemoptoica</option>
-                        <option value="Rolha">Rolha / Tampao mucoso</option>
+                        <option value="Transparente">Transparente (irritacao leve/alergia)</option>
+                        <option value="Branca">Branca (congestao/inflamacao cronica)</option>
+                        <option value="Amarela">Amarela (infeccao bacteriana)</option>
+                        <option value="Verde">Verde (infeccao intensa/pneumonia)</option>
+                        <option value="Marrom">Marrom (sangue antigo/tabagismo)</option>
+                        <option value="Rosada">Rosada/Vermelha (hemoptise)</option>
+                        <option value="Mucopurulenta">Mucopurulenta (mista)</option>
                         <option value="Ausente">Ausente</option>
                       </select>
                     </FieldShell>
-                    <FieldShell label="Qtd secrecao">
+                    <FieldShell label="Consistencia">
+                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoConsist ?? ''} onChange={(e) => setField('secrecaoConsist', e.target.value)}>
+                        <option value="">Selecionar</option>
+                        <option value="Fluida">Fluida (virose/alergia)</option>
+                        <option value="Espessa">Espessa/Viscosa (bacteriana/desidratacao)</option>
+                        <option value="Rolha">Rolha/Tampao mucoso</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Quantidade">
                       <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoQtd ?? ''} onChange={(e) => setField('secrecaoQtd', e.target.value)}>
                         <option value="">Selecionar</option>
                         <option value="Pequena">Pequena</option>
@@ -3488,7 +3496,7 @@ export function ProntuarioSystemPanel() {
                         <option value="Grande">Grande</option>
                       </select>
                     </FieldShell>
-                    <FieldShell label="Evolucao secrecao">
+                    <FieldShell label="Evolucao">
                       <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoEvolucao ?? ''} onChange={(e) => setField('secrecaoEvolucao', e.target.value)}>
                         <option value="">Selecionar</option>
                         <option value="Melhora">Melhora (clareando)</option>
