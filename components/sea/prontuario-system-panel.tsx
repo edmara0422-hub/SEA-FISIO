@@ -1624,6 +1624,84 @@ export function ProntuarioSystemPanel() {
     }
   }, [currentRecord])
 
+  // ── SMART ALERTS — cruzamento inteligente de dados ──
+  const smartAlerts = useMemo(() => {
+    if (!currentRecord || !calculations) return []
+    const a: Array<{ text: string; color: string; action?: string }> = []
+
+    // 1. TOT/TNT selecionado mas sem modo VM → sugerir preencher VM
+    const isIntubated = currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT'
+    const isTQT = currentRecord.tipoVia?.startsWith('TQT')
+    const onVM = isIntubated || (isTQT && currentRecord.tipoVia === 'TQT-VM')
+    if (onVM && !currentRecord.modoVM) {
+      a.push({ text: 'Paciente intubado sem modo VM preenchido', color: '#60a5fa', action: 'Preencher parametros de VM na aba Resp' })
+    }
+
+    // 2. Via aérea mudou para RE (ar ambiente/O2) com data TOT → paciente extubou
+    const isRE = currentRecord.tipoVia?.startsWith('RE')
+    if (isRE && currentRecord.dataTOT && !currentRecord.dataExtubacao) {
+      a.push({ text: 'Via aerea em RE mas sem data de extubacao', color: '#facc15', action: 'Preencher data/hora da extubacao nos eventos' })
+    }
+
+    // 3. P/F calculado → classificar SDRA
+    if (calculations.pf && calculations.pf <= 300) {
+      const grau = calculations.pf <= 100 ? 'GRAVE' : calculations.pf <= 200 ? 'MODERADA' : 'LEVE'
+      const cor = calculations.pf <= 100 ? '#f87171' : calculations.pf <= 200 ? '#fb923c' : '#facc15'
+      a.push({ text: `P/F ${calculations.pf.toFixed(0)} → SDRA ${grau}`, color: cor, action: grau === 'GRAVE' ? 'Considerar prona, PEEP alta, VC 6mL/kg' : 'Ventilacao protetora, monitorar evolucao' })
+    }
+
+    // 4. Driving Pressure > 15
+    if (calculations.dp && calculations.dp > 15) {
+      a.push({ text: `Driving Pressure ${calculations.dp.toFixed(0)} cmH₂O (> 15)`, color: '#f87171', action: 'Reduzir VC ou ajustar PEEP para DP ≤ 15' })
+    }
+
+    // 5. Sedativos reduzindo → correlacionar com desmame
+    const sedReducing = currentRecord.sedativos?.some((s: SedativeEntry) => {
+      const trend = calcDrugTrend(s.doseInicio, s.doseAtual)
+      return trend === 'reduziu'
+    })
+    if (sedReducing && onVM) {
+      a.push({ text: 'Sedativo em reducao — avaliar despertar diario', color: '#4ade80', action: 'Considerar janela de sedacao, avaliar RASS e drive respiratorio' })
+    }
+
+    // 6. Dias TOT > 7 → intubação prolongada
+    if (calculations.daysTOT && calculations.daysTOT >= 7 && isIntubated) {
+      a.push({ text: `Intubacao prolongada: D${calculations.daysTOT} de TOT`, color: '#f87171', action: calculations.daysTOT >= 14 ? 'Considerar TQT — intubacao > 14 dias' : 'Avaliar indicacao de TQT se perspectiva de VM prolongada' })
+    }
+
+    // 7. Glasgow + drive → elegibilidade desmame
+    if (calculations.glasgow && calculations.glasgow >= 8 && onVM) {
+      const hasDrive = currentRecord.p01 || currentRecord.pocc
+      if (hasDrive) {
+        a.push({ text: `Glasgow ${calculations.glasgow} + drive presente → avaliar desmame`, color: '#4ade80', action: 'Paciente com nivel de consciencia e drive respiratorio — checar criterios de elegibilidade' })
+      }
+    }
+    if (calculations.glasgow && calculations.glasgow < 8 && onVM) {
+      a.push({ text: `Glasgow ${calculations.glasgow} — nivel de consciencia rebaixado`, color: '#fb923c', action: 'Sem condicoes de protecao de via aerea. Manter VM.' })
+    }
+
+    // 8. Gasometria com disturbio acido-base
+    if (calculations.gaso?.disturbio && calculations.gaso.disturbio !== 'Normal') {
+      a.push({ text: `Gasometria: ${calculations.gaso.disturbio}`, color: '#fb923c', action: calculations.gaso.disturbio.includes('Acidose respiratoria') ? 'Aumentar VM (FR ou VC) para corrigir PaCO₂' : calculations.gaso.disturbio.includes('Alcalose respiratoria') ? 'Reduzir VM — pode dificultar desmame' : 'Corrigir disturbio metabolico' })
+    }
+
+    // 9. RSBI automatico de FR e VC
+    if (calculations.rsbi && onVM) {
+      const cor = calculations.rsbi < 80 ? '#4ade80' : calculations.rsbi < 105 ? '#facc15' : '#f87171'
+      if (calculations.rsbi >= 105) {
+        a.push({ text: `RSBI ${calculations.rsbi.toFixed(0)} (≥ 105) — risco de falha no desmame`, color: cor })
+      }
+    }
+
+    // 10. Balanço hidrico positivo → dificulta desmame
+    const bal24 = parseNumber(currentRecord.balanco24h)
+    if (bal24 > 500 && onVM) {
+      a.push({ text: `Balanco hidrico +${bal24}mL — dificulta desmame`, color: '#facc15', action: 'Considerar restricao hidrica ou diuretico antes do TRE' })
+    }
+
+    return a
+  }, [currentRecord, calculations])
+
   const updateCurrentRecord = (updater: (record: ICURecord) => ICURecord) => {
     if (!selectedId) return
 
@@ -2490,6 +2568,19 @@ export function ProntuarioSystemPanel() {
             </div>
 
             <div ref={tabContentRef} />
+
+            {/* ── SMART ALERTS ── */}
+            {smartAlerts.length > 0 && (
+              <div className="mb-4 space-y-1.5">
+                {smartAlerts.map((alert, i) => (
+                  <div key={i} className="rounded-[1rem] border px-3 py-2" style={{ borderColor: `${alert.color}25`, background: `${alert.color}08` }}>
+                    <p className="text-[11px] font-semibold" style={{ color: alert.color }}>{alert.text}</p>
+                    {alert.action && <p className="text-[10px] text-white/40 mt-0.5">{alert.action}</p>}
+                  </div>
+                ))}
+              </div>
+            )}
+
             {activeTab === 'dados' ? (
               <div className="space-y-5">
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
@@ -4297,21 +4388,29 @@ export function ProntuarioSystemPanel() {
                 {(() => {
                   const isTOT = currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML'
                   const isTQT = currentRecord.tipoVia?.startsWith('TQT')
+                  // ── Auto-detect from events ──
+                  // Se preencheu data de extubação → extubação ativa automaticamente
+                  const extFromEvent = !!(currentRecord.dataExtubacao && currentRecord.horaExtubacao)
+                  // Se preencheu data desc VM → desconexão ativa automaticamente
+                  const descFromEvent = !!(currentRecord.dataDescVM && currentRecord.horaDescVM)
+
                   const treActive = currentRecord.treOK === '1'
-                  const extActive = currentRecord.extOK === '1'
-                  const descActive = currentRecord.descVMOK === '1'
+                  const extActive = currentRecord.extOK === '1' || extFromEvent
+                  const descActive = currentRecord.descVMOK === '1' || descFromEvent
 
                   // ── Intelligent phase detection ──────────────────────────────
                   const isControlled = ['VCV', 'PCV', 'PRVC', 'MMV', 'HFOV'].includes(currentRecord.modoVM)
                   const isPSV = currentRecord.modoVM === 'PSV'
                   const psVal = isPSV ? parseFloat(currentRecord.ps || '99') : 99
                   const psvLow = isPSV && psVal <= 10          // PS <= 10 → sugerir TRE
+                  const psvTRE = isPSV && psVal <= 7           // PS <= 7 → já está em TRE
                   const rsbiGood = (calculations?.rsbi ?? 999) < 105
                   const suggestTRE = psvLow && rsbiGood
 
                   // active phase: 4 > 3 > 2 > 1
+                  // PS ≤ 7 automaticamente detecta TRE (fase 3)
                   const activePhase = (extActive || descActive) ? 4
-                    : treActive ? 3
+                    : (treActive || psvTRE) ? 3
                     : isPSV ? 2
                     : isControlled ? 1
                     : 0
@@ -4340,7 +4439,12 @@ export function ProntuarioSystemPanel() {
                             {tipoDesmame}
                           </span>
                         ) : null}
-                        {activePhase === 2 && psvLow && (
+                        {activePhase === 3 && psvTRE && !treActive && (
+                          <span className="rounded-full border border-[#60a5fa40] bg-[#60a5fa12] px-2 py-0.5 text-[9px] font-bold text-[#60a5fa]">
+                            PS ≤ 7 — TRE detectado
+                          </span>
+                        )}
+                        {activePhase === 2 && psvLow && !psvTRE && (
                           <span className="rounded-full border border-[#facc1540] bg-[#facc1512] px-2 py-0.5 text-[9px] font-bold text-[#facc15]">
                             PS baixa — avaliar TRE
                           </span>
@@ -4348,6 +4452,16 @@ export function ProntuarioSystemPanel() {
                         {activePhase === 2 && suggestTRE && (
                           <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
                             ✓ Pronto para TRE
+                          </span>
+                        )}
+                        {activePhase === 4 && extFromEvent && (
+                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
+                            ✓ Extubado
+                          </span>
+                        )}
+                        {activePhase === 4 && descFromEvent && (
+                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
+                            ✓ Desconectado VM
                           </span>
                         )}
                       </div>
