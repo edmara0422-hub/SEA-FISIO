@@ -1005,17 +1005,22 @@ function AutoGrowTextarea({
   onChange: (value: string) => void
   placeholder?: string
 }) {
+  const ref = useRef<HTMLTextAreaElement>(null)
+
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    el.style.height = 'auto'
+    el.style.height = `${el.scrollHeight}px`
+  }, [value])
+
   return (
     <textarea
+      ref={ref}
       rows={1}
       className={AUTO_TEXTAREA_CLASS}
       value={value}
       onChange={(event) => onChange(event.target.value)}
-      onInput={(event) => {
-        const target = event.currentTarget
-        target.style.height = 'auto'
-        target.style.height = `${target.scrollHeight}px`
-      }}
       placeholder={placeholder}
     />
   )
