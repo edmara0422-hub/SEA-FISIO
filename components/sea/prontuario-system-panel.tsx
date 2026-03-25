@@ -3534,31 +3534,6 @@ export function ProntuarioSystemPanel() {
                         </>
                       )
                     })()}
-                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3">
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">Badge via aerea</p>
-                      <div className="mt-2 flex flex-wrap gap-2">
-                        {currentRecord.tipoVia ? (
-                          <span
-                            className="rounded-full border px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.16em]"
-                            style={{
-                              borderColor:
-                                VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.border ??
-                                'rgba(255,255,255,0.12)',
-                              background:
-                                VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.background ??
-                                'rgba(255,255,255,0.04)',
-                              color:
-                                VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.color ??
-                                'rgba(255,255,255,0.72)',
-                            }}
-                          >
-                            {VIA_BADGE_STYLES[currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML' ? 'TOT' : currentRecord.tipoVia]?.label ?? currentRecord.tipoVia}
-                          </span>
-                        ) : (
-                          <span className="text-[11px] text-white/46">Selecionar via aerea</span>
-                        )}
-                      </div>
-                    </div>
                   </div>
                 </div>
 
