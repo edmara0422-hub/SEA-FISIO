@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation } from '@tanstack/react-query'
 import { useAppStore } from '@/lib/stores/appStore'
+import { API_BASE } from '@/lib/api-url'
 import { motion } from 'framer-motion'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -23,7 +24,7 @@ export function AIAssistant() {
 
   const sendMessage = useMutation({
     mutationFn: async (query: string) => {
-      const response = await fetch('/api/ai/assistant', {
+      const response = await fetch(`${API_BASE}/api/ai/assistant`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ query, context: 'clinical' }),

@@ -91,7 +91,7 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
     setIsTutorLoading(true)
 
     try {
-      const res = await fetch('/api/tutor', {
+      const res = await fetch(`${API_BASE}/api/tutor`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
