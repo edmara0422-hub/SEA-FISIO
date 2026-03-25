@@ -3142,9 +3142,12 @@ export function ProntuarioSystemPanel() {
                     <div className="space-y-3">
                       {currentRecord.sedativos?.length ? (
                         currentRecord.sedativos.map((item, index) => {
-                          const analise = analiseSedativo(item.inicio, item.atual)
+                          const isSuspended = !!item.suspensao
+                          const analise = isSuspended
+                            ? { trend: 'desligado' as const, label: 'SEDATIVO SUSPENSO', color: '#22d3ee', indica: `Suspenso em ${formatDateTime(item.suspensao!)}. Monitorar RASS, CAM-ICU, drive respiratorio.`, evolucao: 'Avaliar delirium de abstinencia. Se agitacao: tratar causa antes de reintroduzir.' }
+                            : analiseSedativo(item.inicio, item.atual)
                           return (
-                          <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
+                          <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
                             <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('sedativos', index, 'droga', event.target.value)}>
@@ -3157,12 +3160,29 @@ export function ProntuarioSystemPanel() {
                                 <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('sedativos', index, 'inicio', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
                               <FieldShell label="Atual">
-                                <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('sedativos', index, 'atual', event.target.value)} placeholder="ml/h" />
+                                <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('sedativos', index, 'atual', event.target.value)} placeholder="ml/h" disabled={isSuspended} />
                               </FieldShell>
                               <FieldShell label="Unidade">
                                 <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('sedativos', index, 'unidade', event.target.value)} />
                               </FieldShell>
-                              <div className="flex items-end pb-1">
+                              <div className="flex items-end gap-1 pb-1">
+                                {!isSuspended ? (
+                                  <button
+                                    onClick={() => updateListItem('sedativos', index, 'suspensao', nowIso())}
+                                    className="inline-flex h-7 items-center gap-1 rounded-[0.6rem] border border-[#22d3ee30] bg-[#22d3ee10] px-2 text-[8px] font-bold uppercase tracking-wider text-[#22d3ee]"
+                                    title="Marcar como desligado"
+                                  >
+                                    OFF
+                                  </button>
+                                ) : (
+                                  <button
+                                    onClick={() => updateListItem('sedativos', index, 'suspensao', '')}
+                                    className="inline-flex h-7 items-center gap-1 rounded-[0.6rem] border border-[#4ade8030] bg-[#4ade8010] px-2 text-[8px] font-bold uppercase tracking-wider text-[#4ade80]"
+                                    title="Reativar"
+                                  >
+                                    ON
+                                  </button>
+                                )}
                                 <button
                                   onClick={() => removeListItem('sedativos', index)}
                                   className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
@@ -3171,6 +3191,9 @@ export function ProntuarioSystemPanel() {
                                 </button>
                               </div>
                             </div>
+                            {isSuspended && (
+                              <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>
+                            )}
                             {analise ? (
                               <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
                                 <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
@@ -3204,9 +3227,12 @@ export function ProntuarioSystemPanel() {
                     <div className="space-y-3">
                       {currentRecord.bnmList?.length ? (
                         currentRecord.bnmList.map((item, index) => {
-                          const analise = analiseBNM(item.inicio, item.atual)
+                          const isSuspended = !!item.suspensao
+                          const analise = isSuspended
+                            ? { trend: 'desligado' as const, label: 'BNM SUSPENSO', color: '#22d3ee', indica: `Suspenso em ${formatDateTime(item.suspensao!)}. Monitorar TOF, P0.1, drive respiratorio, forca muscular.`, evolucao: 'Avaliar MRC, ICUAW. Iniciar mobilizacao precoce.' }
+                            : analiseBNM(item.inicio, item.atual)
                           return (
-                          <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
+                          <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
                             <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('bnmList', index, 'droga', event.target.value)}>
@@ -3219,20 +3245,21 @@ export function ProntuarioSystemPanel() {
                                 <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('bnmList', index, 'inicio', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
                               <FieldShell label="Atual">
-                                <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('bnmList', index, 'atual', event.target.value)} placeholder="ml/h" />
+                                <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('bnmList', index, 'atual', event.target.value)} placeholder="ml/h" disabled={isSuspended} />
                               </FieldShell>
                               <FieldShell label="Unidade">
                                 <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('bnmList', index, 'unidade', event.target.value)} />
                               </FieldShell>
-                              <div className="flex items-end pb-1">
-                                <button
-                                  onClick={() => removeListItem('bnmList', index)}
-                                  className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
-                                >
-                                  <Trash2 className="h-3 w-3" />
-                                </button>
+                              <div className="flex items-end gap-1 pb-1">
+                                {!isSuspended ? (
+                                  <button onClick={() => updateListItem('bnmList', index, 'suspensao', nowIso())} className="inline-flex h-7 items-center rounded-[0.6rem] border border-[#22d3ee30] bg-[#22d3ee10] px-2 text-[8px] font-bold uppercase tracking-wider text-[#22d3ee]">OFF</button>
+                                ) : (
+                                  <button onClick={() => updateListItem('bnmList', index, 'suspensao', '')} className="inline-flex h-7 items-center rounded-[0.6rem] border border-[#4ade8030] bg-[#4ade8010] px-2 text-[8px] font-bold uppercase tracking-wider text-[#4ade80]">ON</button>
+                                )}
+                                <button onClick={() => removeListItem('bnmList', index)} className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"><Trash2 className="h-3 w-3" /></button>
                               </div>
                             </div>
+                            {isSuspended && <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>}
                             {analise ? (
                               <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
                                 <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
@@ -3322,9 +3349,12 @@ export function ProntuarioSystemPanel() {
                   <div className="space-y-3">
                     {currentRecord.dvaList?.length ? (
                       currentRecord.dvaList.map((item, index) => {
-                        const analise = analiseDVA(item.inicio, item.dose)
+                        const isSuspended = !!item.suspensao
+                        const analise = isSuspended
+                          ? { trend: 'desligado' as const, label: 'DVA SUSPENSA', color: '#22d3ee', indica: `Suspensa em ${formatDateTime(item.suspensao!)}. Monitorar PAM, FC, lactato e perfusao nas proximas 6-12h.`, evolucao: 'Se hipotensao: reavaliar volemia e reintroduzir DVA.' }
+                          : analiseDVA(item.inicio, item.dose)
                         return (
-                        <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3">
+                        <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
                           <div className="grid gap-2 grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                             <FieldShell label="Droga" span="col-span-2 md:col-span-1">
                               <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('dvaList', index, 'droga', event.target.value)}>
@@ -3337,20 +3367,21 @@ export function ProntuarioSystemPanel() {
                               <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('dvaList', index, 'inicio', event.target.value)} placeholder="0.12" />
                             </FieldShell>
                             <FieldShell label="Dose atual">
-                              <input className={INPUT_CLASS_SM} value={item.dose} onChange={(event) => updateListItem('dvaList', index, 'dose', event.target.value)} placeholder="0.08" />
+                              <input className={INPUT_CLASS_SM} value={item.dose} onChange={(event) => updateListItem('dvaList', index, 'dose', event.target.value)} placeholder="0.08" disabled={isSuspended} />
                             </FieldShell>
                             <FieldShell label="Unidade">
                               <input className={INPUT_CLASS_SM} value={item.unidade} onChange={(event) => updateListItem('dvaList', index, 'unidade', event.target.value)} />
                             </FieldShell>
-                            <div className="flex items-end justify-end pb-1 md:justify-start">
-                              <button
-                                onClick={() => removeListItem('dvaList', index)}
-                                className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
-                              >
-                                <Trash2 className="h-3 w-3" />
-                              </button>
+                            <div className="flex items-end justify-end gap-1 pb-1 md:justify-start">
+                              {!isSuspended ? (
+                                <button onClick={() => updateListItem('dvaList', index, 'suspensao', nowIso())} className="inline-flex h-7 items-center rounded-[0.6rem] border border-[#22d3ee30] bg-[#22d3ee10] px-2 text-[8px] font-bold uppercase tracking-wider text-[#22d3ee]">OFF</button>
+                              ) : (
+                                <button onClick={() => updateListItem('dvaList', index, 'suspensao', '')} className="inline-flex h-7 items-center rounded-[0.6rem] border border-[#4ade8030] bg-[#4ade8010] px-2 text-[8px] font-bold uppercase tracking-wider text-[#4ade80]">ON</button>
+                              )}
+                              <button onClick={() => removeListItem('dvaList', index)} className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"><Trash2 className="h-3 w-3" /></button>
                             </div>
                           </div>
+                          {isSuspended && <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspensa em {formatDateTime(item.suspensao!)}</p>}
                           {analise ? (
                             <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
                               <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
