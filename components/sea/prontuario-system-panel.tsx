@@ -382,10 +382,8 @@ type DrugTrend = 'manteve' | 'reduziu' | 'aumentou' | 'desligado'
 function calcDrugTrend(inicio: string, atual: string): DrugTrend | null {
   const i = parseFloat(inicio)
   const a = parseFloat(atual)
-  if (isNaN(i) && isNaN(a)) return null
-  // Se atual é 0 (ou vazio/NaN) e início > 0 → desligado
-  if (i > 0 && (isNaN(a) || a === 0)) return 'desligado'
   if (isNaN(i) || isNaN(a)) return null
+  if (a === 0 && i > 0) return 'desligado'
   if (a < i) return 'reduziu'
   if (a > i) return 'aumentou'
   return 'manteve'
