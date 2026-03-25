@@ -22,6 +22,9 @@ export function BottomNav({
     }`
 
   return (
+    <>
+    {/* Solid block below nav to hide content underneath */}
+    <div className="fixed bottom-0 left-0 right-0 z-40 h-20" style={{ background: '#020202' }} />
     <motion.nav
       data-sea-bottom-nav="true"
       className="fixed bottom-5 left-0 right-0 z-50 px-2.5 md:px-8"
@@ -47,5 +50,6 @@ export function BottomNav({
         </button>
       </div>
     </motion.nav>
+    </>
   )
 }
