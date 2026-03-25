@@ -4737,7 +4737,10 @@ export function ProntuarioSystemPanel() {
 
                   // 8. Balanço hídrico
                   const bal = parseNumber(currentRecord.balanco24h)
-                  eligibility.push({ label: 'Balanco hidrico (≤ +500)', met: currentRecord.balanco24h ? bal <= 500 : null, detail: currentRecord.balanco24h ? `BH24 ${bal >= 0 ? '+' : ''}${bal}mL` : 'Sem dados' })
+                  const balAc = parseNumber(currentRecord.balancoAcumulado)
+                  const balOk = bal <= 500 && (!currentRecord.balancoAcumulado || balAc <= 3000)
+                  const balDetail = [currentRecord.balanco24h ? `BH24 ${bal >= 0 ? '+' : ''}${bal}` : '', currentRecord.balancoAcumulado ? `Ac ${balAc >= 0 ? '+' : ''}${balAc}` : ''].filter(Boolean).join(' · ') || 'Sem dados'
+                  eligibility.push({ label: 'Balanco hidrico', met: (currentRecord.balanco24h || currentRecord.balancoAcumulado) ? balOk : null, detail: balDetail })
 
                   // 9. Sedação
                   const sedsSusp = !currentRecord.sedativos?.length || currentRecord.sedativos.every((s: SedativeEntry) => !!s.suspensao || !s.atual || parseFloat(s.atual) === 0)
@@ -4880,7 +4883,7 @@ export function ProntuarioSystemPanel() {
                         {isTOT && (
                           <button type="button" onClick={() => setField('extOK', extActive ? '' : '1')}
                             className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
-                            style={extActive ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
+                            style={extActive ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
                           >Extubacao</button>
                         )}
                         {isTQT && (
