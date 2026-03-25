@@ -1472,9 +1472,14 @@ export function ProntuarioSystemPanel() {
       : 0
     const pf = calcPF(parseNumber(currentRecord.gasoPaO2), parseNumber(currentRecord.gasoFiO2) || parseNumber(currentRecord.fio2))
     const pfInterp = pf ? interpPF(pf) : null
-    const dp = calcDP(parseNumber(currentRecord.pplato), parseNumber(currentRecord.peep))
-    const cest = calcCest(parseNumber(currentRecord.vt), dp || 0)
-    const cdyn = calcCdyn(parseNumber(currentRecord.vt), parseNumber(currentRecord.ppico), parseNumber(currentRecord.peep))
+    // DP: usa Pplat se disponível, senão tenta Pinsp (campo pc) para PCV
+    const pplatoVal = parseNumber(currentRecord.pplato)
+    const pcVal = parseNumber(currentRecord.pc)
+    const peepVal = parseNumber(currentRecord.peep)
+    const pplatoOrPc = pplatoVal || pcVal + peepVal // Pinsp em PCV = PC + PEEP
+    const dp = calcDP(pplatoVal || (pcVal ? pcVal + peepVal : 0), peepVal)
+    const cest = calcCest(parseNumber(currentRecord.vt) || parseNumber(currentRecord.vc), dp || 0)
+    const cdyn = calcCdyn(parseNumber(currentRecord.vt) || parseNumber(currentRecord.vc), parseNumber(currentRecord.ppico), peepVal)
     const mechanicalPower = calcMechanicalPower(parseNumber(currentRecord.fr), parseNumber(currentRecord.vt), parseNumber(currentRecord.ppico), parseNumber(currentRecord.peep))
     const glasgow = calcGlasgow(
       parseNumber(currentRecord.glasgowO),
@@ -4110,6 +4115,17 @@ export function ProntuarioSystemPanel() {
                 </div>
 
                 {/* ── Analysis chips — volume modes (VCV, PRVC, HFOV, MMV) ── */}
+                {/* ── Volume Minuto (todos os modos) ── */}
+                {calculations?.minuteVentilation != null && (
+                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
+                    <MetricChip label="VE (Vol. Minuto)" value={`${typeof calculations.minuteVentilation === 'number' ? calculations.minuteVentilation.toFixed(1) : calculations.minuteVentilation} L/min`} hint={calculations.minuteVentilation > 12 ? 'Elevado' : calculations.minuteVentilation < 4 ? 'Baixo' : 'Adequado'} color={calculations.minuteVentilation > 12 || calculations.minuteVentilation < 4 ? '#fb923c' : '#4ade80'} />
+                    {calculations?.pf != null && (
+                      <MetricChip label="P/F" value={calculations.pf.toFixed(0)} hint={calculations.pfInterp?.t} color={calculations.pfInterp?.c} />
+                    )}
+                  </div>
+                )}
+
+                {/* ── Analysis chips — volume modes (VCV, PRVC) ── */}
                 {respModeType === 'volume' && (
                   <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
                     {calculations?.dp != null && (
@@ -4139,19 +4155,28 @@ export function ProntuarioSystemPanel() {
                 {/* ── Analysis chips — pressure modes (PCV) ── */}
                 {respModeType === 'pressure' && (
                   <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
-                    {currentRecord.pplato && (
-                      <MetricChip label="P. Plato" value={`${currentRecord.pplato} cmH2O`} hint={Number(currentRecord.pplato) > 30 ? 'ALTO' : 'OK'} color={Number(currentRecord.pplato) > 30 ? 'red' : undefined} />
+                    {calculations?.dp != null && (
+                      <MetricChip label="DP (Driving Pressure)" value={`${calculations.dp.toFixed(1)} cmH2O`} hint={calculations.dp > 15 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.dp > 15 ? 'red' : 'green'} />
                     )}
                     {calculations?.cest != null && (
                       <MetricChip label="Cest (complacencia)" value={`${calculations.cest.toFixed(1)} mL/cmH2O`} hint="Complacencia estatica" />
                     )}
-                    {calculations?.dp != null && (
-                      <MetricChip label="DP (Driving Pressure)" value={`${calculations.dp.toFixed(1)} cmH2O`} hint={calculations.dp > 15 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.dp > 15 ? 'red' : 'green'} />
+                    {calculations?.cdyn != null && (
+                      <MetricChip label="Cdyn (complacencia din.)" value={`${calculations.cdyn.toFixed(1)} mL/cmH2O`} hint="Complacencia dinamica" />
+                    )}
+                    {calculations?.raw != null && (
+                      <MetricChip label="Raw (resistencia)" value={`${calculations.raw.toFixed(1)} cmH2O/L/s`} hint="Resistencia de via aerea" />
+                    )}
+                    {currentRecord.ppico && (
+                      <MetricChip label="P. Pico" value={`${currentRecord.ppico} cmH2O`} hint={Number(currentRecord.ppico) > 40 ? 'ALTO' : 'OK'} color={Number(currentRecord.ppico) > 40 ? 'red' : undefined} />
+                    )}
+                    {calculations?.mechanicalPower != null && (
+                      <MetricChip label="Mechanical Power" value={`${calculations.mechanicalPower.toFixed(1)} J/min`} hint={calculations.mechanicalPower > 17 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.mechanicalPower > 17 ? 'red' : 'green'} />
                     )}
                   </div>
                 )}
 
-                {/* ── Analysis chips — spontaneous modes ── */}
+                {/* ── Analysis chips — spontaneous modes (PSV) ── */}
                 {respModeType === 'spontaneous' && currentRecord.modoVM !== 'TuboT' && currentRecord.modoVM !== 'CPAP' && currentRecord.modoVM !== 'BIPAP' && (
                   <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
                     {calculations?.rsbi != null && (
@@ -4167,6 +4192,9 @@ export function ProntuarioSystemPanel() {
                     )}
                     {calculations?.pmusc != null && (
                       <MetricChip label="Pmusc" value={calculations.pmusc.toFixed(1)} hint={calculations.pmuscInterp?.t} color={calculations.pmuscInterp?.c} />
+                    )}
+                    {calculations?.cest != null && (
+                      <MetricChip label="Cest" value={`${calculations.cest.toFixed(1)} mL/cmH2O`} hint="Complacencia estatica" />
                     )}
                   </div>
                 )}
