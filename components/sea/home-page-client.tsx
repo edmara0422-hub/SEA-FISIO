@@ -34,7 +34,7 @@ export default function HomePageClient() {
         {/* 3D Simulations marquee — full width */}
         <SimulationsMarquee />
 
-        <div className="mx-auto max-w-2xl px-4 md:px-8">
+        <div className="mx-auto max-w-2xl">
 
           {/* Performance */}
           <div className="mt-5">
