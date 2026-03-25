@@ -22,7 +22,7 @@ export default function HomePageClient() {
       <SeaBackdrop />
       <TopBarSEA />
 
-      <main className="relative z-10 px-4 pb-2 pt-28 md:px-8 md:pt-32">
+      <main className="relative z-10 px-4 pb-0 pt-28 md:px-8 md:pt-32">
         <div className="mx-auto max-w-2xl">
           {/* Greeting + Clock */}
           <div className="mb-8">
