@@ -854,33 +854,65 @@ function analyzeVMTrend(entries: VMHistoryEntry[]): TrendInsight[] {
   const prev = entries[1]
   const insights: TrendInsight[] = []
 
+  // Modo alterado
+  if (cur.modo && prev.modo && cur.modo !== prev.modo) {
+    const isProgression = (prev.modo === 'VCV' || prev.modo === 'PCV') && cur.modo === 'PSV'
+    const isRegression = prev.modo === 'PSV' && (cur.modo === 'VCV' || cur.modo === 'PCV')
+    if (isProgression) insights.push({ text: `${prev.modo} → ${cur.modo} — progressão para modo espontâneo`, color: '#4ade80' })
+    else if (isRegression) insights.push({ text: `${prev.modo} → ${cur.modo} — retorno a modo controlado`, color: '#f87171' })
+    else insights.push({ text: `Modo alterado: ${prev.modo} → ${cur.modo}`, color: '#60a5fa' })
+  }
+
+  // DP
   const dp = numDelta(cur.dp, prev.dp)
   if (dp) {
-    if (dp.delta < -2) insights.push({ text: `DP reduziu: ${prev.dp}→${cur.dp} cmH2O — proteção pulmonar`, color: '#4ade80' })
-    else if (dp.delta > 2) insights.push({ text: `DP aumentou: ${prev.dp}→${cur.dp} cmH2O — risco lesão pulmonar`, color: '#f87171' })
-    else insights.push({ text: `DP estável: ${cur.dp} cmH2O`, color: '#94a3b8' })
+    if (dp.delta < -2) insights.push({ text: `DP reduziu: ${prev.dp}→${cur.dp} cmH₂O — proteção pulmonar`, color: '#4ade80' })
+    else if (dp.delta > 2) insights.push({ text: `DP aumentou: ${prev.dp}→${cur.dp} cmH₂O — risco VILI`, color: '#f87171' })
   }
 
+  // FiO2
   const fio2 = numDelta(cur.fio2, prev.fio2)
   if (fio2) {
-    if (fio2.delta < -5) insights.push({ text: `FiO2 reduzida: ${prev.fio2}→${cur.fio2}% — desmame de O2`, color: '#4ade80' })
-    else if (fio2.delta > 5) insights.push({ text: `FiO2 aumentada: ${prev.fio2}→${cur.fio2}% — demanda O2 maior`, color: '#fb923c' })
+    if (fio2.delta < -5) insights.push({ text: `FiO₂ reduzida: ${prev.fio2}→${cur.fio2}% — desmame de O₂`, color: '#4ade80' })
+    else if (fio2.delta > 5) insights.push({ text: `FiO₂ aumentada: ${prev.fio2}→${cur.fio2}% — piora oxigenação`, color: '#fb923c' })
   }
 
+  // PEEP
   const peep = numDelta(cur.peep, prev.peep)
   if (peep && Math.abs(peep.delta) >= 1) {
-    insights.push({ text: `PEEP ${peep.delta > 0 ? 'aumentado' : 'reduzido'}: ${prev.peep}→${cur.peep} cmH2O`, color: '#facc15' })
+    insights.push({ text: `PEEP ${peep.delta > 0 ? 'aumentada' : 'reduzida'}: ${prev.peep}→${cur.peep} cmH₂O`, color: peep.delta > 0 ? '#facc15' : '#4ade80' })
   }
 
-  if (cur.modo && prev.modo && cur.modo !== prev.modo) {
-    insights.push({ text: `Modo alterado: ${prev.modo} → ${cur.modo}`, color: '#60a5fa' })
+  // PS (desmame PSV)
+  const ps = numDelta(cur.ps, prev.ps)
+  if (ps && Math.abs(ps.delta) >= 1) {
+    if (ps.delta < 0) insights.push({ text: `PS reduzida: ${prev.ps}→${cur.ps} cmH₂O — desmame em curso`, color: '#4ade80' })
+    else insights.push({ text: `PS aumentada: ${prev.ps}→${cur.ps} cmH₂O`, color: '#fb923c' })
   }
 
+  // FR
+  const fr = numDelta(cur.fr, prev.fr)
+  if (fr && Math.abs(fr.delta) >= 3) {
+    if (fr.delta > 5) insights.push({ text: `FR subiu: ${prev.fr}→${cur.fr} — taquipneia, avaliar causa`, color: '#f87171' })
+    else if (fr.delta < -3) insights.push({ text: `FR reduziu: ${prev.fr}→${cur.fr} — melhora do padrão`, color: '#4ade80' })
+  }
+
+  // VE
+  const ve = numDelta(cur.ve, prev.ve)
+  if (ve && Math.abs(ve.delta) >= 1) {
+    insights.push({ text: `VE ${ve.delta > 0 ? 'aumentou' : 'reduziu'}: ${prev.ve}→${cur.ve} L/min`, color: '#60a5fa' })
+  }
+
+  // Tendência geral (>= 3 registros)
   if (entries.length >= 3) {
     const first = entries[entries.length - 1]
     const fio2Trend = numDelta(cur.fio2, first.fio2)
     if (fio2Trend && fio2Trend.delta < -10) {
-      insights.push({ text: `Tendência (${entries.length} registros): FiO2 ${first.fio2}→${cur.fio2}% — desmame em curso`, color: '#60a5fa' })
+      insights.push({ text: `Tendência (${entries.length} reg): FiO₂ ${first.fio2}→${cur.fio2}% — desmame O₂ progressivo`, color: '#60a5fa' })
+    }
+    const psTrend = numDelta(cur.ps, first.ps)
+    if (psTrend && psTrend.delta < -3) {
+      insights.push({ text: `Tendência (${entries.length} reg): PS ${first.ps}→${cur.ps} — desmame PSV progressivo`, color: '#60a5fa' })
     }
   }
 
