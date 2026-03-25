@@ -1,32 +1,16 @@
 'use client'
 
 import dynamic from 'next/dynamic'
-import { motion } from 'framer-motion'
-import { BookOpen, Cpu, Brain, HeartPulse, Wind } from 'lucide-react'
-import { useEffect, useRef, useState } from 'react'
+import { BookOpen, Cpu, Brain } from 'lucide-react'
 import BusinessClock from '@/components/sea/greeting-clock-card'
 import { PerformanceBar } from '@/components/sea/performance-bar'
 import { SeaBackdrop } from '@/components/sea/sea-backdrop'
 import { TopBarSEA } from '@/components/sea/top-bar-sea'
 
-const BrainHeroScene = dynamic(
-  () => import('@/components/experience/brain-hero-scene').then((m) => m.BrainHeroScene),
-  { ssr: false }
+const SimulationMarquee = dynamic(
+  () => import('@/components/sea/simulation-marquee').then((m) => m.SimulationMarquee),
+  { ssr: false, loading: () => <div className="h-[clamp(140px,24vw,190px)] animate-pulse rounded-xl" style={{ background: 'rgba(255,255,255,0.02)' }} /> }
 )
-const CardioHeroScene = dynamic(
-  () => import('@/components/experience/cardio-hero-scene').then((m) => m.CardioHeroScene),
-  { ssr: false }
-)
-const PneumoHeroScene = dynamic(
-  () => import('@/components/experience/pneumo-hero-scene').then((m) => m.PneumoHeroScene),
-  { ssr: false }
-)
-
-const SCENES = [
-  { id: 'neuro', label: 'Neuro', icon: Brain, color: '#2dd4bf', Scene: BrainHeroScene },
-  { id: 'cardio', label: 'Cardio', icon: HeartPulse, color: '#f87171', Scene: CardioHeroScene },
-  { id: 'pneumo', label: 'Pneumo', icon: Wind, color: '#38bdf8', Scene: PneumoHeroScene },
-] as const
 
 export default function HomePageClient() {
   return (
@@ -42,8 +26,8 @@ export default function HomePageClient() {
           </div>
         </div>
 
-        {/* ── Simulation Strip — fullwidth carousel ── */}
-        <SimulationStrip />
+        {/* ── 3D Marquee — single WebGL, all models ── */}
+        <SimulationMarquee />
 
         <div className="mx-auto max-w-2xl px-4 md:px-8">
           {/* Quick stats */}
