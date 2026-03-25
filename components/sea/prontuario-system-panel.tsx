@@ -3935,6 +3935,12 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="Pocc">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pocc} onChange={(e) => setField('pocc', e.target.value)} placeholder="8" />
                         </FieldShell>
+                        <FieldShell label="P. Pico">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="18" />
+                        </FieldShell>
+                        <FieldShell label="P. Plato">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="15" />
+                        </FieldShell>
                       </div>
                     </div>
                   )}
