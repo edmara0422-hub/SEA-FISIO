@@ -3494,7 +3494,7 @@ export function ProntuarioSystemPanel() {
                         <>
                           <div className="col-span-2 xl:col-span-4 space-y-2">
                             <div>
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Cor secrecao</p>
+                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Cor</p>
                               <div className="flex flex-wrap gap-1">
                                 {chip('secrecao', 'Transparente', 'Transparente')}
                                 {chip('secrecao', 'Branca', 'Branca')}
@@ -3506,28 +3506,30 @@ export function ProntuarioSystemPanel() {
                                 {chip('secrecao', 'Ausente', 'Ausente')}
                               </div>
                             </div>
-                            <div>
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Consistencia</p>
-                              <div className="flex flex-wrap gap-1">
-                                {chip('secrecaoConsist', 'Fluida', 'Fluida')}
-                                {chip('secrecaoConsist', 'Espessa', 'Espessa/Viscosa')}
-                                {chip('secrecaoConsist', 'Rolha', 'Rolha/Tampao')}
+                            <div className="grid grid-cols-3 gap-3">
+                              <div>
+                                <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Consistencia</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {chip('secrecaoConsist', 'Fluida', 'Fluida')}
+                                  {chip('secrecaoConsist', 'Espessa', 'Espessa')}
+                                  {chip('secrecaoConsist', 'Rolha', 'Rolha')}
+                                </div>
                               </div>
-                            </div>
-                            <div>
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Quantidade</p>
-                              <div className="flex flex-wrap gap-1">
-                                {chip('secrecaoQtd', 'Pequena', 'Pequena')}
-                                {chip('secrecaoQtd', 'Media', 'Media')}
-                                {chip('secrecaoQtd', 'Grande', 'Grande')}
+                              <div>
+                                <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Quantidade</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {chip('secrecaoQtd', 'Pequena', 'Peq')}
+                                  {chip('secrecaoQtd', 'Media', 'Med')}
+                                  {chip('secrecaoQtd', 'Grande', 'Gde')}
+                                </div>
                               </div>
-                            </div>
-                            <div>
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Evolucao</p>
-                              <div className="flex flex-wrap gap-1">
-                                {chip('secrecaoEvolucao', 'Melhora', 'Melhora')}
-                                {chip('secrecaoEvolucao', 'Estavel', 'Estavel')}
-                                {chip('secrecaoEvolucao', 'Piora', 'Piora')}
+                              <div>
+                                <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Evolucao</p>
+                                <div className="flex flex-wrap gap-1">
+                                  {chip('secrecaoEvolucao', 'Melhora', '↑')}
+                                  {chip('secrecaoEvolucao', 'Estavel', '=')}
+                                  {chip('secrecaoEvolucao', 'Piora', '↓')}
+                                </div>
                               </div>
                             </div>
                           </div>
