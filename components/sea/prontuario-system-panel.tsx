@@ -1472,13 +1472,11 @@ export function ProntuarioSystemPanel() {
       : 0
     const pf = calcPF(parseNumber(currentRecord.gasoPaO2), parseNumber(currentRecord.gasoFiO2) || parseNumber(currentRecord.fio2))
     const pfInterp = pf ? interpPF(pf) : null
-    // DP: usa Pplat se disponível, senão Pinsp (PC + PEEP) para PCV
     const pplatoVal = currentRecord.pplato ? parseNumber(currentRecord.pplato) : 0
-    const pcVal = currentRecord.pc ? parseNumber(currentRecord.pc) : 0
     const peepVal = currentRecord.peep ? parseNumber(currentRecord.peep) : 0
-    const pplatoEfetivo = pplatoVal || (pcVal && peepVal ? pcVal + peepVal : 0)
-    const dp = pplatoEfetivo && peepVal ? calcDP(pplatoEfetivo, peepVal) : null
     const vtEfetivo = (currentRecord.vt ? parseNumber(currentRecord.vt) : 0) || (currentRecord.vc ? parseNumber(currentRecord.vc) : 0)
+    // DP e Cest: só com Pplat real (pausa inspiratória — VCV/PRVC)
+    const dp = pplatoVal && peepVal ? calcDP(pplatoVal, peepVal) : null
     const cest = dp && vtEfetivo ? calcCest(vtEfetivo, dp) : null
     const cdyn = calcCdyn(vtEfetivo, currentRecord.ppico ? parseNumber(currentRecord.ppico) : 0, peepVal)
     const mechanicalPower = calcMechanicalPower(parseNumber(currentRecord.fr), parseNumber(currentRecord.vt), parseNumber(currentRecord.ppico), parseNumber(currentRecord.peep))
@@ -3705,6 +3703,9 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="VC (mL)">
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
+                        <FieldShell label="VE (L/min)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve || (calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '')} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '8'} style={!currentRecord.ve && calculations?.minuteVentilation ? { color: 'rgba(74,222,128,0.7)' } : undefined} />
+                        </FieldShell>
                       </div>
                     </div>
                   )}
@@ -3739,8 +3740,14 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="I:E">
                           <input className={INPUT_CLASS_SM} value={currentRecord.ie} onChange={(e) => setField('ie', e.target.value)} placeholder="1:2" />
                         </FieldShell>
+                        <FieldShell label="P. Pico">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="28" />
+                        </FieldShell>
                         <FieldShell label="P. Plato">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="22" />
+                        </FieldShell>
+                        <FieldShell label="VE (L/min)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve || (calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '')} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '8'} style={!currentRecord.ve && calculations?.minuteVentilation ? { color: 'rgba(74,222,128,0.7)' } : undefined} />
                         </FieldShell>
                       </div>
                     </div>
@@ -3781,6 +3788,9 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Pocc">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pocc} onChange={(e) => setField('pocc', e.target.value)} placeholder="8" />
+                        </FieldShell>
+                        <FieldShell label="VE (L/min)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve || (calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '')} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '8'} style={!currentRecord.ve && calculations?.minuteVentilation ? { color: 'rgba(74,222,128,0.7)' } : undefined} />
                         </FieldShell>
                       </div>
                     </div>
@@ -4117,13 +4127,10 @@ export function ProntuarioSystemPanel() {
                 </div>
 
                 {/* ── Analysis chips — volume modes (VCV, PRVC, HFOV, MMV) ── */}
-                {/* ── Volume Minuto (todos os modos) ── */}
-                {calculations?.minuteVentilation != null && (
+                {/* ── P/F (todos os modos com FiO2 e PaO2) ── */}
+                {calculations?.pf != null && (
                   <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
-                    <MetricChip label="VE (Vol. Minuto)" value={`${typeof calculations.minuteVentilation === 'number' ? calculations.minuteVentilation.toFixed(1) : calculations.minuteVentilation} L/min`} hint={calculations.minuteVentilation > 12 ? 'Elevado' : calculations.minuteVentilation < 4 ? 'Baixo' : 'Adequado'} color={calculations.minuteVentilation > 12 || calculations.minuteVentilation < 4 ? '#fb923c' : '#4ade80'} />
-                    {calculations?.pf != null && (
-                      <MetricChip label="P/F" value={calculations.pf.toFixed(0)} hint={calculations.pfInterp?.t} color={calculations.pfInterp?.c} />
-                    )}
+                    <MetricChip label="P/F" value={calculations.pf.toFixed(0)} hint={calculations.pfInterp?.t} color={calculations.pfInterp?.c} />
                   </div>
                 )}
 
@@ -4160,17 +4167,8 @@ export function ProntuarioSystemPanel() {
                     {calculations?.dp != null && (
                       <MetricChip label="DP (Driving Pressure)" value={`${calculations.dp.toFixed(1)} cmH2O`} hint={calculations.dp > 15 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.dp > 15 ? 'red' : 'green'} />
                     )}
-                    {calculations?.cest != null && (
-                      <MetricChip label="Cest (complacencia)" value={`${calculations.cest.toFixed(1)} mL/cmH2O`} hint="Complacencia estatica" />
-                    )}
                     {calculations?.cdyn != null && (
                       <MetricChip label="Cdyn (complacencia din.)" value={`${calculations.cdyn.toFixed(1)} mL/cmH2O`} hint="Complacencia dinamica" />
-                    )}
-                    {calculations?.raw != null && (
-                      <MetricChip label="Raw (resistencia)" value={`${calculations.raw.toFixed(1)} cmH2O/L/s`} hint="Resistencia de via aerea" />
-                    )}
-                    {currentRecord.ppico && (
-                      <MetricChip label="P. Pico" value={`${currentRecord.ppico} cmH2O`} hint={Number(currentRecord.ppico) > 40 ? 'ALTO' : 'OK'} color={Number(currentRecord.ppico) > 40 ? 'red' : undefined} />
                     )}
                     {calculations?.mechanicalPower != null && (
                       <MetricChip label="Mechanical Power" value={`${calculations.mechanicalPower.toFixed(1)} J/min`} hint={calculations.mechanicalPower > 17 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.mechanicalPower > 17 ? 'red' : 'green'} />
@@ -4194,9 +4192,6 @@ export function ProntuarioSystemPanel() {
                     )}
                     {calculations?.pmusc != null && (
                       <MetricChip label="Pmusc" value={calculations.pmusc.toFixed(1)} hint={calculations.pmuscInterp?.t} color={calculations.pmuscInterp?.c} />
-                    )}
-                    {calculations?.cest != null && (
-                      <MetricChip label="Cest" value={`${calculations.cest.toFixed(1)} mL/cmH2O`} hint="Complacencia estatica" />
                     )}
                   </div>
                 )}
