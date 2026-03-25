@@ -140,7 +140,7 @@ export function RespiratoryOxyHbCurveSim({ className }: RespiratoryOxyHbCurveSim
       ctx.stroke()
 
       // P50 marker
-      if (isMain || mode === 'all') {
+      if (isMain || (mode as string) === 'all') {
         const p50X = po2ToX(curve.p50)
         const p50Y = satToY(50)
         ctx.beginPath()
