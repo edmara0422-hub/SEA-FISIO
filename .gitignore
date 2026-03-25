@@ -1,8 +1,15 @@
 # Dependências e build (nunca versionar)
 node_modules/
+node_modules 2/
 .next/
+.next.backup*/
 .vercel/
 .trae/
+tmp_refs/
+out/
+ios/DerivedData/
+*.pack
+*.sst
 
 # Sistema e IDE
 .DS_Store
