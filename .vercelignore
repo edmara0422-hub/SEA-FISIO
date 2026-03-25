@@ -1,7 +1,14 @@
 node_modules
+node_modules 2
 build
 dist
+out
+ios
+tmp_refs
+__tests__
 .git
 .trae
 .log
 .figma
+*.pack
+*.sst
