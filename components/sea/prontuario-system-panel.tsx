@@ -3021,13 +3021,27 @@ export function ProntuarioSystemPanel() {
                     <FieldShell label="RASS">
                       <select className={INPUT_CLASS_SM} value={currentRecord.rass} onChange={(e) => setField('rass', e.target.value)}>
                         <option value="">--</option>
-                        {['+4','+3','+2','+1','0','-1','-2','-3','-4','-5'].map((v) => <option key={v} value={v}>{v}</option>)}
+                        <option value="+4">+4 Combativo</option>
+                        <option value="+3">+3 Muito agitado</option>
+                        <option value="+2">+2 Agitado</option>
+                        <option value="+1">+1 Inquieto</option>
+                        <option value="0">0 Alerta e calmo</option>
+                        <option value="-1">-1 Sonolento</option>
+                        <option value="-2">-2 Sedação leve</option>
+                        <option value="-3">-3 Sedação moderada</option>
+                        <option value="-4">-4 Sedação profunda</option>
+                        <option value="-5">-5 Não despertável</option>
                       </select>
                     </FieldShell>
                     <FieldShell label="M.RASS">
                       <select className={INPUT_CLASS_SM} value={currentRecord.metaRASS} onChange={(e) => setField('metaRASS', e.target.value)}>
                         <option value="">--</option>
-                        {['0','-1','-2','-3','-4','-5'].map((v) => <option key={v} value={v}>{v}</option>)}
+                        <option value="0">0 Alerta e calmo</option>
+                        <option value="-1">-1 Sonolento</option>
+                        <option value="-2">-2 Sedação leve</option>
+                        <option value="-3">-3 Sedação moderada</option>
+                        <option value="-4">-4 Sedação profunda</option>
+                        <option value="-5">-5 Não despertável</option>
                       </select>
                     </FieldShell>
                   </div>
@@ -3039,7 +3053,15 @@ export function ProntuarioSystemPanel() {
                       hint={calculations?.glasgow?.interp}
                       color={calculations?.glasgow?.cor}
                     />
-                    <MetricChip label="Meta RASS" value={currentRecord.metaRASS || '--'} hint={currentRecord.rass ? `Atual ${currentRecord.rass}` : null} />
+                    <MetricChip label="RASS" value={currentRecord.rass || '--'} hint={currentRecord.metaRASS ? `Meta ${currentRecord.metaRASS}` : null} color={
+                      currentRecord.rass === '+4' || currentRecord.rass === '+3' ? '#f87171'
+                      : currentRecord.rass === '+2' || currentRecord.rass === '+1' ? '#fb923c'
+                      : currentRecord.rass === '0' ? '#4ade80'
+                      : currentRecord.rass === '-1' || currentRecord.rass === '-2' ? '#60a5fa'
+                      : currentRecord.rass === '-3' ? '#facc15'
+                      : currentRecord.rass === '-4' || currentRecord.rass === '-5' ? '#f87171'
+                      : undefined
+                    } />
                     <MetricChip label="TOF" value={currentRecord.ultimoTOF || '--'} hint={currentRecord.metaTOF ? `Meta ${currentRecord.metaTOF}` : null} />
                   </div>
                 </div>
