@@ -20,11 +20,11 @@ export default function HomePageClient() {
       <SeaBackdrop />
       <TopBarSEA />
 
-      <main className="relative z-10 px-4 pb-32 pt-[4.5rem] md:px-8 md:pt-20">
+      <main className="relative z-10 px-4 pb-32 pt-24 md:px-8 md:pt-28">
         <div className="mx-auto max-w-2xl">
 
           {/* Greeting + Clock */}
-          <div className="mb-6">
+          <div className="mb-8">
             <BusinessClock variant="hero" showGreeting />
           </div>
 
