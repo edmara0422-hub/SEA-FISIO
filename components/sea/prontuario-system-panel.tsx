@@ -3704,7 +3704,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve || (calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '')} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '8'} style={!currentRecord.ve && calculations?.minuteVentilation ? { color: 'rgba(74,222,128,0.7)' } : undefined} />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                       </div>
                     </div>
@@ -3747,7 +3747,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="22" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve || (calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '')} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '8'} style={!currentRecord.ve && calculations?.minuteVentilation ? { color: 'rgba(74,222,128,0.7)' } : undefined} />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                       </div>
                     </div>
@@ -3790,7 +3790,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.pocc} onChange={(e) => setField('pocc', e.target.value)} placeholder="8" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve || (calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '')} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? calculations.minuteVentilation.toFixed(1) : '8'} style={!currentRecord.ve && calculations?.minuteVentilation ? { color: 'rgba(74,222,128,0.7)' } : undefined} />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                       </div>
                     </div>
@@ -3879,7 +3879,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder="7" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                         <FieldShell label="FR">
                           <input className={INPUT_CLASS_SM} value={currentRecord.fr} onChange={(e) => setField('fr', e.target.value)} placeholder="18" />
@@ -3902,7 +3902,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder="7" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                         <FieldShell label="FR">
                           <input className={INPUT_CLASS_SM} value={currentRecord.fr} onChange={(e) => setField('fr', e.target.value)} placeholder="18" />
@@ -3939,7 +3939,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder="7" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                         <FieldShell label="FR">
                           <input className={INPUT_CLASS_SM} value={currentRecord.fr} onChange={(e) => setField('fr', e.target.value)} placeholder="18" />
@@ -3968,7 +3968,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder="7" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                         <FieldShell label="FR">
                           <input className={INPUT_CLASS_SM} value={currentRecord.fr} onChange={(e) => setField('fr', e.target.value)} placeholder="18" />
@@ -4008,7 +4008,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder="7" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                         <FieldShell label="FR">
                           <input className={INPUT_CLASS_SM} value={currentRecord.fr} onChange={(e) => setField('fr', e.target.value)} placeholder="18" />
@@ -4076,7 +4076,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
                         <FieldShell label="VE (L/min)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder="7" />
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ve} onChange={(e) => setField('ve', e.target.value)} placeholder={calculations?.minuteVentilation ? `${calculations.minuteVentilation.toFixed(1)} (auto)` : '8'} />
                         </FieldShell>
                         <FieldShell label="Fluxo (L/min)">
                           <input className={INPUT_CLASS_SM} value={currentRecord.fluxo} onChange={(e) => setField('fluxo', e.target.value)} placeholder="60" />
@@ -4127,13 +4127,6 @@ export function ProntuarioSystemPanel() {
                 </div>
 
                 {/* ── Analysis chips — volume modes (VCV, PRVC, HFOV, MMV) ── */}
-                {/* ── P/F (todos os modos com FiO2 e PaO2) ── */}
-                {calculations?.pf != null && (
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
-                    <MetricChip label="P/F" value={calculations.pf.toFixed(0)} hint={calculations.pfInterp?.t} color={calculations.pfInterp?.c} />
-                  </div>
-                )}
-
                 {/* ── Analysis chips — volume modes (VCV, PRVC) ── */}
                 {respModeType === 'volume' && (
                   <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
