@@ -3492,10 +3492,10 @@ export function ProntuarioSystemPanel() {
                       }
                       return (
                         <>
-                          <div className="col-span-2 xl:col-span-4 space-y-2">
+                          <div className="col-span-2 xl:col-span-4 space-y-2 text-center">
                             <div>
                               <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Cor</p>
-                              <div className="flex flex-wrap gap-1">
+                              <div className="flex flex-wrap justify-center gap-1">
                                 {chip('secrecao', 'Transparente', 'Transparente')}
                                 {chip('secrecao', 'Branca', 'Branca')}
                                 {chip('secrecao', 'Amarela', 'Amarela')}
@@ -3509,7 +3509,7 @@ export function ProntuarioSystemPanel() {
                             <div className="grid grid-cols-3 gap-3">
                               <div>
                                 <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Consistencia</p>
-                                <div className="flex flex-wrap gap-1">
+                                <div className="flex flex-wrap justify-center gap-1">
                                   {chip('secrecaoConsist', 'Fluida', 'Fluida')}
                                   {chip('secrecaoConsist', 'Espessa', 'Espessa')}
                                   {chip('secrecaoConsist', 'Rolha', 'Rolha')}
@@ -3517,7 +3517,7 @@ export function ProntuarioSystemPanel() {
                               </div>
                               <div>
                                 <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Quantidade</p>
-                                <div className="flex flex-wrap gap-1">
+                                <div className="flex flex-wrap justify-center gap-1">
                                   {chip('secrecaoQtd', 'Pequena', 'Peq')}
                                   {chip('secrecaoQtd', 'Media', 'Med')}
                                   {chip('secrecaoQtd', 'Grande', 'Gde')}
@@ -3525,7 +3525,7 @@ export function ProntuarioSystemPanel() {
                               </div>
                               <div>
                                 <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Evolucao</p>
-                                <div className="flex flex-wrap gap-1">
+                                <div className="flex flex-wrap justify-center gap-1">
                                   {chip('secrecaoEvolucao', 'Melhora', '↑')}
                                   {chip('secrecaoEvolucao', 'Estavel', '=')}
                                   {chip('secrecaoEvolucao', 'Piora', '↓')}
