@@ -681,26 +681,43 @@ function summarizeBalance(record: ICURecord) {
   const balAcc = parseNumber(record.balancoAcumulado)
   if (!record.balanco24h && !record.balancoAcumulado) return null
 
-  if (bal24 > 2000 || balAcc > 5000) {
-    return { text: 'Balanco muito positivo', color: '#f87171' }
-  }
-  if (bal24 > 500 || balAcc > 3000) {
-    return { text: 'Retencao hidrica em vigilancia', color: '#facc15' }
-  }
-  if (bal24 < -1000 || balAcc < -2000) {
-    return { text: 'Balanco negativo importante', color: '#fb923c' }
-  }
-  return { text: 'Balanco sob monitorizacao', color: '#4ade80' }
+  // Análise do balanço 24h
+  if (bal24 > 1500) return { text: `BH24 +${bal24}mL — sobrecarga hidrica`, color: '#f87171' }
+  if (bal24 > 500) return { text: `BH24 +${bal24}mL — positivo, monitorar`, color: '#facc15' }
+  if (bal24 >= -500 && bal24 <= 500) return { text: `BH24 ${bal24 >= 0 ? '+' : ''}${bal24}mL — equilibrado`, color: '#4ade80' }
+  if (bal24 >= -1500) return { text: `BH24 ${bal24}mL — negativo leve`, color: '#60a5fa' }
+  return { text: `BH24 ${bal24}mL — negativo importante`, color: '#fb923c' }
 }
 
 function summarizeBalanceDetailed(record: ICURecord) {
   const bal24 = parseNumber(record.balanco24h)
   const balAcc = parseNumber(record.balancoAcumulado)
   if (!record.balanco24h && !record.balancoAcumulado) return null
-  if (bal24 > 2000 || balAcc > 5000) return 'Balanco fortemente positivo — risco de sobrecarga hidrica, edema pulmonar e comprometimento ventilatório. Revisar aporte, estimular diurese e considerar restricao de fluidos.'
-  if (bal24 > 500 || balAcc > 3000) return 'Balanco moderadamente positivo — monitorar sinais de congestao pulmonar, resposta renal e saturacao. Avaliar necessidade de restricao hidrica e diuretico.'
-  if (bal24 < -1000 || balAcc < -2000) return 'Balanco negativo significativo — avaliar perfusao tecidual, pressao arterial, diurese e necessidade de reposicao volemica. Correlacionar com status hemodinamico.'
-  return 'Balanco em faixa monitorada — manter correlacao clinica com hemodinamica, perfusao periferica e diurese.'
+
+  const parts: string[] = []
+
+  // Balanço 24h
+  if (record.balanco24h) {
+    if (bal24 > 1500) parts.push(`BH 24h +${bal24}mL: sobrecarga hidrica. Risco de edema pulmonar, piora da oxigenacao e dificuldade de desmame. Restringir aporte, avaliar diuretico (furosemida), monitorar debito urinario.`)
+    else if (bal24 > 500) parts.push(`BH 24h +${bal24}mL: balanco positivo. Monitorar congestao pulmonar, SpO2 e resposta renal. Considerar restricao hidrica se tendencia de acumulo.`)
+    else if (bal24 >= -500) parts.push(`BH 24h ${bal24 >= 0 ? '+' : ''}${bal24}mL: equilibrado. Manter monitorizacao.`)
+    else if (bal24 >= -1500) parts.push(`BH 24h ${bal24}mL: balanco negativo leve. Se intencional (pos-ressuscitacao), favoravel ao desmame. Monitorar perfusao e PAM.`)
+    else parts.push(`BH 24h ${bal24}mL: balanco negativo importante. Avaliar perfusao tecidual, PAM, debito urinario, lactato. Correlacionar com hemodinamica antes de continuar desidratacao.`)
+  }
+
+  // Balanço acumulado
+  if (record.balancoAcumulado) {
+    if (balAcc > 5000) parts.push(`BH acumulado +${balAcc}mL: retencao hidrica grave. Peso estimado +${(balAcc / 1000).toFixed(1)}kg acima do basal. Forte impacto em complacencia pulmonar e desmame.`)
+    else if (balAcc > 2000) parts.push(`BH acumulado +${balAcc}mL: retencao moderada (+${(balAcc / 1000).toFixed(1)}kg). Considerar fase de desidratacao guiada por metas.`)
+    else if (balAcc >= -2000) parts.push(`BH acumulado ${balAcc >= 0 ? '+' : ''}${balAcc}mL: faixa aceitavel.`)
+    else parts.push(`BH acumulado ${balAcc}mL: desidratacao acumulada. Reavaliar necessidade de reposicao.`)
+  }
+
+  // Correlação clínica
+  if (bal24 > 500 && balAcc > 3000) parts.push('Atencao: BH 24h positivo + acumulado alto = risco de piora ventilatória progressiva.')
+  if (bal24 < -500 && balAcc > 3000) parts.push('BH 24h negativo com acumulado ainda positivo: fase de desidratacao em curso — manter se hemodinamica estavel.')
+
+  return parts.join(' ')
 }
 
 function analyzeLabExam(exam: LabExamEntry) {
