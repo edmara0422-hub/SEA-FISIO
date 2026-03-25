@@ -4658,10 +4658,10 @@ export function ProntuarioSystemPanel() {
                 {(() => {
                   const isTOT = currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia === 'ML'
                   const isTQT = currentRecord.tipoVia?.startsWith('TQT')
+                  // Paciente esteve em VM (tem dados de IOT ou histórico VM) — mostra desmame mesmo após extubação
+                  const wasOnVM = !!currentRecord.dataTOT || !!currentRecord.dataTQT || (currentRecord.vmHist?.length ?? 0) > 0 || !!currentRecord.modoVM
                   // ── Auto-detect from events ──
-                  // Se preencheu data de extubação → extubação ativa automaticamente
                   const extFromEvent = !!(currentRecord.dataExtubacao && currentRecord.horaExtubacao)
-                  // Se preencheu data desc VM → desconexão ativa automaticamente
                   const descFromEvent = !!(currentRecord.dataDescVM && currentRecord.horaDescVM)
 
                   const treActive = currentRecord.treOK === '1'
