@@ -4870,18 +4870,18 @@ export function ProntuarioSystemPanel() {
                         </div>
                       )}
 
-                      {/* Ext / Desc action buttons */}
+                      {/* Ext / Desc action buttons — show if currently intubated OR was on VM */}
                       <div className="flex flex-wrap justify-center gap-2 mb-3">
-                        {isTOT && (
+                        {(isTOT || wasOnVM) && (
                           <button type="button" onClick={() => setField('extOK', extActive ? '' : '1')}
                             className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
                             style={extActive ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
                           >Extubacao</button>
                         )}
-                        {isTQT && (
+                        {(isTQT || currentRecord.dataTQT) && (
                           <button type="button" onClick={() => setField('descVMOK', descActive ? '' : '1')}
                             className="rounded-[0.8rem] border px-3 py-1.5 text-[10px] font-semibold"
-                            style={descActive ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
+                            style={descActive ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.04)', borderColor: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.50)' }}
                           >Desconexao VM</button>
                         )}
                       </div>
@@ -4899,12 +4899,12 @@ export function ProntuarioSystemPanel() {
                       )}
 
                       {/* Extubation result */}
-                      {isTOT && extActive && (
+                      {(isTOT || wasOnVM) && extActive && (
                         <div className="mb-3">
                           <p className="mb-1 text-[9px] text-white/36">Resultado da Extubacao</p>
                           <div className="flex gap-2">
                             {(['Sucesso', 'Falha'] as const).map((opt) => (
-                              <button key={opt} type="button" onClick={() => setField('extResult', opt)}
+                              <button key={opt} type="button" onClick={() => setField('extResult', currentRecord.extResult === opt ? '' : opt)}
                                 className="rounded-[0.7rem] border px-3 py-1 text-[10px] font-semibold"
                                 style={currentRecord.extResult === opt ? (opt === 'Sucesso' ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(248,113,113,0.12)', borderColor: 'rgba(248,113,113,0.35)', color: '#f87171' }) : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.50)' }}>
                                 {opt}
@@ -4915,12 +4915,12 @@ export function ProntuarioSystemPanel() {
                       )}
 
                       {/* Disconnection result */}
-                      {isTQT && descActive && (
+                      {(isTQT || currentRecord.dataTQT) && descActive && (
                         <div className="mb-3">
                           <p className="mb-1 text-[9px] text-white/36">Resultado da Desconexao</p>
                           <div className="flex gap-2">
                             {(['Sucesso', 'Falha'] as const).map((opt) => (
-                              <button key={opt} type="button" onClick={() => setField('descResult', opt)}
+                              <button key={opt} type="button" onClick={() => setField('descResult', currentRecord.descResult === opt ? '' : opt)}
                                 className="rounded-[0.7rem] border px-3 py-1 text-[10px] font-semibold"
                                 style={currentRecord.descResult === opt ? (opt === 'Sucesso' ? { background: 'rgba(74,222,128,0.12)', borderColor: 'rgba(74,222,128,0.35)', color: '#4ade80' } : { background: 'rgba(248,113,113,0.12)', borderColor: 'rgba(248,113,113,0.35)', color: '#f87171' }) : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.50)' }}>
                                 {opt}
