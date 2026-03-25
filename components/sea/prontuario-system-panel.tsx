@@ -1472,14 +1472,15 @@ export function ProntuarioSystemPanel() {
       : 0
     const pf = calcPF(parseNumber(currentRecord.gasoPaO2), parseNumber(currentRecord.gasoFiO2) || parseNumber(currentRecord.fio2))
     const pfInterp = pf ? interpPF(pf) : null
-    // DP: usa Pplat se disponível, senão tenta Pinsp (campo pc) para PCV
-    const pplatoVal = parseNumber(currentRecord.pplato)
-    const pcVal = parseNumber(currentRecord.pc)
-    const peepVal = parseNumber(currentRecord.peep)
-    const pplatoOrPc = pplatoVal || pcVal + peepVal // Pinsp em PCV = PC + PEEP
-    const dp = calcDP(pplatoVal || (pcVal ? pcVal + peepVal : 0), peepVal)
-    const cest = calcCest(parseNumber(currentRecord.vt) || parseNumber(currentRecord.vc), dp || 0)
-    const cdyn = calcCdyn(parseNumber(currentRecord.vt) || parseNumber(currentRecord.vc), parseNumber(currentRecord.ppico), peepVal)
+    // DP: usa Pplat se disponível, senão Pinsp (PC + PEEP) para PCV
+    const pplatoVal = currentRecord.pplato ? parseNumber(currentRecord.pplato) : 0
+    const pcVal = currentRecord.pc ? parseNumber(currentRecord.pc) : 0
+    const peepVal = currentRecord.peep ? parseNumber(currentRecord.peep) : 0
+    const pplatoEfetivo = pplatoVal || (pcVal && peepVal ? pcVal + peepVal : 0)
+    const dp = pplatoEfetivo && peepVal ? calcDP(pplatoEfetivo, peepVal) : null
+    const vtEfetivo = (currentRecord.vt ? parseNumber(currentRecord.vt) : 0) || (currentRecord.vc ? parseNumber(currentRecord.vc) : 0)
+    const cest = dp && vtEfetivo ? calcCest(vtEfetivo, dp) : null
+    const cdyn = calcCdyn(vtEfetivo, currentRecord.ppico ? parseNumber(currentRecord.ppico) : 0, peepVal)
     const mechanicalPower = calcMechanicalPower(parseNumber(currentRecord.fr), parseNumber(currentRecord.vt), parseNumber(currentRecord.ppico), parseNumber(currentRecord.peep))
     const glasgow = calcGlasgow(
       parseNumber(currentRecord.glasgowO),
@@ -1516,10 +1517,11 @@ export function ProntuarioSystemPanel() {
       }))
       : []
     const sf = calcSF(currentRecord.sfSpO2, currentRecord.sfFiO2)
-    const minuteVentilation =
-      parseNumber(currentRecord.ve) || (parseNumber(currentRecord.fr) && (parseNumber(currentRecord.vc) || parseNumber(currentRecord.vt))
-        ? (parseNumber(currentRecord.fr) * (parseNumber(currentRecord.vc) || parseNumber(currentRecord.vt))) / 1000
-        : null)
+    const veManual = currentRecord.ve ? parseNumber(currentRecord.ve) : null
+    const frVal = currentRecord.fr ? parseNumber(currentRecord.fr) : 0
+    const vtOrVc = currentRecord.vt ? parseNumber(currentRecord.vt) : currentRecord.vc ? parseNumber(currentRecord.vc) : 0
+    const veCalc = frVal > 0 && vtOrVc > 0 ? (frVal * vtOrVc) / 1000 : null
+    const minuteVentilation = veManual ?? veCalc
 
     const weanMinuteVentilation =
       parseNumber(currentRecord.dFrDesm) && parseNumber(currentRecord.dVcDesm)
