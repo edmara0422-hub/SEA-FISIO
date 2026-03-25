@@ -3467,43 +3467,73 @@ export function ProntuarioSystemPanel() {
                         placeholder="Ausculta, complacencia, infiltrado, expansao..."
                       />
                     </FieldShell>
-                    <FieldShell label="Cor secrecao">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecao} onChange={(e) => setField('secrecao', e.target.value)}>
-                        <option value="">Selecionar</option>
-                        <option value="Transparente">Transparente (irritacao leve/alergia)</option>
-                        <option value="Branca">Branca (congestao/inflamacao cronica)</option>
-                        <option value="Amarela">Amarela (infeccao bacteriana)</option>
-                        <option value="Verde">Verde (infeccao intensa/pneumonia)</option>
-                        <option value="Marrom">Marrom (sangue antigo/tabagismo)</option>
-                        <option value="Rosada">Rosada/Vermelha (hemoptise)</option>
-                        <option value="Mucopurulenta">Mucopurulenta (mista)</option>
-                        <option value="Ausente">Ausente</option>
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Consistencia">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoConsist ?? ''} onChange={(e) => setField('secrecaoConsist', e.target.value)}>
-                        <option value="">Selecionar</option>
-                        <option value="Fluida">Fluida (virose/alergia)</option>
-                        <option value="Espessa">Espessa/Viscosa (bacteriana/desidratacao)</option>
-                        <option value="Rolha">Rolha/Tampao mucoso</option>
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Quantidade">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoQtd ?? ''} onChange={(e) => setField('secrecaoQtd', e.target.value)}>
-                        <option value="">Selecionar</option>
-                        <option value="Pequena">Pequena</option>
-                        <option value="Media">Media</option>
-                        <option value="Grande">Grande</option>
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Evolucao">
-                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoEvolucao ?? ''} onChange={(e) => setField('secrecaoEvolucao', e.target.value)}>
-                        <option value="">Selecionar</option>
-                        <option value="Melhora">Melhora (clareando)</option>
-                        <option value="Estavel">Estavel</option>
-                        <option value="Piora">Piora (espessando/purulenta)</option>
-                      </select>
-                    </FieldShell>
+                    {/* Secrecao — multi-select chips */}
+                    {(() => {
+                      const toggleTag = (field: string, tag: string) => {
+                        const cur = (currentRecord[field as keyof typeof currentRecord] as string) || ''
+                        const tags = cur ? cur.split(',').map(t => t.trim()).filter(Boolean) : []
+                        const next = tags.includes(tag) ? tags.filter(t => t !== tag) : [...tags, tag]
+                        setField(field, next.join(', '))
+                      }
+                      const hasTags = (field: string) => {
+                        const cur = (currentRecord[field as keyof typeof currentRecord] as string) || ''
+                        return cur ? cur.split(',').map(t => t.trim()).filter(Boolean) : []
+                      }
+                      const chip = (field: string, tag: string, label: string) => {
+                        const active = hasTags(field).includes(tag)
+                        return (
+                          <button key={tag} type="button" onClick={() => toggleTag(field, tag)}
+                            className="rounded-full border px-2 py-0.5 text-[9px] font-semibold transition-all"
+                            style={active
+                              ? { borderColor: 'rgba(96,165,250,0.4)', background: 'rgba(96,165,250,0.15)', color: '#93c5fd' }
+                              : { borderColor: 'rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.45)' }
+                            }>{label}</button>
+                        )
+                      }
+                      return (
+                        <>
+                          <div className="col-span-2 xl:col-span-4 space-y-2">
+                            <div>
+                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Cor secrecao</p>
+                              <div className="flex flex-wrap gap-1">
+                                {chip('secrecao', 'Transparente', 'Transparente')}
+                                {chip('secrecao', 'Branca', 'Branca')}
+                                {chip('secrecao', 'Amarela', 'Amarela')}
+                                {chip('secrecao', 'Verde', 'Verde')}
+                                {chip('secrecao', 'Marrom', 'Marrom')}
+                                {chip('secrecao', 'Rosada', 'Rosada/Sangue')}
+                                {chip('secrecao', 'Mucopurulenta', 'Mucopurulenta')}
+                                {chip('secrecao', 'Ausente', 'Ausente')}
+                              </div>
+                            </div>
+                            <div>
+                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Consistencia</p>
+                              <div className="flex flex-wrap gap-1">
+                                {chip('secrecaoConsist', 'Fluida', 'Fluida')}
+                                {chip('secrecaoConsist', 'Espessa', 'Espessa/Viscosa')}
+                                {chip('secrecaoConsist', 'Rolha', 'Rolha/Tampao')}
+                              </div>
+                            </div>
+                            <div>
+                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Quantidade</p>
+                              <div className="flex flex-wrap gap-1">
+                                {chip('secrecaoQtd', 'Pequena', 'Pequena')}
+                                {chip('secrecaoQtd', 'Media', 'Media')}
+                                {chip('secrecaoQtd', 'Grande', 'Grande')}
+                              </div>
+                            </div>
+                            <div>
+                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Evolucao</p>
+                              <div className="flex flex-wrap gap-1">
+                                {chip('secrecaoEvolucao', 'Melhora', 'Melhora')}
+                                {chip('secrecaoEvolucao', 'Estavel', 'Estavel')}
+                                {chip('secrecaoEvolucao', 'Piora', 'Piora')}
+                              </div>
+                            </div>
+                          </div>
+                        </>
+                      )
+                    })()}
                     <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">Badge via aerea</p>
                       <div className="mt-2 flex flex-wrap gap-2">
