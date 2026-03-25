@@ -28,13 +28,6 @@ export default function HomePageClient() {
             <BusinessClock variant="hero" showGreeting />
           </div>
 
-          {/* Divider subtle */}
-          <div className="mb-5 flex items-center gap-3">
-            <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 50%, transparent)' }} />
-            <span className="text-[8px] font-semibold uppercase tracking-[0.3em] text-white/16">Simulacoes</span>
-            <div className="h-px flex-1" style={{ background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08) 50%, transparent)' }} />
-          </div>
-
           {/* 3D Simulation Cards */}
           <SimulationsGrid />
 
