@@ -729,9 +729,31 @@ function analyzeLabExam(exam: LabExamEntry) {
   const inr = parseNumber(exam.inr)
   if (exam.inr) pushItem('INR', inr > 1.5 ? 'Coagulopatia' : 'Faixa esperada', inr > 1.5 ? '#fb923c' : '#4ade80')
 
-  if (hb && hb < 7) alerts.push({ text: 'Considerar estrategia transfusional conforme contexto clinico', color: '#f87171' })
-  if (lactate && lactate >= 4) alerts.push({ text: 'Lactato elevado, correlacionar com perfusao e choque', color: '#fb923c' })
-  if (potassium && (potassium > 5.5 || potassium < 3.0)) alerts.push({ text: 'Potassio critico, revisar ECG e correcao imediata', color: '#f87171' })
+  // Exames adicionais
+  const bt = parseNumber(exam.bt)
+  if (exam.bt) pushItem('BT', bt > 3 ? 'Ictericia' : bt > 1.2 ? 'Elevada' : 'Normal', bt > 3 ? '#f87171' : bt > 1.2 ? '#facc15' : '#4ade80')
+  const alb = parseNumber(exam.alb)
+  if (exam.alb) pushItem('Alb', alb < 2.5 ? 'Hipoalbuminemia grave' : alb < 3.5 ? 'Hipoalbuminemia' : 'Normal', alb < 2.5 ? '#f87171' : alb < 3.5 ? '#facc15' : '#4ade80')
+  const tgo = parseNumber(exam.tgo)
+  if (exam.tgo) pushItem('TGO', tgo > 120 ? 'Muito elevada' : tgo > 40 ? 'Elevada' : 'Normal', tgo > 120 ? '#f87171' : tgo > 40 ? '#facc15' : '#4ade80')
+  const tgp = parseNumber(exam.tgp)
+  if (exam.tgp) pushItem('TGP', tgp > 120 ? 'Muito elevada' : tgp > 41 ? 'Elevada' : 'Normal', tgp > 120 ? '#f87171' : tgp > 41 ? '#facc15' : '#4ade80')
+  const ht = parseNumber(exam.ht)
+  if (exam.ht) pushItem('HT', ht < 30 ? 'Baixo' : ht > 50 ? 'Elevado' : 'Normal', ht < 30 || ht > 50 ? '#facc15' : '#4ade80')
+
+  // Alertas clínicos
+  if (hb && hb < 7) alerts.push({ text: 'HB < 7: considerar transfusao conforme contexto clinico', color: '#f87171' })
+  if (lactate && lactate >= 4) alerts.push({ text: 'Lactato ≥ 4: hipoperfusao, correlacionar com choque e perfusao tecidual', color: '#f87171' })
+  if (lactate && lactate >= 2 && lactate < 4) alerts.push({ text: 'Lactato 2-4: monitorar clearance, avaliar perfusao', color: '#fb923c' })
+  if (potassium && potassium > 5.5) alerts.push({ text: 'K+ > 5.5: hipercalemia — ECG, glucoinsulinoterapia, considerar dialise', color: '#f87171' })
+  if (potassium && potassium < 3.0) alerts.push({ text: 'K+ < 3.0: hipocalemia grave — reposicao IV, monitorar ECG', color: '#f87171' })
+  if (sodium && sodium > 155) alerts.push({ text: 'Na+ > 155: hipernatremia grave — corrigir lentamente (max 10 mEq/24h)', color: '#f87171' })
+  if (sodium && sodium < 125) alerts.push({ text: 'Na+ < 125: hiponatremia grave — risco de edema cerebral', color: '#f87171' })
+  if (creat && creat > 2) alerts.push({ text: 'Creat > 2: lesao renal — avaliar debito urinario, hidratacao e nefrotoxicos', color: '#f87171' })
+  if (plaq && plaq < 50000) alerts.push({ text: 'Plaquetas < 50k: risco hemorragico — cuidado com procedimentos invasivos', color: '#f87171' })
+  if (inr && inr > 2) alerts.push({ text: 'INR > 2: coagulopatia significativa — avaliar vitamina K, plasma', color: '#f87171' })
+  if (alb && alb < 2.5) alerts.push({ text: 'Albumina < 2.5: desnutricao grave — impacto em edema, cicatrizacao e farmacocinetica', color: '#fb923c' })
+  if (leuco && leuco > 20000) alerts.push({ text: 'Leucocitose > 20k: infeccao provavel — reavaliar antibioticoterapia e foco', color: '#fb923c' })
 
   return { items, alerts }
 }
