@@ -417,7 +417,7 @@ export function calcMrcTotal(values: Array<string | number>): number | null {
   if (values.length !== 12) return null
   const parsed = values.map((value) => toNumber(value))
   if (parsed.some((value) => value === null)) return null
-  return parsed.reduce((total, current) => total + Number(current), 0)
+  return (parsed as number[]).reduce((total, current) => total + current, 0)
 }
 
 export function interpMrc(v: number): Tone | null {
