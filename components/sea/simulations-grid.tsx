@@ -54,7 +54,7 @@ export function SimulationsGrid() {
 
   return (
     <motion.div
-      className="grid grid-cols-2 gap-3"
+      className="grid grid-cols-2 gap-2.5"
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, delay: 0.1 }}
@@ -62,12 +62,12 @@ export function SimulationsGrid() {
 
       {/* ── NEURO ────────────────────────────────────────────────── */}
       <motion.div
-        className="col-span-2 relative overflow-hidden rounded-[2rem] cursor-pointer"
+        className="col-span-2 relative overflow-hidden rounded-[1.75rem] cursor-pointer"
         style={{
-          height: 'clamp(280px, 44vw, 400px)',
-          border: '1px solid rgba(255,255,255,0.10)',
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
-          boxShadow: '0 32px 72px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06)',
+          height: 'clamp(260px, 42vw, 380px)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(160deg, rgba(45,212,191,0.03) 0%, rgba(255,255,255,0.01) 30%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 28px 64px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.05)',
         }}
         whileHover={{ scale: 1.007 }}
         transition={spring}
@@ -122,12 +122,12 @@ export function SimulationsGrid() {
 
       {/* ── CARDIO ───────────────────────────────────────────────── */}
       <motion.div
-        className="relative overflow-hidden rounded-[2rem] cursor-pointer"
+        className="relative overflow-hidden rounded-[1.75rem] cursor-pointer"
         style={{
-          height: 'clamp(220px, 36vw, 300px)',
-          border: '1px solid rgba(255,255,255,0.10)',
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
-          boxShadow: '0 24px 56px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+          height: 'clamp(200px, 34vw, 280px)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(160deg, rgba(180,30,40,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 20px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
         }}
         whileHover={{ scale: 1.012 }}
         transition={spring}
@@ -156,12 +156,12 @@ export function SimulationsGrid() {
 
       {/* ── PNEUMO ───────────────────────────────────────────────── */}
       <motion.div
-        className="relative overflow-hidden rounded-[2rem] cursor-pointer"
+        className="relative overflow-hidden rounded-[1.75rem] cursor-pointer"
         style={{
-          height: 'clamp(220px, 36vw, 300px)',
-          border: '1px solid rgba(255,255,255,0.10)',
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
-          boxShadow: '0 24px 56px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06)',
+          height: 'clamp(200px, 34vw, 280px)',
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(160deg, rgba(30,120,180,0.04) 0%, rgba(255,255,255,0.01) 40%, rgba(0,0,0,0) 100%)',
+          boxShadow: '0 20px 48px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.05)',
         }}
         whileHover={{ scale: 1.012 }}
         transition={spring}
