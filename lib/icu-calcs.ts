@@ -7,6 +7,7 @@ export type SedativeEntry = {
   inicio: string
   atual: string
   unidade: string
+  suspensao?: string
 }
 
 export type BNMEntry = {
@@ -14,6 +15,7 @@ export type BNMEntry = {
   inicio: string
   atual: string
   unidade: string
+  suspensao?: string
 }
 
 export type DVAEntry = {
@@ -21,6 +23,7 @@ export type DVAEntry = {
   inicio: string
   dose: string
   unidade: string
+  suspensao?: string
 }
 
 export type LabExamEntry = {
