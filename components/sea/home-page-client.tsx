@@ -63,106 +63,96 @@ export default function HomePageClient() {
   )
 }
 
-// ── Simulation Strip: 3D scenes in perspective carousel ──
+// ── Simulation Strip: infinite marquee with 3D scenes ──
 function SimulationStrip() {
-  const [active, setActive] = useState(0)
-  const timerRef = useRef<ReturnType<typeof setInterval>>()
+  const [mounted, setMounted] = useState([false, false, false])
 
-  // Auto-rotate every 4s
   useEffect(() => {
-    timerRef.current = setInterval(() => setActive((v) => (v + 1) % SCENES.length), 4000)
-    return () => clearInterval(timerRef.current)
+    const timers = [0, 300, 600].map((d, i) =>
+      setTimeout(() => setMounted((p) => p.map((v, j) => j === i ? true : v)), d)
+    )
+    return () => timers.forEach(clearTimeout)
   }, [])
 
-  const handleClick = (i: number) => {
-    setActive(i)
-    clearInterval(timerRef.current)
-    timerRef.current = setInterval(() => setActive((v) => (v + 1) % SCENES.length), 4000)
-  }
+  // Duplicate items for seamless loop (3 original + 3 clone)
+  const items = [...SCENES, ...SCENES]
 
   return (
-    <div className="relative" style={{ perspective: '900px', perspectiveOrigin: '50% 50%' }}>
-      {/* Track */}
-      <div className="flex items-center justify-center gap-3 py-2" style={{ height: 'clamp(180px, 30vw, 260px)' }}>
-        {SCENES.map((scene, i) => {
-          const offset = i - active
-          const isActive = offset === 0
-          const SceneComp = scene.Scene
-          const Icon = scene.icon
+    <div className="relative overflow-hidden" style={{ height: 'clamp(160px, 28vw, 220px)' }}>
+      {/* Fade edges */}
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16" style={{ background: 'linear-gradient(to right, #020202, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16" style={{ background: 'linear-gradient(to left, #020202, transparent)' }} />
 
-          return (
-            <motion.div
-              key={scene.id}
-              onClick={() => handleClick(i)}
-              className="relative shrink-0 cursor-pointer overflow-hidden"
-              style={{
-                width: isActive ? 'clamp(240px, 55vw, 360px)' : 'clamp(80px, 18vw, 120px)',
-                height: '100%',
-                borderRadius: isActive ? '1.5rem' : '1.2rem',
-                border: `1px solid ${isActive ? `${scene.color}30` : 'rgba(255,255,255,0.06)'}`,
-                transformStyle: 'preserve-3d',
-              }}
-              animate={{
-                rotateY: offset < 0 ? 25 : offset > 0 ? -25 : 0,
-                scale: isActive ? 1 : 0.88,
-                opacity: isActive ? 1 : 0.5,
-                z: isActive ? 40 : -20,
-              }}
-              transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            >
-              {/* 3D Scene */}
-              <div className="absolute inset-0" style={{ background: '#050505' }}>
-                {isActive && <SceneComp transparent />}
-              </div>
+      {/* Perspective container */}
+      <div className="h-full" style={{ perspective: '800px', perspectiveOrigin: '50% 50%' }}>
+        {/* Scrolling track */}
+        <div
+          className="flex h-full items-center gap-4"
+          style={{
+            animation: 'marquee-strip 20s linear infinite',
+            width: 'max-content',
+          }}
+        >
+          {items.map((scene, i) => {
+            const origIdx = i % SCENES.length
+            const Icon = scene.icon
 
-              {/* Gradient overlay */}
-              <div className="pointer-events-none absolute inset-0" style={{
-                background: isActive
-                  ? `linear-gradient(to top, ${scene.color}18 0%, transparent 50%)`
-                  : 'linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 100%)',
-              }} />
+            return (
+              <div
+                key={`${scene.id}-${i}`}
+                className="relative shrink-0 overflow-hidden"
+                style={{
+                  width: 'clamp(200px, 40vw, 280px)',
+                  height: '85%',
+                  borderRadius: '1.4rem',
+                  border: `1px solid ${scene.color}18`,
+                  background: '#050505',
+                  transformStyle: 'preserve-3d',
+                  transform: 'rotateY(-8deg)',
+                }}
+              >
+                {/* 3D Scene — only mount originals (not clones) to save GPU */}
+                <div className="absolute inset-0">
+                  {i < SCENES.length && mounted[origIdx] && <scene.Scene transparent />}
+                </div>
 
-              {/* Top shimmer */}
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{
-                background: `linear-gradient(90deg, transparent, ${isActive ? scene.color + '40' : 'rgba(255,255,255,0.08)'} 50%, transparent)`,
-              }} />
+                {/* Color glow at bottom */}
+                <div className="pointer-events-none absolute inset-0" style={{
+                  background: `linear-gradient(to top, ${scene.color}12 0%, transparent 40%)`,
+                }} />
 
-              {/* Label */}
-              <div className="absolute bottom-0 inset-x-0 p-3">
-                <div className="flex items-center gap-1.5">
-                  <Icon className="h-3 w-3" style={{ color: isActive ? scene.color : 'rgba(255,255,255,0.4)' }} />
-                  {isActive && (
-                    <motion.span
-                      initial={{ opacity: 0, x: -8 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="text-xs font-semibold tracking-wide"
-                      style={{ color: `${scene.color}cc` }}
-                    >
-                      {scene.label}
-                    </motion.span>
-                  )}
+                {/* Top shimmer */}
+                <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{
+                  background: `linear-gradient(90deg, transparent, ${scene.color}30 50%, transparent)`,
+                }} />
+
+                {/* Label */}
+                <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
+                  <Icon className="h-3 w-3" style={{ color: `${scene.color}90` }} />
+                  <span className="text-[10px] font-semibold tracking-wide" style={{ color: `${scene.color}80` }}>
+                    {scene.label}
+                  </span>
+                </div>
+
+                {/* Subtle badge */}
+                <div className="absolute top-3 right-3">
+                  <span className="rounded-full px-2 py-0.5 text-[7px] font-bold uppercase tracking-[0.2em]"
+                    style={{ background: `${scene.color}10`, border: `1px solid ${scene.color}20`, color: `${scene.color}60` }}>
+                    3D
+                  </span>
                 </div>
               </div>
-            </motion.div>
-          )
-        })}
+            )
+          })}
+        </div>
       </div>
 
-      {/* Dots */}
-      <div className="mt-3 flex justify-center gap-2">
-        {SCENES.map((scene, i) => (
-          <button key={i} onClick={() => handleClick(i)} className="p-1">
-            <motion.div
-              animate={{
-                width: active === i ? 20 : 5,
-                background: active === i ? scene.color : 'rgba(255,255,255,0.15)',
-              }}
-              transition={{ type: 'spring', stiffness: 400, damping: 30 }}
-              className="h-1 rounded-full"
-            />
-          </button>
-        ))}
-      </div>
+      <style>{`
+        @keyframes marquee-strip {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-50%); }
+        }
+      `}</style>
     </div>
   )
 }
