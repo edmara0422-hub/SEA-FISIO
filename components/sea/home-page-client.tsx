@@ -65,36 +65,31 @@ export default function HomePageClient() {
 
 // ── Simulation Strip: infinite marquee with 3D scenes ──
 function SimulationStrip() {
-  const [mounted, setMounted] = useState([false, false, false])
+  const [scenesReady, setScenesReady] = useState(false)
 
+  // Delay 3D mount by 1.5s so the strip shows immediately with placeholders
   useEffect(() => {
-    const timers = [0, 300, 600].map((d, i) =>
-      setTimeout(() => setMounted((p) => p.map((v, j) => j === i ? true : v)), d)
-    )
-    return () => timers.forEach(clearTimeout)
+    const t = setTimeout(() => setScenesReady(true), 1500)
+    return () => clearTimeout(t)
   }, [])
 
-  // Duplicate items for seamless loop (3 original + 3 clone)
+  // 3 originals + 3 clones for seamless loop
   const items = [...SCENES, ...SCENES]
 
   return (
-    <div className="relative overflow-hidden" style={{ height: 'clamp(160px, 28vw, 220px)' }}>
+    <div className="relative overflow-hidden" style={{ height: 'clamp(150px, 26vw, 200px)' }}>
       {/* Fade edges */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16" style={{ background: 'linear-gradient(to right, #020202, transparent)' }} />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16" style={{ background: 'linear-gradient(to left, #020202, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20" style={{ background: 'linear-gradient(to right, #020202, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20" style={{ background: 'linear-gradient(to left, #020202, transparent)' }} />
 
-      {/* Perspective container */}
+      {/* Perspective wrapper */}
       <div className="h-full" style={{ perspective: '800px', perspectiveOrigin: '50% 50%' }}>
-        {/* Scrolling track */}
         <div
-          className="flex h-full items-center gap-4"
-          style={{
-            animation: 'marquee-strip 20s linear infinite',
-            width: 'max-content',
-          }}
+          className="flex h-full items-center gap-4 pl-4"
+          style={{ animation: 'marquee-strip 18s linear infinite', width: 'max-content' }}
         >
           {items.map((scene, i) => {
-            const origIdx = i % SCENES.length
+            const isOriginal = i < SCENES.length
             const Icon = scene.icon
 
             return (
@@ -102,43 +97,43 @@ function SimulationStrip() {
                 key={`${scene.id}-${i}`}
                 className="relative shrink-0 overflow-hidden"
                 style={{
-                  width: 'clamp(200px, 40vw, 280px)',
-                  height: '85%',
-                  borderRadius: '1.4rem',
-                  border: `1px solid ${scene.color}18`,
-                  background: '#050505',
-                  transformStyle: 'preserve-3d',
-                  transform: 'rotateY(-8deg)',
+                  width: 'clamp(180px, 38vw, 260px)',
+                  height: '82%',
+                  borderRadius: '1.3rem',
+                  border: `1px solid ${scene.color}15`,
+                  background: `radial-gradient(ellipse at 50% 80%, ${scene.color}08, #050505 70%)`,
+                  transform: 'rotateY(-6deg)',
                 }}
               >
-                {/* 3D Scene — only mount originals (not clones) to save GPU */}
-                <div className="absolute inset-0">
-                  {i < SCENES.length && mounted[origIdx] && <scene.Scene transparent />}
-                </div>
+                {/* 3D Scene — only originals, delayed mount */}
+                {isOriginal && scenesReady && (
+                  <div className="absolute inset-0 opacity-90">
+                    <scene.Scene transparent />
+                  </div>
+                )}
 
-                {/* Color glow at bottom */}
+                {/* Animated placeholder before 3D loads */}
+                {(!scenesReady || !isOriginal) && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Icon className="h-10 w-10 animate-pulse" style={{ color: `${scene.color}20` }} />
+                  </div>
+                )}
+
+                {/* Bottom gradient */}
                 <div className="pointer-events-none absolute inset-0" style={{
-                  background: `linear-gradient(to top, ${scene.color}12 0%, transparent 40%)`,
+                  background: `linear-gradient(to top, ${scene.color}10 0%, transparent 50%)`,
                 }} />
 
-                {/* Top shimmer */}
+                {/* Top shimmer line */}
                 <div className="pointer-events-none absolute inset-x-0 top-0 h-px" style={{
-                  background: `linear-gradient(90deg, transparent, ${scene.color}30 50%, transparent)`,
+                  background: `linear-gradient(90deg, transparent, ${scene.color}25 50%, transparent)`,
                 }} />
 
                 {/* Label */}
-                <div className="absolute bottom-3 left-3 flex items-center gap-1.5">
-                  <Icon className="h-3 w-3" style={{ color: `${scene.color}90` }} />
-                  <span className="text-[10px] font-semibold tracking-wide" style={{ color: `${scene.color}80` }}>
+                <div className="absolute bottom-2.5 left-3 flex items-center gap-1.5">
+                  <Icon className="h-2.5 w-2.5" style={{ color: `${scene.color}80` }} />
+                  <span className="text-[9px] font-semibold tracking-wider" style={{ color: `${scene.color}70` }}>
                     {scene.label}
-                  </span>
-                </div>
-
-                {/* Subtle badge */}
-                <div className="absolute top-3 right-3">
-                  <span className="rounded-full px-2 py-0.5 text-[7px] font-bold uppercase tracking-[0.2em]"
-                    style={{ background: `${scene.color}10`, border: `1px solid ${scene.color}20`, color: `${scene.color}60` }}>
-                    3D
                   </span>
                 </div>
               </div>
