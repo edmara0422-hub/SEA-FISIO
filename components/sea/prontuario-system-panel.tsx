@@ -1732,10 +1732,13 @@ export function ProntuarioSystemPanel() {
       a.push({ text: 'Paciente intubado sem modo VM preenchido', color: '#60a5fa', action: 'Preencher parametros de VM na aba Resp' })
     }
 
-    // 2. Via aérea mudou para RE (ar ambiente/O2) com data TOT → paciente extubou
+    // 2. Via aérea ↔ extubação
     const isRE = currentRecord.tipoVia?.startsWith('RE')
     if (isRE && currentRecord.dataTOT && !currentRecord.dataExtubacao) {
       a.push({ text: 'Via aerea em RE mas sem data de extubacao', color: '#facc15', action: 'Preencher data/hora da extubacao nos eventos' })
+    }
+    if (currentRecord.dataExtubacao && currentRecord.horaExtubacao && !isRE && (isIntubated)) {
+      a.push({ text: 'Extubacao registrada mas via aerea ainda em TOT/TNT', color: '#fb923c', action: 'Alterar via aerea para RE-O2, RE-AA ou outra conforme prescricao' })
     }
 
     // 3. P/F calculado → classificar SDRA
