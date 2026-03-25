@@ -3426,6 +3426,45 @@ export function ProntuarioSystemPanel() {
                         ))}
                       </select>
                     </FieldShell>
+                    {/* Campos de O2 conforme via aérea */}
+                    {(currentRecord.tipoVia === 'RE-O2' || currentRecord.tipoVia === 'RE-MFS' || currentRecord.tipoVia === 'RE-MFR' || currentRecord.tipoVia === 'TQT-O2') && (
+                      <FieldShell label="Fluxo O₂ (L/min)">
+                        <input className={INPUT_CLASS_SM} value={currentRecord.fluxoO2 ?? ''} onChange={(e) => setField('fluxoO2', e.target.value)} placeholder="3" />
+                      </FieldShell>
+                    )}
+                    {currentRecord.tipoVia === 'RE-MFV' && (
+                      <>
+                        <FieldShell label="FiO₂ Venturi (%)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
+                        </FieldShell>
+                        <FieldShell label="Fluxo (L/min)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.fluxoO2 ?? ''} onChange={(e) => setField('fluxoO2', e.target.value)} placeholder="8" />
+                        </FieldShell>
+                      </>
+                    )}
+                    {(currentRecord.tipoVia === 'RE-MFR') && (
+                      <FieldShell label="FiO₂ (%)">
+                        <input className={INPUT_CLASS_SM} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="60" />
+                      </FieldShell>
+                    )}
+                    {currentRecord.tipoVia === 'HFNC' && (
+                      <>
+                        <FieldShell label="Fluxo HFNC (L/min)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.fluxoO2 ?? ''} onChange={(e) => setField('fluxoO2', e.target.value)} placeholder="50" />
+                        </FieldShell>
+                        <FieldShell label="FiO₂ (%)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
+                        </FieldShell>
+                        <FieldShell label="Temp (°C)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.tempHFNC ?? ''} onChange={(e) => setField('tempHFNC', e.target.value)} placeholder="37" />
+                        </FieldShell>
+                      </>
+                    )}
+                    {currentRecord.tipoVia === 'TQT-AA' && (
+                      <FieldShell label="Fluxo O₂ (L/min)">
+                        <input className={INPUT_CLASS_SM} value={currentRecord.fluxoO2 ?? ''} onChange={(e) => setField('fluxoO2', e.target.value)} placeholder="0" />
+                      </FieldShell>
+                    )}
                     <FieldShell label="Avaliacao pulmonar" span="xl:col-span-2">
                       <AutoGrowTextarea
                         value={currentRecord.pulmonar}
@@ -3433,12 +3472,34 @@ export function ProntuarioSystemPanel() {
                         placeholder="Ausculta, complacencia, infiltrado, expansao..."
                       />
                     </FieldShell>
-                    <FieldShell label="Secrecao">
-                      <AutoGrowTextarea
-                        value={currentRecord.secrecao}
-                        onChange={(value) => setField('secrecao', value)}
-                        placeholder="Volume, aspecto, necessidade de aspiracao..."
-                      />
+                    <FieldShell label="Aspecto secrecao">
+                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecao} onChange={(e) => setField('secrecao', e.target.value)}>
+                        <option value="">Selecionar</option>
+                        <option value="Mucoide clara">Mucoide clara</option>
+                        <option value="Mucoide espessa">Mucoide espessa</option>
+                        <option value="Mucopurulenta">Mucopurulenta</option>
+                        <option value="Purulenta">Purulenta</option>
+                        <option value="Sanguinolenta">Sanguinolenta</option>
+                        <option value="Hemoptoica">Hemoptoica</option>
+                        <option value="Rolha">Rolha / Tampao mucoso</option>
+                        <option value="Ausente">Ausente</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Qtd secrecao">
+                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoQtd ?? ''} onChange={(e) => setField('secrecaoQtd', e.target.value)}>
+                        <option value="">Selecionar</option>
+                        <option value="Pequena">Pequena</option>
+                        <option value="Media">Media</option>
+                        <option value="Grande">Grande</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Evolucao secrecao">
+                      <select className={INPUT_CLASS_SM} value={currentRecord.secrecaoEvolucao ?? ''} onChange={(e) => setField('secrecaoEvolucao', e.target.value)}>
+                        <option value="">Selecionar</option>
+                        <option value="Melhora">Melhora (clareando)</option>
+                        <option value="Estavel">Estavel</option>
+                        <option value="Piora">Piora (espessando/purulenta)</option>
+                      </select>
                     </FieldShell>
                     <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-3">
                       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">Badge via aerea</p>
