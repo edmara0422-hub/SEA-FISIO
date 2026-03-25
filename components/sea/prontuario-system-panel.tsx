@@ -174,7 +174,7 @@ const VIA_BADGE_STYLES: Record<string, { label: string; border: string; backgrou
 const LAB_FIELDS = [
   { key: 'hb', label: 'HB', unit: 'g/dL', ref: '12-17' },
   { key: 'ht', label: 'HT', unit: '%', ref: '36-50' },
-  { key: 'leuco', label: 'Leuco', unit: '/mm3', ref: '4k-11k' },
+  { key: 'leuco', label: 'Leuco', unit: '/mm³', ref: '4k-11k' },
   { key: 'plaq', label: 'Plaq', unit: 'x10³', ref: '150-400' },
   { key: 'creat', label: 'Creat', unit: 'mg/dL', ref: '0.6-1.2' },
   { key: 'ureia', label: 'Ureia', unit: 'mg/dL', ref: '15-40' },
