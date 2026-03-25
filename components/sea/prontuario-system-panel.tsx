@@ -3506,7 +3506,7 @@ export function ProntuarioSystemPanel() {
                                 {chip('secrecao', 'Ausente', 'Ausente')}
                               </div>
                             </div>
-                            <div className="grid grid-cols-3 gap-3">
+                            <div className="flex justify-center gap-6">
                               <div>
                                 <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/40">Consistencia</p>
                                 <div className="flex flex-wrap justify-center gap-1">
