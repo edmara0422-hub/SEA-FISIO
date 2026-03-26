@@ -42,9 +42,9 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
   const [selectionPopup, setSelectionPopup]       = useState<{ x: number; y: number; text: string } | null>(null)
   const popupRef = useRef<HTMLButtonElement>(null)
 
-  // ── Selection popup — document-level listeners (same fix as IPB) ──
+  // ── Selection popup — desktop + mobile ──
   useEffect(() => {
-    function onMouseUp() {
+    function showPopupIfSelection() {
       setTimeout(() => {
         const selection = window.getSelection()
         if (!selection || selection.isCollapsed || selection.rangeCount === 0) return
@@ -53,20 +53,32 @@ export function CadernoModulePanel({ moduleId }: { moduleId: string }) {
         const range = selection.getRangeAt(0)
         const rect = range.getBoundingClientRect()
         if (rect.width === 0 && rect.height === 0) return
-        setSelectionPopup({ x: rect.left + rect.width / 2, y: rect.top - 52, text })
-      }, 20)
+        // Position above selection on desktop, below on mobile (avoid native menu overlap)
+        const isMobile = 'ontouchstart' in window
+        const yPos = isMobile ? rect.bottom + 8 : rect.top - 52
+        setSelectionPopup({ x: rect.left + rect.width / 2, y: yPos, text })
+      }, 80)
     }
 
-    function onMouseDown(e: MouseEvent) {
+    function onClearPopup(e: MouseEvent | TouchEvent) {
       if (popupRef.current && popupRef.current.contains(e.target as Node)) return
       setSelectionPopup(null)
     }
 
-    document.addEventListener('mouseup', onMouseUp)
-    document.addEventListener('mousedown', onMouseDown)
+    // Desktop
+    document.addEventListener('mouseup', showPopupIfSelection)
+    document.addEventListener('mousedown', onClearPopup)
+    // Mobile — selectionchange fires when user adjusts selection handles
+    document.addEventListener('selectionchange', showPopupIfSelection)
+    document.addEventListener('touchend', showPopupIfSelection)
+    document.addEventListener('touchstart', onClearPopup)
+
     return () => {
-      document.removeEventListener('mouseup', onMouseUp)
-      document.removeEventListener('mousedown', onMouseDown)
+      document.removeEventListener('mouseup', showPopupIfSelection)
+      document.removeEventListener('mousedown', onClearPopup)
+      document.removeEventListener('selectionchange', showPopupIfSelection)
+      document.removeEventListener('touchend', showPopupIfSelection)
+      document.removeEventListener('touchstart', onClearPopup)
     }
   }, [])
 
