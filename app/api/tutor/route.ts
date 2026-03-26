@@ -70,12 +70,22 @@ const SYSTEM_PROMPT = `Você é o **SEA Tutor** — um tutor de elite em Fisiote
 - Use emojis com moderação (⚠️ para alertas, ✅ para correto, 💡 para dicas)
 `
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type',
+}
+
+export async function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS })
+}
+
 export async function POST(req: NextRequest) {
   try {
     const { selectedText, question, topicTitle, moduleId, history = [] } = await req.json()
 
     if (!question?.trim()) {
-      return NextResponse.json({ error: 'Pergunta obrigatória' }, { status: 400 })
+      return NextResponse.json({ error: 'Pergunta obrigatória' }, { status: 400, headers: CORS_HEADERS })
     }
 
     const moduleContext = MODULE_CONTEXT[moduleId] ?? 'fisioterapia clínica geral'
@@ -113,19 +123,19 @@ export async function POST(req: NextRequest) {
       console.error('[tutor] Groq error:', response.status, errBody)
       return NextResponse.json(
         { response: 'Erro ao consultar o tutor. Tente novamente.', source: 'error' },
-        { status: 500 }
+        { status: 500, headers: CORS_HEADERS }
       )
     }
 
     const data = await response.json()
     const text = data.choices?.[0]?.message?.content ?? 'Sem resposta do tutor.'
 
-    return NextResponse.json({ response: text, source: 'groq' })
+    return NextResponse.json({ response: text, source: 'groq' }, { headers: CORS_HEADERS })
   } catch (err) {
     console.error('[tutor]', err)
     return NextResponse.json(
       { response: 'Não foi possível responder agora. Tente novamente em instantes.' },
-      { status: 500 }
+      { status: 500, headers: CORS_HEADERS }
     )
   }
 }
