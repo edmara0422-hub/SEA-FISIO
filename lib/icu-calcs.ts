@@ -406,6 +406,12 @@ export type PatientData = {
   dvaList: DVAEntry[]
   pulmonar: string
   secrecao: string
+  secCor: string[]
+  secConsist: string[]
+  secQtd: string[]
+  secEvo: string[]
+  fluxoO2: string
+  tempHFNC: string
   tipoVia: string
   dataTOT: string
   horaTOT: string

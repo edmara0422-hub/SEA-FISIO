@@ -1752,7 +1752,7 @@ export function ProntuarioSystemPanel() {
 
     // 5. Sedativos reduzindo → correlacionar com desmame
     const sedReducing = currentRecord.sedativos?.some((s: SedativeEntry) => {
-      const trend = calcDrugTrend(s.doseInicio, s.doseAtual)
+      const trend = calcDrugTrend(s.inicio, s.atual)
       return trend === 'reduziu'
     })
     if (sedReducing && onVM) {
@@ -1765,19 +1765,20 @@ export function ProntuarioSystemPanel() {
     }
 
     // 7. Glasgow + drive → elegibilidade desmame
-    if (calculations.glasgow && calculations.glasgow >= 8 && onVM) {
+    const glasgowNum = typeof calculations.glasgow?.total === 'number' ? calculations.glasgow.total : 0
+    if (glasgowNum >= 8 && onVM) {
       const hasDrive = currentRecord.p01 || currentRecord.pocc
       if (hasDrive) {
-        a.push({ text: `Glasgow ${calculations.glasgow} + drive presente → avaliar desmame`, color: '#4ade80', action: 'Paciente com nivel de consciencia e drive respiratorio — checar criterios de elegibilidade' })
+        a.push({ text: `Glasgow ${calculations.glasgow?.total} + drive presente → avaliar desmame`, color: '#4ade80', action: 'Paciente com nivel de consciencia e drive respiratorio — checar criterios de elegibilidade' })
       }
     }
-    if (calculations.glasgow && calculations.glasgow < 8 && onVM) {
-      a.push({ text: `Glasgow ${calculations.glasgow} — nivel de consciencia rebaixado`, color: '#fb923c', action: 'Sem condicoes de protecao de via aerea. Manter VM.' })
+    if (glasgowNum > 0 && glasgowNum < 8 && onVM) {
+      a.push({ text: `Glasgow ${calculations.glasgow?.total} — nivel de consciencia rebaixado`, color: '#fb923c', action: 'Sem condicoes de protecao de via aerea. Manter VM.' })
     }
 
     // 8. Gasometria com disturbio acido-base
-    if (calculations.gaso?.disturbio && calculations.gaso.disturbio !== 'Normal') {
-      a.push({ text: `Gasometria: ${calculations.gaso.disturbio}`, color: '#fb923c', action: calculations.gaso.disturbio.includes('Acidose respiratoria') ? 'Aumentar VM (FR ou VC) para corrigir PaCO₂' : calculations.gaso.disturbio.includes('Alcalose respiratoria') ? 'Reduzir VM — pode dificultar desmame' : 'Corrigir disturbio metabolico' })
+    if (calculations.gaso?.full && calculations.gaso.full !== 'Normal') {
+      a.push({ text: `Gasometria: ${calculations.gaso.full}`, color: '#fb923c', action: calculations.gaso.full.includes('Acidose respirat') ? 'Aumentar VM (FR ou VC) para corrigir PaCO₂' : calculations.gaso.full.includes('Alcalose respirat') ? 'Reduzir VM — pode dificultar desmame' : 'Corrigir disturbio metabolico' })
     }
 
     // 9. RSBI automatico de FR e VC
@@ -4717,7 +4718,7 @@ export function ProntuarioSystemPanel() {
                   eligibility.push({ label: 'Hemodinamica estavel', met: dvasSuspOrLow, detail: dvasSuspOrLow ? 'Sem DVA ou dose baixa' : 'DVA em dose alta' })
 
                   // 3. Neurológico — Glasgow >= 8 ou avaliação clínica
-                  const glasgowVal = calculations?.glasgow?.total ?? 0
+                  const glasgowVal = typeof calculations?.glasgow?.total === 'number' ? calculations.glasgow.total : 0
                   const neuroOk = glasgowVal >= 8
                   eligibility.push({ label: 'Neurologico', met: glasgowVal > 0 ? neuroOk : null, detail: glasgowVal > 0 ? `Glasgow ${glasgowVal}${neuroOk ? '' : ' — rebaixado'}` : 'Nao avaliado' })
 
