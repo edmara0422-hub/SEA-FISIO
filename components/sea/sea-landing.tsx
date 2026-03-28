@@ -87,7 +87,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       ringGrad.addColorStop(1, 'rgba(99, 179, 237, 0)')
       ctx.beginPath()
       ctx.arc(cx, cy, r * 0.95, 0, Math.PI * 2)
-      ctx.strokeStyle = ringGrad.toString ? `rgba(120, 190, 255, ${0.2 + Math.sin(t * 2) * 0.1})` : 'rgba(120,190,255,0.2)'
+      ctx.strokeStyle = `rgba(120, 190, 255, ${0.2 + Math.sin(t * 2) * 0.1})`
       ctx.lineWidth = 1.5
       ctx.stroke()
 
