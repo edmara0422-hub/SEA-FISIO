@@ -51,20 +51,13 @@ export function MainShell({ children }: { children: ReactNode }) {
     router.prefetch('/explore/conteudos')
     router.prefetch('/explore/sistemas')
   }, [router])
-  // First load: Landing → Splash → Home. Subsequent navigations: skip both.
-  const isFirstLoad = !splashShownForRuntime
-  const [phase, setPhase] = useState<'landing' | 'splash' | 'ready'>(isFirstLoad ? 'landing' : 'ready')
+  // Landing always shows on app open. Splash after clicking "Entrar no SEA".
+  const [phase, setPhase] = useState<'landing' | 'splash' | 'ready'>('landing')
   const [activeTab, setActiveTab] = useState<Tab>(() => pathToTab(pathname))
   const [visited, setVisited] = useState<Record<'home' | 'explore', boolean>>(() => ({
     home: pathToTab(pathname) === 'home',
     explore: pathToTab(pathname) === 'explore',
   }))
-
-  useLayoutEffect(() => {
-    if (!splashShownForRuntime) {
-      splashShownForRuntime = true
-    }
-  }, [])
 
   // Sync tab with pathname
   useLayoutEffect(() => {
