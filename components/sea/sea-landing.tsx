@@ -12,7 +12,10 @@ const PHRASES = [
 ]
 
 const PHASE_DURATION = 3500
-const FADE_DURATION = 0.6
+
+// Paleta do app — preto, prata, branco
+const PRIMARY = { r: 180, g: 180, b: 180 }  // prata
+const ACCENT = { r: 220, g: 220, b: 220 }   // branco suave
 
 export function SeaLanding({ onEnter }: { onEnter: () => void }) {
   const [phraseIdx, setPhraseIdx] = useState(0)
@@ -31,7 +34,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
     return () => clearTimeout(t)
   }, [phraseIdx])
 
-  // Animated orb on canvas
+  // Animated orb
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -54,44 +57,39 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
     function draw() {
       if (!ctx) return
       ctx.clearRect(0, 0, size, size)
-
       t += 0.008
 
-      // Outer glow
+      // Outer glow — bordô
       const glow = ctx.createRadialGradient(cx, cy, baseR * 0.2, cx, cy, baseR * 1.4)
-      glow.addColorStop(0, 'rgba(99, 179, 237, 0.08)')
-      glow.addColorStop(0.5, 'rgba(66, 153, 225, 0.04)')
+      glow.addColorStop(0, `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.12)`)
+      glow.addColorStop(0.5, `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.05)`)
       glow.addColorStop(1, 'rgba(0, 0, 0, 0)')
       ctx.fillStyle = glow
       ctx.fillRect(0, 0, size, size)
 
-      // Main orb — breathing effect
+      // Main orb — breathing
       const breathe = 1 + Math.sin(t * 1.2) * 0.06
       const r = baseR * breathe
 
       const orbGrad = ctx.createRadialGradient(cx - r * 0.25, cy - r * 0.25, r * 0.05, cx, cy, r)
-      orbGrad.addColorStop(0, 'rgba(180, 220, 255, 0.45)')
-      orbGrad.addColorStop(0.3, 'rgba(99, 179, 237, 0.3)')
-      orbGrad.addColorStop(0.6, 'rgba(49, 130, 206, 0.18)')
-      orbGrad.addColorStop(1, 'rgba(26, 54, 93, 0.05)')
+      orbGrad.addColorStop(0, 'rgba(255, 255, 255, 0.4)')
+      orbGrad.addColorStop(0.3, `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.25)`)
+      orbGrad.addColorStop(0.6, `rgba(${PRIMARY.r - 40}, ${PRIMARY.g - 40}, ${PRIMARY.b - 40}, 0.12)`)
+      orbGrad.addColorStop(1, 'rgba(60, 60, 60, 0.03)')
 
       ctx.beginPath()
       ctx.arc(cx, cy, r, 0, Math.PI * 2)
       ctx.fillStyle = orbGrad
       ctx.fill()
 
-      // Inner light ring
-      const ringGrad = ctx.createRadialGradient(cx, cy, r * 0.85, cx, cy, r * 1.02)
-      ringGrad.addColorStop(0, 'rgba(99, 179, 237, 0)')
-      ringGrad.addColorStop(0.5, `rgba(120, 190, 255, ${0.12 + Math.sin(t * 2) * 0.06})`)
-      ringGrad.addColorStop(1, 'rgba(99, 179, 237, 0)')
+      // Inner ring
       ctx.beginPath()
       ctx.arc(cx, cy, r * 0.95, 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(120, 190, 255, ${0.2 + Math.sin(t * 2) * 0.1})`
+      ctx.strokeStyle = `rgba(${ACCENT.r}, ${ACCENT.g}, ${ACCENT.b}, ${0.2 + Math.sin(t * 2) * 0.1})`
       ctx.lineWidth = 1.5
       ctx.stroke()
 
-      // Orbiting particles
+      // Orbiting particles — bordô
       for (let i = 0; i < 5; i++) {
         const angle = t * (0.5 + i * 0.15) + (i * Math.PI * 2) / 5
         const orbitR = r * (1.1 + i * 0.08)
@@ -102,7 +100,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
 
         ctx.beginPath()
         ctx.arc(px, py, pSize, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(160, 210, 255, ${alpha})`
+        ctx.fillStyle = `rgba(${ACCENT.r + 20}, ${ACCENT.g + 20}, ${ACCENT.b + 20}, ${alpha})`
         ctx.fill()
       }
 
@@ -115,15 +113,15 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
 
   const handleEnter = useCallback(() => {
     setExiting(true)
-    setTimeout(onEnter, 600)
+    setTimeout(onEnter, 700)
   }, [onEnter])
 
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
       style={{ background: '#020202' }}
-      animate={exiting ? { opacity: 0, scale: 1.05 } : { opacity: 1, scale: 1 }}
-      transition={{ duration: 0.6, ease: 'easeInOut' }}
+      animate={exiting ? { opacity: 0 } : { opacity: 1 }}
+      transition={{ duration: 0.7, ease: 'easeInOut' }}
     >
       {/* Orb */}
       <canvas ref={canvasRef} className="mb-8" />
@@ -131,13 +129,13 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       {/* Phrases cycling */}
       <div className="relative h-24 w-full max-w-sm px-6 text-center">
         <AnimatePresence mode="wait">
-          {phraseIdx < PHRASES.length && (
+          {phraseIdx < PHRASES.length && !showButton && (
             <motion.div
               key={phraseIdx}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: FADE_DURATION, ease: 'easeOut' }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
               className="absolute inset-0 flex flex-col items-center justify-center"
             >
               <p className="text-lg font-light tracking-wide text-white/90">
@@ -156,7 +154,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
               key="enter"
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 }}
+              transition={{ duration: 0.5, delay: 0.3 }}
               className="absolute inset-0 flex flex-col items-center justify-center"
             >
               <p className="mb-1 text-2xl font-extralight tracking-widest text-white/90">
@@ -167,7 +165,11 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
               </p>
               <button
                 onClick={handleEnter}
-                className="rounded-full border border-white/15 bg-white/5 px-8 py-2.5 text-sm font-light tracking-wider text-white/80 backdrop-blur-sm transition-all active:scale-95 hover:bg-white/10 hover:border-white/25"
+                className="rounded-full px-8 py-2.5 text-sm font-light tracking-wider text-white/90 transition-all active:scale-95"
+                style={{
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  background: 'rgba(255, 255, 255, 0.05)',
+                }}
               >
                 Entrar no SEA
               </button>
@@ -184,7 +186,9 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
             className="h-1 rounded-full transition-all duration-500"
             style={{
               width: i <= phraseIdx ? 16 : 6,
-              background: i <= phraseIdx ? 'rgba(99, 179, 237, 0.6)' : 'rgba(255, 255, 255, 0.1)',
+              background: i <= phraseIdx
+                ? `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.7)`
+                : 'rgba(255, 255, 255, 0.1)',
             }}
           />
         ))}
