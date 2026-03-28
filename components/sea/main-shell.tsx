@@ -5,6 +5,7 @@ import { usePathname, useRouter } from 'next/navigation'
 import dynamic from 'next/dynamic'
 import { BottomNav } from '@/components/sea/bottom-nav'
 import { PremiumSplash } from '@/components/sea/premium-splash'
+import { SeaLanding } from '@/components/sea/sea-landing'
 
 // Lazy-load both pages once — they stay mounted forever after
 const HomePageClient = dynamic(
@@ -50,6 +51,7 @@ export function MainShell({ children }: { children: ReactNode }) {
     router.prefetch('/explore/conteudos')
     router.prefetch('/explore/sistemas')
   }, [router])
+  const [showLanding, setShowLanding] = useState(true)
   const [showSplash, setShowSplash] = useState<boolean | null>(null)
   const [activeTab, setActiveTab] = useState<Tab>(() => pathToTab(pathname))
   // Track if Home/Explore were ever visited so we mount them lazily
@@ -61,9 +63,11 @@ export function MainShell({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     if (!splashShownForRuntime) {
       splashShownForRuntime = true
-      setShowSplash(true)
+      // Landing handles splash now — don't auto-show splash
+      setShowSplash(null)
       return
     }
+    setShowLanding(false)
     setShowSplash(false)
   }, [pathname])
 
@@ -93,9 +97,18 @@ export function MainShell({ children }: { children: ReactNode }) {
 
   return (
     <>
-      {showSplash === null ? <div className="sea-shell-overlay" /> : null}
+      {/* 1. Landing — sempre aparece primeiro */}
+      {showLanding ? (
+        <SeaLanding onEnter={() => {
+          setShowLanding(false)
+          setShowSplash(true)
+        }} />
+      ) : null}
 
-      {showSplash ? (
+      {showSplash === null && !showLanding ? <div className="sea-shell-overlay" /> : null}
+
+      {/* 2. Splash — aparece depois do Landing */}
+      {showSplash && !showLanding ? (
         <PremiumSplash durationMs={2400} exitHoldMs={500} onComplete={() => setShowSplash(false)} />
       ) : null}
 
