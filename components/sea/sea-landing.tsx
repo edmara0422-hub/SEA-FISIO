@@ -11,7 +11,7 @@ const PHRASES = [
   { text: 'Profissionais acima da média', sub: 'Avaliação e condução de excelência' },
 ]
 
-const PHASE_DURATION = 2800
+const PHASE_DURATION = 3500
 const FADE_DURATION = 0.6
 
 export function SeaLanding({ onEnter }: { onEnter: () => void }) {
