@@ -51,10 +51,10 @@ export function MainShell({ children }: { children: ReactNode }) {
     router.prefetch('/explore/conteudos')
     router.prefetch('/explore/sistemas')
   }, [router])
-  const [showLanding, setShowLanding] = useState(true)
-  const [showSplash, setShowSplash] = useState<boolean | null>(null)
+  // First load: Landing → Splash → Home. Subsequent navigations: skip both.
+  const isFirstLoad = !splashShownForRuntime
+  const [phase, setPhase] = useState<'landing' | 'splash' | 'ready'>(isFirstLoad ? 'landing' : 'ready')
   const [activeTab, setActiveTab] = useState<Tab>(() => pathToTab(pathname))
-  // Track if Home/Explore were ever visited so we mount them lazily
   const [visited, setVisited] = useState<Record<'home' | 'explore', boolean>>(() => ({
     home: pathToTab(pathname) === 'home',
     explore: pathToTab(pathname) === 'explore',
@@ -63,13 +63,8 @@ export function MainShell({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     if (!splashShownForRuntime) {
       splashShownForRuntime = true
-      // Landing handles splash now — don't auto-show splash
-      setShowSplash(null)
-      return
     }
-    setShowLanding(false)
-    setShowSplash(false)
-  }, [pathname])
+  }, [])
 
   // Sync tab with pathname
   useLayoutEffect(() => {
@@ -98,19 +93,14 @@ export function MainShell({ children }: { children: ReactNode }) {
   return (
     <>
       {/* 1. Landing — sempre aparece primeiro */}
-      {showLanding ? (
-        <SeaLanding onEnter={() => {
-          setShowLanding(false)
-          setShowSplash(true)
-        }} />
-      ) : null}
+      {phase === 'landing' && (
+        <SeaLanding onEnter={() => setPhase('splash')} />
+      )}
 
-      {showSplash === null && !showLanding ? <div className="sea-shell-overlay" /> : null}
-
-      {/* 2. Splash — aparece depois do Landing */}
-      {showSplash && !showLanding ? (
-        <PremiumSplash durationMs={2400} exitHoldMs={500} onComplete={() => setShowSplash(false)} />
-      ) : null}
+      {/* 2. Splash SEA — aparece depois do "Entrar no SEA" */}
+      {phase === 'splash' && (
+        <PremiumSplash durationMs={2400} exitHoldMs={500} onComplete={() => setPhase('ready')} />
+      )}
 
       <div className="sea-shell-root">
         <main className="pb-28">
