@@ -4,12 +4,18 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const PHRASES = [
-  'Inovação na fisioterapia intensiva',
-  'Simulações 3D interativas de órgãos reais',
-  'IA especialista integrada ao aprendizado',
-  'Zero papel · Zero infecção cruzada',
-  'Sustentabilidade na prática clínica',
-  'Acelerador de competência profissional',
+  'Raciocínio clínico à beira do leito',
+  'Simulações 3D reais · Pulmão · Coração · Cérebro',
+  'IA especialista que ensina em segundos',
+  'Prontuário inteligente · Detecção automática de desmame',
+  'Zero papel · Zero infecção cruzada · Zero prancheta',
+  'Criatividade · Cocriação com profissionais reais',
+  'Inovação · IA adaptativa · Análise gráfica em tempo real',
+  'Sustentabilidade social · Profissional mais preparado = paciente mais seguro',
+  'Sustentabilidade ambiental · Digital-first · Menos servidor · Offline',
+  'Sustentabilidade econômica · Menos tempo de VM = menos custo hospitalar',
+  'Acessibilidade · Inclusão · Diversidade · Igualdade',
+  'Acelerador de competência clínica',
 ]
 
 const PHASE_DURATION = 3200
