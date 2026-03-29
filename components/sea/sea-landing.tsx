@@ -4,22 +4,19 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const PHRASES = [
-  { text: 'Raciocínio clínico no bolso', sub: '' },
-  { text: 'Zero papel. Zero infecção cruzada.', sub: 'Sustentabilidade na prática clínica' },
-  { text: 'Simulações 3D reais', sub: 'Pulmão, coração e cérebro interativos' },
-  { text: 'IA que ensina na hora', sub: 'Dúvidas resolvidas em segundos' },
-  { text: 'Profissionais acima da média', sub: 'Avaliação e condução de excelência' },
+  'Inovação na fisioterapia intensiva',
+  'Simulações 3D interativas de órgãos reais',
+  'IA especialista integrada ao aprendizado',
+  'Zero papel · Zero infecção cruzada',
+  'Sustentabilidade na prática clínica',
+  'Acelerador de competência profissional',
 ]
 
-const PHASE_DURATION = 3500
-
-// Paleta do app — preto, prata, branco
-const PRIMARY = { r: 180, g: 180, b: 180 }  // prata
-const ACCENT = { r: 220, g: 220, b: 220 }   // branco suave
+const PHASE_DURATION = 3200
 
 export function SeaLanding({ onEnter }: { onEnter: () => void }) {
   const [phraseIdx, setPhraseIdx] = useState(0)
-  const [showButton, setShowButton] = useState(false)
+  const [showFinal, setShowFinal] = useState(false)
   const [exiting, setExiting] = useState(false)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const animFrame = useRef(0)
@@ -27,14 +24,14 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
   // Auto-advance phrases
   useEffect(() => {
     if (phraseIdx >= PHRASES.length) {
-      setShowButton(true)
+      setShowFinal(true)
       return
     }
     const t = setTimeout(() => setPhraseIdx((i) => i + 1), PHASE_DURATION)
     return () => clearTimeout(t)
   }, [phraseIdx])
 
-  // Animated orb
+  // Animated orb — silver/white on black
   useEffect(() => {
     const canvas = canvasRef.current
     if (!canvas) return
@@ -42,7 +39,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
     if (!ctx) return
 
     const dpr = window.devicePixelRatio || 1
-    const size = Math.min(window.innerWidth * 0.55, 280)
+    const size = Math.min(window.innerWidth * 0.85, 360)
     canvas.width = size * dpr
     canvas.height = size * dpr
     canvas.style.width = `${size}px`
@@ -51,56 +48,64 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
 
     const cx = size / 2
     const cy = size / 2
-    const baseR = size * 0.35
+    const baseR = size * 0.42
     let t = 0
 
     function draw() {
       if (!ctx) return
       ctx.clearRect(0, 0, size, size)
-      t += 0.008
+      t += 0.006
 
-      // Outer glow — bordô
-      const glow = ctx.createRadialGradient(cx, cy, baseR * 0.2, cx, cy, baseR * 1.4)
-      glow.addColorStop(0, `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.12)`)
-      glow.addColorStop(0.5, `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.05)`)
+      // Outer glow
+      const glow = ctx.createRadialGradient(cx, cy, baseR * 0.3, cx, cy, baseR * 1.5)
+      glow.addColorStop(0, 'rgba(200, 200, 200, 0.06)')
+      glow.addColorStop(0.5, 'rgba(150, 150, 150, 0.03)')
       glow.addColorStop(1, 'rgba(0, 0, 0, 0)')
       ctx.fillStyle = glow
       ctx.fillRect(0, 0, size, size)
 
       // Main orb — breathing
-      const breathe = 1 + Math.sin(t * 1.2) * 0.06
+      const breathe = 1 + Math.sin(t * 1.2) * 0.04
       const r = baseR * breathe
 
-      const orbGrad = ctx.createRadialGradient(cx - r * 0.25, cy - r * 0.25, r * 0.05, cx, cy, r)
-      orbGrad.addColorStop(0, 'rgba(255, 255, 255, 0.4)')
-      orbGrad.addColorStop(0.3, `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.25)`)
-      orbGrad.addColorStop(0.6, `rgba(${PRIMARY.r - 40}, ${PRIMARY.g - 40}, ${PRIMARY.b - 40}, 0.12)`)
-      orbGrad.addColorStop(1, 'rgba(60, 60, 60, 0.03)')
+      const orbGrad = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.05, cx, cy, r)
+      orbGrad.addColorStop(0, 'rgba(255, 255, 255, 0.18)')
+      orbGrad.addColorStop(0.25, 'rgba(200, 200, 200, 0.12)')
+      orbGrad.addColorStop(0.5, 'rgba(150, 150, 150, 0.07)')
+      orbGrad.addColorStop(0.8, 'rgba(80, 80, 80, 0.04)')
+      orbGrad.addColorStop(1, 'rgba(30, 30, 30, 0.01)')
 
       ctx.beginPath()
       ctx.arc(cx, cy, r, 0, Math.PI * 2)
       ctx.fillStyle = orbGrad
       ctx.fill()
 
-      // Inner ring
+      // Subtle ring
       ctx.beginPath()
-      ctx.arc(cx, cy, r * 0.95, 0, Math.PI * 2)
-      ctx.strokeStyle = `rgba(${ACCENT.r}, ${ACCENT.g}, ${ACCENT.b}, ${0.2 + Math.sin(t * 2) * 0.1})`
-      ctx.lineWidth = 1.5
+      ctx.arc(cx, cy, r * 0.96, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.06 + Math.sin(t * 2) * 0.03})`
+      ctx.lineWidth = 0.8
       ctx.stroke()
 
-      // Orbiting particles — bordô
-      for (let i = 0; i < 5; i++) {
-        const angle = t * (0.5 + i * 0.15) + (i * Math.PI * 2) / 5
-        const orbitR = r * (1.1 + i * 0.08)
+      // Outer ring
+      ctx.beginPath()
+      ctx.arc(cx, cy, r * 1.08, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.03 + Math.sin(t * 1.5) * 0.02})`
+      ctx.lineWidth = 0.5
+      ctx.stroke()
+
+      // Orbiting particles
+      for (let i = 0; i < 6; i++) {
+        const angle = t * (0.3 + i * 0.12) + (i * Math.PI * 2) / 6
+        const orbitR = r * (1.12 + i * 0.06)
         const px = cx + Math.cos(angle) * orbitR
-        const py = cy + Math.sin(angle) * orbitR * 0.85
-        const pSize = 1.5 + Math.sin(t * 3 + i) * 0.8
-        const alpha = 0.3 + Math.sin(t * 2 + i * 1.2) * 0.2
+        const py = cy + Math.sin(angle) * orbitR * 0.9
+        const pSize = 1.2 + Math.sin(t * 2.5 + i) * 0.5
+        const alpha = 0.15 + Math.sin(t * 2 + i * 1.2) * 0.1
 
         ctx.beginPath()
         ctx.arc(px, py, pSize, 0, Math.PI * 2)
-        ctx.fillStyle = `rgba(${ACCENT.r + 20}, ${ACCENT.g + 20}, ${ACCENT.b + 20}, ${alpha})`
+        ctx.fillStyle = `rgba(220, 220, 220, ${alpha})`
         ctx.fill()
       }
 
@@ -119,76 +124,80 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden"
-      style={{ background: '#020202' }}
+      style={{ background: '#010101' }}
       animate={exiting ? { opacity: 0 } : { opacity: 1 }}
       transition={{ duration: 0.7, ease: 'easeInOut' }}
     >
-      {/* Orb */}
-      <canvas ref={canvasRef} className="mb-8" />
+      {/* Orb + content inside it */}
+      <div className="relative flex items-center justify-center">
+        <canvas ref={canvasRef} />
 
-      {/* Phrases cycling */}
-      <div className="relative h-24 w-full max-w-sm px-6 text-center">
-        <AnimatePresence mode="wait">
-          {phraseIdx < PHRASES.length && !showButton && (
-            <motion.div
-              key={phraseIdx}
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -12 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              className="absolute inset-0 flex flex-col items-center justify-center"
-            >
-              <p className="text-lg font-light tracking-wide text-white/90">
-                {PHRASES[phraseIdx].text}
-              </p>
-              {PHRASES[phraseIdx].sub && (
-                <p className="mt-1.5 text-xs text-white/40">
-                  {PHRASES[phraseIdx].sub}
-                </p>
-              )}
-            </motion.div>
-          )}
-
-          {showButton && (
-            <motion.div
-              key="enter"
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="absolute inset-0 flex flex-col items-center justify-center"
-            >
-              <p className="mb-1 text-2xl font-extralight tracking-widest text-white/90">
-                SEA FISIO
-              </p>
-              <p className="mb-6 text-[10px] uppercase tracking-[0.3em] text-white/30">
-                Acelerador de competência clínica
-              </p>
-              <button
-                onClick={handleEnter}
-                className="rounded-full px-8 py-2.5 text-sm font-light tracking-wider text-white/90 transition-all active:scale-95"
-                style={{
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  background: 'rgba(255, 255, 255, 0.05)',
-                }}
+        {/* Content centered inside the orb */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-8">
+          {/* SEA title — same style as splash */}
+          <div className="mb-3 flex items-baseline gap-[2px]">
+            {'SEA'.split('').map((letter, i) => (
+              <motion.span
+                key={i}
+                className="text-4xl font-extralight tracking-[0.35em] text-white/80"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 + i * 0.15 }}
               >
-                Entrar no SEA
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+                {letter}
+              </motion.span>
+            ))}
+          </div>
+
+          {/* Phrases cycling inside orb */}
+          <div className="relative h-14 w-full text-center">
+            <AnimatePresence mode="wait">
+              {phraseIdx < PHRASES.length && !showFinal && (
+                <motion.p
+                  key={phraseIdx}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.5 }}
+                  className="absolute inset-0 flex items-center justify-center text-[13px] font-light leading-snug tracking-wide text-white/50"
+                >
+                  {PHRASES[phraseIdx]}
+                </motion.p>
+              )}
+
+              {showFinal && (
+                <motion.div
+                  key="final"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="absolute inset-0 flex flex-col items-center justify-center gap-4"
+                >
+                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/25">
+                    Acelerador de competência clínica
+                  </p>
+                  <button
+                    onClick={handleEnter}
+                    className="rounded-full border border-white/12 bg-white/[0.04] px-6 py-2 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
+                  >
+                    Entrar
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       </div>
 
       {/* Progress dots */}
-      <div className="absolute bottom-12 flex gap-2">
+      <div className="absolute bottom-10 flex gap-1.5">
         {PHRASES.map((_, i) => (
           <div
             key={i}
-            className="h-1 rounded-full transition-all duration-500"
+            className="h-[3px] rounded-full transition-all duration-500"
             style={{
-              width: i <= phraseIdx ? 16 : 6,
-              background: i <= phraseIdx
-                ? `rgba(${PRIMARY.r}, ${PRIMARY.g}, ${PRIMARY.b}, 0.7)`
-                : 'rgba(255, 255, 255, 0.1)',
+              width: i <= phraseIdx ? 14 : 5,
+              background: i <= phraseIdx ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.06)',
             }}
           />
         ))}
