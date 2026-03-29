@@ -2,8 +2,24 @@
 
 import { motion } from 'framer-motion'
 import { Bell, User } from 'lucide-react'
+import { useState, useEffect } from 'react'
+
+function useStaticClock() {
+  const [time, setTime] = useState('')
+  useEffect(() => {
+    const update = () => {
+      const now = new Date()
+      setTime(now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }))
+    }
+    update()
+    const id = setInterval(update, 30000)
+    return () => clearInterval(id)
+  }, [])
+  return time
+}
 
 export function TopBarSEA() {
+  const time = useStaticClock()
   const shellBackground =
     'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(10,10,12,0.92) 52%, rgba(3,3,4,0.985) 100%)'
 
@@ -43,6 +59,13 @@ export function TopBarSEA() {
             Sistema de Estudo Avancado
           </p>
         </div>
+
+        {/* Clock */}
+        {time && (
+          <span className="text-[11px] font-light tabular-nums tracking-wider text-white/50">
+            {time}
+          </span>
+        )}
 
         <div className="flex shrink-0 items-center gap-1.5">
           <button
