@@ -55,13 +55,13 @@ export function TopBarSEA() {
 
           {mounted && (
             <>
-              <div className="flex items-center gap-0.5 rounded-full border border-white/12 bg-black/18 px-1 py-px text-[6px] font-semibold uppercase tracking-[0.15em] text-white/74">
-                <GreetingIcon className="h-2 w-2 text-white/74" />
+              <div className="flex items-center gap-1 rounded-full border border-white/12 bg-black/18 px-1.5 py-0.5 text-[8px] font-semibold uppercase tracking-[0.15em] text-white/74">
+                <GreetingIcon className="h-2.5 w-2.5 text-white/74" />
                 <span>{greeting}</span>
               </div>
 
-              <div className="flex items-center gap-1 text-[7px] text-white/55">
-                <CalendarDays className="h-2 w-2 text-white/50" />
+              <div className="flex items-center gap-1 text-[8px] text-white/55">
+                <CalendarDays className="h-2.5 w-2.5 text-white/50" />
                 <span className="uppercase tracking-[0.08em]">{dateLabel}</span>
               </div>
             </>
@@ -71,7 +71,7 @@ export function TopBarSEA() {
         {/* Right: time + buttons */}
         <div className="flex shrink-0 items-center gap-1.5">
           {mounted && (
-            <span className="text-[7px] font-semibold tabular-nums tracking-[0.1em] text-white/65">
+            <span className="text-[8px] font-semibold tabular-nums tracking-[0.1em] text-white/65">
               {timeLabel}
             </span>
           )}
