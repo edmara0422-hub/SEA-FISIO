@@ -17,7 +17,7 @@ export function BottomNav({
   const isExplore = p === '/explore' || p.startsWith('/explore/')
 
   const tabClass = (active: boolean) =>
-    `flex items-center justify-center gap-1.5 rounded-[1rem] px-5 py-2.5 text-xs font-semibold tracking-[0.16em] transition-colors duration-200 ${
+    `flex items-center justify-center gap-1.5 rounded-[0.8rem] px-4 py-1.5 text-[10px] font-semibold tracking-[0.16em] transition-colors duration-200 ${
       active ? 'chrome-active text-[#050505]' : 'text-white/82 hover:text-white'
     }`
 
@@ -33,7 +33,7 @@ export function BottomNav({
       transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
     >
       <div
-        className="mx-auto grid max-w-2xl grid-cols-2 gap-1 rounded-[1.4rem] border border-white/16 p-1 shadow-[0_24px_48px_rgba(0,0,0,0.36)] backdrop-blur-xl"
+        className="mx-auto grid max-w-2xl grid-cols-2 gap-0.5 rounded-[1.4rem] border border-white/16 p-0.5 shadow-[0_24px_48px_rgba(0,0,0,0.36)] backdrop-blur-xl"
         style={{
           background:
             'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
