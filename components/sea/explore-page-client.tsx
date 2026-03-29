@@ -24,7 +24,7 @@ const CARDS = [
     sub: 'Protocolos, referencias e fluxos clinicos para a beira do leito',
     color: '#A8B8FF',
     glow: 'rgba(168,184,255,0.18)',
-    grain: 'from-[#1a1e3a] via-[#0d0f1e] to-[#020202]',
+    grain: 'from-[#1a1e3a] via-[#0d0f1e] to-[#0a0a0a]',
   },
   {
     href: '/explore/sistemas',
@@ -33,7 +33,7 @@ const CARDS = [
     sub: 'Modulos interativos — neuro, cardio, pneumo e mais',
     color: '#7EEFC0',
     glow: 'rgba(126,239,192,0.14)',
-    grain: 'from-[#0e2420] via-[#081410] to-[#020202]',
+    grain: 'from-[#0e2420] via-[#081410] to-[#0a0a0a]',
   },
 ] as const
 
@@ -41,7 +41,7 @@ export default function ExplorePageClient() {
   const ready = useDeferredMount()
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0a] text-white">
       <SeaBackdrop />
       <main className="relative z-10 px-4 pb-36 pt-14 md:px-8 md:pt-12">
         <div className="mx-auto flex min-h-[calc(100vh-8rem)] max-w-2xl flex-col justify-center space-y-6">

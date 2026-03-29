@@ -175,7 +175,7 @@ export default function ConteudosPageClient() {
   }
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0a] text-white">
       <SeaBackdrop />
       <main className="relative z-10 px-2.5 pb-32 pt-8 md:px-8 md:pt-10">
         <div className="mx-auto max-w-5xl space-y-6">

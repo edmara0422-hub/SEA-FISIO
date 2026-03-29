@@ -18,7 +18,7 @@ const SimulationsMarquee = dynamic(
 
 export default function HomePageClient() {
   return (
-    <div className="relative overflow-hidden bg-[#020202] text-white">
+    <div className="relative overflow-hidden bg-[#0a0a0a] text-white">
       <SeaBackdrop />
       <TopBarSEA />
 

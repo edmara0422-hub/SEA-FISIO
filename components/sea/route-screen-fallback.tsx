@@ -10,7 +10,7 @@ export function RouteScreenFallback({
   title = 'Preparando a proxima tela',
 }: RouteScreenFallbackProps) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#020202] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#0a0a0a] text-white">
       <SeaBackdrop />
 
       <div className="relative z-10 flex min-h-screen items-center justify-center px-4 pb-28 pt-10">

@@ -106,8 +106,8 @@ export function SimulationsMarquee() {
 
   return (
     <div className="relative overflow-hidden" style={{ height: 'clamp(210px, 38vw, 290px)' }}>
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12" style={{ background: 'linear-gradient(to right, #020202, transparent)' }} />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12" style={{ background: 'linear-gradient(to left, #020202, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-12" style={{ background: 'linear-gradient(to right, #0a0a0a, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-12" style={{ background: 'linear-gradient(to left, #0a0a0a, transparent)' }} />
       <div className="flex items-center gap-4 h-full" style={{ animation: 'sim-marquee 25s linear infinite', width: 'max-content' }}>
         {neuroCard('n1')}{cardioCard('c1')}{pneumoCard('p1')}
         {neuroCard('n2')}{cardioCard('c2')}{pneumoCard('p2')}
