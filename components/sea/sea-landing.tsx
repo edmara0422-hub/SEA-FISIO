@@ -4,18 +4,18 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const PHRASES = [
-  'Raciocínio clínico à beira do leito',
-  'Simulações 3D reais · Pulmão · Coração · Cérebro',
-  'IA especialista que ensina em segundos',
-  'Prontuário inteligente · Detecção automática de desmame',
-  'Zero papel · Zero infecção cruzada · Zero prancheta',
-  'Criatividade · Cocriação com profissionais reais',
-  'Inovação · IA adaptativa · Análise gráfica em tempo real',
-  'Sustentabilidade social · Profissional mais preparado = paciente mais seguro',
-  'Sustentabilidade ambiental · Digital-first · Menos servidor · Offline',
-  'Sustentabilidade econômica · Menos tempo de VM = menos custo hospitalar',
-  'Acessibilidade · Inclusão · Diversidade · Igualdade',
-  'Acelerador de competência clínica',
+  'Raciocínio clínico\nà beira do leito',
+  'Simulações 3D reais\nPulmão · Coração · Cérebro',
+  'IA especialista\nque ensina em segundos',
+  'Prontuário inteligente\nDetecção automática de desmame',
+  'Zero papel\nZero infecção cruzada\nZero prancheta',
+  'Criatividade\nCocriação com profissionais reais',
+  'Inovação\nIA adaptativa · Análise gráfica',
+  'Sustentabilidade social\nProfissional preparado\n= paciente mais seguro',
+  'Sustentabilidade ambiental\nDigital-first · Offline',
+  'Sustentabilidade econômica\nMenos tempo de VM\n= menos custo hospitalar',
+  'Acessibilidade · Inclusão\nDiversidade · Igualdade',
+  'Acelerador de\ncompetência clínica',
 ]
 
 const PHASE_DURATION = 3200
@@ -155,7 +155,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
           </div>
 
           {/* Phrases cycling — between SEA and button */}
-          <div className="relative mt-3 h-10 w-full text-center">
+          <div className="relative mt-3 h-16 w-full text-center">
             <AnimatePresence mode="wait">
               <motion.p
                 key={phraseIdx < PHRASES.length ? phraseIdx : 'done'}
@@ -163,7 +163,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -6 }}
                 transition={{ duration: 0.5 }}
-                className="absolute inset-0 flex items-center justify-center text-[12px] font-light leading-snug tracking-wide text-white/40"
+                className="absolute inset-0 flex items-center justify-center whitespace-pre-line text-[11px] font-light leading-relaxed tracking-wide text-white/40"
               >
                 {phraseIdx < PHRASES.length ? PHRASES[phraseIdx] : 'Acelerador de competência clínica'}
               </motion.p>
