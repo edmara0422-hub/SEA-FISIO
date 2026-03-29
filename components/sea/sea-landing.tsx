@@ -132,15 +132,15 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       <div className="relative flex items-center justify-center">
         <canvas ref={canvasRef} />
 
-        {/* Content centered inside the orb */}
+        {/* Content inside the orb */}
         <div className="absolute inset-0 flex flex-col items-center justify-center px-8">
-          {/* SEA title — same style as splash */}
-          <div className="mb-3 flex items-baseline gap-[2px]">
+          {/* SEA title — same as splash: 4.8rem semibold */}
+          <div className="flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold leading-none">
             {'SEA'.split('').map((letter, i) => (
               <motion.span
                 key={i}
-                className="text-4xl font-extralight tracking-[0.35em] text-white/80"
-                initial={{ opacity: 0, y: 10 }}
+                className="bg-gradient-to-b from-white/90 via-white/70 to-white/40 bg-clip-text text-transparent"
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 + i * 0.15 }}
               >
@@ -148,9 +148,12 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
               </motion.span>
             ))}
           </div>
+        </div>
+      </div>
 
-          {/* Phrases cycling inside orb */}
-          <div className="relative h-14 w-full text-center">
+      {/* Phrases + button BELOW the orb */}
+      <div className="mt-6 w-full max-w-sm px-6">
+        <div className="relative h-16 text-center">
             <AnimatePresence mode="wait">
               {phraseIdx < PHRASES.length && !showFinal && (
                 <motion.p
@@ -186,7 +189,6 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
               )}
             </AnimatePresence>
           </div>
-        </div>
       </div>
 
       {/* Progress dots */}
