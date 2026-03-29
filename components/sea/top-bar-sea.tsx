@@ -1,6 +1,5 @@
 'use client'
 
-import { motion } from 'framer-motion'
 import { Bell, User } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { CalendarDays, MoonStar, SunMedium } from 'lucide-react'
@@ -32,14 +31,9 @@ export function TopBarSEA() {
     'linear-gradient(180deg, rgba(255,255,255,0.08) 0%, rgba(10,10,12,0.92) 52%, rgba(3,3,4,0.985) 100%)'
 
   return (
-    <motion.header
-      className="fixed left-0 right-0 top-0 z-40 px-2.5 pt-5 md:px-8 md:pt-6"
-      initial={{ y: -80, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-    >
+    <header className="fixed left-0 right-0 top-0 z-40 px-2.5 pt-5 md:px-8 md:pt-6">
       <div
-        className="floating-silver-strip mx-auto flex max-w-2xl items-center justify-between overflow-hidden rounded-[1.4rem] border border-white/12 px-2.5 py-1 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-4"
+        className="mx-auto flex max-w-2xl items-center justify-between overflow-hidden rounded-[1.4rem] border border-white/12 px-2.5 py-1 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-4"
         style={{
           background:
             'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
@@ -99,6 +93,6 @@ export function TopBarSEA() {
           </button>
         </div>
       </div>
-    </motion.header>
+    </header>
   )
 }

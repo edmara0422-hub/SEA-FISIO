@@ -17,7 +17,7 @@ export function BottomNav({
   const isExplore = p === '/explore' || p.startsWith('/explore/')
 
   const tabClass = (active: boolean) =>
-    `flex items-center justify-center gap-1.5 rounded-[0.8rem] px-4 py-1.5 text-[10px] font-semibold tracking-[0.16em] transition-colors duration-200 ${
+    `flex items-center justify-center gap-1.5 rounded-[0.8rem] px-4 py-1 text-[10px] font-semibold tracking-[0.16em] transition-colors duration-200 ${
       active ? 'chrome-active text-[#050505]' : 'text-white/82 hover:text-white'
     }`
 
