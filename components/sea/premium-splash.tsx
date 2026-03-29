@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 type PremiumSplashProps = {
   durationMs?: number
@@ -9,27 +9,6 @@ type PremiumSplashProps = {
   exitHoldMs?: number
 }
 
-type CoreTrace = {
-  id: string
-  d: string
-  width: number
-  opacity: number
-  delay: number
-}
-
-type CoreSpark = {
-  id: string
-  x: number
-  y: number
-  r: number
-  opacity: number
-  delay: number
-}
-
-type CoreField = {
-  traces: CoreTrace[]
-  sparks: CoreSpark[]
-}
 
 export function PremiumSplash({
   durationMs = 3000,
@@ -37,7 +16,7 @@ export function PremiumSplash({
   exitHoldMs = 600,
 }: PremiumSplashProps) {
   const [progress, setProgress] = useState(0)
-  const field = useMemo(() => buildCoreField(), [])
+  // orb canvas handles visuals now
 
   useEffect(() => {
     document.documentElement.classList.add('sea-splash-active')
@@ -85,58 +64,170 @@ export function PremiumSplash({
 
   return (
     <div className="fixed inset-0 z-[90] h-[100dvh] w-screen overflow-hidden bg-[#010101]" suppressHydrationWarning>
-      {/* Same subtle glow as landing */}
-      <motion.div
-        className="absolute left-1/2 top-1/2 h-[60vw] max-h-[22rem] w-[60vw] max-w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
-        style={{ background: 'radial-gradient(circle, rgba(200,200,200,0.1) 0%, rgba(150,150,150,0.04) 40%, transparent 70%)' }}
-        animate={{ opacity: [0.4, 0.7, 0.4], scale: [0.96, 1.04, 0.96] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-      />
+      {/* Orb canvas — same as landing but with expansion effect */}
+      <SplashOrb progress={progress} />
 
+      {/* Floating particles around the orb */}
+      {Array.from({ length: 8 }).map((_, i) => (
+        <motion.div
+          key={i}
+          className="absolute left-1/2 top-1/2 h-1 w-1 rounded-full bg-white/20"
+          initial={{ opacity: 0, x: 0, y: 0 }}
+          animate={{
+            opacity: [0, 0.4, 0],
+            x: [0, Math.cos(i * 0.785) * 180],
+            y: [0, Math.sin(i * 0.785) * 180],
+            scale: [0.5, 1.5, 0],
+          }}
+          transition={{ duration: 2.5, delay: 0.3 + i * 0.15, ease: 'easeOut' }}
+        />
+      ))}
+
+      {/* SEA text */}
       <div className="relative flex h-full items-center justify-center px-4">
         <motion.div
           className="pointer-events-none relative text-center"
-          initial={{ opacity: 0, y: 18, filter: 'blur(10px)' }}
-          animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-          transition={{ duration: 1.3, delay: 0.2, ease: 'easeOut' }}
+          initial={{ opacity: 0, scale: 0.8, filter: 'blur(12px)' }}
+          animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+          transition={{ duration: 1.2, delay: 0.15, ease: 'easeOut' }}
         >
-          <motion.div
-            className="absolute left-1/2 top-1/2 h-24 w-[18rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,255,255,0.2),transparent_72%)] blur-3xl"
-            animate={{ opacity: [0.34, 0.54, 0.38] }}
-            transition={{ duration: 4.4, repeat: Infinity, ease: 'easeInOut' }}
-          />
-
           <div className="mx-auto flex w-fit items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold sm:text-[6.4rem] md:text-[8.5rem]">
             <Letter value="S" />
             <Letter value="E" />
             <Letter value="A" />
           </div>
 
+          {/* Animated line under SEA */}
           <motion.div
-            className="mx-auto mt-5 h-px w-24 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.78),transparent)]"
-            animate={{ opacity: [0.3, 0.82, 0.3], scaleX: [0.95, 1.1, 0.95] }}
-            transition={{ duration: 3.6, repeat: Infinity, ease: 'easeInOut' }}
+            className="mx-auto mt-4 h-px w-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.78),transparent)]"
+            animate={{ width: '6rem', opacity: [0, 0.8] }}
+            transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
           />
         </motion.div>
       </div>
 
+      {/* Progress bar */}
       <motion.div
         className="pointer-events-none absolute inset-x-8 bottom-8 md:bottom-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.45 }}
+        transition={{ duration: 0.6, delay: 0.3 }}
       >
         <div className="mx-auto w-full max-w-md">
-          <div className="h-px overflow-hidden rounded-full bg-white/10">
+          <div className="h-[2px] overflow-hidden rounded-full bg-white/8">
             <motion.div
-              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(120,120,120,0.08)_0%,rgba(255,255,255,0.98)_50%,rgba(120,120,120,0.12)_100%)]"
+              className="h-full rounded-full bg-[linear-gradient(90deg,rgba(120,120,120,0.08)_0%,rgba(255,255,255,0.9)_50%,rgba(120,120,120,0.12)_100%)]"
               animate={{ width: `${progress}%` }}
-              transition={{ duration: 0.2, ease: 'easeOut' }}
+              transition={{ duration: 0.15, ease: 'linear' }}
             />
           </div>
         </div>
       </motion.div>
     </div>
+  )
+}
+
+function SplashOrb({ progress }: { progress: number }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const animFrame = useRef(0)
+
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
+
+    const dpr = window.devicePixelRatio || 1
+    const size = Math.min(window.innerWidth * 0.85, 380)
+    canvas.width = size * dpr
+    canvas.height = size * dpr
+    canvas.style.width = `${size}px`
+    canvas.style.height = `${size}px`
+    ctx.scale(dpr, dpr)
+
+    const cx = size / 2
+    const cy = size / 2
+    const baseR = size * 0.38
+    let t = 0
+
+    function draw() {
+      if (!ctx) return
+      ctx.clearRect(0, 0, size, size)
+      t += 0.01
+
+      // Expansion based on progress
+      const expand = 1 + (progress / 100) * 0.15
+      const breathe = 1 + Math.sin(t * 1.5) * 0.04
+      const r = baseR * breathe * expand
+
+      // Outer glow — grows with progress
+      const glow = ctx.createRadialGradient(cx, cy, r * 0.3, cx, cy, r * 1.6)
+      glow.addColorStop(0, `rgba(200, 200, 200, ${0.04 + (progress / 100) * 0.06})`)
+      glow.addColorStop(0.5, 'rgba(150, 150, 150, 0.02)')
+      glow.addColorStop(1, 'rgba(0, 0, 0, 0)')
+      ctx.fillStyle = glow
+      ctx.fillRect(0, 0, size, size)
+
+      // Main orb
+      const orbGrad = ctx.createRadialGradient(cx - r * 0.2, cy - r * 0.2, r * 0.05, cx, cy, r)
+      orbGrad.addColorStop(0, `rgba(255, 255, 255, ${0.12 + (progress / 100) * 0.1})`)
+      orbGrad.addColorStop(0.25, 'rgba(200, 200, 200, 0.08)')
+      orbGrad.addColorStop(0.5, 'rgba(150, 150, 150, 0.05)')
+      orbGrad.addColorStop(1, 'rgba(60, 60, 60, 0.01)')
+      ctx.beginPath()
+      ctx.arc(cx, cy, r, 0, Math.PI * 2)
+      ctx.fillStyle = orbGrad
+      ctx.fill()
+
+      // Inner ring — pulses
+      ctx.beginPath()
+      ctx.arc(cx, cy, r * 0.94, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.05 + Math.sin(t * 2.5) * 0.04})`
+      ctx.lineWidth = 0.8
+      ctx.stroke()
+
+      // Outer ring — expands with progress
+      const outerR = r * (1.1 + (progress / 100) * 0.1)
+      ctx.beginPath()
+      ctx.arc(cx, cy, outerR, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.03 + Math.sin(t * 1.8) * 0.02})`
+      ctx.lineWidth = 0.5
+      ctx.stroke()
+
+      // Second outer ring
+      ctx.beginPath()
+      ctx.arc(cx, cy, outerR * 1.08, 0, Math.PI * 2)
+      ctx.strokeStyle = `rgba(255, 255, 255, ${0.015 + Math.sin(t * 1.2) * 0.01})`
+      ctx.lineWidth = 0.3
+      ctx.stroke()
+
+      // Orbiting particles — faster than landing
+      for (let i = 0; i < 8; i++) {
+        const angle = t * (0.6 + i * 0.1) + (i * Math.PI * 2) / 8
+        const orbitR = r * (1.05 + i * 0.05)
+        const px = cx + Math.cos(angle) * orbitR
+        const py = cy + Math.sin(angle) * orbitR * 0.88
+        const pSize = 1 + Math.sin(t * 3 + i) * 0.6
+        const alpha = 0.12 + Math.sin(t * 2 + i) * 0.08 + (progress / 100) * 0.1
+
+        ctx.beginPath()
+        ctx.arc(px, py, pSize, 0, Math.PI * 2)
+        ctx.fillStyle = `rgba(220, 220, 220, ${alpha})`
+        ctx.fill()
+      }
+
+      animFrame.current = requestAnimationFrame(draw)
+    }
+
+    draw()
+    return () => cancelAnimationFrame(animFrame.current)
+  }, [progress])
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+    />
   )
 }
 
@@ -148,121 +239,3 @@ function Letter({ value }: { value: string }) {
   )
 }
 
-function CoreAura({ field }: { field: CoreField }) {
-  return (
-    <svg
-      aria-hidden
-      viewBox="0 0 1440 900"
-      className="pointer-events-none absolute inset-0 h-full w-full"
-      preserveAspectRatio="xMidYMid slice"
-    >
-      <defs>
-        <linearGradient id="sea-core-trace" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="rgba(120,120,120,0.04)" />
-          <stop offset="50%" stopColor="rgba(255,255,255,0.76)" />
-          <stop offset="100%" stopColor="rgba(120,120,120,0.04)" />
-        </linearGradient>
-      </defs>
-
-      {field.traces.map((trace) => (
-        <motion.path
-          key={trace.id}
-          d={trace.d}
-          fill="none"
-          stroke="url(#sea-core-trace)"
-          strokeWidth={trace.width}
-          strokeLinecap="round"
-          initial={{ opacity: 0, pathLength: 0.35 }}
-          animate={{ opacity: [trace.opacity * 0.55, trace.opacity, trace.opacity * 0.6], pathLength: 1 }}
-          transition={{
-            duration: 5.5,
-            delay: trace.delay,
-            repeat: Infinity,
-            repeatType: 'mirror',
-            ease: 'easeInOut',
-          }}
-        />
-      ))}
-
-      {field.sparks.map((spark) => (
-        <motion.circle
-          key={spark.id}
-          cx={spark.x}
-          cy={spark.y}
-          r={spark.r}
-          fill="#ffffff"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: [spark.opacity * 0.35, spark.opacity, spark.opacity * 0.42], scale: [0.94, 1.14, 1] }}
-          transition={{
-            duration: 4.2,
-            delay: spark.delay,
-            repeat: Infinity,
-            ease: 'easeInOut',
-          }}
-          style={{ transformOrigin: `${spark.x}px ${spark.y}px` }}
-        />
-      ))}
-    </svg>
-  )
-}
-
-function CentralPulseColumn() {
-  const rails = [-18, -6, 6, 18]
-  const pulses = [
-    { x: -18, delay: 0.1, duration: 3.8 },
-    { x: -6, delay: 0.7, duration: 4.2 },
-    { x: 6, delay: 0.35, duration: 4 },
-    { x: 18, delay: 1.05, duration: 4.6 },
-  ]
-
-  return (
-    <div className="pointer-events-none absolute inset-0">
-      {rails.map((offset, index) => (
-        <motion.span
-          key={`rail-${offset}`}
-          className="absolute left-1/2 top-1/2 h-[52vh] w-px -translate-y-1/2 bg-[linear-gradient(180deg,transparent,rgba(255,255,255,0.5),transparent)]"
-          style={{ marginLeft: `${offset}px` }}
-          animate={{ opacity: [0.12, index % 2 === 0 ? 0.45 : 0.3, 0.14] }}
-          transition={{ duration: 4.4 + index * 0.55, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
-
-      {pulses.map((pulse) => (
-        <motion.span
-          key={`pulse-${pulse.x}`}
-          className="absolute left-1/2 top-1/2 h-2 w-2 rounded-full bg-white shadow-[0_0_16px_rgba(255,255,255,0.42)]"
-          style={{ marginLeft: `${pulse.x - 4}px` }}
-          initial={{ y: '18vh', opacity: 0 }}
-          animate={{ y: ['18vh', '0vh', '-18vh'], opacity: [0, 1, 0] }}
-          transition={{ duration: pulse.duration, delay: pulse.delay, repeat: Infinity, ease: 'easeInOut' }}
-        />
-      ))}
-    </div>
-  )
-}
-
-function buildCoreField(): CoreField {
-  const traces: CoreTrace[] = [
-    { id: 'bridge-top', d: 'M 610 312 C 670 284, 770 284, 830 312', width: 1.2, opacity: 0.18, delay: 0.25 },
-    { id: 'bridge-mid', d: 'M 590 450 C 670 420, 770 420, 850 450', width: 1.2, opacity: 0.2, delay: 0.5 },
-    { id: 'bridge-low', d: 'M 620 590 C 690 566, 750 566, 820 590', width: 1.2, opacity: 0.18, delay: 0.75 },
-    { id: 'crest-top', d: 'M 470 168 C 620 122, 820 122, 970 168', width: 0.9, opacity: 0.1, delay: 0.35 },
-    { id: 'crest-bottom', d: 'M 470 732 C 620 778, 820 778, 970 732', width: 0.9, opacity: 0.1, delay: 0.65 },
-    { id: 'inner-top', d: 'M 650 246 C 690 226, 750 226, 790 246', width: 0.8, opacity: 0.14, delay: 0.2 },
-    { id: 'inner-bottom', d: 'M 650 654 C 690 674, 750 674, 790 654', width: 0.8, opacity: 0.14, delay: 0.55 },
-  ]
-
-  const sparks: CoreSpark[] = [
-    { id: 'core-1', x: 614, y: 312, r: 1.6, opacity: 0.28, delay: 0.28 },
-    { id: 'core-2', x: 826, y: 312, r: 1.6, opacity: 0.28, delay: 0.36 },
-    { id: 'core-3', x: 596, y: 450, r: 1.8, opacity: 0.3, delay: 0.44 },
-    { id: 'core-4', x: 844, y: 450, r: 1.8, opacity: 0.3, delay: 0.52 },
-    { id: 'core-5', x: 624, y: 590, r: 1.6, opacity: 0.28, delay: 0.6 },
-    { id: 'core-6', x: 816, y: 590, r: 1.6, opacity: 0.28, delay: 0.68 },
-    { id: 'core-7', x: 720, y: 168, r: 1.2, opacity: 0.18, delay: 0.76 },
-    { id: 'core-8', x: 720, y: 732, r: 1.2, opacity: 0.18, delay: 0.84 },
-    { id: 'core-9', x: 720, y: 450, r: 2.2, opacity: 0.36, delay: 0.3 },
-  ]
-
-  return { traces, sparks }
-}
