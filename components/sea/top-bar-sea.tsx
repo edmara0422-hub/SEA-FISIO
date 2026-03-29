@@ -68,15 +68,13 @@ export function TopBarSEA() {
           )}
         </div>
 
-        {/* Center: time */}
-        {mounted && (
-          <p className="metal-text text-[0.7rem] font-semibold leading-none tracking-[0.18em] tabular-nums">
-            {timeLabel}
-          </p>
-        )}
-
-        {/* Right: buttons */}
-        <div className="flex shrink-0 items-center gap-1">
+        {/* Right: time + buttons */}
+        <div className="flex shrink-0 items-center gap-1.5">
+          {mounted && (
+            <span className="text-[7px] font-semibold tabular-nums tracking-[0.1em] text-white/65">
+              {timeLabel}
+            </span>
+          )}
           <button
             aria-label="Notificacoes"
             className="flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/70 transition hover:text-white"
