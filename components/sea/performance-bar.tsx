@@ -31,10 +31,24 @@ function useAppMetrics() {
   return metrics
 }
 
-const SUSTAINABILITY_ITEMS = [
-  { icon: Leaf, label: 'Ambiental', desc: 'Zero papel · Digital-first · Offline' },
-  { icon: Heart, label: 'Social', desc: 'Profissional preparado = paciente seguro' },
-  { icon: Scale, label: 'Econômico', desc: 'Menos tempo VM = menos custo hospitalar' },
+const TBL_ITEMS = [
+  { icon: Leaf, label: 'Planeta', desc: 'Zero papel · Digital-first · Offline · Eco-eficiência digital' },
+  { icon: Heart, label: 'Pessoas', desc: 'Profissional preparado = paciente seguro · Inclusão · Diversidade' },
+  { icon: Scale, label: 'Prosperidade', desc: 'Menos tempo VM = menos custo hospitalar · Valor compartilhado' },
+]
+
+const ODS_ITEMS = [
+  { num: 3, label: 'Saúde e Bem-Estar', desc: 'Profissionais mais preparados para cuidar de vidas' },
+  { num: 4, label: 'Educação de Qualidade', desc: 'Ensino acessível com IA e simulações 3D' },
+  { num: 9, label: 'Inovação e Infraestrutura', desc: 'IA adaptativa · Tecnologia à beira do leito' },
+  { num: 10, label: 'Redução das Desigualdades', desc: 'Acesso igualitário ao conhecimento clínico' },
+  { num: 12, label: 'Consumo Responsável', desc: 'Zero papel · Menos recursos · Digital sustentável' },
+]
+
+const CSV_ITEMS = [
+  { label: 'Valor Social', desc: 'Reduz evasão profissional · Capacita fisioterapeutas · Melhora desfechos clínicos' },
+  { label: 'Valor Econômico', desc: 'Mercado inexplorado de EdTech em saúde · Diferencial competitivo por inclusão' },
+  { label: 'Valor Ambiental', desc: 'Digitalização reduz pegada de carbono · Código otimizado · Menos processamento em nuvem' },
 ]
 
 const GOVERNANCE_ITEMS = [
@@ -103,7 +117,7 @@ export function PerformanceBar() {
         </div>
       </div>
 
-      {/* Sustentabilidade */}
+      {/* Sustentabilidade — TBL */}
       <div
         className="rounded-[1.4rem] p-4"
         style={{
@@ -112,11 +126,11 @@ export function PerformanceBar() {
         }}
       >
         <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
-          Sustentabilidade (Triple Bottom Line)
+          Triple Bottom Line (TBL)
         </p>
 
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {SUSTAINABILITY_ITEMS.map((item) => (
+          {TBL_ITEMS.map((item) => (
             <div
               key={item.label}
               className="flex items-center gap-2.5 rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5"
@@ -124,8 +138,63 @@ export function PerformanceBar() {
               <item.icon className="h-4 w-4 shrink-0 text-white/50" />
               <div>
                 <p className="text-[9px] font-semibold uppercase tracking-wider text-white/70">{item.label}</p>
-                <p className="text-[8px] text-white/35">{item.desc}</p>
+                <p className="text-[8px] leading-relaxed text-white/35">{item.desc}</p>
               </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ODS — Objetivos de Desenvolvimento Sustentável */}
+      <div
+        className="rounded-[1.4rem] p-4"
+        style={{
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
+        }}
+      >
+        <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
+          ODS — Objetivos de Desenvolvimento Sustentável
+        </p>
+
+        <div className="grid grid-cols-1 gap-2">
+          {ODS_ITEMS.map((item) => (
+            <div
+              key={item.num}
+              className="flex items-center gap-3 rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2"
+            >
+              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/[0.04] text-[9px] font-bold text-white/70">
+                {item.num}
+              </span>
+              <div>
+                <p className="text-[9px] font-semibold text-white/70">{item.label}</p>
+                <p className="text-[7px] text-white/35">{item.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CSV — Criação de Valor Compartilhado */}
+      <div
+        className="rounded-[1.4rem] p-4"
+        style={{
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
+        }}
+      >
+        <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
+          CSV — Criação de Valor Compartilhado
+        </p>
+
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+          {CSV_ITEMS.map((item) => (
+            <div
+              key={item.label}
+              className="rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5"
+            >
+              <p className="text-[9px] font-semibold uppercase tracking-wider text-white/70">{item.label}</p>
+              <p className="mt-1 text-[7px] leading-relaxed text-white/35">{item.desc}</p>
             </div>
           ))}
         </div>
