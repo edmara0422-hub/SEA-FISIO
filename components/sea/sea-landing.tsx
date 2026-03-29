@@ -138,8 +138,8 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       <div className="relative flex items-center justify-center">
         <canvas ref={canvasRef} />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
-          {/* SEA — always visible */}
+        {/* Inside orb: SEA + Entrar only */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
           <div className="flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold leading-none">
             {'SEA'.split('').map((letter, i) => (
               <motion.span
@@ -154,26 +154,9 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
             ))}
           </div>
 
-          {/* Phrases cycling — between SEA and button */}
-          <div className="relative mt-3 h-16 w-full text-center">
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={phraseIdx < PHRASES.length ? phraseIdx : 'done'}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -6 }}
-                transition={{ duration: 0.5 }}
-                className="absolute inset-0 flex items-center justify-center whitespace-pre-line text-[11px] font-light leading-relaxed tracking-wide text-white/40"
-              >
-                {phraseIdx < PHRASES.length ? PHRASES[phraseIdx] : 'Acelerador de competência clínica'}
-              </motion.p>
-            </AnimatePresence>
-          </div>
-
-          {/* Entrar button — always visible */}
           <motion.button
             onClick={handleEnter}
-            className="mt-4 rounded-full border border-white/12 bg-white/[0.04] px-6 py-2 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
+            className="rounded-full border border-white/12 bg-white/[0.04] px-6 py-2 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 1.2 }}
@@ -181,6 +164,22 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
             Entrar
           </motion.button>
         </div>
+      </div>
+
+      {/* Phrases below the orb */}
+      <div className="relative mt-6 h-16 w-full max-w-xs text-center">
+        <AnimatePresence mode="wait">
+          <motion.p
+            key={phraseIdx < PHRASES.length ? phraseIdx : 'done'}
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 flex items-center justify-center whitespace-pre-line text-[11px] font-light leading-relaxed tracking-wide text-white/35"
+          >
+            {phraseIdx < PHRASES.length ? PHRASES[phraseIdx] : 'Acelerador de competência clínica'}
+          </motion.p>
+        </AnimatePresence>
       </div>
 
       {/* Progress dots */}
