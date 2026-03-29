@@ -27,7 +27,7 @@ const systemModules = [
 
 export default function SistemasPageClient() {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#060606] text-white">
+    <div className="relative min-h-screen overflow-hidden bg-[#010101] text-white">
       <SeaBackdrop />
 
       <main className="relative z-10 px-2.5 pb-32 pt-8 md:px-8 md:pt-10">

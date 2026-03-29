@@ -3,7 +3,7 @@
 export function SeaBackdrop() {
   return (
     <div className="pointer-events-none fixed inset-0 overflow-hidden will-change-transform">
-      <div className="absolute inset-0 bg-[#060606]" />
+      <div className="absolute inset-0 bg-[#010101]" />
       {/* All light effects as pure CSS gradients — no filter:blur needed */}
       <div className="absolute inset-0" style={{
         background: [

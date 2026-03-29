@@ -154,8 +154,8 @@ export function SimulationMarquee({ className }: { className?: string }) {
   return (
     <div className={`relative overflow-hidden ${className ?? ''}`} style={{ height: 'clamp(140px, 24vw, 190px)' }}>
       {/* Fade edges */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20" style={{ background: 'linear-gradient(to right, #060606, transparent)' }} />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20" style={{ background: 'linear-gradient(to left, #060606, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20" style={{ background: 'linear-gradient(to right, #010101, transparent)' }} />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20" style={{ background: 'linear-gradient(to left, #010101, transparent)' }} />
 
       <Canvas
         camera={{ position: [0, 0.5, 4], fov: 38 }}
