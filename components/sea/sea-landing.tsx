@@ -138,7 +138,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
             {'SEA'.split('').map((letter, i) => (
               <motion.span
                 key={i}
-                className="bg-gradient-to-b from-white/90 via-white/70 to-white/40 bg-clip-text text-transparent"
+                className="text-white/90 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]"
                 initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.3 + i * 0.15 }}
