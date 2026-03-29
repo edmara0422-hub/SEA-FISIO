@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Leaf, Shield, Heart, Megaphone, FileText, Scale, BookOpen, Stethoscope } from 'lucide-react'
+import { Leaf, Shield, Heart, Megaphone, FileText, Scale, BookOpen, Stethoscope, Star, MessageSquare } from 'lucide-react'
 
 // Real metrics from localStorage
 function useAppMetrics() {
@@ -38,10 +38,10 @@ const SUSTAINABILITY_ITEMS = [
 ]
 
 const GOVERNANCE_ITEMS = [
-  { icon: FileText, label: 'Políticas', href: '#' },
-  { icon: Shield, label: 'Práticas', href: '#' },
-  { icon: Scale, label: 'Compliance', href: '#' },
-  { icon: Megaphone, label: 'Canal de Denúncias', href: '#' },
+  { icon: FileText, label: 'Políticas' },
+  { icon: Shield, label: 'Práticas' },
+  { icon: Scale, label: 'Compliance' },
+  { icon: Megaphone, label: 'Canal de Denúncias e Feedback' },
 ]
 
 export function PerformanceBar() {
@@ -72,6 +72,34 @@ export function PerformanceBar() {
           <ImpactCard icon={BookOpen} value={metrics.conteudosAcessados} label="Conteúdos" sub="acessados" />
           <ImpactCard icon={Leaf} value={folhasEconomizadas} label="Folhas" sub="papel economizado" />
           <ImpactCard icon={Heart} value={metrics.calculosRealizados} label="Cálculos" sub="realizados" />
+        </div>
+      </div>
+
+      {/* NPS e Feedback */}
+      <div
+        className="rounded-[1.4rem] p-4"
+        style={{
+          border: '1px solid rgba(255,255,255,0.08)',
+          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
+        }}
+      >
+        <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
+          NPS e Feedback
+        </p>
+
+        <div className="grid grid-cols-2 gap-2">
+          <div className="rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-3 text-center">
+            <Star className="mx-auto mb-1 h-4 w-4 text-white/40" />
+            <p className="text-2xl font-semibold tabular-nums text-white/85">--</p>
+            <p className="text-[8px] font-semibold uppercase tracking-wider text-white/50">NPS Score</p>
+            <p className="text-[7px] text-white/25">Disponível com avaliações</p>
+          </div>
+          <div className="rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-3 text-center">
+            <MessageSquare className="mx-auto mb-1 h-4 w-4 text-white/40" />
+            <p className="text-2xl font-semibold tabular-nums text-white/85">--</p>
+            <p className="text-[8px] font-semibold uppercase tracking-wider text-white/50">Feedbacks</p>
+            <p className="text-[7px] text-white/25">Disponível com respostas</p>
+          </div>
         </div>
       </div>
 
