@@ -105,34 +105,40 @@ export function PerformanceBar() {
           Impacto SEA
         </p>
 
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-          <ImpactCard icon={Stethoscope} value={metrics.prontuarios} label="Prontuários" sub={`${folhasEconomizadas} folhas economizadas`} />
-          <ImpactCard icon={BookOpen} value={metrics.conteudosAcessados} label="Conteúdos" sub="acessados" />
-          <ImpactCard icon={Leaf} value={folhasEconomizadas} label="Folhas" sub="papel economizado" />
-          <ImpactCard icon={Heart} value={metrics.calculosRealizados} label="Cálculos" sub="realizados" />
+        <div className="grid grid-cols-4 gap-1.5">
+          <MiniImpact icon={Stethoscope} value={metrics.prontuarios} label="Prontuários" />
+          <MiniImpact icon={BookOpen} value={metrics.conteudosAcessados} label="Conteúdos" />
+          <MiniImpact icon={Leaf} value={folhasEconomizadas} label="Folhas" />
+          <MiniImpact icon={Heart} value={metrics.calculosRealizados} label="Cálculos" />
         </div>
       </div>
 
-      {/* NPS + Feedback — card com score e botão */}
+      {/* NPS + Feedback — dados em tempo real */}
       <div
         className="rounded-[1.4rem] p-4"
         style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)' }}
       >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <Star className="h-4 w-4 text-white/40" />
-            <div>
-              <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">NPS</p>
-              <p className="text-lg font-semibold tabular-nums text-white/85">{nps ? nps.score : '--'} <span className="text-[8px] font-normal text-white/30">{nps ? `(${nps.total})` : ''}</span></p>
-            </div>
+        <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">NPS e Feedback</p>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-2 py-2 text-center">
+            <p className="text-xl font-semibold tabular-nums text-white/85">{nps ? nps.score : '--'}</p>
+            <p className="text-[7px] text-white/40">NPS Score</p>
           </div>
-          <button
-            onClick={() => setShowFeedback(true)}
-            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[8px] font-semibold tracking-wider text-white/60 transition hover:bg-white/[0.08]"
-          >
-            <MessageSquare className="h-3 w-3" /> Avaliar / Feedback
-          </button>
+          <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-2 py-2 text-center">
+            <p className="text-xl font-semibold tabular-nums text-white/85">{nps ? nps.total : 0}</p>
+            <p className="text-[7px] text-white/40">Avaliações</p>
+          </div>
+          <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-2 py-2 text-center">
+            <p className="text-xl font-semibold tabular-nums text-white/85">{fbCount}</p>
+            <p className="text-[7px] text-white/40">Feedbacks</p>
+          </div>
         </div>
+        <button
+          onClick={() => setShowFeedback(true)}
+          className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-[0.8rem] border border-white/8 bg-white/[0.03] py-2 text-[8px] font-semibold tracking-wider text-white/50 transition hover:bg-white/[0.06]"
+        >
+          <MessageSquare className="h-3 w-3" /> Avaliar / Enviar Feedback
+        </button>
       </div>
 
       {/* Sustentabilidade — TBL + ODS + CSV juntos */}
@@ -147,35 +153,35 @@ export function PerformanceBar() {
         {/* TBL */}
         <div className="mb-3 grid grid-cols-3 gap-1.5">
           {TBL_ITEMS.map((item) => (
-            <div key={item.label} className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-2 py-2 text-center">
-              <item.icon className="mx-auto mb-1 h-3 w-3 text-white/45" />
-              <p className="text-[8px] font-semibold text-white/65">{item.label}</p>
-              <p className="mt-0.5 text-[6px] leading-snug text-white/30">{item.desc}</p>
+            <div key={item.label} className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-2 py-2.5 text-center">
+              <item.icon className="mx-auto mb-1 h-3.5 w-3.5 text-white/45" />
+              <p className="text-[9px] font-semibold text-white/65">{item.label}</p>
+              <p className="mt-0.5 text-[7px] leading-snug text-white/35">{item.desc}</p>
             </div>
           ))}
         </div>
 
         {/* ODS inline */}
-        <div className="mb-3">
+        <div className="mb-3 text-center">
           <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.15em] text-white/30">ODS</p>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap justify-center gap-1">
             {ODS_ITEMS.map((item) => (
               <div key={item.num} className="flex items-center gap-1 rounded-full border border-white/6 bg-white/[0.02] px-2 py-0.5">
-                <span className="text-[8px] font-bold text-white/60">{item.num}</span>
-                <span className="text-[7px] text-white/40">{item.label}</span>
+                <span className="text-[9px] font-bold text-white/60">{item.num}</span>
+                <span className="text-[8px] text-white/40">{item.label}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* CSV inline */}
-        <div>
+        <div className="text-center">
           <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.15em] text-white/30">CSV — Valor Compartilhado</p>
           <div className="grid grid-cols-3 gap-1.5">
             {CSV_ITEMS.map((item) => (
-              <div key={item.label} className="rounded-[0.6rem] border border-white/5 bg-white/[0.015] px-2 py-1.5">
-                <p className="text-[7px] font-semibold text-white/55">{item.label}</p>
-                <p className="text-[6px] leading-snug text-white/25">{item.desc}</p>
+              <div key={item.label} className="rounded-[0.6rem] border border-white/5 bg-white/[0.015] px-2 py-2 text-center">
+                <p className="text-[8px] font-semibold text-white/55">{item.label}</p>
+                <p className="text-[7px] leading-snug text-white/30">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -216,13 +222,12 @@ export function PerformanceBar() {
   )
 }
 
-function ImpactCard({ icon: Icon, value, label, sub }: { icon: typeof Leaf; value: number; label: string; sub: string }) {
+function MiniImpact({ icon: Icon, value, label }: { icon: typeof Leaf; value: number; label: string }) {
   return (
-    <div className="rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5 text-center">
-      <Icon className="mx-auto mb-1 h-4 w-4 text-white/40" />
-      <p className="text-lg font-semibold tabular-nums text-white/85">{value}</p>
-      <p className="text-[8px] font-semibold uppercase tracking-wider text-white/50">{label}</p>
-      <p className="text-[7px] text-white/25">{sub}</p>
+    <div className="rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-1.5 py-2 text-center">
+      <Icon className="mx-auto mb-0.5 h-3 w-3 text-white/35" />
+      <p className="text-sm font-semibold tabular-nums text-white/80">{value}</p>
+      <p className="text-[6px] uppercase tracking-wider text-white/40">{label}</p>
     </div>
   )
 }
