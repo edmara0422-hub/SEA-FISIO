@@ -39,7 +39,7 @@ export function TopBarSEA() {
       transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
     >
       <div
-        className="floating-silver-strip mx-auto flex max-w-2xl items-center justify-between overflow-hidden rounded-[1.4rem] border border-white/12 px-3 py-1.5 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-5"
+        className="floating-silver-strip mx-auto flex max-w-2xl items-center justify-between overflow-hidden rounded-[1.4rem] border border-white/12 px-2.5 py-1 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-4"
         style={{
           background:
             'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
@@ -48,7 +48,7 @@ export function TopBarSEA() {
         {/* Left: SEA logo + greeting + date */}
         <div className="flex items-center gap-2">
           <div
-            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[0.6rem] border border-white/16"
+            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-white/16"
             style={{ background: shellBackground }}
           >
             <span
@@ -66,9 +66,9 @@ export function TopBarSEA() {
                 <span>{greeting}</span>
               </div>
 
-              <div className="hidden items-center gap-1 text-[8px] text-white/55 sm:flex">
-                <CalendarDays className="h-2.5 w-2.5 text-white/50" />
-                <span className="uppercase tracking-[0.1em]">{dateLabel}</span>
+              <div className="flex items-center gap-1 text-[7px] text-white/55">
+                <CalendarDays className="h-2 w-2 text-white/50" />
+                <span className="uppercase tracking-[0.08em]">{dateLabel}</span>
               </div>
             </>
           )}
