@@ -18,18 +18,11 @@ const SimulationsMarquee = dynamic(
 
 export default function HomePageClient() {
   return (
-    <div className="relative overflow-hidden bg-[#0a0a0a] text-white">
+    <div className="relative overflow-hidden bg-[#060606] text-white">
       <SeaBackdrop />
       <TopBarSEA />
 
-      <main className="relative z-10 px-4 pb-0 pt-28 md:px-8 md:pt-32">
-        <div className="mx-auto max-w-2xl">
-          {/* Greeting + Clock */}
-          <div className="mb-8">
-            <BusinessClock variant="hero" showGreeting />
-          </div>
-
-        </div>
+      <main className="relative z-10 px-4 pb-0 pt-20 md:px-8 md:pt-24">
 
         {/* 3D Simulations marquee — full width */}
         <SimulationsMarquee />

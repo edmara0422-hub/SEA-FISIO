@@ -49,7 +49,7 @@ export function OnboardingCarousel() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col">
+    <div className="min-h-screen bg-[#060606] flex flex-col">
       {/* Skip button */}
       <div className="flex justify-end p-6">
         <button

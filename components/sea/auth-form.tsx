@@ -35,7 +35,7 @@ export function AuthForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center px-6 py-10">
+    <div className="min-h-screen bg-[#060606] flex flex-col items-center justify-center px-6 py-10">
       {/* Logo */}
       <motion.div
         className="mb-10 text-center"
