@@ -156,7 +156,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
 
           <motion.button
             onClick={handleEnter}
-            className="mt-10 rounded-full border border-white/15 bg-white/[0.06] px-8 py-2.5 text-[12px] font-light tracking-wider text-white/70 transition-all active:scale-95"
+            className="mt-10 rounded-full border border-white/15 bg-white/[0.06] px-5 py-1.5 text-[9px] font-light tracking-wider text-white/70 transition-all active:scale-95"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 1.2 }}
