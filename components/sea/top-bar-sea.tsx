@@ -33,7 +33,7 @@ export function TopBarSEA() {
   return (
     <header className="fixed left-0 right-0 top-0 z-40 px-2.5 pt-5 md:px-8 md:pt-6">
       <div
-        className="mx-auto flex max-w-2xl items-center justify-between overflow-hidden rounded-[1.4rem] border border-white/12 px-2.5 py-1 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-4"
+        className="mx-auto flex max-w-2xl items-center justify-between overflow-hidden rounded-[1.4rem] border border-white/12 px-2 py-0.5 text-white shadow-[0_6px_16px_rgba(0,0,0,0.2)] backdrop-blur-xl md:px-4"
         style={{
           background:
             'linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(231,236,243,0.3) 14%, rgba(86,92,101,0.9) 42%, rgba(9,10,12,0.98) 100%)',
@@ -42,7 +42,7 @@ export function TopBarSEA() {
         {/* Left: SEA logo + greeting + date */}
         <div className="flex items-center gap-2">
           <div
-            className="flex h-6 w-6 shrink-0 items-center justify-center rounded-[0.5rem] border border-white/16"
+            className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-white/16"
             style={{ background: shellBackground }}
           >
             <span
@@ -80,14 +80,14 @@ export function TopBarSEA() {
             className="flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/70 transition hover:text-white"
             style={{ background: shellBackground }}
           >
-            <Bell className="h-3 w-3" />
+            <Bell className="h-2.5 w-2.5" />
           </button>
           <button
             aria-label="Perfil"
             className="flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-white/12 text-white/70 transition hover:text-white"
             style={{ background: shellBackground }}
           >
-            <User className="h-3 w-3" />
+            <User className="h-2.5 w-2.5" />
           </button>
         </div>
       </div>
