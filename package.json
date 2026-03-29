@@ -11,7 +11,6 @@
     "lint": "npm run typecheck"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.80.0",
     "@dimforge/rapier3d-compat": "^0.19.3",
     "@hookform/resolvers": "^5.2.2",
     "@huggingface/transformers": "^3.8.1",
