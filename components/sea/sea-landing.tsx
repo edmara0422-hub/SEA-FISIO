@@ -128,13 +128,12 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       animate={exiting ? { opacity: 0 } : { opacity: 1 }}
       transition={{ duration: 0.7, ease: 'easeInOut' }}
     >
-      {/* Orb + content inside it */}
+      {/* Orb + ALL content inside it */}
       <div className="relative flex items-center justify-center">
         <canvas ref={canvasRef} />
 
-        {/* Content inside the orb */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-8">
-          {/* SEA title — same as splash: 4.8rem semibold */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6">
+          {/* SEA — always visible */}
           <div className="flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold leading-none">
             {'SEA'.split('').map((letter, i) => (
               <motion.span
@@ -148,47 +147,34 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
               </motion.span>
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Phrases + button BELOW the orb */}
-      <div className="mt-6 w-full max-w-sm px-6">
-        <div className="relative h-16 text-center">
+          {/* Phrases cycling — between SEA and button */}
+          <div className="relative mt-3 h-10 w-full text-center">
             <AnimatePresence mode="wait">
-              {phraseIdx < PHRASES.length && !showFinal && (
-                <motion.p
-                  key={phraseIdx}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.5 }}
-                  className="absolute inset-0 flex items-center justify-center text-[13px] font-light leading-snug tracking-wide text-white/50"
-                >
-                  {PHRASES[phraseIdx]}
-                </motion.p>
-              )}
-
-              {showFinal && (
-                <motion.div
-                  key="final"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                  className="absolute inset-0 flex flex-col items-center justify-center gap-4"
-                >
-                  <p className="text-[10px] uppercase tracking-[0.25em] text-white/25">
-                    Acelerador de competência clínica
-                  </p>
-                  <button
-                    onClick={handleEnter}
-                    className="rounded-full border border-white/12 bg-white/[0.04] px-6 py-2 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
-                  >
-                    Entrar
-                  </button>
-                </motion.div>
-              )}
+              <motion.p
+                key={phraseIdx < PHRASES.length ? phraseIdx : 'done'}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.5 }}
+                className="absolute inset-0 flex items-center justify-center text-[12px] font-light leading-snug tracking-wide text-white/40"
+              >
+                {phraseIdx < PHRASES.length ? PHRASES[phraseIdx] : 'Acelerador de competência clínica'}
+              </motion.p>
             </AnimatePresence>
           </div>
+
+          {/* Entrar button — always visible */}
+          <motion.button
+            onClick={handleEnter}
+            className="mt-4 rounded-full border border-white/12 bg-white/[0.04] px-6 py-2 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+          >
+            Entrar
+          </motion.button>
+        </div>
       </div>
 
       {/* Progress dots */}
