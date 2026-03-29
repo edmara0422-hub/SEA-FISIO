@@ -138,9 +138,9 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       <div className="relative flex items-center justify-center">
         <canvas ref={canvasRef} />
 
-        {/* Inside orb: SEA only */}
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold leading-none">
+        {/* Inside orb: SEA + Entrar */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-8">
+          <div className="flex items-center justify-center gap-[0.02em] text-[5.2rem] font-semibold leading-none">
             {'SEA'.split('').map((letter, i) => (
               <motion.span
                 key={i}
@@ -153,49 +153,49 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
               </motion.span>
             ))}
           </div>
+
+          <motion.button
+            onClick={handleEnter}
+            className="rounded-full border border-white/15 bg-white/[0.06] px-8 py-2.5 text-[12px] font-light tracking-wider text-white/70 transition-all active:scale-95"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 1.2 }}
+          >
+            Entrar
+          </motion.button>
         </div>
       </div>
 
-      {/* Phrases below the orb */}
-      <div className="relative mt-6 h-16 w-full max-w-xs text-center">
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={phraseIdx < PHRASES.length ? phraseIdx : 'done'}
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.5 }}
-            className="absolute inset-0 flex items-center justify-center whitespace-pre-line text-[11px] font-light leading-relaxed tracking-wide text-white/35"
-          >
-            {phraseIdx < PHRASES.length ? PHRASES[phraseIdx] : 'Acelerador de competência clínica'}
-          </motion.p>
-        </AnimatePresence>
-      </div>
+      {/* Phrases + dots together below the orb */}
+      <div className="mt-6 flex flex-col items-center gap-4">
+        <div className="relative h-16 w-full max-w-xs text-center">
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={phraseIdx < PHRASES.length ? phraseIdx : 'done'}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0 flex items-center justify-center whitespace-pre-line text-[11px] font-light leading-relaxed tracking-wide text-white/35"
+            >
+              {phraseIdx < PHRASES.length ? PHRASES[phraseIdx] : 'Acelerador de competência clínica'}
+            </motion.p>
+          </AnimatePresence>
+        </div>
 
-      {/* Progress dots */}
-      <div className="absolute bottom-24 flex gap-1.5">
-        {PHRASES.map((_, i) => (
-          <div
-            key={i}
-            className="h-[3px] rounded-full transition-all duration-500"
-            style={{
-              width: i <= phraseIdx ? 14 : 5,
-              background: i <= phraseIdx ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.06)',
-            }}
-          />
-        ))}
+        <div className="flex gap-1.5">
+          {PHRASES.map((_, i) => (
+            <div
+              key={i}
+              className="h-[3px] rounded-full transition-all duration-500"
+              style={{
+                width: i <= phraseIdx ? 14 : 5,
+                background: i <= phraseIdx ? 'rgba(255, 255, 255, 0.25)' : 'rgba(255, 255, 255, 0.06)',
+              }}
+            />
+          ))}
+        </div>
       </div>
-
-      {/* Entrar button — below dots */}
-      <motion.button
-        onClick={handleEnter}
-        className="absolute bottom-10 rounded-full border border-white/12 bg-white/[0.04] px-7 py-2.5 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 1.2 }}
-      >
-        Entrar
-      </motion.button>
     </motion.div>
   )
 }
