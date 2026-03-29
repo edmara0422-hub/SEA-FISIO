@@ -113,114 +113,72 @@ export function PerformanceBar() {
         </div>
       </div>
 
-      {/* NPS e Feedback */}
+      {/* NPS + Feedback — card com score e botão */}
       <div
         className="rounded-[1.4rem] p-4"
-        style={{
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
-        }}
+        style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)' }}
       >
-        <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
-          NPS e Feedback
-        </p>
-
-        <div className="grid grid-cols-2 gap-2">
-          <div className="rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-3 text-center">
-            <Star className="mx-auto mb-1 h-4 w-4 text-white/40" />
-            <p className="text-2xl font-semibold tabular-nums text-white/85">{nps ? nps.score : '--'}</p>
-            <p className="text-[8px] font-semibold uppercase tracking-wider text-white/50">NPS Score</p>
-            <p className="text-[7px] text-white/25">{nps ? `${nps.total} avaliações` : 'Sem avaliações'}</p>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Star className="h-4 w-4 text-white/40" />
+            <div>
+              <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">NPS</p>
+              <p className="text-lg font-semibold tabular-nums text-white/85">{nps ? nps.score : '--'} <span className="text-[8px] font-normal text-white/30">{nps ? `(${nps.total})` : ''}</span></p>
+            </div>
           </div>
-          <button onClick={() => setShowFeedback(true)} className="rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-3 text-center transition hover:bg-white/[0.04]">
-            <MessageSquare className="mx-auto mb-1 h-4 w-4 text-white/40" />
-            <p className="text-2xl font-semibold tabular-nums text-white/85">{fbCount || '--'}</p>
-            <p className="text-[8px] font-semibold uppercase tracking-wider text-white/50">Feedbacks</p>
-            <p className="text-[7px] text-white/25">Toque para avaliar</p>
+          <button
+            onClick={() => setShowFeedback(true)}
+            className="flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1.5 text-[8px] font-semibold tracking-wider text-white/60 transition hover:bg-white/[0.08]"
+          >
+            <MessageSquare className="h-3 w-3" /> Avaliar / Feedback
           </button>
         </div>
       </div>
 
-      {/* Sustentabilidade — TBL */}
+      {/* Sustentabilidade — TBL + ODS + CSV juntos */}
       <div
         className="rounded-[1.4rem] p-4"
-        style={{
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
-        }}
+        style={{ border: '1px solid rgba(255,255,255,0.08)', background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)' }}
       >
         <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
-          Triple Bottom Line (TBL)
+          Sustentabilidade
         </p>
 
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+        {/* TBL */}
+        <div className="mb-3 grid grid-cols-3 gap-1.5">
           {TBL_ITEMS.map((item) => (
-            <div
-              key={item.label}
-              className="flex items-center gap-2.5 rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5"
-            >
-              <item.icon className="h-4 w-4 shrink-0 text-white/50" />
-              <div>
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-white/70">{item.label}</p>
-                <p className="text-[8px] leading-relaxed text-white/35">{item.desc}</p>
-              </div>
+            <div key={item.label} className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-2 py-2 text-center">
+              <item.icon className="mx-auto mb-1 h-3 w-3 text-white/45" />
+              <p className="text-[8px] font-semibold text-white/65">{item.label}</p>
+              <p className="mt-0.5 text-[6px] leading-snug text-white/30">{item.desc}</p>
             </div>
           ))}
         </div>
-      </div>
 
-      {/* ODS — Objetivos de Desenvolvimento Sustentável */}
-      <div
-        className="rounded-[1.4rem] p-4"
-        style={{
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
-        }}
-      >
-        <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
-          ODS — Objetivos de Desenvolvimento Sustentável
-        </p>
-
-        <div className="grid grid-cols-1 gap-2">
-          {ODS_ITEMS.map((item) => (
-            <div
-              key={item.num}
-              className="flex items-center gap-3 rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2"
-            >
-              <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/12 bg-white/[0.04] text-[9px] font-bold text-white/70">
-                {item.num}
-              </span>
-              <div>
-                <p className="text-[9px] font-semibold text-white/70">{item.label}</p>
-                <p className="text-[7px] text-white/35">{item.desc}</p>
+        {/* ODS inline */}
+        <div className="mb-3">
+          <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.15em] text-white/30">ODS</p>
+          <div className="flex flex-wrap gap-1">
+            {ODS_ITEMS.map((item) => (
+              <div key={item.num} className="flex items-center gap-1 rounded-full border border-white/6 bg-white/[0.02] px-2 py-0.5">
+                <span className="text-[8px] font-bold text-white/60">{item.num}</span>
+                <span className="text-[7px] text-white/40">{item.label}</span>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* CSV — Criação de Valor Compartilhado */}
-      <div
-        className="rounded-[1.4rem] p-4"
-        style={{
-          border: '1px solid rgba(255,255,255,0.08)',
-          background: 'linear-gradient(160deg, rgba(255,255,255,0.03) 0%, rgba(0,0,0,0) 100%)',
-        }}
-      >
-        <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.2em] text-white/40">
-          CSV — Criação de Valor Compartilhado
-        </p>
-
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-          {CSV_ITEMS.map((item) => (
-            <div
-              key={item.label}
-              className="rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5"
-            >
-              <p className="text-[9px] font-semibold uppercase tracking-wider text-white/70">{item.label}</p>
-              <p className="mt-1 text-[7px] leading-relaxed text-white/35">{item.desc}</p>
-            </div>
-          ))}
+        {/* CSV inline */}
+        <div>
+          <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.15em] text-white/30">CSV — Valor Compartilhado</p>
+          <div className="grid grid-cols-3 gap-1.5">
+            {CSV_ITEMS.map((item) => (
+              <div key={item.label} className="rounded-[0.6rem] border border-white/5 bg-white/[0.015] px-2 py-1.5">
+                <p className="text-[7px] font-semibold text-white/55">{item.label}</p>
+                <p className="text-[6px] leading-snug text-white/25">{item.desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
@@ -252,7 +210,7 @@ export function PerformanceBar() {
       {/* Modais */}
       <AnimatePresence>
         {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
-        {showReport && <ReportModal onClose={() => setShowReport(false)} />}
+        {showReport && <FeedbackModal onClose={() => setShowReport(false)} startTab="denuncia" />}
       </AnimatePresence>
     </motion.section>
   )
@@ -296,118 +254,63 @@ function ModalShell({ title, onClose, children }: { title: string; onClose: () =
   )
 }
 
-function FeedbackModal({ onClose }: { onClose: () => void }) {
+function FeedbackModal({ onClose, startTab = 'nps' }: { onClose: () => void; startTab?: string }) {
+  const [tab, setTab] = useState(startTab)
   const [npsScore, setNpsScore] = useState<number | null>(null)
   const [message, setMessage] = useState('')
+  const [reportType, setReportType] = useState('denuncia')
   const [sent, setSent] = useState(false)
 
-  const handleSubmit = async () => {
-    if (!supabase || (npsScore === null && !message.trim())) return
-    if (npsScore !== null) {
-      await supabase.from('sea_feedback').insert({ type: 'nps', score: npsScore, message: message.trim() || null })
-    }
-    if (message.trim()) {
-      await supabase.from('sea_feedback').insert({ type: 'feedback', message: message.trim() })
-    }
-    setSent(true)
-    setTimeout(onClose, 1500)
-  }
+  const tabs = [
+    { id: 'nps', label: 'NPS' },
+    { id: 'feedback', label: 'Feedback' },
+    { id: 'denuncia', label: 'Denúncia' },
+  ]
 
-  if (sent) {
-    return (
-      <ModalShell title="Feedback" onClose={onClose}>
-        <div className="flex flex-col items-center gap-3 py-6">
-          <Check className="h-8 w-8 text-white/60" />
-          <p className="text-sm text-white/70">Obrigado pelo seu feedback!</p>
-        </div>
-      </ModalShell>
-    )
-  }
-
-  return (
-    <ModalShell title="Feedback e NPS" onClose={onClose}>
-      <p className="mb-3 text-[10px] text-white/40">De 0 a 10, o quanto você recomendaria o SEA FISIO?</p>
-
-      <div className="mb-4 flex flex-wrap justify-center gap-1.5">
-        {Array.from({ length: 11 }, (_, i) => (
-          <button
-            key={i}
-            onClick={() => setNpsScore(i)}
-            className={`flex h-8 w-8 items-center justify-center rounded-lg border text-[11px] font-semibold transition ${
-              npsScore === i
-                ? 'border-white/30 bg-white/15 text-white'
-                : 'border-white/8 bg-white/[0.03] text-white/50 hover:bg-white/[0.06]'
-            }`}
-          >
-            {i}
-          </button>
-        ))}
-      </div>
-
-      <textarea
-        className="mb-3 w-full rounded-[0.8rem] border border-white/8 bg-white/[0.03] px-3 py-2 text-[11px] text-white/80 outline-none placeholder:text-white/25 focus:border-white/15"
-        rows={3}
-        placeholder="Deixe um comentário (opcional)"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
-
-      <button
-        onClick={handleSubmit}
-        disabled={npsScore === null && !message.trim()}
-        className="flex w-full items-center justify-center gap-2 rounded-[0.8rem] border border-white/12 bg-white/[0.06] py-2 text-[10px] font-semibold tracking-wider text-white/70 transition disabled:opacity-30 hover:bg-white/[0.1]"
-      >
-        <Send className="h-3 w-3" /> Enviar
-      </button>
-    </ModalShell>
-  )
-}
-
-function ReportModal({ onClose }: { onClose: () => void }) {
-  const [type, setType] = useState('denuncia')
-  const [message, setMessage] = useState('')
-  const [sent, setSent] = useState(false)
-
-  const types = [
+  const reportTypes = [
     { value: 'denuncia', label: 'Denúncia' },
     { value: 'assedio', label: 'Assédio' },
     { value: 'etica', label: 'Ética' },
-    { value: 'feedback', label: 'Feedback' },
     { value: 'outro', label: 'Outro' },
   ]
 
   const handleSubmit = async () => {
-    if (!supabase || !message.trim()) return
-    await supabase.from('sea_reports').insert({ type, message: message.trim(), anonymous: true })
+    if (!supabase) return
+    if (tab === 'nps' && npsScore !== null) {
+      await supabase.from('sea_feedback').insert({ type: 'nps', score: npsScore, message: message.trim() || null })
+    } else if (tab === 'feedback' && message.trim()) {
+      await supabase.from('sea_feedback').insert({ type: 'feedback', message: message.trim() })
+    } else if (tab === 'denuncia' && message.trim()) {
+      await supabase.from('sea_reports').insert({ type: reportType, message: message.trim(), anonymous: true })
+    } else return
     setSent(true)
     setTimeout(onClose, 1500)
   }
 
   if (sent) {
     return (
-      <ModalShell title="Canal de Denúncias" onClose={onClose}>
+      <ModalShell title="Enviado" onClose={onClose}>
         <div className="flex flex-col items-center gap-3 py-6">
           <Check className="h-8 w-8 text-white/60" />
-          <p className="text-sm text-white/70">Recebemos sua mensagem.</p>
-          <p className="text-[10px] text-white/35">Sua identidade está protegida.</p>
+          <p className="text-sm text-white/70">{tab === 'denuncia' ? 'Recebemos sua denúncia.' : 'Obrigado pelo seu feedback!'}</p>
+          {tab === 'denuncia' && <p className="text-[10px] text-white/35">Sua identidade está protegida.</p>}
         </div>
       </ModalShell>
     )
   }
 
+  const canSubmit = tab === 'nps' ? npsScore !== null : message.trim().length > 0
+
   return (
     <ModalShell title="Canal de Denúncias e Feedback" onClose={onClose}>
-      <p className="mb-3 text-[10px] text-white/40">Todas as denúncias são anônimas e confidenciais.</p>
-
-      <div className="mb-3 flex flex-wrap gap-1.5">
-        {types.map((t) => (
+      {/* Tabs */}
+      <div className="mb-4 flex gap-1">
+        {tabs.map((t) => (
           <button
-            key={t.value}
-            onClick={() => setType(t.value)}
-            className={`rounded-full border px-3 py-1 text-[9px] font-semibold transition ${
-              type === t.value
-                ? 'border-white/25 bg-white/12 text-white/80'
-                : 'border-white/8 bg-white/[0.03] text-white/45 hover:bg-white/[0.06]'
+            key={t.id}
+            onClick={() => { setTab(t.id); setMessage(''); setNpsScore(null) }}
+            className={`flex-1 rounded-[0.6rem] py-1.5 text-[9px] font-semibold tracking-wider transition ${
+              tab === t.id ? 'bg-white/12 text-white/80' : 'text-white/40 hover:bg-white/[0.04]'
             }`}
           >
             {t.label}
@@ -415,17 +318,74 @@ function ReportModal({ onClose }: { onClose: () => void }) {
         ))}
       </div>
 
-      <textarea
-        className="mb-3 w-full rounded-[0.8rem] border border-white/8 bg-white/[0.03] px-3 py-2 text-[11px] text-white/80 outline-none placeholder:text-white/25 focus:border-white/15"
-        rows={4}
-        placeholder="Descreva sua denúncia ou feedback..."
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-      />
+      {/* NPS */}
+      {tab === 'nps' && (
+        <>
+          <p className="mb-3 text-[10px] text-white/40">De 0 a 10, o quanto recomendaria o SEA?</p>
+          <div className="mb-3 flex flex-wrap justify-center gap-1.5">
+            {Array.from({ length: 11 }, (_, i) => (
+              <button
+                key={i}
+                onClick={() => setNpsScore(i)}
+                className={`flex h-7 w-7 items-center justify-center rounded-lg border text-[10px] font-semibold transition ${
+                  npsScore === i ? 'border-white/30 bg-white/15 text-white' : 'border-white/8 bg-white/[0.03] text-white/50'
+                }`}
+              >
+                {i}
+              </button>
+            ))}
+          </div>
+          <textarea
+            className="mb-3 w-full rounded-[0.8rem] border border-white/8 bg-white/[0.03] px-3 py-2 text-[11px] text-white/80 outline-none placeholder:text-white/25"
+            rows={2}
+            placeholder="Comentário (opcional)"
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+        </>
+      )}
+
+      {/* Feedback */}
+      {tab === 'feedback' && (
+        <textarea
+          className="mb-3 w-full rounded-[0.8rem] border border-white/8 bg-white/[0.03] px-3 py-2 text-[11px] text-white/80 outline-none placeholder:text-white/25"
+          rows={4}
+          placeholder="Deixe seu feedback, sugestão ou elogio..."
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+      )}
+
+      {/* Denúncia */}
+      {tab === 'denuncia' && (
+        <>
+          <p className="mb-2 text-[9px] text-white/35">Anônimo e confidencial.</p>
+          <div className="mb-3 flex flex-wrap gap-1">
+            {reportTypes.map((t) => (
+              <button
+                key={t.value}
+                onClick={() => setReportType(t.value)}
+                className={`rounded-full border px-2.5 py-0.5 text-[8px] font-semibold transition ${
+                  reportType === t.value ? 'border-white/25 bg-white/12 text-white/80' : 'border-white/8 text-white/40'
+                }`}
+              >
+                {t.label}
+              </button>
+            ))}
+          </div>
+          <textarea
+            className="mb-3 w-full rounded-[0.8rem] border border-white/8 bg-white/[0.03] px-3 py-2 text-[11px] text-white/80 outline-none placeholder:text-white/25"
+            rows={4}
+            placeholder="Descreva..."
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+          />
+        </>
+      )}
 
       <button
         onClick={handleSubmit}
-        disabled={!message.trim()}
+        disabled={!canSubmit}
         className="flex w-full items-center justify-center gap-2 rounded-[0.8rem] border border-white/12 bg-white/[0.06] py-2 text-[10px] font-semibold tracking-wider text-white/70 transition disabled:opacity-30 hover:bg-white/[0.1]"
       >
         <Send className="h-3 w-3" /> Enviar
