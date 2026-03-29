@@ -45,7 +45,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
     if (!ctx) return
 
     const dpr = window.devicePixelRatio || 1
-    const size = Math.min(window.innerWidth * 0.85, 360)
+    const size = Math.min(window.innerWidth * 0.9, 400)
     canvas.width = size * dpr
     canvas.height = size * dpr
     canvas.style.width = `${size}px`
@@ -138,9 +138,9 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       <div className="relative flex items-center justify-center">
         <canvas ref={canvasRef} />
 
-        {/* Inside orb: SEA + Entrar */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-8">
-          <div className="flex items-center justify-center gap-[0.02em] text-[5.2rem] font-semibold leading-none">
+        {/* Inside orb: SEA top-center, Entrar bottom */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <div className="-mt-6 flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold leading-none sm:text-[5.5rem]">
             {'SEA'.split('').map((letter, i) => (
               <motion.span
                 key={i}
@@ -156,7 +156,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
 
           <motion.button
             onClick={handleEnter}
-            className="rounded-full border border-white/15 bg-white/[0.06] px-8 py-2.5 text-[12px] font-light tracking-wider text-white/70 transition-all active:scale-95"
+            className="mt-10 rounded-full border border-white/15 bg-white/[0.06] px-8 py-2.5 text-[12px] font-light tracking-wider text-white/70 transition-all active:scale-95"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 1.2 }}
