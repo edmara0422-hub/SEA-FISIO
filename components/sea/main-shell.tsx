@@ -95,27 +95,27 @@ export function MainShell({ children }: { children: ReactNode }) {
         <PremiumSplash durationMs={2400} exitHoldMs={500} onComplete={() => setPhase('ready')} />
       )}
 
-      <div className="sea-shell-root">
-        <main className="pb-28">
-          {/* Cached Home tab — stays mounted once visited */}
-          {visited.home && (
-            <div style={{ display: activeTab === 'home' ? 'block' : 'none' }}>
-              <HomePageClient />
-            </div>
-          )}
+      {/* Home content — only visible when ready */}
+      {phase === 'ready' && (
+        <div className="sea-shell-root">
+          <main className="pb-28">
+            {visited.home && (
+              <div style={{ display: activeTab === 'home' ? 'block' : 'none' }}>
+                <HomePageClient />
+              </div>
+            )}
 
-          {/* Cached Explore tab — stays mounted once visited */}
-          {visited.explore && (
-            <div style={{ display: activeTab === 'explore' ? 'block' : 'none' }}>
-              <ExplorePageClient />
-            </div>
-          )}
+            {visited.explore && (
+              <div style={{ display: activeTab === 'explore' ? 'block' : 'none' }}>
+                <ExplorePageClient />
+              </div>
+            )}
 
-          {/* Other routes (profile, conteudos, sistemas, etc.) render normally */}
-          {!isMainTab && children}
-        </main>
-        <BottomNav onSwitch={handleSwitch} />
-      </div>
+            {!isMainTab && children}
+          </main>
+          <BottomNav onSwitch={handleSwitch} />
+        </div>
+      )}
     </>
   )
 }
