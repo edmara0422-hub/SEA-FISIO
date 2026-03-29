@@ -138,8 +138,8 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       <div className="relative flex items-center justify-center">
         <canvas ref={canvasRef} />
 
-        {/* Inside orb: SEA + Entrar only */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
+        {/* Inside orb: SEA only */}
+        <div className="absolute inset-0 flex items-center justify-center">
           <div className="flex items-center justify-center gap-[0.02em] text-[4.8rem] font-semibold leading-none">
             {'SEA'.split('').map((letter, i) => (
               <motion.span
@@ -153,16 +153,6 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
               </motion.span>
             ))}
           </div>
-
-          <motion.button
-            onClick={handleEnter}
-            className="rounded-full border border-white/12 bg-white/[0.04] px-6 py-2 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 1.2 }}
-          >
-            Entrar
-          </motion.button>
         </div>
       </div>
 
@@ -183,7 +173,7 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
       </div>
 
       {/* Progress dots */}
-      <div className="absolute bottom-10 flex gap-1.5">
+      <div className="absolute bottom-24 flex gap-1.5">
         {PHRASES.map((_, i) => (
           <div
             key={i}
@@ -195,6 +185,17 @@ export function SeaLanding({ onEnter }: { onEnter: () => void }) {
           />
         ))}
       </div>
+
+      {/* Entrar button — below dots */}
+      <motion.button
+        onClick={handleEnter}
+        className="absolute bottom-10 rounded-full border border-white/12 bg-white/[0.04] px-7 py-2.5 text-[11px] font-light tracking-wider text-white/60 transition-all active:scale-95"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6, delay: 1.2 }}
+      >
+        Entrar
+      </motion.button>
     </motion.div>
   )
 }
