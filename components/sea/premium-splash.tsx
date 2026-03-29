@@ -11,9 +11,9 @@ type PremiumSplashProps = {
 
 
 export function PremiumSplash({
-  durationMs = 6000,
+  durationMs = 10000,
   onComplete,
-  exitHoldMs = 800,
+  exitHoldMs = 1000,
 }: PremiumSplashProps) {
   const [progress, setProgress] = useState(0)
   // orb canvas handles visuals now
