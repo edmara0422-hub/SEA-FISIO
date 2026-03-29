@@ -32,9 +32,9 @@ type CoreField = {
 }
 
 export function PremiumSplash({
-  durationMs = 8200,
+  durationMs = 3000,
   onComplete,
-  exitHoldMs = 1200,
+  exitHoldMs = 600,
 }: PremiumSplashProps) {
   const [progress, setProgress] = useState(0)
   const field = useMemo(() => buildCoreField(), [])
@@ -85,18 +85,13 @@ export function PremiumSplash({
 
   return (
     <div className="fixed inset-0 z-[90] h-[100dvh] w-screen overflow-hidden bg-[#010101]" suppressHydrationWarning>
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.06),transparent_16%,rgba(1,1,1,0.94)_56%,rgba(1,1,1,1)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.06),transparent_26%),radial-gradient(circle_at_80%_18%,rgba(205,205,205,0.04),transparent_28%),radial-gradient(circle_at_18%_82%,rgba(255,255,255,0.04),transparent_26%),radial-gradient(circle_at_82%_80%,rgba(170,170,170,0.035),transparent_30%)]" />
-      <div className="absolute inset-0 opacity-[0.12] [background-image:repeating-linear-gradient(180deg,rgba(255,255,255,0.018)_0px,rgba(255,255,255,0.018)_1px,transparent_1px,transparent_11px)]" />
-
+      {/* Same subtle glow as landing */}
       <motion.div
-        className="absolute left-1/2 top-1/2 h-[22rem] w-[30rem] -translate-x-1/2 -translate-y-1/2 bg-[radial-gradient(circle,rgba(255,255,255,0.16),rgba(255,255,255,0.03)_46%,transparent_76%)] blur-3xl"
-        animate={{ opacity: [0.22, 0.34, 0.24], scale: [0.98, 1.03, 0.99] }}
-        transition={{ duration: 6.5, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute left-1/2 top-1/2 h-[60vw] max-h-[22rem] w-[60vw] max-w-[22rem] -translate-x-1/2 -translate-y-1/2 rounded-full"
+        style={{ background: 'radial-gradient(circle, rgba(200,200,200,0.1) 0%, rgba(150,150,150,0.04) 40%, transparent 70%)' }}
+        animate={{ opacity: [0.4, 0.7, 0.4], scale: [0.96, 1.04, 0.96] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
       />
-
-      <CoreAura field={field} />
-      <CentralPulseColumn />
 
       <div className="relative flex h-full items-center justify-center px-4">
         <motion.div
