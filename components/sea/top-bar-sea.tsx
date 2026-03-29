@@ -71,7 +71,7 @@ export function TopBarSEA() {
         {/* Right: time + buttons */}
         <div className="flex shrink-0 items-center gap-1.5">
           {mounted && (
-            <span className="text-[8px] font-semibold tabular-nums tracking-[0.1em] text-white/65">
+            <span className="text-[9px] font-bold tabular-nums tracking-[0.12em] text-white/75">
               {timeLabel}
             </span>
           )}
