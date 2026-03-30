@@ -85,6 +85,7 @@ export function PerformanceBar() {
   const { nps, fbCount } = useNpsData()
   const [showFeedback, setShowFeedback] = useState(false)
   const [showReport, setShowReport] = useState(false)
+  const [showGov, setShowGov] = useState<string | null>(null)
 
   return (
     <motion.section
@@ -198,7 +199,12 @@ export function PerformanceBar() {
           {GOVERNANCE_ITEMS.map((item) => (
             <button
               key={item.label}
-              onClick={item.label.includes('Denúncia') ? () => setShowReport(true) : undefined}
+              onClick={() => {
+                if (item.label.includes('Denúncia')) setShowReport(true)
+                else if (item.label === 'Políticas') setShowGov('politicas')
+                else if (item.label === 'Práticas') setShowGov('praticas')
+                else if (item.label === 'Compliance') setShowGov('compliance')
+              }}
               className="flex items-center gap-2 rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5 text-left transition-colors hover:bg-white/[0.04]"
             >
               <item.icon className="h-3.5 w-3.5 shrink-0 text-white/45" />
@@ -211,8 +217,134 @@ export function PerformanceBar() {
       <AnimatePresence>
         {showFeedback && <FeedbackModal onClose={() => setShowFeedback(false)} />}
         {showReport && <FeedbackModal onClose={() => setShowReport(false)} startTab="denuncia" />}
+        {showGov && <GovernanceModal type={showGov} onClose={() => setShowGov(null)} />}
       </AnimatePresence>
     </motion.section>
+  )
+}
+
+const GOV_CONTENT: Record<string, { title: string; sections: { heading: string; items: string[] }[] }> = {
+  politicas: {
+    title: 'Políticas SEA FISIO',
+    sections: [
+      {
+        heading: 'Política de Privacidade e LGPD',
+        items: [
+          'Os dados clínicos permanecem exclusivamente no dispositivo do profissional (localStorage)',
+          'Nenhum dado identificável de paciente é transmitido para servidores externos',
+          'O prontuário SEA é uma ferramenta de raciocínio clínico pessoal, não um PEP',
+          'A sincronização via Supabase utiliza identificadores anônimos (session_id)',
+          'O usuário pode excluir todos os seus dados a qualquer momento',
+        ],
+      },
+      {
+        heading: 'Política de Sustentabilidade',
+        items: [
+          'Compromisso com o Triple Bottom Line: Pessoas, Planeta e Prosperidade',
+          'Alinhamento com os ODS 3, 4, 9, 10 e 12 da ONU',
+          'Priorização do modo offline para reduzir consumo energético de servidores',
+          'Eliminação do uso de papel na prática clínica à beira do leito',
+        ],
+      },
+      {
+        heading: 'Política de Inclusão e Diversidade',
+        items: [
+          'Design acessível como princípio, não como adaptação posterior',
+          'Compromisso com igualdade de acesso ao conhecimento clínico',
+          'Respeito à diversidade de perfis profissionais e acadêmicos',
+          'Canal de denúncias anônimo para assédio e discriminação',
+        ],
+      },
+    ],
+  },
+  praticas: {
+    title: 'Práticas SEA FISIO',
+    sections: [
+      {
+        heading: 'Práticas de Segurança do Paciente',
+        items: [
+          'Cálculos automáticos validados por literatura (driving pressure, RSBI, P/F)',
+          'Alertas inteligentes para intubação prolongada (>7 dias)',
+          'Detecção automática de elegibilidade para desmame ventilatório',
+          'Histórico completo de condução para rastreabilidade clínica',
+        ],
+      },
+      {
+        heading: 'Práticas de Educação Continuada',
+        items: [
+          'Conteúdo baseado em guidelines AMIB, SBPT, ATS e ERS',
+          'Simulações 3D interativas para aprendizado imersivo',
+          'IA tutor especialista com raciocínio clínico contextualizado',
+          'Atualização contínua de protocolos e evidências',
+        ],
+      },
+      {
+        heading: 'Práticas de Controle de Infecção',
+        items: [
+          'Zero papel = zero vetor de transmissão por contato',
+          'Eliminação de pranchetas compartilhadas na UTI',
+          'Dispositivo pessoal higienizável vs. papel contaminado',
+          'Conformidade com práticas de precaução de contato',
+        ],
+      },
+    ],
+  },
+  compliance: {
+    title: 'Compliance SEA FISIO',
+    sections: [
+      {
+        heading: 'Conformidade Legal',
+        items: [
+          'LGPD (Lei Geral de Proteção de Dados) — dados no dispositivo, sem coleta de PII',
+          'Código de Ética Profissional da Fisioterapia (COFFITO)',
+          'Resoluções do COFFITO sobre prontuário eletrônico e teleatendimento',
+          'Marco Civil da Internet — transparência no tratamento de dados',
+        ],
+      },
+      {
+        heading: 'Conformidade Ética',
+        items: [
+          'Canal de denúncias anônimo e confidencial',
+          'Política de tolerância zero para assédio e discriminação',
+          'Transparência na utilização de IA (o tutor informa que é IA)',
+          'Conteúdo revisado por profissionais especializados',
+        ],
+      },
+      {
+        heading: 'Conformidade Técnica',
+        items: [
+          'Criptografia de dados em trânsito (HTTPS/TLS)',
+          'Armazenamento local isolado (sandboxed localStorage)',
+          'Código-fonte versionado e auditável',
+          'Testes de integridade nos cálculos clínicos',
+        ],
+      },
+    ],
+  },
+}
+
+function GovernanceModal({ type, onClose }: { type: string; onClose: () => void }) {
+  const content = GOV_CONTENT[type]
+  if (!content) return null
+
+  return (
+    <ModalShell title={content.title} onClose={onClose}>
+      <div className="max-h-[60vh] space-y-4 overflow-y-auto pr-1">
+        {content.sections.map((section) => (
+          <div key={section.heading}>
+            <p className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-white/60">{section.heading}</p>
+            <ul className="space-y-1.5">
+              {section.items.map((item, i) => (
+                <li key={i} className="flex gap-2 text-[10px] leading-relaxed text-white/45">
+                  <span className="mt-1 h-1 w-1 shrink-0 rounded-full bg-white/30" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </ModalShell>
   )
 }
 
