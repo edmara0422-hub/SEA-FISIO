@@ -133,12 +133,6 @@ export function PerformanceBar() {
             <p className="text-[7px] text-white/40">Feedbacks</p>
           </div>
         </div>
-        <button
-          onClick={() => setShowFeedback(true)}
-          className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-[0.8rem] border border-white/8 bg-white/[0.03] py-2 text-[8px] font-semibold tracking-wider text-white/50 transition hover:bg-white/[0.06]"
-        >
-          <MessageSquare className="h-3 w-3" /> Avaliar / Enviar Feedback
-        </button>
       </div>
 
       {/* Sustentabilidade — TBL + ODS + CSV juntos */}
