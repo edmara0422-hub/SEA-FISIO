@@ -63,8 +63,7 @@ export function StudyRailBoard({
     <div className="space-y-4">
       {/* Rail */}
       <div
-        className="overflow-hidden rounded-[1.8rem] border border-white/8 p-5 md:p-6"
-        style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.01) 50%, transparent 100%)' }}
+        className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-black/22 p-5 md:p-6"
       >
         {/* Rail header */}
         <div className="mb-5 flex items-center justify-between gap-3">
@@ -201,8 +200,7 @@ export function StudyRailBoard({
               current.panel
             ) : (
               <div
-                className="overflow-hidden rounded-[1.8rem] border border-white/8"
-                style={{ background: 'linear-gradient(160deg, rgba(255,255,255,0.035) 0%, rgba(0,0,0,0) 100%)' }}
+                className="overflow-hidden rounded-[1.8rem] border border-white/10 bg-black/22"
               >
                 {/* Detail header */}
                 <div className="flex items-center justify-between gap-4 border-b border-white/6 px-6 py-4">
