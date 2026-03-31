@@ -1566,8 +1566,9 @@ export function ProntuarioSystemPanel() {
     const peepVal = currentRecord.peep ? parseNumber(currentRecord.peep) : 0
     const vtEfetivo = (currentRecord.vt ? parseNumber(currentRecord.vt) : 0) || (currentRecord.vc ? parseNumber(currentRecord.vc) : 0)
     // DP e Cest: só com Pplat real (pausa inspiratória — VCV/PRVC)
+    const isVolumeControlled = ['VCV', 'PRVC'].includes(currentRecord.modoVM)
     const dp = pplatoVal && peepVal ? calcDP(pplatoVal, peepVal) : null
-    const cest = dp && vtEfetivo ? calcCest(vtEfetivo, dp) : null
+    const cest = isVolumeControlled && dp && vtEfetivo ? calcCest(vtEfetivo, dp) : null
     const cdyn = calcCdyn(vtEfetivo, currentRecord.ppico ? parseNumber(currentRecord.ppico) : 0, peepVal)
     const mechanicalPower = calcMechanicalPower(parseNumber(currentRecord.fr), parseNumber(currentRecord.vt), parseNumber(currentRecord.ppico), parseNumber(currentRecord.peep))
     const glasgow = calcGlasgow(
@@ -4034,8 +4035,11 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="P. Pico">
                           <input className={INPUT_CLASS_SM} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="18" />
                         </FieldShell>
-                        <FieldShell label="P. Plato">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="15" />
+                        <FieldShell label="P. Mean">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="10" />
+                        </FieldShell>
+                        <FieldShell label="Ciclagem (%)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ciclagem} onChange={(e) => setField('ciclagem', e.target.value)} placeholder="25" />
                         </FieldShell>
                       </div>
                     </div>
