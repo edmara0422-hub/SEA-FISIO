@@ -1565,12 +1565,14 @@ export function ProntuarioSystemPanel() {
     const pplatoVal = currentRecord.pplato ? parseNumber(currentRecord.pplato) : 0
     const peepVal = currentRecord.peep ? parseNumber(currentRecord.peep) : 0
     const vtEfetivo = (currentRecord.vt ? parseNumber(currentRecord.vt) : 0) || (currentRecord.vc ? parseNumber(currentRecord.vc) : 0)
-    // DP e Cest: só com Pplat real (pausa inspiratória — VCV/PRVC)
-    const isVolumeControlled = ['VCV', 'PRVC'].includes(currentRecord.modoVM)
-    const dp = pplatoVal && peepVal ? calcDP(pplatoVal, peepVal) : null
-    const cest = isVolumeControlled && dp && vtEfetivo ? calcCest(vtEfetivo, dp) : null
-    const cdyn = calcCdyn(vtEfetivo, currentRecord.ppico ? parseNumber(currentRecord.ppico) : 0, peepVal)
-    const mechanicalPower = calcMechanicalPower(parseNumber(currentRecord.fr), parseNumber(currentRecord.vt), parseNumber(currentRecord.ppico), parseNumber(currentRecord.peep))
+    // DP e Cest: VCV, PRVC e PCV (todos têm pausa inspiratória)
+    // Cdyn, Raw, MP, SI, P1-P2: somente VCV/PRVC
+    const isVCV = ['VCV', 'PRVC'].includes(currentRecord.modoVM)
+    const hasPplato = ['VCV', 'PRVC', 'PCV'].includes(currentRecord.modoVM)
+    const dp = hasPplato && pplatoVal && peepVal ? calcDP(pplatoVal, peepVal) : null
+    const cest = hasPplato && dp && vtEfetivo ? calcCest(vtEfetivo, dp) : null
+    const cdyn = isVCV ? calcCdyn(vtEfetivo, currentRecord.ppico ? parseNumber(currentRecord.ppico) : 0, peepVal) : null
+    const mechanicalPower = isVCV ? calcMechanicalPower(parseNumber(currentRecord.fr), parseNumber(currentRecord.vt), parseNumber(currentRecord.ppico), parseNumber(currentRecord.peep)) : null
     const glasgow = calcGlasgow(
       parseNumber(currentRecord.glasgowO),
       currentRecord.glasgowV || '',
@@ -1578,7 +1580,7 @@ export function ProntuarioSystemPanel() {
     )
     const rsbi = calcRSBI(parseNumber(currentRecord.fr), parseNumber(currentRecord.vc))
     const rsbiInterp = rsbi ? interpRSBI(rsbi) : null
-    const raw = calcResist(currentRecord.ppico, currentRecord.pplato, currentRecord.fluxo)
+    const raw = isVCV ? calcResist(currentRecord.ppico, currentRecord.pplato, currentRecord.fluxo) : null
     const gaso = analisarGaso({
       gasoPH: parseNumber(currentRecord.gasoPH),
       gasoPaCO2: parseNumber(currentRecord.gasoPaCO2),
@@ -4470,7 +4472,7 @@ export function ProntuarioSystemPanel() {
                         if (entry.trigger) params.push({ label: 'Trigger', value: entry.trigger })
                         if (entry.ti) params.push({ label: 'TI', value: `${entry.ti}s` })
                         if (entry.ie) params.push({ label: 'I:E', value: entry.ie })
-                        if (entry.ppico) params.push({ label: 'Ppico', value: `${entry.ppico} cmH₂O` })
+                        if (entry.ppico) params.push({ label: entry.modo === 'PCV' ? 'PC' : 'Ppico', value: `${entry.ppico} cmH₂O` })
                         if (entry.pplato) params.push({ label: 'Pplatô', value: `${entry.pplato} cmH₂O` })
                         if (entry.pmean) params.push({ label: 'Pmean', value: `${entry.pmean} cmH₂O` })
                         if (entry.ciclagem) params.push({ label: 'Cicl', value: `${entry.ciclagem}%` })
