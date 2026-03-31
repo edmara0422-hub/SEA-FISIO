@@ -526,6 +526,13 @@ export type PatientData = {
   weanTRETipo: string
   weanTREResult: string
   weanObs: string
+  weanCausaReversivel: string
+  weanNeuroOk: string
+  weanTosse: string
+  weanPeakFlow: string
+  weanCuffLeak: string
+  weanCuffLeakDiff: string
+  weanTipoDesm: string
   pronaAtiva: string
   pronaTempo: string
   pronaData: string
@@ -695,6 +702,13 @@ export function emptyPatient(): PatientData {
     weanTRETipo: '',
     weanTREResult: '',
     weanObs: '',
+    weanCausaReversivel: '',
+    weanNeuroOk: '',
+    weanTosse: '',
+    weanPeakFlow: '',
+    weanCuffLeak: '',
+    weanCuffLeakDiff: '',
+    weanTipoDesm: '',
     pronaAtiva: '',
     pronaTempo: '16h',
     pronaData: '',
