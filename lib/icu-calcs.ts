@@ -299,9 +299,10 @@ export function analisarGaso(params: {
       origem = 'Metabolica'
       // Winters: PaCO2 esperado = 1.5 × HCO3 + 8 (±2)
       const expCO2 = 1.5 * hco3 + 8
-      if (co2 >= expCO2 - 2 && co2 <= expCO2 + 2) comp = 'Compensada (Winters)'
-      else if (co2 < expCO2 - 2) comp = '+Alcalose resp. associada'
-      else comp = '+Acidose resp. associada'
+      if (co2 >= expCO2 - 2 && co2 <= expCO2 + 2) comp = `Compensada (Winters: CO₂ esp ${expCO2.toFixed(0)}±2)`
+      else if (co2 < expCO2 - 2) comp = `Hipercompensada — CO₂ ${co2} < esperado ${(expCO2 - 2).toFixed(0)} (+ alcalose resp.)`
+      else if (co2 <= 45) comp = `Nao compensada — CO₂ ${co2} normal mas esperado ~${expCO2.toFixed(0)} (compensacao inadequada)`
+      else comp = `+Acidose resp. associada — CO₂ ${co2} > esperado ${(expCO2 + 2).toFixed(0)}`
     }
   } else if (pH > 7.45) {
     tipo = 'Alcalose'

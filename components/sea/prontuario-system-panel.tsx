@@ -981,9 +981,9 @@ function calcResist(pico: string, plato: string, fluxo: string) {
   const pi = parseNumber(pico)
   const pl = parseNumber(plato)
   const fl = parseNumber(fluxo)
-  if (!pi || !pl) return null
+  if (!pi || !pl || pi <= pl) return null // Ppico must be > Pplato
   if (fl > 0) return (pi - pl) / (fl / 60)
-  return pi - pl
+  return null // Fluxo obrigatório para calcular resistência
 }
 
 function getModeType(mode: string) {
