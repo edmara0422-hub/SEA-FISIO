@@ -4758,6 +4758,8 @@ export function ProntuarioSystemPanel() {
                   }
 
                   const phaseColor = (p: number) => {
+                    // TRE (phase 3): verde se PS ≤ 7 (já em TRE) ou treOK marcado
+                    if (p === 3 && activePhase >= 3 && (psvTRE || treActive)) return '#4ade80'
                     if (activePhase === p) return '#60a5fa'
                     if (activePhase > p) return '#4ade80'
                     return undefined
@@ -4945,7 +4947,9 @@ export function ProntuarioSystemPanel() {
                           </select>
                         </div>
 
-                        <AutoGrowTextarea value={currentRecord.weanObs} onChange={(value) => setField('weanObs', value)} placeholder="Obs desmame..." />
+                        <div className="text-[9px]">
+                          <AutoGrowTextarea value={currentRecord.weanObs} onChange={(value) => setField('weanObs', value)} placeholder="Obs desmame..." />
+                        </div>
                       </div>
 
                       {/* Phase flow */}
