@@ -4034,15 +4034,30 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="Pocc">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pocc} onChange={(e) => setField('pocc', e.target.value)} placeholder="8" />
                         </FieldShell>
-                        <FieldShell label="P. Pico">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="18" />
-                        </FieldShell>
-                        <FieldShell label="P. Mean">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="10" />
-                        </FieldShell>
                         <FieldShell label="Ciclagem (%)">
                           <input className={INPUT_CLASS_SM} value={currentRecord.ciclagem} onChange={(e) => setField('ciclagem', e.target.value)} placeholder="25" />
                         </FieldShell>
+                      </div>
+                      {/* Drive respiratório — cálculo automático */}
+                      {(currentRecord.p01 || currentRecord.pocc) && (
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {calculations?.p01Interp && (
+                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[9px]" style={{ color: calculations.p01Interp.c }}>
+                              P0.1: {currentRecord.p01} — {calculations.p01Interp.t}
+                            </span>
+                          )}
+                          {calculations?.poccInterp && (
+                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[9px]" style={{ color: calculations.poccInterp.c }}>
+                              Pocc: {currentRecord.pocc} — {calculations.poccInterp.t}
+                            </span>
+                          )}
+                          {calculations?.pmusc != null && (
+                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[9px]" style={{ color: calculations.pmuscInterp?.c || '#60a5fa' }}>
+                              Pmusc: {calculations.pmusc.toFixed(1)} cmH₂O {calculations.pmuscInterp ? `— ${calculations.pmuscInterp.t}` : ''}
+                            </span>
+                          )}
+                        </div>
+                      )}
                       </div>
                     </div>
                   )}
