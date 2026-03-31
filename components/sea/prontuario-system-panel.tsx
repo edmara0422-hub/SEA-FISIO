@@ -749,7 +749,7 @@ function analyzeLabExam(exam: LabExamEntry) {
   const leuco = parseNumber(exam.leuco)
   if (exam.leuco) pushItem('Leuco', leuco > 11000 ? 'Leucocitose' : leuco < 4000 ? 'Leucopenia' : 'Faixa esperada', leuco > 11000 || leuco < 4000 ? '#fb923c' : '#4ade80')
   const plaq = parseNumber(exam.plaq)
-  if (exam.plaq) pushItem('Plaq', plaq < 50000 ? 'Plaquetopenia grave' : plaq < 150000 ? 'Plaquetopenia' : 'Faixa esperada', plaq < 50000 ? '#f87171' : plaq < 150000 ? '#facc15' : '#4ade80')
+  if (exam.plaq) pushItem('Plaq', plaq < 50 ? 'Plaquetopenia grave' : plaq < 150 ? 'Plaquetopenia' : plaq > 400 ? 'Trombocitose' : 'Faixa esperada', plaq < 50 ? '#f87171' : plaq < 150 ? '#facc15' : plaq > 400 ? '#fb923c' : '#4ade80')
   const creat = parseNumber(exam.creat)
   if (exam.creat) pushItem('Creat', creat > 2 ? 'Lesao renal importante' : creat > 1.2 ? 'Creat elevada' : 'Faixa esperada', creat > 2 ? '#f87171' : creat > 1.2 ? '#facc15' : '#4ade80')
   const ureia = parseNumber(exam.ureia)
@@ -786,7 +786,7 @@ function analyzeLabExam(exam: LabExamEntry) {
   if (sodium && sodium > 155) alerts.push({ text: 'Na+ > 155: hipernatremia grave — corrigir lentamente (max 10 mEq/24h)', color: '#f87171' })
   if (sodium && sodium < 125) alerts.push({ text: 'Na+ < 125: hiponatremia grave — risco de edema cerebral', color: '#f87171' })
   if (creat && creat > 2) alerts.push({ text: 'Creat > 2: lesao renal — avaliar debito urinario, hidratacao e nefrotoxicos', color: '#f87171' })
-  if (plaq && plaq < 50000) alerts.push({ text: 'Plaquetas < 50k: risco hemorragico — cuidado com procedimentos invasivos', color: '#f87171' })
+  if (plaq && plaq < 50) alerts.push({ text: 'Plaquetas < 50k: risco hemorragico — cuidado com procedimentos invasivos', color: '#f87171' })
   if (inr && inr > 2) alerts.push({ text: 'INR > 2: coagulopatia significativa — avaliar vitamina K, plasma', color: '#f87171' })
   if (alb && alb < 2.5) alerts.push({ text: 'Albumina < 2.5: desnutricao grave — impacto em edema, cicatrizacao e farmacocinetica', color: '#fb923c' })
   if (leuco && leuco > 20000) alerts.push({ text: 'Leucocitose > 20k: infeccao provavel — reavaliar antibioticoterapia e foco', color: '#fb923c' })
@@ -2118,14 +2118,21 @@ export function ProntuarioSystemPanel() {
       pplato: currentRecord.pplato,
       pmean: currentRecord.pmean || '',
       ps: currentRecord.ps,
+      ciclagem: currentRecord.ciclagem || '',
       ipap: currentRecord.ipap || '',
       epap: currentRecord.epap || '',
       p01: currentRecord.p01 || '',
       pocc: currentRecord.pocc || '',
+      p1: currentRecord.p1 || '',
+      p2: currentRecord.p2 || '',
+      si: currentRecord.si || '',
       pmusc: calculations?.pmusc ? calculations.pmusc.toFixed(1) : (currentRecord.pmusc || ''),
       dp: calculations?.dp ? calculations.dp.toFixed(1) : '',
       cest: calculations?.cest ? calculations.cest.toFixed(1) : '',
+      cdyn: calculations?.cdyn ? calculations.cdyn.toFixed(1) : '',
       raw: calculations?.raw ? calculations.raw.toFixed(1) : '',
+      mp: calculations?.mechanicalPower ? calculations.mechanicalPower.toFixed(1) : '',
+      pf: calculations?.pf ? calculations.pf.toFixed(0) : '',
     }
 
     if (!entry.modo && !entry.vt && !entry.ps) return
@@ -3150,10 +3157,10 @@ export function ProntuarioSystemPanel() {
                                   ))}
                                 </select>
                               </FieldShell>
-                              <FieldShell label="Inicio">
+                              <FieldShell label="Dose Inicio">
                                 <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('sedativos', index, 'inicio', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
-                              <FieldShell label="Atual">
+                              <FieldShell label="Dose Atual">
                                 <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('sedativos', index, 'atual', event.target.value)} placeholder="ml/h" disabled={isSuspended} />
                               </FieldShell>
                               <FieldShell label="Unidade">
@@ -3235,10 +3242,10 @@ export function ProntuarioSystemPanel() {
                                   ))}
                                 </select>
                               </FieldShell>
-                              <FieldShell label="Inicio">
+                              <FieldShell label="Dose Inicio">
                                 <input className={INPUT_CLASS_SM} value={item.inicio} onChange={(event) => updateListItem('bnmList', index, 'inicio', event.target.value)} placeholder="ml/h" />
                               </FieldShell>
-                              <FieldShell label="Atual">
+                              <FieldShell label="Dose Atual">
                                 <input className={INPUT_CLASS_SM} value={item.atual} onChange={(event) => updateListItem('bnmList', index, 'atual', event.target.value)} placeholder="ml/h" disabled={isSuspended} />
                               </FieldShell>
                               <FieldShell label="Unidade">
@@ -3922,6 +3929,26 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="25" />
                         </FieldShell>
                       </div>
+                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                        <FieldShell label="P. Mean">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="12" />
+                        </FieldShell>
+                        <FieldShell label="P0.1">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.p01} onChange={(e) => setField('p01', e.target.value)} placeholder="2.2" />
+                        </FieldShell>
+                        <FieldShell label="Pocc">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.pocc} onChange={(e) => setField('pocc', e.target.value)} placeholder="8" />
+                        </FieldShell>
+                        <FieldShell label="P1 (cmH2O)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.p1 ?? ''} onChange={(e) => setField('p1', e.target.value)} placeholder="22" />
+                        </FieldShell>
+                        <FieldShell label="P2 (cmH2O)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.p2 ?? ''} onChange={(e) => setField('p2', e.target.value)} placeholder="20" />
+                        </FieldShell>
+                        <FieldShell label="SI (Stress Index)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.si ?? ''} onChange={(e) => setField('si', e.target.value)} placeholder="1.0" />
+                        </FieldShell>
+                      </div>
                     </div>
                   )}
 
@@ -3958,11 +3985,8 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="I:E">
                           <input className={INPUT_CLASS_SM} value={currentRecord.ie} onChange={(e) => setField('ie', e.target.value)} placeholder="1:2" />
                         </FieldShell>
-                        <FieldShell label="P. Pico">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="28" />
-                        </FieldShell>
-                        <FieldShell label="P. Plato">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="22" />
+                        <FieldShell label="P. Mean">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="12" />
                         </FieldShell>
                       </div>
                     </div>
@@ -4445,16 +4469,23 @@ export function ProntuarioSystemPanel() {
                         if (entry.ppico) params.push({ label: 'Ppico', value: `${entry.ppico} cmH₂O` })
                         if (entry.pplato) params.push({ label: 'Pplatô', value: `${entry.pplato} cmH₂O` })
                         if (entry.pmean) params.push({ label: 'Pmean', value: `${entry.pmean} cmH₂O` })
+                        if (entry.ciclagem) params.push({ label: 'Cicl', value: `${entry.ciclagem}%` })
                         if (entry.p01) params.push({ label: 'P0.1', value: entry.p01 })
                         if (entry.pocc) params.push({ label: 'Pocc', value: entry.pocc })
+                        if (entry.p1) params.push({ label: 'P1', value: `${entry.p1} cmH₂O` })
+                        if (entry.p2) params.push({ label: 'P2', value: `${entry.p2} cmH₂O` })
+                        if (entry.si) params.push({ label: 'SI', value: entry.si })
                         if (entry.ipap) params.push({ label: 'IPAP', value: entry.ipap })
                         if (entry.epap) params.push({ label: 'EPAP', value: entry.epap })
 
                         const calcs: Array<{ label: string; value: string; color?: string }> = []
                         if (entry.dp) { const v = parseFloat(entry.dp); calcs.push({ label: 'DP', value: `${entry.dp}`, color: v > 15 ? '#f87171' : '#4ade80' }) }
                         if (entry.cest) calcs.push({ label: 'Cest', value: entry.cest })
+                        if (entry.cdyn) calcs.push({ label: 'Cdyn', value: entry.cdyn })
                         if (entry.raw) calcs.push({ label: 'Raw', value: entry.raw })
                         if (entry.pmusc) calcs.push({ label: 'Pmusc', value: entry.pmusc })
+                        if (entry.mp) { const v = parseFloat(entry.mp); calcs.push({ label: 'MP', value: `${entry.mp} J/min`, color: v > 17 ? '#f87171' : v > 12 ? '#facc15' : '#4ade80' }) }
+                        if (entry.pf) { const v = parseFloat(entry.pf); calcs.push({ label: 'P/F', value: entry.pf, color: v < 100 ? '#f87171' : v < 200 ? '#fb923c' : v < 300 ? '#facc15' : '#4ade80' }) }
 
                         return (
                           <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">

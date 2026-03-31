@@ -87,14 +87,21 @@ export type VMHistoryEntry = {
   pplato: string
   pmean: string
   ps: string
+  ciclagem: string
   ipap: string
   epap: string
   p01: string
   pocc: string
+  p1: string
+  p2: string
+  si: string
   pmusc: string
   dp: string
   cest: string
+  cdyn: string
   raw: string
+  mp: string
+  pf: string
 }
 
 export type PeepOptEntry = {
@@ -266,7 +273,7 @@ export function analisarGaso(params: {
   const hco3 = Number(params.gasoHCO3)
 
   if (!pH || !co2 || !hco3 || [pH, co2, hco3].some((v) => Number.isNaN(v))) return null
-  if (pH < 6.5 || pH > 8.0 || co2 < 5 || hco3 < 1) return null
+  if (pH < 6.5 || pH > 8.0 || co2 < 5 || co2 > 150 || hco3 < 1 || hco3 > 60) return null
 
   let tipo = 'Normal'
   let origem = ''
@@ -441,6 +448,9 @@ export type PatientData = {
   pmean: string
   ps: string
   ciclagem: string
+  p1: string
+  p2: string
+  si: string
   p01: string
   pocc: string
   pmusc: string
@@ -602,6 +612,9 @@ export function emptyPatient(): PatientData {
     pmean: '',
     ps: '',
     ciclagem: '',
+    p1: '',
+    p2: '',
+    si: '',
     p01: '',
     pocc: '',
     pmusc: '',
