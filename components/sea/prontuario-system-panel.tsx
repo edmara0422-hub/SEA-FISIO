@@ -4767,17 +4767,19 @@ export function ProntuarioSystemPanel() {
                   // ── Auto eligibility checklist ──
                   const eligibility: Array<{ label: string; met: boolean | null; detail: string }> = []
 
-                  // 1. Causa reversível — não automático, precisa de avaliação clínica
-                  eligibility.push({ label: 'Causa reversivel', met: null, detail: 'Avaliacao clinica necessaria' })
+                  // 1. Causa reversível — toggle manual
+                  const causaRev = currentRecord.weanCausaReversivel === 'sim'
+                  eligibility.push({ label: 'Causa reversivel', met: currentRecord.weanCausaReversivel ? causaRev : null, detail: causaRev ? 'Marcada como reversivel' : currentRecord.weanCausaReversivel ? 'Nao reversivel' : 'Avaliar clinicamente' })
 
                   // 2. Hemodinâmica — DVA suspensa ou dose baixa
                   const dvasSuspOrLow = !currentRecord.dvaList?.length || currentRecord.dvaList.every((d: DVAEntry) => !!d.suspensao || !d.dose || parseFloat(d.dose) === 0 || parseFloat(d.dose) <= 0.1)
                   eligibility.push({ label: 'Hemodinamica estavel', met: dvasSuspOrLow, detail: dvasSuspOrLow ? 'Sem DVA ou dose baixa' : 'DVA em dose alta' })
 
-                  // 3. Neurológico — Glasgow >= 8 ou avaliação clínica
+                  // 3. Neurológico — Glasgow >= 8 OU toggle manual
                   const glasgowVal = typeof calculations?.glasgow?.total === 'number' ? calculations.glasgow.total : 0
-                  const neuroOk = glasgowVal >= 8
-                  eligibility.push({ label: 'Neurologico', met: glasgowVal > 0 ? neuroOk : null, detail: glasgowVal > 0 ? `Glasgow ${glasgowVal}${neuroOk ? '' : ' — rebaixado'}` : 'Nao avaliado' })
+                  const neuroManual = currentRecord.weanNeuroOk === 'sim'
+                  const neuroOk = neuroManual || glasgowVal >= 8
+                  eligibility.push({ label: 'Neurologico', met: (glasgowVal > 0 || currentRecord.weanNeuroOk) ? neuroOk : null, detail: neuroManual ? 'Marcado adequado' : glasgowVal > 0 ? `Glasgow ${glasgowVal}${neuroOk ? '' : ' — rebaixado'}` : 'Nao avaliado' })
 
                   // 4. Oxigenação — P/F >= 150 ou FiO2 <= 40 + PEEP <= 8
                   const pfVal = calculations?.pf ?? 0
@@ -4811,9 +4813,14 @@ export function ProntuarioSystemPanel() {
                   const sedsSusp = !currentRecord.sedativos?.length || currentRecord.sedativos.every((s: SedativeEntry) => !!s.suspensao || !s.atual || parseFloat(s.atual) === 0)
                   eligibility.push({ label: 'Sedacao suspensa ou minima', met: sedsSusp, detail: sedsSusp ? 'Sem sedacao continua' : 'Sedativos ativos' })
 
-                  // 10. Tosse / proteção VA
+                  // 10. Tosse / proteção VA — tosse eficaz + PFT >= 60
+                  const tosseOk = currentRecord.weanTosse === 'sim'
+                  const pftVal = currentRecord.weanPeakFlow ? parseFloat(currentRecord.weanPeakFlow) : 0
+                  const pftOk = pftVal >= 60
                   const glasgowSuf = glasgowVal >= 9
-                  eligibility.push({ label: 'Protecao de VA (Glasgow ≥ 9, tosse)', met: glasgowVal > 0 ? glasgowSuf : null, detail: glasgowVal > 0 ? `Glasgow ${glasgowVal}` : 'Nao avaliado' })
+                  const vaOk = tosseOk || (pftVal > 0 && pftOk) || glasgowSuf
+                  const vaDetail = [tosseOk ? 'Tosse eficaz' : '', pftVal > 0 ? `PFT ${pftVal}${pftOk ? '' : ' (<60)'}` : '', glasgowVal > 0 ? `Glasgow ${glasgowVal}` : ''].filter(Boolean).join(' · ') || 'Nao avaliado'
+                  eligibility.push({ label: 'Protecao de VA', met: (currentRecord.weanTosse || pftVal > 0 || glasgowVal > 0) ? vaOk : null, detail: vaDetail })
 
                   const metCount = eligibility.filter(e => e.met === true).length
                   const totalAssessed = eligibility.filter(e => e.met !== null).length
@@ -4884,99 +4891,61 @@ export function ProntuarioSystemPanel() {
                         )}
                       </div>
 
-                      {/* Avaliação clínica manual */}
-                      <div className="mb-3 rounded-[1rem] border border-white/8 bg-black/20 p-2.5 space-y-2">
-                        <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/36">Avaliacao clinica</p>
-
-                        {/* Tipo de desmame */}
-                        <div>
-                          <p className="mb-1 text-[8px] text-white/30">Classificacao do desmame</p>
-                          <div className="flex flex-wrap gap-1">
+                      {/* Avaliação clínica — compacta */}
+                      <div className="mb-3 rounded-[0.8rem] border border-white/6 bg-black/15 p-2 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/30">Avaliacao clinica</p>
+                          <div className="flex gap-1">
                             {[
-                              { v: 'simples', l: 'Simples', d: '1º TRE com sucesso, 48h sem reintubação' },
-                              { v: 'dificil', l: 'Difícil', d: 'Até 3 TREs ou ≤7 dias após 1º TRE' },
-                              { v: 'prolongado', l: 'Prolongado', d: '>3 TREs ou >7 dias de desmame' },
+                              { v: 'simples', l: 'Simples' },
+                              { v: 'dificil', l: 'Difícil' },
+                              { v: 'prolongado', l: 'Prolongado' },
                             ].map((t) => (
                               <button key={t.v} type="button" onClick={() => setField('weanTipoDesm', currentRecord.weanTipoDesm === t.v ? '' : t.v)}
-                                className="rounded-[0.5rem] border px-2 py-0.5 text-[9px] font-semibold transition"
-                                style={currentRecord.weanTipoDesm === t.v ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.40)' }}
-                                title={t.d}
+                                className="rounded-full border px-1.5 py-px text-[7px] font-semibold transition"
+                                style={currentRecord.weanTipoDesm === t.v ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.30)' }}
                               >{t.l}</button>
                             ))}
                           </div>
-                          {currentRecord.weanTipoDesm && (
-                            <p className="mt-0.5 text-[7px] text-white/25">
-                              {currentRecord.weanTipoDesm === 'simples' ? 'Sucesso no 1º TRE, 48h sem reintubação (~70% dos casos)' :
-                               currentRecord.weanTipoDesm === 'dificil' ? 'Falha no 1º TRE, até 3 TREs ou ≤7 dias (~20% dos casos)' :
-                               'Falha em >3 TREs ou >7 dias de desmame (~10% dos casos)'}
-                            </p>
-                          )}
                         </div>
 
-                        {/* Toggles */}
-                        <div className="grid grid-cols-2 gap-1.5">
+                        <div className="flex flex-wrap gap-1">
                           {[
                             { field: 'weanCausaReversivel', label: 'Causa reversível' },
-                            { field: 'weanNeuroOk', label: 'Neurológico adequado' },
+                            { field: 'weanNeuroOk', label: 'Neuro OK' },
                             { field: 'weanTosse', label: 'Tosse eficaz' },
                           ].map((item) => (
                             <button key={item.field} type="button"
                               onClick={() => setField(item.field, currentRecord[item.field as keyof typeof currentRecord] === 'sim' ? '' : 'sim')}
-                              className="flex items-center gap-1.5 rounded-[0.5rem] border px-2 py-1 text-[9px] font-semibold transition text-left"
+                              className="rounded-full border px-2 py-0.5 text-[8px] font-semibold transition"
                               style={currentRecord[item.field as keyof typeof currentRecord] === 'sim'
                                 ? { background: 'rgba(74,222,128,0.1)', borderColor: 'rgba(74,222,128,0.3)', color: '#4ade80' }
-                                : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.40)' }}
-                            >
-                              <span>{currentRecord[item.field as keyof typeof currentRecord] === 'sim' ? '✅' : '⬜'}</span>
-                              {item.label}
-                            </button>
+                                : { background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.35)' }}
+                            >{item.label}</button>
                           ))}
-                          <FieldShell label="Peak Flow (L/min)">
-                            <input className={INPUT_CLASS_SM} value={currentRecord.weanPeakFlow} onChange={(e) => setField('weanPeakFlow', e.target.value)} placeholder="60" />
-                          </FieldShell>
+                          <input className="w-16 rounded-full border border-white/8 bg-white/[0.02] px-2 py-0.5 text-[8px] text-white/70 outline-none placeholder:text-white/20" value={currentRecord.weanPeakFlow} onChange={(e) => setField('weanPeakFlow', e.target.value)} placeholder="PFT" />
                         </div>
 
-                        {/* Cuff-Leak Test */}
-                        <div>
-                          <p className="mb-1 text-[8px] text-white/30">Cuff-Leak Test</p>
-                          <div className="flex gap-1.5">
-                            <button type="button" onClick={() => setField('weanCuffLeak', currentRecord.weanCuffLeak === 'negativo' ? '' : 'negativo')}
-                              className="flex-1 rounded-[0.5rem] border px-2 py-1 text-[9px] font-semibold transition text-center"
-                              style={currentRecord.weanCuffLeak === 'negativo' ? { background: 'rgba(74,222,128,0.1)', borderColor: 'rgba(74,222,128,0.3)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.40)' }}
-                            >Negativo (tem vazamento)</button>
-                            <button type="button" onClick={() => setField('weanCuffLeak', currentRecord.weanCuffLeak === 'positivo' ? '' : 'positivo')}
-                              className="flex-1 rounded-[0.5rem] border px-2 py-1 text-[9px] font-semibold transition text-center"
-                              style={currentRecord.weanCuffLeak === 'positivo' ? { background: 'rgba(248,113,113,0.1)', borderColor: 'rgba(248,113,113,0.3)', color: '#f87171' } : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.10)', color: 'rgba(255,255,255,0.40)' }}
-                            >Positivo (sem vazamento)</button>
-                          </div>
-                          {currentRecord.weanCuffLeak && (
-                            <p className="mt-0.5 text-[7px]" style={{ color: currentRecord.weanCuffLeak === 'negativo' ? '#4ade80' : '#f87171' }}>
-                              {currentRecord.weanCuffLeak === 'negativo'
-                                ? 'Diferença >110mL ou >10% — BAIXA possibilidade de estridor pós-extubação'
-                                : 'Diferença <110mL ou <10% — PODEM desenvolver estridor pós-extubação'}
-                            </p>
-                          )}
-                          <div className="mt-1">
-                            <FieldShell label="Diferença VTi-VTe (mL ou %)">
-                              <input className={INPUT_CLASS_SM} value={currentRecord.weanCuffLeakDiff} onChange={(e) => setField('weanCuffLeakDiff', e.target.value)} placeholder="120 mL ou 12%" />
-                            </FieldShell>
-                          </div>
-                        </div>
-
-                        {/* TRE tipo (movido da calculadora) */}
-                        <div>
-                          <p className="mb-1 text-[8px] text-white/30">Tipo de TRE</p>
-                          <select className={INPUT_CLASS_SM} value={currentRecord.weanTRETipo} onChange={(event) => setField('weanTRETipo', event.target.value)}>
+                        <div className="flex flex-wrap items-center gap-1">
+                          <span className="text-[7px] text-white/25">CLT:</span>
+                          <button type="button" onClick={() => setField('weanCuffLeak', currentRecord.weanCuffLeak === 'negativo' ? '' : 'negativo')}
+                            className="rounded-full border px-2 py-0.5 text-[7px] font-semibold transition"
+                            style={currentRecord.weanCuffLeak === 'negativo' ? { background: 'rgba(74,222,128,0.1)', borderColor: 'rgba(74,222,128,0.3)', color: '#4ade80' } : { background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.30)' }}
+                          >Neg (vazamento)</button>
+                          <button type="button" onClick={() => setField('weanCuffLeak', currentRecord.weanCuffLeak === 'positivo' ? '' : 'positivo')}
+                            className="rounded-full border px-2 py-0.5 text-[7px] font-semibold transition"
+                            style={currentRecord.weanCuffLeak === 'positivo' ? { background: 'rgba(248,113,113,0.1)', borderColor: 'rgba(248,113,113,0.3)', color: '#f87171' } : { background: 'rgba(255,255,255,0.02)', borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.30)' }}
+                          >Pos (sem vazamento)</button>
+                          <input className="w-16 rounded-full border border-white/8 bg-white/[0.02] px-2 py-0.5 text-[7px] text-white/70 outline-none placeholder:text-white/20" value={currentRecord.weanCuffLeakDiff} onChange={(e) => setField('weanCuffLeakDiff', e.target.value)} placeholder="Diff mL" />
+                          <span className="text-[7px] text-white/25">TRE:</span>
+                          <select className="rounded-full border border-white/8 bg-white/[0.02] px-1.5 py-0.5 text-[7px] text-white/60 outline-none" value={currentRecord.weanTRETipo} onChange={(event) => setField('weanTRETipo', event.target.value)}>
                             {TRE_TYPE_OPTIONS.map(([value, label]) => (
                               <option key={value} value={value}>{label}</option>
                             ))}
                           </select>
                         </div>
 
-                        {/* Obs desmame */}
-                        <FieldShell label="Obs. desmame">
-                          <AutoGrowTextarea value={currentRecord.weanObs} onChange={(value) => setField('weanObs', value)} placeholder="Tolerância, fadiga, tosse, secreção..." />
-                        </FieldShell>
+                        <AutoGrowTextarea value={currentRecord.weanObs} onChange={(value) => setField('weanObs', value)} placeholder="Obs desmame..." />
                       </div>
 
                       {/* Phase flow */}
