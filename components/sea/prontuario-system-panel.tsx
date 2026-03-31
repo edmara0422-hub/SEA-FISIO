@@ -3940,20 +3940,26 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="P. Mean">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="12" />
                         </FieldShell>
-                        <FieldShell label="P0.1">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.p01} onChange={(e) => setField('p01', e.target.value)} placeholder="2.2" />
-                        </FieldShell>
-                        <FieldShell label="Pocc">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.pocc} onChange={(e) => setField('pocc', e.target.value)} placeholder="8" />
-                        </FieldShell>
-                        <FieldShell label="P1 (cmH2O)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.p1 ?? ''} onChange={(e) => setField('p1', e.target.value)} placeholder="22" />
-                        </FieldShell>
-                        <FieldShell label="P2 (cmH2O)">
-                          <input className={INPUT_CLASS_SM} value={currentRecord.p2 ?? ''} onChange={(e) => setField('p2', e.target.value)} placeholder="20" />
-                        </FieldShell>
                         <FieldShell label="SI (Stress Index)">
                           <input className={INPUT_CLASS_SM} value={currentRecord.si ?? ''} onChange={(e) => setField('si', e.target.value)} placeholder="1.0" />
+                        </FieldShell>
+                        <FieldShell label="P1-P2">
+                          <div className="flex gap-1">
+                            <button
+                              type="button"
+                              onClick={() => setField('p1', currentRecord.p1 === '=' ? '' : '=')}
+                              className={`flex-1 rounded-lg border py-1 text-[10px] font-bold transition ${currentRecord.p1 === '=' ? 'border-white/25 bg-white/15 text-white' : 'border-white/8 bg-white/[0.03] text-white/40'}`}
+                            >
+                              P1 = P2
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setField('p1', currentRecord.p1 === '≠' ? '' : '≠')}
+                              className={`flex-1 rounded-lg border py-1 text-[10px] font-bold transition ${currentRecord.p1 === '≠' ? 'border-white/25 bg-white/15 text-white' : 'border-white/8 bg-white/[0.03] text-white/40'}`}
+                            >
+                              P1 ≠ P2
+                            </button>
+                          </div>
                         </FieldShell>
                       </div>
                     </div>
@@ -4506,8 +4512,7 @@ export function ProntuarioSystemPanel() {
                         if (entry.ciclagem) params.push({ label: 'Cicl', value: `${entry.ciclagem}%` })
                         if (entry.p01) params.push({ label: 'P0.1', value: entry.p01 })
                         if (entry.pocc) params.push({ label: 'Pocc', value: entry.pocc })
-                        if (entry.p1) params.push({ label: 'P1', value: `${entry.p1} cmH₂O` })
-                        if (entry.p2) params.push({ label: 'P2', value: `${entry.p2} cmH₂O` })
+                        if (entry.p1 === '=' || entry.p1 === '≠') params.push({ label: 'P1-P2', value: entry.p1 === '=' ? 'P1=P2' : 'P1≠P2', color: entry.p1 === '≠' ? '#fb923c' : '#4ade80' })
                         if (entry.si) params.push({ label: 'SI', value: entry.si })
                         if (entry.ipap) params.push({ label: 'IPAP', value: entry.ipap })
                         if (entry.epap) params.push({ label: 'EPAP', value: entry.epap })
