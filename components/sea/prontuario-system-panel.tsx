@@ -4061,7 +4061,6 @@ export function ProntuarioSystemPanel() {
                           )}
                         </div>
                       )}
-                      </div>
                     </div>
                   )}
 
