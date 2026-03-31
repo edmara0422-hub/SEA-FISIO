@@ -4895,21 +4895,7 @@ export function ProntuarioSystemPanel() {
 
                       {/* Avaliação clínica — compacta */}
                       <div className="mb-3 rounded-[0.8rem] border border-white/6 bg-black/15 p-2 space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/30">Avaliacao clinica</p>
-                          <div className="flex gap-1">
-                            {[
-                              { v: 'simples', l: 'Simples' },
-                              { v: 'dificil', l: 'Difícil' },
-                              { v: 'prolongado', l: 'Prolongado' },
-                            ].map((t) => (
-                              <button key={t.v} type="button" onClick={() => setField('weanTipoDesm', currentRecord.weanTipoDesm === t.v ? '' : t.v)}
-                                className="rounded-full border px-1.5 py-px text-[7px] font-semibold transition"
-                                style={currentRecord.weanTipoDesm === t.v ? { background: 'rgba(96,165,250,0.12)', borderColor: 'rgba(96,165,250,0.35)', color: '#60a5fa' } : { background: 'rgba(255,255,255,0.03)', borderColor: 'rgba(255,255,255,0.08)', color: 'rgba(255,255,255,0.30)' }}
-                              >{t.l}</button>
-                            ))}
-                          </div>
-                        </div>
+                        <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/30">Avaliacao clinica</p>
 
                         <div className="flex flex-wrap gap-1">
                           {[
