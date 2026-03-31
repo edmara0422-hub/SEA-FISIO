@@ -824,7 +824,7 @@ export function VMSystemPanel() {
           onClear={() => setHacor(INITIAL_HACOR)}
         >
           <div className="space-y-3">
-            <div className="chrome-panel rounded-[1.25rem] p-4">
+            <div className="rounded-[1.25rem] border border-white/10 bg-black/22 p-4">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">HACOR</p>
               <div className="scrollbar-hide mt-3 overflow-x-auto overscroll-x-contain pb-2">
                 <div className="grid min-w-[58rem] grid-cols-6 gap-3">
@@ -838,7 +838,7 @@ export function VMSystemPanel() {
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.25rem] p-4">
+            <div className="rounded-[1.25rem] border border-white/10 bg-black/22 p-4">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">SOFA</p>
               <div className="scrollbar-hide mt-3 overflow-x-auto overscroll-x-contain pb-2">
                 <div className="grid min-w-[58rem] grid-cols-6 gap-3">
@@ -964,7 +964,7 @@ export function VMSystemPanel() {
         >
           <div className="grid gap-2 xl:grid-cols-3">
             {peepLevels.map((level, index) => (
-              <div key={`level-${index}`} className="chrome-panel rounded-[1.15rem] p-3">
+              <div key={`level-${index}`} className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
                 <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Nivel {index + 1}</p>
                 <div className="mt-2 grid gap-2 sm:grid-cols-3">
                   <InputField label="PEEP" value={level.peep} placeholder="5" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, peep: value } : item)))} type="number" />
@@ -1002,7 +1002,7 @@ export function VMSystemPanel() {
           onClear={() => setRecruit(INITIAL_RECRUIT)}
         >
           <div className="space-y-3">
-            <div className="chrome-panel rounded-[1.15rem] p-3">
+            <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Recrutabilidade</p>
               <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
                 <div className="grid min-w-[34rem] grid-cols-3 gap-3">
@@ -1018,7 +1018,7 @@ export function VMSystemPanel() {
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.15rem] p-3">
+            <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Loop P-V</p>
               <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
                 <div className="grid min-w-[68rem] grid-cols-6 gap-3">
@@ -1131,7 +1131,7 @@ export function VMSystemPanel() {
           onClear={() => setWean(INITIAL_WEAN)}
         >
           <div className="grid gap-3 xl:grid-cols-2">
-            <div className="chrome-panel rounded-[1.15rem] p-3">
+            <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">VD/VT</p>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
@@ -1140,7 +1140,7 @@ export function VMSystemPanel() {
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.15rem] p-3">
+            <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Ventilatory ratio</p>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
@@ -1155,7 +1155,7 @@ export function VMSystemPanel() {
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.15rem] p-3">
+            <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Gap CO2</p>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
@@ -1164,7 +1164,7 @@ export function VMSystemPanel() {
               </div>
             </div>
 
-            <div className="chrome-panel rounded-[1.15rem] p-3">
+            <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
               <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Criterios de desmame</p>
               <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
                 <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
@@ -1255,7 +1255,7 @@ export function VMSystemPanel() {
         >
           <div className="grid gap-2 grid-cols-2 md:grid-cols-3">
             {MRC_GROUPS.map((group) => (
-              <div key={group.label} className="chrome-panel rounded-[1rem] p-2.5">
+              <div key={group.label} className="rounded-[1rem] border border-white/10 bg-black/22 p-2.5">
                 <p className="text-[10px] uppercase tracking-[0.16em] text-white/42">{group.label}</p>
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   <SelectField label="D" value={mrc[group.keyD]} options={[0,1,2,3,4,5].map((value)=>({ value: String(value), label: String(value) }))} onChange={(value) => setMrc((prev) => ({ ...prev, [group.keyD]: value }))} />
