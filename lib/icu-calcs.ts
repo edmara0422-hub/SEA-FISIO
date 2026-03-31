@@ -267,7 +267,7 @@ export function analisarGaso(params: {
   gasoPH: number
   gasoPaCO2: number
   gasoHCO3: number
-}): { tipo: string; origem: string; comp: string; cor: string; full: string } | null {
+}): { tipo: string; origem: string; comp: string; cor: string; wintersDetail: string; full: string } | null {
   const pH = Number(params.gasoPH)
   const co2 = Number(params.gasoPaCO2)
   const hco3 = Number(params.gasoHCO3)
@@ -299,10 +299,10 @@ export function analisarGaso(params: {
       origem = 'Metabolica'
       // Winters: PaCO2 esperado = 1.5 × HCO3 + 8 (±2)
       const expCO2 = 1.5 * hco3 + 8
-      if (co2 >= expCO2 - 2 && co2 <= expCO2 + 2) comp = `Compensada (Winters: CO₂ esp ${expCO2.toFixed(0)}±2)`
-      else if (co2 < expCO2 - 2) comp = `Hipercompensada — CO₂ ${co2} < esperado ${(expCO2 - 2).toFixed(0)} (+ alcalose resp.)`
-      else if (co2 <= 45) comp = `Nao compensada — CO₂ ${co2} normal mas esperado ~${expCO2.toFixed(0)} (compensacao inadequada)`
-      else comp = `+Acidose resp. associada — CO₂ ${co2} > esperado ${(expCO2 + 2).toFixed(0)}`
+      if (co2 >= expCO2 - 2 && co2 <= expCO2 + 2) comp = 'Compensada'
+      else if (co2 < expCO2 - 2) comp = 'Hipercompensada (+alcalose resp.)'
+      else if (co2 > 45) comp = '+Acidose resp. sobreposta'
+      else comp = 'Nao compensada'
     }
   } else if (pH > 7.45) {
     tipo = 'Alcalose'
@@ -335,11 +335,19 @@ export function analisarGaso(params: {
   if (origem === 'Mista' || comp.includes('Nao compensada') || comp.startsWith('+')) cor = '#fb923c'
   if (pH < 7.2 || pH > 7.6) cor = '#f87171'
 
+  // Winters detail for metabolic acidosis
+  let wintersDetail = ''
+  if (tipo === 'Acidose' && origem === 'Metabolica') {
+    const expCO2 = 1.5 * hco3 + 8
+    wintersDetail = `Winters: CO₂ esperado ${(expCO2 - 2).toFixed(0)}-${(expCO2 + 2).toFixed(0)}, medido ${co2}`
+  }
+
   return {
     tipo,
     origem,
     comp,
     cor,
+    wintersDetail,
     full: `${tipo}${origem ? ` ${origem}` : ''}${comp ? ` — ${comp}` : ''}`,
   }
 }

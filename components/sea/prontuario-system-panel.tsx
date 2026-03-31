@@ -3721,6 +3721,9 @@ export function ProntuarioSystemPanel() {
                     {calculations.gaso.comp ? (
                       <p className="mt-1 text-[11px] text-white/52">{calculations.gaso.comp}</p>
                     ) : null}
+                    {calculations.gaso.wintersDetail ? (
+                      <p className="mt-1 text-[10px] text-white/35">{calculations.gaso.wintersDetail}</p>
+                    ) : null}
                   </div>
                 ) : null}
 
