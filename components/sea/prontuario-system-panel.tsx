@@ -2122,6 +2122,7 @@ export function ProntuarioSystemPanel() {
       pmean: currentRecord.pmean || '',
       ps: currentRecord.ps,
       ciclagem: currentRecord.ciclagem || '',
+      rampa: currentRecord.rampa || '',
       ipap: currentRecord.ipap || '',
       epap: currentRecord.epap || '',
       p01: currentRecord.p01 || '',
@@ -3994,6 +3995,12 @@ export function ProntuarioSystemPanel() {
                         <FieldShell label="P. Mean">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="12" />
                         </FieldShell>
+                        <FieldShell label="Rampa (s)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.rampa ?? ''} onChange={(e) => setField('rampa', e.target.value)} placeholder="0.15" />
+                        </FieldShell>
+                        <FieldShell label="Ciclagem (%)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.ciclagem} onChange={(e) => setField('ciclagem', e.target.value)} placeholder="25" />
+                        </FieldShell>
                       </div>
                     </div>
                   )}
@@ -4036,6 +4043,9 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="Pocc">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pocc} onChange={(e) => setField('pocc', e.target.value)} placeholder="8" />
+                        </FieldShell>
+                        <FieldShell label="Rampa (s)">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.rampa ?? ''} onChange={(e) => setField('rampa', e.target.value)} placeholder="0.15" />
                         </FieldShell>
                         <FieldShell label="Ciclagem (%)">
                           <input className={INPUT_CLASS_SM} value={currentRecord.ciclagem} onChange={(e) => setField('ciclagem', e.target.value)} placeholder="25" />
@@ -4492,6 +4502,7 @@ export function ProntuarioSystemPanel() {
                         if (entry.ppico && entry.modo !== 'PSV') params.push({ label: entry.modo === 'PCV' ? 'PC' : 'Ppico', value: `${entry.ppico} cmH₂O` })
                         if (entry.pplato && entry.modo !== 'PSV') params.push({ label: 'Pplatô', value: `${entry.pplato} cmH₂O` })
                         if (entry.pmean) params.push({ label: 'Pmean', value: `${entry.pmean} cmH₂O` })
+                        if (entry.rampa) params.push({ label: 'Rampa', value: `${entry.rampa}s` })
                         if (entry.ciclagem) params.push({ label: 'Cicl', value: `${entry.ciclagem}%` })
                         if (entry.p01) params.push({ label: 'P0.1', value: entry.p01 })
                         if (entry.pocc) params.push({ label: 'Pocc', value: entry.pocc })

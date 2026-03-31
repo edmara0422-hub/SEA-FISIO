@@ -88,6 +88,7 @@ export type VMHistoryEntry = {
   pmean: string
   ps: string
   ciclagem: string
+  rampa: string
   ipap: string
   epap: string
   p01: string
@@ -460,6 +461,7 @@ export type PatientData = {
   p1: string
   p2: string
   si: string
+  rampa: string
   p01: string
   pocc: string
   pmusc: string
@@ -624,6 +626,7 @@ export function emptyPatient(): PatientData {
     p1: '',
     p2: '',
     si: '',
+    rampa: '',
     p01: '',
     pocc: '',
     pmusc: '',
