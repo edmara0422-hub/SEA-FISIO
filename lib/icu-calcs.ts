@@ -280,7 +280,29 @@ export function analisarGaso(params: {
   let origem = ''
   let comp = ''
 
-  if (pH < 7.35) {
+  // Detectar distúrbio compensado quando pH está no limite normal
+  // mas HCO3 e/ou CO2 estão claramente alterados
+  if (pH >= 7.35 && pH <= 7.45) {
+    if (hco3 < 20 && co2 < 38) {
+      tipo = 'Acidose'
+      origem = 'Metabolica'
+      comp = 'Compensada (pH normal)'
+    } else if (hco3 > 28 && co2 > 42) {
+      tipo = 'Alcalose'
+      origem = 'Metabolica'
+      comp = 'Compensada (pH normal)'
+    } else if (co2 > 48 && hco3 > 26) {
+      tipo = 'Acidose'
+      origem = 'Respiratoria'
+      comp = 'Cronica compensada (pH normal)'
+    } else if (co2 < 32 && hco3 < 22) {
+      tipo = 'Alcalose'
+      origem = 'Respiratoria'
+      comp = 'Cronica compensada (pH normal)'
+    }
+  }
+
+  if (tipo === 'Normal' && pH < 7.35) {
     tipo = 'Acidose'
     const hasRespComp = co2 > 45
     const hasMetComp = hco3 < 22
@@ -305,7 +327,8 @@ export function analisarGaso(params: {
       else if (co2 > 45) comp = '+Acidose resp. sobreposta'
       else comp = 'Nao compensada'
     }
-  } else if (pH > 7.45) {
+  }
+  if (tipo === 'Normal' && pH > 7.45) {
     tipo = 'Alcalose'
     const hasRespComp = co2 < 35
     const hasMetComp = hco3 > 26
@@ -323,10 +346,11 @@ export function analisarGaso(params: {
       else comp = '+Alcalose met. associada'
     } else if (hasMetComp) {
       origem = 'Metabolica'
-      // PaCO2 esperado = 40 + 0.7 × (HCO3 - 24)
+      // PaCO2 esperado = 40 + 0.7 × (HCO3 - 24) ou simplificado HCO3 + 15
       const expCO2 = 40 + 0.7 * (hco3 - 24)
       if (co2 >= expCO2 - 3 && co2 <= expCO2 + 3) comp = 'Compensada'
-      else if (co2 < expCO2 - 3) comp = '+Acidose resp. associada'
+      else if (co2 > expCO2 + 3) comp = 'Hipoventilacao excessiva (+acidose resp.)'
+      else if (co2 < 35) comp = '+Alcalose resp. associada'
       else comp = 'Nao compensada'
     }
   }
@@ -336,11 +360,14 @@ export function analisarGaso(params: {
   if (origem === 'Mista' || comp.includes('Nao compensada') || comp.startsWith('+')) cor = '#fb923c'
   if (pH < 7.2 || pH > 7.6) cor = '#f87171'
 
-  // Winters detail for metabolic acidosis
+  // Compensation detail
   let wintersDetail = ''
   if (tipo === 'Acidose' && origem === 'Metabolica') {
     const expCO2 = 1.5 * hco3 + 8
     wintersDetail = `Winters: CO₂ esperado ${(expCO2 - 2).toFixed(0)}-${(expCO2 + 2).toFixed(0)}, medido ${co2}`
+  } else if (tipo === 'Alcalose' && origem === 'Metabolica') {
+    const expCO2 = 40 + 0.7 * (hco3 - 24)
+    wintersDetail = `CO₂ esperado ${(expCO2 - 3).toFixed(0)}-${(expCO2 + 3).toFixed(0)}, medido ${co2}`
   }
 
   return {
