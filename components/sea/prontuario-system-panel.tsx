@@ -1047,6 +1047,23 @@ function ActionButton({
   )
 }
 
+function TabAlerts({ alerts }: { alerts: Array<{ text: string; color: string; action?: string }> }) {
+  if (!alerts.length) return null
+  return (
+    <div className="mb-3 space-y-1">
+      {alerts.map((a, i) => (
+        <div key={i} className="flex items-start gap-2 rounded-[0.6rem] border px-2 py-1" style={{ borderColor: `${a.color}20`, background: `${a.color}06` }}>
+          <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: a.color }} />
+          <div>
+            <p className="text-[9px] font-semibold" style={{ color: a.color }}>{a.text}</p>
+            {a.action && <p className="text-[8px] text-white/30">{a.action}</p>}
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 function FieldShell({
   label,
   children,
@@ -1723,77 +1740,48 @@ export function ProntuarioSystemPanel() {
   }, [currentRecord])
 
   // ── SMART ALERTS — cruzamento inteligente de dados ──
-  const smartAlerts = useMemo(() => {
-    if (!currentRecord || !calculations) return []
-    const a: Array<{ text: string; color: string; action?: string }> = []
+  type AlertItem = { text: string; color: string; action?: string }
+  const tabAlerts = useMemo(() => {
+    if (!currentRecord || !calculations) return { neuro: [] as AlertItem[], cardio: [] as AlertItem[], resp: [] as AlertItem[], motora: [] as AlertItem[], pendencias: [] as AlertItem[] }
+    const neuro: AlertItem[] = []
+    const cardio: AlertItem[] = []
+    const resp: AlertItem[] = []
+    const motora: AlertItem[] = []
+    const pendencias: AlertItem[] = []
 
-    // 1. TOT/TNT selecionado mas sem modo VM → sugerir preencher VM
     const isIntubated = currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT'
     const isTQT = currentRecord.tipoVia?.startsWith('TQT')
     const onVM = isIntubated || (isTQT && currentRecord.tipoVia === 'TQT-VM')
-    if (onVM && !currentRecord.modoVM) {
-      a.push({ text: 'Paciente intubado sem modo VM preenchido', color: '#60a5fa', action: 'Preencher parametros de VM na aba Resp' })
-    }
-
-    // 2. Via aérea ↔ extubação
-    const isRE = currentRecord.tipoVia?.startsWith('RE')
-    if (isRE && currentRecord.dataTOT && !currentRecord.dataExtubacao) {
-      a.push({ text: 'Via aerea em RE mas sem data de extubacao', color: '#facc15', action: 'Preencher data/hora da extubacao nos eventos' })
-    }
-
-    // 3. P/F calculado → classificar SDRA
-    if (calculations.pf && calculations.pf <= 300) {
-      const grau = calculations.pf <= 100 ? 'GRAVE' : calculations.pf <= 200 ? 'MODERADA' : 'LEVE'
-      const cor = calculations.pf <= 100 ? '#f87171' : calculations.pf <= 200 ? '#fb923c' : '#facc15'
-      a.push({ text: `P/F ${calculations.pf.toFixed(0)} → SDRA ${grau}`, color: cor, action: grau === 'GRAVE' ? 'Considerar prona, PEEP alta, VC 6mL/kg' : 'Ventilacao protetora, monitorar evolucao' })
-    }
-
-    // 4. Driving Pressure > 15
-    if (calculations.dp && calculations.dp > 15) {
-      a.push({ text: `Driving Pressure ${calculations.dp.toFixed(0)} cmH₂O (> 15)`, color: '#f87171', action: 'Reduzir VC ou ajustar PEEP para DP ≤ 15' })
-    }
-
-    // 5. Sedativos reduzindo → correlacionar com desmame
-    const sedReducing = currentRecord.sedativos?.some((s: SedativeEntry) => {
-      const trend = calcDrugTrend(s.inicio, s.atual)
-      return trend === 'reduziu'
-    })
-    if (sedReducing && onVM) {
-      a.push({ text: 'Sedativo em reducao — avaliar despertar diario', color: '#4ade80', action: 'Considerar janela de sedacao, avaliar RASS e drive respiratorio' })
-    }
-
-    // 6. Dias TOT > 7 → intubação prolongada
-    if (calculations.daysTOT && calculations.daysTOT >= 7 && isIntubated) {
-      a.push({ text: `Intubacao prolongada: D${calculations.daysTOT} de TOT`, color: '#f87171', action: calculations.daysTOT >= 14 ? 'Considerar TQT — intubacao > 14 dias' : 'Avaliar indicacao de TQT se perspectiva de VM prolongada' })
-    }
-
-    // 7. Glasgow + drive → elegibilidade desmame
     const glasgowNum = typeof calculations.glasgow?.total === 'number' ? calculations.glasgow.total : 0
-    if (glasgowNum >= 8 && onVM) {
-      const hasDrive = currentRecord.p01 || currentRecord.pocc
-      if (hasDrive) {
-        a.push({ text: `Glasgow ${calculations.glasgow?.total} + drive presente → avaliar desmame`, color: '#4ade80', action: 'Paciente com nivel de consciencia e drive respiratorio — checar criterios de elegibilidade' })
-      }
-    }
-    if (glasgowNum > 0 && glasgowNum < 8 && onVM) {
-      a.push({ text: `Glasgow ${calculations.glasgow?.total} — nivel de consciencia rebaixado`, color: '#fb923c', action: 'Sem condicoes de protecao de via aerea. Manter VM.' })
-    }
 
-    // 8. Gasometria com disturbio acido-base
-    if (calculations.gaso?.full && calculations.gaso.full !== 'Normal') {
-      a.push({ text: `Gasometria: ${calculations.gaso.full}`, color: '#fb923c', action: calculations.gaso.full.includes('Acidose respirat') ? 'Aumentar VM (FR ou VC) para corrigir PaCO₂' : calculations.gaso.full.includes('Alcalose respirat') ? 'Reduzir VM — pode dificultar desmame' : 'Corrigir disturbio metabolico' })
-    }
+    // NEURO
+    if (glasgowNum > 0 && glasgowNum < 8) neuro.push({ text: `Glasgow ${calculations.glasgow?.total} — rebaixado`, color: '#fb923c', action: 'Sem protecao de VA. Manter VM.' })
+    if (glasgowNum >= 8 && onVM) neuro.push({ text: `Glasgow ${calculations.glasgow?.total} — favoravel`, color: '#4ade80' })
+    const sedReducing = currentRecord.sedativos?.some((s: SedativeEntry) => calcDrugTrend(s.inicio, s.atual) === 'reduziu')
+    if (sedReducing) neuro.push({ text: 'Sedativo em reducao — avaliar despertar diario', color: '#4ade80', action: 'Considerar janela de sedacao, avaliar RASS e drive' })
 
-    // 9. RSBI automatico de FR e VC
-    if (calculations.rsbi && onVM) {
-      const cor = calculations.rsbi < 80 ? '#4ade80' : calculations.rsbi < 105 ? '#facc15' : '#f87171'
-      if (calculations.rsbi >= 105) {
-        a.push({ text: `RSBI ${calculations.rsbi.toFixed(0)} (≥ 105) — risco de falha no desmame`, color: cor })
-      }
-    }
+    // CARDIO
+    const dvaActive = currentRecord.dvaList?.some((d: DVAEntry) => !d.suspensao && d.dose && parseFloat(d.dose) > 0)
+    if (dvaActive) cardio.push({ text: 'DVA ativa — monitorar PAM, lactato, perfusao', color: '#fb923c' })
+    if (calculations.balance?.text) cardio.push({ text: calculations.balance.text, color: calculations.balance.color })
 
+    // RESP
+    if (onVM && !currentRecord.modoVM) pendencias.push({ text: 'Sem modo VM preenchido', color: '#60a5fa', action: 'Preencher parametros de VM' })
+    if (calculations.dp && calculations.dp > 15) resp.push({ text: `DP ${calculations.dp.toFixed(0)} cmH₂O (> 15) — risco VILI`, color: '#f87171', action: 'Reduzir VC ou ajustar PEEP' })
+    if (calculations.gaso?.full && calculations.gaso.full !== 'Normal') resp.push({ text: `Gaso: ${calculations.gaso.full}`, color: '#fb923c' })
+    if (calculations.rsbi && calculations.rsbi >= 105 && onVM) resp.push({ text: `RSBI ${calculations.rsbi.toFixed(0)} (≥ 105) — risco falha desmame`, color: '#f87171' })
+    if (calculations.daysTOT && calculations.daysTOT >= 7 && isIntubated) resp.push({ text: `D${calculations.daysTOT} TOT`, color: '#f87171', action: calculations.daysTOT >= 14 ? 'Considerar TQT' : 'Avaliar TQT se VM prolongada' })
+    if (calculations.mechanicalPower && calculations.mechanicalPower > 17) resp.push({ text: `MP ${calculations.mechanicalPower.toFixed(1)} J/min (> 17) — risco VILI`, color: '#f87171' })
 
-    return a
+    // MOTORA
+    if (calculations.mrc) motora.push({ text: calculations.mrc.text, color: calculations.mrc.color })
+
+    // PENDENCIAS
+    const isRE = currentRecord.tipoVia?.startsWith('RE')
+    if (isRE && currentRecord.dataTOT && !currentRecord.dataExtubacao) pendencias.push({ text: 'Via aerea RE sem data de extubacao', color: '#facc15' })
+    if (glasgowNum >= 8 && onVM && (currentRecord.p01 || currentRecord.pocc)) pendencias.push({ text: 'Glasgow + drive presentes — checar elegibilidade desmame', color: '#4ade80' })
+
+    return { neuro, cardio, resp, motora, pendencias }
   }, [currentRecord, calculations])
 
   const updateCurrentRecord = (updater: (record: ICURecord) => ICURecord) => {
@@ -2671,20 +2659,10 @@ export function ProntuarioSystemPanel() {
 
             <div ref={tabContentRef} />
 
-            {/* ── SMART ALERTS ── */}
-            {smartAlerts.length > 0 && (
-              <div className="mb-4 space-y-1.5">
-                {smartAlerts.map((alert, i) => (
-                  <div key={i} className="rounded-[1rem] border px-3 py-2" style={{ borderColor: `${alert.color}25`, background: `${alert.color}08` }}>
-                    <p className="text-[11px] font-semibold" style={{ color: alert.color }}>{alert.text}</p>
-                    {alert.action && <p className="text-[10px] text-white/40 mt-0.5">{alert.action}</p>}
-                  </div>
-                ))}
-              </div>
-            )}
 
             {activeTab === 'dados' ? (
               <div className="space-y-5">
+                <TabAlerts alerts={tabAlerts.pendencias} />
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
@@ -3060,6 +3038,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'neuro' ? (
               <div className="space-y-5">
+                <TabAlerts alerts={tabAlerts.neuro} />
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Avaliacao neurologica
@@ -3298,6 +3277,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'cardio' ? (
               <div className="space-y-5">
+                <TabAlerts alerts={tabAlerts.cardio} />
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Hemodinamica / DVA
@@ -3419,6 +3399,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'resp' ? (
               <div className="space-y-5">
+                <TabAlerts alerts={tabAlerts.resp} />
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Via aerea / avaliacao pulmonar / secrecao
@@ -5350,6 +5331,7 @@ export function ProntuarioSystemPanel() {
 
             {activeTab === 'motora' ? (
               <div className="space-y-5">
+                <TabAlerts alerts={tabAlerts.motora} />
                 <div className="chrome-panel rounded-[1.5rem] p-3 md:p-5">
                   <FieldShell label="Avaliacao motora / funcional">
                     <AutoGrowTextarea
