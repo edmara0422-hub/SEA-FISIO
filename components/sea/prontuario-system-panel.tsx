@@ -3153,7 +3153,7 @@ export function ProntuarioSystemPanel() {
                             : analiseSedativo(item.inicio, item.atual)
                           return (
                           <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
-                            <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                            <div className="grid gap-2 grid-cols-2 sm:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('sedativos', index, 'droga', event.target.value)}>
                                   {SEDATIVE_OPTIONS.map((option) => (
@@ -3238,7 +3238,7 @@ export function ProntuarioSystemPanel() {
                             : analiseBNM(item.inicio, item.atual)
                           return (
                           <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
-                            <div className="grid gap-2 grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                            <div className="grid gap-2 grid-cols-2 sm:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS_SM} value={item.droga} onChange={(event) => updateListItem('bnmList', index, 'droga', event.target.value)}>
                                   {BNM_OPTIONS.map((option) => (
@@ -3997,6 +3997,9 @@ export function ProntuarioSystemPanel() {
                         </FieldShell>
                         <FieldShell label="I:E">
                           <input className={INPUT_CLASS_SM} value={currentRecord.ie} onChange={(e) => setField('ie', e.target.value)} placeholder="1:2" />
+                        </FieldShell>
+                        <FieldShell label="P. Plato">
+                          <input className={INPUT_CLASS_SM} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="18" />
                         </FieldShell>
                         <FieldShell label="P. Mean">
                           <input className={INPUT_CLASS_SM} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="12" />
