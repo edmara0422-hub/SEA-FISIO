@@ -2700,13 +2700,14 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                     <FieldShell label="Clin">
                       <select
-                        className={INPUT_CLASS_SM} style={INPUT_STYLE}
+                        className={INPUT_CLASS_SM}
                         value={currentRecord.statusClinico}
                         onChange={(event) => setField('statusClinico', event.target.value)}
                         style={currentRecord.statusClinico && STATUS_STYLES[currentRecord.statusClinico] ? {
+                          ...INPUT_STYLE,
                           borderColor: STATUS_STYLES[currentRecord.statusClinico].border,
                           color: STATUS_STYLES[currentRecord.statusClinico].color,
-                        } : undefined}
+                        } : INPUT_STYLE}
                       >
                         {STATUS_OPTIONS.map(([value, label]) => (
                           <option key={value} value={value}>{label}</option>
