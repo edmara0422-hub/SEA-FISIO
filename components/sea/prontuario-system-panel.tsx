@@ -4447,8 +4447,8 @@ export function ProntuarioSystemPanel() {
                     {calculations?.dp != null && (
                       <MetricChip label="DP (Driving Pressure)" value={`${calculations.dp.toFixed(1)} cmH2O`} hint={calculations.dp > 15 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.dp > 15 ? 'red' : 'green'} />
                     )}
-                    {calculations?.cdyn != null && (
-                      <MetricChip label="Cdyn (complacencia din.)" value={`${calculations.cdyn.toFixed(1)} mL/cmH2O`} hint="Complacencia dinamica" />
+                    {calculations?.cest != null && (
+                      <MetricChip label="Cest (complacencia)" value={`${calculations.cest.toFixed(1)} mL/cmH2O`} hint="Complacencia estatica" />
                     )}
                     {calculations?.mechanicalPower != null && (
                       <MetricChip label="Mechanical Power" value={`${calculations.mechanicalPower.toFixed(1)} J/min`} hint={calculations.mechanicalPower > 17 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.mechanicalPower > 17 ? 'red' : 'green'} />
