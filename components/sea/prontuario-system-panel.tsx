@@ -1126,7 +1126,7 @@ function AutoGrowTextarea({
       ref={ref}
       rows={1}
       className={AUTO_TEXTAREA_CLASS}
-      style={{ fontSize: '8px' }}
+      style={{ fontSize: '9px' }}
       value={value}
       onChange={(event) => onChange(event.target.value)}
       placeholder={placeholder}
