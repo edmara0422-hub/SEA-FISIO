@@ -126,19 +126,14 @@
     scrollbar-width: none;
   }
 
-  /* Prevent iOS auto-zoom on small font inputs */
-  input, select, textarea,
-  input[type="text"], input[type="number"], input[type="date"], input[type="time"],
-  .sea-shell-root input, .sea-shell-root select, .sea-shell-root textarea {
-    font-size: 10px !important;
-    line-height: 1.4 !important;
-    -webkit-text-size-adjust: 100% !important;
-    -moz-text-size-adjust: 100% !important;
-    text-size-adjust: 100% !important;
+  /* Force small font on iOS WebView */
+  html, body {
+    -webkit-text-size-adjust: none !important;
+    text-size-adjust: none !important;
   }
-  /* Force on Capacitor WebView */
-  html {
-    -webkit-text-size-adjust: 100% !important;
+  input, select, textarea {
+    font-size: inherit !important;
+    -webkit-text-size-adjust: none !important;
   }
 
   *::-webkit-scrollbar {
