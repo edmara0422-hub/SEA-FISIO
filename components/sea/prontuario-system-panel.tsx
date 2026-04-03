@@ -80,19 +80,19 @@ const STORAGE_KEYS = {
 }
 
 const INPUT_CLASS =
-  'w-full rounded-[0.8rem] border border-white/10 bg-black/22 px-2.5 py-2 text-[10px] text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18'
+  'w-full rounded-[0.8rem] border border-white/10 bg-black/22 px-2 py-1.5 text-[7.5px] tabular-nums text-white outline-none transition-all placeholder:text-[7px] placeholder:text-white/22 focus:border-white/18'
 
 const INPUT_CLASS_SM =
-  'w-full rounded-[0.6rem] border border-white/10 bg-black/22 px-1.5 py-1 text-[9px] tabular-nums text-white outline-none transition-all placeholder:text-white/20 focus:border-white/18'
+  'w-full rounded-[0.6rem] border border-white/10 bg-black/22 px-1.5 py-1 text-[7.5px] tabular-nums text-white outline-none transition-all placeholder:text-[6.5px] placeholder:text-white/20 focus:border-white/18'
 
 const INPUT_CLASS_LAB =
-  'w-full rounded-[0.5rem] border border-white/10 bg-black/22 px-1.5 py-0.5 text-[9px] tabular-nums text-white outline-none transition-all placeholder:text-[6px] placeholder:text-white/25 focus:border-white/18'
+  'w-full rounded-[0.5rem] border border-white/10 bg-black/22 px-1.5 py-0.5 text-[7.5px] tabular-nums text-white outline-none transition-all placeholder:text-[6px] placeholder:text-white/25 focus:border-white/18'
 const INPUT_FLEX =
-  'rounded-[0.6rem] border border-white/10 bg-black/22 px-1.5 py-1 text-[9px] tabular-nums text-white outline-none transition-all placeholder:text-white/20 focus:border-white/18'
+  'rounded-[0.6rem] border border-white/10 bg-black/22 px-1.5 py-1 text-[7.5px] tabular-nums text-white outline-none transition-all placeholder:text-[6.5px] placeholder:text-white/20 focus:border-white/18'
 
-const TEXTAREA_CLASS = `${INPUT_CLASS} min-h-[4rem] resize-none`
+const TEXTAREA_CLASS = `${INPUT_CLASS} min-h-[3.5rem] resize-none`
 const AUTO_TEXTAREA_CLASS =
-  'w-full rounded-[0.8rem] border border-white/10 bg-black/18 px-2.5 py-1.5 text-[10px] text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18 resize-none overflow-hidden min-h-[2rem]'
+  'w-full rounded-[0.8rem] border border-white/10 bg-black/18 px-2 py-1.5 text-[7.5px] tabular-nums text-white outline-none transition-all placeholder:text-[7px] placeholder:text-white/22 focus:border-white/18 resize-none overflow-hidden min-h-[1.8rem]'
 
 const STATUS_OPTIONS = [
   ['', '--'],
