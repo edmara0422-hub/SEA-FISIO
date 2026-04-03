@@ -34,6 +34,12 @@ const config: CapacitorConfig = {
     allowsLinkPreview: false,
     scrollEnabled: true,
   },
+  plugins: {
+    Keyboard: {
+      resize: 'body',
+      resizeOnFullScreen: true,
+    },
+  },
 };
 
 export default config;
