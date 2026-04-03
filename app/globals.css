@@ -130,7 +130,7 @@
   input, select, textarea,
   input[type="text"], input[type="number"], input[type="date"], input[type="time"],
   .sea-shell-root input, .sea-shell-root select, .sea-shell-root textarea {
-    font-size: 9.5px !important;
+    font-size: 10px !important;
     line-height: 1.4 !important;
     -webkit-text-size-adjust: 100% !important;
     -moz-text-size-adjust: 100% !important;
