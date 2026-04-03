@@ -126,6 +126,12 @@
     scrollbar-width: none;
   }
 
+  /* Prevent iOS auto-zoom on small font inputs */
+  input, select, textarea {
+    font-size: inherit !important;
+    -webkit-text-size-adjust: 100%;
+  }
+
   *::-webkit-scrollbar {
     display: none;
     width: 0;
