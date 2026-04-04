@@ -8,15 +8,44 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Inject CSS to prevent font inflation in WKWebView
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-            if let vc = self.window?.rootViewController as? CAPBridgeViewController {
-                let js = """
-                var style = document.createElement('style');
-                style.innerHTML = 'html, body { -webkit-text-size-adjust: none !important; } input, select, textarea { font-size: 10px !important; }';
-                document.head.appendChild(style);
+        // Inject CSS before page loads to prevent iOS font inflation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            if let vc = self.window?.rootViewController as? CAPBridgeViewController,
+               let webView = vc.webView {
+                let css = """
+                html, body, * { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }
+                input, select, textarea { font-size: 10px !important; }
                 """
-                vc.webView?.evaluateJavaScript(js, completionHandler: nil)
+                let js = """
+                (function() {
+                    var s = document.createElement('style');
+                    s.textContent = `\(css)`;
+                    document.documentElement.appendChild(s);
+
+                    // Also set on all existing inputs
+                    document.querySelectorAll('input, select, textarea').forEach(function(el) {
+                        el.style.fontSize = '10px';
+                    });
+
+                    // Observer for new inputs
+                    var obs = new MutationObserver(function(muts) {
+                        muts.forEach(function(m) {
+                            m.addedNodes.forEach(function(n) {
+                                if (n.nodeType === 1) {
+                                    if (n.tagName === 'INPUT' || n.tagName === 'SELECT' || n.tagName === 'TEXTAREA') {
+                                        n.style.fontSize = '10px';
+                                    }
+                                    n.querySelectorAll && n.querySelectorAll('input, select, textarea').forEach(function(el) {
+                                        el.style.fontSize = '10px';
+                                    });
+                                }
+                            });
+                        });
+                    });
+                    obs.observe(document.body, { childList: true, subtree: true });
+                })();
+                """
+                webView.evaluateJavaScript(js, completionHandler: nil)
             }
         }
         return true
