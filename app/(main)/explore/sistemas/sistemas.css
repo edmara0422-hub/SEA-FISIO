@@ -3,3 +3,10 @@
 @source '../../../../components/sea/study-rail-board.tsx';
 @source '../../../../components/sea/prontuario-system-panel.tsx';
 @source '../../../../components/sea/vm-system-panel.tsx';
+
+/* Force font-size 10px only inside S1 prontuario panel */
+[data-s1-prontuario] input,
+[data-s1-prontuario] select,
+[data-s1-prontuario] textarea {
+  font-size: 10px !important;
+}

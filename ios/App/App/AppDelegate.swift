@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
                 let js = """
                 (function() {
                     var s = document.createElement('style');
-                    s.textContent = 'html, body, * { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }';
+                    s.textContent = 'html, body, * { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; } [data-s1-prontuario] input, [data-s1-prontuario] select, [data-s1-prontuario] textarea { font-size: 10px !important; }';
                     document.documentElement.appendChild(s);
                 })();
                 """

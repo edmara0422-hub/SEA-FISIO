@@ -2404,7 +2404,7 @@ export function ProntuarioSystemPanel() {
   const proneActive = calculations?.pronaAtiva ?? false
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-s1-prontuario>
       <div className="chrome-board rounded-[1.8rem] p-3 md:p-6">
         <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">

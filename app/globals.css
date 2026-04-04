@@ -137,10 +137,6 @@
     height: 0;
   }
 
-  html {
-    font-size: 10px !important;
-  }
-
   html,
   body {
     min-height: 100%;
@@ -151,7 +147,6 @@
   body {
     @apply bg-background text-foreground;
     font-family: 'Poppins', 'Avenir Next', 'Segoe UI', sans-serif;
-    font-size: 10px !important;
   }
 
   html.sea-splash-active,
@@ -170,8 +165,7 @@
   input,
   select,
   textarea {
-    font-family: inherit;
-    font-size: 10px !important;
+    font: inherit;
   }
 }
 

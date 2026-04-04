@@ -24,8 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" style={{ background: '#010101', WebkitTextSizeAdjust: 'none', fontSize: '10px' }}>
-      <body style={{ background: '#010101', fontSize: '10px' }}>
+    <html lang="pt-BR" style={{ background: '#010101', WebkitTextSizeAdjust: 'none' }}>
+      <body style={{ background: '#010101' }}>
         {children}
       </body>
     </html>
