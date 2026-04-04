@@ -24,14 +24,8 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="pt-BR" style={{ background: '#010101', WebkitTextSizeAdjust: 'none' }}>
-      <head>
-        <style dangerouslySetInnerHTML={{ __html: `
-          html { -webkit-text-size-adjust: none !important; }
-          input, select, textarea { font-size: 10px !important; -webkit-text-size-adjust: none !important; }
-        `}} />
-      </head>
-      <body style={{ background: '#010101' }}>
+    <html lang="pt-BR" style={{ background: '#010101', WebkitTextSizeAdjust: 'none', fontSize: '10px' }}>
+      <body style={{ background: '#010101', fontSize: '10px' }}>
         {children}
       </body>
     </html>
