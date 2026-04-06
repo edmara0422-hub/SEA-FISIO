@@ -1096,12 +1096,12 @@ function MetricChip({
   color?: string
 }) {
   return (
-    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2.5">
-      <p className="text-[9px] uppercase tracking-[0.18em] text-white/38">{label}</p>
-      <p className="mt-1 text-sm font-semibold text-white/92" style={color ? { color } : undefined}>
+    <div className="rounded-[0.6rem] border border-white/10 bg-white/[0.04] px-2 py-1.5">
+      <p className="text-[7px] uppercase tracking-[0.14em] text-white/38">{label}</p>
+      <p className="mt-0.5 text-[11px] font-semibold text-white/92" style={color ? { color } : undefined}>
         {value}
       </p>
-      {hint ? <p className="mt-1 text-[10px] leading-relaxed text-white/48">{hint}</p> : null}
+      {hint ? <p className="mt-0.5 text-[8px] leading-relaxed text-white/48">{hint}</p> : null}
     </div>
   )
 }
@@ -3035,13 +3035,13 @@ export function ProntuarioSystemPanel() {
             ) : null}
 
             {activeTab === 'neuro' ? (
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 <TabAlerts alerts={tabAlerts.neuro} />
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                  <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                     Avaliacao neurologica
                   </p>
-                  <div className="grid gap-2 grid-cols-5">
+                  <div className="grid gap-1 grid-cols-5">
                     <FieldShell label="O">
                       <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.glasgowO} onChange={(e) => setField('glasgowO', e.target.value)}>
                         <option value="">--</option>
@@ -3088,7 +3088,7 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                   </div>
 
-                  <div className="mt-4 grid gap-3 grid-cols-3">
+                  <div className="mt-2 grid gap-1.5 grid-cols-3">
                     <MetricChip
                       label="Glasgow"
                       value={calculations?.glasgow ? String(calculations.glasgow.total) : '--'}
@@ -3108,20 +3108,20 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="grid gap-5 xl:grid-cols-2">
-                  <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                    <div className="mb-4 flex items-center justify-between gap-3">
-                      <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">Sedativos</p>
+                <div className="grid gap-1.5 xl:grid-cols-2">
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                      <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Sedativos</p>
                       <button
                         onClick={() => addListItem('sedativos')}
-                        className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                        className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-3 w-3" />
                         Medicamento
                       </button>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-1.5">
                       {currentRecord.sedativos?.length ? (
                         currentRecord.sedativos.map((item, index) => {
                           const isSuspended = !!item.suspensao
@@ -3129,8 +3129,8 @@ export function ProntuarioSystemPanel() {
                             ? { trend: 'desligado' as const, label: 'SEDATIVO SUSPENSO', color: '#22d3ee', indica: `Suspenso em ${formatDateTime(item.suspensao!)}. Monitorar RASS, CAM-ICU, drive respiratorio.`, evolucao: 'Avaliar delirium de abstinencia. Se agitacao: tratar causa antes de reintroduzir.' }
                             : analiseSedativo(item.inicio, item.atual)
                           return (
-                          <div key={`sed-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
-                            <div className="grid gap-2 grid-cols-2 sm:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                          <div key={`sed-${index}`} className="rounded-[0.7rem] border border-white/10 bg-black/18 p-1.5" style={isSuspended ? { opacity: 0.6 } : undefined}>
+                            <div className="grid gap-1 grid-cols-2 sm:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={item.droga} onChange={(event) => updateListItem('sedativos', index, 'droga', event.target.value)}>
                                   {SEDATIVE_OPTIONS.map((option) => (
@@ -3177,9 +3177,9 @@ export function ProntuarioSystemPanel() {
                               <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>
                             )}
                             {analise ? (
-                              <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
-                                <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
-                                <p className="mb-1 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
+                              <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[9px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                                <p className="mb-1 font-semibold uppercase tracking-[0.12em]" style={{ color: analise.color }}>{analise.label}</p>
+                                <p className="mb-0.5 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
                                 <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
                               </div>
                             ) : null}
@@ -3187,26 +3187,26 @@ export function ProntuarioSystemPanel() {
                           )
                         })
                       ) : (
-                        <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                        <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
                           Nenhum sedativo em uso.
                         </div>
                       )}
                     </div>
                   </div>
 
-                  <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                    <div className="mb-4 flex items-center justify-between gap-3">
-                      <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">BNM</p>
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <div className="mb-2 flex items-center justify-between gap-2">
+                      <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">BNM</p>
                       <button
                         onClick={() => addListItem('bnmList')}
-                        className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                        className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                       >
-                        <Plus className="h-4 w-4" />
+                        <Plus className="h-3 w-3" />
                         BNM
                       </button>
                     </div>
 
-                    <div className="space-y-3">
+                    <div className="space-y-1.5">
                       {currentRecord.bnmList?.length ? (
                         currentRecord.bnmList.map((item, index) => {
                           const isSuspended = !!item.suspensao
@@ -3214,8 +3214,8 @@ export function ProntuarioSystemPanel() {
                             ? { trend: 'desligado' as const, label: 'BNM SUSPENSO', color: '#22d3ee', indica: `Suspenso em ${formatDateTime(item.suspensao!)}. Monitorar TOF, P0.1, drive respiratorio, forca muscular.`, evolucao: 'Avaliar MRC, ICUAW. Iniciar mobilizacao precoce.' }
                             : analiseBNM(item.inicio, item.atual)
                           return (
-                          <div key={`bnm-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
-                            <div className="grid gap-2 grid-cols-2 sm:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                          <div key={`bnm-${index}`} className="rounded-[0.7rem] border border-white/10 bg-black/18 p-1.5" style={isSuspended ? { opacity: 0.6 } : undefined}>
+                            <div className="grid gap-1 grid-cols-2 sm:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                               <FieldShell label="Droga">
                                 <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={item.droga} onChange={(event) => updateListItem('bnmList', index, 'droga', event.target.value)}>
                                   {BNM_OPTIONS.map((option) => (
@@ -3241,11 +3241,11 @@ export function ProntuarioSystemPanel() {
                                 <button onClick={() => removeListItem('bnmList', index)} className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"><Trash2 className="h-3 w-3" /></button>
                               </div>
                             </div>
-                            {isSuspended && <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>}
+                            {isSuspended && <p className="mt-1 text-[8px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>}
                             {analise ? (
-                              <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
-                                <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
-                                <p className="mb-1 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
+                              <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[9px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                                <p className="mb-1 font-semibold uppercase tracking-[0.12em]" style={{ color: analise.color }}>{analise.label}</p>
+                                <p className="mb-0.5 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
                                 <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
                               </div>
                             ) : null}
@@ -3253,7 +3253,7 @@ export function ProntuarioSystemPanel() {
                           )
                         })
                       ) : (
-                        <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                        <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
                           Nenhum BNM em uso.
                         </div>
                       )}
@@ -3261,7 +3261,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <FieldShell label="Observacoes neurologicas">
                     <AutoGrowTextarea
                       value={currentRecord.neurologico}
