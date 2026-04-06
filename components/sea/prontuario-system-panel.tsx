@@ -2547,14 +2547,14 @@ export function ProntuarioSystemPanel() {
                   <div className="flex flex-wrap gap-2">
                     <button
                       onClick={() => openRecord(record.id)}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                      className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                     >
                       <Eye className="h-4 w-4" />
                       Ver
                     </button>
                     <button
                       onClick={() => restoreRecord(record.id)}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                      className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                     >
                       <RotateCcw className="h-4 w-4" />
                       Restaurar
@@ -2576,8 +2576,8 @@ export function ProntuarioSystemPanel() {
             )}
           </div>
         ) : currentRecord ? (
-          <div className="space-y-3">
-            <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
+          <div className="space-y-1.5">
+            <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
               <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3">
                   <button
@@ -3023,7 +3023,7 @@ export function ProntuarioSystemPanel() {
                             </div>
                           ))
                         ) : (
-                          <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                          <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
                             Nenhum exame de imagem registrado.
                           </div>
                         )}
@@ -3274,13 +3274,13 @@ export function ProntuarioSystemPanel() {
             ) : null}
 
             {activeTab === 'cardio' ? (
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 <TabAlerts alerts={tabAlerts.cardio} />
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                  <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                     Hemodinamica / DVA
                   </p>
-                  <div className="grid gap-2 grid-cols-3 md:grid-cols-7">
+                  <div className="grid gap-1 grid-cols-3 md:grid-cols-7">
                     <FieldShell label="PAS">
                       <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pas} onChange={(event) => setField('pas', event.target.value)} placeholder="120" />
                     </FieldShell>
@@ -3307,7 +3307,7 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                   </div>
 
-                  <div className="mt-4 grid gap-3 grid-cols-3">
+                  <div className="mt-2 grid gap-1.5 grid-cols-3">
                     <MetricChip
                       label="PAM calculada"
                       value={calculations?.pamAuto ? `${calculations.pamAuto} mmHg` : '--'}
@@ -3317,19 +3317,19 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                  <div className="mb-4 flex items-center justify-between gap-3">
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">Drogas vasoativas</p>
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Drogas vasoativas</p>
                     <button
                       onClick={() => addListItem('dvaList')}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                      className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                     >
-                      <Plus className="h-4 w-4" />
+                      <Plus className="h-3 w-3" />
                       DVA
                     </button>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="space-y-1.5">
                     {currentRecord.dvaList?.length ? (
                       currentRecord.dvaList.map((item, index) => {
                         const isSuspended = !!item.suspensao
@@ -3337,8 +3337,8 @@ export function ProntuarioSystemPanel() {
                           ? { trend: 'desligado' as const, label: 'DVA SUSPENSA', color: '#22d3ee', indica: `Suspensa em ${formatDateTime(item.suspensao!)}. Monitorar PAM, FC, lactato e perfusao nas proximas 6-12h.`, evolucao: 'Se hipotensao: reavaliar volemia e reintroduzir DVA.' }
                           : analiseDVA(item.inicio, item.dose)
                         return (
-                        <div key={`dva-${index}`} className="rounded-[1.2rem] border border-white/10 bg-black/18 p-3" style={isSuspended ? { opacity: 0.6 } : undefined}>
-                          <div className="grid gap-2 grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
+                        <div key={`dva-${index}`} className="rounded-[0.7rem] border border-white/10 bg-black/18 p-1.5" style={isSuspended ? { opacity: 0.6 } : undefined}>
+                          <div className="grid gap-1 grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
                             <FieldShell label="Droga" span="col-span-2 md:col-span-1">
                               <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={item.droga} onChange={(event) => updateListItem('dvaList', index, 'droga', event.target.value)}>
                                 {DVA_OPTIONS.map((option) => (
@@ -3366,8 +3366,8 @@ export function ProntuarioSystemPanel() {
                           </div>
                           {isSuspended && <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspensa em {formatDateTime(item.suspensao!)}</p>}
                           {analise ? (
-                            <div className="mt-3 rounded-[0.8rem] border p-3 text-[11px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
-                              <p className="mb-1.5 font-semibold uppercase tracking-[0.16em]" style={{ color: analise.color }}>{analise.label}</p>
+                            <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[9px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                              <p className="mb-1 font-semibold uppercase tracking-[0.12em]" style={{ color: analise.color }}>{analise.label}</p>
                               <p className="mb-1 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
                               <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
                             </div>
@@ -3376,14 +3376,14 @@ export function ProntuarioSystemPanel() {
                         )
                       })
                     ) : (
-                      <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                      <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
                         Nenhuma DVA registrada.
                       </div>
                     )}
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <FieldShell label="Avaliacao cardiovascular">
                     <AutoGrowTextarea
                       value={currentRecord.cardiovascular}
@@ -3396,13 +3396,13 @@ export function ProntuarioSystemPanel() {
             ) : null}
 
             {activeTab === 'resp' ? (
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 <TabAlerts alerts={tabAlerts.resp} />
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                  <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                     Via aerea / avaliacao pulmonar / secrecao
                   </p>
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
+                  <div className="grid gap-1.5 grid-cols-2 xl:grid-cols-4">
                     <FieldShell label="Via aerea atual">
                       <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.tipoVia} onChange={(event) => setField('tipoVia', event.target.value)}>
                         {VIA_OPTIONS.map(([value, label]) => (
@@ -3531,11 +3531,11 @@ export function ProntuarioSystemPanel() {
                 </div>
 
                 {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia.startsWith('TQT')) && (
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                  <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                     Eventos de via aerea
                   </p>
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-6">
+                  <div className="grid gap-1.5 grid-cols-2 xl:grid-cols-6">
                     {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT') && (
                       <>
                         <FieldShell label="Data IOT">
@@ -3584,7 +3584,7 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia.startsWith('TQT')) && (
-                    <div className="mt-4 grid gap-3 grid-cols-3">
+                    <div className="mt-2 grid gap-1.5 grid-cols-3">
                       {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || (currentRecord.tipoVia.startsWith('TQT') && currentRecord.dataTOT)) && (
                         <MetricChip
                           label="Dias TOT"
@@ -3606,8 +3606,8 @@ export function ProntuarioSystemPanel() {
                 </div>
                 )}
 
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                  <p className="mb-4 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                     Gasometria
                   </p>
                   <div className="mb-2 flex gap-3">
@@ -3678,7 +3678,7 @@ export function ProntuarioSystemPanel() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       onClick={saveGaso}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                      className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                     >
                       <Save className="h-4 w-4" />
                       Salvar gaso
@@ -3696,7 +3696,7 @@ export function ProntuarioSystemPanel() {
                 {/* Gasometria analise — só aparece quando há dados */}
                 {calculations?.gaso ? (
                   <div className="chrome-panel rounded-[1.5rem] p-4">
-                    <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">Análise gasométrica</p>
+                    <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Análise gasométrica</p>
                     <p className="text-sm font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
                     {calculations.gaso.comp ? (
                       <p className="mt-1 text-[11px] text-white/52">{calculations.gaso.comp}</p>
@@ -3813,8 +3813,8 @@ export function ProntuarioSystemPanel() {
                 ) : null}
 
                 {currentRecord.gasometrias?.length ? (
-                  <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                    <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <p className="mb-3 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                       Historico de gasometria · {currentRecord.gasometrias.length}
                     </p>
                     {currentRecord.gasometrias.length >= 2 && (() => {
@@ -4377,7 +4377,7 @@ export function ProntuarioSystemPanel() {
                   <div className="mt-4 flex flex-wrap gap-2">
                     <button
                       onClick={saveVM}
-                      className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                      className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                     >
                       <Save className="h-4 w-4" />
                       Salvar parametros
@@ -4395,7 +4395,7 @@ export function ProntuarioSystemPanel() {
                 {/* ── Analysis chips — volume modes (VCV, PRVC, HFOV, MMV) ── */}
                 {/* ── Analysis chips — volume modes (VCV, PRVC) ── */}
                 {respModeType === 'volume' && (
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
+                  <div className="grid gap-1.5 grid-cols-2 xl:grid-cols-4">
                     {calculations?.dp != null && (
                       <MetricChip label="DP (Driving Pressure)" value={`${calculations.dp.toFixed(1)} cmH2O`} hint={calculations.dp > 15 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.dp > 15 ? 'red' : 'green'} />
                     )}
@@ -4422,7 +4422,7 @@ export function ProntuarioSystemPanel() {
 
                 {/* ── Analysis chips — pressure modes (PCV) ── */}
                 {respModeType === 'pressure' && (
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
+                  <div className="grid gap-1.5 grid-cols-2 xl:grid-cols-4">
                     {calculations?.dp != null && (
                       <MetricChip label="DP (Driving Pressure)" value={`${calculations.dp.toFixed(1)} cmH2O`} hint={calculations.dp > 15 ? 'ALTO — risco de VILI' : 'Adequado'} color={calculations.dp > 15 ? 'red' : 'green'} />
                     )}
@@ -4437,7 +4437,7 @@ export function ProntuarioSystemPanel() {
 
                 {/* ── Analysis chips — spontaneous modes (PSV) ── */}
                 {respModeType === 'spontaneous' && currentRecord.modoVM !== 'TuboT' && currentRecord.modoVM !== 'CPAP' && currentRecord.modoVM !== 'BIPAP' && (
-                  <div className="grid gap-3 grid-cols-2 xl:grid-cols-4">
+                  <div className="grid gap-1.5 grid-cols-2 xl:grid-cols-4">
                     {calculations?.rsbi != null && (
                       <MetricChip label="RSBI" value={calculations.rsbi.toFixed(1)} hint={calculations.rsbiInterp?.t} color={calculations.rsbiInterp?.c} />
                     )}
@@ -4456,8 +4456,8 @@ export function ProntuarioSystemPanel() {
                 )}
 
                 {currentRecord.vmHist?.length ? (
-                  <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                    <p className="mb-3 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <p className="mb-3 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                       Historico VM · {currentRecord.vmHist.length}
                     </p>
                     {currentRecord.vmHist.length >= 2 && (() => {
@@ -4671,7 +4671,7 @@ export function ProntuarioSystemPanel() {
                       </div>
 
                       <div className="mt-3 flex flex-wrap gap-2">
-                        <button onClick={saveDesmame} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
+                        <button onClick={saveDesmame} className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72">
                           <Save className="h-4 w-4" />
                           Salvar Desmame
                         </button>
@@ -5168,7 +5168,7 @@ export function ProntuarioSystemPanel() {
 
                       {proneActive && (
                         <div className="mt-2">
-                          <button onClick={saveProna} className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72">
+                          <button onClick={saveProna} className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72">
                             <Save className="h-4 w-4" />
                             Salvar Prona
                           </button>
@@ -5328,9 +5328,9 @@ export function ProntuarioSystemPanel() {
             ) : null}
 
             {activeTab === 'motora' ? (
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 <TabAlerts alerts={tabAlerts.motora} />
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <FieldShell label="Avaliacao motora / funcional">
                     <AutoGrowTextarea
                       value={currentRecord.motora}
@@ -5518,8 +5518,8 @@ export function ProntuarioSystemPanel() {
             ) : null}
 
             {activeTab === 'percepcao' ? (
-              <div className="space-y-3">
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
+              <div className="space-y-1.5">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <div className="space-y-4">
                     <FieldShell label="Percepcao do plantao">
                       <AutoGrowTextarea
@@ -5552,7 +5552,7 @@ export function ProntuarioSystemPanel() {
                 {tabIndex > 0 ? (
                   <button
                     onClick={() => setActiveTab(TAB_ITEMS[tabIndex - 1].id)}
-                    className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                    className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                   >
                     <ArrowLeft className="h-4 w-4" />
                     {TAB_ITEMS[tabIndex - 1].label}
@@ -5563,14 +5563,14 @@ export function ProntuarioSystemPanel() {
                 {tabIndex < TAB_ITEMS.length - 1 ? (
                   <button
                     onClick={() => setActiveTab(TAB_ITEMS[tabIndex + 1].id)}
-                    className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                    className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                   >
                     {TAB_ITEMS[tabIndex + 1].label}
                   </button>
                 ) : (
                   <button
                     onClick={saveAndClose}
-                    className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                    className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                   >
                     <Save className="h-4 w-4" />
                     Concluir
