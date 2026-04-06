@@ -83,19 +83,19 @@ const FONT_SIZE = '10px'
 const INPUT_STYLE = { fontSize: FONT_SIZE } as const
 
 const INPUT_CLASS =
-  'w-full rounded-[0.8rem] border border-white/10 bg-black/22 px-2 py-1.5 tabular-nums text-white outline-none transition-all placeholder:text-white/22 focus:border-white/18'
+  'w-full rounded-[0.6rem] border border-white/10 bg-black/22 px-1.5 py-1 text-[10px] tabular-nums text-white outline-none transition-all placeholder:text-white/22 focus:border-white/18'
 
 const INPUT_CLASS_SM =
-  'w-full rounded-[0.6rem] border border-white/10 bg-black/22 px-1.5 py-1 tabular-nums text-white outline-none transition-all placeholder:text-white/20 focus:border-white/18'
+  'w-full rounded-[0.5rem] border border-white/10 bg-black/22 px-1 py-0.5 text-[10px] tabular-nums text-white outline-none transition-all placeholder:text-white/20 focus:border-white/18'
 
 const INPUT_CLASS_LAB =
-  'w-full rounded-[0.5rem] border border-white/10 bg-black/22 px-1.5 py-0.5 tabular-nums text-white outline-none transition-all placeholder:text-white/25 focus:border-white/18'
+  'w-full rounded-[0.4rem] border border-white/10 bg-black/22 px-1 py-0.5 text-[10px] tabular-nums text-white outline-none transition-all placeholder:text-white/25 focus:border-white/18'
 const INPUT_FLEX =
-  'rounded-[0.6rem] border border-white/10 bg-black/22 px-1.5 py-1 tabular-nums text-white outline-none transition-all placeholder:text-white/20 focus:border-white/18'
+  'rounded-[0.5rem] border border-white/10 bg-black/22 px-1 py-0.5 text-[10px] tabular-nums text-white outline-none transition-all placeholder:text-white/20 focus:border-white/18'
 
-const TEXTAREA_CLASS = `${INPUT_CLASS} min-h-[3.5rem] resize-none`
+const TEXTAREA_CLASS = `${INPUT_CLASS} min-h-[2.5rem] resize-none`
 const AUTO_TEXTAREA_CLASS =
-  'w-full rounded-[0.8rem] border border-white/10 bg-black/18 px-2 py-1.5 tabular-nums text-white outline-none transition-all placeholder:text-white/22 focus:border-white/18 resize-none overflow-hidden min-h-[1.8rem]'
+  'w-full rounded-[0.6rem] border border-white/10 bg-black/18 px-1.5 py-1 text-[10px] tabular-nums text-white outline-none transition-all placeholder:text-white/22 focus:border-white/18 resize-none overflow-hidden min-h-[1.4rem]'
 
 const STATUS_OPTIONS = [
   ['', '--'],
@@ -1077,8 +1077,8 @@ function FieldShell({
   span?: string
 }) {
   return (
-    <div className={`space-y-2 ${span}`}>
-      <p className="whitespace-nowrap text-[10px] font-semibold uppercase tracking-[0.18em] text-white/48">{label}</p>
+    <div className={`space-y-0.5 ${span}`}>
+      <p className="whitespace-nowrap text-[7px] font-semibold uppercase tracking-[0.14em] text-white/48">{label}</p>
       {children}
     </div>
   )
@@ -1129,7 +1129,6 @@ function AutoGrowTextarea({
       ref={ref}
       rows={1}
       className={AUTO_TEXTAREA_CLASS}
-      style={{ fontSize: '10px' }}
       value={value}
       onChange={(event) => onChange(event.target.value)}
       placeholder={placeholder}
@@ -2665,20 +2664,20 @@ export function ProntuarioSystemPanel() {
 
 
             {activeTab === 'dados' ? (
-              <div className="space-y-3">
+              <div className="space-y-1.5">
                 <TabAlerts alerts={tabAlerts.pendencias} />
-                <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                  <div className="mb-2 flex items-center justify-between gap-2">
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <div className="mb-1 flex items-center justify-between gap-1">
+                    <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                       Identificacao / Antropometria
                     </p>
-                    <span className="rounded-full border border-white/8 px-2 py-0.5 text-[8px] uppercase tracking-[0.14em] text-white/35">
+                    <span className="rounded-full border border-white/8 px-1.5 py-0.5 text-[6px] uppercase tracking-[0.10em] text-white/35">
                       {formatDateTime(currentRecord.updatedAt)}
                     </span>
                   </div>
 
                   {/* Nome */}
-                  <div className="mb-2">
+                  <div className="mb-1">
                     <FieldShell label="Nome">
                       <input
                         className={INPUT_CLASS_SM} style={INPUT_STYLE}
@@ -2689,7 +2688,7 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                   </div>
 
-                  <div className="grid grid-cols-5 gap-1.5">
+                  <div className="grid grid-cols-5 gap-1">
                     <FieldShell label="Lt">
                       <input
                         className={INPUT_CLASS_SM} style={INPUT_STYLE}
@@ -2762,7 +2761,7 @@ export function ProntuarioSystemPanel() {
                       />
                     </FieldShell>
                     <FieldShell label="PBW">
-                      <div className="w-full rounded-[0.7rem] border border-white/10 bg-white/[0.04] px-2 py-1.5 text-xs text-white/88">
+                      <div className="w-full rounded-[0.5rem] border border-white/10 bg-white/[0.04] px-1 py-0.5 text-[10px] text-white/88">
                         {calculations?.pesoIdeal ? `${calculations.pesoIdeal.toFixed(1)} kg` : '--'}
                       </div>
                     </FieldShell>
@@ -2784,8 +2783,8 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                   </div>
 
-                  <div className="mt-4 space-y-3">
-                    <div className="rounded-[1rem] border border-white/10 bg-white/[0.04] px-3 py-2">
+                  <div className="mt-2 space-y-1.5">
+                    <div className="rounded-[0.7rem] border border-white/10 bg-white/[0.04] px-2 py-1">
                       <div className="scrollbar-hide flex flex-nowrap items-center gap-1.5 overflow-x-auto">
                         {calculations?.vtTargets?.length ? (
                           calculations.vtTargets.map((target) => (
@@ -2833,10 +2832,10 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="grid gap-3 xl:grid-cols-[1.1fr_0.9fr]">
-                  <div className="space-y-2">
-                    <div className="chrome-panel rounded-[1.2rem] p-2 md:p-2.5">
-                      <div className="space-y-2">
+                <div className="grid gap-1.5 xl:grid-cols-[1.1fr_0.9fr]">
+                  <div className="space-y-1.5">
+                    <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                      <div className="space-y-1">
                         <FieldShell label="Historia clinica">
                           <AutoGrowTextarea
                             value={currentRecord.historia}
@@ -2854,49 +2853,49 @@ export function ProntuarioSystemPanel() {
                       </div>
                     </div>
 
-                    <div className="chrome-panel rounded-[1.2rem] p-2.5 md:p-3">
-                      <div className="mb-4 flex items-center justify-between gap-3">
-                        <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">Laboratorio</p>
+                    <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Laboratorio</p>
                         <button
                           onClick={() => addListItem('examesLabList')}
-                          className="chrome-subtle inline-flex items-center gap-2 rounded-[1rem] border border-white/12 px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/72"
+                          className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
                         >
-                          <Plus className="h-4 w-4" />
+                          <Plus className="h-3 w-3" />
                           Exame
                         </button>
                       </div>
 
-                      <div className="space-y-2">
+                      <div className="space-y-1.5">
                         {currentRecord.examesLabList?.length ? (
                           currentRecord.examesLabList.map((exam, index) => (
-                            <div key={`lab-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
-                              <div className="mb-2 flex items-center gap-2">
+                            <div key={`lab-${index}`} className="rounded-[0.7rem] border border-white/10 bg-black/18 p-1.5">
+                              <div className="mb-1 flex items-center gap-1">
                                 <input
-                                  className={`${INPUT_CLASS_SM} w-36`}
+                                  className={`${INPUT_CLASS_SM} w-32`}
                                   type="date"
                                   value={exam.data}
                                   onChange={(event) => updateListItem('examesLabList', index, 'data', event.target.value)}
                                 />
                                 <button
                                   onClick={() => removeListItem('examesLabList', index)}
-                                  className="ml-auto flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
+                                  className="ml-auto flex h-5 w-5 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"
                                 >
-                                  <Trash2 className="h-3.5 w-3.5" />
+                                  <Trash2 className="h-2.5 w-2.5" />
                                 </button>
                               </div>
-                              <div className="grid grid-cols-5 gap-1">
+                              <div className="grid grid-cols-5 gap-0.5">
                                 {LAB_FIELDS.map((field) => (
-                                  <div key={field.key} className="space-y-1">
-                                    <p className="whitespace-nowrap text-[8px] font-semibold uppercase tracking-[0.12em] text-white/48">
+                                  <div key={field.key} className="space-y-0.5">
+                                    <p className="whitespace-nowrap text-[6px] font-semibold uppercase tracking-[0.10em] text-white/48">
                                       {field.label}
                                       {field.unit ? (
-                                        <span className="ml-0.5 text-[6px] normal-case tracking-normal text-white/28">
+                                        <span className="ml-0.5 text-[5px] normal-case tracking-normal text-white/28">
                                           {field.unit}
                                         </span>
                                       ) : null}
                                     </p>
                                     <input
-                                      className={INPUT_CLASS_LAB} style={INPUT_STYLE}
+                                      className={INPUT_CLASS_LAB}
                                       value={String(exam[field.key] ?? '')}
                                       onChange={(event) => updateListItem('examesLabList', index, field.key, event.target.value)}
                                       placeholder={field.ref}
@@ -2907,12 +2906,12 @@ export function ProntuarioSystemPanel() {
                               {(() => {
                                 const labAnalysis = analyzeLabExam(exam)
                                 return labAnalysis.items.length ? (
-                                  <div className="mt-2 rounded-[0.8rem] border border-white/8 bg-white/[0.02] p-2">
-                                    <div className="flex flex-wrap gap-1">
+                                  <div className="mt-1 rounded-[0.5rem] border border-white/8 bg-white/[0.02] p-1.5">
+                                    <div className="flex flex-wrap gap-0.5">
                                       {labAnalysis.items.map((item) => (
                                         <span
                                           key={`${index}-${item.label}`}
-                                          className="rounded-full border px-1.5 py-0.5 text-[8px] font-semibold"
+                                          className="rounded-full border px-1 py-0.5 text-[6px] font-semibold"
                                           style={{
                                             borderColor: `${item.color}25`,
                                             background: `${item.color}08`,
@@ -2924,9 +2923,9 @@ export function ProntuarioSystemPanel() {
                                       ))}
                                     </div>
                                     {labAnalysis.alerts.length ? (
-                                      <div className="mt-1.5 space-y-0.5">
+                                      <div className="mt-1 space-y-0.5">
                                         {labAnalysis.alerts.map((alert) => (
-                                          <p key={alert.text} className="text-[8px] font-medium" style={{ color: alert.color }}>
+                                          <p key={alert.text} className="text-[7px] font-medium" style={{ color: alert.color }}>
                                             {alert.text}
                                           </p>
                                         ))}
@@ -2938,7 +2937,7 @@ export function ProntuarioSystemPanel() {
                             </div>
                           ))
                         ) : (
-                          <div className="rounded-[1.2rem] border border-dashed border-white/10 bg-black/16 px-4 py-6 text-center text-sm text-white/46">
+                          <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
                             Nenhum exame laboratorial registrado.
                           </div>
                         )}
@@ -2946,10 +2945,10 @@ export function ProntuarioSystemPanel() {
                     </div>
                   </div>
 
-                  <div className="space-y-3">
-                    <div className="chrome-panel rounded-[1.2rem] p-2 md:p-2.5">
-                      <div className="mb-2 flex items-center justify-between gap-2">
-                        <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/40">Exames de imagem</p>
+                  <div className="space-y-1.5">
+                    <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                      <div className="mb-1 flex items-center justify-between gap-1">
+                        <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Exames de imagem</p>
                         <button
                           onClick={() => addListItem('examesImagemList')}
                           className="chrome-subtle inline-flex items-center gap-1.5 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72"
@@ -2959,10 +2958,10 @@ export function ProntuarioSystemPanel() {
                         </button>
                       </div>
 
-                      <div className="space-y-3">
+                      <div className="space-y-1.5">
                         {currentRecord.examesImagemList?.length ? (
                           currentRecord.examesImagemList.map((exam, index) => (
-                            <div key={`img-${index}`} className="space-y-2 rounded-[1rem] border border-white/10 bg-black/18 p-3">
+                            <div key={`img-${index}`} className="space-y-1 rounded-[0.7rem] border border-white/10 bg-black/18 p-1.5">
                               {/* linha 1: data · tipo · apagar */}
                               <div className="flex items-center gap-2">
                                 <input

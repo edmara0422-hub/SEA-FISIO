@@ -8,54 +8,38 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Inject CSS BEFORE page loads via WKUserScript
+        // Disable iOS font inflation at native level + inject scoped 10px CSS
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             if let vc = self.window?.rootViewController as? CAPBridgeViewController,
                let webView = vc.webView {
+
+                // 1. Native: allow small fonts, no minimum
+                webView.configuration.preferences.minimumFontSize = 0
+
+                // 2. Disable text autosizing via viewport meta + CSS
                 let js = """
                 (function() {
-                    function injectStyle() {
-                        if (document.getElementById('__sea_base_style__')) return;
-                        var base = document.createElement('style');
-                        base.id = '__sea_base_style__';
-                        base.textContent = 'html, body, * { -webkit-text-size-adjust: none !important; text-size-adjust: none !important; }';
-                        (document.head || document.documentElement).appendChild(base);
-
-                        var s1 = document.createElement('style');
-                        s1.id = '__sea_s1_font__';
-                        s1.textContent = 'input, select, textarea { font-size: 10px !important; }';
-                        s1.disabled = true;
-                        (document.head || document.documentElement).appendChild(s1);
+                    // Ensure viewport prevents zoom (which triggers font inflation)
+                    var vp = document.querySelector('meta[name="viewport"]');
+                    if (!vp) {
+                        vp = document.createElement('meta');
+                        vp.name = 'viewport';
+                        (document.head || document.documentElement).appendChild(vp);
                     }
-                    injectStyle();
+                    vp.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no';
 
-                    function isS1Page() {
-                        var url = window.location.href.toLowerCase();
-                        return url.indexOf('sistemas') !== -1 || url.indexOf('prontuario') !== -1;
-                    }
-                    function applyScopedFont() {
-                        injectStyle();
-                        var s1 = document.getElementById('__sea_s1_font__');
-                        if (s1) s1.disabled = !isS1Page();
-                    }
-                    applyScopedFont();
-
-                    var lastUrl = window.location.href;
-                    setInterval(function() {
-                        if (window.location.href !== lastUrl) {
-                            lastUrl = window.location.href;
-                            applyScopedFont();
-                        }
-                    }, 250);
-
-                    document.addEventListener('DOMContentLoaded', applyScopedFont);
-                    window.addEventListener('load', applyScopedFont);
+                    // Force text-size-adjust on everything
+                    var base = document.createElement('style');
+                    base.id = '__sea_base__';
+                    base.textContent = [
+                        '* { -webkit-text-size-adjust: 100% !important; text-size-adjust: 100% !important; }',
+                        'input, select, textarea { font-size: 10px !important; -webkit-text-size-adjust: 100% !important; }'
+                    ].join('\\n');
+                    (document.head || document.documentElement).appendChild(base);
                 })();
                 """
                 let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: false)
                 webView.configuration.userContentController.addUserScript(script)
-
-                // Also apply immediately for current page
                 webView.evaluateJavaScript(js, completionHandler: nil)
             }
         }
