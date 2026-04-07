@@ -237,20 +237,25 @@ export function calcGlasgow(
   o: number,
   v: number | string,
   m: number,
-): { total: number | string; interp: string; cor: string } | null {
+): { total: number | string; interp: string; cor: string; detail: string } | null {
   if (v === 'T' || v === 't') {
-    return {
-      total: `${(o || 0) + (m || 0)}T`,
-      interp: 'Intubado',
-      cor: '#60a5fa',
-    }
+    const om = (o || 0) + (m || 0)
+    let interp = 'Intubado'
+    let cor = '#60a5fa'
+    let detail = 'Verbal nao testavel (tubo). '
+    if (om >= 10) { interp = 'Intubado — resposta preservada'; cor = '#4ade80'; detail += 'Abertura ocular e resposta motora preservadas. Bom prognostico neurologico se sem sedacao.' }
+    else if (om >= 7) { interp = 'Intubado — disfuncao moderada'; cor = '#facc15'; detail += 'Resposta motora presente mas reduzida. Avaliar sedacao residual vs lesao neurologica.' }
+    else if (om >= 5) { interp = 'Intubado — disfuncao grave'; cor = '#fb923c'; detail += 'Resposta pobre. Descartar sedacao residual, BNM, disturbio metabolico. Se persistente, considerar neuroimagem.' }
+    else { interp = 'Intubado — coma profundo'; cor = '#f87171'; detail += 'Ausencia de resposta significativa. Avaliar reflexos de tronco, pupilas, e indicacao de EEG/TC.' }
+    return { total: `${om}T`, interp, cor, detail }
   }
 
   const t = (o || 0) + Number(v) + (m || 0)
-  if (t >= 15) return { total: 15, interp: 'Consciente e orientado', cor: '#4ade80' }
-  if (t >= 13) return { total: t, interp: 'Disfuncao leve', cor: '#facc15' }
-  if (t >= 9) return { total: t, interp: 'Disfuncao moderada', cor: '#fb923c' }
-  return { total: t, interp: 'Coma / VA definitiva', cor: '#f87171' }
+  if (t === 15) return { total: 15, interp: 'Consciente e orientado', cor: '#4ade80', detail: 'Glasgow maximo. Paciente lucido e responsivo.' }
+  if (t >= 13) return { total: t, interp: 'Disfuncao leve', cor: '#facc15', detail: `Glasgow ${t}: confusao leve ou desorientacao. Avaliar delirium (CAM-ICU), dor, disturbio metabolico (Na+, glicemia, ureia). Monitorar evolucao.` }
+  if (t >= 9) return { total: t, interp: 'Disfuncao moderada', cor: '#fb923c', detail: `Glasgow ${t}: rebaixamento moderado. Resposta a estimulos presente mas inadequada. Investigar: sedacao residual, hiponatremia, hipoglicemia, lesao intracraniana. Considerar TC de cranio se nao justificado por sedacao.` }
+  if (t >= 6) return { total: t, interp: 'Coma leve', cor: '#f87171', detail: `Glasgow ${t}: coma. Apenas respostas reflexas. Avaliar pupilas, reflexos de tronco (corneopalpebral, oculocefalico). Indicacao de neuroimagem e EEG se sem causa metabolica clara.` }
+  return { total: t, interp: 'Coma profundo', cor: '#f87171', detail: `Glasgow ${t}: coma profundo (3-5). Prognostico reservado. Avaliar reflexos de tronco encefalico, pupilas fixas/midriaticas, indicacao de protocolo de morte encefalica se aplicavel. Descartar hipotermia e intoxicacao.` }
 }
 
 export function calcRSBI(fr: number, vc: number): number | null {
@@ -438,6 +443,24 @@ export type PatientData = {
   metaRASS: string
   metaTOF: string
   ultimoTOF: string
+  // Neuro — pupilas
+  pupilaDTam: string
+  pupilaDReag: string
+  pupilaETam: string
+  pupilaEReag: string
+  // Neuro — CAM-ICU (delirium)
+  camIcuRassOk: string      // RASS >= -3? (sim/nao) — step 1
+  camIcuAltConsc: string    // Alteração aguda consciência? (sim/nao) — feature 1
+  camIcuInatencao: string   // Inatenção? (sim/nao) — feature 2
+  camIcuPensamento: string  // Pensamento desorganizado? (sim/nao) — feature 3
+  camIcuNivelConsc: string  // Nível consciência alterado (RASS != 0)? — feature 4
+  // Neuro — Dor
+  dorEscala: string         // CPOT (0-8) ou BPS (3-12) ou NRS (0-10)
+  dorTipo: string           // 'cpot' | 'bps' | 'nrs'
+  dorLocal: string
+  // Neuro — Convulsões
+  convulsao: string         // sim/nao
+  convulsaoObs: string
   sedativos: SedativeEntry[]
   bnmList: BNMEntry[]
   cardiovascular: string
@@ -610,6 +633,20 @@ export function emptyPatient(): PatientData {
     metaRASS: '',
     metaTOF: '',
     ultimoTOF: '',
+    pupilaDTam: '',
+    pupilaDReag: '',
+    pupilaETam: '',
+    pupilaEReag: '',
+    camIcuRassOk: '',
+    camIcuAltConsc: '',
+    camIcuInatencao: '',
+    camIcuPensamento: '',
+    camIcuNivelConsc: '',
+    dorEscala: '',
+    dorTipo: 'cpot',
+    dorLocal: '',
+    convulsao: '',
+    convulsaoObs: '',
     sedativos: [],
     bnmList: [],
     cardiovascular: '',

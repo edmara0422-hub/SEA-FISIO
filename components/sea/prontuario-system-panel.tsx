@@ -496,6 +496,196 @@ function analiseBNM(inicio: string, atual: string): DrugAnalysis | null {
   return { trend, ...map[trend] }
 }
 
+// ══════════════════════════════════════════════════════
+// ── Análise Neurológica Avançada ──
+// ══════════════════════════════════════════════════════
+
+function analyzeCAMICU(record: ICURecord): { positive: boolean; result: string; color: string; detail: string } | null {
+  // CAM-ICU: Confusion Assessment Method for ICU
+  // Step 1: RASS >= -3 (testável)
+  if (!record.camIcuRassOk) return null
+  if (record.camIcuRassOk === 'nao') return { positive: false, result: 'Nao testavel', color: '#60a5fa', detail: 'RASS < -3: paciente em sedacao profunda. CAM-ICU nao aplicavel. Reavaliar apos reducao de sedacao.' }
+
+  const feat1 = record.camIcuAltConsc === 'sim'     // Alteração aguda
+  const feat2 = record.camIcuInatencao === 'sim'     // Inatenção
+  const feat3 = record.camIcuPensamento === 'sim'     // Pensamento desorganizado
+  const feat4 = record.camIcuNivelConsc === 'sim'     // Nível consciência alterado
+
+  // CAM-ICU positivo = Feature 1 + Feature 2 + (Feature 3 OR Feature 4)
+  const positive = feat1 && feat2 && (feat3 || feat4)
+
+  if (positive) {
+    // Classificar tipo de delirium
+    const rass = parseNumber(record.rass)
+    let tipo = 'misto'
+    if (rass > 0) tipo = 'hiperativo'
+    else if (rass < 0) tipo = 'hipoativo'
+
+    return {
+      positive: true,
+      result: `DELIRIUM ${tipo.toUpperCase()}`,
+      color: '#f87171',
+      detail: `CAM-ICU POSITIVO — Delirium ${tipo}. ${tipo === 'hiperativo'
+        ? 'Agitacao, alucinacoes, risco de autoextubacao. Tratar causa base (dor, infeccao, metabolico). Considerar haloperidol ou dexmedetomidina. Evitar benzodiazepinicos.'
+        : tipo === 'hipoativo'
+        ? 'Mais comum e mais perigoso (subdiagnosticado). Associado a maior mortalidade. Avaliar: infeccao oculta, disturbio metabolico (Na+, Ca++, glicemia), hipoxia. Evitar sedacao desnecessaria.'
+        : 'Alternancia entre agitacao e letargia. Tratar causa base. Monitorar RASS a cada 2h. Protocolo ABCDEF bundle.'
+      } Investigar e tratar causas reversiveis: dor, retencao urinaria, constipacao, infeccao, disturbio metabolico, medicacoes (opioides, BZD, anticolinergicos).`
+    }
+  }
+
+  return { positive: false, result: 'CAM-ICU negativo', color: '#4ade80', detail: 'Sem criterios de delirium no momento. Reaplicar a cada turno (8-12h) enquanto em UTI.' }
+}
+
+function analyzePupilas(record: ICURecord): { text: string; color: string; detail: string } | null {
+  const dTam = record.pupilaDTam
+  const dReag = record.pupilaDReag
+  const eTam = record.pupilaETam
+  const eReag = record.pupilaEReag
+  if (!dTam && !dReag && !eTam && !eReag) return null
+
+  const parts: string[] = []
+  const alerts: string[] = []
+  let color = '#4ade80'
+
+  const dSize = parseNumber(dTam)
+  const eSize = parseNumber(eTam)
+
+  // Anisocoria (diferença > 1mm)
+  if (dSize > 0 && eSize > 0 && Math.abs(dSize - eSize) > 1) {
+    alerts.push(`ANISOCORIA detectada (D:${dSize}mm E:${eSize}mm, diff ${Math.abs(dSize - eSize).toFixed(1)}mm). Investigar herniacao cerebral, lesao de III par, trauma ocular.`)
+    color = '#f87171'
+  }
+
+  // Midriase bilateral fixa
+  if (dReag === 'fixa' && eReag === 'fixa') {
+    if (dSize >= 6 && eSize >= 6) {
+      alerts.push('PUPILAS FIXAS E DILATADAS BILATERALMENTE. Sinal de herniacao cerebral, lesao de tronco, ou morte encefalica. EMERGENCIA NEUROLOGICA.')
+      color = '#f87171'
+    } else {
+      alerts.push('Pupilas fixas bilaterais. Descartar: atropina, midriatipos, hipotermia. Se nenhuma causa farmacologica, investigar lesao de tronco encefalico.')
+      color = '#f87171'
+    }
+  } else if (dReag === 'fixa' || eReag === 'fixa') {
+    const lado = dReag === 'fixa' ? 'DIREITA' : 'ESQUERDA'
+    alerts.push(`Pupila ${lado} FIXA (nao reagente). Possivel compressao ipsilateral do III par craniano. Correlacionar com neuroimagem. Se aguda, considerar herniacao.`)
+    color = '#f87171'
+  }
+
+  // Miose bilateral
+  if (dSize > 0 && dSize <= 2 && eSize > 0 && eSize <= 2) {
+    alerts.push('Miose bilateral (<= 2mm). Causas: opioides, lesao pontina, pilocarpina. Se uso de opioide, esperado.')
+    if (color === '#4ade80') color = '#facc15'
+  }
+
+  // Midriase bilateral reagente
+  if (dSize >= 5 && eSize >= 5 && dReag === 'reagente' && eReag === 'reagente') {
+    alerts.push('Midriase bilateral reagente. Causas: dor, ansiedade, simpaticomiméticos, atropina. Menos preocupante se reagentes.')
+    if (color === '#4ade80') color = '#facc15'
+  }
+
+  // Resumo
+  parts.push(`D: ${dSize || '?'}mm ${dReag || '?'} | E: ${eSize || '?'}mm ${eReag || '?'}`)
+  if (dReag === 'reagente' && eReag === 'reagente' && Math.abs(dSize - eSize) <= 1) {
+    parts.push('Isocoricas e fotorreagentes — normal')
+  }
+
+  return {
+    text: parts.join('. '),
+    color,
+    detail: alerts.length ? alerts.join(' ') : 'Pupilas simetricas e reagentes. Sem sinais de alarme neurologico.'
+  }
+}
+
+function analyzePain(record: ICURecord): { score: number; text: string; color: string; detail: string } | null {
+  if (!record.dorEscala) return null
+  const score = parseNumber(record.dorEscala)
+  const tipo = record.dorTipo || 'cpot'
+
+  if (tipo === 'cpot') {
+    // CPOT: 0-8 (para sedados/intubados)
+    if (score === 0) return { score, text: 'Sem dor (CPOT 0)', color: '#4ade80', detail: 'Ausencia de indicadores de dor. Reavaliar a cada 4h ou apos procedimentos dolorosos.' }
+    if (score <= 2) return { score, text: `Dor leve (CPOT ${score})`, color: '#facc15', detail: 'Indicadores minimos de dor. Considerar medidas nao farmacologicas (posicionamento, conversa). Reavaliar em 30min.' }
+    if (score <= 5) return { score, text: `Dor moderada (CPOT ${score})`, color: '#fb923c', detail: 'Dor presente. Avaliar analgesia (dipirona, paracetamol ou opioide em dose baixa). Identificar causa (procedimento, posicao, dreno). Reavaliar em 30min apos intervencao.' }
+    return { score, text: `Dor intensa (CPOT ${score})`, color: '#f87171', detail: 'DOR SIGNIFICATIVA. Opioide indicado se nao contraindicado. Avaliar bolus de fentanil ou morfina. Investigar causa (isquemia, compartimantal, peritonite). Reavaliar em 15min.' }
+  }
+
+  if (tipo === 'bps') {
+    // BPS: 3-12 (para sedados)
+    if (score <= 4) return { score, text: `Sem dor (BPS ${score})`, color: '#4ade80', detail: 'Ausencia de indicadores de dor. Manter monitorizacao.' }
+    if (score <= 6) return { score, text: `Dor leve (BPS ${score})`, color: '#facc15', detail: 'Sinais leves de desconforto. Avaliar causa e considerar analgesia.' }
+    if (score <= 8) return { score, text: `Dor moderada (BPS ${score})`, color: '#fb923c', detail: 'Dor presente. Iniciar ou ajustar analgesia. Reavaliar apos intervencao.' }
+    return { score, text: `Dor intensa (BPS ${score})`, color: '#f87171', detail: 'DOR INTENSA. Analgesia imediata. Investigar causa aguda.' }
+  }
+
+  // NRS: 0-10 (paciente acordado)
+  if (score === 0) return { score, text: 'Sem dor (NRS 0)', color: '#4ade80', detail: 'Paciente nega dor.' }
+  if (score <= 3) return { score, text: `Dor leve (NRS ${score})`, color: '#facc15', detail: 'Dor toleravel. Medidas nao farmacologicas + analgesia simples se necessario.' }
+  if (score <= 6) return { score, text: `Dor moderada (NRS ${score})`, color: '#fb923c', detail: 'Dor que interfere em atividades. Analgesia escalonada. Avaliar causa.' }
+  return { score, text: `Dor intensa (NRS ${score})`, color: '#f87171', detail: 'DOR SEVERA. Analgesia imediata (opioide se necessario). Reavaliar em 15min.' }
+}
+
+function analyzeRassVsMeta(record: ICURecord): { text: string; color: string; detail: string } | null {
+  if (!record.rass || !record.metaRASS) return null
+  const atual = parseNumber(record.rass)
+  const meta = parseNumber(record.metaRASS)
+  const diff = atual - meta
+
+  if (diff === 0) return { text: 'RASS no alvo', color: '#4ade80', detail: `RASS atual (${record.rass}) = meta (${record.metaRASS}). Sedacao adequada. Manter doses atuais e reavaliar a cada 4h.` }
+
+  if (diff > 0) {
+    // Paciente mais agitado que a meta (sub-sedação)
+    if (diff >= 3) return { text: 'SUB-SEDACAO GRAVE', color: '#f87171', detail: `RASS atual (${record.rass}) muito acima da meta (${record.metaRASS}). Risco de autoextubacao, queda, agitacao. ANTES de aumentar sedacao: descartar dor (CPOT/BPS), bexigoma, delirium (CAM-ICU), hipoxia. Se delirium: dexmedetomidina ou haloperidol — NAO benzodiazepinicos.` }
+    return { text: 'Sub-sedacao', color: '#fb923c', detail: `RASS atual (${record.rass}) acima da meta (${record.metaRASS}). Avaliar: dor nao tratada, delirium, desconforto ventilatorio, causas metabolicas. Ajustar sedacao somente apos tratar causa.` }
+  }
+
+  // Paciente mais sedado que a meta (sobre-sedação)
+  if (diff <= -3) return { text: 'SOBRE-SEDACAO GRAVE', color: '#f87171', detail: `RASS atual (${record.rass}) muito abaixo da meta (${record.metaRASS}). Risco de: imobilidade prolongada → ICUAW, ileo paralitico, TVP, pneumonia, delirium de abstinencia. Iniciar REDUCAO de sedacao. Implementar janela de sedacao (SAT — Spontaneous Awakening Trial) diaria.` }
+  return { text: 'Sobre-sedacao', color: '#facc15', detail: `RASS atual (${record.rass}) abaixo da meta (${record.metaRASS}). Considerar reducao de dose. Avaliar se ha indicacao de manter (ex: SDRA grave, assincronia). Se nao, iniciar desmame de sedacao.` }
+}
+
+function analyzeNeuroAlerts(record: ICURecord, calculations: Record<string, unknown> | null): Array<{ text: string; color: string }> {
+  const alerts: Array<{ text: string; color: string }> = []
+  const rass = parseNumber(record.rass)
+  const glasgow = calculations?.glasgow as { total: number | string } | null
+
+  // Glasgow baixo + RASS alto = possível delirium ou lesão
+  if (glasgow && typeof glasgow.total === 'number' && glasgow.total <= 10 && rass >= 0) {
+    alerts.push({ text: `⚠ Glasgow ${glasgow.total} com RASS ${record.rass}: rebaixamento SEM sedacao. Investigar causa neurologica (AVC, sangramento, metabolica) ou delirium hipoativo. Considerar TC de cranio.`, color: '#f87171' })
+  }
+
+  // RASS profundo sem sedativo
+  if (rass <= -3 && (!record.sedativos?.length || record.sedativos.every(s => !!s.suspensao))) {
+    alerts.push({ text: `⚠ RASS ${record.rass} sem sedativos ativos. Rebaixamento nao farmacologico. Investigar: AVC, hemorragia intracraniana, crise convulsiva, disturbio metabolico grave (Na+, glicemia, ureia), sepse com encefalopatia.`, color: '#f87171' })
+  }
+
+  // Sedação prolongada (> 2 sedativos mantidos)
+  const sedAtivos = record.sedativos?.filter(s => !s.suspensao && s.droga) || []
+  if (sedAtivos.length >= 2) {
+    alerts.push({ text: `⚠ ${sedAtivos.length} sedativos em uso simultaneo (${sedAtivos.map(s => s.droga).join(', ')}). Risco elevado de: delirium, ICUAW, ileo, TVP. Avaliar se todos sao necessarios. Protocolo ABCDEF: janela de sedacao diaria.`, color: '#fb923c' })
+  }
+
+  // BNM sem monitorização TOF
+  const bnmAtivos = record.bnmList?.filter(b => !b.suspensao && b.droga) || []
+  if (bnmAtivos.length > 0 && !record.ultimoTOF) {
+    alerts.push({ text: '⚠ BNM ativo SEM monitorização TOF. Risco de bloqueio excessivo e ICUAW. TOF deve ser medido a cada 4h (meta 1-2/4).', color: '#f87171' })
+  }
+
+  // Pupilas + Glasgow cruzamento
+  if (record.pupilaDReag === 'fixa' || record.pupilaEReag === 'fixa') {
+    if (glasgow && typeof glasgow.total === 'number' && glasgow.total <= 8) {
+      alerts.push({ text: '⚠ EMERGENCIA: Glasgow <= 8 + pupila fixa. Sinais de herniacao cerebral. Elevar cabeceira 30°, manitol ou salina hipertonica, TC de cranio URGENTE, acionar neurocirurgia.', color: '#f87171' })
+    }
+  }
+
+  // Convulsão ativa
+  if (record.convulsao === 'sim') {
+    alerts.push({ text: '⚠ CONVULSAO registrada. Protocolo: benzodiazepínico IV (midazolam/diazepam), proteger vias aereas, monitorar SpO2. Se refrataria (>5min): fenitoina IV. Solicitar EEG e investigar causa (metabolica, estrutural, medicamentosa).', color: '#f87171' })
+  }
+
+  return alerts
+}
+
 const DVA_OPTIONS = ['', 'Noradrenalina', 'Adrenalina', 'Dobutamina', 'Vasopressina', 'Milrinona']
 
 const MRC_GROUPS = [
@@ -3407,7 +3597,177 @@ export function ProntuarioSystemPanel() {
                     } />
                     <MetricChip label="TOF" value={currentRecord.ultimoTOF || '--'} hint={currentRecord.metaTOF ? `Meta ${currentRecord.metaTOF}` : null} />
                   </div>
+
+                  {/* Glasgow detail */}
+                  {calculations?.glasgow?.detail ? (
+                    <div className="mt-1.5 rounded-[0.5rem] border border-white/8 bg-white/[0.02] p-1.5">
+                      <p className="text-[8px] leading-relaxed text-white/60">{calculations.glasgow.detail}</p>
+                    </div>
+                  ) : null}
+
+                  {/* RASS vs Meta análise */}
+                  {(() => {
+                    const rassAnalysis = analyzeRassVsMeta(currentRecord)
+                    return rassAnalysis ? (
+                      <div className="mt-1.5 rounded-[0.5rem] border p-1.5" style={{ borderColor: `${rassAnalysis.color}30`, background: `${rassAnalysis.color}08` }}>
+                        <p className="text-[7px] font-semibold uppercase tracking-[0.12em]" style={{ color: rassAnalysis.color }}>{rassAnalysis.text}</p>
+                        <p className="mt-0.5 text-[8px] leading-relaxed text-white/60">{rassAnalysis.detail}</p>
+                      </div>
+                    ) : null
+                  })()}
                 </div>
+
+                {/* Pupilas + Dor + CAM-ICU + Convulsões */}
+                <div className="grid gap-1.5 xl:grid-cols-2">
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Pupilas</p>
+                    <div className="grid grid-cols-4 gap-1">
+                      <FieldShell label="D mm">
+                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pupilaDTam} onChange={(e) => setField('pupilaDTam', e.target.value)} placeholder="3" />
+                      </FieldShell>
+                      <FieldShell label="D reag">
+                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.pupilaDReag} onChange={(e) => setField('pupilaDReag', e.target.value)}>
+                          <option value="">--</option>
+                          <option value="reagente">Reagente</option>
+                          <option value="lenta">Lenta</option>
+                          <option value="fixa">Fixa</option>
+                        </select>
+                      </FieldShell>
+                      <FieldShell label="E mm">
+                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pupilaETam} onChange={(e) => setField('pupilaETam', e.target.value)} placeholder="3" />
+                      </FieldShell>
+                      <FieldShell label="E reag">
+                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.pupilaEReag} onChange={(e) => setField('pupilaEReag', e.target.value)}>
+                          <option value="">--</option>
+                          <option value="reagente">Reagente</option>
+                          <option value="lenta">Lenta</option>
+                          <option value="fixa">Fixa</option>
+                        </select>
+                      </FieldShell>
+                    </div>
+                    {(() => {
+                      const pupAnalysis = analyzePupilas(currentRecord)
+                      return pupAnalysis ? (
+                        <div className="mt-1.5 rounded-[0.5rem] border p-1.5" style={{ borderColor: `${pupAnalysis.color}30`, background: `${pupAnalysis.color}08` }}>
+                          <p className="text-[7px] font-semibold" style={{ color: pupAnalysis.color }}>{pupAnalysis.text}</p>
+                          <p className="mt-0.5 text-[8px] leading-relaxed text-white/60">{pupAnalysis.detail}</p>
+                        </div>
+                      ) : null
+                    })()}
+                  </div>
+
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Dor</p>
+                    <div className="grid grid-cols-3 gap-1">
+                      <FieldShell label="Escala">
+                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.dorTipo} onChange={(e) => setField('dorTipo', e.target.value)}>
+                          <option value="cpot">CPOT (0-8)</option>
+                          <option value="bps">BPS (3-12)</option>
+                          <option value="nrs">NRS (0-10)</option>
+                        </select>
+                      </FieldShell>
+                      <FieldShell label="Score">
+                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dorEscala} onChange={(e) => setField('dorEscala', e.target.value)} placeholder="0" />
+                      </FieldShell>
+                      <FieldShell label="Local">
+                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.dorLocal} onChange={(e) => setField('dorLocal', e.target.value)} placeholder="--" />
+                      </FieldShell>
+                    </div>
+                    {(() => {
+                      const painAnalysis = analyzePain(currentRecord)
+                      return painAnalysis ? (
+                        <div className="mt-1.5 rounded-[0.5rem] border p-1.5" style={{ borderColor: `${painAnalysis.color}30`, background: `${painAnalysis.color}08` }}>
+                          <p className="text-[7px] font-semibold" style={{ color: painAnalysis.color }}>{painAnalysis.text}</p>
+                          <p className="mt-0.5 text-[8px] leading-relaxed text-white/60">{painAnalysis.detail}</p>
+                        </div>
+                      ) : null
+                    })()}
+                  </div>
+                </div>
+
+                {/* CAM-ICU (Delirium) */}
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">CAM-ICU (Delirium)</p>
+                  <div className="grid grid-cols-5 gap-1">
+                    <FieldShell label="RASS≥-3?">
+                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuRassOk} onChange={(e) => setField('camIcuRassOk', e.target.value)}>
+                        <option value="">--</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Nao</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Alt.Aguda">
+                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuAltConsc} onChange={(e) => setField('camIcuAltConsc', e.target.value)}>
+                        <option value="">--</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Nao</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Inatencao">
+                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuInatencao} onChange={(e) => setField('camIcuInatencao', e.target.value)}>
+                        <option value="">--</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Nao</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Pens.Desorg">
+                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuPensamento} onChange={(e) => setField('camIcuPensamento', e.target.value)}>
+                        <option value="">--</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Nao</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Nivel Alt.">
+                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuNivelConsc} onChange={(e) => setField('camIcuNivelConsc', e.target.value)}>
+                        <option value="">--</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Nao</option>
+                      </select>
+                    </FieldShell>
+                  </div>
+                  {(() => {
+                    const camResult = analyzeCAMICU(currentRecord)
+                    return camResult ? (
+                      <div className="mt-1.5 rounded-[0.5rem] border p-1.5" style={{ borderColor: `${camResult.color}30`, background: `${camResult.color}08` }}>
+                        <p className="text-[7px] font-semibold uppercase tracking-[0.12em]" style={{ color: camResult.color }}>{camResult.result}</p>
+                        <p className="mt-0.5 text-[8px] leading-relaxed text-white/60">{camResult.detail}</p>
+                      </div>
+                    ) : null
+                  })()}
+                </div>
+
+                {/* Convulsões */}
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                  <div className="grid grid-cols-2 gap-1">
+                    <FieldShell label="Convulsao">
+                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.convulsao} onChange={(e) => setField('convulsao', e.target.value)}>
+                        <option value="">--</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Nao</option>
+                      </select>
+                    </FieldShell>
+                    <FieldShell label="Obs convulsao">
+                      <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.convulsaoObs} onChange={(e) => setField('convulsaoObs', e.target.value)} placeholder="Tipo, duracao..." />
+                    </FieldShell>
+                  </div>
+                </div>
+
+                {/* Alertas Neuro Cruzados */}
+                {(() => {
+                  const neuroAlerts = analyzeNeuroAlerts(currentRecord, calculations)
+                  return neuroAlerts.length ? (
+                    <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                      <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Alertas neurologicos</p>
+                      <div className="space-y-1">
+                        {neuroAlerts.map((alert, i) => (
+                          <div key={i} className="rounded-[0.5rem] border p-1.5" style={{ borderColor: `${alert.color}30`, background: `${alert.color}08` }}>
+                            <p className="text-[8px] leading-relaxed font-medium" style={{ color: alert.color }}>{alert.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null
+                })()}
 
                 <div className="grid gap-1.5 xl:grid-cols-2">
                   <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
