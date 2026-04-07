@@ -19,14 +19,13 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const PRODUCTION_MODE = true;
 
 const DEV_SERVER_URL = 'http://192.168.18.9:3000';
+const VERCEL_URL = 'https://sea-fisio.vercel.app';
 
 const config: CapacitorConfig = {
   appId: 'com.seafisio.app',
   appName: 'SEA Fisio',
   webDir: 'out',
-  ...(PRODUCTION_MODE ? {} : {
-    server: { url: DEV_SERVER_URL, cleartext: true },
-  }),
+  server: { url: VERCEL_URL },
   ios: {
     contentInset: 'automatic',
     preferredContentMode: 'mobile',
