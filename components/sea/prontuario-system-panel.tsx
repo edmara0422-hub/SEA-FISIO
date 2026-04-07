@@ -687,6 +687,17 @@ function parseNumber(value: unknown): number {
   return Number.isFinite(parsed) ? parsed : 0
 }
 
+/** Parse balance value — auto-detect Litros vs mL.
+ *  If |value| < 50, assumes Litros and converts to mL (*1000).
+ *  Ex: 3.53363 → 3533.63 mL | 3500 → 3500 mL | -2.1 → -2100 mL */
+function parseBalanceML(value: unknown): number {
+  const n = parseNumber(value)
+  if (n === 0) return 0
+  // Values < 50 are almost certainly in Litros (nobody has BH of 3mL)
+  if (Math.abs(n) > 0 && Math.abs(n) < 50) return Math.round(n * 1000 * 100) / 100
+  return n
+}
+
 function formatDateTime(value: string) {
   if (!value) return '--'
   return new Intl.DateTimeFormat('pt-BR', {
@@ -712,8 +723,8 @@ function compactTone(text?: string | null) {
 }
 
 function summarizeBalance(record: ICURecord) {
-  const bal24 = parseNumber(record.balanco24h)
-  const balAcc = parseNumber(record.balancoAcumulado)
+  const bal24 = parseBalanceML(record.balanco24h)
+  const balAcc = parseBalanceML(record.balancoAcumulado)
   const peso = parseNumber(record.peso) || parseNumber(record.pesoAtual)
   if (!record.balanco24h && !record.balancoAcumulado) return null
 
@@ -726,39 +737,47 @@ function summarizeBalance(record: ICURecord) {
   const fmt = (v: number) => { const s = v >= 0 ? '+' : ''; return `${s}${v}` }
 
   // Sobrecarga hídrica: acumulado > 10% peso corporal (critério UTI)
-  const sobrecargaPct = peso > 0 && balAcc > 0 ? (balAcc / (peso * 10)) : 0 // ml/(kg*10) = % peso
+  const sobrecargaPct = peso > 0 && balAcc > 0 ? ((balAcc / 1000) / peso * 100) : 0
 
   // BH 24h
   if (record.balanco24h) {
     if (bal24 > 1500) { parts.push(`BH24 ${fmt(bal24)}mL sobrecarga`); escalate('#f87171') }
     else if (bal24 > 500) { parts.push(`BH24 ${fmt(bal24)}mL positivo`); escalate('#facc15') }
-    else if (bal24 >= -500) { parts.push(`BH24 ${fmt(bal24)}mL equilibrado`); escalate('#4ade80') }
+    else if (bal24 >= -500 && bal24 <= 500) { parts.push(`BH24 ${fmt(bal24)}mL equilibrado`); escalate('#4ade80') }
     else if (bal24 >= -1500) { parts.push(`BH24 ${fmt(bal24)}mL neg. leve`); escalate('#60a5fa') }
     else { parts.push(`BH24 ${fmt(bal24)}mL neg. importante`); escalate('#fb923c') }
   }
 
-  // BH Acumulado — faixas criticas para UTI
+  // BH Acumulado — hierarquia: critico PRIMEIRO, equilibrado com TETO
   if (record.balancoAcumulado) {
     const kgExtra = (Math.abs(balAcc) / 1000).toFixed(1)
-    if (balAcc > 0 && sobrecargaPct > 10) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA >${sobrecargaPct.toFixed(0)}% peso`); escalate('#f87171') }
-    else if (balAcc > 3000) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA CRITICA`); escalate('#f87171') }
+    // 1º: Sobrecarga Crítica (prioridade máxima)
+    if (balAcc > 3000) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA CRITICA`); escalate('#f87171') }
+    // 2º: Sobrecarga por % peso
+    else if (balAcc > 0 && sobrecargaPct > 10) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA >${sobrecargaPct.toFixed(0)}% peso`); escalate('#f87171') }
+    // 3º: Sobrecarga moderada
     else if (balAcc > 1500) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) sobrecarga moderada`); escalate('#fb923c') }
+    // 4º: Retencao leve
     else if (balAcc > 500) { parts.push(`Ac ${fmt(balAcc)}mL retencao leve`); escalate('#facc15') }
-    else if (balAcc >= -500) { parts.push(`Ac ${fmt(balAcc)}mL equilibrado`); escalate('#4ade80') }
-    else if (balAcc >= -1500) { parts.push(`Ac ${fmt(balAcc)}mL depleção leve`); escalate('#60a5fa') }
+    // 5º: Equilibrado — COM TETO de 500
+    else if (balAcc >= -500 && balAcc <= 500) { parts.push(`Ac ${fmt(balAcc)}mL equilibrado`); escalate('#4ade80') }
+    // 6º: Depleção leve
+    else if (balAcc >= -1500) { parts.push(`Ac ${fmt(balAcc)}mL deplecao leve`); escalate('#60a5fa') }
+    // 7º: Desidratação grave
     else { parts.push(`Ac ${fmt(balAcc)}mL (-${kgExtra}kg) desidratacao/deplecao`); escalate('#f87171') }
   }
 
   // Correlação BH24 + Acumulado
-  if (bal24 < 0 && balAcc > 2000) { parts.push('fase desidratacao'); escalate('#60a5fa') }
+  if (bal24 < 0 && balAcc > 2000) { parts.push('em depuracao'); escalate('#60a5fa') }
   else if (bal24 > 500 && balAcc > 3000) { parts.push('retencao progressiva'); escalate('#f87171') }
+  else if (bal24 > 0 && balAcc > 2000) { parts.push('retencao continua'); escalate('#fb923c') }
 
   return { text: parts.join(' · '), color: worstColor }
 }
 
 function summarizeBalanceDetailed(record: ICURecord) {
-  const bal24 = parseNumber(record.balanco24h)
-  const balAcc = parseNumber(record.balancoAcumulado)
+  const bal24 = parseBalanceML(record.balanco24h)
+  const balAcc = parseBalanceML(record.balancoAcumulado)
   const peso = parseNumber(record.peso) || parseNumber(record.pesoAtual)
   if (!record.balanco24h && !record.balancoAcumulado) return null
 
@@ -799,7 +818,7 @@ function summarizeBalanceDetailed(record: ICURecord) {
       parts.push(`BH acumulado ${fmt(balAcc)}mL: SOBRECARGA MODERADA (+${kgExtra}kg). Risco de congestao tecidual. Considerar iniciar fase de desidratacao guiada por metas: BH 24h negativo de -500 a -1000mL ate atingir peso proximo ao basal. Checar edema (cacifo), ausculta pulmonar, peso diario. Avaliar diureticos.`)
     } else if (balAcc > 500) {
       parts.push(`BH acumulado ${fmt(balAcc)}mL: retencao leve (+${kgExtra}kg). Monitorar sinais de edema e oferta hidrica. Evitar acumulo progressivo.`)
-    } else if (balAcc >= -500) {
+    } else if (balAcc >= -500 && balAcc <= 500) {
       parts.push(`BH acumulado ${fmt(balAcc)}mL: HOMEOSTASE. Volume dentro da faixa de normalidade. Manter monitorizacao padrao.`)
     } else if (balAcc >= -1500) {
       parts.push(`BH acumulado ${fmt(balAcc)}mL: depleção leve (-${kgExtra}kg). Monitorar perfusao e funcao renal. Se intencional pos-sobrecarga, manter estrategia.`)
@@ -818,7 +837,7 @@ function summarizeBalanceDetailed(record: ICURecord) {
       parts.push(`Atencao: acumulado positivo alto e dia ainda positivo. Tendencia de retencao continua. Avaliar se entradas podem ser reduzidas (concentrar medicacoes, ajustar dieta).`)
     } else if (bal24 < -500 && balAcc < -2000) {
       parts.push(`Atencao: BH 24h e acumulado ambos negativos — desidratacao em curso. Garantir que nao ha hipoperfusao (lactato, PAM, debito urinario). Se paciente em pos-operatorio ou pos-ressuscitacao, validar com equipe se meta esta alcancada.`)
-    } else if (Math.abs(bal24) <= 500 && Math.abs(balAcc) <= 500) {
+    } else if (Math.abs(bal24) <= 500 && balAcc >= -500 && balAcc <= 500) {
       parts.push(`Homeostase hidrica: BH 24h e acumulado proximos de zero. Quadro de estabilidade hidrica — manter vigilancia padrao.`)
     }
   }
@@ -5069,8 +5088,8 @@ export function ProntuarioSystemPanel() {
                   eligibility.push({ label: 'Hb ≥ 7 g/dL', met: hbVal > 0 ? hbVal >= 7 : null, detail: hbVal > 0 ? `Hb ${hbVal}` : 'Sem lab' })
 
                   // 8. Balanço hídrico
-                  const bal = parseNumber(currentRecord.balanco24h)
-                  const balAc = parseNumber(currentRecord.balancoAcumulado)
+                  const bal = parseBalanceML(currentRecord.balanco24h)
+                  const balAc = parseBalanceML(currentRecord.balancoAcumulado)
                   const balOk = bal <= 500 && (!currentRecord.balancoAcumulado || balAc <= 3000)
                   const balDetail = [currentRecord.balanco24h ? `BH24 ${bal >= 0 ? '+' : ''}${bal}` : '', currentRecord.balancoAcumulado ? `Ac ${balAc >= 0 ? '+' : ''}${balAc}` : ''].filter(Boolean).join(' · ') || 'Sem dados'
                   eligibility.push({ label: 'Balanco hidrico', met: (currentRecord.balanco24h || currentRecord.balancoAcumulado) ? balOk : null, detail: balDetail })
