@@ -714,33 +714,43 @@ function compactTone(text?: string | null) {
 function summarizeBalance(record: ICURecord) {
   const bal24 = parseNumber(record.balanco24h)
   const balAcc = parseNumber(record.balancoAcumulado)
+  const peso = parseNumber(record.peso) || parseNumber(record.pesoAtual)
   if (!record.balanco24h && !record.balancoAcumulado) return null
 
   const parts: string[] = []
-  let worstColor = '#4ade80' // green = ok
+  let worstColor = '#4ade80'
   const escalate = (c: string) => {
     const rank: Record<string, number> = { '#4ade80': 0, '#60a5fa': 1, '#facc15': 2, '#fb923c': 3, '#f87171': 4 }
     if ((rank[c] ?? 0) > (rank[worstColor] ?? 0)) worstColor = c
   }
+  const fmt = (v: number) => { const s = v >= 0 ? '+' : ''; return `${s}${v}` }
 
-  // Balanço 24h
+  // Sobrecarga hídrica: acumulado > 10% peso corporal (critério UTI)
+  const sobrecargaPct = peso > 0 && balAcc > 0 ? (balAcc / (peso * 10)) : 0 // ml/(kg*10) = % peso
+
+  // BH 24h
   if (record.balanco24h) {
-    const sign = bal24 >= 0 ? '+' : ''
-    if (bal24 > 1500) { parts.push(`BH24 +${bal24}mL sobrecarga`); escalate('#f87171') }
-    else if (bal24 > 500) { parts.push(`BH24 +${bal24}mL positivo`); escalate('#facc15') }
-    else if (bal24 >= -500) { parts.push(`BH24 ${sign}${bal24}mL equilibrado`); escalate('#4ade80') }
-    else if (bal24 >= -1500) { parts.push(`BH24 ${bal24}mL neg. leve`); escalate('#60a5fa') }
-    else { parts.push(`BH24 ${bal24}mL neg. importante`); escalate('#fb923c') }
+    if (bal24 > 1500) { parts.push(`BH24 ${fmt(bal24)}mL sobrecarga`); escalate('#f87171') }
+    else if (bal24 > 500) { parts.push(`BH24 ${fmt(bal24)}mL positivo`); escalate('#facc15') }
+    else if (bal24 >= -500) { parts.push(`BH24 ${fmt(bal24)}mL equilibrado`); escalate('#4ade80') }
+    else if (bal24 >= -1500) { parts.push(`BH24 ${fmt(bal24)}mL neg. leve`); escalate('#60a5fa') }
+    else { parts.push(`BH24 ${fmt(bal24)}mL neg. importante`); escalate('#fb923c') }
   }
 
-  // Balanço acumulado
+  // BH Acumulado
   if (record.balancoAcumulado) {
-    const sign = balAcc >= 0 ? '+' : ''
-    if (balAcc > 5000) { parts.push(`Ac ${sign}${balAcc}mL retencao grave`); escalate('#f87171') }
-    else if (balAcc > 2000) { parts.push(`Ac ${sign}${balAcc}mL retencao moderada`); escalate('#facc15') }
-    else if (balAcc >= -2000) { parts.push(`Ac ${sign}${balAcc}mL aceitavel`); escalate('#4ade80') }
-    else { parts.push(`Ac ${balAcc}mL desidratacao`); escalate('#fb923c') }
+    const kgExtra = (balAcc / 1000).toFixed(1)
+    if (sobrecargaPct > 10) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA >${sobrecargaPct.toFixed(0)}% peso`); escalate('#f87171') }
+    else if (balAcc > 5000) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) retencao grave`); escalate('#f87171') }
+    else if (balAcc > 2000) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) retencao moderada`); escalate('#facc15') }
+    else if (balAcc > 500) { parts.push(`Ac ${fmt(balAcc)}mL positivo leve`); escalate('#4ade80') }
+    else if (balAcc >= -2000) { parts.push(`Ac ${fmt(balAcc)}mL aceitavel`); escalate('#4ade80') }
+    else { parts.push(`Ac ${fmt(balAcc)}mL desidratacao`); escalate('#fb923c') }
   }
+
+  // Correlação BH24 + Acumulado
+  if (bal24 < 0 && balAcc > 2000) { parts.push('fase desidratacao'); escalate('#60a5fa') }
+  else if (bal24 > 500 && balAcc > 3000) { parts.push('retencao progressiva'); escalate('#f87171') }
 
   return { text: parts.join(' · '), color: worstColor }
 }
@@ -748,30 +758,72 @@ function summarizeBalance(record: ICURecord) {
 function summarizeBalanceDetailed(record: ICURecord) {
   const bal24 = parseNumber(record.balanco24h)
   const balAcc = parseNumber(record.balancoAcumulado)
+  const peso = parseNumber(record.peso) || parseNumber(record.pesoAtual)
   if (!record.balanco24h && !record.balancoAcumulado) return null
 
   const parts: string[] = []
+  const fmt = (v: number) => { const s = v >= 0 ? '+' : ''; return `${s}${v}` }
 
-  // Balanço 24h
+  // ── Perdas insensíveis estimadas ──
+  if (peso > 0) {
+    const insensivel24 = peso * 0.5 * 24
+    parts.push(`Perdas insensiveis estimadas: ~${insensivel24.toFixed(0)}mL/24h (${(peso * 0.5).toFixed(0)}mL/h). Considerar ajuste com febre (+100-150mL/°C acima de 37), taquipneia ou sudorese.`)
+  }
+
+  // ── Análise BH 24h ──
   if (record.balanco24h) {
-    if (bal24 > 1500) parts.push(`BH 24h +${bal24}mL: sobrecarga hidrica. Risco de edema pulmonar, piora da oxigenacao e dificuldade de desmame. Restringir aporte, avaliar diuretico (furosemida), monitorar debito urinario.`)
-    else if (bal24 > 500) parts.push(`BH 24h +${bal24}mL: balanco positivo. Monitorar congestao pulmonar, SpO2 e resposta renal. Considerar restricao hidrica se tendencia de acumulo.`)
-    else if (bal24 >= -500) parts.push(`BH 24h ${bal24 >= 0 ? '+' : ''}${bal24}mL: equilibrado. Manter monitorizacao.`)
-    else if (bal24 >= -1500) parts.push(`BH 24h ${bal24}mL: balanco negativo leve. Se intencional (pos-ressuscitacao), favoravel ao desmame. Monitorar perfusao e PAM.`)
-    else parts.push(`BH 24h ${bal24}mL: balanco negativo importante. Avaliar perfusao tecidual, PAM, debito urinario, lactato. Correlacionar com hemodinamica antes de continuar desidratacao.`)
+    if (bal24 > 1500) {
+      parts.push(`BH 24h ${fmt(bal24)}mL: sobrecarga hidrica aguda. Risco de edema pulmonar, piora de oxigenacao (P/F) e dificuldade de desmame ventilatorio. Conduta: restringir aporte hidrico, avaliar furosemida, monitorar debito urinario (meta >0.5mL/kg/h), checar SpO2 e ausculta pulmonar.`)
+    } else if (bal24 > 500) {
+      parts.push(`BH 24h ${fmt(bal24)}mL: balanco positivo. Monitorar sinais de congestao (crepitacoes, edema, queda de SpO2). Se tendencia de acumulo em dias consecutivos, considerar restricao hidrica e reavaliar necessidade de cada soro/medicacao IV.`)
+    } else if (bal24 >= -500) {
+      parts.push(`BH 24h ${fmt(bal24)}mL: balanco equilibrado (proximo de zero). Objetivo alcancado para paciente estavel. Manter monitorizacao de entradas/saidas.`)
+    } else if (bal24 >= -1500) {
+      parts.push(`BH 24h ${fmt(bal24)}mL: balanco negativo leve. Se intencional (pos-ressuscitacao com acumulado positivo), favoravel ao desmame ventilatorio e reducao de edema. Monitorar PAM, perfusao periferica, debito urinario e lactato.`)
+    } else {
+      parts.push(`BH 24h ${fmt(bal24)}mL: balanco negativo importante. Avaliar perfusao tecidual (TEC, lactato, PAM), debito urinario e sinais de hipoperfusao. Correlacionar com hemodinamica antes de manter ritmo de desidratacao. Se DVA em uso, cautela.`)
+    }
   }
 
-  // Balanço acumulado
+  // ── Análise BH Acumulado ──
   if (record.balancoAcumulado) {
-    if (balAcc > 5000) parts.push(`BH acumulado +${balAcc}mL: retencao hidrica grave. Peso estimado +${(balAcc / 1000).toFixed(1)}kg acima do basal. Forte impacto em complacencia pulmonar e desmame.`)
-    else if (balAcc > 2000) parts.push(`BH acumulado +${balAcc}mL: retencao moderada (+${(balAcc / 1000).toFixed(1)}kg). Considerar fase de desidratacao guiada por metas.`)
-    else if (balAcc >= -2000) parts.push(`BH acumulado ${balAcc >= 0 ? '+' : ''}${balAcc}mL: faixa aceitavel.`)
-    else parts.push(`BH acumulado ${balAcc}mL: desidratacao acumulada. Reavaliar necessidade de reposicao.`)
+    const kgExtra = Math.abs(balAcc / 1000).toFixed(1)
+    const sobrecargaPct = peso > 0 ? ((balAcc / 1000) / peso * 100) : 0
+
+    if (balAcc > 0 && peso > 0 && sobrecargaPct > 10) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: SOBRECARGA HIDRICA — retencao equivalente a +${kgExtra}kg (${sobrecargaPct.toFixed(1)}% do peso corporal, acima do limiar critico de 10%). Associado a aumento de mortalidade, disfuncao organica e falha de desmame. Conduta agressiva: diuretico, restricao hidrica rigorosa, meta de BH negativo.`)
+    } else if (balAcc > 5000) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: retencao hidrica grave (+${kgExtra}kg estimado acima do basal). Forte impacto em complacencia pulmonar, troca gasosa e desmame. Considerar uso de diuretico de alca, restricao hidrica, e pesagem diaria para validar o balanco.`)
+    } else if (balAcc > 2000) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: retencao moderada (+${kgExtra}kg). Considerar iniciar fase de desidratacao guiada por metas: BH 24h negativo de -500 a -1000mL ate atingir peso proximo ao basal. Checar edema (cacifo), ausculta pulmonar, peso diario.`)
+    } else if (balAcc > 500) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: levemente positivo (+${kgExtra}kg). Dentro de faixa toleravel se paciente estavel. Manter monitorizacao e evitar acumulo progressivo.`)
+    } else if (balAcc >= -2000) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: faixa aceitavel. Paciente sem sinais de retencao ou desidratacao acumulada significativa.`)
+    } else {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: desidratacao acumulada (-${kgExtra}kg estimado). Reavaliar aporte hidrico, perfusao e funcao renal. Se intencional pos-sobrecarga, validar com peso e hemodinamica antes de repor.`)
+    }
   }
 
-  // Correlação clínica
-  if (bal24 > 500 && balAcc > 3000) parts.push('Atencao: BH 24h positivo + acumulado alto = risco de piora ventilatória progressiva.')
-  if (bal24 < -500 && balAcc > 3000) parts.push('BH 24h negativo com acumulado ainda positivo: fase de desidratacao em curso — manter se hemodinamica estavel.')
+  // ── Correlação cruzada BH24 + Acumulado ──
+  if (record.balanco24h && record.balancoAcumulado) {
+    if (bal24 < 0 && balAcc > 2000) {
+      parts.push(`Contexto: BH 24h negativo com acumulado ainda positivo alto — indica fase de desidratacao em curso. Se hemodinamica estavel (PAM >65, sem aumento de DVA, lactato normal), manter estrategia. Objetivo: trazer acumulado para <500mL progressivamente.`)
+    } else if (bal24 > 500 && balAcc > 3000) {
+      parts.push(`ALERTA: BH 24h positivo + acumulado >3L = retencao progressiva. Risco de piora ventilatoria, edema pulmonar e falha de desmame. Acao imediata: reavaliar todas as entradas (soros, dietas, medicacoes IV), considerar diuretico, restringir volume.`)
+    } else if (bal24 > 0 && balAcc > 2000) {
+      parts.push(`Atencao: acumulado positivo alto e dia ainda positivo. Tendencia de retencao continua. Avaliar se entradas podem ser reduzidas (concentrar medicacoes, ajustar dieta).`)
+    } else if (bal24 < -500 && balAcc < -2000) {
+      parts.push(`Atencao: BH 24h e acumulado ambos negativos — desidratacao em curso. Garantir que nao ha hipoperfusao (lactato, PAM, debito urinario). Se paciente em pos-operatorio ou pos-ressuscitacao, validar com equipe se meta esta alcancada.`)
+    } else if (Math.abs(bal24) <= 500 && Math.abs(balAcc) <= 500) {
+      parts.push(`Homeostase hidrica: BH 24h e acumulado proximos de zero. Quadro de estabilidade hidrica — manter vigilancia padrao.`)
+    }
+  }
+
+  // ── Orientação para plantão ──
+  if (record.balancoAcumulado && balAcc > 2000) {
+    parts.push(`Orientacao para plantao: com acumulado positivo alto, a meta e manter BH do turno negativo ou proximo de zero. Anotar todas as entradas (inclusive medicacoes IV diluidas) e saidas (urina horaria, drenos). Comunicar equipe se debito urinario <0.5mL/kg/h por mais de 6h.`)
+  }
 
   return parts.join(' ')
 }
