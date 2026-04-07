@@ -670,7 +670,20 @@ function normalizeRecord(raw: Partial<ICURecord> | null | undefined): ICURecord 
 }
 
 function parseNumber(value: unknown): number {
-  const parsed = Number.parseFloat(String(value ?? ''))
+  let str = String(value ?? '').trim()
+  // Handle BR format: "240.000" (dot as thousands separator)
+  // If string has dot(s) and NO comma, and digits after last dot are exactly 3, treat dot as thousands sep
+  if (str.includes('.') && !str.includes(',')) {
+    const parts = str.split('.')
+    if (parts.length >= 2 && parts.slice(1).every(p => p.length === 3 && /^\d{3}$/.test(p))) {
+      str = parts.join('') // 240.000 → 240000, 1.200.000 → 1200000
+    }
+  }
+  // Handle comma as decimal: "3,5" → "3.5"
+  if (str.includes(',')) {
+    str = str.replace(/\./g, '').replace(',', '.')
+  }
+  const parsed = Number.parseFloat(str)
   return Number.isFinite(parsed) ? parsed : 0
 }
 
@@ -814,6 +827,9 @@ function analyzeLabExam(exam: LabExamEntry) {
   if (inr && inr > 2) alerts.push({ text: 'INR > 2: coagulopatia significativa — avaliar vitamina K, plasma', color: '#f87171' })
   if (alb && alb < 2.5) alerts.push({ text: 'Albumina < 2.5: desnutricao grave — impacto em edema, cicatrizacao e farmacocinetica', color: '#fb923c' })
   if (leuco && leuco > 20000) alerts.push({ text: 'Leucocitose > 20k: infeccao provavel — reavaliar antibioticoterapia e foco', color: '#fb923c' })
+  if (bt && bt > 3) alerts.push({ text: 'BT > 3: ictericia — avaliar funcao hepatica, hemolise e obstrucao biliar', color: '#fb923c' })
+  if (tgo && tgo > 120 && tgp && tgp > 120) alerts.push({ text: 'TGO + TGP muito elevadas: hepatotoxicidade — reavaliar drogas hepatotoxicas', color: '#f87171' })
+  if (ht && ht < 25) alerts.push({ text: 'HT < 25%: hemodilucao ou anemia grave — correlacionar com HB', color: '#f87171' })
 
   return { items, alerts }
 }
