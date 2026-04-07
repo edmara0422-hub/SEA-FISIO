@@ -703,12 +703,33 @@ function summarizeBalance(record: ICURecord) {
   const balAcc = parseNumber(record.balancoAcumulado)
   if (!record.balanco24h && !record.balancoAcumulado) return null
 
-  // Análise do balanço 24h
-  if (bal24 > 1500) return { text: `BH24 +${bal24}mL — sobrecarga hidrica`, color: '#f87171' }
-  if (bal24 > 500) return { text: `BH24 +${bal24}mL — positivo, monitorar`, color: '#facc15' }
-  if (bal24 >= -500 && bal24 <= 500) return { text: `BH24 ${bal24 >= 0 ? '+' : ''}${bal24}mL — equilibrado`, color: '#4ade80' }
-  if (bal24 >= -1500) return { text: `BH24 ${bal24}mL — negativo leve`, color: '#60a5fa' }
-  return { text: `BH24 ${bal24}mL — negativo importante`, color: '#fb923c' }
+  const parts: string[] = []
+  let worstColor = '#4ade80' // green = ok
+  const escalate = (c: string) => {
+    const rank: Record<string, number> = { '#4ade80': 0, '#60a5fa': 1, '#facc15': 2, '#fb923c': 3, '#f87171': 4 }
+    if ((rank[c] ?? 0) > (rank[worstColor] ?? 0)) worstColor = c
+  }
+
+  // Balanço 24h
+  if (record.balanco24h) {
+    const sign = bal24 >= 0 ? '+' : ''
+    if (bal24 > 1500) { parts.push(`BH24 +${bal24}mL sobrecarga`); escalate('#f87171') }
+    else if (bal24 > 500) { parts.push(`BH24 +${bal24}mL positivo`); escalate('#facc15') }
+    else if (bal24 >= -500) { parts.push(`BH24 ${sign}${bal24}mL equilibrado`); escalate('#4ade80') }
+    else if (bal24 >= -1500) { parts.push(`BH24 ${bal24}mL neg. leve`); escalate('#60a5fa') }
+    else { parts.push(`BH24 ${bal24}mL neg. importante`); escalate('#fb923c') }
+  }
+
+  // Balanço acumulado
+  if (record.balancoAcumulado) {
+    const sign = balAcc >= 0 ? '+' : ''
+    if (balAcc > 5000) { parts.push(`Ac ${sign}${balAcc}mL retencao grave`); escalate('#f87171') }
+    else if (balAcc > 2000) { parts.push(`Ac ${sign}${balAcc}mL retencao moderada`); escalate('#facc15') }
+    else if (balAcc >= -2000) { parts.push(`Ac ${sign}${balAcc}mL aceitavel`); escalate('#4ade80') }
+    else { parts.push(`Ac ${balAcc}mL desidratacao`); escalate('#fb923c') }
+  }
+
+  return { text: parts.join(' · '), color: worstColor }
 }
 
 function summarizeBalanceDetailed(record: ICURecord) {
