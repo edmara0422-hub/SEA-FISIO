@@ -737,15 +737,16 @@ function summarizeBalance(record: ICURecord) {
     else { parts.push(`BH24 ${fmt(bal24)}mL neg. importante`); escalate('#fb923c') }
   }
 
-  // BH Acumulado
+  // BH Acumulado — faixas criticas para UTI
   if (record.balancoAcumulado) {
-    const kgExtra = (balAcc / 1000).toFixed(1)
-    if (sobrecargaPct > 10) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA >${sobrecargaPct.toFixed(0)}% peso`); escalate('#f87171') }
-    else if (balAcc > 5000) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) retencao grave`); escalate('#f87171') }
-    else if (balAcc > 2000) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) retencao moderada`); escalate('#facc15') }
-    else if (balAcc > 500) { parts.push(`Ac ${fmt(balAcc)}mL positivo leve`); escalate('#4ade80') }
-    else if (balAcc >= -2000) { parts.push(`Ac ${fmt(balAcc)}mL aceitavel`); escalate('#4ade80') }
-    else { parts.push(`Ac ${fmt(balAcc)}mL desidratacao`); escalate('#fb923c') }
+    const kgExtra = (Math.abs(balAcc) / 1000).toFixed(1)
+    if (balAcc > 0 && sobrecargaPct > 10) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA >${sobrecargaPct.toFixed(0)}% peso`); escalate('#f87171') }
+    else if (balAcc > 3000) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) SOBRECARGA CRITICA`); escalate('#f87171') }
+    else if (balAcc > 1500) { parts.push(`Ac ${fmt(balAcc)}mL (+${kgExtra}kg) sobrecarga moderada`); escalate('#fb923c') }
+    else if (balAcc > 500) { parts.push(`Ac ${fmt(balAcc)}mL retencao leve`); escalate('#facc15') }
+    else if (balAcc >= -500) { parts.push(`Ac ${fmt(balAcc)}mL equilibrado`); escalate('#4ade80') }
+    else if (balAcc >= -1500) { parts.push(`Ac ${fmt(balAcc)}mL depleção leve`); escalate('#60a5fa') }
+    else { parts.push(`Ac ${fmt(balAcc)}mL (-${kgExtra}kg) desidratacao/deplecao`); escalate('#f87171') }
   }
 
   // Correlação BH24 + Acumulado
@@ -791,17 +792,19 @@ function summarizeBalanceDetailed(record: ICURecord) {
     const sobrecargaPct = peso > 0 ? ((balAcc / 1000) / peso * 100) : 0
 
     if (balAcc > 0 && peso > 0 && sobrecargaPct > 10) {
-      parts.push(`BH acumulado ${fmt(balAcc)}mL: SOBRECARGA HIDRICA — retencao equivalente a +${kgExtra}kg (${sobrecargaPct.toFixed(1)}% do peso corporal, acima do limiar critico de 10%). Associado a aumento de mortalidade, disfuncao organica e falha de desmame. Conduta agressiva: diuretico, restricao hidrica rigorosa, meta de BH negativo.`)
-    } else if (balAcc > 5000) {
-      parts.push(`BH acumulado ${fmt(balAcc)}mL: retencao hidrica grave (+${kgExtra}kg estimado acima do basal). Forte impacto em complacencia pulmonar, troca gasosa e desmame. Considerar uso de diuretico de alca, restricao hidrica, e pesagem diaria para validar o balanco.`)
-    } else if (balAcc > 2000) {
-      parts.push(`BH acumulado ${fmt(balAcc)}mL: retencao moderada (+${kgExtra}kg). Considerar iniciar fase de desidratacao guiada por metas: BH 24h negativo de -500 a -1000mL ate atingir peso proximo ao basal. Checar edema (cacifo), ausculta pulmonar, peso diario.`)
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: SOBRECARGA HIDRICA CRITICA — retencao equivalente a +${kgExtra}kg (${sobrecargaPct.toFixed(1)}% do peso corporal, acima do limiar critico de 10%). Associado a aumento de mortalidade, disfuncao organica e falha de desmame. Conduta agressiva: diuretico, restricao hidrica rigorosa, meta de BH negativo. Avaliar indicacao de dialise.`)
+    } else if (balAcc > 3000) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: ALERTA CRITICO — SOBRECARGA HIDRICA GRAVE (+${kgExtra}kg). Risco iminente de edema agudo de pulmao (EAP), especialmente se funcao renal comprometida. Conduta: diuretico de alca, restricao hidrica rigorosa, pesagem diaria, monitorar ausculta pulmonar e SpO2 a cada 2h.`)
+    } else if (balAcc > 1500) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: SOBRECARGA MODERADA (+${kgExtra}kg). Risco de congestao tecidual. Considerar iniciar fase de desidratacao guiada por metas: BH 24h negativo de -500 a -1000mL ate atingir peso proximo ao basal. Checar edema (cacifo), ausculta pulmonar, peso diario. Avaliar diureticos.`)
     } else if (balAcc > 500) {
-      parts.push(`BH acumulado ${fmt(balAcc)}mL: levemente positivo (+${kgExtra}kg). Dentro de faixa toleravel se paciente estavel. Manter monitorizacao e evitar acumulo progressivo.`)
-    } else if (balAcc >= -2000) {
-      parts.push(`BH acumulado ${fmt(balAcc)}mL: faixa aceitavel. Paciente sem sinais de retencao ou desidratacao acumulada significativa.`)
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: retencao leve (+${kgExtra}kg). Monitorar sinais de edema e oferta hidrica. Evitar acumulo progressivo.`)
+    } else if (balAcc >= -500) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: HOMEOSTASE. Volume dentro da faixa de normalidade. Manter monitorizacao padrao.`)
+    } else if (balAcc >= -1500) {
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: depleção leve (-${kgExtra}kg). Monitorar perfusao e funcao renal. Se intencional pos-sobrecarga, manter estrategia.`)
     } else {
-      parts.push(`BH acumulado ${fmt(balAcc)}mL: desidratacao acumulada (-${kgExtra}kg estimado). Reavaliar aporte hidrico, perfusao e funcao renal. Se intencional pos-sobrecarga, validar com peso e hemodinamica antes de repor.`)
+      parts.push(`BH acumulado ${fmt(balAcc)}mL: ALERTA — desidratacao/depleção grave (-${kgExtra}kg). Risco de choque hipovolemico. Avaliar reposicao volemica, perfusao tecidual, PAM e debito urinario.`)
     }
   }
 
@@ -837,9 +840,9 @@ function analyzeLabExam(exam: LabExamEntry) {
   // ── Serie Vermelha e Coagulacao ──
   const hb = parseNumber(exam.hb)
   if (exam.hb) {
-    if (hb < 7) pushItem('HB', 'CRITICO — hipoxia tecidual', red)
-    else if (hb < 10) pushItem('HB', 'Anemia moderada', yellow)
-    else if (hb < 12) pushItem('HB', 'Anemia leve compensada', orange)
+    if (hb < 7.5) pushItem('HB', 'CRITICO — limiar transfusional', red)
+    else if (hb < 9) pushItem('HB', 'Anemia moderada', orange)
+    else if (hb < 12) pushItem('HB', 'Anemia leve compensada', yellow)
     else pushItem('HB', 'Normal', green)
   }
   const ht = parseNumber(exam.ht)
@@ -881,14 +884,15 @@ function analyzeLabExam(exam: LabExamEntry) {
   // ── Funcao Renal ──
   const creat = parseNumber(exam.creat)
   if (exam.creat) {
-    if (creat > 4) pushItem('Creat', 'CRITICO — anuria iminente', red)
-    else if (creat > 2) pushItem('Creat', 'KDIGO 2 — IRA moderada', orange)
+    if (creat >= 4) pushItem('Creat', 'CRITICO KDIGO 3 — falencia renal', red)
+    else if (creat >= 2) pushItem('Creat', 'KDIGO 2 — IRA moderada', orange)
     else if (creat > 1.2) pushItem('Creat', 'KDIGO 1 — IRA leve', yellow)
     else pushItem('Creat', 'Normal', green)
   }
   const ureia = parseNumber(exam.ureia)
   if (exam.ureia) {
     if (ureia > 150) pushItem('Ureia', 'CRITICO — encefalopatia uremica', red)
+    else if (ureia > 100) pushItem('Ureia', 'Severa — azotemia critica', red)
     else if (ureia > 80) pushItem('Ureia', 'Moderada — acumulo escorias', orange)
     else if (ureia > 40) pushItem('Ureia', 'Leve — desidratacao?', yellow)
     else pushItem('Ureia', 'Normal', green)
@@ -963,9 +967,9 @@ function analyzeLabExam(exam: LabExamEntry) {
   // ══════════════════════════════════════════════
 
   // Serie vermelha
-  if (hb && hb < 7) alerts.push({ text: 'HB < 7: hipoxia tecidual. Alto risco de choque cardiogenico. Reservar hemacias, avaliar transfusao imediata.', color: red })
-  else if (hb && hb < 10) alerts.push({ text: 'HB 7-10: anemia sintomatica. Monitorar taquicardia e dispneia ao esforco. Investigar perdas ocultas.', color: yellow })
-  else if (hb && hb < 12) alerts.push({ text: 'HB 10-12: anemia compensada. Monitorar perdas e tendencia.', color: orange })
+  if (hb && hb < 7.5) alerts.push({ text: 'ALERTA CRITICO: HB < 7.5 — anemia grave, limiar transfusional. Risco de choque hipoxemico. Reservar hemacias e avaliar transfusao imediata. Monitorar estabilidade hemodinamica.', color: red })
+  else if (hb && hb < 9) alerts.push({ text: 'HB 7.5-9: anemia moderada. Monitorar taquicardia, dispneia ao esforco e perfusao periferica. Investigar perdas ocultas.', color: orange })
+  else if (hb && hb < 12) alerts.push({ text: 'HB 9-12: anemia leve compensada. Investigar causa e monitorar tendencia.', color: yellow })
   if (ht && ht < 21) alerts.push({ text: 'HT < 21%: anemia severa ou hemodiluicao extrema. Sobrecarga cardiaca para manter oxigenacao.', color: red })
   else if (ht && ht > 55) alerts.push({ text: 'HT > 55%: hemoconcentracao. Desidratacao grave ou policitemia. Risco de trombose e falha de microcirculacao.', color: red })
 
@@ -982,11 +986,12 @@ function analyzeLabExam(exam: LabExamEntry) {
   else if (leuco && leuco > 20000) alerts.push({ text: 'Leuco > 20k: leucocitose importante. Infeccao provavel — reavaliar antibioticoterapia e foco infeccioso.', color: orange })
 
   // Funcao renal
-  if (creat && creat > 4) alerts.push({ text: 'Creat > 4: anuria iminente. Risco de sindrome uremica. Avaliar terapia dialitica de urgencia.', color: red })
-  else if (creat && creat > 2) alerts.push({ text: 'Creat > 2 (KDIGO 2): reducao de 50% da filtracao. Ajustar doses de antibioticos e nefrotoxicos. Avaliar debito urinario.', color: orange })
-  else if (creat && creat > 1.2) alerts.push({ text: 'Creat > 1.2 (KDIGO 1): injuria renal estagio 1. Aumentar vigilancia do debito urinario e hidratacao.', color: yellow })
-  if (ureia && ureia > 150) alerts.push({ text: 'Ureia > 150: encefalopatia uremica. Risco de confusao mental e flapping. Avaliar indicacao de dialise.', color: red })
-  else if (ureia && ureia > 80) alerts.push({ text: 'Ureia > 80: acumulo de escorias nitrogenadas. Nauseas e mal-estar. Monitorar funcao renal.', color: orange })
+  if (creat && creat >= 4) alerts.push({ text: 'ALERTA CRITICO: Creat >= 4.0 (KDIGO 3) — FALENCIA RENAL. Filtracao reduzida > 75%. Risco iminente de anuria e necessidade de terapia dialitica urgente. Notificar Nefrologia.', color: red })
+  else if (creat && creat >= 2) alerts.push({ text: 'Creat >= 2 (KDIGO 2): IRA moderada. Reducao de ~50% da filtracao. Ajustar doses de antibioticos e nefrotoxicos imediatamente. Avaliar debito urinario.', color: orange })
+  else if (creat && creat > 1.2) alerts.push({ text: 'Creat > 1.2 (KDIGO 1): injuria renal leve. Iniciar protocolo de protecao renal. Aumentar vigilancia do debito urinario e hidratacao.', color: yellow })
+  if (ureia && ureia > 150) alerts.push({ text: 'Ureia > 150: ENCEFALOPATIA UREMICA. Risco de confusao mental, flapping e pericardite uremica. Indicacao de dialise.', color: red })
+  else if (ureia && ureia > 100) alerts.push({ text: 'Ureia > 100: AZOTEMIA SEVERA. Acumulo critico de escorias nitrogenadas. Monitorar nivel de consciencia (risco de encefalopatia). Avaliar indicacao de dialise.', color: red })
+  else if (ureia && ureia > 80) alerts.push({ text: 'Ureia > 80: azotemia moderada. Acumulo de escorias. Possivel mal-estar e nauseas. Monitorar funcao renal.', color: orange })
 
   // Eletrolitos
   if (potassium && potassium > 6.5) alerts.push({ text: 'K+ > 6.5: EMERGENCIA METABOLICA. Risco de arritmia fatal em minutos. ECG imediato, glucoinsulinoterapia, gluconato de calcio, considerar dialise.', color: red })
@@ -1041,9 +1046,34 @@ function analyzeLabExam(exam: LabExamEntry) {
     alerts.push({ text: '⚠ DESIDRATACAO: Na+ > 145 + HT > 50% + Ureia > 60 (Creat normal). Hemoconcentracao por deficit de agua livre. Repor volume.', color: orange })
   }
 
-  // Congestao: BH alto + IRA + baixa albumina (usa dados do exam apenas)
+  // Congestao: IRA + baixa albumina
   if (creat && creat > 3 && alb && alb < 2.5) {
     alerts.push({ text: '⚠ CONGESTAO: Creat > 3 + Alb < 2.5. Falencia renal + baixa pressao oncotica. Liquido sobra e o corpo nao segura nos vasos. Risco de edema pulmonar. Correlacionar com BH acumulado.', color: red })
+  }
+
+  // Falencia renal + sobrecarga — risco dialitico (Creat + Ureia combo)
+  if (creat && creat >= 4 && ureia && ureia > 100) {
+    alerts.push({ text: '⚠ COMBO CRITICO: Creat >= 4 + Ureia > 100 = falencia renal com acumulo severo de escorias. ALTA PROBABILIDADE DE HEMODIALISE. Correlacionar com BH acumulado — se positivo, risco extremo de edema pulmonar.', color: red })
+  }
+
+  // Anemia grave + IRA (choque renal-anemico)
+  if (hb && hb < 7.5 && creat && creat >= 2) {
+    alerts.push({ text: '⚠ INSTABILIDADE: HB < 7.5 + Creat >= 2. Anemia grave agrava esforco cardiaco em paciente renal. O coracao bombeia sangue diluido com sobrecarga de volume. Cenario de alta instabilidade hemodinamica.', color: red })
+  }
+
+  // Hemodiluicao extrema: HT muito baixo + Na baixo
+  if (ht && ht < 25 && sodium && sodium < 130) {
+    alerts.push({ text: '⚠ HEMODILUICAO EXTREMA: HT < 25% + Na+ < 130. Excesso de liquidos diluindo o sangue severamente. Correlacionar com BH acumulado. Restringir aporte hidrico.', color: red })
+  }
+
+  // Emergencia dialitica triplice: K+ alto + Creat alta + BH contexto
+  if (potassium && potassium > 6 && creat && creat >= 4) {
+    alerts.push({ text: '⚠ URGENCIA DIALITICA: K+ > 6 + Creat >= 4. Triade de falencia renal + hipercalemia. Se BH acumulado positivo, risco extremo. Medidas de urgencia: gluconato de calcio, insulina+glicose, DIALISE.', color: red })
+  }
+
+  // Fuga de liquido: albumina baixa + qualquer retencao
+  if (alb && alb < 2.5) {
+    alerts.push({ text: '⚠ FUGA DE LIQUIDO: Albumina < 2.5. Baixa pressao oncotica — liquido acumulado tende a sair para tecidos (edema, ascite). BH pode ser falso-positivo (liquido no corpo mas fora dos vasos).', color: orange })
   }
 
   return { items, alerts }
