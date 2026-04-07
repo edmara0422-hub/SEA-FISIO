@@ -832,56 +832,219 @@ function analyzeLabExam(exam: LabExamEntry) {
   const items: Array<{ label: string; interp: string; color: string }> = []
   const alerts: Array<{ text: string; color: string }> = []
   const pushItem = (label: string, interp: string, color: string) => items.push({ label, interp, color })
+  const red = '#f87171', orange = '#fb923c', yellow = '#facc15', green = '#4ade80'
 
+  // ── Serie Vermelha e Coagulacao ──
   const hb = parseNumber(exam.hb)
-  if (exam.hb) pushItem('HB', hb < 7 ? 'Anemia grave' : hb < 10 ? 'Anemia' : 'Faixa aceitavel', hb < 7 ? '#f87171' : hb < 10 ? '#facc15' : '#4ade80')
-  const leuco = parseNumber(exam.leuco)
-  if (exam.leuco) pushItem('Leuco', leuco > 11000 ? 'Leucocitose' : leuco < 4000 ? 'Leucopenia' : 'Faixa esperada', leuco > 11000 || leuco < 4000 ? '#fb923c' : '#4ade80')
-  const plaq = parseNumber(exam.plaq)
-  if (exam.plaq) pushItem('Plaq', plaq < 50 ? 'Plaquetopenia grave' : plaq < 150 ? 'Plaquetopenia' : plaq > 400 ? 'Trombocitose' : 'Faixa esperada', plaq < 50 ? '#f87171' : plaq < 150 ? '#facc15' : plaq > 400 ? '#fb923c' : '#4ade80')
-  const creat = parseNumber(exam.creat)
-  if (exam.creat) pushItem('Creat', creat > 2 ? 'Lesao renal importante' : creat > 1.2 ? 'Creat elevada' : 'Faixa esperada', creat > 2 ? '#f87171' : creat > 1.2 ? '#facc15' : '#4ade80')
-  const ureia = parseNumber(exam.ureia)
-  if (exam.ureia) pushItem('Ureia', ureia > 80 ? 'Elevada' : 'Faixa esperada', ureia > 80 ? '#fb923c' : '#4ade80')
-  const potassium = parseNumber(exam.k)
-  if (exam.k) pushItem('K+', potassium > 5.5 ? 'Hipercalemia' : potassium < 3.5 ? 'Hipocalemia' : 'Faixa esperada', potassium > 5.5 || potassium < 3.5 ? '#f87171' : '#4ade80')
-  const sodium = parseNumber(exam.na)
-  if (exam.na) pushItem('Na+', sodium > 145 ? 'Hipernatremia' : sodium < 135 ? 'Hiponatremia' : 'Faixa esperada', sodium > 145 || sodium < 135 ? '#fb923c' : '#4ade80')
-  const lactate = parseNumber(exam.lac)
-  if (exam.lac) pushItem('Lactato', lactate >= 4 ? 'Hipoperfusao importante' : lactate >= 2 ? 'Elevado' : 'Faixa esperada', lactate >= 4 ? '#f87171' : lactate >= 2 ? '#facc15' : '#4ade80')
-  const pcr = parseNumber(exam.pcr)
-  if (exam.pcr) pushItem('PCR', pcr > 100 ? 'Inflamacao intensa' : pcr > 5 ? 'Inflamacao ativa' : 'Faixa esperada', pcr > 100 ? '#f87171' : pcr > 5 ? '#facc15' : '#4ade80')
-  const inr = parseNumber(exam.inr)
-  if (exam.inr) pushItem('INR', inr > 1.5 ? 'Coagulopatia' : 'Faixa esperada', inr > 1.5 ? '#fb923c' : '#4ade80')
-
-  // Exames adicionais
-  const bt = parseNumber(exam.bt)
-  if (exam.bt) pushItem('BT', bt > 3 ? 'Ictericia' : bt > 1.2 ? 'Elevada' : 'Normal', bt > 3 ? '#f87171' : bt > 1.2 ? '#facc15' : '#4ade80')
-  const alb = parseNumber(exam.alb)
-  if (exam.alb) pushItem('Alb', alb < 2.5 ? 'Hipoalbuminemia grave' : alb < 3.5 ? 'Hipoalbuminemia' : 'Normal', alb < 2.5 ? '#f87171' : alb < 3.5 ? '#facc15' : '#4ade80')
-  const tgo = parseNumber(exam.tgo)
-  if (exam.tgo) pushItem('TGO', tgo > 120 ? 'Muito elevada' : tgo > 40 ? 'Elevada' : 'Normal', tgo > 120 ? '#f87171' : tgo > 40 ? '#facc15' : '#4ade80')
-  const tgp = parseNumber(exam.tgp)
-  if (exam.tgp) pushItem('TGP', tgp > 120 ? 'Muito elevada' : tgp > 41 ? 'Elevada' : 'Normal', tgp > 120 ? '#f87171' : tgp > 41 ? '#facc15' : '#4ade80')
+  if (exam.hb) {
+    if (hb < 7) pushItem('HB', 'CRITICO — hipoxia tecidual', red)
+    else if (hb < 10) pushItem('HB', 'Anemia moderada', yellow)
+    else if (hb < 12) pushItem('HB', 'Anemia leve compensada', orange)
+    else pushItem('HB', 'Normal', green)
+  }
   const ht = parseNumber(exam.ht)
-  if (exam.ht) pushItem('HT', ht < 30 ? 'Baixo' : ht > 50 ? 'Elevado' : 'Normal', ht < 30 || ht > 50 ? '#facc15' : '#4ade80')
+  if (exam.ht) {
+    if (ht < 21) pushItem('HT', 'CRITICO — anemia severa', red)
+    else if (ht < 36) pushItem('HT', 'Baixo', yellow)
+    else if (ht > 55) pushItem('HT', 'Hemoconcentracao', red)
+    else if (ht > 50) pushItem('HT', 'Elevado', yellow)
+    else pushItem('HT', 'Normal', green)
+  }
+  const inr = parseNumber(exam.inr)
+  if (exam.inr) {
+    if (inr > 4) pushItem('INR', 'CRITICO — hemorragia', red)
+    else if (inr > 2) pushItem('INR', 'Moderado — risco sangramento', orange)
+    else if (inr > 1.2) pushItem('INR', 'Alargamento leve', yellow)
+    else pushItem('INR', 'Normal', green)
+  }
+  const plaq = parseNumber(exam.plaq)
+  if (exam.plaq) {
+    if (plaq < 20000) pushItem('Plaq', 'CRITICO — sangramento espontaneo', red)
+    else if (plaq < 100000) pushItem('Plaq', 'Plaquetopenia moderada', yellow)
+    else if (plaq < 150000) pushItem('Plaq', 'Plaquetopenia leve', orange)
+    else if (plaq > 600000) pushItem('Plaq', 'Trombocitose — risco trombotico', red)
+    else if (plaq > 400000) pushItem('Plaq', 'Trombocitose leve', yellow)
+    else pushItem('Plaq', 'Normal', green)
+  }
 
-  // Alertas clínicos
-  if (hb && hb < 7) alerts.push({ text: 'HB < 7: considerar transfusao conforme contexto clinico', color: '#f87171' })
-  if (lactate && lactate >= 4) alerts.push({ text: 'Lactato ≥ 4: hipoperfusao, correlacionar com choque e perfusao tecidual', color: '#f87171' })
-  if (lactate && lactate >= 2 && lactate < 4) alerts.push({ text: 'Lactato 2-4: monitorar clearance, avaliar perfusao', color: '#fb923c' })
-  if (potassium && potassium > 5.5) alerts.push({ text: 'K+ > 5.5: hipercalemia — ECG, glucoinsulinoterapia, considerar dialise', color: '#f87171' })
-  if (potassium && potassium < 3.0) alerts.push({ text: 'K+ < 3.0: hipocalemia grave — reposicao IV, monitorar ECG', color: '#f87171' })
-  if (sodium && sodium > 155) alerts.push({ text: 'Na+ > 155: hipernatremia grave — corrigir lentamente (max 10 mEq/24h)', color: '#f87171' })
-  if (sodium && sodium < 125) alerts.push({ text: 'Na+ < 125: hiponatremia grave — risco de edema cerebral', color: '#f87171' })
-  if (creat && creat > 2) alerts.push({ text: 'Creat > 2: lesao renal — avaliar debito urinario, hidratacao e nefrotoxicos', color: '#f87171' })
-  if (plaq && plaq < 50) alerts.push({ text: 'Plaquetas < 50k: risco hemorragico — cuidado com procedimentos invasivos', color: '#f87171' })
-  if (inr && inr > 2) alerts.push({ text: 'INR > 2: coagulopatia significativa — avaliar vitamina K, plasma', color: '#f87171' })
-  if (alb && alb < 2.5) alerts.push({ text: 'Albumina < 2.5: desnutricao grave — impacto em edema, cicatrizacao e farmacocinetica', color: '#fb923c' })
-  if (leuco && leuco > 20000) alerts.push({ text: 'Leucocitose > 20k: infeccao provavel — reavaliar antibioticoterapia e foco', color: '#fb923c' })
-  if (bt && bt > 3) alerts.push({ text: 'BT > 3: ictericia — avaliar funcao hepatica, hemolise e obstrucao biliar', color: '#fb923c' })
-  if (tgo && tgo > 120 && tgp && tgp > 120) alerts.push({ text: 'TGO + TGP muito elevadas: hepatotoxicidade — reavaliar drogas hepatotoxicas', color: '#f87171' })
-  if (ht && ht < 25) alerts.push({ text: 'HT < 25%: hemodilucao ou anemia grave — correlacionar com HB', color: '#f87171' })
+  // ── Leucocitos ──
+  const leuco = parseNumber(exam.leuco)
+  if (exam.leuco) {
+    if (leuco < 1000) pushItem('Leuco', 'CRITICO — neutropenia febril', red)
+    else if (leuco < 4000) pushItem('Leuco', 'Leucopenia', yellow)
+    else if (leuco > 30000) pushItem('Leuco', 'CRITICO — reacao leucemoide', red)
+    else if (leuco > 20000) pushItem('Leuco', 'Leucocitose importante', orange)
+    else if (leuco > 11000) pushItem('Leuco', 'Leucocitose', yellow)
+    else pushItem('Leuco', 'Normal', green)
+  }
+
+  // ── Funcao Renal ──
+  const creat = parseNumber(exam.creat)
+  if (exam.creat) {
+    if (creat > 4) pushItem('Creat', 'CRITICO — anuria iminente', red)
+    else if (creat > 2) pushItem('Creat', 'KDIGO 2 — IRA moderada', orange)
+    else if (creat > 1.2) pushItem('Creat', 'KDIGO 1 — IRA leve', yellow)
+    else pushItem('Creat', 'Normal', green)
+  }
+  const ureia = parseNumber(exam.ureia)
+  if (exam.ureia) {
+    if (ureia > 150) pushItem('Ureia', 'CRITICO — encefalopatia uremica', red)
+    else if (ureia > 80) pushItem('Ureia', 'Moderada — acumulo escorias', orange)
+    else if (ureia > 40) pushItem('Ureia', 'Leve — desidratacao?', yellow)
+    else pushItem('Ureia', 'Normal', green)
+  }
+
+  // ── Eletrolitos ──
+  const potassium = parseNumber(exam.k)
+  if (exam.k) {
+    if (potassium > 6.5) pushItem('K+', 'EMERGENCIA — arritmia fatal', red)
+    else if (potassium > 5.5) pushItem('K+', 'Hipercalemia moderada', orange)
+    else if (potassium > 5.0) pushItem('K+', 'Hipercalemia leve', yellow)
+    else if (potassium < 2.5) pushItem('K+', 'CRITICO — parada cardiaca', red)
+    else if (potassium < 3.0) pushItem('K+', 'Hipocalemia grave', orange)
+    else if (potassium < 3.5) pushItem('K+', 'Hipocalemia leve', yellow)
+    else pushItem('K+', 'Normal', green)
+  }
+  const sodium = parseNumber(exam.na)
+  if (exam.na) {
+    if (sodium < 125) pushItem('Na+', 'CRITICO — edema cerebral', red)
+    else if (sodium < 135) pushItem('Na+', 'Hiponatremia', yellow)
+    else if (sodium > 155) pushItem('Na+', 'CRITICO — desidratacao celular', red)
+    else if (sodium > 145) pushItem('Na+', 'Hipernatremia', yellow)
+    else pushItem('Na+', 'Normal', green)
+  }
+
+  // ── Metabolico e Inflamatorio ──
+  const lactate = parseNumber(exam.lac)
+  if (exam.lac) {
+    if (lactate >= 4) pushItem('Lactato', 'CRITICO — acidose lactica', red)
+    else if (lactate >= 2) pushItem('Lactato', 'Hiperlactatemia', yellow)
+    else pushItem('Lactato', 'Normal', green)
+  }
+  const pcr = parseNumber(exam.pcr)
+  if (exam.pcr) {
+    if (pcr > 150) pushItem('PCR', 'CRITICO — SIRS grave', red)
+    else if (pcr > 50) pushItem('PCR', 'Infeccao bacteriana provavel', orange)
+    else if (pcr > 10) pushItem('PCR', 'Inflamacao leve/viral', yellow)
+    else if (pcr > 5) pushItem('PCR', 'Inflamacao inespecifica', yellow)
+    else pushItem('PCR', 'Normal', green)
+  }
+
+  // ── Funcao Hepatica ──
+  const bt = parseNumber(exam.bt)
+  if (exam.bt) {
+    if (bt > 2.5) pushItem('BT', 'Ictericia clinica', red)
+    else if (bt > 1.2) pushItem('BT', 'Elevada leve', yellow)
+    else pushItem('BT', 'Normal', green)
+  }
+  const alb = parseNumber(exam.alb)
+  if (exam.alb) {
+    if (alb < 2.5) pushItem('Alb', 'CRITICO — anasarca', red)
+    else if (alb < 3.5) pushItem('Alb', 'Hipoalbuminemia', yellow)
+    else pushItem('Alb', 'Normal', green)
+  }
+  const tgo = parseNumber(exam.tgo)
+  if (exam.tgo) {
+    if (tgo > 1000) pushItem('TGO', 'CRITICO — hepatite fulminante', red)
+    else if (tgo > 100) pushItem('TGO', 'Injuria hepatica moderada', orange)
+    else if (tgo > 40) pushItem('TGO', 'Elevada leve', yellow)
+    else pushItem('TGO', 'Normal', green)
+  }
+  const tgp = parseNumber(exam.tgp)
+  if (exam.tgp) {
+    if (tgp > 1000) pushItem('TGP', 'CRITICO — hepatite fulminante', red)
+    else if (tgp > 100) pushItem('TGP', 'Injuria hepatica moderada', orange)
+    else if (tgp > 41) pushItem('TGP', 'Elevada leve', yellow)
+    else pushItem('TGP', 'Normal', green)
+  }
+
+  // ══════════════════════════════════════════════
+  // ── Alertas clinicos individuais ──
+  // ══════════════════════════════════════════════
+
+  // Serie vermelha
+  if (hb && hb < 7) alerts.push({ text: 'HB < 7: hipoxia tecidual. Alto risco de choque cardiogenico. Reservar hemacias, avaliar transfusao imediata.', color: red })
+  else if (hb && hb < 10) alerts.push({ text: 'HB 7-10: anemia sintomatica. Monitorar taquicardia e dispneia ao esforco. Investigar perdas ocultas.', color: yellow })
+  else if (hb && hb < 12) alerts.push({ text: 'HB 10-12: anemia compensada. Monitorar perdas e tendencia.', color: orange })
+  if (ht && ht < 21) alerts.push({ text: 'HT < 21%: anemia severa ou hemodiluicao extrema. Sobrecarga cardiaca para manter oxigenacao.', color: red })
+  else if (ht && ht > 55) alerts.push({ text: 'HT > 55%: hemoconcentracao. Desidratacao grave ou policitemia. Risco de trombose e falha de microcirculacao.', color: red })
+
+  // Coagulacao
+  if (inr && inr > 4) alerts.push({ text: 'INR > 4: risco de hemorragia espontanea. Vitamina K IV ou plasma se sangramento ativo.', color: red })
+  else if (inr && inr > 2) alerts.push({ text: 'INR 2-3.5: faixa terapeutica para anticoagulacao, porem risco em procedimentos. Suspender antes de invasivos.', color: orange })
+  if (plaq && plaq < 20000) alerts.push({ text: 'Plaq < 20k: RISCO DE SANGRAMENTO ESPONTANEO. Hemorragia cerebral ou digestiva possivel sem trauma. Transfusao de plaquetas.', color: red })
+  else if (plaq && plaq < 100000) alerts.push({ text: 'Plaq < 100k: plaquetopenia moderada. Contraindicado cirurgias, biopsias e anticoagulantes.', color: yellow })
+  if (plaq && plaq > 600000) alerts.push({ text: 'Plaq > 600k: trombocitose. Tendencia a formacao de trombos — risco de AVC e embolia.', color: orange })
+
+  // Leucocitos
+  if (leuco && leuco < 1000) alerts.push({ text: 'Leuco < 1k: NEUTROPENIA FEBRIL. Paciente sem defesa. Risco de morte por infeccao oportunista em horas. Isolamento e ATB de amplo espectro.', color: red })
+  else if (leuco && leuco > 30000) alerts.push({ text: 'Leuco > 30k: reacao leucemoide. Infeccao sistemica muito grave ou disturbio medular. Hemocultura e reavaliar esquema ATB.', color: red })
+  else if (leuco && leuco > 20000) alerts.push({ text: 'Leuco > 20k: leucocitose importante. Infeccao provavel — reavaliar antibioticoterapia e foco infeccioso.', color: orange })
+
+  // Funcao renal
+  if (creat && creat > 4) alerts.push({ text: 'Creat > 4: anuria iminente. Risco de sindrome uremica. Avaliar terapia dialitica de urgencia.', color: red })
+  else if (creat && creat > 2) alerts.push({ text: 'Creat > 2 (KDIGO 2): reducao de 50% da filtracao. Ajustar doses de antibioticos e nefrotoxicos. Avaliar debito urinario.', color: orange })
+  else if (creat && creat > 1.2) alerts.push({ text: 'Creat > 1.2 (KDIGO 1): injuria renal estagio 1. Aumentar vigilancia do debito urinario e hidratacao.', color: yellow })
+  if (ureia && ureia > 150) alerts.push({ text: 'Ureia > 150: encefalopatia uremica. Risco de confusao mental e flapping. Avaliar indicacao de dialise.', color: red })
+  else if (ureia && ureia > 80) alerts.push({ text: 'Ureia > 80: acumulo de escorias nitrogenadas. Nauseas e mal-estar. Monitorar funcao renal.', color: orange })
+
+  // Eletrolitos
+  if (potassium && potassium > 6.5) alerts.push({ text: 'K+ > 6.5: EMERGENCIA METABOLICA. Risco de arritmia fatal em minutos. ECG imediato, glucoinsulinoterapia, gluconato de calcio, considerar dialise.', color: red })
+  else if (potassium && potassium > 5.5) alerts.push({ text: 'K+ > 5.5: hipercalemia. Comum em falha renal. ECG e medidas de reducao (resina, insulina+glicose).', color: orange })
+  if (potassium && potassium < 2.5) alerts.push({ text: 'K+ < 2.5: CRITICO. Instabilidade eletrica, risco de parada em sistole. Reposicao IV urgente + monitorar ECG continuo.', color: red })
+  else if (potassium && potassium < 3.0) alerts.push({ text: 'K+ < 3.0: hipocalemia grave. Risco de arritmia. Reposicao IV e monitorar ECG.', color: orange })
+  else if (potassium && potassium < 3.5) alerts.push({ text: 'K+ 3.0-3.5: hipocalemia leve. Risco de fraqueza muscular. Reposicao oral ou IV conforme quadro.', color: yellow })
+  if (sodium && sodium < 125) alerts.push({ text: 'Na+ < 125: HIPONATREMIA GRAVE. Risco de edema cerebral, confusao mental e convulsoes. Correcao deve ser lenta para evitar lesao neurologica.', color: red })
+  else if (sodium && sodium < 135) alerts.push({ text: 'Na+ 126-134: hiponatremia. Geralmente por excesso de liquidos (BH positivo) que dilui o sodio.', color: yellow })
+  if (sodium && sodium > 155) alerts.push({ text: 'Na+ > 155: HIPERNATREMIA GRAVE. Desidratacao celular grave, risco de coma. Corrigir lentamente (max 10mEq/24h).', color: red })
+  else if (sodium && sodium > 145) alerts.push({ text: 'Na+ > 145: hipernatremia. Deficit de agua livre. Avaliar aporte hidrico e perdas insensiveis.', color: yellow })
+
+  // Metabolico
+  if (lactate && lactate >= 4) alerts.push({ text: 'Lactato >= 4: ACIDOSE LACTICA. Marcador de choque septico ou hipovolemico. Falencia circulatoria — mortalidade elevada. Ressuscitacao hemodinamica imediata.', color: red })
+  else if (lactate && lactate >= 2) alerts.push({ text: 'Lactato 2-4: hiperlactatemia. Hipoperfusao tecidual — o corpo esta em metabolismo anaerobico. Monitorar clearance (queda >20%/2h e bom sinal).', color: yellow })
+  if (pcr && pcr > 150) alerts.push({ text: 'PCR > 150: resposta inflamatoria sistemica GRAVE. Alto risco de sepse. Reavaliar foco e escalonar ATB.', color: red })
+  else if (pcr && pcr > 50) alerts.push({ text: 'PCR 50-150: forte indicio de infeccao bacteriana ou trauma grave. Investigar foco e considerar ATB.', color: orange })
+
+  // Funcao hepatica
+  if (bt && bt > 2.5) alerts.push({ text: 'BT > 2.5: ictericia clinica (pele e olhos amarelados). Avaliar funcao hepatica, hemolise e obstrucao biliar.', color: orange })
+  if (alb && alb < 2.5) alerts.push({ text: 'Alb < 2.5: ANASARCA. Inchaço generalizado — liquido migra para intersticio. BH sera falso-positivo (liquido no corpo, mas fora dos vasos). Impacto em cicatrizacao e farmacocinetica.', color: red })
+  else if (alb && alb < 3.5) alerts.push({ text: 'Alb 2.5-3.5: hipoalbuminemia. Liquido comeca a migrar para intersticio (edema). Impacto em pressao oncotica.', color: yellow })
+  if ((tgo && tgo > 1000) || (tgp && tgp > 1000)) alerts.push({ text: 'TGO/TGP > 1000: HEPATITE FULMINANTE ou choque hepatico. Falencia do orgao. Avaliar etiologia urgente.', color: red })
+  else if (tgo && tgo > 100 && tgp && tgp > 100) alerts.push({ text: 'TGO + TGP > 100: injuria hepatica moderada. Reavaliar drogas hepatotoxicas (paracetamol, estatinas, ATB).', color: orange })
+
+  // ══════════════════════════════════════════════
+  // ── Cruzamento de dados — alertas compostos ──
+  // ══════════════════════════════════════════════
+
+  // Choque oculto: lactato alto + anemia
+  if (lactate && lactate > 3 && hb && hb < 7.5) {
+    alerts.push({ text: '⚠ CHOQUE OCULTO: Lactato > 3 + HB < 7.5. Oferta de O2 insuficiente para demanda celular, gerando acidose. Transfusao + ressuscitacao hemodinamica.', color: red })
+  }
+
+  // Seguranca hemorragica: INR alto + plaquetopenia
+  if (inr && inr > 3 && plaq && plaq < 50000) {
+    alerts.push({ text: '⚠ RISCO HEMORRAGICO EXTREMO: INR > 3 + Plaq < 50k. Contraindicacao total para procedimentos invasivos. Plasma + plaquetas se sangramento.', color: red })
+  }
+
+  // Emergencia metabolica: K alto + IRA
+  if (potassium && potassium > 6 && creat && creat > 4) {
+    alerts.push({ text: '⚠ EMERGENCIA METABOLICA: K+ > 6 + Creat > 4. Hipercalemia por falencia renal. Risco de morte subita. Indicacao de dialise e medidas de urgencia (gluconato Ca, insulina+glicose).', color: red })
+  }
+
+  // Hiper-hidratacao (hemodiluicao)
+  if (sodium && sodium < 135 && ht && ht < 36) {
+    alerts.push({ text: '⚠ HIPER-HIDRATACAO: Na+ < 135 + HT < 36%. Hemodiluicao — excesso de liquidos diluindo o sangue. Correlacionar com BH acumulado. Restringir aporte.', color: orange })
+  }
+
+  // Desidratacao (hemoconcentracao)
+  if (sodium && sodium > 145 && ht && ht > 50 && ureia && ureia > 60 && (!creat || creat <= 1.2)) {
+    alerts.push({ text: '⚠ DESIDRATACAO: Na+ > 145 + HT > 50% + Ureia > 60 (Creat normal). Hemoconcentracao por deficit de agua livre. Repor volume.', color: orange })
+  }
+
+  // Congestao: BH alto + IRA + baixa albumina (usa dados do exam apenas)
+  if (creat && creat > 3 && alb && alb < 2.5) {
+    alerts.push({ text: '⚠ CONGESTAO: Creat > 3 + Alb < 2.5. Falencia renal + baixa pressao oncotica. Liquido sobra e o corpo nao segura nos vasos. Risco de edema pulmonar. Correlacionar com BH acumulado.', color: red })
+  }
 
   return { items, alerts }
 }
