@@ -427,7 +427,7 @@ function SectionDivider({
         <Icon className="h-5 w-5 text-white" />
       </div>
       <div className="min-w-0">
-        <p className="text-[10px] uppercase tracking-[0.22em] text-white/34">{eyebrow}</p>
+        <p className="text-[7px] uppercase tracking-[0.14em] text-white/34">{eyebrow}</p>
         <h2 className="metal-text text-[1.05rem] font-semibold uppercase tracking-[0.22em] md:text-[1.2rem]">
           {title}
         </h2>
@@ -454,14 +454,14 @@ function InputField({
 }) {
   return (
     <label className="space-y-1.5">
-      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">{label}</span>
+      <span className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/42">{label}</span>
       <input
         type={type}
         step={step}
         value={value}
         onChange={(event) => onChange(event.target.value)}
         placeholder={placeholder}
-        className="h-11 w-full rounded-[0.95rem] border border-white/10 bg-black/18 px-3 text-[13px] text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18"
+        className="h-8 w-full rounded-[0.6rem] border border-white/10 bg-black/18 px-2 text-[10px] text-white outline-none transition-all placeholder:text-white/24 focus:border-white/18"
       />
     </label>
   )
@@ -480,11 +480,11 @@ function SelectField({
 }) {
   return (
     <label className="space-y-1.5">
-      <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-white/42">{label}</span>
+      <span className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/42">{label}</span>
       <select
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-[0.95rem] border border-white/10 bg-black/18 px-3 text-[13px] text-white outline-none transition-all focus:border-white/18"
+        className="h-8 w-full rounded-[0.6rem] border border-white/10 bg-black/18 px-2 text-[10px] text-white outline-none transition-all focus:border-white/18"
       >
         <option value="">Selecionar</option>
         {options.map((option) => (
@@ -512,9 +512,9 @@ function ResultBadge({
 }) {
   return (
     <div className={`rounded-[0.95rem] border ${compact ? 'p-2' : 'p-2.5'} ${toneClass(color)}`}>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.16em] opacity-72">{label}</p>
-      <p className={`mt-1.5 font-semibold ${compact ? 'text-[12px] md:text-[13px]' : 'text-[13px] md:text-sm'}`}>{value}</p>
-      {hint ? <p className={`mt-1 opacity-72 ${compact ? 'text-[10px]' : 'text-[11px]'}`}>{hint}</p> : null}
+      <p className="text-[7px] font-semibold uppercase tracking-[0.14em] opacity-72">{label}</p>
+      <p className="mt-0.5 font-semibold text-[8px]">{value}</p>
+      {hint ? <p className="mt-0.5 opacity-72 text-[7px]">{hint}</p> : null}
     </div>
   )
 }
@@ -554,8 +554,8 @@ function CalcCard({
             <Icon className="h-5 w-5 text-white" />
           </div>
           <div className="min-w-0">
-            <h3 className="truncate text-sm font-semibold uppercase tracking-[0.16em] text-white/92">{title}</h3>
-            <p className="truncate text-[11px] tracking-[0.08em] text-white/42">{subtitle}</p>
+            <h3 className="truncate text-[8px] font-semibold uppercase tracking-[0.14em] text-white/92">{title}</h3>
+            <p className="truncate text-[7px] tracking-[0.08em] text-white/42">{subtitle}</p>
           </div>
         </div>
 
@@ -578,7 +578,7 @@ function CalcCard({
                 <button
                   type="button"
                   onClick={onClear}
-                  className="chrome-subtle inline-flex h-9 items-center gap-2 rounded-[0.95rem] px-3 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/72 transition hover:text-white"
+                  className="chrome-subtle inline-flex h-7 items-center gap-1 rounded-[0.7rem] px-2 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72 transition hover:text-white"
                 >
                   <RotateCcw className="h-3.5 w-3.5" />
                   Limpar
@@ -825,7 +825,7 @@ export function VMSystemPanel() {
         >
           <div className="space-y-3">
             <div className="rounded-[1.25rem] border border-white/10 bg-black/22 p-4">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">HACOR</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">HACOR</p>
               <div className="scrollbar-hide mt-3 overflow-x-auto overscroll-x-contain pb-2">
                 <div className="grid min-w-[58rem] grid-cols-6 gap-3">
                   <SelectField label="FC" value={hacor.fc} options={HACOR_SELECTS.fc} onChange={(value) => setHacor((prev) => ({ ...prev, fc: value }))} />
@@ -839,7 +839,7 @@ export function VMSystemPanel() {
             </div>
 
             <div className="rounded-[1.25rem] border border-white/10 bg-black/22 p-4">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">SOFA</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">SOFA</p>
               <div className="scrollbar-hide mt-3 overflow-x-auto overscroll-x-contain pb-2">
                 <div className="grid min-w-[58rem] grid-cols-6 gap-3">
                   {SOFA_SELECTS.map((item) => (
@@ -965,7 +965,7 @@ export function VMSystemPanel() {
           <div className="grid gap-2 xl:grid-cols-3">
             {peepLevels.map((level, index) => (
               <div key={`level-${index}`} className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
-                <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Nivel {index + 1}</p>
+                <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">Nivel {index + 1}</p>
                 <div className="mt-2 grid gap-2 sm:grid-cols-3">
                   <InputField label="PEEP" value={level.peep} placeholder="5" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, peep: value } : item)))} type="number" />
                   <InputField label="Plato" value={level.plato} placeholder="22" onChange={(value) => setPeepLevels((prev) => prev.map((item, itemIndex) => (itemIndex === index ? { ...item, plato: value } : item)))} type="number" />
@@ -1003,7 +1003,7 @@ export function VMSystemPanel() {
         >
           <div className="space-y-3">
             <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Recrutabilidade</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">Recrutabilidade</p>
               <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
                 <div className="grid min-w-[34rem] grid-cols-3 gap-3">
                   <InputField label="Vol. insp." value={recruit.recVolInsp} placeholder="1200" onChange={(value) => setRecruit((prev) => ({ ...prev, recVolInsp: value }))} type="number" />
@@ -1019,7 +1019,7 @@ export function VMSystemPanel() {
             </div>
 
             <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Loop P-V</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">Loop P-V</p>
               <div className="scrollbar-hide mt-2 overflow-x-auto pb-2">
                 <div className="grid min-w-[68rem] grid-cols-6 gap-3">
                   <InputField label="LIP" value={recruit.lip} placeholder="10" onChange={(value) => setRecruit((prev) => ({ ...prev, lip: value }))} type="number" />
@@ -1132,7 +1132,7 @@ export function VMSystemPanel() {
         >
           <div className="grid gap-3 xl:grid-cols-2">
             <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">VD/VT</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">VD/VT</p>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 <InputField label="PaCO2" value={wean.vdvtPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPaCO2: value }))} type="number" />
                 <InputField label="PetCO2" value={wean.vdvtPetCO2} placeholder="35" onChange={(value) => setWean((prev) => ({ ...prev, vdvtPetCO2: value }))} type="number" />
@@ -1141,7 +1141,7 @@ export function VMSystemPanel() {
             </div>
 
             <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Ventilatory ratio</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">Ventilatory ratio</p>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 <InputField label="VE atual" value={wean.vrVe} placeholder="8" onChange={(value) => setWean((prev) => ({ ...prev, vrVe: value }))} type="number" step="0.1" />
                 <InputField label="PaCO2 atual" value={wean.vrPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, vrPaCO2: value }))} type="number" />
@@ -1156,7 +1156,7 @@ export function VMSystemPanel() {
             </div>
 
             <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Gap CO2</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">Gap CO2</p>
               <div className="mt-2 grid grid-cols-3 gap-2">
                 <InputField label="PaCO2" value={wean.gapPaCO2} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, gapPaCO2: value }))} type="number" />
                 <InputField label="EtCO2" value={wean.gapEtCO2} placeholder="37" onChange={(value) => setWean((prev) => ({ ...prev, gapEtCO2: value }))} type="number" />
@@ -1165,7 +1165,7 @@ export function VMSystemPanel() {
             </div>
 
             <div className="rounded-[1.15rem] border border-white/10 bg-black/22 p-3">
-              <p className="text-[10px] uppercase tracking-[0.18em] text-white/42">Criterios de desmame</p>
+              <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">Criterios de desmame</p>
               <div className="mt-2 grid grid-cols-2 gap-2 md:grid-cols-4">
                 <InputField label="PImax" value={wean.piMax} placeholder="30" onChange={(value) => setWean((prev) => ({ ...prev, piMax: value }))} type="number" />
                 <InputField label="PEmax" value={wean.peMax} placeholder="40" onChange={(value) => setWean((prev) => ({ ...prev, peMax: value }))} type="number" />
@@ -1256,7 +1256,7 @@ export function VMSystemPanel() {
           <div className="grid gap-2 grid-cols-2 md:grid-cols-3">
             {MRC_GROUPS.map((group) => (
               <div key={group.label} className="rounded-[1rem] border border-white/10 bg-black/22 p-2.5">
-                <p className="text-[10px] uppercase tracking-[0.16em] text-white/42">{group.label}</p>
+                <p className="text-[7px] uppercase tracking-[0.14em] text-white/42">{group.label}</p>
                 <div className="mt-2 grid grid-cols-2 gap-2">
                   <SelectField label="D" value={mrc[group.keyD]} options={[0,1,2,3,4,5].map((value)=>({ value: String(value), label: String(value) }))} onChange={(value) => setMrc((prev) => ({ ...prev, [group.keyD]: value }))} />
                   <SelectField label="E" value={mrc[group.keyE]} options={[0,1,2,3,4,5].map((value)=>({ value: String(value), label: String(value) }))} onChange={(value) => setMrc((prev) => ({ ...prev, [group.keyE]: value }))} />
