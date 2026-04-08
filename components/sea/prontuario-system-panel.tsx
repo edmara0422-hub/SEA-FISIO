@@ -5325,7 +5325,6 @@ export function ProntuarioSystemPanel() {
 
                       {/* Painel informativo com abas */}
                       <div id="__desmame_info__" style={{ display: 'none' }} className="mt-1.5 rounded-[0.7rem] border border-white/10 bg-black/30 overflow-hidden">
-                        {(() => { return (
                           <div id="__desmame_info_content__">
                             {/* Tabs */}
                             <div className="scrollbar-hide flex overflow-x-auto border-b border-white/8">
@@ -5446,8 +5445,7 @@ export function ProntuarioSystemPanel() {
                               <p className="mt-1 text-[6px] text-white/30">Todos os criterios devem ser atendidos simultaneamente para indicar elegibilidade. Avaliar tambem: Glasgow, tosse, secrecao, estabilidade hemodinamica.</p>
                             </div>
                           </div>
-                          </div>
-                        ) })()}
+                        </div>
                       </div>
 
                       {currentRecord.desmHist?.length ? (
