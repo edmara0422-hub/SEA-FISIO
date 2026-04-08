@@ -5887,11 +5887,11 @@ export function ProntuarioSystemPanel() {
 
                   {!collapsedProna && (
                     <>
-                      <div className="mt-3 flex flex-wrap gap-1">
+                      <div className="mt-1.5 flex flex-wrap gap-1">
                         <button
                           type="button"
                           onClick={() => setField('pronaAtiva', proneActive ? '' : '1')}
-                          className="rounded-[0.8rem] border px-3 py-1.5 text-[8px] font-semibold uppercase tracking-[0.12em]"
+                          className="rounded-[0.6rem] border px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.12em]"
                           style={{
                             borderColor: proneActive ? 'rgba(74,222,128,0.35)' : 'rgba(255,255,255,0.12)',
                             background: proneActive ? 'rgba(74,222,128,0.12)' : 'rgba(255,255,255,0.04)',
@@ -5904,7 +5904,7 @@ export function ProntuarioSystemPanel() {
                           <button
                             type="button"
                             onClick={() => updateCurrentRecord((r) => ({ ...r, pronaAtiva: '', pronaTempo: '', pronaData: '', pronaHora: '' }))}
-                            className="inline-flex items-center gap-1 rounded-[0.8rem] border border-[#f8717130] bg-[#f8717110] px-3 py-1.5 text-[8px] font-semibold text-[#fca5a5]"
+                            className="inline-flex items-center gap-1 rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[8px] font-semibold text-[#fca5a5]"
                           >
                             <Trash2 className="h-3 w-3" />
                             Limpar Prona
@@ -5947,10 +5947,10 @@ export function ProntuarioSystemPanel() {
 
                       {currentRecord.pronaHist?.length ? (
                         <div className="mt-2 space-y-1.5">
-                          <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/36">Historico Prona</p>
+                          <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/36">Historico Prona</p>
                           {currentRecord.pronaHist.map((entry, i) => (
-                            <div key={`prona-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/10 bg-black/18 px-2.5 py-1.5">
-                              <p className="text-[9px] text-white/50">
+                            <div key={`prona-${i}`} className="flex items-center justify-between gap-1 rounded-[0.5rem] border border-white/10 bg-black/18 px-1.5 py-1">
+                              <p className="text-[8px] text-white/50">
                                 {formatDateTime(entry.ts)} · {entry.tempo || '--'} · {entry.dataInicio || '--'} {entry.horaInicio || ''}
                               </p>
                               <button onClick={() => deleteProna(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
@@ -5961,9 +5961,9 @@ export function ProntuarioSystemPanel() {
                         </div>
                       ) : null}
 
-                      <div className="mt-4 border-t border-white/8 pt-4">
-                        <p className="mb-1.5 text-[8px] font-bold text-[#fb923c]">Manobra de Recrutamento</p>
-                        <p className="mb-2 text-[9px] leading-relaxed text-white/30">FiO₂ 100%, FR 10, ΔP 15 cmH₂O | PCV: PEEP +5 a cada 2min ate 25-45 cmH₂O | Apos: PEEP 25, calcular Cest, iniciar titulacao decremental.</p>
+                      <div className="mt-2 border-t border-white/8 pt-2">
+                        <p className="mb-1 text-[7px] font-bold text-[#fb923c]">Manobra de Recrutamento</p>
+                        <p className="mb-1 text-[7px] leading-relaxed text-white/30">FiO2 100%, FR 10, DP 15 cmH2O | PCV: PEEP +5 a cada 2min ate 25-45 cmH2O | Apos: PEEP 25, calcular Cest, iniciar titulacao decremental. DP = Pplato - PEEP (calculado automaticamente).</p>
                     <div className="overflow-x-auto">
                       <table className="w-full border-collapse text-[9px]">
                         <thead>
@@ -5997,15 +5997,15 @@ export function ProntuarioSystemPanel() {
                     <button
                       type="button"
                       onClick={() => updateCurrentRecord((r) => ({ ...r, mraTab: Array(8).fill(null).map(() => ({ plato: '', peep: '', cest: '', sat: '', pam: '', best: false })) }))}
-                      className="mt-2 rounded-[0.8rem] border border-[#f8717130] bg-[#f8717110] px-3 py-1.5 text-[9px] font-semibold text-[#fca5a5]"
+                      className="mt-1 rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[7px] font-semibold text-[#fca5a5]"
                     >
                       Limpar Tabela
                     </button>
                   </div>
 
-                  <div className="mt-5 border-t border-white/8 pt-5">
-                    <p className="mb-2 text-[8px] font-bold text-[#60a5fa]">Titulacao PEEP Decremental</p>
-                    <p className="mb-3 text-[9px] leading-relaxed text-white/30">VCV, Onda Quadrada | PEEP 25: reduzir -2 cmH₂O a cada 4min | PEEP ideal: melhor Cest + 2 cmH₂O.</p>
+                  <div className="mt-2 border-t border-white/8 pt-2">
+                    <p className="mb-1 text-[7px] font-bold text-[#60a5fa]">Titulacao PEEP Decremental</p>
+                    <p className="mb-1 text-[7px] leading-relaxed text-white/30">VCV, Onda Quadrada | PEEP 25: reduzir -2 cmH2O a cada 4min | PEEP ideal: melhor Cest + 2 cmH2O. DP = Pplato - PEEP (calculado automaticamente).</p>
                     <div className="overflow-x-auto">
                       <table className="w-full border-collapse text-[9px]">
                         <thead>
@@ -6043,7 +6043,7 @@ export function ProntuarioSystemPanel() {
                       if (bestTit?.peep) {
                         const peepIdeal = parseFloat(bestTit.peep) + 2
                         return (
-                          <div className="mt-2 rounded-[0.8rem] border border-[#4ade8030] bg-[#4ade8008] px-3 py-2 text-[8px] font-semibold text-[#4ade80]">
+                          <div className="mt-1 rounded-[0.5rem] border border-[#4ade8030] bg-[#4ade8008] px-2 py-1 text-[7px] font-semibold text-[#4ade80]">
                             PEEP Ideal: {peepIdeal} cmH₂O (melhor Cest {bestTit.cest} + 2)
                           </div>
                         )
@@ -6053,25 +6053,35 @@ export function ProntuarioSystemPanel() {
                     <button
                       type="button"
                       onClick={() => updateCurrentRecord((r) => ({ ...r, titTab: Array(10).fill(null).map(() => ({ pico: '', plato: '', peep: '', cest: '', si: '', sat: '', pam: '', best: false })) }))}
-                      className="mt-2 rounded-[0.8rem] border border-[#f8717130] bg-[#f8717110] px-3 py-1.5 text-[9px] font-semibold text-[#fca5a5]"
+                      className="mt-1 rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[7px] font-semibold text-[#fca5a5]"
                     >
                       Limpar Tabela
                     </button>
                   </div>
 
-                      <div className="mt-4 border-t border-white/8 pt-4">
-                        <div className="mb-2 flex items-center justify-between gap-2">
-                          <p className="text-[8px] font-bold text-[#a78bfa]">Recrutabilidade pulmonar</p>
+                      <div className="mt-2 border-t border-white/8 pt-2">
+                        <div className="mb-1 flex items-center justify-between gap-2">
+                          <p className="text-[7px] font-bold text-[#a78bfa]">Recrutabilidade pulmonar</p>
                           <button
                             type="button"
                             onClick={() => updateCurrentRecord((r) => ({ ...r, recVolInsp: '', recVolExp: '' }))}
-                            className="inline-flex items-center gap-1 rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] px-2 py-0.5 text-[9px] font-semibold text-[#fca5a5]"
+                            className="inline-flex items-center gap-1 rounded-[0.5rem] border border-[#f8717130] bg-[#f8717110] px-2 py-0.5 text-[7px] font-semibold text-[#fca5a5]"
                           >
                             <Trash2 className="h-2.5 w-2.5" />
                             Limpar
                           </button>
                         </div>
-                        <div className="grid gap-2 grid-cols-2 xl:grid-cols-4">
+                        {/* Protocolo P×V */}
+                        <div className="mb-1.5 rounded-[0.5rem] border border-white/6 bg-white/[0.02] p-1.5 space-y-0.5">
+                          <p className="text-[7px] font-semibold text-white/50">Protocolo de Execucao (Manobra PxV)</p>
+                          <p className="text-[6px] text-white/35">Iniciar: PEEP 5 cmH2O. Insuflacao progressiva ate 40 cmH2O (ou plato na curva). Pausa 2-3s no pico inspiratorio. Expiracao passiva completa. Medir Vol.Insp - Vol.Exp em 20 cmH2O.</p>
+                          <p className="text-[6px] text-white/30">Modo volume controlado, fluxo constante. Sedar adequadamente — evitar esforcos respiratorios durante a manobra.</p>
+                          <div className="mt-0.5 flex flex-wrap gap-0.5">
+                            <span className="rounded-full border border-[#4ade8030] bg-[#4ade8010] px-1.5 py-0.5 text-[6px] font-semibold text-[#4ade80]">Diferenca {'>'} 500mL: RECRUTAVEL (SDRA extrapulm. — sepse, pancreatite, politrauma)</span>
+                            <span className="rounded-full border border-[#f8717130] bg-[#f8717110] px-1.5 py-0.5 text-[6px] font-semibold text-[#f87171]">Diferenca {'<'} 500mL: POUCO RECRUTAVEL (SDRA pulm. — pneumonia, aspiracao, COVID)</span>
+                          </div>
+                        </div>
+                        <div className="grid gap-1 grid-cols-2 xl:grid-cols-4">
                           <FieldShell label="Vol. insp. (mL)">
                             <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.recVolInsp} onChange={(event) => setField('recVolInsp', event.target.value)} placeholder="1200" />
                           </FieldShell>
