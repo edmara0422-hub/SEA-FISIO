@@ -1661,7 +1661,7 @@ function TabAlerts({ alerts }: { alerts: Array<{ text: string; color: string; ac
         <div key={i} className="flex items-start gap-2 rounded-[0.6rem] border px-2 py-1" style={{ borderColor: `${a.color}20`, background: `${a.color}06` }}>
           <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: a.color }} />
           <div>
-            <p className="text-[9px] font-semibold" style={{ color: a.color }}>{a.text}</p>
+            <p className="text-[8px] font-semibold" style={{ color: a.color }}>{a.text}</p>
             {a.action && <p className="text-[8px] text-white/30">{a.action}</p>}
           </div>
         </div>
@@ -1701,7 +1701,7 @@ function MetricChip({
   return (
     <div className="rounded-[0.6rem] border border-white/10 bg-white/[0.04] px-2 py-1.5">
       <p className="text-[7px] uppercase tracking-[0.14em] text-white/38">{label}</p>
-      <p className="mt-0.5 text-[9px] font-semibold text-white/92" style={color ? { color } : undefined}>
+      <p className="mt-0.5 text-[8px] font-semibold text-white/92" style={color ? { color } : undefined}>
         {value}
       </p>
       {hint ? <p className="mt-0.5 text-[8px] leading-relaxed text-white/48">{hint}</p> : null}
@@ -1770,7 +1770,7 @@ function ProtoRow({ label, value, obs }: { label: string; value: string; obs?: s
     <div className="flex justify-between gap-2 border-b border-white/6 py-0.5 text-[8px]">
       <span className="flex-1 text-white/40">{label}</span>
       <span className="flex-1 text-center font-semibold text-white/86">{value}</span>
-      {obs ? <span className="flex-1 text-right text-[9px] text-white/30">{obs}</span> : null}
+      {obs ? <span className="flex-1 text-right text-[8px] text-white/30">{obs}</span> : null}
     </div>
   )
 }
@@ -2467,7 +2467,7 @@ export function ProntuarioSystemPanel() {
     <div className="rounded-[0.75rem] border border-white/10 bg-black/16 p-1.5">
       <p className="mb-1 text-[7px] font-semibold uppercase tracking-[0.12em] text-white/40">{icon} {label}</p>
       <select
-        className="w-full rounded-[0.4rem] border border-white/10 bg-black/22 px-1 py-0.5 text-[9px] text-white outline-none"
+        className="w-full rounded-[0.4rem] border border-white/10 bg-black/22 px-1 py-0.5 text-[8px] text-white outline-none"
         defaultValue=""
         onChange={(event) => {
           toggleStringArrayField(field, event.target.value)
@@ -3057,22 +3057,22 @@ export function ProntuarioSystemPanel() {
           <div className="flex items-center gap-1.5">
             {/* Sync status indicator */}
             {syncStatus === 'syncing' && (
-              <span className="flex items-center gap-1 rounded-full border border-[#60a5fa30] bg-[#60a5fa0a] px-2 py-0.5 text-[9px] font-semibold text-[#60a5fa]">
+              <span className="flex items-center gap-1 rounded-full border border-[#60a5fa30] bg-[#60a5fa0a] px-2 py-0.5 text-[8px] font-semibold text-[#60a5fa]">
                 <Loader2 className="h-2.5 w-2.5 animate-spin" />Sync
               </span>
             )}
             {syncStatus === 'saved' && (
-              <span className="flex items-center gap-1 rounded-full border border-[#4ade8030] bg-[#4ade800a] px-2 py-0.5 text-[9px] font-semibold text-[#4ade80]">
+              <span className="flex items-center gap-1 rounded-full border border-[#4ade8030] bg-[#4ade800a] px-2 py-0.5 text-[8px] font-semibold text-[#4ade80]">
                 <CheckCircle2 className="h-2.5 w-2.5" />Salvo
               </span>
             )}
             {syncStatus === 'offline' && (
-              <span className="flex items-center gap-1 rounded-full border border-[#facc1530] bg-[#facc150a] px-2 py-0.5 text-[9px] font-semibold text-[#facc15]">
+              <span className="flex items-center gap-1 rounded-full border border-[#facc1530] bg-[#facc150a] px-2 py-0.5 text-[8px] font-semibold text-[#facc15]">
                 <WifiOff className="h-2.5 w-2.5" />Offline
               </span>
             )}
             {syncStatus === 'error' && (
-              <span className="flex items-center gap-1 rounded-full border border-[#f8717130] bg-[#f871710a] px-2 py-0.5 text-[9px] font-semibold text-[#f87171]">
+              <span className="flex items-center gap-1 rounded-full border border-[#f8717130] bg-[#f871710a] px-2 py-0.5 text-[8px] font-semibold text-[#f87171]">
                 <Cloud className="h-2.5 w-2.5" />Erro
               </span>
             )}
@@ -3152,8 +3152,8 @@ export function ProntuarioSystemPanel() {
                       <Archive className="h-5 w-5 text-white/72" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-[9px] font-semibold text-white/88">{recordTitle(record)}</p>
-                      <p className="mt-1 text-[9px] text-white/58">{recordSubtitle(record)}</p>
+                      <p className="text-[8px] font-semibold text-white/88">{recordTitle(record)}</p>
+                      <p className="mt-1 text-[8px] text-white/58">{recordSubtitle(record)}</p>
                       <p className="mt-2 text-xs text-white/38">Arquivado em {formatDateTime(record.updatedAt)}</p>
                     </div>
                   </div>
@@ -3185,7 +3185,7 @@ export function ProntuarioSystemPanel() {
               ))
             ) : (
               <div className="chrome-panel rounded-[1.45rem] p-8 text-center">
-                <p className="text-[9px] text-white/56">Arquivo vazio.</p>
+                <p className="text-[8px] text-white/56">Arquivo vazio.</p>
               </div>
             )}
           </div>
@@ -3202,8 +3202,8 @@ export function ProntuarioSystemPanel() {
                   </button>
                   <div>
                     <p className="text-[8px] uppercase tracking-[0.14em] text-white/38">Leito {currentRecord.leito || '--'}</p>
-                    <h4 className="text-[9px] font-semibold text-white/92">{recordTitle(currentRecord)}</h4>
-                    <p className={`mt-0.5 text-[9px] ${compactTone(recordSubtitle(currentRecord))}`}>{recordSubtitle(currentRecord)}</p>
+                    <h4 className="text-[8px] font-semibold text-white/92">{recordTitle(currentRecord)}</h4>
+                    <p className={`mt-0.5 text-[8px] ${compactTone(recordSubtitle(currentRecord))}`}>{recordSubtitle(currentRecord)}</p>
                   </div>
                 </div>
 
@@ -3551,7 +3551,7 @@ export function ProntuarioSystemPanel() {
                             </div>
                           ))
                         ) : (
-                          <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
+                          <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[8px] text-white/46">
                             Nenhum exame laboratorial registrado.
                           </div>
                         )}
@@ -3637,7 +3637,7 @@ export function ProntuarioSystemPanel() {
                             </div>
                           ))
                         ) : (
-                          <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
+                          <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[8px] text-white/46">
                             Nenhum exame de imagem registrado.
                           </div>
                         )}
@@ -3832,10 +3832,10 @@ export function ProntuarioSystemPanel() {
                               </div>
                             </div>
                             {isSuspended && (
-                              <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>
+                              <p className="mt-1.5 text-[8px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>
                             )}
                             {analise ? (
-                              <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[9px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                              <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[8px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
                                 <p className="mb-1 font-semibold uppercase tracking-[0.12em]" style={{ color: analise.color }}>{analise.label}</p>
                                 <p className="mb-0.5 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
                                 <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
@@ -3845,7 +3845,7 @@ export function ProntuarioSystemPanel() {
                           )
                         })
                       ) : (
-                        <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
+                        <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[8px] text-white/46">
                           Nenhum sedativo em uso.
                         </div>
                       )}
@@ -3901,7 +3901,7 @@ export function ProntuarioSystemPanel() {
                             </div>
                             {isSuspended && <p className="mt-1 text-[8px] text-[#22d3ee]/70">Suspenso em {formatDateTime(item.suspensao!)}</p>}
                             {analise ? (
-                              <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[9px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                              <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[8px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
                                 <p className="mb-1 font-semibold uppercase tracking-[0.12em]" style={{ color: analise.color }}>{analise.label}</p>
                                 <p className="mb-0.5 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
                                 <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
@@ -3911,7 +3911,7 @@ export function ProntuarioSystemPanel() {
                           )
                         })
                       ) : (
-                        <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
+                        <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[8px] text-white/46">
                           Nenhum BNM em uso.
                         </div>
                       )}
@@ -3999,9 +3999,9 @@ export function ProntuarioSystemPanel() {
                               <button onClick={() => removeListItem('dvaList', index)} className="inline-flex h-7 w-7 items-center justify-center rounded-[0.6rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]"><Trash2 className="h-3 w-3" /></button>
                             </div>
                           </div>
-                          {isSuspended && <p className="mt-1.5 text-[9px] text-[#22d3ee]/70">Suspensa em {formatDateTime(item.suspensao!)}</p>}
+                          {isSuspended && <p className="mt-1.5 text-[8px] text-[#22d3ee]/70">Suspensa em {formatDateTime(item.suspensao!)}</p>}
                           {analise ? (
-                            <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[9px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
+                            <div className="mt-1.5 rounded-[0.5rem] border p-1.5 text-[8px] leading-relaxed" style={{ borderColor: `${analise.color}30`, background: `${analise.color}08` }}>
                               <p className="mb-1 font-semibold uppercase tracking-[0.12em]" style={{ color: analise.color }}>{analise.label}</p>
                               <p className="mb-1 text-white/72"><span className="font-semibold text-white/50">Indica: </span>{analise.indica}</p>
                               <p className="text-white/60"><span className="font-semibold text-white/50">Evolucao: </span>{analise.evolucao}</p>
@@ -4011,7 +4011,7 @@ export function ProntuarioSystemPanel() {
                         )
                       })
                     ) : (
-                      <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[9px] text-white/46">
+                      <div className="rounded-[0.7rem] border border-dashed border-white/10 bg-black/16 px-3 py-4 text-center text-[8px] text-white/46">
                         Nenhuma DVA registrada.
                       </div>
                     )}
@@ -4109,7 +4109,7 @@ export function ProntuarioSystemPanel() {
                         const active = hasTags(field).includes(tag)
                         return (
                           <button key={tag} type="button" onClick={() => toggleTag(field, tag)}
-                            className="rounded-full border px-2 py-0.5 text-[9px] font-semibold transition-all"
+                            className="rounded-full border px-2 py-0.5 text-[8px] font-semibold transition-all"
                             style={active
                               ? { borderColor: 'rgba(96,165,250,0.4)', background: 'rgba(96,165,250,0.15)', color: '#93c5fd' }
                               : { borderColor: 'rgba(255,255,255,0.10)', background: 'rgba(255,255,255,0.03)', color: 'rgba(255,255,255,0.45)' }
@@ -4312,7 +4312,7 @@ export function ProntuarioSystemPanel() {
                 {calculations?.gaso ? (
                   <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                     <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Analise gasometrica</p>
-                    <p className="text-[9px] font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
+                    <p className="text-[8px] font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
                     {calculations.gaso.wintersDetail ? (
                       <p className="mt-0.5 text-[8px] text-white/35">{calculations.gaso.wintersDetail}</p>
                     ) : null}
@@ -4389,7 +4389,7 @@ export function ProntuarioSystemPanel() {
                       {/* S/F — 2 colunas */}
                       {calculations?.sf ? (
                         <div>
-                          <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/44">
+                          <p className="mb-2 text-[8px] font-semibold uppercase tracking-[0.18em] text-white/44">
                             S/F <span className="text-white/70">{calculations.sf.toFixed(0)}</span>
                             <span className="ml-1.5 text-[8px] text-white/30">≈P/F {Math.round((calculations.sf - 64) / 0.84)}</span>
                           </p>
@@ -4444,9 +4444,9 @@ export function ProntuarioSystemPanel() {
                       if (!insights.length) return null
                       return (
                         <div className="mb-3 rounded-[1rem] border border-white/10 bg-black/22 p-3 space-y-1">
-                          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução gasométrica</p>
+                          <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução gasométrica</p>
                           {insights.map((ins, i) => (
-                            <p key={i} className="text-[9px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
+                            <p key={i} className="text-[8px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
                           ))}
                         </div>
                       )
@@ -4456,7 +4456,7 @@ export function ProntuarioSystemPanel() {
                         <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0 flex-1">
-                              <p className="text-[9px] font-semibold text-white/86">
+                              <p className="text-[8px] font-semibold text-white/86">
                                 {entry.data || '--'} {entry.hora || ''}
                                 {entry.analise ? <span className="ml-1 text-[8px]" style={{ color: gasoAnaliseColor(entry.analise) }}>{entry.analise}</span> : null}
                               </p>
@@ -4665,17 +4665,17 @@ export function ProntuarioSystemPanel() {
                       {(currentRecord.p01 || currentRecord.pocc) && (
                         <div className="mt-2 flex flex-wrap gap-1">
                           {calculations?.p01Interp && (
-                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[9px]" style={{ color: calculations.p01Interp.c }}>
+                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[8px]" style={{ color: calculations.p01Interp.c }}>
                               P0.1: {currentRecord.p01} — {calculations.p01Interp.t}
                             </span>
                           )}
                           {calculations?.poccInterp && (
-                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[9px]" style={{ color: calculations.poccInterp.c }}>
+                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[8px]" style={{ color: calculations.poccInterp.c }}>
                               Pocc: {currentRecord.pocc} — {calculations.poccInterp.t}
                             </span>
                           )}
                           {calculations?.pmusc != null && (
-                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[9px]" style={{ color: calculations.pmuscInterp?.c || '#60a5fa' }}>
+                            <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[8px]" style={{ color: calculations.pmuscInterp?.c || '#60a5fa' }}>
                               Pmusc: {calculations.pmusc.toFixed(1)} cmH₂O {calculations.pmuscInterp ? `— ${calculations.pmuscInterp.t}` : ''}
                             </span>
                           )}
@@ -5087,9 +5087,9 @@ export function ProntuarioSystemPanel() {
                       if (!insights.length) return null
                       return (
                         <div className="mb-3 rounded-[1rem] border border-white/10 bg-black/22 p-3 space-y-1">
-                          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução ventilatória</p>
+                          <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução ventilatória</p>
                           {insights.map((ins, i) => (
-                            <p key={i} className="text-[9px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
+                            <p key={i} className="text-[8px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
                           ))}
                         </div>
                       )
@@ -5134,7 +5134,7 @@ export function ProntuarioSystemPanel() {
                           <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0 flex-1">
-                                <p className="text-[9px] font-semibold text-white/86">
+                                <p className="text-[8px] font-semibold text-white/86">
                                   {entry.modo || 'Sem modo'} · {formatDateTime(entry.ts)}
                                 </p>
                                 <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
@@ -5226,7 +5226,7 @@ export function ProntuarioSystemPanel() {
                     <button
                       type="button"
                       onClick={() => updateCurrentRecord((r) => ({ ...r, curvaPxT: [], curvaFxT: [], curvaVxT: [], loopPV: [], loopFV: [], assincronia: [] }))}
-                      className="inline-flex items-center gap-1 rounded-[0.7rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[9px] font-semibold text-[#fca5a5]"
+                      className="inline-flex items-center gap-1 rounded-[0.7rem] border border-[#f8717130] bg-[#f8717110] px-2 py-1 text-[8px] font-semibold text-[#fca5a5]"
                     >
                       <Trash2 className="h-2.5 w-2.5" />
                       Limpar
@@ -5449,15 +5449,15 @@ export function ProntuarioSystemPanel() {
 
                       {currentRecord.desmHist?.length ? (
                         <div className="mt-3">
-                          <p className="mb-1.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/36">Historico · {currentRecord.desmHist.length}</p>
+                          <p className="mb-1.5 text-[8px] font-semibold uppercase tracking-[0.18em] text-white/36">Historico · {currentRecord.desmHist.length}</p>
                           <div className="space-y-1.5">
                             {currentRecord.desmHist.map((entry, i) => (
                               <div key={`desm-${i}`} className="rounded-[0.8rem] border border-white/10 bg-black/18 p-2.5">
                                 <div className="flex items-start justify-between gap-2">
                                   <div className="min-w-0 flex-1">
-                                    <p className="text-[9px] text-white/40">{formatDateTime(entry.ts)}</p>
+                                    <p className="text-[8px] text-white/40">{formatDateTime(entry.ts)}</p>
                                     <p className="mt-0.5 text-[8px] text-white/60">PImax {entry.pimax || '--'} · PEmax {entry.pemax || '--'} · VC {entry.vc || '--'} · FR {entry.fr || '--'} · RSBI {entry.rsbi || '--'}</p>
-                                    {entry.analise ? <p className="mt-0.5 text-[9px] font-semibold" style={{ color: calculations?.weanSummary?.color || '#60a5fa' }}>{entry.analise}</p> : null}
+                                    {entry.analise ? <p className="mt-0.5 text-[8px] font-semibold" style={{ color: calculations?.weanSummary?.color || '#60a5fa' }}>{entry.analise}</p> : null}
                                   </div>
                                   <button onClick={() => deleteDesmame(i)} className="flex h-5 w-5 shrink-0 items-center justify-center rounded-[0.4rem] border border-[#f8717130] bg-[#f8717110] text-[#fca5a5]">
                                     <Trash2 className="h-2.5 w-2.5" />
@@ -5586,32 +5586,32 @@ export function ProntuarioSystemPanel() {
                       <div className="mb-3 flex items-center justify-center gap-2 flex-wrap">
                         <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Parametros de Desmame</p>
                         {treActive && currentRecord.treDt ? (
-                          <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: corDesm, borderColor: `${corDesm}30`, background: `${corDesm}12` }}>
+                          <span className="rounded-full border px-2 py-0.5 text-[8px] font-bold" style={{ color: corDesm, borderColor: `${corDesm}30`, background: `${corDesm}12` }}>
                             {tipoDesmame}
                           </span>
                         ) : null}
                         {activePhase === 3 && psvTRE && !treActive && (
-                          <span className="rounded-full border border-[#60a5fa40] bg-[#60a5fa12] px-2 py-0.5 text-[9px] font-bold text-[#60a5fa]">
+                          <span className="rounded-full border border-[#60a5fa40] bg-[#60a5fa12] px-2 py-0.5 text-[8px] font-bold text-[#60a5fa]">
                             PS ≤ 7 — TRE detectado
                           </span>
                         )}
                         {activePhase === 2 && psvLow && !psvTRE && (
-                          <span className="rounded-full border border-[#facc1540] bg-[#facc1512] px-2 py-0.5 text-[9px] font-bold text-[#facc15]">
+                          <span className="rounded-full border border-[#facc1540] bg-[#facc1512] px-2 py-0.5 text-[8px] font-bold text-[#facc15]">
                             PS baixa — avaliar TRE
                           </span>
                         )}
                         {activePhase === 2 && suggestTRE && (
-                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
+                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[8px] font-bold text-[#4ade80]">
                             ✓ Pronto para TRE
                           </span>
                         )}
                         {activePhase === 4 && extFromEvent && (
-                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
+                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[8px] font-bold text-[#4ade80]">
                             ✓ Extubado
                           </span>
                         )}
                         {activePhase === 4 && descFromEvent && (
-                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[9px] font-bold text-[#4ade80]">
+                          <span className="rounded-full border border-[#4ade8040] bg-[#4ade8012] px-2 py-0.5 text-[8px] font-bold text-[#4ade80]">
                             ✓ Desconectado VM
                           </span>
                         )}
@@ -5620,8 +5620,8 @@ export function ProntuarioSystemPanel() {
                       {/* Eligibility checklist */}
                       <div className="mb-3 rounded-[1rem] border border-white/8 bg-black/20 p-2.5">
                         <div className="mb-2 flex items-center justify-between">
-                          <p className="text-[9px] font-semibold uppercase tracking-[0.16em] text-white/36">Elegibilidade automatica</p>
-                          <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{
+                          <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-white/36">Elegibilidade automatica</p>
+                          <span className="rounded-full border px-2 py-0.5 text-[8px] font-bold" style={{
                             color: allMet ? '#4ade80' : metCount >= totalAssessed * 0.7 ? '#facc15' : '#f87171',
                             borderColor: allMet ? '#4ade8030' : metCount >= totalAssessed * 0.7 ? '#facc1530' : '#f8717130',
                             background: allMet ? '#4ade8010' : metCount >= totalAssessed * 0.7 ? '#facc1510' : '#f8717110',
@@ -5634,7 +5634,7 @@ export function ProntuarioSystemPanel() {
                             <div key={ei} className="flex items-start gap-1.5">
                               <span className="mt-0.5 text-[8px]">{e.met === true ? '✅' : e.met === false ? '❌' : '⬜'}</span>
                               <div className="min-w-0">
-                                <p className="text-[9px] font-semibold" style={{ color: e.met === true ? 'rgba(74,222,128,0.8)' : e.met === false ? 'rgba(248,113,113,0.8)' : 'rgba(255,255,255,0.35)' }}>{e.label}</p>
+                                <p className="text-[8px] font-semibold" style={{ color: e.met === true ? 'rgba(74,222,128,0.8)' : e.met === false ? 'rgba(248,113,113,0.8)' : 'rgba(255,255,255,0.35)' }}>{e.label}</p>
                                 <p className="text-[8px] text-white/30">{e.detail}</p>
                               </div>
                             </div>
@@ -5685,7 +5685,7 @@ export function ProntuarioSystemPanel() {
                           </select>
                         </div>
 
-                        <div className="text-[9px]">
+                        <div className="text-[8px]">
                           <AutoGrowTextarea value={currentRecord.weanObs} onChange={(value) => setField('weanObs', value)} placeholder="Obs desmame..." />
                         </div>
                       </div>
@@ -5727,7 +5727,7 @@ export function ProntuarioSystemPanel() {
                                   {done ? '✓ ' : ''}{label}
                                 </span>
                               )}
-                              {p < 4 ? <span className="text-[9px] text-white/18">→</span> : null}
+                              {p < 4 ? <span className="text-[8px] text-white/18">→</span> : null}
                             </div>
                           )
                         })}
@@ -5780,7 +5780,7 @@ export function ProntuarioSystemPanel() {
                       {/* Extubation result */}
                       {(isTOT || wasOnVM) && extActive && (
                         <div className="mb-3">
-                          <p className="mb-1 text-[9px] text-white/36">Resultado da Extubacao</p>
+                          <p className="mb-1 text-[8px] text-white/36">Resultado da Extubacao</p>
                           <div className="flex gap-2">
                             {(['Sucesso', 'Falha'] as const).map((opt) => (
                               <button key={opt} type="button" onClick={() => setField('extResult', currentRecord.extResult === opt ? '' : opt)}
@@ -5796,7 +5796,7 @@ export function ProntuarioSystemPanel() {
                       {/* Disconnection result */}
                       {(isTQT || currentRecord.dataTQT) && descActive && (
                         <div className="mb-3">
-                          <p className="mb-1 text-[9px] text-white/36">Resultado da Desconexao</p>
+                          <p className="mb-1 text-[8px] text-white/36">Resultado da Desconexao</p>
                           <div className="flex gap-2">
                             {(['Sucesso', 'Falha'] as const).map((opt) => (
                               <button key={opt} type="button" onClick={() => setField('descResult', currentRecord.descResult === opt ? '' : opt)}
@@ -5965,7 +5965,7 @@ export function ProntuarioSystemPanel() {
                         <p className="mb-1 text-[7px] font-bold text-[#fb923c]">Manobra de Recrutamento</p>
                         <p className="mb-1 text-[7px] leading-relaxed text-white/30">FiO2 100%, FR 10, DP 15 cmH2O | PCV: PEEP +5 a cada 2min ate 25-45 cmH2O | Apos: PEEP 25, calcular Cest, iniciar titulacao decremental. DP = Pplato - PEEP (calculado automaticamente).</p>
                     <div className="overflow-x-auto">
-                      <table className="w-full border-collapse text-[9px]">
+                      <table className="w-full border-collapse text-[8px]">
                         <thead>
                           <tr className="bg-white/4">
                             {['PLATO','PEEP','ΔP','CEST','SAT','PAM','★'].map((h) => (
@@ -5979,14 +5979,14 @@ export function ProntuarioSystemPanel() {
                             const dp = (!isNaN(plato) && !isNaN(peep)) ? (plato - peep).toFixed(0) : ''
                             return (
                               <tr key={ri} style={row.best ? { background: 'rgba(74,222,128,0.08)' } : {}}>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.plato} onChange={(e) => setMraField(ri, 'plato', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.peep} onChange={(e) => setMraField(ri, 'peep', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.plato} onChange={(e) => setMraField(ri, 'plato', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.peep} onChange={(e) => setMraField(ri, 'peep', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-1 py-0.5 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.cest} onChange={(e) => setMraField(ri, 'cest', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setMraField(ri, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setMraField(ri, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.cest} onChange={(e) => setMraField(ri, 'cest', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setMraField(ri, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setMraField(ri, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-1 py-0.5 text-center">
-                                  <button type="button" onClick={() => toggleMraBest(ri)} className="text-[9px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                  <button type="button" onClick={() => toggleMraBest(ri)} className="text-[8px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
                                 </td>
                               </tr>
                             )
@@ -6007,7 +6007,7 @@ export function ProntuarioSystemPanel() {
                     <p className="mb-1 text-[7px] font-bold text-[#60a5fa]">Titulacao PEEP Decremental</p>
                     <p className="mb-1 text-[7px] leading-relaxed text-white/30">VCV, Onda Quadrada | PEEP 25: reduzir -2 cmH2O a cada 4min | PEEP ideal: melhor Cest + 2 cmH2O. DP = Pplato - PEEP (calculado automaticamente).</p>
                     <div className="overflow-x-auto">
-                      <table className="w-full border-collapse text-[9px]">
+                      <table className="w-full border-collapse text-[8px]">
                         <thead>
                           <tr className="bg-white/4">
                             {['PICO','PLATO','PEEP','ΔP','CEST','SI','SAT','PAM','★'].map((h) => (
@@ -6021,16 +6021,16 @@ export function ProntuarioSystemPanel() {
                             const dp = (!isNaN(plato) && !isNaN(peep)) ? (plato - peep).toFixed(0) : ''
                             return (
                               <tr key={ti} style={row.best ? { background: 'rgba(74,222,128,0.08)' } : {}}>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pico} onChange={(e) => setTitField(ti, 'pico', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.plato} onChange={(e) => setTitField(ti, 'plato', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.peep} onChange={(e) => setTitField(ti, 'peep', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pico} onChange={(e) => setTitField(ti, 'pico', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.plato} onChange={(e) => setTitField(ti, 'plato', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.peep} onChange={(e) => setTitField(ti, 'peep', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-1 py-0.5 text-center font-semibold" style={{ color: dp && parseFloat(dp) > 15 ? '#f87171' : '#4ade80' }}>{dp || ''}</td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.cest} onChange={(e) => setTitField(ti, 'cest', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="text" value={row.si} onChange={(e) => setTitField(ti, 'si', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="=1" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setTitField(ti, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
-                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setTitField(ti, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.cest} onChange={(e) => setTitField(ti, 'cest', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="text" value={row.si} onChange={(e) => setTitField(ti, 'si', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="=1" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setTitField(ti, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
+                                <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setTitField(ti, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[8px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-1 py-0.5 text-center">
-                                  <button type="button" onClick={() => toggleTitBest(ti)} className="text-[9px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                  <button type="button" onClick={() => toggleTitBest(ti)} className="text-[8px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
                                 </td>
                               </tr>
                             )
@@ -6125,12 +6125,12 @@ export function ProntuarioSystemPanel() {
                     <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">MRC</p>
                     <div className="flex items-center gap-2">
                       {calculations?.mrc && (
-                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.mrc.color, borderColor: `${calculations.mrc.color}30`, background: `${calculations.mrc.color}12` }}>
+                        <span className="rounded-full border px-2 py-0.5 text-[8px] font-bold" style={{ color: calculations.mrc.color, borderColor: `${calculations.mrc.color}30`, background: `${calculations.mrc.color}12` }}>
                           {calculations.mrc.total}/60 · {calculations.mrc.text}
                         </span>
                       )}
                       {calculations?.mrc && (
-                        <button type="button" onClick={saveMrc} title="Salvar avaliacao MRC" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[9px] font-semibold text-white/50 hover:text-white/80">
+                        <button type="button" onClick={saveMrc} title="Salvar avaliacao MRC" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[8px] font-semibold text-white/50 hover:text-white/80">
                           <Save className="h-2.5 w-2.5" />Salvar
                         </button>
                       )}
@@ -6139,16 +6139,16 @@ export function ProntuarioSystemPanel() {
                   <div className="space-y-1.5">
                     {MRC_GROUPS.map((group) => (
                       <div key={group.label} className="grid items-center gap-2 grid-cols-[1fr_auto_auto]">
-                        <p className="text-[9px] text-white/65">{group.label}</p>
+                        <p className="text-[8px] text-white/65">{group.label}</p>
                         <div className="flex items-center gap-1">
-                          <span className="text-[9px] text-white/36 w-4 text-center">D</span>
+                          <span className="text-[8px] text-white/36 w-4 text-center">D</span>
                           <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord[group.right]} onChange={(event) => setField(group.right, event.target.value)}>
                             <option value="">-</option>
                             {['0', '1', '2', '3', '4', '5'].map((v) => <option key={v} value={v}>{v}</option>)}
                           </select>
                         </div>
                         <div className="flex items-center gap-1">
-                          <span className="text-[9px] text-white/36 w-4 text-center">E</span>
+                          <span className="text-[8px] text-white/36 w-4 text-center">E</span>
                           <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord[group.left]} onChange={(event) => setField(group.left, event.target.value)}>
                             <option value="">-</option>
                             {['0', '1', '2', '3', '4', '5'].map((v) => <option key={v} value={v}>{v}</option>)}
@@ -6159,19 +6159,19 @@ export function ProntuarioSystemPanel() {
                   </div>
                   {(currentRecord.mrcHist?.length ?? 0) > 0 && (
                     <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2.5">
-                      <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico MRC</p>
+                      <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico MRC</p>
                       {currentRecord.mrcHist!.map((entry, i) => {
                         const prev = currentRecord.mrcHist![i + 1]
                         const diff = prev != null ? entry.total - prev.total : null
                         return (
                           <div key={`mrc-h-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/8 bg-black/15 px-2.5 py-1.5">
                             <div className="flex items-center gap-2">
-                              <span className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</span>
-                              <span className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold" style={{ color: entry.total >= 48 ? '#4ade80' : entry.total >= 36 ? '#facc15' : '#f87171', borderColor: entry.total >= 48 ? '#4ade8030' : entry.total >= 36 ? '#facc1530' : '#f8717130', background: entry.total >= 48 ? '#4ade8010' : entry.total >= 36 ? '#facc1510' : '#f8717110' }}>
+                              <span className="text-[8px] text-white/36">{formatDateTime(entry.ts)}</span>
+                              <span className="rounded-full border px-1.5 py-0.5 text-[8px] font-bold" style={{ color: entry.total >= 48 ? '#4ade80' : entry.total >= 36 ? '#facc15' : '#f87171', borderColor: entry.total >= 48 ? '#4ade8030' : entry.total >= 36 ? '#facc1530' : '#f8717130', background: entry.total >= 48 ? '#4ade8010' : entry.total >= 36 ? '#facc1510' : '#f8717110' }}>
                                 {entry.total}/60
                               </span>
                               {diff !== null && (
-                                <span className={`text-[9px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
+                                <span className={`text-[8px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
                                   {diff > 0 ? `+${diff}` : diff}
                                 </span>
                               )}
@@ -6191,12 +6191,12 @@ export function ProntuarioSystemPanel() {
                     <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">PERME</p>
                     <div className="flex items-center gap-2">
                       {calculations?.perme && (
-                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.perme.color, borderColor: `${calculations.perme.color}30`, background: `${calculations.perme.color}12` }}>
+                        <span className="rounded-full border px-2 py-0.5 text-[8px] font-bold" style={{ color: calculations.perme.color, borderColor: `${calculations.perme.color}30`, background: `${calculations.perme.color}12` }}>
                           {calculations.perme.total}/21 · {calculations.perme.text}
                         </span>
                       )}
                       {calculations?.perme && (
-                        <button type="button" onClick={savePerme} title="Salvar avaliacao PERME" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[9px] font-semibold text-white/50 hover:text-white/80">
+                        <button type="button" onClick={savePerme} title="Salvar avaliacao PERME" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[8px] font-semibold text-white/50 hover:text-white/80">
                           <Save className="h-2.5 w-2.5" />Salvar
                         </button>
                       )}
@@ -6215,19 +6215,19 @@ export function ProntuarioSystemPanel() {
                   </div>
                   {(currentRecord.permeHist?.length ?? 0) > 0 && (
                     <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2.5">
-                      <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico PERME</p>
+                      <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico PERME</p>
                       {currentRecord.permeHist!.map((entry, i) => {
                         const prev = currentRecord.permeHist![i + 1]
                         const diff = prev != null ? entry.total - prev.total : null
                         return (
                           <div key={`perme-h-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/8 bg-black/15 px-2.5 py-1.5">
                             <div className="flex items-center gap-2">
-                              <span className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</span>
-                              <span className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold" style={{ color: entry.total >= 15 ? '#4ade80' : entry.total >= 8 ? '#facc15' : '#f87171', borderColor: entry.total >= 15 ? '#4ade8030' : entry.total >= 8 ? '#facc1530' : '#f8717130', background: entry.total >= 15 ? '#4ade8010' : entry.total >= 8 ? '#facc1510' : '#f8717110' }}>
+                              <span className="text-[8px] text-white/36">{formatDateTime(entry.ts)}</span>
+                              <span className="rounded-full border px-1.5 py-0.5 text-[8px] font-bold" style={{ color: entry.total >= 15 ? '#4ade80' : entry.total >= 8 ? '#facc15' : '#f87171', borderColor: entry.total >= 15 ? '#4ade8030' : entry.total >= 8 ? '#facc1530' : '#f8717130', background: entry.total >= 15 ? '#4ade8010' : entry.total >= 8 ? '#facc1510' : '#f8717110' }}>
                                 {entry.total}/21
                               </span>
                               {diff !== null && (
-                                <span className={`text-[9px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
+                                <span className={`text-[8px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
                                   {diff > 0 ? `+${diff}` : diff}
                                 </span>
                               )}
@@ -6247,12 +6247,12 @@ export function ProntuarioSystemPanel() {
                     <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">IMS</p>
                     <div className="flex items-center gap-2">
                       {calculations?.ims && (
-                        <span className="rounded-full border px-2 py-0.5 text-[9px] font-bold" style={{ color: calculations.ims.color, borderColor: `${calculations.ims.color}30`, background: `${calculations.ims.color}12` }}>
+                        <span className="rounded-full border px-2 py-0.5 text-[8px] font-bold" style={{ color: calculations.ims.color, borderColor: `${calculations.ims.color}30`, background: `${calculations.ims.color}12` }}>
                           {calculations.ims.value}/10 · {calculations.ims.text}
                         </span>
                       )}
                       {currentRecord.imsScore && (
-                        <button type="button" onClick={saveIms} title="Salvar avaliacao IMS" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[9px] font-semibold text-white/50 hover:text-white/80">
+                        <button type="button" onClick={saveIms} title="Salvar avaliacao IMS" className="flex items-center gap-1 rounded-[0.6rem] border border-white/12 bg-white/5 px-2 py-0.5 text-[8px] font-semibold text-white/50 hover:text-white/80">
                           <Save className="h-2.5 w-2.5" />Salvar
                         </button>
                       )}
@@ -6267,7 +6267,7 @@ export function ProntuarioSystemPanel() {
                   </FieldShell>
                   {(currentRecord.imsHist?.length ?? 0) > 0 && (
                     <div className="mt-3 space-y-1.5 border-t border-white/8 pt-2.5">
-                      <p className="mb-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico IMS</p>
+                      <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.18em] text-white/30">Historico IMS</p>
                       {currentRecord.imsHist!.map((entry, i) => {
                         const prev = currentRecord.imsHist![i + 1]
                         const score = parseInt(entry.score)
@@ -6275,12 +6275,12 @@ export function ProntuarioSystemPanel() {
                         return (
                           <div key={`ims-h-${i}`} className="flex items-center justify-between gap-2 rounded-[0.8rem] border border-white/8 bg-black/15 px-2.5 py-1.5">
                             <div className="flex items-center gap-2">
-                              <span className="text-[9px] text-white/36">{formatDateTime(entry.ts)}</span>
-                              <span className="rounded-full border px-1.5 py-0.5 text-[9px] font-bold" style={{ color: score >= 7 ? '#4ade80' : score >= 4 ? '#facc15' : '#f87171', borderColor: score >= 7 ? '#4ade8030' : score >= 4 ? '#facc1530' : '#f8717130', background: score >= 7 ? '#4ade8010' : score >= 4 ? '#facc1510' : '#f8717110' }}>
+                              <span className="text-[8px] text-white/36">{formatDateTime(entry.ts)}</span>
+                              <span className="rounded-full border px-1.5 py-0.5 text-[8px] font-bold" style={{ color: score >= 7 ? '#4ade80' : score >= 4 ? '#facc15' : '#f87171', borderColor: score >= 7 ? '#4ade8030' : score >= 4 ? '#facc1530' : '#f8717130', background: score >= 7 ? '#4ade8010' : score >= 4 ? '#facc1510' : '#f8717110' }}>
                                 IMS {entry.score}/10
                               </span>
                               {diff !== null && (
-                                <span className={`text-[9px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
+                                <span className={`text-[8px] font-semibold ${diff > 0 ? 'text-[#4ade80]' : diff < 0 ? 'text-[#f87171]' : 'text-white/36'}`}>
                                   {diff > 0 ? `+${diff}` : diff}
                                 </span>
                               )}
@@ -6385,7 +6385,7 @@ export function ProntuarioSystemPanel() {
                       {record.leito ? (
                         <>
                           <span className="text-[7px] uppercase tracking-[0.12em] text-white/38">Lt</span>
-                          <span className="text-[9px] font-bold leading-none text-white/82">{record.leito}</span>
+                          <span className="text-[8px] font-bold leading-none text-white/82">{record.leito}</span>
                         </>
                       ) : (
                         <FileText className="h-3.5 w-3.5 text-white/52" />
@@ -6394,7 +6394,7 @@ export function ProntuarioSystemPanel() {
 
                     {/* Nome + diagnóstico */}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[9px] font-semibold text-white/90">{recordTitle(record)}</p>
+                      <p className="truncate text-[8px] font-semibold text-white/90">{recordTitle(record)}</p>
                       <p className="truncate text-[8px] text-white/48">{recordSubtitle(record)}</p>
                     </div>
 
@@ -6451,14 +6451,14 @@ export function ProntuarioSystemPanel() {
                         disabled={idx === 0}
                         className="flex h-5 w-7 items-center justify-center rounded-[0.4rem] border border-white/10 bg-black/18 text-white/42 disabled:opacity-20 hover:text-white/70"
                       >
-                        <span className="text-[9px] leading-none">↑</span>
+                        <span className="text-[8px] leading-none">↑</span>
                       </button>
                       <button
                         onClick={() => moveRecord(record.id, 'down')}
                         disabled={idx === records.length - 1}
                         className="flex h-5 w-7 items-center justify-center rounded-[0.4rem] border border-white/10 bg-black/18 text-white/42 disabled:opacity-20 hover:text-white/70"
                       >
-                        <span className="text-[9px] leading-none">↓</span>
+                        <span className="text-[8px] leading-none">↓</span>
                       </button>
                     </div>
                   </div>
@@ -6466,7 +6466,7 @@ export function ProntuarioSystemPanel() {
               })
             ) : (
               <div className="chrome-panel rounded-[1rem] p-4 text-center">
-                <p className="text-[9px] text-white/58">Nenhum paciente ativo.</p>
+                <p className="text-[8px] text-white/58">Nenhum paciente ativo.</p>
                 <p className="mt-2 text-xs text-white/38">
                   Use <span className="text-white/68">Adicionar</span> para abrir um novo prontuario ICU.
                 </p>
