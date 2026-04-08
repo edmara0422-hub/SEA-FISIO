@@ -652,8 +652,9 @@ function analyzeNeuroAlerts(record: ICURecord, calculations: Record<string, unkn
   const sedAtivosCheck = record.sedativos?.filter(s => !s.suspensao && s.droga) || []
   const temSedativoAtivo = sedAtivosCheck.length > 0
 
-  // Glasgow baixo — diferenciar sedação vs lesão
-  if (glasgow && typeof glasgow.total === 'number' && glasgow.total <= 10) {
+  // Glasgow baixo — diferenciar sedação vs lesão (só se O, V, M preenchidos)
+  const glasgowPreenchido = record.glasgowO && record.glasgowM && record.glasgowV
+  if (glasgowPreenchido && glasgow && typeof glasgow.total === 'number' && glasgow.total <= 10) {
     if (temSedativoAtivo && rass < 0) {
       // Sedado — Glasgow baixo é ESPERADO
       alerts.push({ text: `Glasgow ${glasgow.total} com sedacao ativa (${sedAtivosCheck.map(s => s.droga).join(', ')}). Rebaixamento ESPERADO por sedacao — NAO indica lesao neurologica. Para avaliacao real: realizar janela de sedacao (SAT) e reavaliar Glasgow apos 30-60min sem sedativo.`, color: '#60a5fa' })
@@ -663,8 +664,8 @@ function analyzeNeuroAlerts(record: ICURecord, calculations: Record<string, unkn
     }
   }
 
-  // RASS profundo sem sedativo
-  if (rass <= -3 && !temSedativoAtivo) {
+  // RASS profundo sem sedativo — só se RASS preenchido
+  if (record.rass && rass <= -3 && !temSedativoAtivo) {
     alerts.push({ text: `⚠ RASS ${record.rass} sem sedativos ativos. Rebaixamento nao farmacologico. Investigar: AVC, hemorragia intracraniana, crise convulsiva, disturbio metabolico grave (Na+, glicemia, ureia), sepse com encefalopatia.`, color: '#f87171' })
   }
 
@@ -679,21 +680,6 @@ function analyzeNeuroAlerts(record: ICURecord, calculations: Record<string, unkn
     alerts.push({ text: '⚠ BNM ativo SEM monitorização TOF. Risco de bloqueio excessivo e ICUAW. TOF deve ser medido a cada 4h (meta 1-2/4).', color: '#f87171' })
   }
 
-  // Pupilas + Glasgow cruzamento — pupila fixa é sempre alarmante, independente de sedação
-  if (record.pupilaDReag === 'fixa' || record.pupilaEReag === 'fixa') {
-    if (glasgow && typeof glasgow.total === 'number' && glasgow.total <= 8) {
-      if (temSedativoAtivo) {
-        alerts.push({ text: '⚠ ATENCAO: Pupila fixa detectada em paciente sedado com Glasgow <= 8. Sedacao NAO causa pupila fixa. Investigar herniacao mesmo sob sedacao. TC de cranio URGENTE. Se confirmada: elevar cabeceira 30°, manitol ou salina hipertonica, acionar neurocirurgia.', color: '#f87171' })
-      } else {
-        alerts.push({ text: '⚠ EMERGENCIA: Glasgow <= 8 + pupila fixa SEM sedacao. Alta suspeita de herniacao cerebral. Elevar cabeceira 30°, manitol ou salina hipertonica, TC de cranio URGENTE, acionar neurocirurgia.', color: '#f87171' })
-      }
-    }
-  }
-
-  // Convulsão ativa
-  if (record.convulsao === 'sim') {
-    alerts.push({ text: '⚠ CONVULSAO registrada. Protocolo: benzodiazepínico IV (midazolam/diazepam), proteger vias aereas, monitorar SpO2. Se refrataria (>5min): fenitoina IV. Solicitar EEG e investigar causa (metabolica, estrutural, medicamentosa).', color: '#f87171' })
-  }
 
   return alerts
 }
