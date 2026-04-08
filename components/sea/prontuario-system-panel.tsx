@@ -4280,7 +4280,7 @@ export function ProntuarioSystemPanel() {
                     </FieldShell>
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-2">
                     <FieldShell label="Obs. gasometricas">
                       <AutoGrowTextarea
                         value={currentRecord.gasoObs}
@@ -4482,7 +4482,7 @@ export function ProntuarioSystemPanel() {
                   <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
                     Ventilacao mecanica
                   </p>
-                  <div className="grid gap-2 grid-cols-3 xl:grid-cols-6">
+                  <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                     <FieldShell label="Modo ventilatorio" span="xl:col-span-2">
                       <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.modoVM} onChange={(event) => setField('modoVM', event.target.value)}>
                         {VM_OPTIONS.map((option) => (
@@ -4496,8 +4496,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── VCV / PRVC ── */}
                   {(currentRecord.modoVM === 'VCV' || currentRecord.modoVM === 'PRVC') && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="VT (mL)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.vt} onChange={(e) => setField('vt', e.target.value)} placeholder="450" />
                         </FieldShell>
@@ -4517,7 +4517,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="Fluxo (L/min)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.fluxo} onChange={(e) => setField('fluxo', e.target.value)} placeholder="60" />
                         </FieldShell>
@@ -4537,7 +4537,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.pplato} onChange={(e) => setField('pplato', e.target.value)} placeholder="25" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="P. Mean">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.pmean} onChange={(e) => setField('pmean', e.target.value)} placeholder="12" />
                         </FieldShell>
@@ -4568,8 +4568,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── PCV ── */}
                   {currentRecord.modoVM === 'PCV' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="PC (cmH2O)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="20" />
                         </FieldShell>
@@ -4589,7 +4589,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="Trigger">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.trigger} onChange={(e) => setField('trigger', e.target.value)} placeholder="-2" />
                         </FieldShell>
@@ -4617,8 +4617,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── PSV ── */}
                   {currentRecord.modoVM === 'PSV' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="PS (cmH2O)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ps} onChange={(e) => setField('ps', e.target.value)} placeholder="10" />
                         </FieldShell>
@@ -4638,7 +4638,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="40" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="Trigger">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.trigger} onChange={(e) => setField('trigger', e.target.value)} placeholder="-2" />
                         </FieldShell>
@@ -4663,7 +4663,7 @@ export function ProntuarioSystemPanel() {
                       </div>
                       {/* Drive respiratório — cálculo automático */}
                       {(currentRecord.p01 || currentRecord.pocc) && (
-                        <div className="mt-2 flex flex-wrap gap-2">
+                        <div className="mt-2 flex flex-wrap gap-1">
                           {calculations?.p01Interp && (
                             <span className="rounded-full border border-white/8 bg-white/[0.03] px-2.5 py-0.5 text-[9px]" style={{ color: calculations.p01Interp.c }}>
                               P0.1: {currentRecord.p01} — {calculations.p01Interp.t}
@@ -4686,7 +4686,7 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── Tubo-T ── */}
                   {currentRecord.modoVM === 'TuboT' && (
-                    <div className="mt-4">
+                    <div className="mt-2">
                       <FieldShell label="Observacoes Tubo-T" span="col-span-full">
                         <AutoGrowTextarea value={currentRecord.vmObs ?? ''} onChange={(v) => setField('vmObs', v)} placeholder="Tempo, tolerancia, SatO2, FR..." />
                       </FieldShell>
@@ -4695,8 +4695,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── CPAP ── */}
                   {currentRecord.modoVM === 'CPAP' && (
-                    <div className="mt-4">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                    <div className="mt-2">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="CPAP / PEEP">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.peep} onChange={(e) => setField('peep', e.target.value)} placeholder="8" />
                         </FieldShell>
@@ -4718,8 +4718,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── BIPAP ── */}
                   {currentRecord.modoVM === 'BIPAP' && (
-                    <div className="mt-4">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                    <div className="mt-2">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="IPAP">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ipap} onChange={(e) => setField('ipap', e.target.value)} placeholder="15" />
                         </FieldShell>
@@ -4744,8 +4744,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── APRV ── */}
                   {currentRecord.modoVM === 'APRV' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-5">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-5">
                         <FieldShell label="P-High (cmH2O)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="28" />
                         </FieldShell>
@@ -4762,7 +4762,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.fio2} onChange={(e) => setField('fio2', e.target.value)} placeholder="60" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="VC (mL)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
@@ -4784,8 +4784,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── VS / ASV / IntelliVENT ── */}
                   {(currentRecord.modoVM === 'VS' || currentRecord.modoVM === 'ASV' || currentRecord.modoVM === 'IntelliVENT') && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-5">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-5">
                         <FieldShell label="VC (mL)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
@@ -4802,7 +4802,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.trigger} onChange={(e) => setField('trigger', e.target.value)} placeholder="-2" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="TI (s)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ti} onChange={(e) => setField('ti', e.target.value)} placeholder="0.8" />
                         </FieldShell>
@@ -4821,8 +4821,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── SmartCare/PS ── */}
                   {currentRecord.modoVM === 'SmartCare' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="VC (mL)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
@@ -4850,8 +4850,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── PAV+ ── */}
                   {currentRecord.modoVM === 'PAV' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-5">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-5">
                         <FieldShell label="VC (mL)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
@@ -4868,7 +4868,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.trigger} onChange={(e) => setField('trigger', e.target.value)} placeholder="-2" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="WOB (J/L)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.wob ?? ''} onChange={(e) => setField('wob', e.target.value)} placeholder="0.8" />
                         </FieldShell>
@@ -4887,8 +4887,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── NAVA ── */}
                   {currentRecord.modoVM === 'NAVA' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="PS / NAVA level">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ps} onChange={(e) => setField('ps', e.target.value)} placeholder="2.0" />
                         </FieldShell>
@@ -4905,7 +4905,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.trigger} onChange={(e) => setField('trigger', e.target.value)} placeholder="0.5" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="PEEP">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.peep} onChange={(e) => setField('peep', e.target.value)} placeholder="8" />
                         </FieldShell>
@@ -4921,8 +4921,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── HFOV ── */}
                   {currentRecord.modoVM === 'HFOV' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-5">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-5">
                         <FieldShell label="mPaw (cmH2O)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ppico} onChange={(e) => setField('ppico', e.target.value)} placeholder="30" />
                         </FieldShell>
@@ -4939,7 +4939,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ti} onChange={(e) => setField('ti', e.target.value)} placeholder="33" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="I:E">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ie} onChange={(e) => setField('ie', e.target.value)} placeholder="1:2" />
                         </FieldShell>
@@ -4958,8 +4958,8 @@ export function ProntuarioSystemPanel() {
 
                   {/* ── MMV ── */}
                   {currentRecord.modoVM === 'MMV' && (
-                    <div className="mt-4 space-y-3">
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-5">
+                    <div className="mt-2 space-y-1.5">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-5">
                         <FieldShell label="VC (mL)">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.vc} onChange={(e) => setField('vc', e.target.value)} placeholder="420" />
                         </FieldShell>
@@ -4976,7 +4976,7 @@ export function ProntuarioSystemPanel() {
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.ie} onChange={(e) => setField('ie', e.target.value)} placeholder="1:2" />
                         </FieldShell>
                       </div>
-                      <div className="grid gap-3 grid-cols-3 xl:grid-cols-6">
+                      <div className="grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="Trigger">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.trigger} onChange={(e) => setField('trigger', e.target.value)} placeholder="-2" />
                         </FieldShell>
@@ -5180,11 +5180,11 @@ export function ProntuarioSystemPanel() {
                   </button>
                   {!collapsedPeep && (
                     <>
-                      <div className="mt-3 grid gap-2 xl:grid-cols-3">
+                      <div className="mt-1.5 grid gap-1 xl:grid-cols-3">
                         {peepRows.map((row, index) => (
-                          <div key={`peep-row-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-2.5">
-                            <div className="mb-2 flex items-center justify-between">
-                              <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-white/36">Nivel {index + 1}</p>
+                          <div key={`peep-row-${index}`} className="rounded-[0.7rem] border border-white/10 bg-black/18 p-1.5">
+                            <div className="mb-1 flex items-center justify-between">
+                              <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-white/36">Nivel {index + 1}</p>
                               <button
                                 type="button"
                                 onClick={() => { setPeepOptField(index, 'peep', ''); setPeepOptField(index, 'plato', ''); setPeepOptField(index, 'si', '') }}
@@ -5193,7 +5193,7 @@ export function ProntuarioSystemPanel() {
                                 <Trash2 className="h-2.5 w-2.5" />
                               </button>
                             </div>
-                            <div className="grid gap-2 grid-cols-3">
+                            <div className="grid gap-1 grid-cols-3">
                               <FieldShell label="PEEP">
                                 <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={row.peep} onChange={(event) => setPeepOptField(index, 'peep', event.target.value)} placeholder="10" />
                               </FieldShell>
@@ -5207,7 +5207,7 @@ export function ProntuarioSystemPanel() {
                           </div>
                         ))}
                       </div>
-                      <div className="mt-3 grid gap-2 grid-cols-2">
+                      <div className="mt-1.5 grid gap-1 grid-cols-2">
                         <MetricChip
                           label="Melhor combinacao"
                           value={calculations?.peepOptBest ? `Nivel ${calculations.peepOptBest.index + 1}` : '--'}
@@ -5232,12 +5232,12 @@ export function ProntuarioSystemPanel() {
                       Limpar
                     </button>
                   </div>
-                  <div className="grid gap-2 grid-cols-3">
+                  <div className="grid gap-1 grid-cols-3">
                     {renderRespSelectionField('P×T', 'curvaPxT', CURVE_PXT_OPTIONS, 'PXT')}
                     {renderRespSelectionField('F×T', 'curvaFxT', CURVE_FXT_OPTIONS, 'FXT')}
                     {renderRespSelectionField('V×T', 'curvaVxT', CURVE_VXT_OPTIONS, 'VXT')}
                   </div>
-                  <div className="mt-2 grid gap-2 grid-cols-3">
+                  <div className="mt-1.5 grid gap-1 grid-cols-3">
                     {renderRespSelectionField('Loop P-V', 'loopPV', LOOP_PV_OPTIONS, 'LPV')}
                     {renderRespSelectionField('Loop F-V', 'loopFV', LOOP_FV_OPTIONS, 'LFV')}
                     {renderRespSelectionField('Assinc.', 'assincronia', ASSINCRONIA_OPTIONS, 'ASY')}
@@ -5266,7 +5266,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                   {!collapsedDesmame && (
                     <>
-                      <div className="mt-3 grid gap-2 grid-cols-3 xl:grid-cols-6">
+                      <div className="mt-3 grid gap-1 grid-cols-3 xl:grid-cols-6">
                         <FieldShell label="PImax">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dPimax} onChange={(event) => setField('dPimax', event.target.value)} placeholder="-40" />
                         </FieldShell>
@@ -5292,7 +5292,7 @@ export function ProntuarioSystemPanel() {
                         <MetricChip label="VM" value={calculations?.weanMinuteVentilation ? `${calculations.weanMinuteVentilation.toFixed(1)} L/min` : '--'} hint="VC × FR" />
                       </div>
 
-                      <div className="mt-3 flex flex-wrap gap-2">
+                      <div className="mt-3 flex flex-wrap gap-1">
                         <button onClick={saveDesmame} className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72">
                           <Save className="h-4 w-4" />
                           Salvar Desmame
@@ -5739,7 +5739,7 @@ export function ProntuarioSystemPanel() {
 
                   {!collapsedProna && (
                     <>
-                      <div className="mt-3 flex flex-wrap gap-2">
+                      <div className="mt-3 flex flex-wrap gap-1">
                         <button
                           type="button"
                           onClick={() => setField('pronaAtiva', proneActive ? '' : '1')}
