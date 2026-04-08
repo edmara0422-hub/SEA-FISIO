@@ -649,20 +649,28 @@ function analyzeNeuroAlerts(record: ICURecord, calculations: Record<string, unkn
   const rass = parseNumber(record.rass)
   const glasgow = calculations?.glasgow as { total: number | string } | null
 
-  // Glasgow baixo + RASS alto = possível delirium ou lesão
-  if (glasgow && typeof glasgow.total === 'number' && glasgow.total <= 10 && rass >= 0) {
-    alerts.push({ text: `⚠ Glasgow ${glasgow.total} com RASS ${record.rass}: rebaixamento SEM sedacao. Investigar causa neurologica (AVC, sangramento, metabolica) ou delirium hipoativo. Considerar TC de cranio.`, color: '#f87171' })
+  const sedAtivosCheck = record.sedativos?.filter(s => !s.suspensao && s.droga) || []
+  const temSedativoAtivo = sedAtivosCheck.length > 0
+
+  // Glasgow baixo — diferenciar sedação vs lesão
+  if (glasgow && typeof glasgow.total === 'number' && glasgow.total <= 10) {
+    if (temSedativoAtivo && rass < 0) {
+      // Sedado — Glasgow baixo é ESPERADO
+      alerts.push({ text: `Glasgow ${glasgow.total} com sedacao ativa (${sedAtivosCheck.map(s => s.droga).join(', ')}). Rebaixamento ESPERADO por sedacao — NAO indica lesao neurologica. Para avaliacao real: realizar janela de sedacao (SAT) e reavaliar Glasgow apos 30-60min sem sedativo.`, color: '#60a5fa' })
+    } else if (rass >= 0) {
+      // Não sedado mas rebaixado — investigar
+      alerts.push({ text: `⚠ Glasgow ${glasgow.total} com RASS ${record.rass} SEM sedacao. Rebaixamento nao farmacologico. Investigar: AVC, hemorragia intracraniana, disturbio metabolico (Na+, glicemia, ureia), encefalopatia septica, delirium hipoativo. Considerar TC de cranio e EEG.`, color: '#f87171' })
+    }
   }
 
   // RASS profundo sem sedativo
-  if (rass <= -3 && (!record.sedativos?.length || record.sedativos.every(s => !!s.suspensao))) {
+  if (rass <= -3 && !temSedativoAtivo) {
     alerts.push({ text: `⚠ RASS ${record.rass} sem sedativos ativos. Rebaixamento nao farmacologico. Investigar: AVC, hemorragia intracraniana, crise convulsiva, disturbio metabolico grave (Na+, glicemia, ureia), sepse com encefalopatia.`, color: '#f87171' })
   }
 
   // Sedação prolongada (> 2 sedativos mantidos)
-  const sedAtivos = record.sedativos?.filter(s => !s.suspensao && s.droga) || []
-  if (sedAtivos.length >= 2) {
-    alerts.push({ text: `⚠ ${sedAtivos.length} sedativos em uso simultaneo (${sedAtivos.map(s => s.droga).join(', ')}). Risco elevado de: delirium, ICUAW, ileo, TVP. Avaliar se todos sao necessarios. Protocolo ABCDEF: janela de sedacao diaria.`, color: '#fb923c' })
+  if (sedAtivosCheck.length >= 2) {
+    alerts.push({ text: `⚠ ${sedAtivosCheck.length} sedativos em uso simultaneo (${sedAtivosCheck.map(s => s.droga).join(', ')}). Risco elevado de: delirium, ICUAW, ileo, TVP. Avaliar se todos sao necessarios. Protocolo ABCDEF: janela de sedacao diaria.`, color: '#fb923c' })
   }
 
   // BNM sem monitorização TOF
@@ -671,10 +679,14 @@ function analyzeNeuroAlerts(record: ICURecord, calculations: Record<string, unkn
     alerts.push({ text: '⚠ BNM ativo SEM monitorização TOF. Risco de bloqueio excessivo e ICUAW. TOF deve ser medido a cada 4h (meta 1-2/4).', color: '#f87171' })
   }
 
-  // Pupilas + Glasgow cruzamento
+  // Pupilas + Glasgow cruzamento — pupila fixa é sempre alarmante, independente de sedação
   if (record.pupilaDReag === 'fixa' || record.pupilaEReag === 'fixa') {
     if (glasgow && typeof glasgow.total === 'number' && glasgow.total <= 8) {
-      alerts.push({ text: '⚠ EMERGENCIA: Glasgow <= 8 + pupila fixa. Sinais de herniacao cerebral. Elevar cabeceira 30°, manitol ou salina hipertonica, TC de cranio URGENTE, acionar neurocirurgia.', color: '#f87171' })
+      if (temSedativoAtivo) {
+        alerts.push({ text: '⚠ ATENCAO: Pupila fixa detectada em paciente sedado com Glasgow <= 8. Sedacao NAO causa pupila fixa. Investigar herniacao mesmo sob sedacao. TC de cranio URGENTE. Se confirmada: elevar cabeceira 30°, manitol ou salina hipertonica, acionar neurocirurgia.', color: '#f87171' })
+      } else {
+        alerts.push({ text: '⚠ EMERGENCIA: Glasgow <= 8 + pupila fixa SEM sedacao. Alta suspeita de herniacao cerebral. Elevar cabeceira 30°, manitol ou salina hipertonica, TC de cranio URGENTE, acionar neurocirurgia.', color: '#f87171' })
+      }
     }
   }
 
@@ -3598,10 +3610,18 @@ export function ProntuarioSystemPanel() {
                     <MetricChip label="TOF" value={currentRecord.ultimoTOF || '--'} hint={currentRecord.metaTOF ? `Meta ${currentRecord.metaTOF}` : null} />
                   </div>
 
-                  {/* Glasgow detail */}
+                  {/* Glasgow detail — contextualizado com sedação */}
                   {calculations?.glasgow?.detail ? (
                     <div className="mt-1.5 rounded-[0.5rem] border border-white/8 bg-white/[0.02] p-1.5">
-                      <p className="text-[8px] leading-relaxed text-white/60">{calculations.glasgow.detail}</p>
+                      <p className="text-[8px] leading-relaxed text-white/60">
+                        {(() => {
+                          const sedAtv = currentRecord.sedativos?.filter(s => !s.suspensao && s.droga) || []
+                          if (sedAtv.length > 0 && typeof calculations.glasgow.total === 'number' && calculations.glasgow.total <= 12) {
+                            return `Paciente em uso de ${sedAtv.map(s => s.droga).join(', ')}. Glasgow ${calculations.glasgow.total} e ESPERADO por sedacao — nao indica lesao. Para avaliacao neurologica real, realizar janela de sedacao (SAT): suspender sedativo por 30-60min e reavaliar.`
+                          }
+                          return calculations.glasgow.detail
+                        })()}
+                      </p>
                     </div>
                   ) : null}
 
@@ -3620,28 +3640,29 @@ export function ProntuarioSystemPanel() {
                 {/* Pupilas + Dor + CAM-ICU + Convulsões */}
                 <div className="grid gap-1.5 xl:grid-cols-2">
                   <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
-                    <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Pupilas</p>
+                    <p className="mb-1 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Pupilas</p>
+                    <p className="mb-1.5 text-[7px] leading-relaxed text-white/35">Ilumine cada olho com lanterna em ambiente escuro. Meca o diametro (mm) e observe se contrai (reagente), contrai lento (lenta) ou nao contrai (fixa). Normal: 2-4mm, isocoricas, fotorreagentes.</p>
                     <div className="grid grid-cols-4 gap-1">
-                      <FieldShell label="D mm">
-                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pupilaDTam} onChange={(e) => setField('pupilaDTam', e.target.value)} placeholder="3" />
+                      <FieldShell label="Dir. mm">
+                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pupilaDTam} onChange={(e) => setField('pupilaDTam', e.target.value)} placeholder="2-4" />
                       </FieldShell>
-                      <FieldShell label="D reag">
+                      <FieldShell label="Dir. luz">
                         <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.pupilaDReag} onChange={(e) => setField('pupilaDReag', e.target.value)}>
                           <option value="">--</option>
-                          <option value="reagente">Reagente</option>
+                          <option value="reagente">Contrai</option>
                           <option value="lenta">Lenta</option>
-                          <option value="fixa">Fixa</option>
+                          <option value="fixa">Nao contrai</option>
                         </select>
                       </FieldShell>
-                      <FieldShell label="E mm">
-                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pupilaETam} onChange={(e) => setField('pupilaETam', e.target.value)} placeholder="3" />
+                      <FieldShell label="Esq. mm">
+                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pupilaETam} onChange={(e) => setField('pupilaETam', e.target.value)} placeholder="2-4" />
                       </FieldShell>
-                      <FieldShell label="E reag">
+                      <FieldShell label="Esq. luz">
                         <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.pupilaEReag} onChange={(e) => setField('pupilaEReag', e.target.value)}>
                           <option value="">--</option>
-                          <option value="reagente">Reagente</option>
+                          <option value="reagente">Contrai</option>
                           <option value="lenta">Lenta</option>
-                          <option value="fixa">Fixa</option>
+                          <option value="fixa">Nao contrai</option>
                         </select>
                       </FieldShell>
                     </div>
@@ -3657,22 +3678,39 @@ export function ProntuarioSystemPanel() {
                   </div>
 
                   <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
-                    <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Dor</p>
-                    <div className="grid grid-cols-3 gap-1">
-                      <FieldShell label="Escala">
-                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.dorTipo} onChange={(e) => setField('dorTipo', e.target.value)}>
-                          <option value="cpot">CPOT (0-8)</option>
-                          <option value="bps">BPS (3-12)</option>
-                          <option value="nrs">NRS (0-10)</option>
-                        </select>
-                      </FieldShell>
-                      <FieldShell label="Score">
-                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dorEscala} onChange={(e) => setField('dorEscala', e.target.value)} placeholder="0" />
-                      </FieldShell>
-                      <FieldShell label="Local">
-                        <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.dorLocal} onChange={(e) => setField('dorLocal', e.target.value)} placeholder="--" />
-                      </FieldShell>
-                    </div>
+                    <p className="mb-1 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Dor</p>
+                    {(() => {
+                      const rassVal = parseNumber(currentRecord.rass)
+                      const autoEscala = !currentRecord.rass ? '' : rassVal <= -2 ? 'cpot' : 'nrs'
+                      const escalaAtual = currentRecord.dorTipo || autoEscala || 'cpot'
+                      return (
+                        <>
+                          <p className="mb-1.5 text-[7px] leading-relaxed text-white/35">
+                            {escalaAtual === 'cpot'
+                              ? 'CPOT (0-8) — para sedados/intubados. Avalie: expressao facial (0-2), movimentos corporais (0-2), tensao muscular (0-2), adaptacao ao ventilador ou vocalizacao (0-2).'
+                              : escalaAtual === 'bps'
+                              ? 'BPS (3-12) — para sedados. Avalie: expressao facial (1-4), movimentos de MMSS (1-4), adaptacao ao ventilador (1-4). Score 3 = sem dor.'
+                              : 'NRS (0-10) — pergunte ao paciente: "De 0 a 10, qual sua dor agora?" 0 = nenhuma, 10 = a pior possivel.'}
+                            {currentRecord.rass && !currentRecord.dorTipo ? ` (selecionado automaticamente pelo RASS ${currentRecord.rass})` : ''}
+                          </p>
+                          <div className="grid grid-cols-3 gap-1">
+                            <FieldShell label="Escala">
+                              <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={escalaAtual} onChange={(e) => setField('dorTipo', e.target.value)}>
+                                <option value="cpot">CPOT (sedado)</option>
+                                <option value="bps">BPS (sedado)</option>
+                                <option value="nrs">NRS (acordado)</option>
+                              </select>
+                            </FieldShell>
+                            <FieldShell label={escalaAtual === 'cpot' ? 'Score (0-8)' : escalaAtual === 'bps' ? 'Score (3-12)' : 'Score (0-10)'}>
+                              <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dorEscala} onChange={(e) => setField('dorEscala', e.target.value)} placeholder="0" />
+                            </FieldShell>
+                            <FieldShell label="Local">
+                              <input className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.dorLocal} onChange={(e) => setField('dorLocal', e.target.value)} placeholder="Ex: abdome, torax" />
+                            </FieldShell>
+                          </div>
+                        </>
+                      )
+                    })()}
                     {(() => {
                       const painAnalysis = analyzePain(currentRecord)
                       return painAnalysis ? (
@@ -3687,43 +3725,53 @@ export function ProntuarioSystemPanel() {
 
                 {/* CAM-ICU (Delirium) */}
                 <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
-                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">CAM-ICU (Delirium)</p>
-                  <div className="grid grid-cols-5 gap-1">
-                    <FieldShell label="RASS≥-3?">
-                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuRassOk} onChange={(e) => setField('camIcuRassOk', e.target.value)}>
-                        <option value="">--</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Nao</option>
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Alt.Aguda">
-                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuAltConsc} onChange={(e) => setField('camIcuAltConsc', e.target.value)}>
-                        <option value="">--</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Nao</option>
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Inatencao">
+                  <p className="mb-1 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">CAM-ICU (Delirium)</p>
+                  <p className="mb-1.5 text-[7px] leading-relaxed text-white/35">Aplicar apenas se RASS >= -3. Delirium positivo = Criterio 1 + Criterio 2 + (Criterio 3 OU 4).</p>
+                  <div className="space-y-1">
+                    <div className="grid grid-cols-2 gap-1">
+                      <div>
+                        <p className="text-[6px] text-white/30 mb-0.5">Passo 1: O paciente tem RASS >= -3? (se nao, CAM-ICU nao aplicavel)</p>
+                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuRassOk} onChange={(e) => setField('camIcuRassOk', e.target.value)}>
+                          <option value="">--</option>
+                          <option value="sim">Sim, RASS >= -3</option>
+                          <option value="nao">Nao, RASS &lt; -3</option>
+                        </select>
+                      </div>
+                      <div>
+                        <p className="text-[6px] text-white/30 mb-0.5">1. Alteracao aguda do estado mental basal? (mudou nas ultimas horas?)</p>
+                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuAltConsc} onChange={(e) => setField('camIcuAltConsc', e.target.value)}>
+                          <option value="">--</option>
+                          <option value="sim">Sim, mudou</option>
+                          <option value="nao">Nao, igual ao basal</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[6px] text-white/30 mb-0.5">2. Inatencao? Peca ao paciente: aperte minha mao quando eu disser a letra A. Dite: S-A-V-E-A-H-A-A-R-T. Errou 2 ou mais letras?</p>
                       <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuInatencao} onChange={(e) => setField('camIcuInatencao', e.target.value)}>
                         <option value="">--</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Nao</option>
+                        <option value="sim">Sim, errou 2+ letras</option>
+                        <option value="nao">Nao, acertou</option>
                       </select>
-                    </FieldShell>
-                    <FieldShell label="Pens.Desorg">
-                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuPensamento} onChange={(e) => setField('camIcuPensamento', e.target.value)}>
-                        <option value="">--</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Nao</option>
-                      </select>
-                    </FieldShell>
-                    <FieldShell label="Nivel Alt.">
-                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuNivelConsc} onChange={(e) => setField('camIcuNivelConsc', e.target.value)}>
-                        <option value="">--</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Nao</option>
-                      </select>
-                    </FieldShell>
+                    </div>
+                    <div className="grid grid-cols-2 gap-1">
+                      <div>
+                        <p className="text-[6px] text-white/30 mb-0.5">3. Pensamento desorganizado? Faca 4 perguntas simples (ex: pedra flutua na agua? Peixe vive no mar?). Errou 2+?</p>
+                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuPensamento} onChange={(e) => setField('camIcuPensamento', e.target.value)}>
+                          <option value="">--</option>
+                          <option value="sim">Sim, respostas erradas</option>
+                          <option value="nao">Nao, respondeu certo</option>
+                        </select>
+                      </div>
+                      <div>
+                        <p className="text-[6px] text-white/30 mb-0.5">4. Nivel de consciencia alterado? RASS diferente de 0 neste momento?</p>
+                        <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.camIcuNivelConsc} onChange={(e) => setField('camIcuNivelConsc', e.target.value)}>
+                          <option value="">--</option>
+                          <option value="sim">Sim, RASS != 0</option>
+                          <option value="nao">Nao, RASS = 0</option>
+                        </select>
+                      </div>
+                    </div>
                   </div>
                   {(() => {
                     const camResult = analyzeCAMICU(currentRecord)
