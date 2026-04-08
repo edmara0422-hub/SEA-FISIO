@@ -4207,26 +4207,6 @@ export function ProntuarioSystemPanel() {
                     )}
                   </div>
 
-                  {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || currentRecord.tipoVia.startsWith('TQT')) && (
-                    <div className="mt-2 grid gap-1.5 grid-cols-3">
-                      {(currentRecord.tipoVia === 'TOT' || currentRecord.tipoVia === 'TNT' || (currentRecord.tipoVia.startsWith('TQT') && currentRecord.dataTOT)) && (
-                        <MetricChip
-                          label="Dias TOT"
-                          value={calculations?.daysTOT !== null && calculations?.daysTOT !== undefined ? `D${calculations.daysTOT}` : '--'}
-                          hint={calculations?.daysTOT && calculations.daysTOT >= 7 ? 'Tempo prolongado' : 'Contagem automatica'}
-                          color={calculations?.daysTOT && calculations.daysTOT >= 7 ? '#f87171' : '#60a5fa'}
-                        />
-                      )}
-                      {currentRecord.tipoVia.startsWith('TQT') && (
-                        <MetricChip
-                          label="Dias TQT"
-                          value={calculations?.daysTQT !== null && calculations?.daysTQT !== undefined ? `D${calculations.daysTQT}` : '--'}
-                          hint="Contagem automatica"
-                          color="#fb923c"
-                        />
-                      )}
-                    </div>
-                  )}
                 </div>
                 )}
 
