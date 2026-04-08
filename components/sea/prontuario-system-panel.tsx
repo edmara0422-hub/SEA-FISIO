@@ -4312,7 +4312,7 @@ export function ProntuarioSystemPanel() {
                 {calculations?.gaso ? (
                   <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                     <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Analise gasometrica</p>
-                    <p className="text-[11px] font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
+                    <p className="text-[9px] font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
                     {calculations.gaso.wintersDetail ? (
                       <p className="mt-0.5 text-[8px] text-white/35">{calculations.gaso.wintersDetail}</p>
                     ) : null}
@@ -4331,53 +4331,53 @@ export function ProntuarioSystemPanel() {
 
                 {/* P/F + S/F classificação — painel único compacto */}
                 {(calculations?.pf || calculations?.sf) ? (
-                  <div className="chrome-panel rounded-[1.5rem] p-3">
-                    <div className="grid grid-cols-2 gap-3">
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <div className="grid grid-cols-2 gap-1.5">
 
                       {/* P/F — 3 colunas */}
                       {calculations?.pf ? (
                         <div>
-                          <p className="mb-2 text-[9px] font-semibold uppercase tracking-[0.18em] text-white/44">
+                          <p className="mb-1 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/44">
                             P/F <span className="text-white/70">{calculations.pf.toFixed(0)}</span>
                           </p>
                           <div className="grid grid-cols-3 gap-1">
                             {/* Padrão */}
                             <div className="space-y-0.5">
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.1em] text-white/28">Padrão</p>
+                              <p className="mb-0.5 text-[6px] font-semibold uppercase tracking-[0.1em] text-white/28">Padrão</p>
                               {([
                                 { label: '>300 Normal', active: calculations.pf > 300, color: '#4ade80' },
                                 { label: '200–300 Leve', active: calculations.pf > 200 && calculations.pf <= 300, color: '#facc15' },
                                 { label: '100–200 Mod.', active: calculations.pf > 100 && calculations.pf <= 200, color: '#fb923c' },
                                 { label: '≤100 Grave', active: calculations.pf <= 100, color: '#f87171' },
                               ] as { label: string; active: boolean; color: string }[]).map((row, i) => (
-                                <div key={i} className={`rounded-[0.4rem] px-1.5 py-0.5 text-[9px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
+                                <div key={i} className={`rounded-[0.4rem] px-1 py-0.5 text-[7px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
                                   style={row.active ? { background: row.color + '1e', border: `1px solid ${row.color}38`, color: row.color } : { border: '1px solid transparent' }}
                                 >{row.label}</div>
                               ))}
                             </div>
                             {/* Berlim 2012 — sem Normal (só SDRA) */}
                             <div className="space-y-0.5">
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.1em] text-white/28">Berlim 12</p>
+                              <p className="mb-0.5 text-[6px] font-semibold uppercase tracking-[0.1em] text-white/28">Berlim 12</p>
                               {([
                                 { label: '200–300 Leve', active: calculations.pf > 200 && calculations.pf <= 300, color: '#facc15' },
                                 { label: '100–200 Mod.', active: calculations.pf > 100 && calculations.pf <= 200, color: '#fb923c' },
                                 { label: '≤100 Grave', active: calculations.pf <= 100, color: '#f87171' },
                               ] as { label: string; active: boolean; color: string }[]).map((row, i) => (
-                                <div key={i} className={`rounded-[0.4rem] px-1.5 py-0.5 text-[9px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
+                                <div key={i} className={`rounded-[0.4rem] px-1 py-0.5 text-[7px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
                                   style={row.active ? { background: row.color + '1e', border: `1px solid ${row.color}38`, color: row.color } : { border: '1px solid transparent' }}
                                 >{row.label}</div>
                               ))}
                             </div>
                             {/* Global 2023 via S/F */}
                             <div className="space-y-0.5">
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.1em] text-white/28">Global 23</p>
+                              <p className="mb-0.5 text-[6px] font-semibold uppercase tracking-[0.1em] text-white/28">Global 23</p>
                               {([
                                 { label: 'S/F>315', active: (calculations.sf ?? 0) > 315, color: '#4ade80' },
                                 { label: 'S/F 235–315', active: (calculations.sf ?? 0) > 235 && (calculations.sf ?? 0) <= 315, color: '#facc15' },
                                 { label: 'S/F 148–235', active: (calculations.sf ?? 0) > 148 && (calculations.sf ?? 0) <= 235, color: '#fb923c' },
                                 { label: 'S/F≤148', active: (calculations.sf ?? 0) > 0 && (calculations.sf ?? 0) <= 148, color: '#f87171' },
                               ] as { label: string; active: boolean; color: string }[]).map((row, i) => (
-                                <div key={i} className={`rounded-[0.4rem] px-1.5 py-0.5 text-[9px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
+                                <div key={i} className={`rounded-[0.4rem] px-1 py-0.5 text-[7px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
                                   style={row.active ? { background: row.color + '1e', border: `1px solid ${row.color}38`, color: row.color } : { border: '1px solid transparent' }}
                                 >{row.label}</div>
                               ))}
@@ -4396,14 +4396,14 @@ export function ProntuarioSystemPanel() {
                           <div className="grid grid-cols-2 gap-1">
                             {/* Tabela 1 */}
                             <div className="space-y-0.5">
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.1em] text-white/28">Tab 1</p>
+                              <p className="mb-0.5 text-[6px] font-semibold uppercase tracking-[0.1em] text-white/28">Tab 1</p>
                               {([
                                 { pf: '>300', sf: '>315', active: calculations.sf > 315, color: '#4ade80' },
                                 { pf: '<300', sf: '≤315', active: calculations.sf > 274 && calculations.sf <= 315, color: '#facc15' },
                                 { pf: '<250', sf: '≤274', active: calculations.sf > 232 && calculations.sf <= 274, color: '#fb923c' },
                                 { pf: '<200', sf: '≤232', active: calculations.sf > 0 && calculations.sf <= 232, color: '#f87171' },
                               ] as { pf: string; sf: string; active: boolean; color: string }[]).map((row, i) => (
-                                <div key={i} className={`flex justify-between rounded-[0.4rem] px-1.5 py-0.5 text-[9px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
+                                <div key={i} className={`flex justify-between rounded-[0.4rem] px-1 py-0.5 text-[7px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
                                   style={row.active ? { background: row.color + '1e', border: `1px solid ${row.color}38`, color: row.color } : { border: '1px solid transparent' }}
                                 >
                                   <span>{row.pf}</span><span>{row.sf}</span>
@@ -4412,14 +4412,14 @@ export function ProntuarioSystemPanel() {
                             </div>
                             {/* Tabela 2 */}
                             <div className="space-y-0.5">
-                              <p className="mb-1 text-[8px] font-semibold uppercase tracking-[0.1em] text-white/28">Tab 2</p>
+                              <p className="mb-0.5 text-[6px] font-semibold uppercase tracking-[0.1em] text-white/28">Tab 2</p>
                               {([
                                 { pf: '>300', sf: '>315', active: calculations.sf > 315, color: '#4ade80' },
                                 { pf: '≤300', sf: '≤315', active: calculations.sf > 250 && calculations.sf <= 315, color: '#facc15' },
                                 { pf: '≤225', sf: '≤250', active: calculations.sf > 200 && calculations.sf <= 250, color: '#fb923c' },
                                 { pf: '≤150', sf: '≤200', active: calculations.sf > 0 && calculations.sf <= 200, color: '#f87171' },
                               ] as { pf: string; sf: string; active: boolean; color: string }[]).map((row, i) => (
-                                <div key={i} className={`flex justify-between rounded-[0.4rem] px-1.5 py-0.5 text-[9px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
+                                <div key={i} className={`flex justify-between rounded-[0.4rem] px-1 py-0.5 text-[7px] leading-tight ${row.active ? 'font-semibold' : 'text-white/24'}`}
                                   style={row.active ? { background: row.color + '1e', border: `1px solid ${row.color}38`, color: row.color } : { border: '1px solid transparent' }}
                                 >
                                   <span>{row.pf}</span><span>{row.sf}</span>
