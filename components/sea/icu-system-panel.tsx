@@ -31,7 +31,7 @@ function SectionList({
       <p className="text-[9px] font-semibold uppercase tracking-[0.22em] text-white/36">{title}</p>
       <div className="space-y-1">
         {items.map((item) => (
-          <div key={`${title}-${item}`} className="flex gap-2 text-[11px] leading-snug text-white/68">
+          <div key={`${title}-${item}`} className="flex gap-2 text-[9px] leading-snug text-white/68">
             <span className="mt-px shrink-0 text-[10px]" style={{ color: accent }}>•</span>
             <span>{item}</span>
           </div>
@@ -163,7 +163,7 @@ export function ICUSystemPanel() {
               <SystemGlyph path={activeSystem.icon} color={activeSystem.color} />
             </div>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-[11px] font-semibold text-white/88">{activeSystem.name}</p>
+              <p className="truncate text-[9px] font-semibold text-white/88">{activeSystem.name}</p>
               <p className="text-[9px] text-white/40">{groupedProblems.length} blocos · {activeSystem.problems.length} problemas{query ? ' · filtrado' : ''}</p>
             </div>
           </div>
@@ -197,7 +197,7 @@ export function ICUSystemPanel() {
                           className="flex w-full items-start justify-between gap-3 px-3 py-2.5 text-left"
                         >
                           <div className="min-w-0 flex-1">
-                            <p className="text-[11px] font-semibold leading-snug text-white/88">{problem.name}</p>
+                            <p className="text-[9px] font-semibold leading-snug text-white/88">{problem.name}</p>
                             <p className="mt-0.5 text-[10px] leading-snug text-white/50">{problem.desc}</p>
                           </div>
                           <span
@@ -242,7 +242,7 @@ export function ICUSystemPanel() {
                                         {(phase.interv ?? []).map((item) => (
                                           <div
                                             key={`${phase.timeframe}-${item}`}
-                                            className="flex gap-1.5 text-[11px] leading-snug text-white/62"
+                                            className="flex gap-1.5 text-[9px] leading-snug text-white/62"
                                           >
                                             <span className="mt-px shrink-0 text-[10px]" style={{ color: activeSystem.color }}>→</span>
                                             <span>{item}</span>
@@ -274,7 +274,7 @@ export function ICUSystemPanel() {
         </div>
       ) : (
         <div className="chrome-panel rounded-[1.4rem] p-6 text-center">
-          <p className="text-[11px] text-white/46">Nenhum sistema corresponde ao filtro.</p>
+          <p className="text-[9px] text-white/46">Nenhum sistema corresponde ao filtro.</p>
         </div>
       )}
     </div>

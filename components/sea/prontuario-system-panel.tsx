@@ -1701,7 +1701,7 @@ function MetricChip({
   return (
     <div className="rounded-[0.6rem] border border-white/10 bg-white/[0.04] px-2 py-1.5">
       <p className="text-[7px] uppercase tracking-[0.14em] text-white/38">{label}</p>
-      <p className="mt-0.5 text-[11px] font-semibold text-white/92" style={color ? { color } : undefined}>
+      <p className="mt-0.5 text-[9px] font-semibold text-white/92" style={color ? { color } : undefined}>
         {value}
       </p>
       {hint ? <p className="mt-0.5 text-[8px] leading-relaxed text-white/48">{hint}</p> : null}
@@ -3021,7 +3021,7 @@ export function ProntuarioSystemPanel() {
       <div className="chrome-board rounded-[1.8rem] p-3 md:p-6">
         <div className="mb-5 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-4">
-            <div className="chrome-subtle flex h-14 w-14 items-center justify-center rounded-[1.2rem]">
+            <div className="chrome-subtle flex h-10 w-10 items-center justify-center rounded-[1rem]">
               <FileText className="h-6 w-6 text-white" />
             </div>
             <div>
@@ -3085,7 +3085,7 @@ export function ProntuarioSystemPanel() {
 
         {/* Sync modal — share session code between devices */}
         {showSyncModal && (
-          <div className="chrome-panel rounded-[1.2rem] p-4 space-y-3">
+          <div className="chrome-panel rounded-[1rem] p-2 space-y-1.5">
             <div className="flex items-center justify-between">
               <p className="text-xs font-semibold text-white/72">Sincronizar entre dispositivos</p>
               <button onClick={() => setShowSyncModal(false)} className="text-white/38 hover:text-white/72 transition-colors">
@@ -3152,8 +3152,8 @@ export function ProntuarioSystemPanel() {
                       <Archive className="h-5 w-5 text-white/72" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-base font-semibold text-white/88">{recordTitle(record)}</p>
-                      <p className="mt-1 text-sm text-white/58">{recordSubtitle(record)}</p>
+                      <p className="text-[10px] font-semibold text-white/88">{recordTitle(record)}</p>
+                      <p className="mt-1 text-[9px] text-white/58">{recordSubtitle(record)}</p>
                       <p className="mt-2 text-xs text-white/38">Arquivado em {formatDateTime(record.updatedAt)}</p>
                     </div>
                   </div>
@@ -3185,7 +3185,7 @@ export function ProntuarioSystemPanel() {
               ))
             ) : (
               <div className="chrome-panel rounded-[1.45rem] p-8 text-center">
-                <p className="text-sm text-white/56">Arquivo vazio.</p>
+                <p className="text-[9px] text-white/56">Arquivo vazio.</p>
               </div>
             )}
           </div>
@@ -3202,8 +3202,8 @@ export function ProntuarioSystemPanel() {
                   </button>
                   <div>
                     <p className="text-[10px] uppercase tracking-[0.22em] text-white/38">Leito {currentRecord.leito || '--'}</p>
-                    <h4 className="text-lg font-semibold text-white/92">{recordTitle(currentRecord)}</h4>
-                    <p className={`mt-1 text-sm ${compactTone(recordSubtitle(currentRecord))}`}>{recordSubtitle(currentRecord)}</p>
+                    <h4 className="text-[10px] font-semibold text-white/92">{recordTitle(currentRecord)}</h4>
+                    <p className={`mt-0.5 text-[9px] ${compactTone(recordSubtitle(currentRecord))}`}>{recordSubtitle(currentRecord)}</p>
                   </div>
                 </div>
 
@@ -4446,7 +4446,7 @@ export function ProntuarioSystemPanel() {
                         <div className="mb-3 rounded-[1rem] border border-white/10 bg-black/22 p-3 space-y-1">
                           <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução gasométrica</p>
                           {insights.map((ins, i) => (
-                            <p key={i} className="text-[11px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
+                            <p key={i} className="text-[9px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
                           ))}
                         </div>
                       )
@@ -4456,7 +4456,7 @@ export function ProntuarioSystemPanel() {
                         <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
                           <div className="flex items-start justify-between gap-2">
                             <div className="min-w-0 flex-1">
-                              <p className="text-[11px] font-semibold text-white/86">
+                              <p className="text-[9px] font-semibold text-white/86">
                                 {entry.data || '--'} {entry.hora || ''}
                                 {entry.analise ? <span className="ml-2 text-[10px]" style={{ color: gasoAnaliseColor(entry.analise) }}>{entry.analise}</span> : null}
                               </p>
@@ -4478,7 +4478,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 ) : null}
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Ventilacao mecanica
                   </p>
@@ -5089,7 +5089,7 @@ export function ProntuarioSystemPanel() {
                         <div className="mb-3 rounded-[1rem] border border-white/10 bg-black/22 p-3 space-y-1">
                           <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/36 mb-1.5">Evolução ventilatória</p>
                           {insights.map((ins, i) => (
-                            <p key={i} className="text-[11px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
+                            <p key={i} className="text-[9px] leading-snug" style={{ color: ins.color }}>{ins.text}</p>
                           ))}
                         </div>
                       )
@@ -5134,7 +5134,7 @@ export function ProntuarioSystemPanel() {
                           <div key={`${entry.ts}-${index}`} className="rounded-[1rem] border border-white/10 bg-black/18 p-3">
                             <div className="flex items-start justify-between gap-2">
                               <div className="min-w-0 flex-1">
-                                <p className="text-[11px] font-semibold text-white/86">
+                                <p className="text-[9px] font-semibold text-white/86">
                                   {entry.modo || 'Sem modo'} · {formatDateTime(entry.ts)}
                                 </p>
                                 <div className="mt-1 flex flex-wrap gap-x-2 gap-y-0.5">
@@ -5165,7 +5165,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 ) : null}
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <button
                     type="button"
                     onClick={() => setCollapsedPeep((v) => !v)}
@@ -5220,7 +5220,7 @@ export function ProntuarioSystemPanel() {
                   )}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-3">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Analise de curvas e loops</p>
                     <button
@@ -5244,7 +5244,7 @@ export function ProntuarioSystemPanel() {
                   </div>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <div className="flex items-center justify-between gap-2">
                     <button
                       type="button"
@@ -5433,7 +5433,7 @@ export function ProntuarioSystemPanel() {
                   const allMet = metCount === totalAssessed && totalAssessed >= 6
 
                   return (
-                    <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                    <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                       {/* Header */}
                       <div className="mb-3 flex items-center justify-center gap-2 flex-wrap">
                         <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">Parametros de Desmame</p>
@@ -5665,7 +5665,7 @@ export function ProntuarioSystemPanel() {
                   )
                 })()}
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">
                     Protocolo VM especifico
                   </p>
@@ -5689,7 +5689,7 @@ export function ProntuarioSystemPanel() {
                           >
                             {selected ? <div className="h-1.5 w-1.5 rounded-[0.1rem]" style={{ background: protocol.color }} /> : null}
                           </div>
-                          <span className="text-[11px] font-medium text-white/76">{protocol.label}</span>
+                          <span className="text-[9px] font-medium text-white/76">{protocol.label}</span>
                         </button>
                       )
                     })}
@@ -5725,7 +5725,7 @@ export function ProntuarioSystemPanel() {
                   ) : null}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <button
                     type="button"
                     onClick={() => setCollapsedProna((v) => !v)}
@@ -5838,7 +5838,7 @@ export function ProntuarioSystemPanel() {
                                 <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setMraField(ri, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setMraField(ri, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-1 py-0.5 text-center">
-                                  <button type="button" onClick={() => toggleMraBest(ri)} className="text-[11px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                  <button type="button" onClick={() => toggleMraBest(ri)} className="text-[9px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
                                 </td>
                               </tr>
                             )
@@ -5882,7 +5882,7 @@ export function ProntuarioSystemPanel() {
                                 <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.sat} onChange={(e) => setTitField(ti, 'sat', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-0.5 py-0.5"><input type="number" value={row.pam} onChange={(e) => setTitField(ti, 'pam', e.target.value)} className="w-full bg-transparent text-center text-[9px] text-white outline-none placeholder:text-white/20" placeholder="--" /></td>
                                 <td className="border border-white/6 px-1 py-0.5 text-center">
-                                  <button type="button" onClick={() => toggleTitBest(ti)} className="text-[11px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
+                                  <button type="button" onClick={() => toggleTitBest(ti)} className="text-[9px]" style={{ color: row.best ? '#4ade80' : 'rgba(255,255,255,0.20)' }}>★</button>
                                 </td>
                               </tr>
                             )
@@ -5962,7 +5962,7 @@ export function ProntuarioSystemPanel() {
                   </FieldShell>
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">MRC</p>
                     <div className="flex items-center gap-2">
@@ -5981,7 +5981,7 @@ export function ProntuarioSystemPanel() {
                   <div className="space-y-1.5">
                     {MRC_GROUPS.map((group) => (
                       <div key={group.label} className="grid items-center gap-2 grid-cols-[1fr_auto_auto]">
-                        <p className="text-[11px] text-white/65">{group.label}</p>
+                        <p className="text-[9px] text-white/65">{group.label}</p>
                         <div className="flex items-center gap-1">
                           <span className="text-[9px] text-white/36 w-4 text-center">D</span>
                           <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord[group.right]} onChange={(event) => setField(group.right, event.target.value)}>
@@ -6028,7 +6028,7 @@ export function ProntuarioSystemPanel() {
                   )}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">PERME</p>
                     <div className="flex items-center gap-2">
@@ -6084,7 +6084,7 @@ export function ProntuarioSystemPanel() {
                   )}
                 </div>
 
-                <div className="chrome-panel rounded-[1.5rem] p-2.5 md:p-4">
+                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <div className="mb-2 flex items-center justify-between gap-2">
                     <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/44">IMS</p>
                     <div className="flex items-center gap-2">
@@ -6220,14 +6220,14 @@ export function ProntuarioSystemPanel() {
                 return (
                   <div
                     key={record.id}
-                    className="chrome-panel flex items-center gap-3 rounded-[1.2rem] px-3 py-2.5"
+                    className="chrome-panel flex items-center gap-2 rounded-[1rem] px-2 py-1.5"
                   >
                     {/* Ícone leito */}
                     <div className="chrome-subtle flex h-9 w-9 shrink-0 flex-col items-center justify-center rounded-[0.8rem]">
                       {record.leito ? (
                         <>
                           <span className="text-[7px] uppercase tracking-[0.12em] text-white/38">Lt</span>
-                          <span className="text-[11px] font-bold leading-none text-white/82">{record.leito}</span>
+                          <span className="text-[9px] font-bold leading-none text-white/82">{record.leito}</span>
                         </>
                       ) : (
                         <FileText className="h-3.5 w-3.5 text-white/52" />
@@ -6293,22 +6293,22 @@ export function ProntuarioSystemPanel() {
                         disabled={idx === 0}
                         className="flex h-5 w-7 items-center justify-center rounded-[0.4rem] border border-white/10 bg-black/18 text-white/42 disabled:opacity-20 hover:text-white/70"
                       >
-                        <span className="text-[11px] leading-none">↑</span>
+                        <span className="text-[9px] leading-none">↑</span>
                       </button>
                       <button
                         onClick={() => moveRecord(record.id, 'down')}
                         disabled={idx === records.length - 1}
                         className="flex h-5 w-7 items-center justify-center rounded-[0.4rem] border border-white/10 bg-black/18 text-white/42 disabled:opacity-20 hover:text-white/70"
                       >
-                        <span className="text-[11px] leading-none">↓</span>
+                        <span className="text-[9px] leading-none">↓</span>
                       </button>
                     </div>
                   </div>
                 )
               })
             ) : (
-              <div className="chrome-panel rounded-[1.5rem] p-8 text-center">
-                <p className="text-sm text-white/58">Nenhum paciente ativo.</p>
+              <div className="chrome-panel rounded-[1rem] p-4 text-center">
+                <p className="text-[9px] text-white/58">Nenhum paciente ativo.</p>
                 <p className="mt-2 text-xs text-white/38">
                   Use <span className="text-white/68">Adicionar</span> para abrir um novo prontuario ICU.
                 </p>
