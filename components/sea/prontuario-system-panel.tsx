@@ -5304,7 +5304,7 @@ export function ProntuarioSystemPanel() {
                         })()}
                       </div>
 
-                      {/* Botão info + salvar */}
+                      {/* Salvar + Info toggle */}
                       <div className="mt-1 flex items-center gap-1">
                         <button onClick={saveDesmame} className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72">
                           <Save className="h-3 w-3" />
@@ -5312,12 +5312,71 @@ export function ProntuarioSystemPanel() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => alert('PImax: Forca inspiratoria. Valores <= -30 cmH2O = adequado. -40 e MELHOR que -15.\n\nPEmax: Forca expiratoria. >= +60 cmH2O = tosse eficaz.\n\nVM (Volume Minuto): VC x FR. <4 L/min = hipoventilacao. 4-10 = normal. >10 = hiperventilacao.\n\nCV (Capacidade Vital): >= 15 mL/kg = reserva adequada para respiracao espontanea.\n\nRSBI (Rapid Shallow Breathing Index): FR / VC(L). <80 = favoravel. >105 = fadiga, desmame dificil.')}
+                          onClick={() => {
+                            const el = document.getElementById('__desmame_info__')
+                            if (el) el.style.display = el.style.display === 'none' ? 'block' : 'none'
+                          }}
                           className="inline-flex items-center gap-0.5 rounded-[0.7rem] border border-white/10 bg-white/[0.04] px-2 py-1 text-[7px] text-white/50 hover:bg-white/8"
                         >
                           <BookOpen className="h-3 w-3" />
-                          Info
+                          Guia de parametros
                         </button>
+                      </div>
+
+                      {/* Painel informativo expansível */}
+                      <div id="__desmame_info__" style={{ display: 'none' }} className="mt-1.5 rounded-[0.7rem] border border-white/10 bg-white/[0.03] p-2 space-y-2">
+                        <div>
+                          <p className="text-[7px] font-bold text-[#60a5fa]">PImax (Pressao Inspiratoria Maxima)</p>
+                          <p className="text-[7px] leading-relaxed text-white/50">Avalia a forca dos musculos inspiratorios (diafragma e intercostais). Valores mais negativos indicam MAIS forca. Meta: {'<='} -30 cmH2O.</p>
+                          <div className="mt-0.5 flex flex-wrap gap-0.5">
+                            <span className="rounded-full border border-[#4ade8030] bg-[#4ade8010] px-1.5 py-0.5 text-[6px] font-semibold text-[#4ade80]">{'<='} -30: Adequado</span>
+                            <span className="rounded-full border border-[#facc1530] bg-[#facc1510] px-1.5 py-0.5 text-[6px] font-semibold text-[#facc15]">-20 a -29: Limitrofe</span>
+                            <span className="rounded-full border border-[#f8717130] bg-[#f8717110] px-1.5 py-0.5 text-[6px] font-semibold text-[#f87171]">{'>'} -20: Fraqueza</span>
+                          </div>
+                          <p className="mt-0.5 text-[6px] text-white/30">Atencao: -40 e MELHOR que -15 (quanto mais negativo, mais forte)</p>
+                        </div>
+
+                        <div>
+                          <p className="text-[7px] font-bold text-[#60a5fa]">PEmax (Pressao Expiratoria Maxima)</p>
+                          <p className="text-[7px] leading-relaxed text-white/50">Avalia forca dos musculos expiratorios. Essencial para tosse eficaz e protecao de vias aereas.</p>
+                          <div className="mt-0.5 flex flex-wrap gap-0.5">
+                            <span className="rounded-full border border-[#4ade8030] bg-[#4ade8010] px-1.5 py-0.5 text-[6px] font-semibold text-[#4ade80]">{'>='} +60: Tosse eficaz</span>
+                            <span className="rounded-full border border-[#facc1530] bg-[#facc1510] px-1.5 py-0.5 text-[6px] font-semibold text-[#facc15]">+40 a +59: Tosse fraca</span>
+                            <span className="rounded-full border border-[#f8717130] bg-[#f8717110] px-1.5 py-0.5 text-[6px] font-semibold text-[#f87171]">{'<'} +40: Tosse ineficaz</span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-[7px] font-bold text-[#60a5fa]">VM (Volume Minuto) = VC x FR</p>
+                          <p className="text-[7px] leading-relaxed text-white/50">Volume total de ar movimentado por minuto. Calculado automaticamente.</p>
+                          <div className="mt-0.5 flex flex-wrap gap-0.5">
+                            <span className="rounded-full border border-[#f8717130] bg-[#f8717110] px-1.5 py-0.5 text-[6px] font-semibold text-[#f87171]">{'<'} 4 L/min: Hipoventilacao</span>
+                            <span className="rounded-full border border-[#4ade8030] bg-[#4ade8010] px-1.5 py-0.5 text-[6px] font-semibold text-[#4ade80]">4-10 L/min: Normal</span>
+                            <span className="rounded-full border border-[#facc1530] bg-[#facc1510] px-1.5 py-0.5 text-[6px] font-semibold text-[#facc15]">{'>'} 10 L/min: Hiperventilacao</span>
+                          </div>
+                          <p className="mt-0.5 text-[6px] text-white/30">VM alto pode indicar compensacao metabolica ou desconforto respiratorio</p>
+                        </div>
+
+                        <div>
+                          <p className="text-[7px] font-bold text-[#60a5fa]">CV (Capacidade Vital) em mL/kg</p>
+                          <p className="text-[7px] leading-relaxed text-white/50">Maior volume de ar expirado apos inspiracao maxima. Indica reserva ventilatoria para sustentar respiracao espontanea.</p>
+                          <div className="mt-0.5 flex flex-wrap gap-0.5">
+                            <span className="rounded-full border border-[#4ade8030] bg-[#4ade8010] px-1.5 py-0.5 text-[6px] font-semibold text-[#4ade80]">{'>='} 15 mL/kg: Reserva adequada</span>
+                            <span className="rounded-full border border-[#facc1530] bg-[#facc1510] px-1.5 py-0.5 text-[6px] font-semibold text-[#facc15]">10-14 mL/kg: Reserva limitada</span>
+                            <span className="rounded-full border border-[#f8717130] bg-[#f8717110] px-1.5 py-0.5 text-[6px] font-semibold text-[#f87171]">{'<'} 10 mL/kg: Insuficiente</span>
+                          </div>
+                        </div>
+
+                        <div>
+                          <p className="text-[7px] font-bold text-[#60a5fa]">RSBI (Rapid Shallow Breathing Index) = FR / VC(L)</p>
+                          <p className="text-[7px] leading-relaxed text-white/50">Razao entre frequencia respiratoria e volume corrente em litros. Indicador mais usado para predizer sucesso de desmame.</p>
+                          <div className="mt-0.5 flex flex-wrap gap-0.5">
+                            <span className="rounded-full border border-[#4ade8030] bg-[#4ade8010] px-1.5 py-0.5 text-[6px] font-semibold text-[#4ade80]">{'<'} 80: Favoravel ao desmame</span>
+                            <span className="rounded-full border border-[#facc1530] bg-[#facc1510] px-1.5 py-0.5 text-[6px] font-semibold text-[#facc15]">80-105: Risco moderado</span>
+                            <span className="rounded-full border border-[#f8717130] bg-[#f8717110] px-1.5 py-0.5 text-[6px] font-semibold text-[#f87171]">{'>'} 105: Alto risco de falha</span>
+                          </div>
+                          <p className="mt-0.5 text-[6px] text-white/30">RSBI alto = respiracao rapida e superficial = fadiga muscular = desmame dificil</p>
+                        </div>
                       </div>
 
                       {currentRecord.desmHist?.length ? (
