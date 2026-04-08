@@ -5266,36 +5266,57 @@ export function ProntuarioSystemPanel() {
                   </div>
                   {!collapsedDesmame && (
                     <>
-                      <div className="mt-3 grid gap-1 grid-cols-3 xl:grid-cols-6">
+                      {/* Inputs em 1 linha */}
+                      <div className="mt-1.5 grid gap-0.5 grid-cols-5">
                         <FieldShell label="PImax">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dPimax} onChange={(event) => setField('dPimax', event.target.value)} placeholder="-40" />
                         </FieldShell>
                         <FieldShell label="PEmax">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dPemax} onChange={(event) => setField('dPemax', event.target.value)} placeholder="60" />
                         </FieldShell>
-                        <FieldShell label="VC (mL)">
+                        <FieldShell label="VC mL">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dVcDesm} onChange={(event) => setField('dVcDesm', event.target.value)} placeholder="450" />
                         </FieldShell>
                         <FieldShell label="FR">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dFrDesm} onChange={(event) => setField('dFrDesm', event.target.value)} placeholder="18" />
                         </FieldShell>
-                        <FieldShell label="CV (mL/kg)">
+                        <FieldShell label="CV mL/kg">
                           <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.dCv} onChange={(event) => setField('dCv', event.target.value)} placeholder="15" />
                         </FieldShell>
                       </div>
 
-                      <div className="mt-3 grid gap-2 grid-cols-2 xl:grid-cols-5">
-                        <MetricChip label="RSBI" value={calculations?.weanRsbi ? calculations.weanRsbi.toFixed(1) : '--'} hint={calculations?.weanSummary?.text} color={calculations?.weanSummary?.color} />
-                        <MetricChip label="PImax" value={currentRecord.dPimax || '--'} hint={calculations?.pimaxAdequate ? 'Adequado' : 'Vigiar'} color={calculations?.pimaxAdequate ? '#4ade80' : '#facc15'} />
-                        <MetricChip label="PEmax" value={currentRecord.dPemax || '--'} hint={calculations?.pemaxAdequate ? 'Adequado' : 'Tosse limitada'} color={calculations?.pemaxAdequate ? '#4ade80' : '#facc15'} />
-                        <MetricChip label="CV" value={currentRecord.dCv || '--'} hint={calculations?.cvAdequate ? 'Reserva adequada' : 'Em vigilancia'} color={calculations?.cvAdequate ? '#4ade80' : '#facc15'} />
-                        <MetricChip label="VM" value={calculations?.weanMinuteVentilation ? `${calculations.weanMinuteVentilation.toFixed(1)} L/min` : '--'} hint="VC × FR" />
+                      {/* Análise em 1 linha inline */}
+                      <div className="mt-1 flex flex-wrap gap-1">
+                        {(() => {
+                          const chips: Array<{ label: string; value: string; ok: boolean }> = []
+                          if (currentRecord.dPimax) chips.push({ label: 'PImax', value: currentRecord.dPimax, ok: !!calculations?.pimaxAdequate })
+                          if (currentRecord.dPemax) chips.push({ label: 'PEmax', value: currentRecord.dPemax, ok: !!calculations?.pemaxAdequate })
+                          if (currentRecord.dCv) chips.push({ label: 'CV', value: currentRecord.dCv, ok: !!calculations?.cvAdequate })
+                          if (calculations?.weanRsbi) chips.push({ label: 'RSBI', value: calculations.weanRsbi.toFixed(0), ok: calculations.weanRsbi < 105 })
+                          if (calculations?.weanMinuteVentilation) chips.push({ label: 'VM', value: `${calculations.weanMinuteVentilation.toFixed(1)}L`, ok: calculations.weanMinuteVentilation >= 4 && calculations.weanMinuteVentilation <= 10 })
+                          return chips.length ? chips.map((c) => (
+                            <span key={c.label} className="rounded-full border px-1.5 py-0.5 text-[7px] font-semibold" style={{
+                              borderColor: c.ok ? '#4ade8030' : '#facc1530',
+                              background: c.ok ? '#4ade8010' : '#facc1510',
+                              color: c.ok ? '#4ade80' : '#facc15',
+                            }}>{c.label} {c.value} {c.ok ? '✓' : '!'}</span>
+                          )) : <span className="text-[7px] text-white/30">Preencha os campos acima</span>
+                        })()}
                       </div>
 
-                      <div className="mt-3 flex flex-wrap gap-1">
+                      {/* Botão info + salvar */}
+                      <div className="mt-1 flex items-center gap-1">
                         <button onClick={saveDesmame} className="chrome-subtle inline-flex items-center gap-1 rounded-[0.7rem] border border-white/12 px-2 py-1 text-[8px] font-semibold uppercase tracking-[0.14em] text-white/72">
-                          <Save className="h-4 w-4" />
-                          Salvar Desmame
+                          <Save className="h-3 w-3" />
+                          Salvar
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => alert('PImax: Forca inspiratoria. Valores <= -30 cmH2O = adequado. -40 e MELHOR que -15.\n\nPEmax: Forca expiratoria. >= +60 cmH2O = tosse eficaz.\n\nVM (Volume Minuto): VC x FR. <4 L/min = hipoventilacao. 4-10 = normal. >10 = hiperventilacao.\n\nCV (Capacidade Vital): >= 15 mL/kg = reserva adequada para respiracao espontanea.\n\nRSBI (Rapid Shallow Breathing Index): FR / VC(L). <80 = favoravel. >105 = fadiga, desmame dificil.')}
+                          className="inline-flex items-center gap-0.5 rounded-[0.7rem] border border-white/10 bg-white/[0.04] px-2 py-1 text-[7px] text-white/50 hover:bg-white/8"
+                        >
+                          <BookOpen className="h-3 w-3" />
+                          Info
                         </button>
                       </div>
 
