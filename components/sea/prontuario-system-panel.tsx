@@ -400,36 +400,141 @@ type DrugAnalysis = {
   evolucao: string
 }
 
-function analiseDVA(inicio: string, atual: string): DrugAnalysis | null {
+// Faixas de dose por droga (mcg/kg/min exceto Vasopressina que é U/min)
+const DVA_DOSE_RANGES: Record<string, { low: number; mid: number; high: number; max: number; unit: string; tipo: string }> = {
+  'Noradrenalina': { low: 0.05, mid: 0.2, high: 0.5, max: 2, unit: 'mcg/kg/min', tipo: 'vasopressor' },
+  'Adrenalina':    { low: 0.02, mid: 0.1, high: 0.3, max: 1.5, unit: 'mcg/kg/min', tipo: 'vasopressor + inotropico' },
+  'Dobutamina':    { low: 2.5, mid: 5, high: 10, max: 20, unit: 'mcg/kg/min', tipo: 'inotropico' },
+  'Vasopressina':  { low: 0.01, mid: 0.03, high: 0.04, max: 0.04, unit: 'U/min', tipo: 'vasopressor puro' },
+  'Milrinona':     { low: 0.125, mid: 0.375, high: 0.5, max: 0.75, unit: 'mcg/kg/min', tipo: 'inodilatador' },
+}
+
+function analiseDVA(inicio: string, atual: string, droga?: string): DrugAnalysis | null {
   const trend = calcDrugTrend(inicio, atual)
   if (!trend) return null
+
+  const doseInicio = parseFloat(inicio)
+  const doseAtual = parseFloat(atual)
+  const pctChange = doseInicio > 0 ? Math.round(((doseAtual - doseInicio) / doseInicio) * 100) : 0
+  const range = droga ? DVA_DOSE_RANGES[droga] : null
+
+  // Classificação de dose atual
+  let doseClass = ''
+  let doseAlert = ''
+  if (range && doseAtual > 0) {
+    if (doseAtual >= range.high) {
+      doseClass = 'DOSE ALTA'
+      if (droga === 'Noradrenalina' && doseAtual >= 0.5) {
+        doseAlert = `Noradrenalina >= 0.5 ${range.unit}: CHOQUE REFRATARIO. Considerar: (1) Vasopressina 0.03-0.04 U/min como adjuvante, (2) Hidrocortisona 200mg/dia se sepse, (3) Descartar insuficiencia adrenal. Doses acima de 1.0 associadas a isquemia periferica.`
+      } else if (droga === 'Adrenalina' && doseAtual >= 0.3) {
+        doseAlert = `Adrenalina em dose alta: efeito beta predominante — taquicardia, hiperglicemia, hiperlactatemia por aumento metabolico (lactato pode subir SEM hipoperfusao). Diferenciar lactato por adrenalina vs hipoperfusao real.`
+      } else if (droga === 'Dobutamina' && doseAtual >= 10) {
+        doseAlert = `Dobutamina >= 10 ${range.unit}: risco de taquicardia e arritmia. Efeito inotropico proximo do teto. Se nao responde: avaliar milrinona ou suporte mecanico. Monitorar FC e ritmo.`
+      } else if (droga === 'Milrinona' && doseAtual >= 0.5) {
+        doseAlert = `Milrinona em dose alta: vasodilatacao + inotropismo. Risco de hipotensao. Pode necessitar associar vasopressor. Monitorar PAM e FC.`
+      } else {
+        doseAlert = `Dose alta de ${droga || 'DVA'}. Avaliar otimizacao: volemia adequada? Causa do choque tratada? Considerar adjuvantes.`
+      }
+    } else if (doseAtual >= range.mid) {
+      doseClass = 'dose moderada'
+    } else {
+      doseClass = 'dose baixa'
+    }
+  }
+
+  const pctText = pctChange !== 0 ? ` (${pctChange > 0 ? '+' : ''}${pctChange}% vs inicio)` : ''
+  const doseInfo = range ? ` [${doseAtual} ${range.unit} — ${doseClass}]` : ''
+  const tipoInfo = range ? ` Tipo: ${range.tipo}.` : ''
+
   const map: Record<DrugTrend, Omit<DrugAnalysis, 'trend'>> = {
     manteve: {
-      label: 'DVA mantida',
-      color: '#60a5fa',
-      indica: 'Suporte vasoativo estavel. Paciente com resposta pressórica mantida. Avaliar tolerancia a reducao e metas de PAM (65-70 mmHg). Monitorar perfusao periferica e lactato.',
-      evolucao: 'Melhora: reducao progressiva guiada por PAM e lactato → desmame → suspensao. Piora: escalonamento de dose, adicao de segunda DVA ou refratariedade vasoativa.',
+      label: `DVA mantida${doseInfo}`,
+      color: doseClass === 'DOSE ALTA' ? '#fb923c' : '#60a5fa',
+      indica: `Suporte vasoativo estavel${pctText}.${tipoInfo} Avaliar tolerancia a reducao e metas de PAM (65-70 mmHg). Monitorar perfusao periferica, TEC, lactato e debito urinario.${doseAlert ? ' ' + doseAlert : ''}`,
+      evolucao: 'Melhora: reducao de 10-20% a cada 30-60min guiada por PAM e lactato → desmame → suspensao. Piora: escalonamento, adicao de segunda DVA.',
     },
     reduziu: {
-      label: 'Desmame DVA',
+      label: `Desmame DVA${doseInfo}`,
       color: '#4ade80',
-      indica: 'Reducao de vasoativo. Melhora hemodinamica, menor dependencia vasopressora. Monitorar PAM, FC, lactato e sinais de hipoperfusao durante reducao.',
-      evolucao: 'Melhora: suspensao da DVA com PAM estavel, normalizacao do lactato, boa perfusao. Piora: hipotensao com reducao → retitulacao ou troca de agente.',
+      indica: `Reducao de vasoativo${pctText}.${tipoInfo} Melhora hemodinamica. Monitorar PAM, FC, lactato e sinais de hipoperfusao durante desmame. Reduzir 10-20% a cada 30-60min se PAM estavel.`,
+      evolucao: 'Melhora: suspensao da DVA com PAM >= 65, lactato normal, boa perfusao. Piora: hipotensao com reducao → pausar desmame, retitular dose anterior, reavaliar volemia.',
     },
     aumentou: {
-      label: 'DVA aumentada',
+      label: `DVA AUMENTADA${doseInfo}`,
       color: '#f87171',
-      indica: 'Escalonamento vasoativo. Indica instabilidade hemodinamica progressiva. Investigar: hipovolemia, sepse nao controlada, disfuncao miocardica, TEP ou tamponamento.',
-      evolucao: 'Melhora: identificar e tratar causa, estabilizar PAM, considerar corticoide em choque refratario. Piora: choque refratario, disfuncao multiorganica, necessidade de suporte mecanico circulatorio.',
+      indica: `Escalonamento vasoativo${pctText}.${tipoInfo} Instabilidade hemodinamica progressiva. Investigar causa: (1) Hipovolemia — fluid challenge 250mL cristaloide, (2) Sepse — foco nao drenado, ATB inadequado, (3) Disfuncao miocardica — avaliar eco, (4) Obstrucao — TEP, tamponamento, pneumotorax hipertensivo.${doseAlert ? ' ' + doseAlert : ''}`,
+      evolucao: 'Melhora: identificar e tratar causa, estabilizar PAM, considerar corticoide (Hidrocortisona 50mg 6/6h) em choque septico refratario. Piora: choque refratario → segunda DVA, considerar suporte mecanico circulatorio.',
     },
     desligado: {
       label: 'DVA SUSPENSA',
       color: '#22d3ee',
-      indica: 'Droga vasoativa desligada. Paciente sem suporte vasopressor. Estabilidade hemodinamica alcancada.',
-      evolucao: 'Monitorar PAM, FC, perfusao e lactato nas proximas 6-12h apos suspensao. Se hipotensao: reavaliar volemia e reintroduzir DVA.',
+      indica: `Droga vasoativa desligada.${tipoInfo} Estabilidade hemodinamica alcancada sem suporte vasopressor.`,
+      evolucao: 'VIGILANCIA POS-SUSPENSAO: monitorar PAM, FC, perfusao e lactato a cada 1h nas primeiras 6h. Se PAM < 65: reavaliar volemia antes de reintroduzir DVA. Se hipotensao refrataria: retornar dose que mantinha estabilidade.',
     },
   }
   return { trend, ...map[trend] }
+}
+
+function analyzeDVAAlerts(record: ICURecord): Array<{ text: string; color: string }> {
+  const alerts: Array<{ text: string; color: string }> = []
+  const dvasAtivas = record.dvaList?.filter(d => !d.suspensao && d.droga) || []
+
+  if (dvasAtivas.length === 0) return alerts
+
+  // Múltiplas DVAs
+  if (dvasAtivas.length >= 2) {
+    const nomes = dvasAtivas.map(d => d.droga).join(' + ')
+    alerts.push({ text: `${dvasAtivas.length} DVAs ativas: ${nomes}. Choque com necessidade de suporte multiplo. Avaliar: volemia otimizada? Foco septico drenado? Funcao cardiaca (eco)? Considerar Hidrocortisona se sepse.`, color: '#f87171' })
+  }
+  if (dvasAtivas.length >= 3) {
+    alerts.push({ text: `⚠ CHOQUE REFRATARIO: ${dvasAtivas.length} DVAs simultaneas. Mortalidade elevada. Avaliar: suporte mecanico circulatorio (ECMO, BIA), terapia dialítica para correcao metabolica, e decisao compartilhada com equipe.`, color: '#f87171' })
+  }
+
+  // Noradrenalina em dose alta sem vasopressina
+  const nora = dvasAtivas.find(d => d.droga === 'Noradrenalina')
+  const vaso = dvasAtivas.find(d => d.droga === 'Vasopressina')
+  if (nora && parseFloat(nora.dose) >= 0.3 && !vaso) {
+    alerts.push({ text: 'Noradrenalina >= 0.3 mcg/kg/min SEM vasopressina adjuvante. Guideline Surviving Sepsis: considerar adicionar Vasopressina 0.03 U/min para poupar dose de noradrenalina e reduzir efeitos adversos (taquicardia, isquemia periferica).', color: '#fb923c' })
+  }
+
+  // Adrenalina + lactato falso
+  const adre = dvasAtivas.find(d => d.droga === 'Adrenalina')
+  if (adre && parseFloat(adre.dose) >= 0.1) {
+    alerts.push({ text: 'Adrenalina em uso: ATENCAO ao interpretar lactato. Adrenalina causa hiperlactatemia por estimulo beta-2 (glicogenolise) — lactato pode subir SEM hipoperfusao. Usar lactato/piruvato, ScvO2 e perfusao clinica para diferenciar.', color: '#fb923c' })
+  }
+
+  // Dobutamina + vasopressor = choque misto
+  const dobu = dvasAtivas.find(d => d.droga === 'Dobutamina')
+  if (dobu && (nora || adre)) {
+    alerts.push({ text: 'Dobutamina + vasopressor: padrao de choque misto (distributivo + cardiogenico). Avaliar ecocardiograma para funcao VE. Se FE < 30%: considerar milrinona ou suporte mecanico. Se FE preservada: reavaliar indicacao da dobutamina.', color: '#fb923c' })
+  }
+
+  // Todas DVAs aumentando
+  const todasAumentando = dvasAtivas.every(d => {
+    const i = parseFloat(d.inicio)
+    const a = parseFloat(d.dose)
+    return !isNaN(i) && !isNaN(a) && a > i
+  })
+  if (todasAumentando && dvasAtivas.length >= 1) {
+    const totalPct = dvasAtivas.map(d => {
+      const i = parseFloat(d.inicio)
+      const a = parseFloat(d.dose)
+      return i > 0 ? Math.round(((a - i) / i) * 100) : 0
+    })
+    alerts.push({ text: `⚠ TODAS as DVAs em escalonamento (${dvasAtivas.map((d, idx) => `${d.droga} +${totalPct[idx]}%`).join(', ')}). Deterioracao hemodinamica ativa. Acao imediata: reavaliar volemia (fluid challenge), buscar foco infeccioso nao controlado, avaliar funcao cardiaca, descartar obstrucao (TEP, tamponamento).`, color: '#f87171' })
+  }
+
+  // Todas DVAs reduzindo = melhora
+  const todasReduzindo = dvasAtivas.every(d => {
+    const i = parseFloat(d.inicio)
+    const a = parseFloat(d.dose)
+    return !isNaN(i) && !isNaN(a) && a < i
+  })
+  if (todasReduzindo && dvasAtivas.length >= 1) {
+    alerts.push({ text: `Todas as DVAs em desmame (${dvasAtivas.map(d => d.droga).join(', ')}). Resposta hemodinamica favoravel. Manter reducao gradual (10-20% a cada 30-60min) guiada por PAM e perfusao.`, color: '#4ade80' })
+  }
+
+  return alerts
 }
 
 function analiseSedativo(inicio: string, atual: string): DrugAnalysis | null {
@@ -3818,46 +3923,23 @@ export function ProntuarioSystemPanel() {
             {activeTab === 'cardio' ? (
               <div className="space-y-1.5">
                 <TabAlerts alerts={tabAlerts.cardio} />
-                <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
-                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">
-                    Hemodinamica / DVA
-                  </p>
-                  <div className="grid gap-1 grid-cols-3 md:grid-cols-7">
-                    <FieldShell label="PAS">
-                      <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pas} onChange={(event) => setField('pas', event.target.value)} placeholder="120" />
-                    </FieldShell>
-                    <FieldShell label="PAD">
-                      <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pad} onChange={(event) => setField('pad', event.target.value)} placeholder="80" />
-                    </FieldShell>
-                    <FieldShell label="PAM">
-                      <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.pam} onChange={(event) => setField('pam', event.target.value)} placeholder="85" />
-                    </FieldShell>
-                    <FieldShell label="FC">
-                      <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.fc} onChange={(event) => setField('fc', event.target.value)} placeholder="88" />
-                    </FieldShell>
-                    <FieldShell label="Lactato">
-                      <input className={INPUT_CLASS_SM} style={INPUT_STYLE} type="number" value={currentRecord.lactatoCardio} onChange={(event) => setField('lactatoCardio', event.target.value)} placeholder="1.2" />
-                    </FieldShell>
-                    <FieldShell label="Mudanca hemodinamica" span="col-span-3 md:col-span-2">
-                      <select className={INPUT_CLASS_SM} style={INPUT_STYLE} value={currentRecord.cardiovascularMudanca} onChange={(event) => setField('cardiovascularMudanca', event.target.value)}>
-                        <option value="">--</option>
-                        <option value="estavel">Estavel</option>
-                        <option value="reducao_dva">Reducao DVA</option>
-                        <option value="inicio_dva">Inicio DVA</option>
-                        <option value="piora">Piora</option>
-                      </select>
-                    </FieldShell>
-                  </div>
 
-                  <div className="mt-2 grid gap-1.5 grid-cols-3">
-                    <MetricChip
-                      label="PAM calculada"
-                      value={calculations?.pamAuto ? `${calculations.pamAuto} mmHg` : '--'}
-                      hint={calculations?.pamAuto ? (calculations.pamAuto < 65 ? 'Hipotensao' : calculations.pamAuto > 100 ? 'Elevada' : 'Adequada') : null}
-                      color={calculations?.pamAuto ? (calculations.pamAuto < 65 ? '#f87171' : calculations.pamAuto > 100 ? '#facc15' : '#4ade80') : undefined}
-                    />
-                  </div>
-                </div>
+                {/* Alertas DVA cruzados */}
+                {(() => {
+                  const dvaAlerts = analyzeDVAAlerts(currentRecord)
+                  return dvaAlerts.length ? (
+                    <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                      <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Alertas hemodinamicos</p>
+                      <div className="space-y-1">
+                        {dvaAlerts.map((alert, i) => (
+                          <div key={i} className="rounded-[0.5rem] border p-1.5" style={{ borderColor: `${alert.color}30`, background: `${alert.color}08` }}>
+                            <p className="text-[8px] leading-relaxed font-medium" style={{ color: alert.color }}>{alert.text}</p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null
+                })()}
 
                 <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
                   <div className="mb-2 flex items-center justify-between gap-2">
@@ -3877,7 +3959,7 @@ export function ProntuarioSystemPanel() {
                         const isSuspended = !!item.suspensao
                         const analise = isSuspended
                           ? { trend: 'desligado' as const, label: 'DVA SUSPENSA', color: '#22d3ee', indica: `Suspensa em ${formatDateTime(item.suspensao!)}. Monitorar PAM, FC, lactato e perfusao nas proximas 6-12h.`, evolucao: 'Se hipotensao: reavaliar volemia e reintroduzir DVA.' }
-                          : analiseDVA(item.inicio, item.dose)
+                          : analiseDVA(item.inicio, item.dose, item.droga)
                         return (
                         <div key={`dva-${index}`} className="rounded-[0.7rem] border border-white/10 bg-black/18 p-1.5" style={isSuspended ? { opacity: 0.6 } : undefined}>
                           <div className="grid gap-1 grid-cols-2 md:grid-cols-[1.3fr_1fr_1fr_1fr_auto]">
