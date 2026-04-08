@@ -2204,10 +2204,21 @@ export function ProntuarioSystemPanel() {
     const rsbi = calcRSBI(parseNumber(currentRecord.fr), parseNumber(currentRecord.vc))
     const rsbiInterp = rsbi ? interpRSBI(rsbi) : null
     const raw = isVCV ? calcResist(currentRecord.ppico, currentRecord.pplato, currentRecord.fluxo) : null
+    const lastLab = currentRecord.examesLabList?.length ? currentRecord.examesLabList[currentRecord.examesLabList.length - 1] : null
+    const sedAtivosGaso = currentRecord.sedativos?.filter(s => !s.suspensao && s.droga) || []
+    const bnmAtivosGaso = currentRecord.bnmList?.filter(b => !b.suspensao && b.droga) || []
     const gaso = analisarGaso({
       gasoPH: parseNumber(currentRecord.gasoPH),
       gasoPaCO2: parseNumber(currentRecord.gasoPaCO2),
       gasoHCO3: parseNumber(currentRecord.gasoHCO3),
+      gasoLactato: parseNumber(currentRecord.gasoLactato),
+      gasoBE: parseNumber(currentRecord.gasoBE),
+      creat: lastLab ? parseNumber(lastLab.creat) : undefined,
+      hb: lastLab ? parseNumber(lastLab.hb) : undefined,
+      bhAcumulado: currentRecord.balancoAcumulado ? parseBalanceML(currentRecord.balancoAcumulado) : undefined,
+      rass: currentRecord.rass ? parseNumber(currentRecord.rass) : undefined,
+      temSedativoAtivo: sedAtivosGaso.length > 0,
+      temBNMAtivo: bnmAtivosGaso.length > 0,
     })
     const p01Interp = currentRecord.p01 ? interpP01(parseNumber(currentRecord.p01)) : null
     const poccInterp = currentRecord.pocc ? interpPocc(parseNumber(currentRecord.pocc)) : null
@@ -4299,14 +4310,21 @@ export function ProntuarioSystemPanel() {
 
                 {/* Gasometria analise — só aparece quando há dados */}
                 {calculations?.gaso ? (
-                  <div className="chrome-panel rounded-[1.5rem] p-4">
-                    <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Análise gasométrica</p>
-                    <p className="text-sm font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
-                    {calculations.gaso.comp ? (
-                      <p className="mt-1 text-[11px] text-white/52">{calculations.gaso.comp}</p>
-                    ) : null}
+                  <div className="chrome-panel rounded-[1rem] p-1.5 md:p-2">
+                    <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/40">Analise gasometrica</p>
+                    <p className="text-[11px] font-semibold" style={{ color: calculations.gaso.cor }}>{calculations.gaso.full}</p>
                     {calculations.gaso.wintersDetail ? (
-                      <p className="mt-1 text-[10px] text-white/35">{calculations.gaso.wintersDetail}</p>
+                      <p className="mt-0.5 text-[8px] text-white/35">{calculations.gaso.wintersDetail}</p>
+                    ) : null}
+                    {/* Insights clínicos cruzados */}
+                    {calculations.gaso.insights?.length ? (
+                      <div className="mt-1.5 space-y-1">
+                        {calculations.gaso.insights.map((insight: string, i: number) => (
+                          <div key={i} className="rounded-[0.5rem] border border-white/8 bg-white/[0.03] p-1.5">
+                            <p className="text-[8px] leading-relaxed text-white/60">{insight}</p>
+                          </div>
+                        ))}
+                      </div>
                     ) : null}
                   </div>
                 ) : null}
