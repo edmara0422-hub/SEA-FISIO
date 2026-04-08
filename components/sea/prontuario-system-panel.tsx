@@ -654,13 +654,22 @@ function analyzeNeuroAlerts(record: ICURecord, calculations: Record<string, unkn
 
   // Glasgow baixo — diferenciar sedação vs lesão (só se O, V, M preenchidos)
   const glasgowPreenchido = record.glasgowO && record.glasgowM && record.glasgowV
-  if (glasgowPreenchido && glasgow && typeof glasgow.total === 'number' && glasgow.total <= 10) {
-    if (temSedativoAtivo && rass < 0) {
-      // Sedado — Glasgow baixo é ESPERADO
-      alerts.push({ text: `Glasgow ${glasgow.total} com sedacao ativa (${sedAtivosCheck.map(s => s.droga).join(', ')}). Rebaixamento ESPERADO por sedacao — NAO indica lesao neurologica. Para avaliacao real: realizar janela de sedacao (SAT) e reavaliar Glasgow apos 30-60min sem sedativo.`, color: '#60a5fa' })
-    } else if (rass >= 0) {
-      // Não sedado mas rebaixado — investigar
-      alerts.push({ text: `⚠ Glasgow ${glasgow.total} com RASS ${record.rass} SEM sedacao. Rebaixamento nao farmacologico. Investigar: AVC, hemorragia intracraniana, disturbio metabolico (Na+, glicemia, ureia), encefalopatia septica, delirium hipoativo. Considerar TC de cranio e EEG.`, color: '#f87171' })
+  if (glasgowPreenchido && glasgow) {
+    // Extrair valor numérico do Glasgow (funciona com "8T" e com 8)
+    const gVal = typeof glasgow.total === 'number' ? glasgow.total : parseInt(String(glasgow.total))
+    const isIntubated = record.glasgowV === 'T'
+
+    if (!isNaN(gVal) && gVal <= 10) {
+      if (temSedativoAtivo && rass < 0) {
+        alerts.push({ text: `Glasgow ${glasgow.total} com sedacao ativa (${sedAtivosCheck.map(s => s.droga).join(', ')}). Rebaixamento ESPERADO por sedacao — NAO indica lesao neurologica. Para avaliacao real: realizar janela de sedacao (SAT) e reavaliar Glasgow apos 30-60min sem sedativo.`, color: '#60a5fa' })
+      } else if (!temSedativoAtivo || rass >= 0) {
+        if (isIntubated && temSedativoAtivo) {
+          // Intubado com sedação mas RASS 0 ou positivo — sedação insuficiente ou lesão
+          alerts.push({ text: `⚠ Glasgow ${glasgow.total} (intubado) com RASS ${record.rass || 'nao informado'}. Paciente sedado mas com resposta pobre. Avaliar: sedacao insuficiente, BNM residual, ou causa neurologica. Se RASS >= 0: pode indicar lesao — considerar neuroimagem.`, color: '#fb923c' })
+        } else {
+          alerts.push({ text: `⚠ Glasgow ${glasgow.total} ${isIntubated ? '(intubado) ' : ''}com RASS ${record.rass || 'nao informado'} SEM sedacao ativa. Rebaixamento nao farmacologico. Investigar: AVC, hemorragia intracraniana, disturbio metabolico (Na+, glicemia, ureia), encefalopatia septica. Considerar TC de cranio e EEG.`, color: '#f87171' })
+        }
+      }
     }
   }
 
@@ -3602,7 +3611,8 @@ export function ProntuarioSystemPanel() {
                       <p className="text-[8px] leading-relaxed text-white/60">
                         {(() => {
                           const sedAtv = currentRecord.sedativos?.filter(s => !s.suspensao && s.droga) || []
-                          if (sedAtv.length > 0 && typeof calculations.glasgow.total === 'number' && calculations.glasgow.total <= 12) {
+                          const gTotal = typeof calculations.glasgow.total === 'number' ? calculations.glasgow.total : parseInt(String(calculations.glasgow.total))
+                          if (sedAtv.length > 0 && !isNaN(gTotal) && gTotal <= 12) {
                             return `Paciente em uso de ${sedAtv.map(s => s.droga).join(', ')}. Glasgow ${calculations.glasgow.total} e ESPERADO por sedacao — nao indica lesao. Para avaliacao neurologica real, realizar janela de sedacao (SAT): suspender sedativo por 30-60min e reavaliar.`
                           }
                           return calculations.glasgow.detail
