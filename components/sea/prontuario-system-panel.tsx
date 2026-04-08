@@ -5445,7 +5445,6 @@ export function ProntuarioSystemPanel() {
                               <p className="mt-1 text-[6px] text-white/30">Todos os criterios devem ser atendidos simultaneamente para indicar elegibilidade. Avaliar tambem: Glasgow, tosse, secrecao, estabilidade hemodinamica.</p>
                             </div>
                           </div>
-                        </div>
                       </div>
 
                       {currentRecord.desmHist?.length ? (
