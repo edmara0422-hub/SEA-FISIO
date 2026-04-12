@@ -4,18 +4,19 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 const PHRASES = [
-  'Raciocínio clínico\nà beira do leito',
-  'Simulações 3D reais\nPulmão · Coração · Cérebro',
-  'IA especialista\nque ensina em segundos',
-  'Prontuário inteligente\nDetecção automática de desmame',
-  'Zero papel\nZero infecção cruzada\nZero prancheta',
-  'Criatividade\nCocriação com profissionais reais',
-  'Inovação\nIA adaptativa · Análise gráfica',
-  'Sustentabilidade social\nProfissional preparado\n= paciente mais seguro',
-  'Sustentabilidade ambiental\nDigital-first · Offline',
-  'Sustentabilidade econômica\nMenos tempo de VM\n= menos custo hospitalar',
-  'Acessibilidade · Inclusão\nDiversidade · Igualdade',
-  'Acelerador de\ncompetência clínica',
+  'Raciocínio clínico\nà beira do leito.',
+  'Simulações 3D reais.\nPulmão · Coração · Cérebro.',
+  'IA especialista\nque ensina em segundos.',
+  'Prontuário inteligente.\nDetecção automática de desmame.',
+  'Zero papel. Zero infecção cruzada.\nDigital-first. Offline.',
+  'Cocriação com profissionais reais.\nCriatividade aplicada à prática.',
+  'Inovação e infraestrutura.\nIA adaptativa · Tecnologia à beira do leito.',
+  'Planeta.\nEco-eficiência digital.\nMenos processamento, menos pegada de carbono.',
+  'Pessoas.\nProfissional preparado = paciente seguro.\nInclusão · Diversidade · Igualdade.',
+  'Prosperidade.\nMenos tempo de VM = menos custo hospitalar.\nValor compartilhado.',
+  'ODS: Saúde · Educação · Inovação.\nConsumo responsável · Redução das desigualdades.',
+  'Governança.\nCompliance · Transparência · Ética.',
+  'Acelerador de\ncompetência clínica.',
 ]
 
 const PHASE_DURATION = 3200
