@@ -97,12 +97,6 @@ export function PremiumSplash({
             <Letter value="A" />
           </div>
 
-          {/* Animated line under SEA */}
-          <motion.div
-            className="mx-auto mt-4 h-px w-0 bg-[linear-gradient(90deg,transparent,rgba(255,255,255,0.78),transparent)]"
-            animate={{ width: '6rem', opacity: [0, 0.8] }}
-            transition={{ duration: 1, delay: 0.8, ease: 'easeOut' }}
-          />
         </motion.div>
       </div>
 
