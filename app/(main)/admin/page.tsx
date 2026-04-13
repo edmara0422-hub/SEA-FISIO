@@ -6,7 +6,7 @@ import { useAuthStore, type Profile } from '@/lib/stores/authStore'
 import { supabase } from '@/lib/supabase'
 import {
   ArrowLeft, Ban, Bell, Brain, ChevronRight, Crown, Key, LineChart,
-  Lock, MessageSquare, PencilLine, RefreshCw, Save, Search,
+  Lock, Mail, MessageSquare, PencilLine, RefreshCw, Save, Search,
   Send, Settings, Shield, Trash2, Unlock, User, Users, X,
 } from 'lucide-react'
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
