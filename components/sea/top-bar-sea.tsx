@@ -83,7 +83,6 @@ export function TopBarSEA() {
           )}
           <button
             aria-label="Notificacoes"
-            onClick={() => router.push('/profile')}
             className={btnClass}
             style={{ background: shellBackground }}
           >

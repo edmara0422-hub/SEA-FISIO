@@ -1,70 +1,79 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
 import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/lib/stores/authStore'
 import { supabase } from '@/lib/supabase'
 import {
-  ArrowLeft,
-  Bell,
-  Camera,
-  ChevronRight,
-  Key,
-  LogOut,
-  Moon,
-  PencilLine,
-  Save,
-  Shield,
-  User,
-  Users,
-  X,
+  ArrowLeft, Bell, Camera, ChevronRight, Info, Key, LogOut, Mail,
+  Moon, PencilLine, Save, Shield, Smartphone, User, Users, X,
 } from 'lucide-react'
 
 export default function ProfilePage() {
   const router = useRouter()
-  const { profile, user, isAdmin, signOut, updateProfile } = useAuthStore()
-  const [editMode, setEditMode] = useState(false)
+  const { profile, user, isAdmin, signOut, updateProfile, fetchProfile } = useAuthStore()
+
+  // Edit states
+  const [editField, setEditField] = useState<'name' | 'email' | null>(null)
+  const [editValue, setEditValue] = useState('')
   const [changePassword, setChangePassword] = useState(false)
-  const [showAdmin, setShowAdmin] = useState(false)
-  const [editName, setEditName] = useState(profile?.name || '')
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
+
+  // Admin
+  const [showAdmin, setShowAdmin] = useState(false)
+  const [adminStats, setAdminStats] = useState<{ total: number; active: number; cancelled: number; overdue: number; trial: number } | null>(null)
+  const [adminUsers, setAdminUsers] = useState<Array<{ id: string; name: string; email: string; role: string; created_at: string }>>([])
+  const [adminLoading, setAdminLoading] = useState(false)
+
+  // UI
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
 
-  // Admin stats
-  const [adminStats, setAdminStats] = useState<{ total: number; active: number; cancelled: number; overdue: number; trial: number } | null>(null)
-  const [adminUsers, setAdminUsers] = useState<Array<{ id: string; name: string; email: string; role: string; created_at: string }>>([])
-  const [adminLoading, setAdminLoading] = useState(false)
+  const flash = (msg: string) => { setMessage(msg); setError(''); setTimeout(() => setMessage(''), 3000) }
+  const flashErr = (msg: string) => { setError(msg); setMessage(''); setTimeout(() => setError(''), 5000) }
+
+  // ── Handlers ──
 
   const handleSaveName = async () => {
+    if (!editValue.trim()) { flashErr('Nome nao pode ser vazio.'); return }
     setSaving(true)
-    setError('')
-    const result = await updateProfile({ name: editName })
+    const result = await updateProfile({ name: editValue.trim() })
     setSaving(false)
-    if (result.error) { setError(result.error); return }
-    setEditMode(false)
-    setMessage('Nome atualizado.')
-    setTimeout(() => setMessage(''), 2000)
+    if (result.error) { flashErr(result.error); return }
+    setEditField(null)
+    flash('Nome atualizado.')
+  }
+
+  const handleSaveEmail = async () => {
+    if (!editValue.trim() || !editValue.includes('@')) { flashErr('Email invalido.'); return }
+    if (!supabase) { flashErr('Supabase nao configurado.'); return }
+    setSaving(true)
+    // Update auth email
+    const { error: authErr } = await supabase.auth.updateUser({ email: editValue.trim() })
+    if (authErr) { flashErr(authErr.message); setSaving(false); return }
+    // Update profile table
+    await updateProfile({})
+    setSaving(false)
+    setEditField(null)
+    flash('Email atualizado. Verifique a caixa de entrada para confirmar.')
   }
 
   const handleChangePassword = async () => {
     setError('')
-    if (newPassword.length < 6) { setError('Minimo 6 caracteres.'); return }
-    if (newPassword !== confirmPassword) { setError('Senhas nao coincidem.'); return }
-    if (!supabase) { setError('Supabase nao configurado.'); return }
+    if (newPassword.length < 6) { flashErr('Minimo 6 caracteres.'); return }
+    if (newPassword !== confirmPassword) { flashErr('Senhas nao coincidem.'); return }
+    if (!supabase) { flashErr('Supabase nao configurado.'); return }
     setSaving(true)
     const { error: err } = await supabase.auth.updateUser({ password: newPassword })
     setSaving(false)
-    if (err) { setError(err.message); return }
+    if (err) { flashErr(err.message); return }
     setChangePassword(false)
     setNewPassword('')
     setConfirmPassword('')
-    setMessage('Senha alterada com sucesso.')
-    setTimeout(() => setMessage(''), 2000)
+    flash('Senha alterada com sucesso.')
   }
 
   const handleUploadPhoto = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,12 +83,11 @@ export default function ProfilePage() {
     const ext = file.name.split('.').pop()
     const path = `${user.id}/avatar.${ext}`
     const { error: upErr } = await supabase.storage.from('avatars').upload(path, file, { upsert: true })
-    if (upErr) { setError(upErr.message); setUploading(false); return }
+    if (upErr) { flashErr(upErr.message); setUploading(false); return }
     const { data } = supabase.storage.from('avatars').getPublicUrl(path)
     await updateProfile({ photo_url: data.publicUrl + '?t=' + Date.now() })
     setUploading(false)
-    setMessage('Foto atualizada.')
-    setTimeout(() => setMessage(''), 2000)
+    flash('Foto atualizada.')
   }
 
   const handleToggleNotifications = async () => {
@@ -94,11 +102,9 @@ export default function ProfilePage() {
   const loadAdminData = async () => {
     if (!supabase || !isAdmin) return
     setAdminLoading(true)
-    // Fetch all profiles (admin RLS allows this)
     const { data: profiles } = await supabase.from('profiles').select('*').order('created_at', { ascending: false })
     if (profiles) {
       setAdminUsers(profiles as typeof adminUsers)
-      // Fetch subscriptions
       const { data: subs } = await supabase.from('subscriptions').select('*')
       const subList = subs || []
       setAdminStats({
@@ -113,29 +119,21 @@ export default function ProfilePage() {
   }
 
   const inputClass = 'w-full h-8 rounded-[0.5rem] border border-white/10 bg-white/5 px-2 text-[10px] text-white placeholder:text-white/30 outline-none focus:border-white/20'
+  const menuBtn = 'flex w-full items-center gap-2 rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-3 py-2 text-left'
 
   return (
     <div className="relative min-h-screen bg-[#010101] text-white px-3 pb-32 pt-16 md:px-6">
-      {/* Back button */}
+      {/* Back */}
       <button onClick={() => router.back()} className="mb-4 flex items-center gap-1 text-[8px] text-white/40 hover:text-white/60">
-        <ArrowLeft className="h-3 w-3" />
-        Voltar
+        <ArrowLeft className="h-3 w-3" /> Voltar
       </button>
 
       {/* Messages */}
-      {message && (
-        <div className="mb-3 rounded-[0.5rem] border border-[#4ade8030] bg-[#4ade8008] px-3 py-1.5">
-          <p className="text-[8px] text-[#86efac]">{message}</p>
-        </div>
-      )}
-      {error && (
-        <div className="mb-3 rounded-[0.5rem] border border-[#f8717130] bg-[#f8717108] px-3 py-1.5">
-          <p className="text-[8px] text-[#fca5a5]">{error}</p>
-        </div>
-      )}
+      {message && <div className="mb-3 rounded-[0.5rem] border border-[#4ade8030] bg-[#4ade8008] px-3 py-1.5"><p className="text-[8px] text-[#86efac]">{message}</p></div>}
+      {error && <div className="mb-3 rounded-[0.5rem] border border-[#f8717130] bg-[#f8717108] px-3 py-1.5"><p className="text-[8px] text-[#fca5a5]">{error}</p></div>}
 
-      {/* Profile Header */}
-      <div className="mb-4 flex items-center gap-3">
+      {/* ═══ Avatar + Header ═══ */}
+      <div className="mb-5 flex items-center gap-3">
         <div className="relative">
           <div className="flex h-14 w-14 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-white/[0.04]">
             {profile?.photo_url ? (
@@ -145,65 +143,64 @@ export default function ProfilePage() {
             )}
           </div>
           <label className="absolute -bottom-1 -right-1 flex h-5 w-5 cursor-pointer items-center justify-center rounded-full border border-white/20 bg-black/80">
-            {uploading ? (
-              <div className="h-2.5 w-2.5 animate-spin rounded-full border border-white/30 border-t-white" />
-            ) : (
-              <Camera className="h-2.5 w-2.5 text-white/60" />
-            )}
+            {uploading ? <div className="h-2.5 w-2.5 animate-spin rounded-full border border-white/30 border-t-white" /> : <Camera className="h-2.5 w-2.5 text-white/60" />}
             <input type="file" accept="image/*" className="hidden" onChange={handleUploadPhoto} />
           </label>
         </div>
-        <div className="flex-1">
-          {editMode ? (
-            <div className="flex items-center gap-1">
-              <input className={inputClass} value={editName} onChange={(e) => setEditName(e.target.value)} placeholder="Nome" />
-              <button onClick={handleSaveName} disabled={saving} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.5rem] border border-white/10 bg-white/5">
-                <Save className="h-3 w-3 text-white/60" />
-              </button>
-              <button onClick={() => setEditMode(false)} className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[0.5rem] border border-white/10 bg-white/5">
-                <X className="h-3 w-3 text-white/40" />
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <div>
-                <p className="text-[10px] font-semibold">{profile?.name || 'Usuario'}</p>
-                <p className="text-[7px] text-white/40">{profile?.email || user?.email}</p>
-                {isAdmin && <span className="mt-0.5 inline-block rounded-full border border-[#a78bfa30] bg-[#a78bfa10] px-1.5 py-0.5 text-[6px] font-semibold text-[#a78bfa]">ADMIN</span>}
-              </div>
-              <button onClick={() => { setEditName(profile?.name || ''); setEditMode(true) }} className="text-white/30 hover:text-white/60">
-                <PencilLine className="h-3 w-3" />
-              </button>
-            </div>
-          )}
+        <div>
+          <p className="text-[10px] font-semibold">{profile?.name || 'Usuario'}</p>
+          <p className="text-[7px] text-white/40">{profile?.email || user?.email}</p>
+          {isAdmin && <span className="mt-0.5 inline-block rounded-full border border-[#a78bfa30] bg-[#a78bfa10] px-1.5 py-0.5 text-[6px] font-semibold text-[#a78bfa]">ADMIN</span>}
         </div>
       </div>
 
-      {/* Menu Items */}
-      <div className="space-y-1">
-        {/* Notificações */}
-        <button onClick={handleToggleNotifications} className="flex w-full items-center gap-2 rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-3 py-2">
-          <Bell className="h-3.5 w-3.5 text-white/40" />
-          <span className="flex-1 text-left text-[8px] text-white/70">Notificacoes</span>
-          <span className={`rounded-full px-1.5 py-0.5 text-[6px] font-semibold ${profile?.notifications_enabled ? 'border border-[#4ade8030] bg-[#4ade8010] text-[#4ade80]' : 'border border-white/10 bg-white/5 text-white/30'}`}>
-            {profile?.notifications_enabled ? 'ON' : 'OFF'}
-          </span>
-        </button>
+      <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Conta</p>
+      <div className="space-y-1 mb-4">
 
-        {/* Tema */}
-        <div className="flex items-center gap-2 rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-3 py-2">
-          <Moon className="h-3.5 w-3.5 text-white/40" />
-          <span className="flex-1 text-[8px] text-white/70">Tema</span>
-          <span className="text-[7px] text-white/30">Dark</span>
-        </div>
+        {/* ── Nome ── */}
+        {editField === 'name' ? (
+          <div className="flex items-center gap-1 rounded-[0.7rem] border border-white/10 bg-white/[0.03] px-3 py-1.5">
+            <User className="h-3.5 w-3.5 shrink-0 text-white/30" />
+            <input className={inputClass} value={editValue} onChange={(e) => setEditValue(e.target.value)} placeholder="Seu nome" autoFocus />
+            <button onClick={handleSaveName} disabled={saving} className="shrink-0 text-[#4ade80]"><Save className="h-3.5 w-3.5" /></button>
+            <button onClick={() => setEditField(null)} className="shrink-0 text-white/30"><X className="h-3.5 w-3.5" /></button>
+          </div>
+        ) : (
+          <button onClick={() => { setEditField('name'); setEditValue(profile?.name || '') }} className={menuBtn}>
+            <User className="h-3.5 w-3.5 text-white/40" />
+            <div className="flex-1">
+              <p className="text-[6px] text-white/30">Nome</p>
+              <p className="text-[8px] text-white/70">{profile?.name || 'Nao informado'}</p>
+            </div>
+            <PencilLine className="h-3 w-3 text-white/20" />
+          </button>
+        )}
 
-        {/* Alterar senha */}
-        <button onClick={() => setChangePassword(!changePassword)} className="flex w-full items-center gap-2 rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-3 py-2">
+        {/* ── Email ── */}
+        {editField === 'email' ? (
+          <div className="flex items-center gap-1 rounded-[0.7rem] border border-white/10 bg-white/[0.03] px-3 py-1.5">
+            <Mail className="h-3.5 w-3.5 shrink-0 text-white/30" />
+            <input className={inputClass} type="email" value={editValue} onChange={(e) => setEditValue(e.target.value)} placeholder="Seu email" autoFocus />
+            <button onClick={handleSaveEmail} disabled={saving} className="shrink-0 text-[#4ade80]"><Save className="h-3.5 w-3.5" /></button>
+            <button onClick={() => setEditField(null)} className="shrink-0 text-white/30"><X className="h-3.5 w-3.5" /></button>
+          </div>
+        ) : (
+          <button onClick={() => { setEditField('email'); setEditValue(profile?.email || user?.email || '') }} className={menuBtn}>
+            <Mail className="h-3.5 w-3.5 text-white/40" />
+            <div className="flex-1">
+              <p className="text-[6px] text-white/30">Email</p>
+              <p className="text-[8px] text-white/70">{profile?.email || user?.email}</p>
+            </div>
+            <PencilLine className="h-3 w-3 text-white/20" />
+          </button>
+        )}
+
+        {/* ── Senha ── */}
+        <button onClick={() => { setChangePassword(!changePassword); setError('') }} className={menuBtn}>
           <Key className="h-3.5 w-3.5 text-white/40" />
-          <span className="flex-1 text-left text-[8px] text-white/70">Alterar senha</span>
-          <ChevronRight className={`h-3 w-3 text-white/30 transition-transform ${changePassword ? 'rotate-90' : ''}`} />
+          <span className="flex-1 text-[8px] text-white/70">Alterar senha</span>
+          <ChevronRight className={`h-3 w-3 text-white/20 transition-transform ${changePassword ? 'rotate-90' : ''}`} />
         </button>
-
         {changePassword && (
           <div className="rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-3 py-2 space-y-1.5">
             <input className={inputClass} type="password" placeholder="Nova senha (min 6 caracteres)" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
@@ -213,10 +210,40 @@ export default function ProfilePage() {
             </button>
           </div>
         )}
+      </div>
 
-        {/* Admin Panel — só para admin */}
-        {isAdmin && (
-          <>
+      {/* ═══ Configurações ═══ */}
+      <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Configuracoes</p>
+      <div className="space-y-1 mb-4">
+        {/* Notificações */}
+        <button onClick={handleToggleNotifications} className={menuBtn}>
+          <Bell className="h-3.5 w-3.5 text-white/40" />
+          <span className="flex-1 text-[8px] text-white/70">Notificacoes</span>
+          <span className={`rounded-full px-1.5 py-0.5 text-[6px] font-semibold ${profile?.notifications_enabled ? 'border border-[#4ade8030] bg-[#4ade8010] text-[#4ade80]' : 'border border-white/10 bg-white/5 text-white/30'}`}>
+            {profile?.notifications_enabled ? 'ON' : 'OFF'}
+          </span>
+        </button>
+
+        {/* Tema */}
+        <div className={menuBtn}>
+          <Moon className="h-3.5 w-3.5 text-white/40" />
+          <span className="flex-1 text-[8px] text-white/70">Tema</span>
+          <span className="text-[7px] text-white/30">Dark</span>
+        </div>
+
+        {/* Dispositivo */}
+        <div className={menuBtn}>
+          <Smartphone className="h-3.5 w-3.5 text-white/40" />
+          <span className="flex-1 text-[8px] text-white/70">Dispositivo</span>
+          <span className="text-[7px] text-white/30">Capacitor iOS</span>
+        </div>
+      </div>
+
+      {/* ═══ Admin Panel ═══ */}
+      {isAdmin && (
+        <>
+          <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-[#a78bfa]/50">Administracao</p>
+          <div className="space-y-1 mb-4">
             <button
               onClick={() => { setShowAdmin(!showAdmin); if (!showAdmin && !adminStats) loadAdminData() }}
               className="flex w-full items-center gap-2 rounded-[0.7rem] border border-[#a78bfa20] bg-[#a78bfa08] px-3 py-2"
@@ -229,9 +256,7 @@ export default function ProfilePage() {
             {showAdmin && (
               <div className="rounded-[0.7rem] border border-[#a78bfa20] bg-[#a78bfa05] px-3 py-2 space-y-2">
                 {adminLoading ? (
-                  <div className="flex justify-center py-4">
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-[#a78bfa]" />
-                  </div>
+                  <div className="flex justify-center py-4"><div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-[#a78bfa]" /></div>
                 ) : adminStats ? (
                   <>
                     <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-[#a78bfa]/60">Metricas</p>
@@ -240,18 +265,18 @@ export default function ProfilePage() {
                         { label: 'Total', value: adminStats.total, color: '#60a5fa' },
                         { label: 'Ativos', value: adminStats.active, color: '#4ade80' },
                         { label: 'Trial', value: adminStats.trial, color: '#facc15' },
-                        { label: 'Cancelados', value: adminStats.cancelled, color: '#fb923c' },
+                        { label: 'Cancel.', value: adminStats.cancelled, color: '#fb923c' },
                         { label: 'Devendo', value: adminStats.overdue, color: '#f87171' },
                       ].map((s) => (
-                        <div key={s.label} className="rounded-[0.5rem] border border-white/6 bg-black/20 px-1.5 py-1.5 text-center">
+                        <div key={s.label} className="rounded-[0.5rem] border border-white/6 bg-black/20 px-1 py-1.5 text-center">
                           <p className="text-[10px] font-bold" style={{ color: s.color }}>{s.value}</p>
-                          <p className="text-[6px] text-white/30">{s.label}</p>
+                          <p className="text-[5px] text-white/30">{s.label}</p>
                         </div>
                       ))}
                     </div>
 
-                    <p className="mt-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-[#a78bfa]/60">Usuarios ({adminUsers.length})</p>
-                    <div className="max-h-48 space-y-0.5 overflow-y-auto">
+                    <p className="mt-1 text-[7px] font-semibold uppercase tracking-[0.14em] text-[#a78bfa]/60">Usuarios ({adminUsers.length})</p>
+                    <div className="max-h-48 space-y-0.5 overflow-y-auto scrollbar-hide">
                       {adminUsers.map((u) => (
                         <div key={u.id} className="flex items-center gap-2 rounded-[0.4rem] border border-white/4 bg-black/10 px-2 py-1">
                           <Users className="h-2.5 w-2.5 shrink-0 text-white/20" />
@@ -259,30 +284,36 @@ export default function ProfilePage() {
                             <p className="truncate text-[7px] font-semibold text-white/60">{u.name || 'Sem nome'}</p>
                             <p className="truncate text-[6px] text-white/30">{u.email}</p>
                           </div>
+                          <p className="shrink-0 text-[5px] text-white/20">{new Date(u.created_at).toLocaleDateString('pt-BR')}</p>
                           {u.role === 'admin' && <span className="shrink-0 text-[5px] font-bold text-[#a78bfa]">ADM</span>}
                         </div>
                       ))}
                     </div>
                   </>
-                ) : (
-                  <p className="text-center text-[7px] text-white/30">Sem dados.</p>
-                )}
+                ) : <p className="text-center text-[7px] text-white/30">Sem dados.</p>}
               </div>
             )}
-          </>
-        )}
+          </div>
+        </>
+      )}
 
-        {/* App info */}
-        <div className="rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-3 py-2">
-          <p className="text-[7px] text-white/30">SEA Fisio v1.0.0</p>
+      {/* ═══ Sobre ═══ */}
+      <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Sobre</p>
+      <div className="space-y-1 mb-4">
+        <div className={menuBtn}>
+          <Info className="h-3.5 w-3.5 text-white/40" />
+          <div className="flex-1">
+            <p className="text-[8px] text-white/70">SEA Fisio</p>
+            <p className="text-[6px] text-white/30">Versao 1.0.0 · Sistema de Estudo Avancado.</p>
+          </div>
         </div>
-
-        {/* Logout */}
-        <button onClick={handleLogout} className="flex w-full items-center gap-2 rounded-[0.7rem] border border-[#f8717120] bg-[#f8717108] px-3 py-2">
-          <LogOut className="h-3.5 w-3.5 text-[#fca5a5]" />
-          <span className="text-[8px] font-semibold text-[#fca5a5]">Sair da conta</span>
-        </button>
       </div>
+
+      {/* ═══ Logout ═══ */}
+      <button onClick={handleLogout} className="flex w-full items-center gap-2 rounded-[0.7rem] border border-[#f8717120] bg-[#f8717108] px-3 py-2">
+        <LogOut className="h-3.5 w-3.5 text-[#fca5a5]" />
+        <span className="text-[8px] font-semibold text-[#fca5a5]">Sair da conta</span>
+      </button>
     </div>
   )
 }
