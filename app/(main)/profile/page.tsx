@@ -100,7 +100,7 @@ export default function ProfilePage() {
   return (
     <div className="relative min-h-screen bg-[#010101] text-white px-3 pb-32 pt-16 md:px-6">
       {/* Back */}
-      <button onClick={() => router.back()} className="mb-4 flex items-center gap-1 text-[8px] text-white/40 hover:text-white/60">
+      <button onClick={() => router.push('/sea')} className="mb-4 flex items-center gap-1 text-[8px] text-white/40 hover:text-white/60">
         <ArrowLeft className="h-3 w-3" /> Voltar
       </button>
 

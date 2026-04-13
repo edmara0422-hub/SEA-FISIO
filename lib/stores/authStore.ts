@@ -2,6 +2,7 @@
 
 import { create } from 'zustand'
 import { supabase } from '@/lib/supabase'
+import { trackLogin } from '@/lib/analytics/track'
 import type { User, Session } from '@supabase/supabase-js'
 
 export type Profile = {
@@ -94,6 +95,7 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
       if (error.message.includes('Email not confirmed')) return { error: 'Confirme seu email antes de entrar.' }
       return { error: error.message }
     }
+    trackLogin()
     return { error: null }
   },
 
