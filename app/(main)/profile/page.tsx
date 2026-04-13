@@ -6,12 +6,12 @@ import { useAuthStore } from '@/lib/stores/authStore'
 import { supabase } from '@/lib/supabase'
 import {
   ArrowLeft, Bell, Camera, ChevronRight, Info, Key, LogOut, Mail,
-  Moon, PencilLine, Save, Shield, User, Users, X,
+  Moon, PencilLine, Save, Shield, User, X,
 } from 'lucide-react'
 
 export default function ProfilePage() {
   const router = useRouter()
-  const { profile, user, isAdmin, signOut, updateProfile, fetchProfile } = useAuthStore()
+  const { profile, user, isAdmin, signOut, updateProfile } = useAuthStore()
 
   // Edit states
   const [editField, setEditField] = useState<'name' | 'email' | null>(null)
@@ -19,12 +19,6 @@ export default function ProfilePage() {
   const [changePassword, setChangePassword] = useState(false)
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-
-  // Admin
-  const [showAdmin, setShowAdmin] = useState(false)
-  const [adminStats, setAdminStats] = useState<{ total: number; active: number; cancelled: number; overdue: number; trial: number } | null>(null)
-  const [adminUsers, setAdminUsers] = useState<Array<{ id: string; name: string; email: string; role: string; created_at: string }>>([])
-  const [adminLoading, setAdminLoading] = useState(false)
 
   // UI
   const [message, setMessage] = useState('')
@@ -99,24 +93,6 @@ export default function ProfilePage() {
     window.location.href = '/auth'
   }
 
-  const loadAdminData = async () => {
-    if (!supabase || !isAdmin) return
-    setAdminLoading(true)
-    const { data: profiles } = await supabase.from('profiles').select('*').order('created_at', { ascending: false })
-    if (profiles) {
-      setAdminUsers(profiles as typeof adminUsers)
-      const { data: subs } = await supabase.from('subscriptions').select('*')
-      const subList = subs || []
-      setAdminStats({
-        total: profiles.length,
-        active: subList.filter((s: { status: string }) => s.status === 'active').length,
-        cancelled: subList.filter((s: { status: string }) => s.status === 'cancelled').length,
-        overdue: subList.filter((s: { status: string }) => s.status === 'overdue').length,
-        trial: subList.filter((s: { status: string }) => s.status === 'trial').length,
-      })
-    }
-    setAdminLoading(false)
-  }
 
   const inputClass = 'w-full h-8 rounded-[0.5rem] border border-white/10 bg-white/5 px-2 text-[10px] text-white placeholder:text-white/30 outline-none focus:border-white/20'
   const menuBtn = 'flex w-full items-center gap-2 rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-3 py-2 text-left'
@@ -238,54 +214,13 @@ export default function ProfilePage() {
           <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-[#a78bfa]/50">Administracao</p>
           <div className="space-y-1 mb-4">
             <button
-              onClick={() => { setShowAdmin(!showAdmin); if (!showAdmin && !adminStats) loadAdminData() }}
+              onClick={() => router.push('/admin')}
               className="flex w-full items-center gap-2 rounded-[0.7rem] border border-[#a78bfa20] bg-[#a78bfa08] px-3 py-2"
             >
               <Shield className="h-3.5 w-3.5 text-[#a78bfa]" />
               <span className="flex-1 text-left text-[8px] font-semibold text-[#a78bfa]">Painel Admin</span>
-              <ChevronRight className={`h-3 w-3 text-[#a78bfa]/50 transition-transform ${showAdmin ? 'rotate-90' : ''}`} />
+              <ChevronRight className="h-3 w-3 text-[#a78bfa]/50" />
             </button>
-
-            {showAdmin && (
-              <div className="rounded-[0.7rem] border border-[#a78bfa20] bg-[#a78bfa05] px-3 py-2 space-y-2">
-                {adminLoading ? (
-                  <div className="flex justify-center py-4"><div className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-[#a78bfa]" /></div>
-                ) : adminStats ? (
-                  <>
-                    <p className="text-[7px] font-semibold uppercase tracking-[0.14em] text-[#a78bfa]/60">Metricas</p>
-                    <div className="grid grid-cols-5 gap-1">
-                      {[
-                        { label: 'Total', value: adminStats.total, color: '#60a5fa' },
-                        { label: 'Ativos', value: adminStats.active, color: '#4ade80' },
-                        { label: 'Trial', value: adminStats.trial, color: '#facc15' },
-                        { label: 'Cancel.', value: adminStats.cancelled, color: '#fb923c' },
-                        { label: 'Devendo', value: adminStats.overdue, color: '#f87171' },
-                      ].map((s) => (
-                        <div key={s.label} className="rounded-[0.5rem] border border-white/6 bg-black/20 px-1 py-1.5 text-center">
-                          <p className="text-[10px] font-bold" style={{ color: s.color }}>{s.value}</p>
-                          <p className="text-[5px] text-white/30">{s.label}</p>
-                        </div>
-                      ))}
-                    </div>
-
-                    <p className="mt-1 text-[7px] font-semibold uppercase tracking-[0.14em] text-[#a78bfa]/60">Usuarios ({adminUsers.length})</p>
-                    <div className="max-h-48 space-y-0.5 overflow-y-auto scrollbar-hide">
-                      {adminUsers.map((u) => (
-                        <div key={u.id} className="flex items-center gap-2 rounded-[0.4rem] border border-white/4 bg-black/10 px-2 py-1">
-                          <Users className="h-2.5 w-2.5 shrink-0 text-white/20" />
-                          <div className="min-w-0 flex-1">
-                            <p className="truncate text-[7px] font-semibold text-white/60">{u.name || 'Sem nome'}</p>
-                            <p className="truncate text-[6px] text-white/30">{u.email}</p>
-                          </div>
-                          <p className="shrink-0 text-[5px] text-white/20">{new Date(u.created_at).toLocaleDateString('pt-BR')}</p>
-                          {u.role === 'admin' && <span className="shrink-0 text-[5px] font-bold text-[#a78bfa]">ADM</span>}
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                ) : <p className="text-center text-[7px] text-white/30">Sem dados.</p>}
-              </div>
-            )}
           </div>
         </>
       )}

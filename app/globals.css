@@ -31,6 +31,7 @@
 @source '../components/caderno/study-sidebar.tsx';
 @source '../app/auth/reset-password/page.tsx';
 @source '../app/(main)/profile/page.tsx';
+@source '../app/(main)/admin/page.tsx';
 
 @custom-variant dark (&:is(.dark *));
 
