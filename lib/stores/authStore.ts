@@ -68,11 +68,16 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
 
   fetchProfile: async (userId: string) => {
     if (!supabase) return
-    const { data } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .select('*')
       .eq('id', userId)
       .single()
+    if (error) {
+      console.warn('[authStore] fetchProfile error:', error.message)
+      // Profile might not exist yet (trigger delay) — create fallback
+      return
+    }
     if (data) {
       const profile = data as Profile
       set({ profile, isAdmin: profile.role === 'admin' })
@@ -111,8 +116,12 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
 
   signOut: async () => {
     if (!supabase) return
-    await supabase.auth.signOut()
-    set({ user: null, session: null, profile: null, isAdmin: false })
+    try { await supabase.auth.signOut() } catch { /* empty */ }
+    set({ user: null, session: null, profile: null, isAdmin: false, initialized: false })
+    // Clear any localStorage remnants
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('sea_user')
+    }
   },
 
   resetPassword: async (email) => {
@@ -128,11 +137,15 @@ export const useAuthStore = create<AuthState & AuthActions>((set, get) => ({
     if (!supabase) return { error: 'Supabase nao configurado.' }
     const user = get().user
     if (!user) return { error: 'Nao autenticado.' }
+    const updateData = { ...data, updated_at: new Date().toISOString() }
     const { error } = await supabase
       .from('profiles')
-      .update({ ...data, updated_at: new Date().toISOString() })
+      .update(updateData)
       .eq('id', user.id)
-    if (error) return { error: error.message }
+    if (error) {
+      console.warn('[authStore] updateProfile error:', error.message)
+      return { error: error.message }
+    }
     await get().fetchProfile(user.id)
     return { error: null }
   },

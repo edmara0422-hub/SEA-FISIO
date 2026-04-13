@@ -6,7 +6,7 @@ import { useAuthStore } from '@/lib/stores/authStore'
 import { supabase } from '@/lib/supabase'
 import {
   ArrowLeft, Bell, Camera, ChevronRight, Info, Key, LogOut, Mail,
-  Moon, PencilLine, Save, Shield, Smartphone, User, Users, X,
+  Moon, PencilLine, Save, Shield, User, Users, X,
 } from 'lucide-react'
 
 export default function ProfilePage() {
@@ -96,7 +96,7 @@ export default function ProfilePage() {
 
   const handleLogout = async () => {
     await signOut()
-    router.push('/auth')
+    window.location.href = '/auth'
   }
 
   const loadAdminData = async () => {
@@ -229,13 +229,6 @@ export default function ProfilePage() {
           <Moon className="h-3.5 w-3.5 text-white/40" />
           <span className="flex-1 text-[8px] text-white/70">Tema</span>
           <span className="text-[7px] text-white/30">Dark</span>
-        </div>
-
-        {/* Dispositivo */}
-        <div className={menuBtn}>
-          <Smartphone className="h-3.5 w-3.5 text-white/40" />
-          <span className="flex-1 text-[8px] text-white/70">Dispositivo</span>
-          <span className="text-[7px] text-white/30">Capacitor iOS</span>
         </div>
       </div>
 
