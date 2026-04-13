@@ -30,6 +30,7 @@
 @source '../components/caderno/caderno-block.tsx';
 @source '../components/caderno/study-sidebar.tsx';
 @source '../app/auth/reset-password/page.tsx';
+@source '../app/(main)/profile/page.tsx';
 
 @custom-variant dark (&:is(.dark *));
 
