@@ -5,8 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/lib/stores/authStore'
 import { supabase } from '@/lib/supabase'
 import {
-  ArrowLeft, Bell, Camera, ChevronRight, Info, Key, LogOut, Mail,
-  Moon, PencilLine, Save, Shield, User, X,
+  ArrowLeft, Bell, Camera, ChevronRight, FileText, HelpCircle, Info,
+  Key, LogOut, Mail, Moon, PencilLine, Save, Shield, Trash2, User, X,
 } from 'lucide-react'
 
 export default function ProfilePage() {
@@ -89,6 +89,16 @@ export default function ProfilePage() {
   }
 
   const handleLogout = async () => {
+    await signOut()
+    window.location.href = '/auth'
+  }
+
+  const handleDeleteAccount = async () => {
+    if (!confirm('Tem certeza que deseja excluir sua conta? Todos os seus dados serao apagados permanentemente. Essa acao nao pode ser desfeita.')) return
+    if (!confirm('ULTIMA CONFIRMACAO: Sua conta e todos os dados serao excluidos. Deseja continuar?')) return
+    if (!supabase || !user) return
+    // Delete profile (cascade removes subscriptions, devices, notifications)
+    await supabase.from('profiles').delete().eq('id', user.id)
     await signOut()
     window.location.href = '/auth'
   }
@@ -225,6 +235,26 @@ export default function ProfilePage() {
         </>
       )}
 
+      {/* ═══ Legal / Suporte ═══ */}
+      <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Legal e suporte</p>
+      <div className="space-y-1 mb-4">
+        <a href="https://sea-fisio.vercel.app/termos" target="_blank" rel="noopener" className={menuBtn}>
+          <FileText className="h-3.5 w-3.5 text-white/40" />
+          <span className="flex-1 text-[8px] text-white/70">Termos de uso</span>
+          <ChevronRight className="h-3 w-3 text-white/20" />
+        </a>
+        <a href="https://sea-fisio.vercel.app/privacidade" target="_blank" rel="noopener" className={menuBtn}>
+          <Shield className="h-3.5 w-3.5 text-white/40" />
+          <span className="flex-1 text-[8px] text-white/70">Politica de privacidade</span>
+          <ChevronRight className="h-3 w-3 text-white/20" />
+        </a>
+        <a href="mailto:edmararbusiness1@gmail.com?subject=Suporte SEA Fisio" className={menuBtn}>
+          <HelpCircle className="h-3.5 w-3.5 text-white/40" />
+          <span className="flex-1 text-[8px] text-white/70">Ajuda e suporte</span>
+          <ChevronRight className="h-3 w-3 text-white/20" />
+        </a>
+      </div>
+
       {/* ═══ Sobre ═══ */}
       <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Sobre</p>
       <div className="space-y-1 mb-4">
@@ -237,11 +267,17 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* ═══ Logout ═══ */}
-      <button onClick={handleLogout} className="flex w-full items-center gap-2 rounded-[0.7rem] border border-[#f8717120] bg-[#f8717108] px-3 py-2">
-        <LogOut className="h-3.5 w-3.5 text-[#fca5a5]" />
-        <span className="text-[8px] font-semibold text-[#fca5a5]">Sair da conta</span>
-      </button>
+      {/* ═══ Logout + Deletar ═══ */}
+      <div className="space-y-1">
+        <button onClick={handleLogout} className="flex w-full items-center gap-2 rounded-[0.7rem] border border-[#f8717120] bg-[#f8717108] px-3 py-2">
+          <LogOut className="h-3.5 w-3.5 text-[#fca5a5]" />
+          <span className="text-[8px] font-semibold text-[#fca5a5]">Sair da conta</span>
+        </button>
+        <button onClick={handleDeleteAccount} className="flex w-full items-center gap-2 rounded-[0.7rem] border border-[#f8717108] bg-transparent px-3 py-2">
+          <Trash2 className="h-3.5 w-3.5 text-white/20" />
+          <span className="text-[8px] text-white/20">Excluir minha conta</span>
+        </button>
+      </div>
     </div>
   )
 }
