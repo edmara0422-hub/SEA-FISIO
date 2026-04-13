@@ -1,4 +1,5 @@
 import { MainShell } from '@/components/sea/main-shell'
+import { AuthGuard } from '@/components/sea/auth-guard'
 
 export default function MainLayout({
   children,
@@ -6,6 +7,8 @@ export default function MainLayout({
   children: React.ReactNode
 }) {
   return (
-    <MainShell>{children}</MainShell>
+    <AuthGuard>
+      <MainShell>{children}</MainShell>
+    </AuthGuard>
   )
 }

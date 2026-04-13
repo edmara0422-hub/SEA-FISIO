@@ -24,9 +24,12 @@
 @source '../components/sea/sea-page-entry.tsx';
 @source '../components/sea/simulations-grid.tsx';
 @source '../components/sea/top-bar-sea.tsx';
+@source '../components/sea/auth-form.tsx';
+@source '../components/sea/auth-guard.tsx';
 @source '../components/caderno/caderno-module.tsx';
 @source '../components/caderno/caderno-block.tsx';
 @source '../components/caderno/study-sidebar.tsx';
+@source '../app/auth/reset-password/page.tsx';
 
 @custom-variant dark (&:is(.dark *));
 
