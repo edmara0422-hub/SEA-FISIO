@@ -2175,7 +2175,7 @@ export function ProntuarioSystemPanel() {
                   records: w.records.map(r => normalizeRecord(r)),
                   archive: w.archive.map(r => normalizeRecord(r)),
                 }))
-                localActiveId = v2.activeId || localWs[0]?.id ?? ''
+                localActiveId = v2.activeId || (localWs[0]?.id ?? '')
               } else {
                 // Formato legado: array de ICURecord → migra para setor "UTI"
                 const oldRec = (data.records as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
