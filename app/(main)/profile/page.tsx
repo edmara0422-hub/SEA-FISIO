@@ -286,7 +286,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Como altero minha senha?',
-    a: 'Acesse Perfil → Segurança → Alterar senha. Você precisará digitar a nova senha duas vezes para confirmação.',
+    a: 'Role até o final desta página e toque em "Alterar senha". Você precisará digitar a nova senha duas vezes para confirmação.',
   },
   {
     q: 'Posso usar o SEA FISIO sem internet?',
@@ -298,7 +298,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Como excluo minha conta permanentemente?',
-    a: 'Vá até o final desta página → "Excluir minha conta". O processo exige dupla confirmação. Todos os dados são removidos permanentemente em até 30 dias.',
+    a: 'Role até o final desta página e toque em "Excluir minha conta". O processo exige dupla confirmação. Todos os dados são removidos permanentemente em até 30 dias.',
   },
   {
     q: 'Encontrei um erro ou tenho uma sugestão. Como reporto?',
@@ -307,6 +307,8 @@ const FAQ_ITEMS = [
 ]
 
 function AjudaModal({ onClose }: { onClose: () => void }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null)
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm"
@@ -317,20 +319,36 @@ function AjudaModal({ onClose }: { onClose: () => void }) {
         style={{ background: 'linear-gradient(180deg, rgba(20,20,20,0.98) 0%, rgba(8,8,8,0.99) 100%)' }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
         <div className="mb-4 flex items-center justify-between">
           <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">Ajuda e Suporte</p>
           <button onClick={onClose} className="text-white/40 hover:text-white"><X className="h-4 w-4" /></button>
         </div>
 
         <div className="max-h-[62vh] space-y-4 overflow-y-auto pr-1">
-          {/* FAQ */}
+
+          {/* Status do sistema */}
+          <div className="flex items-center gap-2 rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-3 py-2">
+            <span className="h-1.5 w-1.5 rounded-full bg-white/50" />
+            <p className="text-[8px] text-white/50">Sistema operacional</p>
+          </div>
+
+          {/* FAQ — accordion */}
           <div>
             <p className="mb-2 text-[8px] font-semibold uppercase tracking-wider text-white/40">Perguntas Frequentes</p>
-            <div className="space-y-3">
+            <div className="space-y-1.5">
               {FAQ_ITEMS.map((item, i) => (
-                <div key={i} className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-3 py-2.5">
-                  <p className="mb-1 text-[9px] font-semibold text-white/65">{item.q}</p>
-                  <p className="text-[8px] leading-relaxed text-white/40">{item.a}</p>
+                <div key={i} className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] overflow-hidden">
+                  <button
+                    className="flex w-full items-center justify-between px-3 py-2.5 text-left"
+                    onClick={() => setOpenIndex(openIndex === i ? null : i)}
+                  >
+                    <p className="text-[9px] font-semibold text-white/65 pr-2">{item.q}</p>
+                    <ChevronRight className={`h-3 w-3 shrink-0 text-white/30 transition-transform ${openIndex === i ? 'rotate-90' : ''}`} />
+                  </button>
+                  {openIndex === i && (
+                    <p className="px-3 pb-2.5 text-[8px] leading-relaxed text-white/40">{item.a}</p>
+                  )}
                 </div>
               ))}
             </div>
@@ -339,7 +357,7 @@ function AjudaModal({ onClose }: { onClose: () => void }) {
           {/* Contato */}
           <div>
             <p className="mb-2 text-[8px] font-semibold uppercase tracking-wider text-white/40">Falar com o Suporte</p>
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               <a
                 href="mailto:edmararbusiness1@gmail.com?subject=Suporte SEA Fisio"
                 className="flex items-center gap-2 rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-3 py-2.5 hover:bg-white/[0.04]"
@@ -347,24 +365,25 @@ function AjudaModal({ onClose }: { onClose: () => void }) {
                 <Mail className="h-3.5 w-3.5 shrink-0 text-white/40" />
                 <div>
                   <p className="text-[9px] font-medium text-white/60">E-mail</p>
-                  <p className="text-[8px] text-white/35">edmararbusiness1@gmail.com</p>
+                  <p className="text-[8px] text-white/35">edmararbusiness1@gmail.com · resposta em até 2 dias úteis</p>
                 </div>
               </a>
-              <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-3 py-2.5">
-                <p className="text-[9px] font-medium text-white/60">Tempo de resposta</p>
-                <p className="text-[8px] text-white/35">Respondemos em até 2 dias úteis</p>
-              </div>
             </div>
           </div>
 
           {/* Documentos legais */}
           <div>
             <p className="mb-2 text-[8px] font-semibold uppercase tracking-wider text-white/40">Documentos Legais</p>
-            <p className="text-[8px] leading-relaxed text-white/35">
-              Acesse Termos de Uso, Políticas e Compliance completos em{' '}
-              <span className="text-white/50">Home → Governança</span>.
-            </p>
+            <div className="grid grid-cols-3 gap-1.5">
+              {['Termos de Uso', 'Políticas', 'Compliance'].map((doc) => (
+                <div key={doc} className="rounded-[0.7rem] border border-white/6 bg-white/[0.02] px-2 py-2 text-center">
+                  <p className="text-[8px] text-white/45">{doc}</p>
+                  <p className="text-[7px] text-white/25 mt-0.5">Home → Governança</p>
+                </div>
+              ))}
+            </div>
           </div>
+
         </div>
       </div>
     </div>
