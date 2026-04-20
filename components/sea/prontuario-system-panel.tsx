@@ -2056,38 +2056,42 @@ export function ProntuarioSystemPanel() {
 
   useEffect(() => {
     const loadData = async () => {
+      // Step 1: localStorage — parsed in isolation so a bad JSON never wipes Supabase data
+      let localRecords: ICURecord[] = []
+      let localArchive: ICURecord[] = []
       try {
-        // 1. Load from localStorage first (fast, always available)
         const storedRecords = localStorage.getItem(STORAGE_KEYS.records)
         const storedArchive = localStorage.getItem(STORAGE_KEYS.archive)
-        let localRecords: ICURecord[] = storedRecords
-          ? (JSON.parse(storedRecords) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
-          : []
-        let localArchive: ICURecord[] = storedArchive
-          ? (JSON.parse(storedArchive) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
-          : []
+        if (storedRecords) localRecords = (JSON.parse(storedRecords) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+        if (storedArchive) localArchive = (JSON.parse(storedArchive) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+      } catch { /* localStorage corrompido — segue para Supabase */ }
 
-        // 2. Try to load from Supabase — picks up data saved on another device with same session_id
-        if (supabase) {
+      // Step 2: Supabase — só substitui local se for MAIS RECENTE ou se local estiver vazio
+      if (supabase) {
+        try {
           const sessionId = getOrCreateSessionId()
-          const { data } = await supabase.from('icu_sessions').select('records,archive').eq('session_id', sessionId).maybeSingle()
+          const localUpdatedAt = localStorage.getItem('sea-icu-updated-at') ?? '0'
+          const { data } = await supabase
+            .from('icu_sessions')
+            .select('records,archive,updated_at')
+            .eq('session_id', sessionId)
+            .maybeSingle()
           if (data?.records) {
-            localRecords = (data.records as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
-            localArchive = ((data.archive ?? []) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
-            // Keep localStorage in sync
-            localStorage.setItem(STORAGE_KEYS.records, JSON.stringify(localRecords))
-            localStorage.setItem(STORAGE_KEYS.archive, JSON.stringify(localArchive))
+            const supabaseUpdatedAt = (data.updated_at as string) ?? '0'
+            if (localRecords.length === 0 || supabaseUpdatedAt > localUpdatedAt) {
+              localRecords = (data.records as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+              localArchive = ((data.archive ?? []) as Array<Partial<ICURecord>>).map(r => normalizeRecord(r))
+              localStorage.setItem(STORAGE_KEYS.records, JSON.stringify(localRecords))
+              localStorage.setItem(STORAGE_KEYS.archive, JSON.stringify(localArchive))
+              localStorage.setItem('sea-icu-updated-at', supabaseUpdatedAt)
+            }
           }
-        }
-
-        setRecords(localRecords)
-        setArchive(localArchive)
-      } catch {
-        setRecords([])
-        setArchive([])
-      } finally {
-        setHydrated(true)
+        } catch { /* Supabase indisponível — usa dados locais já carregados */ }
       }
+
+      setRecords(localRecords)
+      setArchive(localArchive)
+      setHydrated(true)
     }
     loadData()
   }, [])
@@ -2108,13 +2112,19 @@ export function ProntuarioSystemPanel() {
     const timer = setTimeout(async () => {
       try {
         const sessionId = getOrCreateSessionId()
+        const now = new Date().toISOString()
         const { error } = await supabase!.from('icu_sessions').upsert({
           session_id: sessionId,
           records: records,
           archive: archive,
-          updated_at: new Date().toISOString(),
+          updated_at: now,
         }, { onConflict: 'session_id' })
-        setSyncStatus(error ? 'offline' : 'saved')
+        if (!error) {
+          localStorage.setItem('sea-icu-updated-at', now)
+          setSyncStatus('saved')
+        } else {
+          setSyncStatus('offline')
+        }
       } catch {
         setSyncStatus('offline')
       }
