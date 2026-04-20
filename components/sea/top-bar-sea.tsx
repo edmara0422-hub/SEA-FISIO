@@ -1,16 +1,20 @@
 'use client'
 
-import { Bell, User } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Bell, User, X, BellOff } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { CalendarDays, MoonStar, SunMedium } from 'lucide-react'
 import { useAuthStore } from '@/lib/stores/authStore'
+import { useNotifications } from '@/hooks/useNotifications'
 
 export function TopBarSEA() {
   const [mounted, setMounted] = useState(false)
   const [now, setNow] = useState(() => new Date())
+  const [showNotif, setShowNotif] = useState(false)
+  const notifRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const { profile } = useAuthStore()
+  const { notifications, unreadCount, markAllRead } = useNotifications()
 
   useEffect(() => {
     setMounted(true)
@@ -18,6 +22,22 @@ export function TopBarSEA() {
     const id = setInterval(() => setNow(new Date()), 1000)
     return () => clearInterval(id)
   }, [])
+
+  useEffect(() => {
+    if (!showNotif) return
+    function handleClick(e: MouseEvent) {
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setShowNotif(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClick)
+    return () => document.removeEventListener('mousedown', handleClick)
+  }, [showNotif])
+
+  function handleBellClick() {
+    if (!showNotif && unreadCount > 0) markAllRead()
+    setShowNotif(v => !v)
+  }
 
   const hour = now.getHours()
   const greeting = hour < 12 ? 'Bom dia' : hour < 18 ? 'Boa tarde' : 'Boa noite'
@@ -81,13 +101,31 @@ export function TopBarSEA() {
               {timeLabel}
             </span>
           )}
-          <button
-            aria-label="Notificacoes"
-            className={btnClass}
-            style={{ background: shellBackground }}
-          >
-            <Bell className="h-3.5 w-3.5" />
-          </button>
+
+          {/* Bell + notification panel */}
+          <div className="relative" ref={notifRef}>
+            <button
+              aria-label="Notificacoes"
+              onClick={handleBellClick}
+              className={btnClass}
+              style={{ background: shellBackground }}
+            >
+              <Bell className="h-3.5 w-3.5" />
+              {unreadCount > 0 && (
+                <span className="absolute -right-0.5 -top-0.5 flex h-3 w-3 items-center justify-center rounded-full bg-white text-[6px] font-bold text-black">
+                  {unreadCount > 9 ? '9+' : unreadCount}
+                </span>
+              )}
+            </button>
+
+            {showNotif && (
+              <NotificationPanel
+                notifications={notifications}
+                onClose={() => setShowNotif(false)}
+              />
+            )}
+          </div>
+
           <button
             aria-label="Perfil"
             onClick={() => router.push('/profile')}
@@ -103,5 +141,59 @@ export function TopBarSEA() {
         </div>
       </div>
     </header>
+  )
+}
+
+type Notif = { id: string; title: string; body: string; read: boolean; created_at: string }
+
+function NotificationPanel({ notifications, onClose }: { notifications: Notif[]; onClose: () => void }) {
+  function formatDate(iso: string) {
+    const d = new Date(iso)
+    return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(d)
+  }
+
+  return (
+    <div
+      className="absolute right-0 top-8 z-50 w-72 rounded-[1.2rem] border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+      style={{ background: 'linear-gradient(180deg, rgba(22,22,22,0.99) 0%, rgba(8,8,8,1) 100%)' }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between border-b border-white/6 px-4 py-3">
+        <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-white/60">Notificações</p>
+        <button onClick={onClose} className="text-white/30 hover:text-white">
+          <X className="h-3.5 w-3.5" />
+        </button>
+      </div>
+
+      {/* List */}
+      <div className="max-h-[50vh] overflow-y-auto">
+        {notifications.length === 0 ? (
+          <div className="flex flex-col items-center gap-2 px-4 py-8">
+            <BellOff className="h-6 w-6 text-white/15" />
+            <p className="text-[8px] text-white/30">Nenhuma notificação ainda</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-white/4">
+            {notifications.map((n) => (
+              <div
+                key={n.id}
+                className={`px-4 py-3 ${!n.read ? 'bg-white/[0.03]' : ''}`}
+              >
+                <div className="flex items-start gap-2">
+                  {!n.read && (
+                    <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/60" />
+                  )}
+                  <div className={!n.read ? '' : 'pl-3.5'}>
+                    <p className="text-[9px] font-semibold text-white/70">{n.title}</p>
+                    <p className="mt-0.5 text-[8px] leading-relaxed text-white/40">{n.body}</p>
+                    <p className="mt-1 text-[7px] text-white/25">{formatDate(n.created_at)}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
   )
 }
