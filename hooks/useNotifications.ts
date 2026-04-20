@@ -41,7 +41,7 @@ export function useNotifications() {
       )
       .subscribe()
 
-    return () => { supabase.removeChannel(channel) }
+    return () => { supabase?.removeChannel(channel) }
   }, [fetchAll, user])
 
   const markAllRead = useCallback(async () => {
