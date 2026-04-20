@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Leaf, Shield, Heart, Megaphone, FileText, Scale, BookOpen, Stethoscope, Star, MessageSquare, X, Send, Check, Scroll } from 'lucide-react'
+import { Leaf, Shield, Heart, Megaphone, FileText, Scale, BookOpen, Stethoscope, Star, MessageSquare, X, Send, Check, Scroll, Cookie, Target, UserCog } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 // Real metrics from localStorage
@@ -57,6 +57,9 @@ const GOVERNANCE_ITEMS = [
   { icon: Shield, label: 'Práticas' },
   { icon: Scale, label: 'Compliance' },
   { icon: Scroll, label: 'Termos de Uso' },
+  { icon: Cookie, label: 'Política de Cookies' },
+  { icon: Target, label: 'Missão e Valores' },
+  { icon: UserCog, label: 'DPO' },
   { icon: Megaphone, label: 'Canal de Denúncias e Feedback' },
 ]
 
@@ -196,7 +199,7 @@ export function PerformanceBar() {
           Governança
         </p>
 
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-5">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
           {GOVERNANCE_ITEMS.map((item) => (
             <button
               key={item.label}
@@ -206,6 +209,9 @@ export function PerformanceBar() {
                 else if (item.label === 'Práticas') setShowGov('praticas')
                 else if (item.label === 'Compliance') setShowGov('compliance')
                 else if (item.label === 'Termos de Uso') setShowGov('termos')
+                else if (item.label === 'Política de Cookies') setShowGov('cookies')
+                else if (item.label === 'Missão e Valores') setShowGov('missao')
+                else if (item.label === 'DPO') setShowGov('dpo')
               }}
               className="flex items-center gap-2 rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5 text-left transition-colors hover:bg-white/[0.04]"
             >
@@ -226,6 +232,147 @@ export function PerformanceBar() {
 }
 
 const GOV_CONTENT: Record<string, { title: string; sections: { heading: string; items: string[] }[] }> = {
+  missao: {
+    title: 'Missão, Visão e Valores — SEA FISIO',
+    sections: [
+      {
+        heading: 'Missão',
+        items: [
+          'Capacitar fisioterapeutas intensivistas com tecnologia de ponta, tornando o conhecimento clínico complexo acessível, aplicável e seguro à beira do leito',
+          'Reduzir a distância entre a evidência científica e a prática clínica diária, em qualquer hospital, de qualquer região do Brasil',
+          'Ser o sistema de estudo mais completo, confiável e humanizado para fisioterapia em terapia intensiva',
+        ],
+      },
+      {
+        heading: 'Visão',
+        items: [
+          'Ser a plataforma de referência em educação clínica para fisioterapeutas intensivistas na América Latina até 2030',
+          'Contribuir para que zero pacientes sejam prejudicados por falta de preparo técnico de seus cuidadores',
+          'Democratizar o acesso ao conhecimento de excelência, eliminando barreiras geográficas, econômicas e institucionais',
+          'Liderar a transformação digital da fisioterapia hospitalar com inovação responsável e ética',
+        ],
+      },
+      {
+        heading: 'Valores',
+        items: [
+          'Excelência clínica — conteúdo fundamentado em evidências científicas de alto nível, sempre atualizado',
+          'Segurança do paciente — cada funcionalidade é desenvolvida pensando no desfecho clínico do paciente',
+          'Inclusão e equidade — acesso igualitário ao conhecimento independente de onde o profissional está',
+          'Transparência — honestidade sobre limitações, erros e incertezas do produto e da ciência',
+          'Inovação com propósito — tecnologia a serviço da vida, não do lucro pelo lucro',
+          'Responsabilidade ambiental — zero papel, eficiência digital, pegada de carbono mínima',
+          'Colaboração — crescemos com os profissionais que usam e constroem o SEA conosco',
+        ],
+      },
+      {
+        heading: 'Propósito',
+        items: [
+          'Existimos para que nenhum fisioterapeuta entre em uma UTI sem a preparação que o paciente merece',
+          'Acreditamos que educação de qualidade salva vidas — e é isso que nos move todos os dias',
+        ],
+      },
+    ],
+  },
+  cookies: {
+    title: 'Política de Cookies — SEA FISIO',
+    sections: [
+      {
+        heading: 'O que são Cookies',
+        items: [
+          'Cookies são pequenos arquivos de texto armazenados no seu dispositivo quando você acessa uma plataforma digital',
+          'Eles permitem que o sistema reconheça o seu dispositivo em acessos futuros e melhore a experiência de uso',
+          'O SEA FISIO utiliza cookies de forma mínima, respeitando o princípio de privacidade desde a concepção (privacy by design)',
+          'Nenhum cookie do SEA FISIO contém dados pessoais de pacientes ou informações clínicas identificáveis',
+        ],
+      },
+      {
+        heading: 'Tipos de Cookies Utilizados',
+        items: [
+          'Cookies essenciais (necessários): mantêm sua sessão ativa e garantem o funcionamento básico da plataforma — não podem ser desativados',
+          'Cookies de autenticação: gerados pelo Supabase Auth para manter o login seguro; expiram automaticamente após o logout ou inatividade prolongada',
+          'Cookies de preferências: armazenam configurações locais como tema, idioma e preferências de exibição',
+          'Cookies analíticos: coletam dados de uso de forma anônima e agregada para melhoria do produto — nenhum dado é vinculado à identidade do usuário',
+          'O SEA FISIO NÃO utiliza cookies de publicidade, rastreamento cross-site ou perfilamento comportamental',
+        ],
+      },
+      {
+        heading: 'Base Legal (LGPD)',
+        items: [
+          'Cookies essenciais: legítimo interesse (Art. 7º, IX da LGPD) — necessários para a prestação do serviço contratado',
+          'Cookies de preferências e analíticos: consentimento do usuário (Art. 7º, I da LGPD)',
+          'O consentimento para cookies não essenciais é coletado no primeiro acesso e pode ser revogado a qualquer momento',
+          'Conforme Art. 8º da LGPD, o consentimento deve ser livre, informado e inequívoco — garantimos isso via banner de cookies na primeira visita',
+        ],
+      },
+      {
+        heading: 'Como Gerenciar seus Cookies',
+        items: [
+          'Você pode aceitar, recusar ou personalizar os cookies no banner exibido no primeiro acesso à plataforma',
+          'A qualquer momento, acesse as configurações do seu navegador para gerenciar ou excluir cookies armazenados',
+          'A desativação de cookies essenciais pode impedir o funcionamento correto da plataforma',
+          'Para limpar todos os dados locais do SEA FISIO, acesse Perfil → Excluir minha conta ou limpe o localStorage pelo navegador',
+          'Suporte para dúvidas sobre cookies: edmararbusiness1@gmail.com',
+        ],
+      },
+      {
+        heading: 'Retenção e Terceiros',
+        items: [
+          'Cookies de sessão são excluídos automaticamente ao fechar o navegador',
+          'Cookies persistentes têm validade máxima de 12 meses',
+          'O SEA FISIO utiliza Supabase (infraestrutura de autenticação) que pode definir cookies técnicos próprios — sujeitos à política de privacidade da Supabase Inc.',
+          'Não utilizamos Google Analytics, Meta Pixel, ou qualquer outro tracker de terceiros para fins publicitários',
+        ],
+      },
+    ],
+  },
+  dpo: {
+    title: 'DPO — Encarregado de Proteção de Dados',
+    sections: [
+      {
+        heading: 'Quem é o DPO',
+        items: [
+          'O Encarregado de Proteção de Dados (DPO — Data Protection Officer) é a pessoa responsável por garantir que o SEA FISIO trate os dados pessoais de forma ética, legal e transparente',
+          'Designado conforme o Art. 41 da LGPD (Lei nº 13.709/2018), o DPO atua como canal oficial entre o SEA FISIO, os titulares de dados e a Autoridade Nacional de Proteção de Dados (ANPD)',
+          'DPO responsável: Edmara Rocha',
+          'Cargo: Fundadora e Responsável pela Proteção de Dados — SEA FISIO',
+        ],
+      },
+      {
+        heading: 'Como Contatar o DPO',
+        items: [
+          'E-mail oficial: edmararbusiness1@gmail.com — assunto: "DPO SEA FISIO"',
+          'Prazo de resposta: até 5 dias úteis para solicitações gerais; até 15 dias para exercício de direitos previstos na LGPD',
+          'O canal de contato com o DPO é independente do suporte técnico — utilize-o exclusivamente para questões relacionadas à privacidade e proteção de dados',
+          'Em caso de não resposta dentro do prazo, o titular pode contatar diretamente a ANPD: www.gov.br/anpd',
+        ],
+      },
+      {
+        heading: 'Responsabilidades do DPO',
+        items: [
+          'Orientar a empresa e os colaboradores sobre as obrigações impostas pela LGPD e demais normas de proteção de dados',
+          'Receber e responder às solicitações dos titulares de dados: acesso, correção, exclusão, portabilidade e revogação de consentimento',
+          'Interagir com a ANPD em caso de fiscalização, notificações de incidentes e consultas regulatórias',
+          'Realizar avaliações periódicas de impacto à proteção de dados (DPIA) para novas funcionalidades',
+          'Garantir que fornecedores e parceiros também estejam em conformidade com a LGPD',
+          'Notificar a ANPD e os titulares em caso de incidente de segurança que possa causar risco ou dano — prazo máximo de 72 horas',
+        ],
+      },
+      {
+        heading: 'Direitos dos Titulares (Art. 18 LGPD)',
+        items: [
+          'Confirmação da existência de tratamento de dados pessoais',
+          'Acesso aos dados pessoais tratados pela plataforma',
+          'Correção de dados incompletos, inexatos ou desatualizados',
+          'Anonimização, bloqueio ou eliminação de dados desnecessários ou excessivos',
+          'Portabilidade dos dados a outro fornecedor de serviço',
+          'Eliminação dos dados tratados com base no consentimento',
+          'Informação sobre compartilhamento de dados com terceiros',
+          'Revogação do consentimento a qualquer momento',
+          'Para exercer qualquer um desses direitos: contate o DPO pelo e-mail acima',
+        ],
+      },
+    ],
+  },
   politicas: {
     title: 'Políticas SEA FISIO',
     sections: [
