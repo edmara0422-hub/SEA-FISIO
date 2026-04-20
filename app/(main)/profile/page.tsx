@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuthStore } from '@/lib/stores/authStore'
 import { supabase } from '@/lib/supabase'
 import {
-  ArrowLeft, Bell, Camera, ChevronRight, FileText, HelpCircle, Info,
+  ArrowLeft, Bell, Camera, ChevronRight, HelpCircle, Info,
   Key, LogOut, Mail, Moon, PencilLine, Save, Shield, Trash2, User, X,
 } from 'lucide-react'
 
@@ -25,6 +25,7 @@ export default function ProfilePage() {
   const [error, setError] = useState('')
   const [saving, setSaving] = useState(false)
   const [uploading, setUploading] = useState(false)
+  const [showAjuda, setShowAjuda] = useState(false)
 
   const flash = (msg: string) => { setMessage(msg); setError(''); setTimeout(() => setMessage(''), 3000) }
   const flashErr = (msg: string) => { setError(msg); setMessage(''); setTimeout(() => setError(''), 5000) }
@@ -236,24 +237,16 @@ export default function ProfilePage() {
       )}
 
       {/* ═══ Legal / Suporte ═══ */}
-      <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Legal e suporte</p>
+      <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Suporte</p>
       <div className="space-y-1 mb-4">
-        <a href="https://sea-fisio.vercel.app/termos" target="_blank" rel="noopener" className={menuBtn}>
-          <FileText className="h-3.5 w-3.5 text-white/40" />
-          <span className="flex-1 text-[8px] text-white/70">Termos de uso</span>
-          <ChevronRight className="h-3 w-3 text-white/20" />
-        </a>
-        <a href="https://sea-fisio.vercel.app/privacidade" target="_blank" rel="noopener" className={menuBtn}>
-          <Shield className="h-3.5 w-3.5 text-white/40" />
-          <span className="flex-1 text-[8px] text-white/70">Politica de privacidade</span>
-          <ChevronRight className="h-3 w-3 text-white/20" />
-        </a>
-        <a href="mailto:edmararbusiness1@gmail.com?subject=Suporte SEA Fisio" className={menuBtn}>
+        <button onClick={() => setShowAjuda(true)} className={menuBtn}>
           <HelpCircle className="h-3.5 w-3.5 text-white/40" />
-          <span className="flex-1 text-[8px] text-white/70">Ajuda e suporte</span>
+          <span className="flex-1 text-left text-[8px] text-white/70">Ajuda e suporte</span>
           <ChevronRight className="h-3 w-3 text-white/20" />
-        </a>
+        </button>
       </div>
+
+      {showAjuda && <AjudaModal onClose={() => setShowAjuda(false)} />}
 
       {/* ═══ Sobre ═══ */}
       <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.14em] text-white/30">Sobre</p>
@@ -277,6 +270,102 @@ export default function ProfilePage() {
           <Trash2 className="h-3.5 w-3.5 text-white/20" />
           <span className="text-[8px] text-white/20">Excluir minha conta</span>
         </button>
+      </div>
+    </div>
+  )
+}
+
+const FAQ_ITEMS = [
+  {
+    q: 'O SEA FISIO substitui o prontuário eletrônico do paciente?',
+    a: 'Não. O SEA é uma ferramenta de apoio ao raciocínio clínico pessoal. Não é um PEP (Prontuário Eletrônico do Paciente) e não substitui documentação oficial exigida pela instituição.',
+  },
+  {
+    q: 'Meus dados clínicos ficam salvos onde?',
+    a: 'Os dados inseridos no prontuário ficam armazenados localmente no seu dispositivo (localStorage). Nenhum dado pessoal de paciente é enviado a servidores externos.',
+  },
+  {
+    q: 'Como altero minha senha?',
+    a: 'Acesse Perfil → Segurança → Alterar senha. Você precisará digitar a nova senha duas vezes para confirmação.',
+  },
+  {
+    q: 'Posso usar o SEA FISIO sem internet?',
+    a: 'Sim. O SEA FISIO foi desenvolvido com arquitetura offline-first. As funcionalidades principais funcionam sem conexão. A sincronização e o tutor IA requerem internet.',
+  },
+  {
+    q: 'O tutor IA pode errar?',
+    a: 'Sim. O tutor IA é uma ferramenta educacional e pode apresentar imprecisões. Sempre valide as informações com guidelines atualizados e julgamento clínico profissional.',
+  },
+  {
+    q: 'Como excluo minha conta permanentemente?',
+    a: 'Vá até o final desta página → "Excluir minha conta". O processo exige dupla confirmação. Todos os dados são removidos permanentemente em até 30 dias.',
+  },
+  {
+    q: 'Encontrei um erro ou tenho uma sugestão. Como reporto?',
+    a: 'Use o Canal de Denúncias e Feedback em Home → Governança, ou envie um e-mail para edmararbusiness1@gmail.com com o assunto "Suporte SEA Fisio".',
+  },
+]
+
+function AjudaModal({ onClose }: { onClose: () => void }) {
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 px-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-sm rounded-[1.4rem] border border-white/10 p-5"
+        style={{ background: 'linear-gradient(180deg, rgba(20,20,20,0.98) 0%, rgba(8,8,8,0.99) 100%)' }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-white/60">Ajuda e Suporte</p>
+          <button onClick={onClose} className="text-white/40 hover:text-white"><X className="h-4 w-4" /></button>
+        </div>
+
+        <div className="max-h-[62vh] space-y-4 overflow-y-auto pr-1">
+          {/* FAQ */}
+          <div>
+            <p className="mb-2 text-[8px] font-semibold uppercase tracking-wider text-white/40">Perguntas Frequentes</p>
+            <div className="space-y-3">
+              {FAQ_ITEMS.map((item, i) => (
+                <div key={i} className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-3 py-2.5">
+                  <p className="mb-1 text-[9px] font-semibold text-white/65">{item.q}</p>
+                  <p className="text-[8px] leading-relaxed text-white/40">{item.a}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Contato */}
+          <div>
+            <p className="mb-2 text-[8px] font-semibold uppercase tracking-wider text-white/40">Falar com o Suporte</p>
+            <div className="space-y-2">
+              <a
+                href="mailto:edmararbusiness1@gmail.com?subject=Suporte SEA Fisio"
+                className="flex items-center gap-2 rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-3 py-2.5 hover:bg-white/[0.04]"
+              >
+                <Mail className="h-3.5 w-3.5 shrink-0 text-white/40" />
+                <div>
+                  <p className="text-[9px] font-medium text-white/60">E-mail</p>
+                  <p className="text-[8px] text-white/35">edmararbusiness1@gmail.com</p>
+                </div>
+              </a>
+              <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] px-3 py-2.5">
+                <p className="text-[9px] font-medium text-white/60">Tempo de resposta</p>
+                <p className="text-[8px] text-white/35">Respondemos em até 2 dias úteis</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Documentos legais */}
+          <div>
+            <p className="mb-2 text-[8px] font-semibold uppercase tracking-wider text-white/40">Documentos Legais</p>
+            <p className="text-[8px] leading-relaxed text-white/35">
+              Acesse Termos de Uso, Políticas e Compliance completos em{' '}
+              <span className="text-white/50">Home → Governança</span>.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   )

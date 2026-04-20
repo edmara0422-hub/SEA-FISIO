@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Leaf, Shield, Heart, Megaphone, FileText, Scale, BookOpen, Stethoscope, Star, MessageSquare, X, Send, Check } from 'lucide-react'
+import { Leaf, Shield, Heart, Megaphone, FileText, Scale, BookOpen, Stethoscope, Star, MessageSquare, X, Send, Check, Scroll } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 // Real metrics from localStorage
@@ -56,6 +56,7 @@ const GOVERNANCE_ITEMS = [
   { icon: FileText, label: 'Políticas' },
   { icon: Shield, label: 'Práticas' },
   { icon: Scale, label: 'Compliance' },
+  { icon: Scroll, label: 'Termos de Uso' },
   { icon: Megaphone, label: 'Canal de Denúncias e Feedback' },
 ]
 
@@ -195,7 +196,7 @@ export function PerformanceBar() {
           Governança
         </p>
 
-        <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 md:grid-cols-5">
           {GOVERNANCE_ITEMS.map((item) => (
             <button
               key={item.label}
@@ -204,6 +205,7 @@ export function PerformanceBar() {
                 else if (item.label === 'Políticas') setShowGov('politicas')
                 else if (item.label === 'Práticas') setShowGov('praticas')
                 else if (item.label === 'Compliance') setShowGov('compliance')
+                else if (item.label === 'Termos de Uso') setShowGov('termos')
               }}
               className="flex items-center gap-2 rounded-[1rem] border border-white/6 bg-white/[0.02] px-3 py-2.5 text-left transition-colors hover:bg-white/[0.04]"
             >
@@ -344,6 +346,78 @@ const GOV_CONTENT: Record<string, { title: string; sections: { heading: string; 
           'Dashboards de impacto em tempo real para gestão de indicadores',
           'NPS e feedback contínuo para melhoria iterativa do produto',
           'Canal de denúncias como instrumento de governança e cultura organizacional',
+        ],
+      },
+    ],
+  },
+  termos: {
+    title: 'Termos de Uso — SEA FISIO',
+    sections: [
+      {
+        heading: 'Aceitação e Elegibilidade',
+        items: [
+          'Ao acessar ou utilizar o SEA FISIO, o usuário declara ter lido, compreendido e aceito integralmente estes Termos de Uso',
+          'O uso da plataforma é destinado exclusivamente a profissionais de saúde habilitados (fisioterapeutas, médicos, enfermeiros e estudantes supervisionados) e a fins educacionais e de apoio clínico',
+          'É vedado o uso por menores de 18 anos sem supervisão de responsável legal profissional',
+          'O aceite pode ser revogado a qualquer momento mediante exclusão da conta, cessando todos os direitos de uso',
+          'Estes Termos se aplicam a todas as versões da plataforma: web, mobile e extensões futuras',
+        ],
+      },
+      {
+        heading: 'Licença de Uso e Restrições',
+        items: [
+          'O SEA FISIO concede ao usuário uma licença pessoal, intransferível, não exclusiva e revogável para uso da plataforma',
+          'É proibido copiar, modificar, distribuir, vender, sublicenciar ou criar obras derivadas sem autorização expressa por escrito',
+          'O usuário não pode realizar engenharia reversa, descompilar ou desmontar qualquer componente da plataforma',
+          'É vedado o uso de bots, scrapers, crawlers ou qualquer mecanismo automatizado de acesso não autorizado',
+          'O uso da plataforma para fins comerciais próprios, revenda ou competição direta é expressamente proibido',
+          'Acesso simultâneo com múltiplas contas ou compartilhamento de credenciais viola estes Termos',
+        ],
+      },
+      {
+        heading: 'Limitações de Responsabilidade',
+        items: [
+          'O SEA FISIO é uma ferramenta de apoio ao raciocínio clínico e educação — não substitui julgamento clínico profissional, diagnóstico médico ou prescrição terapêutica',
+          'As decisões clínicas são de responsabilidade exclusiva do profissional habilitado que utiliza a plataforma',
+          'O SEA FISIO não se responsabiliza por danos decorrentes do uso inadequado das informações apresentadas fora do contexto clínico correto',
+          'Cálculos e alertas automáticos são baseados em literatura científica validada, mas devem ser interpretados em conjunto com o quadro clínico completo do paciente',
+          'A plataforma pode apresentar indisponibilidade temporária por manutenção, atualizações ou falhas de infraestrutura de terceiros',
+          'O SEA FISIO não garante que a plataforma estará livre de erros, vírus ou outros componentes prejudiciais',
+          'A responsabilidade total da empresa, em qualquer hipótese, é limitada ao valor pago pelo usuário nos últimos 12 meses',
+        ],
+      },
+      {
+        heading: 'Propriedade Intelectual e Conteúdo',
+        items: [
+          'Todo o conteúdo da plataforma — textos, algoritmos, simulações 3D, protocolos, calculadoras e interface — é propriedade exclusiva do SEA FISIO, protegido pela Lei nº 9.610/1998 (Lei de Direitos Autorais)',
+          'O conteúdo educacional é desenvolvido por fisioterapeutas especialistas e revisado com base em guidelines internacionais',
+          'O usuário pode utilizar o conteúdo exclusivamente para fins de aprendizado pessoal e aplicação clínica individual',
+          'Capturas de tela, reprodução parcial ou total do conteúdo para publicação em redes sociais, cursos ou materiais de terceiros requer autorização prévia',
+          'Feedbacks, sugestões e denúncias enviadas pelo usuário podem ser utilizados para melhoria da plataforma sem obrigação de compensação',
+          'Marcas, logotipos e identidade visual do SEA FISIO são protegidos e não podem ser utilizados sem licença expressa',
+        ],
+      },
+      {
+        heading: 'Privacidade, Dados e Segurança',
+        items: [
+          'O tratamento de dados pessoais segue integralmente a LGPD (Lei nº 13.709/2018) — detalhes completos disponíveis em Governança → Políticas',
+          'Dados clínicos inseridos no prontuário SEA permanecem no dispositivo do usuário e não são transmitidos a servidores externos',
+          'O usuário é responsável pela segurança de suas credenciais de acesso (e-mail e senha)',
+          'Em caso de suspeita de acesso não autorizado, o usuário deve alterar imediatamente a senha e notificar o suporte',
+          'O SEA FISIO adota criptografia TLS 1.3 em todas as comunicações e armazenamento local sandboxed',
+          'Dados de uso anônimos (métricas de acesso, NPS) podem ser coletados para melhoria contínua, sem identificação pessoal',
+        ],
+      },
+      {
+        heading: 'Vigência, Alterações e Rescisão',
+        items: [
+          'Estes Termos entram em vigor no momento do primeiro acesso e permanecem válidos enquanto a conta estiver ativa',
+          'O SEA FISIO pode atualizar estes Termos a qualquer momento, com notificação prévia de 15 dias por e-mail ou aviso na plataforma',
+          'A continuidade do uso após notificação implica aceitação automática dos novos Termos',
+          'O usuário pode rescindir o contrato a qualquer momento excluindo sua conta — os dados são removidos permanentemente em até 30 dias',
+          'O SEA FISIO pode suspender ou encerrar contas que violem estes Termos, sem aviso prévio em casos de violação grave',
+          'Foro: fica eleito o foro da Comarca de São Paulo/SP para resolução de disputas, com preferência por mediação extrajudicial',
+          'Dúvidas sobre estes Termos: edmararbusiness1@gmail.com — resposta em até 5 dias úteis',
         ],
       },
     ],
