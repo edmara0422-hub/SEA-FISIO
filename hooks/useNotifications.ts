@@ -14,11 +14,12 @@ export type AppNotification = {
 }
 
 export function useNotifications() {
-  const { user } = useAuthStore()
+  const { user, profile } = useAuthStore()
+  const enabled = profile?.notifications_enabled ?? false
   const [notifications, setNotifications] = useState<AppNotification[]>([])
 
   const fetchAll = useCallback(async () => {
-    if (!supabase || !user) return
+    if (!supabase || !user || !enabled) return
     const { data } = await supabase
       .from('notifications')
       .select('*')
@@ -26,9 +27,10 @@ export function useNotifications() {
       .order('created_at', { ascending: false })
       .limit(30)
     if (data) setNotifications(data)
-  }, [user])
+  }, [user, enabled])
 
   useEffect(() => {
+    if (!enabled) { setNotifications([]); return }
     fetchAll()
     if (!supabase || !user) return
 
@@ -42,7 +44,7 @@ export function useNotifications() {
       .subscribe()
 
     return () => { supabase?.removeChannel(channel) }
-  }, [fetchAll, user])
+  }, [fetchAll, user, enabled])
 
   const markAllRead = useCallback(async () => {
     if (!supabase || !user) return
@@ -56,5 +58,5 @@ export function useNotifications() {
 
   const unreadCount = notifications.filter(n => !n.read).length
 
-  return { notifications, unreadCount, markAllRead }
+  return { notifications, unreadCount, markAllRead, enabled }
 }

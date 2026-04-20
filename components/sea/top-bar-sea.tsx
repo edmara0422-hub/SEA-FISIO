@@ -14,7 +14,7 @@ export function TopBarSEA() {
   const notifRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const { profile } = useAuthStore()
-  const { notifications, unreadCount, markAllRead } = useNotifications()
+  const { notifications, unreadCount, markAllRead, enabled: notifEnabled } = useNotifications()
 
   useEffect(() => {
     setMounted(true)
@@ -140,6 +140,7 @@ export function TopBarSEA() {
         <div className="fixed right-2.5 top-16 z-50 md:right-8">
           <NotificationPanel
             notifications={notifications}
+            enabled={notifEnabled}
             onClose={() => setShowNotif(false)}
           />
         </div>
@@ -150,7 +151,7 @@ export function TopBarSEA() {
 
 type Notif = { id: string; title: string; body: string; read: boolean; created_at: string }
 
-function NotificationPanel({ notifications, onClose }: { notifications: Notif[]; onClose: () => void }) {
+function NotificationPanel({ notifications, enabled, onClose }: { notifications: Notif[]; enabled: boolean; onClose: () => void }) {
   function formatDate(iso: string) {
     const d = new Date(iso)
     return new Intl.DateTimeFormat('pt-BR', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }).format(d)
@@ -171,7 +172,13 @@ function NotificationPanel({ notifications, onClose }: { notifications: Notif[];
 
       {/* List */}
       <div className="max-h-[50vh] overflow-y-auto">
-        {notifications.length === 0 ? (
+        {!enabled ? (
+          <div className="flex flex-col items-center gap-2 px-4 py-8">
+            <BellOff className="h-6 w-6 text-white/15" />
+            <p className="text-[8px] text-white/30">Notificações desativadas</p>
+            <p className="text-[7px] text-white/20">Ative em Perfil para receber avisos</p>
+          </div>
+        ) : notifications.length === 0 ? (
           <div className="flex flex-col items-center gap-2 px-4 py-8">
             <BellOff className="h-6 w-6 text-white/15" />
             <p className="text-[8px] text-white/30">Nenhuma notificação ainda</p>
