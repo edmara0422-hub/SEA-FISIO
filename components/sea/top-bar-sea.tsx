@@ -20,8 +20,9 @@ export function TopBarSEA() {
     setMounted(true)
     setNow(new Date())
     const id = setInterval(() => setNow(new Date()), 1000)
+    router.prefetch('/profile')
     return () => clearInterval(id)
-  }, [])
+  }, [router])
 
   useEffect(() => {
     if (!showNotif) return
@@ -102,7 +103,7 @@ export function TopBarSEA() {
             </span>
           )}
 
-          {/* Bell + notification panel */}
+          {/* Bell */}
           <div className="relative" ref={notifRef}>
             <button
               aria-label="Notificacoes"
@@ -117,13 +118,6 @@ export function TopBarSEA() {
                 </span>
               )}
             </button>
-
-            {showNotif && (
-              <NotificationPanel
-                notifications={notifications}
-                onClose={() => setShowNotif(false)}
-              />
-            )}
           </div>
 
           <button
@@ -140,6 +134,16 @@ export function TopBarSEA() {
           </button>
         </div>
       </div>
+
+      {/* Painel fora do overflow-hidden para não ser cortado */}
+      {showNotif && (
+        <div className="fixed right-2.5 top-16 z-50 md:right-8">
+          <NotificationPanel
+            notifications={notifications}
+            onClose={() => setShowNotif(false)}
+          />
+        </div>
+      )}
     </header>
   )
 }
