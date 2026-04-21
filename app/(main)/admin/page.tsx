@@ -7,11 +7,12 @@ import { supabase } from '@/lib/supabase'
 import {
   ArrowLeft, Ban, Brain, Crown, Key, LineChart,
   Mail, MessageSquare, PencilLine, RefreshCw, Save, Search,
-  Send, Settings, Shield, Trash2, Unlock, User, Users, X,
+  Send, Settings, Shield, Trash2, Unlock, User, Users, X, Target,
 } from 'lucide-react'
+import { StrategicPanel } from '@/components/sea/strategic-panel'
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
-type AdminTab = 'users' | 'subscriptions' | 'analytics' | 'communication' | 'config'
+type AdminTab = 'users' | 'subscriptions' | 'analytics' | 'communication' | 'config' | 'estrategia'
 type UserRow = Profile & { blocked: boolean; last_login: string | null }
 type SubRow = { id: string; user_id: string; plan: string; status: string; started_at: string; expires_at: string | null; cancelled_at: string | null }
 
@@ -199,6 +200,7 @@ export default function AdminPage() {
     { id: 'analytics', label: 'Analytics', icon: LineChart },
     { id: 'communication', label: 'Avisos', icon: MessageSquare },
     { id: 'config', label: 'Config', icon: Settings },
+    { id: 'estrategia', label: 'Estrategia', icon: Target },
   ]
 
   return (
@@ -376,6 +378,9 @@ export default function AdminPage() {
           {notifSent && <p className="text-[7px] text-[#4ade80]">Enviado.</p>}
         </div>
       )}
+
+      {/* ══════ ESTRATEGIA ══════ */}
+      {tab === 'estrategia' && !loading && <StrategicPanel />}
 
       {/* ══════ CONFIG ══════ */}
       {tab === 'config' && !loading && (

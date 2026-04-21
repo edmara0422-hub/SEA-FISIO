@@ -185,6 +185,24 @@ export function PerformanceBar() {
             ))}
           </div>
         </div>
+
+        {/* Sustentabilidade Digital */}
+        <div className="mt-3 rounded-[0.8rem] border border-white/5 bg-white/[0.015] px-3 py-3">
+          <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.15em] text-white/30">Sustentabilidade Digital & ESG</p>
+          <div className="grid grid-cols-2 gap-1.5">
+            {[
+              { label: 'Offline-First como escolha ESG', desc: 'Menos requisições ao servidor = menor consumo de energia de datacenter. Padrão arquitetural com impacto ambiental mensurável.' },
+              { label: 'Pegada de Carbono Digital', desc: 'Cada componente é avaliado pelo custo energético. Bundling otimizado reduz transferência de dados e processamento desnecessário.' },
+              { label: 'Antigreenwashing', desc: 'Sem selos sem evidência. O SEA só declara práticas sustentáveis que são verificáveis no código, na arquitetura ou nos processos.' },
+              { label: 'ESG como produto', desc: 'Sustentabilidade não é relatório — é funcionalidade. Zero papel, menos IRAS, menos tempo de VM = impacto ESG no desfecho do paciente.' },
+            ].map((item) => (
+              <div key={item.label} className="rounded-[0.6rem] border border-white/4 bg-white/[0.01] px-2 py-2">
+                <p className="text-[8px] font-semibold text-white/50">{item.label}</p>
+                <p className="mt-0.5 text-[7px] leading-snug text-white/28">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Governança */}
@@ -376,6 +394,15 @@ const GOV_CONTENT: Record<string, { title: string; sections: { heading: string; 
   politicas: {
     title: 'Políticas SEA FISIO',
     sections: [
+      {
+        heading: '4 Pilares da Governança Digital SEA',
+        items: [
+          'Responsabilização (Accountability) — cada decisão de produto tem um responsável identificável; rastreabilidade total de mudanças via Git e changelog público',
+          'Transparência — políticas escritas em linguagem acessível, publicadas na plataforma; sem cláusulas ocultas ou dark patterns',
+          'Equidade e Inclusão — acesso igualitário ao conhecimento clínico independente de região, renda ou instituição; acessibilidade como requisito, não opcional',
+          'Segurança e Conformidade — LGPD, COFFITO, OWASP Top 10 e ISO 27001 como referências permanentes; revisão trimestral obrigatória de todas as políticas',
+        ],
+      },
       {
         heading: 'Política de Privacidade e Proteção de Dados (LGPD)',
         items: [
@@ -618,6 +645,17 @@ const GOV_CONTENT: Record<string, { title: string; sections: { heading: string; 
           'Testes de integridade nos cálculos clínicos com valores de referência publicados',
           'Rate limiting e proteção contra abuso nas APIs públicas',
           'Logs de acesso sem PII para monitoramento de disponibilidade',
+        ],
+      },
+      {
+        heading: 'Frameworks de Governança de TI (COBIT · ISO 38500 · ITIL 4)',
+        items: [
+          'COBIT 2019 — adotado como referência para alinhamento entre objetivos de negócio e TI; foco nos domínios APO (Align, Plan, Organize) e BAI (Build, Acquire, Implement)',
+          'ISO/IEC 38500:2015 — 6 princípios aplicados: Responsabilidade, Estratégia, Aquisição, Desempenho, Conformidade e Comportamento Humano',
+          'ITIL 4 — gestão de serviços orientada por valor; práticas de Gerenciamento de Mudanças, Incidentes e Configuração aplicadas ao ciclo de deploy do SEA',
+          'Cadeia de valor de serviço ITIL: Planejar → Melhorar → Engajar → Projetar/Transicionar → Obter/Construir → Entregar/Suportar',
+          'Governança de dados: catálogo de dados, classificação de sensibilidade (público/interno/restrito/confidencial) e ciclo de vida definido por tipo',
+          'Decisões Data-Driven (DDDM): NPS, métricas de uso, taxa de retenção e feedback qualitativo como insumos obrigatórios para priorização de roadmap',
         ],
       },
       {
