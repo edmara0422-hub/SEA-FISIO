@@ -35,6 +35,8 @@ export default function AdminPage() {
   const [resetPwUser, setResetPwUser] = useState<string | null>(null)
   const [resetPwValue, setResetPwValue] = useState('')
   // Password change for own account
+  const [ownCurrentPw, setOwnCurrentPw] = useState('')
+  const [showOwnCurrentPw, setShowOwnCurrentPw] = useState(false)
   const [ownPw, setOwnPw] = useState('')
   const [showOwnPw, setShowOwnPw] = useState(false)
 
@@ -102,10 +104,17 @@ export default function AdminPage() {
 
   // ── User Actions ──
   const changeOwnPassword = async () => {
-    if (!supabase || ownPw.length < 6) { flash('Senha mínimo 6 caracteres.'); return }
+    if (!supabase || !user?.email) return
+    if (!ownCurrentPw) { flash('Digite a senha atual.'); return }
+    if (ownPw.length < 6) { flash('Nova senha mínimo 6 caracteres.'); return }
+    // Verify current password first
+    const { error: signInErr } = await supabase.auth.signInWithPassword({ email: user.email, password: ownCurrentPw })
+    if (signInErr) { flash('Senha atual incorreta.'); return }
     const { error } = await supabase.auth.updateUser({ password: ownPw })
-    if (error) { flash('Erro: ' + error.message); return }
-    setOwnPw(''); setShowOwnPw(false); flash('Senha alterada com sucesso.')
+    if (error) { flash('Erro ao alterar: ' + error.message); return }
+    setOwnCurrentPw(''); setShowOwnCurrentPw(false)
+    setOwnPw(''); setShowOwnPw(false)
+    flash('Senha alterada com sucesso.')
   }
   const blockUser = async (id: string, block: boolean) => { if (!supabase) return; await supabase.from('profiles').update({ blocked: block }).eq('id', id); flash(block ? 'Bloqueado.' : 'Desbloqueado.'); loadUsers() }
   const deleteUser = async (id: string, email: string) => { if (!confirm(`Excluir ${email}?`)) return; if (!supabase) return; await supabase.from('profiles').delete().eq('id', id); flash('Excluido.'); loadUsers() }
@@ -317,6 +326,20 @@ export default function AdminPage() {
                     {u.id === user?.id && (
                       <div className="space-y-1">
                         <p className="text-[6px] uppercase tracking-[0.1em] text-white/30">Alterar senha (conta própria)</p>
+                        {/* Senha atual */}
+                        <div className="relative">
+                          <input
+                            className={inputClass}
+                            type={showOwnCurrentPw ? 'text' : 'password'}
+                            placeholder="Senha atual"
+                            value={ownCurrentPw}
+                            onChange={(e) => setOwnCurrentPw(e.target.value)}
+                          />
+                          <button type="button" onClick={() => setShowOwnCurrentPw(v => !v)} className="absolute right-2 top-1/2 -translate-y-1/2 text-white/30 hover:text-white/60">
+                            {showOwnCurrentPw ? <EyeOff className="h-3 w-3" /> : <Eye className="h-3 w-3" />}
+                          </button>
+                        </div>
+                        {/* Nova senha + botão */}
                         <div className="flex gap-1">
                           <div className="relative flex-1">
                             <input
@@ -332,10 +355,10 @@ export default function AdminPage() {
                           </div>
                           <button
                             onClick={changeOwnPassword}
-                            disabled={ownPw.length < 6}
+                            disabled={!ownCurrentPw || ownPw.length < 6}
                             className="flex h-7 shrink-0 items-center gap-1 rounded-[0.4rem] border border-[#60a5fa20] bg-[#60a5fa08] px-2 text-[7px] text-[#60a5fa] disabled:opacity-30"
                           >
-                            <Key className="h-2.5 w-2.5" /> Salvar senha
+                            <Key className="h-2.5 w-2.5" /> Alterar
                           </button>
                         </div>
                       </div>
