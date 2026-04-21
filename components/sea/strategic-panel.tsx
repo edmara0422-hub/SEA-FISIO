@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useEffect, useState, useCallback, useMemo } from 'react'
-import { Plus, Trash2, Save, RefreshCw, CheckSquare, Square, ChevronDown, ChevronUp } from 'lucide-react'
+import { Plus, Trash2, Save, RefreshCw, CheckSquare, Square, ChevronDown, ChevronUp, Sparkles } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -213,14 +213,43 @@ export function StrategicPanel() {
     }
     const realIds    = new Set(real.map((p: { id: string }) => p.id))
     const subsActive = (subs ?? []).filter((s: { user_id: string; status: string }) => realIds.has(s.user_id) && s.status === 'active').length
-    setMetrics({ totalUsers: total, activeWeek: week, retention7d: ret7, nps, subsActive, loadedAt: new Date().toLocaleTimeString('pt-BR') })
+    const m = { totalUsers: total, activeWeek: week, retention7d: ret7, nps, subsActive, loadedAt: new Date().toLocaleTimeString('pt-BR') }
+    setMetrics(m)
     setLoadingM(false)
+    // After metrics load, trigger AI analysis
+    const detectedPhase = detectPhase(m)
+    fetchAI(m, detectedPhase)
+  }, [])
+
+  // ── Groq AI analysis ──
+  const [aiDirective, setAiDirective]   = useState<Directive | null>(null)
+  const [loadingAI, setLoadingAI]       = useState(false)
+  const [aiError, setAiError]           = useState(false)
+
+  const fetchAI = useCallback(async (m: Metrics, ph: PhaseId) => {
+    setLoadingAI(true); setAiError(false)
+    try {
+      const res = await fetch('/api/strategic-ai', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ metrics: m, phase: ph }),
+      })
+      if (!res.ok) throw new Error('api error')
+      const data = await res.json()
+      if (data.foco && data.diretiva && data.acoes) {
+        setAiDirective(data as Directive)
+        // Reset weekly actions when new analysis arrives
+        update({ weekDone: [] })
+      } else { setAiError(true) }
+    } catch { setAiError(true) }
+    setLoadingAI(false)
   }, [])
 
   useEffect(() => { loadMetrics() }, [loadMetrics])
 
   const phase     = useMemo(() => detectPhase(metrics), [metrics])
-  const directive = useMemo(() => getDirective(phase, metrics), [phase, metrics])
+  // Use AI directive if available, fall back to static
+  const directive = useMemo(() => aiDirective ?? getDirective(phase, metrics), [aiDirective, phase, metrics])
   const phaseIdx  = PHASES.findIndex(p => p.id === phase)
   const mktIdx    = PHASES.findIndex(p => p.id === state.marketPhase)
 
@@ -309,6 +338,28 @@ export function StrategicPanel() {
 
       {/* ── DIRETIVA ─────────────────────────────────────────────────────── */}
       <div className="rounded-[1rem] border border-white/10 bg-white/[0.03] p-4 space-y-4">
+
+        {/* AI status bar */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            {loadingAI
+              ? <><div className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/40" /><p className="text-[7px] text-white/35">Gerando análise com Groq...</p></>
+              : aiError
+                ? <><div className="h-1.5 w-1.5 rounded-full bg-white/20" /><p className="text-[7px] text-white/25">Análise local (Groq indisponível)</p></>
+                : aiDirective
+                  ? <><div className="h-1.5 w-1.5 rounded-full bg-white/55" /><p className="text-[7px] text-white/40">Análise gerada por IA · Groq</p></>
+                  : null
+            }
+          </div>
+          <button
+            onClick={() => fetchAI(metrics, phase)}
+            disabled={loadingAI}
+            className="flex items-center gap-1 rounded-[0.4rem] border border-white/8 px-2 py-1 text-[7px] text-white/30 hover:text-white/55 disabled:opacity-30"
+          >
+            <Sparkles className="h-2.5 w-2.5" />
+            {loadingAI ? 'Gerando...' : 'Regenerar'}
+          </button>
+        </div>
 
         {/* Foco */}
         <div>
