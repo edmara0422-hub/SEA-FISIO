@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
-import { Plus, Trash2, Save, RefreshCw, Brain, ArrowRight, ChevronDown, ChevronUp, Sparkles, CheckSquare, Square, Zap } from 'lucide-react'
+import { Plus, Trash2, Save, RefreshCw, Brain, CheckSquare, Square, ChevronDown, ChevronUp, Zap, ArrowRight } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -9,11 +9,8 @@ import { supabase } from '@/lib/supabase'
 type PhaseId   = 'f1' | 'f2' | 'f3' | 'f4' | 'f5' | 'f6'
 type MatStatus = 'nao_iniciado' | 'em_desenvolvimento' | 'implementado' | 'otimizado'
 type TndStatus = 'nao_monitorando' | 'estudando' | 'implementado' | 'liderando'
-
-type MatItem  = { status: MatStatus; descricao: string; proximo: string }
-type TndItem  = { status: TndStatus; descricao: string; proximo: string }
-type KR       = { id: string; descricao: string; progresso: number }
-type OKR      = { id: string; objetivo: string; krs: KR[] }
+type KR        = { id: string; descricao: string; progresso: number }
+type OKR       = { id: string; objetivo: string; krs: KR[] }
 
 type Metrics = {
   totalUsers: number; activeWeek: number; retention7d: number
@@ -24,15 +21,16 @@ type StrategyState = {
   companyPhase  : PhaseId | ''
   marketPhase   : PhaseId | ''
   marketSignals : Partial<Record<PhaseId, string>>
-  sgi           : Partial<Record<string, MatItem>>
-  dddm          : Partial<Record<string, MatItem>>
-  tendencias    : Partial<Record<string, TndItem>>
-  sust          : Partial<Record<string, MatItem>>
+  phaseMetas    : Partial<Record<PhaseId, string>>
+  checksDone    : string[]
+  sgi           : Partial<Record<string, MatStatus>>
+  dddm          : Partial<Record<string, MatStatus>>
+  tendencias    : Partial<Record<string, TndStatus>>
+  sust          : Partial<Record<string, MatStatus>>
   okrs          : OKR[]
   h1: number; h2: number; h3: number
   notas         : string
   ultimaRevisao : string
-  actionsDone   : string[]
 }
 
 // ─── Static data ──────────────────────────────────────────────────────────────
@@ -46,49 +44,105 @@ const PHASES: { id: PhaseId; label: string; sublabel: string; desc: string }[] =
   { id: 'f6', label: 'F6', sublabel: 'Transformação', desc: 'Empresa reinventada pela tecnologia' },
 ]
 
-const MAT_STATUS: { id: MatStatus; label: string }[] = [
-  { id: 'nao_iniciado',       label: 'Não iniciado' },
-  { id: 'em_desenvolvimento', label: 'Em desenvolvimento' },
-  { id: 'implementado',       label: 'Implementado' },
-  { id: 'otimizado',          label: 'Otimizado' },
+type CheckItem = {
+  id: string; label: string
+  proximo?: string
+  autoDetect?: (m: Metrics) => boolean
+  autoSource?: string; autoDetail?: string
+}
+
+const PHASE_CHECKS: Record<PhaseId, CheckItem[]> = {
+  f1: [
+    { id: 'hosting',   label: 'App hospedado via HTTPS',           autoDetect: () => true,               autoSource: 'Vercel',        autoDetail: 'SEA hospedado em Vercel — HTTPS ativo' },
+    { id: 'db',        label: 'Banco de dados estruturado',         autoDetect: () => true,               autoSource: 'Supabase',      autoDetail: 'Supabase com tabelas e RLS configurados' },
+    { id: 'auth',      label: 'Autenticação com roles ativa',       autoDetect: () => true,               autoSource: 'Supabase Auth', autoDetail: 'Auth + perfis + bloqueio de conta' },
+    { id: 'analytics', label: 'Analytics básico ativo',             autoDetect: () => true,               autoSource: 'Admin Panel',   autoDetail: 'Painel Admin com eventos e indicadores' },
+  ],
+  f2: [
+    { id: 'users_mgmt',    label: 'Gestão de usuários ativa',       autoDetect: () => true,               autoSource: 'Supabase profiles', autoDetail: 'Perfis com histórico de login e controle' },
+    { id: 'processes_doc', label: 'Processos-chave documentados',   proximo: 'Documentar o fluxo clínico completo: admissão → avaliação → evolução → alta. 1 processo por semana.' },
+    { id: 'automation',    label: 'Ao menos 1 automação ativa',     proximo: 'Criar trigger: novo usuário cadastrado → notificação de boas-vindas automática via Supabase Edge Function.' },
+    { id: 'metrics_dash',  label: 'Dashboard de métricas do negócio', autoDetect: () => true,             autoSource: 'Admin Panel',   autoDetail: 'Analytics com retenção, eventos, insights IA e OKRs' },
+  ],
+  f3: [
+    { id: 'nps_active',  label: 'NPS coletado regularmente',        autoDetect: m => m.nps !== null,      autoSource: 'sea_feedback',  proximo: 'Ativar coleta de NPS inline após 7 dias de uso — mínimo 10 respostas.' },
+    { id: 'core_feat',   label: 'Feature core identificada (>40%)', autoDetect: m => m.activeWeek >= 10, proximo: 'Analisar Top Features no Analytics — identificar o que gera 40%+ do uso.' },
+    { id: 'differentiator', label: 'Diferencial competitivo documentado', proximo: 'Responder: o que o SEA faz que nenhuma alternativa replica em 6 meses?' },
+    { id: 'organic_ch',  label: 'Canal de aquisição orgânica ativo', proximo: 'Criar série de conteúdo clínico exclusivo que gera retorno semanal sem ads.' },
+  ],
+  f4: [
+    { id: 'dddm_full',  label: 'Decisões de produto 100% data-driven', proximo: 'Definir quais 3 métricas determinam cada decisão de produto no próximo sprint.' },
+    { id: 'premium',    label: 'Feature premium lançada e mensurável',  proximo: 'Identificar e lançar 1 funcionalidade que usuários pagariam separadamente.' },
+    { id: 'mrr1k',      label: 'MRR > R$ 1.000',                        autoDetect: m => m.subsActive >= 2, proximo: 'Converter early adopters em pagantes — modelo de precificação definido.' },
+    { id: 'nps30',      label: 'NPS > 30 com 20+ respostas',             autoDetect: m => (m.nps ?? -999) > 30, proximo: 'Coletar NPS de todos os usuários ativos — identificar promotores.' },
+  ],
+  f5: [
+    { id: 'mrr5k',      label: 'MRR > R$ 5.000 com churn < 5%',    autoDetect: m => m.subsActive >= 10, proximo: 'Ativar programa de sucesso do cliente — contato proativo antes do churn.' },
+    { id: 'growth_loop', label: 'Growth loop ativo',                 proximo: 'Criar mecanismo: fisioterapeuta usa → compartilha → novo usuário chega sem custo.' },
+    { id: 'b2b',        label: 'Parceria B2B institucional',          proximo: 'Identificar 3 hospitais ou clínicas e propor piloto B2B com contrato anual.' },
+    { id: 'ai_core',    label: 'IA integrada ao core clínico',        proximo: 'Implementar agente IA para análise automática de parâmetros ventilatórios.' },
+  ],
+  f6: [
+    { id: 'users500', label: '500+ usuários ativos',                  autoDetect: m => m.totalUsers >= 500, proximo: 'Atingir 500 usuários ativos com NPS > 50.' },
+    { id: 'nps50',    label: 'NPS > 50 com amostra representativa',   autoDetect: m => (m.nps ?? -999) > 50, proximo: 'Manter NPS acima de 50 com revisão quinzenal.' },
+    { id: 'latam',    label: 'Expansão LatAm iniciada',               proximo: 'Identificar 1 parceiro em outro país para piloto internacional.' },
+    { id: 'paper',    label: 'Relatório de impacto clínico publicado', proximo: 'Publicar primeiro paper ou relatório com dados anonimizados do SEA.' },
+  ],
+}
+
+const MAT_STATUS_LIST: { id: MatStatus; short: string }[] = [
+  { id: 'nao_iniciado',       short: 'N/I' },
+  { id: 'em_desenvolvimento', short: 'Dev' },
+  { id: 'implementado',       short: 'Impl' },
+  { id: 'otimizado',          short: 'Otim' },
 ]
 
-const TND_STATUS: { id: TndStatus; label: string }[] = [
-  { id: 'nao_monitorando', label: 'Não monitorando' },
-  { id: 'estudando',       label: 'Estudando · Pilotando' },
-  { id: 'implementado',    label: 'Implementado' },
-  { id: 'liderando',       label: 'Liderando' },
+const TND_STATUS_LIST: { id: TndStatus; short: string }[] = [
+  { id: 'nao_monitorando', short: 'N/Mon' },
+  { id: 'estudando',       short: 'Estud' },
+  { id: 'implementado',    short: 'Impl' },
+  { id: 'liderando',       short: 'Lider' },
 ]
 
-const SGI_ITEMS = [
-  { id: 'projetos',   emoji: '🏗️', label: 'Estrutura de Projetos', ph: 'Como está estruturada a gestão de projetos hoje?', phP: 'Próximo passo concreto para evoluir essa dimensão...' },
-  { id: 'processos',  emoji: '⚙️', label: 'Processos',              ph: 'Como estão os processos internos digitalizados?',  phP: 'O que precisa ser automatizado ou padronizado agora?' },
-  { id: 'cultura',    emoji: '🧬', label: 'Cultura',                ph: 'Como está a cultura de inovação e aprendizado?',   phP: 'Que ritual ou prática pode ser criado esta semana?' },
-  { id: 'resultados', emoji: '📈', label: 'Resultados',             ph: 'Como está a mensuração de resultados e KPIs?',     phP: 'Qual métrica precisa ser visível nos próximos 30 dias?' },
+const SGI_ROWS = [
+  { id: 'projetos',   emoji: '🏗️', label: 'Estrutura de Projetos' },
+  { id: 'processos',  emoji: '⚙️', label: 'Processos' },
+  { id: 'cultura',    emoji: '🧬', label: 'Cultura' },
+  { id: 'resultados', emoji: '📈', label: 'Resultados' },
 ]
 
-const DDDM_ITEMS = [
-  { id: 'coleta',       emoji: '💾', label: 'Coleta e Armazenamento',     ph: 'Quais dados são coletados e onde ficam?',                  phP: 'Que dado ainda falta capturar para decisões melhores?' },
-  { id: 'analise',      emoji: '🧠', label: 'Análise e Processamento',    ph: 'Como os dados são analisados?',                            phP: 'Que análise automática pode ser implementada esta sprint?' },
-  { id: 'visualizacao', emoji: '📊', label: 'Visualização e Comunicação', ph: 'Como os dados são visualizados e comunicados?',            phP: 'Que dashboard tornaria as decisões mais rápidas?' },
-  { id: 'integracao',   emoji: '🎯', label: 'Integração Estratégica',     ph: 'Como os dados informam as decisões estratégicas hoje?',    phP: 'Qual decisão da próxima semana deve ser data-driven?' },
+const DDDM_ROWS = [
+  { id: 'coleta',       emoji: '💾', label: 'Coleta e Armazenamento' },
+  { id: 'analise',      emoji: '🧠', label: 'Análise e Processamento' },
+  { id: 'visualizacao', emoji: '📊', label: 'Visualização' },
+  { id: 'integracao',   emoji: '🎯', label: 'Integração Estratégica' },
 ]
 
-const TEND_ITEMS = [
-  { id: 'agentes_ia',   emoji: '🤖', label: 'Agentes de IA Autônomos',           ph: 'Como a IA está sendo usada no SEA hoje?',                   phP: 'Que processo poderia ser executado por um agente autônomo?',       alerta: 'Concorrentes com agentes autônomos vão entregar análises antes de você perguntar.' },
-  { id: 'regtech',      emoji: '⚖️', label: 'RegTech e Compliance Automatizado', ph: 'Como o compliance (LGPD, COFFITO) é gerenciado hoje?',       phP: 'Que verificação de conformidade pode ser automatizada?',           alerta: 'Quem não automatiza compliance paga mais e erra mais — especialmente com LGPD evoluindo.' },
-  { id: 'ambidestra',   emoji: '🔀', label: 'Inovação Ambidestra',               ph: 'Como H1 (core) e H3 (exploração) estão distribuídos?',       phP: 'Revise a distribuição dos 3 Horizontes nesta sprint.',             alerta: 'Foco só em eficiência = estagnação. Só em inovação = caos sem receita.' },
-  { id: 'offline',      emoji: '📡', label: 'Offline-First & Edge',              ph: 'O SEA funciona offline? Em quais cenários críticos?',         phP: 'Mapeie funcionalidades que precisam funcionar sem conexão na UTI.', alerta: 'UTIs têm conectividade instável — offline-first é diferencial clínico, não só técnico.' },
+const TEND_ROWS = [
+  { id: 'agentes_ia', emoji: '🤖', label: 'Agentes de IA Autônomos',           alerta: 'Concorrentes com IA autônoma vão entregar análises antes de você perguntar.' },
+  { id: 'regtech',    emoji: '⚖️', label: 'RegTech e Compliance Automatizado', alerta: 'Quem não automatiza compliance paga mais e erra mais.' },
+  { id: 'ambidestra', emoji: '🔀', label: 'Inovação Ambidestra',               alerta: 'Só eficiência = estagnação. Só inovação = caos sem receita.' },
+  { id: 'offline',    emoji: '📡', label: 'Offline-First & Edge',              alerta: 'UTIs têm conectividade instável — offline-first é diferencial clínico.' },
 ]
 
-const SUST_ITEMS = [
-  { id: 'carbono',          emoji: '🌱', label: 'Pegada de Carbono Digital', ph: 'Como o SEA minimiza o consumo energético da infraestrutura?', phP: 'Mapeie o maior consumidor de energia da stack e otimize.' },
-  { id: 'offline_esg',      emoji: '♻️', label: 'Offline-First como ESG',    ph: 'Como a arquitetura offline reduz requisições ao servidor?',    phP: 'Documente a economia de CO₂ gerada pelo cache local vs cloud.' },
-  { id: 'papel',            emoji: '📄', label: 'Zero Papel na UTI',         ph: 'Quantos prontuários digitais já substituíram papel?',          phP: 'Calcule e publique o impacto ambiental mensalmente.' },
-  { id: 'antigreenwashing', emoji: '🔍', label: 'Antigreenwashing',          ph: 'As práticas ESG declaradas têm evidência verificável?',        phP: 'Documente uma prática sustentável com métrica real esta semana.' },
+const SUST_ROWS = [
+  { id: 'carbono',          emoji: '🌱', label: 'Pegada de Carbono Digital' },
+  { id: 'offline_esg',      emoji: '♻️', label: 'Offline-First como ESG' },
+  { id: 'papel',            emoji: '📄', label: 'Zero Papel na UTI' },
+  { id: 'antigreenwashing', emoji: '🔍', label: 'Antigreenwashing' },
 ]
 
-// ─── Phase detection from live metrics ────────────────────────────────────────
+const STORAGE_KEY = 'sea-strategy-v5'
+
+const DEFAULT_STATE: StrategyState = {
+  companyPhase: '', marketPhase: '', marketSignals: {}, phaseMetas: {},
+  checksDone: [], sgi: {}, dddm: {}, tendencias: {}, sust: {},
+  okrs: [], h1: 70, h2: 20, h3: 10, notas: '', ultimaRevisao: '',
+}
+
+const EMPTY_METRICS: Metrics = { totalUsers: 0, activeWeek: 0, retention7d: 0, nps: null, subsActive: 0, loadedAt: '' }
+
+function genId() { return Math.random().toString(36).slice(2) }
 
 function detectPhase(m: Metrics): PhaseId {
   if (m.totalUsers >= 500 && m.retention7d >= 50) return 'f6'
@@ -99,238 +153,173 @@ function detectPhase(m: Metrics): PhaseId {
   return 'f1'
 }
 
-function phaseSignals(m: Metrics): { label: string; ok: boolean; detail: string }[] {
-  return [
-    { label: 'Usuários reais', ok: m.totalUsers >= 5,  detail: `${m.totalUsers} · F2 requer ≥5` },
-    { label: 'Ativos/semana',  ok: m.activeWeek >= 10, detail: `${m.activeWeek} · F3 requer ≥10` },
-    { label: 'Retenção 7d',    ok: m.retention7d >= 20, detail: `${m.retention7d}% · F3 requer ≥20%` },
-    { label: 'Assinaturas',    ok: m.subsActive > 0,   detail: `${m.subsActive} ativas · F4 requer ≥1` },
-  ]
-}
+// ─── Compact status pill row ──────────────────────────────────────────────────
 
-// ─── Maturity defaults per phase ──────────────────────────────────────────────
-
-const PHASE_MATURITY: Record<PhaseId, {
-  sgi:  Record<string, MatStatus>
-  dddm: Record<string, MatStatus>
-  tend: Record<string, TndStatus>
-  sust: Record<string, MatStatus>
-}> = {
-  f1: {
-    sgi:  { projetos: 'nao_iniciado',       processos: 'nao_iniciado',       cultura: 'em_desenvolvimento', resultados: 'nao_iniciado' },
-    dddm: { coleta: 'em_desenvolvimento',   analise: 'nao_iniciado',         visualizacao: 'nao_iniciado',  integracao: 'nao_iniciado' },
-    tend: { agentes_ia: 'nao_monitorando',  regtech: 'estudando',            ambidestra: 'estudando',       offline: 'nao_monitorando' },
-    sust: { carbono: 'nao_iniciado',        offline_esg: 'nao_iniciado',     papel: 'nao_iniciado',         antigreenwashing: 'nao_iniciado' },
-  },
-  f2: {
-    sgi:  { projetos: 'em_desenvolvimento', processos: 'em_desenvolvimento', cultura: 'em_desenvolvimento', resultados: 'em_desenvolvimento' },
-    dddm: { coleta: 'em_desenvolvimento',   analise: 'em_desenvolvimento',   visualizacao: 'nao_iniciado',  integracao: 'nao_iniciado' },
-    tend: { agentes_ia: 'estudando',        regtech: 'estudando',            ambidestra: 'estudando',          offline: 'estudando' },
-    sust: { carbono: 'nao_iniciado',        offline_esg: 'em_desenvolvimento', papel: 'em_desenvolvimento', antigreenwashing: 'nao_iniciado' },
-  },
-  f3: {
-    sgi:  { projetos: 'implementado',       processos: 'em_desenvolvimento', cultura: 'em_desenvolvimento', resultados: 'em_desenvolvimento' },
-    dddm: { coleta: 'implementado',         analise: 'em_desenvolvimento',   visualizacao: 'em_desenvolvimento', integracao: 'em_desenvolvimento' },
-    tend: { agentes_ia: 'estudando',        regtech: 'implementado',         ambidestra: 'estudando',          offline: 'estudando' },
-    sust: { carbono: 'em_desenvolvimento',  offline_esg: 'em_desenvolvimento', papel: 'em_desenvolvimento', antigreenwashing: 'em_desenvolvimento' },
-  },
-  f4: {
-    sgi:  { projetos: 'implementado',       processos: 'implementado',       cultura: 'implementado',       resultados: 'em_desenvolvimento' },
-    dddm: { coleta: 'implementado',         analise: 'implementado',         visualizacao: 'em_desenvolvimento', integracao: 'em_desenvolvimento' },
-    tend: { agentes_ia: 'implementado',     regtech: 'implementado',         ambidestra: 'implementado',    offline: 'implementado' },
-    sust: { carbono: 'em_desenvolvimento',  offline_esg: 'implementado',     papel: 'implementado',         antigreenwashing: 'em_desenvolvimento' },
-  },
-  f5: {
-    sgi:  { projetos: 'implementado',       processos: 'implementado',       cultura: 'implementado',       resultados: 'implementado' },
-    dddm: { coleta: 'implementado',         analise: 'implementado',         visualizacao: 'implementado',  integracao: 'implementado' },
-    tend: { agentes_ia: 'implementado',     regtech: 'implementado',         ambidestra: 'implementado',    offline: 'implementado' },
-    sust: { carbono: 'implementado',        offline_esg: 'implementado',     papel: 'implementado',         antigreenwashing: 'implementado' },
-  },
-  f6: {
-    sgi:  { projetos: 'otimizado',          processos: 'otimizado',          cultura: 'otimizado',          resultados: 'otimizado' },
-    dddm: { coleta: 'otimizado',            analise: 'otimizado',            visualizacao: 'otimizado',     integracao: 'otimizado' },
-    tend: { agentes_ia: 'liderando',        regtech: 'liderando',            ambidestra: 'liderando',       offline: 'liderando' },
-    sust: { carbono: 'otimizado',           offline_esg: 'otimizado',        papel: 'otimizado',            antigreenwashing: 'otimizado' },
-  },
-}
-
-// ─── Action plans per phase (to advance to next phase) ────────────────────────
-
-const ACTION_PLANS: Record<PhaseId, { id: string; area: string; text: string }[]> = {
-  f1: [
-    { id: 'f1_1', area: 'Aquisição',    text: 'Conseguir os primeiros 5 usuários reais usando o SEA ativamente esta semana — fisioterapeutas intensivistas de confiança.' },
-    { id: 'f1_2', area: 'Produto',      text: 'Documentar o fluxo clínico completo no app: admissão → avaliação diária → evolução → alta. Sem lacunas.' },
-    { id: 'f1_3', area: 'Dados',        text: 'Configurar captura de eventos chave: login, prontuário criado, calculadora usada, simulação iniciada.' },
-    { id: 'f1_4', area: 'Pesquisa',     text: 'Realizar 5 entrevistas com fisioterapeutas: o que trava, o que funciona, o que falta urgente.' },
-    { id: 'f1_5', area: 'Métricas',     text: 'Definir 3 métricas de valor que provam que o SEA está resolvendo o problema clínico real.' },
-  ],
-  f2: [
-    { id: 'f2_1', area: 'Processo',     text: 'Digitalizar 100% do fluxo de avaliação — nenhum dado clínico em papel após este sprint.' },
-    { id: 'f2_2', area: 'Onboarding',   text: 'Criar onboarding guiado: novo usuário cria o primeiro prontuário em menos de 5 minutos.' },
-    { id: 'f2_3', area: 'NPS',          text: 'Ativar coleta de NPS inline após 7 dias de uso ativo — mínimo 10 respostas.' },
-    { id: 'f2_4', area: 'Engajamento',  text: 'Identificar o "momento aha": que ação no SEA leva o usuário a voltar no dia seguinte?' },
-    { id: 'f2_5', area: 'Automação',    text: 'Mapear e automatizar 3 tarefas administrativas repetitivas (suporte, conteúdo, relatórios).' },
-  ],
-  f3: [
-    { id: 'f3_1', area: 'Dados',        text: 'Ativar painel de dados: toda decisão de produto baseada em uso real, não em suposição.' },
-    { id: 'f3_2', area: 'Monetização',  text: 'Lançar funcionalidade premium mensurável — algo que usuários pagariam separadamente.' },
-    { id: 'f3_3', area: 'NPS',          text: 'Atingir NPS > 30 com pelo menos 20 respostas coletadas.' },
-    { id: 'f3_4', area: 'Aquisição',    text: 'Documentar e replicar o canal de aquisição que trouxe os usuários com menor churn.' },
-    { id: 'f3_5', area: 'Conteúdo',     text: 'Criar série de conteúdo clínico exclusivo que gera retorno semanal orgânico.' },
-  ],
-  f4: [
-    { id: 'f4_1', area: 'Receita',      text: 'Atingir MRR de R$ 5.000 com modelo de assinatura recorrente validado.' },
-    { id: 'f4_2', area: 'IA',           text: 'Implementar agente IA para análise automática de parâmetros ventilatórios no prontuário.' },
-    { id: 'f4_3', area: 'Retenção',     text: 'Reduzir churn mensal para abaixo de 5% com programa ativo de sucesso do cliente.' },
-    { id: 'f4_4', area: 'B2B',          text: 'Lançar parceria B2B com 1 hospital ou clínica — contrato anual.' },
-    { id: 'f4_5', area: 'Growth Loop',  text: 'Ativar growth loop: fisioterapeuta usa → compartilha → novo usuário chega sem custo de aquisição.' },
-  ],
-  f5: [
-    { id: 'f5_1', area: 'Plataforma',   text: 'Lançar plataforma B2B para gestão hospitalar — novo segmento de receita.' },
-    { id: 'f5_2', area: 'Escala',       text: 'Atingir 500 usuários ativos com NPS > 50.' },
-    { id: 'f5_3', area: 'Internacional', text: 'Expandir para LatAm: 1 mercado piloto fora do Brasil com parceiro local.' },
-    { id: 'f5_4', area: 'Ciência',      text: 'Publicar primeiro paper científico com dados anonimizados do SEA.' },
-    { id: 'f5_5', area: 'Comunidade',   text: 'Criar marketplace de protocolos clínicos com contribuição da comunidade.' },
-  ],
-  f6: [
-    { id: 'f6_1', area: 'NPS',          text: 'Manter NPS acima de 60 com amostra representativa de todos os segmentos.' },
-    { id: 'f6_2', area: 'Regulação',    text: 'Liderar 1 iniciativa regulatória setorial (COFFITO, CFM, ANS).' },
-    { id: 'f6_3', area: 'Impacto',      text: 'Publicar relatório anual de impacto clínico com dados verificáveis.' },
-    { id: 'f6_4', area: 'Certificação', text: 'Lançar programa de certificação SEA para fisioterapeutas intensivistas.' },
-    { id: 'f6_5', area: 'Inovação',     text: 'Investir 15%+ da receita em H3 (disruptivo) — novos mercados e modelos.' },
-  ],
-}
-
-const STORAGE_KEY = 'sea-strategy-v3'
-
-const DEFAULT_MAT: MatItem = { status: 'nao_iniciado',    descricao: '', proximo: '' }
-const DEFAULT_TND: TndItem = { status: 'nao_monitorando', descricao: '', proximo: '' }
-
-const DEFAULT_STATE: StrategyState = {
-  companyPhase: '', marketPhase: '', marketSignals: {},
-  sgi: {}, dddm: {}, tendencias: {}, sust: {},
-  okrs: [], h1: 70, h2: 20, h3: 10, notas: '', ultimaRevisao: '', actionsDone: [],
-}
-
-function genId() { return Math.random().toString(36).slice(2) }
-
-// ─── Phase railway ─────────────────────────────────────────────────────────────
-
-function PhaseRailway({ current, onSelect, autoPhase }: { current: PhaseId | ''; onSelect: (id: PhaseId) => void; autoPhase?: PhaseId }) {
-  const currentIdx = PHASES.findIndex(p => p.id === current)
+function MatRow<S extends string>({
+  emoji, label, status, statusList, onChange,
+}: {
+  emoji: string; label: string
+  status: S; statusList: { id: S; short: string }[]
+  onChange: (s: S) => void
+}) {
   return (
-    <div className="overflow-x-auto pb-3">
-      <div className="flex min-w-max items-start gap-0">
-        {PHASES.map((ph, idx) => {
-          const done   = idx < currentIdx
-          const active = ph.id === current
-          const future = idx > currentIdx
-          const isAuto = ph.id === autoPhase && ph.id !== current
-          return (
-            <div key={ph.id} className="flex items-start">
-              {idx > 0 && (
-                <div className={`mt-[1.35rem] h-px w-8 ${done || active ? 'bg-white/35' : 'bg-white/8'}`} />
-              )}
-              <button onClick={() => onSelect(ph.id)} className={`flex flex-col items-center gap-1 transition-opacity ${future && !active ? 'opacity-40' : ''}`}>
-                <div className={`flex h-10 w-10 items-center justify-center rounded-full border-2 text-[10px] font-bold transition-all ${
-                  active  ? 'border-white/80 bg-white/[0.12] text-white shadow-[0_0_18px_rgba(255,255,255,0.1)]' :
-                  isAuto  ? 'border-white/30 bg-white/[0.06] text-white/60 border-dashed' :
-                  done    ? 'border-white/40 bg-white/[0.06] text-white/60' :
-                            'border-white/10 bg-transparent text-white/20'
-                }`}>
-                  {ph.label}
-                </div>
-                <p className={`text-[8px] font-semibold ${active ? 'text-white/90' : done ? 'text-white/50' : 'text-white/20'}`}>{ph.sublabel}</p>
-                <p className={`text-center text-[7px] leading-snug ${active ? 'text-white/50' : 'text-white/18'}`} style={{ maxWidth: 72 }}>{ph.desc}</p>
-                {active && <span className="mt-0.5 rounded-full border border-white/25 bg-white/[0.08] px-2 py-0.5 text-[6px] font-bold uppercase tracking-wider text-white/80">Atual</span>}
-                {isAuto  && <span className="mt-0.5 rounded-full border border-white/15 px-2 py-0.5 text-[6px] text-white/40">IA</span>}
-              </button>
-            </div>
-          )
-        })}
+    <div className="flex items-center gap-2 border-b border-white/4 py-2 last:border-0">
+      <span className="text-sm leading-none">{emoji}</span>
+      <p className="flex-1 text-[9px] text-white/65">{label}</p>
+      <div className="flex shrink-0 gap-0.5">
+        {statusList.map(s => (
+          <button
+            key={s.id}
+            onClick={() => onChange(s.id)}
+            className={`rounded-full px-1.5 py-0.5 text-[7px] font-medium transition-all ${
+              status === s.id
+                ? 'bg-white/15 text-white/85'
+                : 'bg-transparent text-white/22 hover:text-white/45'
+            }`}
+          >{s.short}</button>
+        ))}
       </div>
     </div>
   )
 }
 
-// ─── Maturity card ─────────────────────────────────────────────────────────────
+// ─── Collapsible section ──────────────────────────────────────────────────────
 
-function MaturityCard<S extends string>({
-  emoji, label, data, statusList, onChange, ph, phP, alerta,
-}: {
-  emoji: string; label: string
-  data: { status: S; descricao: string; proximo: string }
-  statusList: { id: S; label: string }[]
-  onChange: (patch: Partial<{ status: S; descricao: string; proximo: string }>) => void
-  ph: string; phP: string; alerta?: string
-}) {
-  const txtCls = 'w-full rounded-[0.6rem] border border-white/8 bg-white/[0.02] px-3 py-2 text-[9px] leading-relaxed text-white/65 placeholder:text-white/20 outline-none focus:border-white/18 resize-none'
+function Sec({ label, sub, open, toggle, children }: { label: string; sub?: string; open: boolean; toggle: () => void; children: React.ReactNode }) {
   return (
-    <div className="rounded-[1rem] border border-white/6 bg-white/[0.02] p-4">
-      <div className="mb-3 flex items-center gap-2">
-        <span className="text-lg leading-none">{emoji}</span>
-        <p className="text-[10px] font-semibold text-white/75">{label}</p>
+    <div className="space-y-2">
+      <button onClick={toggle} className="flex w-full items-center justify-between border-b border-white/6 pb-1.5">
+        <div>
+          <p className="text-left text-[9px] font-semibold uppercase tracking-[0.16em] text-white/50">{label}</p>
+          {sub && <p className="text-left text-[7px] text-white/25">{sub}</p>}
+        </div>
+        {open ? <ChevronUp className="h-3 w-3 text-white/20" /> : <ChevronDown className="h-3 w-3 text-white/20" />}
+      </button>
+      {open && children}
+    </div>
+  )
+}
+
+// ─── Phase checklist item ─────────────────────────────────────────────────────
+
+function CheckRow({ item, done, onToggle, metrics }: {
+  item: CheckItem; done: boolean; onToggle: () => void; metrics: Metrics
+}) {
+  const isAuto = !!(item.autoDetect && item.autoDetect(metrics))
+  const checked = done || isAuto
+  return (
+    <div className={`flex items-start gap-2.5 rounded-[0.6rem] px-2.5 py-2 transition-all ${checked ? 'bg-white/[0.02]' : ''}`}>
+      <button onClick={!isAuto ? onToggle : undefined} className={`mt-0.5 shrink-0 ${isAuto ? 'cursor-default' : 'hover:opacity-80'}`}>
+        {checked
+          ? <CheckSquare className="h-3.5 w-3.5 text-white/55" />
+          : <Square      className="h-3.5 w-3.5 text-white/20" />
+        }
+      </button>
+      <div className="min-w-0 flex-1">
+        <p className={`text-[9px] leading-snug ${checked ? 'text-white/40' : 'text-white/70'}`}>{item.label}</p>
+        {isAuto && item.autoSource && (
+          <p className="mt-0.5 text-[7px] text-white/25">via {item.autoSource} — {item.autoDetail}</p>
+        )}
+        {!checked && item.proximo && (
+          <p className="mt-1 text-[7px] leading-relaxed text-white/35">O que fazer: {item.proximo}</p>
+        )}
       </div>
-      <div className="mb-3 flex flex-wrap gap-1">
-        {statusList.map(s => (
-          <button key={s.id} onClick={() => onChange({ status: s.id } as Partial<{ status: S; descricao: string; proximo: string }>)}
-            className={`rounded-full border px-2.5 py-1 text-[8px] font-medium transition-all ${
-              data.status === s.id
-                ? 'border-white/30 bg-white/[0.10] text-white/90'
-                : 'border-white/6 bg-transparent text-white/30 hover:text-white/55'
-            }`}
-          >{s.label}</button>
-        ))}
-      </div>
-      <textarea rows={2} className={txtCls} placeholder={ph} value={data.descricao} onChange={e => onChange({ descricao: e.target.value })} />
-      <div className="mt-2">
-        <p className="mb-1 text-[7px] uppercase tracking-[0.1em] text-white/25">Próximo passo</p>
-        <textarea rows={2} className={txtCls} placeholder={phP} value={data.proximo} onChange={e => onChange({ proximo: e.target.value })} />
-      </div>
-      {alerta && (
-        <p className="mt-2 rounded-[0.5rem] border border-white/5 bg-white/[0.01] px-2 py-1.5 text-[7px] italic leading-relaxed text-white/30">{alerta}</p>
+    </div>
+  )
+}
+
+// ─── Phase node (trilho item) ─────────────────────────────────────────────────
+
+function PhaseNode({ phase, idx, isCurrent, isDone, isMarket, metrics, checksDone, onToggleCheck, meta, onSetMeta, onSelectPhase }: {
+  phase: typeof PHASES[0]; idx: number
+  isCurrent: boolean; isDone: boolean; isMarket: boolean
+  metrics: Metrics
+  checksDone: string[]; onToggleCheck: (id: string) => void
+  meta: string; onSetMeta: (v: string) => void
+  onSelectPhase: () => void
+}) {
+  const checks = isMarket ? [] : PHASE_CHECKS[phase.id as PhaseId]
+  const autoCount   = checks.filter(c => c.autoDetect && c.autoDetect(metrics)).length
+  const manualCount = checks.filter(c => !c.autoDetect && checksDone.includes(c.id)).length
+  const totalDone   = autoCount + manualCount
+  const nextPhase   = PHASES[idx + 1]
+
+  return (
+    <div className={`rounded-[0.9rem] border transition-all ${isCurrent || isMarket ? 'border-white/12 bg-white/[0.025]' : 'border-white/4 bg-transparent'}`}>
+      {/* Header row */}
+      <button onClick={onSelectPhase} className="flex w-full items-center gap-3 px-3 py-2.5 text-left">
+        {/* Node circle */}
+        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border text-[9px] font-bold ${
+          isDone    ? 'border-white/30 bg-white/[0.06] text-white/50' :
+          isCurrent ? 'border-white/70 bg-white/[0.10] text-white' :
+          isMarket  ? 'border-white/50 bg-white/[0.06] text-white/65' :
+                      'border-white/10 text-white/20'
+        }`}>
+          {isDone ? '✓' : phase.label}
+        </div>
+        {/* Labels */}
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-2">
+            <p className={`text-[9px] font-semibold ${isCurrent || isMarket ? 'text-white/80' : isDone ? 'text-white/45' : 'text-white/20'}`}>{phase.sublabel}</p>
+            {isCurrent && <span className="rounded-full border border-white/20 px-1.5 py-0.5 text-[6px] font-bold uppercase tracking-wider text-white/70">Fase atual</span>}
+            {isMarket  && <span className="rounded-full border border-white/15 px-1.5 py-0.5 text-[6px] font-bold uppercase tracking-wider text-white/50">Mercado aqui</span>}
+            {isDone    && <span className="text-[7px] text-white/35">{totalDone} itens verificados ✓</span>}
+          </div>
+          <p className={`text-[7px] ${isCurrent || isMarket ? 'text-white/35' : isDone ? 'text-white/25' : 'text-white/15'}`}>{phase.desc}</p>
+        </div>
+        {(isCurrent || !isDone) && !isMarket && <ChevronDown className="h-3 w-3 shrink-0 text-white/20" />}
+      </button>
+
+      {/* Expanded content — current phase only */}
+      {isCurrent && !isMarket && (
+        <div className="border-t border-white/5 px-3 pb-3 pt-2">
+          {nextPhase && (
+            <div className="mb-2 flex items-center gap-1">
+              <ArrowRight className="h-3 w-3 text-white/25" />
+              <p className="text-[7px] text-white/30">Para avançar para <span className="text-white/50">{nextPhase.label} · {nextPhase.sublabel}</span></p>
+              <span className="ml-auto text-[7px] text-white/35">{totalDone}/{checks.length}</span>
+            </div>
+          )}
+          <div className="space-y-0.5">
+            {checks.map(item => (
+              <CheckRow
+                key={item.id}
+                item={item}
+                done={checksDone.includes(item.id)}
+                onToggle={() => onToggleCheck(item.id)}
+                metrics={metrics}
+              />
+            ))}
+          </div>
+          <div className="mt-2">
+            <input
+              className="w-full rounded-[0.5rem] border border-white/6 bg-transparent px-2.5 py-1.5 text-[8px] text-white/55 placeholder:text-white/18 outline-none focus:border-white/15"
+              placeholder="Meta: Ex: Q3 2025 / próximos 60 dias..."
+              value={meta}
+              onChange={e => onSetMeta(e.target.value)}
+            />
+          </div>
+        </div>
       )}
     </div>
   )
 }
 
-// ─── Section header ────────────────────────────────────────────────────────────
-
-function SectionHead({ label, sub, open, toggle }: { label: string; sub?: string; open: boolean; toggle: () => void }) {
-  return (
-    <button onClick={toggle} className="flex w-full items-center justify-between border-b border-white/6 pb-2">
-      <div>
-        <p className="text-left text-[10px] font-semibold uppercase tracking-[0.18em] text-white/55">{label}</p>
-        {sub && <p className="text-left text-[8px] text-white/30">{sub}</p>}
-      </div>
-      {open ? <ChevronUp className="h-3.5 w-3.5 text-white/25" /> : <ChevronDown className="h-3.5 w-3.5 text-white/25" />}
-    </button>
-  )
-}
-
 // ─── Main Component ────────────────────────────────────────────────────────────
-
-const EMPTY_METRICS: Metrics = { totalUsers: 0, activeWeek: 0, retention7d: 0, nps: null, subsActive: 0, loadedAt: '' }
 
 export function StrategicPanel() {
   const [state, setState] = useState<StrategyState>(DEFAULT_STATE)
   const [metrics, setMetrics] = useState<Metrics>(EMPTY_METRICS)
   const [loadingM, setLoadingM] = useState(false)
   const [saved, setSaved] = useState(false)
-  const [diagApplied, setDiagApplied] = useState(false)
-
-  const [open, setOpen] = useState<Record<string, boolean>>({
-    diag: true, empresa: true, plano: true, mercado: true, sgi: true,
-    dddm: true, tend: true, sust: true, okrs: true, horizontes: true, notas: true,
+  const [openSec, setOpenSec] = useState<Record<string, boolean>>({
+    sgi: false, dddm: false, tend: false, sust: false, okrs: true, notas: false,
   })
 
   useEffect(() => {
     try {
       const r = localStorage.getItem(STORAGE_KEY)
-      if (r) {
-        const parsed = JSON.parse(r)
-        setState({ ...DEFAULT_STATE, ...parsed, actionsDone: parsed.actionsDone ?? [] })
-      }
+      if (r) setState({ ...DEFAULT_STATE, ...JSON.parse(r) })
     } catch {}
   }, [])
 
@@ -338,12 +327,10 @@ export function StrategicPanel() {
     setState(prev => { const next = { ...prev, ...patch }; localStorage.setItem(STORAGE_KEY, JSON.stringify(next)); return next })
   }
 
-  function toggle(k: string) { setOpen(prev => ({ ...prev, [k]: !prev[k] })) }
-
   const loadMetrics = useCallback(async () => {
     if (!supabase) return
     setLoadingM(true)
-    const now = Date.now(); const DAY = 86400000
+    const DAY = 86400000; const now = Date.now()
     const [{ data: profiles }, { data: subs }, { data: fb }] = await Promise.all([
       supabase.from('profiles').select('id, last_login, role'),
       supabase.from('subscriptions').select('status, user_id'),
@@ -368,454 +355,326 @@ export function StrategicPanel() {
 
   useEffect(() => { loadMetrics() }, [loadMetrics])
 
-  // Auto-diagnosis
+  // Auto-detected phase
   const autoPhase = useMemo(() => detectPhase(metrics), [metrics])
-  const signals   = useMemo(() => phaseSignals(metrics), [metrics])
 
+  // Apply auto-diagnosis
   function applyDiagnosis() {
-    const phase    = autoPhase
-    const defaults = PHASE_MATURITY[phase]
-    const newSgi: Record<string, MatItem>  = {}
-    const newDddm: Record<string, MatItem> = {}
-    const newTend: Record<string, TndItem> = {}
-    const newSust: Record<string, MatItem> = {}
-    SGI_ITEMS.forEach(item => {
-      newSgi[item.id] = { status: defaults.sgi[item.id] ?? 'nao_iniciado', descricao: state.sgi[item.id]?.descricao ?? '', proximo: state.sgi[item.id]?.proximo ?? '' }
-    })
-    DDDM_ITEMS.forEach(item => {
-      newDddm[item.id] = { status: defaults.dddm[item.id] ?? 'nao_iniciado', descricao: state.dddm[item.id]?.descricao ?? '', proximo: state.dddm[item.id]?.proximo ?? '' }
-    })
-    TEND_ITEMS.forEach(item => {
-      newTend[item.id] = { status: defaults.tend[item.id] ?? 'nao_monitorando', descricao: state.tendencias[item.id]?.descricao ?? '', proximo: state.tendencias[item.id]?.proximo ?? '' }
-    })
-    SUST_ITEMS.forEach(item => {
-      newSust[item.id] = { status: defaults.sust[item.id] ?? 'nao_iniciado', descricao: state.sust[item.id]?.descricao ?? '', proximo: state.sust[item.id]?.proximo ?? '' }
-    })
-    update({ companyPhase: phase, sgi: newSgi, dddm: newDddm, tendencias: newTend, sust: newSust })
-    setDiagApplied(true)
-    setTimeout(() => setDiagApplied(false), 2500)
+    update({ companyPhase: autoPhase })
   }
 
-  // Helpers
-  function getMatItem(section: 'sgi' | 'dddm' | 'sust', id: string): MatItem {
-    return (state[section][id] as MatItem | undefined) ?? { ...DEFAULT_MAT }
-  }
-  function setMatItem(section: 'sgi' | 'dddm' | 'sust', id: string, patch: Partial<MatItem>) {
-    update({ [section]: { ...state[section], [id]: { ...getMatItem(section, id), ...patch } } })
-  }
-  function getTndItem(id: string): TndItem {
-    return (state.tendencias[id] as TndItem | undefined) ?? { ...DEFAULT_TND }
-  }
-  function setTndItem(id: string, patch: Partial<TndItem>) {
-    update({ tendencias: { ...state.tendencias, [id]: { ...getTndItem(id), ...patch } } })
+  // Phase checks helpers
+  function toggleCheck(id: string) {
+    const done = state.checksDone
+    update({ checksDone: done.includes(id) ? done.filter(d => d !== id) : [...done, id] })
   }
 
-  function toggleAction(id: string) {
-    const done = state.actionsDone ?? []
-    update({ actionsDone: done.includes(id) ? done.filter(d => d !== id) : [...done, id] })
-  }
-
-  // OKR helpers
-  function addOKR()            { update({ okrs: [...state.okrs, { id: genId(), objetivo: '', krs: [] }] }) }
-  function updateOKR(id: string, obj: string) { update({ okrs: state.okrs.map(o => o.id === id ? { ...o, objetivo: obj } : o) }) }
-  function removeOKR(id: string)              { update({ okrs: state.okrs.filter(o => o.id !== id) }) }
-  function addKR(oid: string)                 { update({ okrs: state.okrs.map(o => o.id === oid ? { ...o, krs: [...o.krs, { id: genId(), descricao: '', progresso: 0 }] } : o) }) }
-  function updateKR(oid: string, kid: string, p: Partial<KR>) { update({ okrs: state.okrs.map(o => o.id === oid ? { ...o, krs: o.krs.map(k => k.id === kid ? { ...k, ...p } : k) } : o) }) }
-  function removeKR(oid: string, kid: string)                 { update({ okrs: state.okrs.map(o => o.id === oid ? { ...o, krs: o.krs.filter(k => k.id !== kid) } : o) }) }
-
-  // Gap analysis
+  // Gap
   const gapInfo = useMemo(() => {
     if (!state.companyPhase || !state.marketPhase) return null
     const ci = PHASES.findIndex(p => p.id === state.companyPhase)
     const mi = PHASES.findIndex(p => p.id === state.marketPhase)
     const gap = ci - mi
-    if (gap > 0) return { txt: `SEA ${gap === 1 ? '1 fase' : `${gap} fases`} à frente do mercado — vantagem competitiva estrutural. Velocidade de execução define quem lidera.` }
-    if (gap === 0) return { txt: 'SEA alinhado com o mercado — janela de oportunidade máxima. Quem executa mais rápido captura o segmento.' }
-    return { txt: `SEA ${Math.abs(gap)} fase(s) atrás do mercado — gap de maturidade. Prioridade: fechar esse gap antes de expandir.` }
+    const label = gap > 0 ? `+${gap} À FRENTE` : gap === 0 ? 'ALINHADO' : `${gap} ATRÁS`
+    const desc  = gap > 0 ? 'Vantagem competitiva estrutural — velocidade define quem lidera.' : gap === 0 ? 'Janela de oportunidade máxima — quem executa mais rápido captura o segmento.' : 'Gap de maturidade — fechar antes de expandir.'
+    return { label, desc, ahead: gap > 0, even: gap === 0 }
   }, [state.companyPhase, state.marketPhase])
 
-  // Reflexão
-  const reflexao = useMemo(() => {
-    const acoes: string[] = []
-    if (!state.companyPhase) {
-      acoes.push('Clique em "Aplicar Diagnóstico Automático" acima — o sistema detecta sua fase pelos indicadores reais e preenche tudo automaticamente.')
-    } else {
-      const ph = state.companyPhase
-      if (ph === 'f1') acoes.push(metrics.totalUsers === 0 ? 'Prioridade máxima: conseguir o primeiro usuário real. Sem usuários não há produto — há uma ideia.' : `${metrics.totalUsers} usuário(s). F1: validar que a infraestrutura suporta o uso real.`)
-      if (ph === 'f2') acoes.push('F2: processos digitalizados e replicáveis. Mapeie o fluxo clínico e remova fricções no onboarding.')
-      if (ph === 'f3') acoes.push('F3: diferenciação. O que o SEA faz que nenhuma alternativa replica em 6 meses?')
-      if (ph === 'f4') acoes.push('F4: dados ativos. Quais decisões de produto são baseadas em dados hoje? Quais ainda são intuição?')
-      if (ph === 'f5') acoes.push('F5: digital-first. O SEA gera receita recorrente previsível sem operação manual?')
-      if (ph === 'f6') acoes.push('F6: reinvenção. Produto e modelo de negócio nativamente digitais.')
-    }
-    const okrAvg = (() => { const krs = state.okrs.flatMap(o => o.krs); return krs.length > 0 ? Math.round(krs.reduce((s, k) => s + k.progresso, 0) / krs.length) : null })()
-    if (state.okrs.length === 0) acoes.push('Nenhum OKR definido. Defina 1 objetivo com 2-3 Key Results mensuráveis para o ciclo atual.')
-    else if (okrAvg !== null && okrAvg < 30) acoes.push(`OKRs em ${okrAvg}% — revise o que está bloqueando e ajuste o plano desta semana.`)
-    else if (okrAvg !== null && okrAvg >= 70) acoes.push(`OKRs em ${okrAvg}% — no caminho certo. Documente o que está funcionando.`)
-    if (gapInfo) acoes.push(gapInfo.txt)
-    return acoes.slice(0, 3)
-  }, [state.companyPhase, state.okrs, metrics.totalUsers, gapInfo])
+  // Weekly plan: top 3 pending actions from current phase
+  const weeklyPlan = useMemo(() => {
+    if (!state.companyPhase) return []
+    const checks = PHASE_CHECKS[state.companyPhase]
+    return checks
+      .filter(c => {
+        const isAuto = c.autoDetect && c.autoDetect(metrics)
+        const isDone = state.checksDone.includes(c.id)
+        return !isAuto && !isDone && c.proximo
+      })
+      .slice(0, 3)
+  }, [state.companyPhase, state.checksDone, metrics])
 
-  const inputCls = 'w-full h-7 rounded-[0.6rem] border border-white/10 bg-white/[0.03] px-3 text-[9px] text-white placeholder:text-white/25 outline-none focus:border-white/20'
+  // Pergunta do dia
+  const pergunta = useMemo(() => {
+    if (!state.companyPhase) return 'Em qual fase estamos? Em qual fase o mercado chegou?'
+    const checks = PHASE_CHECKS[state.companyPhase]
+    const totalDone = checks.filter(c => (c.autoDetect && c.autoDetect(metrics)) || state.checksDone.includes(c.id)).length
+    if (totalDone === checks.length) return `${PHASES.find(p=>p.id===state.companyPhase)?.sublabel} completa — o que falta para avançar para a próxima fase?`
+    return `O que ainda trava o SEA em ${PHASES.find(p=>p.id===state.companyPhase)?.sublabel}? Identifique, remova, avance.`
+  }, [state.companyPhase, state.checksDone, metrics])
 
-  const currentActions = state.companyPhase ? ACTION_PLANS[state.companyPhase] : []
-  const doneCount      = currentActions.filter(a => (state.actionsDone ?? []).includes(a.id)).length
+  // OKR helpers
+  function addOKR()                                    { update({ okrs: [...state.okrs, { id: genId(), objetivo: '', krs: [] }] }) }
+  function updateOKR(id: string, obj: string)          { update({ okrs: state.okrs.map(o => o.id === id ? { ...o, objetivo: obj } : o) }) }
+  function removeOKR(id: string)                       { update({ okrs: state.okrs.filter(o => o.id !== id) }) }
+  function addKR(oid: string)                          { update({ okrs: state.okrs.map(o => o.id === oid ? { ...o, krs: [...o.krs, { id: genId(), descricao: '', progresso: 0 }] } : o) }) }
+  function updateKR(oid: string, kid: string, p: Partial<KR>) { update({ okrs: state.okrs.map(o => o.id === oid ? { ...o, krs: o.krs.map(k => k.id === kid ? { ...k, ...p } : k) } : o) }) }
+  function removeKR(oid: string, kid: string)          { update({ okrs: state.okrs.map(o => o.id === oid ? { ...o, krs: o.krs.filter(k => k.id !== kid) } : o) }) }
+
+  const ci = state.companyPhase ? PHASES.findIndex(p => p.id === state.companyPhase) : -1
+  const mi = state.marketPhase  ? PHASES.findIndex(p => p.id === state.marketPhase)  : -1
+  const inCls = 'w-full rounded-[0.5rem] border border-white/8 bg-transparent px-2.5 py-1.5 text-[9px] text-white/65 placeholder:text-white/20 outline-none focus:border-white/15'
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
 
-      {/* ── DIAGNÓSTICO AUTOMÁTICO ──────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="Diagnóstico Automático" sub="O sistema lê os indicadores reais e detecta sua fase" open={!!open.diag} toggle={() => toggle('diag')} />
-        {open.diag && (
-          <div className="space-y-3">
+      {/* ── PERGUNTA DO DIA ────────────────────────────────────────────────── */}
+      <div className="rounded-[1rem] border border-white/8 bg-white/[0.025] p-4">
+        <div className="mb-1 flex items-center justify-between">
+          <p className="text-[7px] font-semibold uppercase tracking-[0.16em] text-white/35">Pergunta do dia</p>
+          <button onClick={loadMetrics} disabled={loadingM} className="flex items-center gap-1 text-[7px] text-white/25 hover:text-white/45">
+            <RefreshCw className={`h-2.5 w-2.5 ${loadingM ? 'animate-spin' : ''}`} /> {metrics.loadedAt || 'Carregar'}
+          </button>
+        </div>
+        <p className="mb-3 text-[11px] font-medium leading-snug text-white/75">{pergunta}</p>
 
-            {/* Métricas + refresh */}
-            <div className="flex items-center justify-between">
-              <p className="text-[8px] text-white/35">Indicadores em tempo real</p>
-              <button onClick={loadMetrics} disabled={loadingM} className="flex items-center gap-1 rounded-[0.5rem] border border-white/8 px-2 py-1 text-[7px] text-white/35 hover:text-white/55">
-                <RefreshCw className={`h-2.5 w-2.5 ${loadingM ? 'animate-spin' : ''}`} /> Atualizar
-              </button>
+        {/* 4 metrics inline */}
+        <div className="flex gap-2">
+          {[
+            { l: 'Usuários', v: metrics.totalUsers },
+            { l: 'Ativos/sem', v: metrics.activeWeek },
+            { l: 'Ret 7d', v: `${metrics.retention7d}%` },
+            { l: 'NPS', v: metrics.nps ?? '--' },
+          ].map(m => (
+            <div key={m.l} className="flex flex-col items-center">
+              <p className="text-[11px] font-bold tabular-nums text-white/70">{m.v}</p>
+              <p className="text-[6px] text-white/30">{m.l}</p>
             </div>
-
-            {/* 4 metric boxes */}
-            <div className="grid grid-cols-4 gap-1.5">
-              {[
-                { l: 'Usuários', v: metrics.totalUsers, ok: metrics.totalUsers >= 5,  threshold: 'F2 requer ≥5' },
-                { l: 'Ativos/sem', v: metrics.activeWeek, ok: metrics.activeWeek >= 10, threshold: 'F3 requer ≥10' },
-                { l: 'Retenção 7d', v: `${metrics.retention7d}%`, ok: metrics.retention7d >= 20, threshold: 'F3 requer ≥20%' },
-                { l: 'Assinaturas', v: metrics.subsActive, ok: metrics.subsActive > 0,  threshold: 'F4 requer ≥1' },
-              ].map(m => (
-                <div key={m.l} className={`rounded-[0.8rem] border px-2 py-2 text-center ${m.ok ? 'border-white/12 bg-white/[0.03]' : 'border-white/4 bg-transparent'}`}>
-                  <p className={`text-[13px] font-bold tabular-nums ${m.ok ? 'text-white/80' : 'text-white/35'}`}>{m.v}</p>
-                  <p className="text-[6px] text-white/40">{m.l}</p>
-                  <p className="text-[6px] text-white/20">{m.threshold}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Diagnosis result */}
-            <div className="rounded-[1rem] border border-white/10 bg-white/[0.025] p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Zap className="h-4 w-4 text-white/60" />
-                  <div>
-                    <p className="text-[10px] font-semibold text-white/80">
-                      Fase Detectada: <span className="text-white">{PHASES.find(p => p.id === autoPhase)?.label} · {PHASES.find(p => p.id === autoPhase)?.sublabel}</span>
-                    </p>
-                    <p className="text-[8px] text-white/40">{PHASES.find(p => p.id === autoPhase)?.desc}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Signals */}
-              <div className="mb-3 grid grid-cols-2 gap-1">
-                {signals.map(s => (
-                  <div key={s.label} className="flex items-center gap-2">
-                    <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${s.ok ? 'bg-white/60' : 'bg-white/15'}`} />
-                    <span className="text-[7px] text-white/45">{s.detail}</span>
-                    <span className={`ml-auto text-[6px] font-semibold ${s.ok ? 'text-white/60' : 'text-white/20'}`}>{s.ok ? '✓' : '✗'}</span>
-                  </div>
-                ))}
-              </div>
-
-              <button
-                onClick={applyDiagnosis}
-                className="flex w-full items-center justify-center gap-2 rounded-[0.7rem] border border-white/15 bg-white/[0.06] py-2.5 text-[9px] font-semibold text-white/80 hover:bg-white/[0.09] active:scale-[0.98] transition-all"
-              >
-                <Sparkles className="h-3.5 w-3.5" />
-                {diagApplied ? 'Diagnóstico aplicado ✓' : 'Aplicar Diagnóstico Automático'}
-              </button>
-              <p className="mt-1.5 text-center text-[7px] text-white/20">Preenche a fase e todos os status de maturidade. Suas descrições e textos são preservados.</p>
-            </div>
-
-            {/* Reflexão */}
-            <div className="rounded-[0.8rem] border border-white/5 bg-white/[0.01] p-3">
-              <div className="mb-1.5 flex items-center gap-1.5">
-                <Brain className="h-3.5 w-3.5 text-white/35" />
-                <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/35">Reflexão do dia</p>
-              </div>
-              <div className="space-y-1">
-                {reflexao.map((a, i) => (
-                  <div key={i} className="flex items-start gap-2">
-                    <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/10 text-[7px] font-bold text-white/30">{i + 1}</span>
-                    <p className="text-[8px] leading-relaxed text-white/45">{a}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {metrics.loadedAt && <p className="text-[6px] text-white/18">Dados às {metrics.loadedAt}</p>}
-          </div>
-        )}
-      </div>
-
-      {/* ── TRILHO DA EMPRESA ───────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="Trilho da Empresa" sub="Maturidade digital do SEA" open={!!open.empresa} toggle={() => toggle('empresa')} />
-        {open.empresa && (
-          <div className="space-y-3">
-            <PhaseRailway current={state.companyPhase} onSelect={id => update({ companyPhase: id })} autoPhase={autoPhase} />
-            {state.companyPhase && (() => {
-              const ph  = PHASES.find(p => p.id === state.companyPhase)!
-              const nxt = PHASES[PHASES.findIndex(p => p.id === state.companyPhase) + 1]
-              return (
-                <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.015] px-4 py-3">
-                  <p className="text-[8px] font-semibold text-white/55">{ph.label} · {ph.sublabel}</p>
-                  <p className="mt-0.5 text-[8px] leading-relaxed text-white/40">{ph.desc}</p>
-                  {nxt && (
-                    <div className="mt-2 flex items-center gap-1">
-                      <ArrowRight className="h-3 w-3 text-white/25" />
-                      <p className="text-[8px] text-white/35">Próxima fase: <span className="text-white/50">{nxt.sublabel}</span> — {nxt.desc}</p>
-                    </div>
-                  )}
-                </div>
-              )
-            })()}
-          </div>
-        )}
-      </div>
-
-      {/* ── PLANO DE AÇÃO ───────────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead
-          label={`Plano de Ação${state.companyPhase ? ` · ${PHASES.find(p => p.id === state.companyPhase)?.label}→${PHASES[PHASES.findIndex(p => p.id === state.companyPhase)+1]?.label ?? '✓'}` : ''}`}
-          sub={`${doneCount}/${currentActions.length} ações concluídas${state.companyPhase ? ' — gerado automaticamente para avançar de fase' : ''}`}
-          open={!!open.plano}
-          toggle={() => toggle('plano')}
-        />
-        {open.plano && (
-          <div className="space-y-1.5">
-            {!state.companyPhase ? (
-              <p className="rounded-[0.8rem] border border-white/5 bg-white/[0.01] px-4 py-4 text-center text-[8px] text-white/30">
-                Aplique o diagnóstico automático para gerar o plano de ação da sua fase.
-              </p>
-            ) : (
+          ))}
+          <div className="ml-auto flex flex-col items-end justify-center">
+            {gapInfo ? (
               <>
-                {currentActions.map(action => {
-                  const done = (state.actionsDone ?? []).includes(action.id)
-                  return (
-                    <button
-                      key={action.id}
-                      onClick={() => toggleAction(action.id)}
-                      className={`flex w-full items-start gap-3 rounded-[0.8rem] border px-3 py-2.5 text-left transition-all ${done ? 'border-white/10 bg-white/[0.03]' : 'border-white/5 bg-transparent hover:bg-white/[0.02]'}`}
-                    >
-                      {done
-                        ? <CheckSquare className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/60" />
-                        : <Square      className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/20" />
-                      }
-                      <div className="min-w-0 flex-1">
-                        <span className="mr-2 rounded-full border border-white/8 px-1.5 py-0.5 text-[6px] font-semibold uppercase tracking-[0.1em] text-white/30">{action.area}</span>
-                        <p className={`mt-1 text-[9px] leading-relaxed ${done ? 'text-white/40 line-through' : 'text-white/65'}`}>{action.text}</p>
-                      </div>
-                    </button>
-                  )
-                })}
-                {doneCount === currentActions.length && currentActions.length > 0 && (
-                  <div className="rounded-[0.8rem] border border-white/10 bg-white/[0.03] px-4 py-3 text-center">
-                    <p className="text-[9px] font-semibold text-white/70">Todas as ações concluídas</p>
-                    <p className="mt-0.5 text-[8px] text-white/35">Avance para a próxima fase e aplique o diagnóstico novamente.</p>
-                  </div>
-                )}
+                <p className={`text-[9px] font-bold ${gapInfo.ahead ? 'text-white/80' : gapInfo.even ? 'text-white/60' : 'text-white/40'}`}>{gapInfo.label}</p>
+                <p className="text-[6px] text-white/30">{gapInfo.ahead ? 'Liderar' : gapInfo.even ? 'Acelerar' : 'Fechar gap'}</p>
               </>
+            ) : (
+              <p className="text-[7px] text-white/20">Defina as fases</p>
+            )}
+          </div>
+        </div>
+
+        {/* Diagnóstico */}
+        {metrics.loadedAt && (
+          <div className="mt-3 flex items-center gap-2 rounded-[0.6rem] border border-white/6 bg-white/[0.02] px-3 py-2">
+            <Zap className="h-3 w-3 shrink-0 text-white/40" />
+            <div className="flex-1">
+              <p className="text-[8px] text-white/55">
+                Diagnóstico automático ativo · Fase detectada: <span className="font-semibold text-white/80">{PHASES.find(p=>p.id===autoPhase)?.label} · {PHASES.find(p=>p.id===autoPhase)?.sublabel}</span>
+              </p>
+              <p className="text-[7px] text-white/30">{metrics.totalUsers} usuários · {metrics.retention7d}% retenção · {metrics.subsActive} assinaturas ativas</p>
+            </div>
+            {state.companyPhase !== autoPhase && (
+              <button onClick={applyDiagnosis} className="shrink-0 rounded-[0.4rem] border border-white/10 bg-white/[0.05] px-2 py-1 text-[7px] text-white/55 hover:text-white/80">
+                Aplicar
+              </button>
             )}
           </div>
         )}
       </div>
 
-      {/* ── TRILHO DO MERCADO ───────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="Trilho do Mercado" sub="Maturidade digital observada no mercado de fisioterapia intensivista" open={!!open.mercado} toggle={() => toggle('mercado')} />
-        {open.mercado && (
-          <div className="space-y-3">
-            <PhaseRailway current={state.marketPhase} onSelect={id => update({ marketPhase: id })} />
-            <div className="space-y-2">
-              <p className="text-[8px] uppercase tracking-[0.1em] text-white/30">Sinais observados no mercado</p>
-              {PHASES.map(ph => (
-                <div key={ph.id} className={`rounded-[0.8rem] border px-3 py-2.5 ${state.marketPhase === ph.id ? 'border-white/12 bg-white/[0.025]' : 'border-white/4'}`}>
-                  <p className="mb-1.5 text-[8px] font-semibold text-white/50">{ph.label} · {ph.sublabel}</p>
-                  <textarea
-                    rows={2}
-                    className="w-full resize-none rounded-[0.5rem] border border-white/6 bg-white/[0.02] px-2 py-1.5 text-[8px] leading-relaxed text-white/60 placeholder:text-white/18 outline-none focus:border-white/15"
-                    placeholder={`O que você observa no mercado na fase ${ph.sublabel}?`}
+      {/* ── PLANO DA SEMANA ────────────────────────────────────────────────── */}
+      {weeklyPlan.length > 0 && (
+        <div className="rounded-[0.9rem] border border-white/6 bg-white/[0.015] p-4">
+          <div className="mb-2 flex items-center gap-1.5">
+            <Brain className="h-3 w-3 text-white/35" />
+            <p className="text-[8px] font-semibold uppercase tracking-[0.14em] text-white/35">Plano de ação — esta semana</p>
+          </div>
+          <div className="space-y-2">
+            {weeklyPlan.map((item, i) => (
+              <div key={item.id} className="flex items-start gap-2">
+                <span className="flex h-4 w-4 shrink-0 items-center justify-center rounded-full border border-white/12 text-[7px] font-bold text-white/30">{i+1}</span>
+                <p className="text-[8px] leading-relaxed text-white/55">{item.proximo}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── TRILHO DA EMPRESA ──────────────────────────────────────────────── */}
+      <div className="space-y-1.5">
+        <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-white/35">Trilho da empresa</p>
+        {PHASES.map((ph, idx) => (
+          <PhaseNode
+            key={ph.id}
+            phase={ph} idx={idx}
+            isCurrent={ph.id === state.companyPhase}
+            isDone={ci > idx}
+            isMarket={false}
+            metrics={metrics}
+            checksDone={state.checksDone}
+            onToggleCheck={toggleCheck}
+            meta={state.phaseMetas[ph.id] ?? ''}
+            onSetMeta={v => update({ phaseMetas: { ...state.phaseMetas, [ph.id]: v } })}
+            onSelectPhase={() => update({ companyPhase: ph.id })}
+          />
+        ))}
+      </div>
+
+      {/* ── TRILHO DO MERCADO ──────────────────────────────────────────────── */}
+      <div className="space-y-1.5">
+        <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-white/35">Trilho do mercado</p>
+        {PHASES.map((ph, idx) => (
+          <div key={ph.id}>
+            <button
+              onClick={() => update({ marketPhase: ph.id })}
+              className={`flex w-full items-center gap-3 rounded-[0.9rem] border px-3 py-2 text-left transition-all ${ph.id === state.marketPhase ? 'border-white/12 bg-white/[0.025]' : 'border-white/4'}`}
+            >
+              <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full border text-[8px] font-bold ${
+                ph.id === state.marketPhase ? 'border-white/50 bg-white/[0.06] text-white/65' :
+                mi > idx                    ? 'border-white/20 text-white/30' :
+                                              'border-white/8 text-white/15'
+              }`}>{ph.label}</div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <p className={`text-[9px] font-semibold ${ph.id === state.marketPhase ? 'text-white/70' : 'text-white/20'}`}>{ph.sublabel}</p>
+                  {ph.id === state.marketPhase && <span className="rounded-full border border-white/15 px-1.5 py-0.5 text-[6px] font-bold uppercase tracking-wider text-white/45">Mercado aqui</span>}
+                </div>
+                {ph.id === state.marketPhase && (
+                  <input
+                    className="mt-1 w-full bg-transparent text-[7px] text-white/35 placeholder:text-white/18 outline-none"
+                    placeholder="O que você observa no mercado nesta fase?"
                     value={state.marketSignals[ph.id] ?? ''}
                     onChange={e => update({ marketSignals: { ...state.marketSignals, [ph.id]: e.target.value } })}
+                    onClick={e => e.stopPropagation()}
                   />
-                </div>
-              ))}
-            </div>
-            {gapInfo && (
-              <div className="rounded-[0.8rem] border border-white/8 bg-white/[0.02] px-4 py-3">
-                <p className="text-[8px] font-semibold uppercase tracking-[0.1em] text-white/35">Análise de Gap</p>
-                <p className="mt-1 text-[9px] leading-relaxed text-white/55">{gapInfo.txt}</p>
+                )}
               </div>
-            )}
+            </button>
+          </div>
+        ))}
+
+        {gapInfo && (
+          <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.015] px-3 py-2">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-1.5">
+                <span className="rounded-full border border-white/15 px-2 py-0.5 text-[7px] font-bold text-white/55">Empresa</span>
+                <span className="text-[8px] font-bold text-white/70">{gapInfo.label}</span>
+                <span className="rounded-full border border-white/8 px-2 py-0.5 text-[7px] text-white/35">Mercado</span>
+              </div>
+            </div>
+            <p className="mt-1 text-[7px] leading-relaxed text-white/35">{gapInfo.desc}</p>
           </div>
         )}
       </div>
 
-      {/* ── SGI + TD ────────────────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="SGI + TD — Maturidade de Execução" sub="Sistema de Gestão da Inovação + Transformação Digital" open={!!open.sgi} toggle={() => toggle('sgi')} />
-        {open.sgi && (
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {SGI_ITEMS.map(item => (
-              <MaturityCard<MatStatus>
-                key={item.id}
-                emoji={item.emoji} label={item.label}
-                data={getMatItem('sgi', item.id)}
-                statusList={MAT_STATUS}
-                onChange={patch => setMatItem('sgi', item.id, patch)}
-                ph={item.ph} phP={item.phP}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      {/* ── SGI + TD ───────────────────────────────────────────────────────── */}
+      <Sec label="SGI + TD — Maturidade de Execução" sub="Sistema de Gestão da Inovação" open={!!openSec.sgi} toggle={() => setOpenSec(p=>({...p, sgi: !p.sgi}))}>
+        <div className="rounded-[0.8rem] border border-white/5 bg-white/[0.01] px-3 py-1">
+          {SGI_ROWS.map(row => (
+            <MatRow<MatStatus>
+              key={row.id}
+              emoji={row.emoji} label={row.label}
+              status={(state.sgi[row.id] as MatStatus) ?? 'nao_iniciado'}
+              statusList={MAT_STATUS_LIST}
+              onChange={s => update({ sgi: { ...state.sgi, [row.id]: s } })}
+            />
+          ))}
+        </div>
+      </Sec>
 
-      {/* ── DDDM ────────────────────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="DDDM — Decisão Baseada em Dados" sub="Data-Driven Decision Making — 4 dimensões" open={!!open.dddm} toggle={() => toggle('dddm')} />
-        {open.dddm && (
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {DDDM_ITEMS.map(item => (
-              <MaturityCard<MatStatus>
-                key={item.id}
-                emoji={item.emoji} label={item.label}
-                data={getMatItem('dddm', item.id)}
-                statusList={MAT_STATUS}
-                onChange={patch => setMatItem('dddm', item.id, patch)}
-                ph={item.ph} phP={item.phP}
-              />
-            ))}
-          </div>
-        )}
-      </div>
+      {/* ── DDDM ───────────────────────────────────────────────────────────── */}
+      <Sec label="DDDM — Decisão Baseada em Dados" sub="Data-Driven Decision Making" open={!!openSec.dddm} toggle={() => setOpenSec(p=>({...p, dddm: !p.dddm}))}>
+        <div className="rounded-[0.8rem] border border-white/5 bg-white/[0.01] px-3 py-1">
+          {DDDM_ROWS.map(row => (
+            <MatRow<MatStatus>
+              key={row.id}
+              emoji={row.emoji} label={row.label}
+              status={(state.dddm[row.id] as MatStatus) ?? 'nao_iniciado'}
+              statusList={MAT_STATUS_LIST}
+              onChange={s => update({ dddm: { ...state.dddm, [row.id]: s } })}
+            />
+          ))}
+        </div>
+      </Sec>
 
-      {/* ── TENDÊNCIAS 2025 ─────────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="Tendências 2025 — Watchlist" sub="Monitore, estude, implemente ou lidere" open={!!open.tend} toggle={() => toggle('tend')} />
-        {open.tend && (
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {TEND_ITEMS.map(item => (
-              <MaturityCard<TndStatus>
-                key={item.id}
-                emoji={item.emoji} label={item.label}
-                data={getTndItem(item.id)}
-                statusList={TND_STATUS}
-                onChange={patch => setTndItem(item.id, patch)}
-                ph={item.ph} phP={item.phP}
-                alerta={item.alerta}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ── SUSTENTABILIDADE DIGITAL ────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="Sustentabilidade Digital" sub="ESG nativo — práticas verificáveis, não selos" open={!!open.sust} toggle={() => toggle('sust')} />
-        {open.sust && (
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {SUST_ITEMS.map(item => (
-              <MaturityCard<MatStatus>
-                key={item.id}
-                emoji={item.emoji} label={item.label}
-                data={getMatItem('sust', item.id)}
-                statusList={MAT_STATUS}
-                onChange={patch => setMatItem('sust', item.id, patch)}
-                ph={item.ph} phP={item.phP}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-
-      {/* ── OKRs ────────────────────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="OKRs do Ciclo" sub="Objetivo + Key Results mensuráveis" open={!!open.okrs} toggle={() => toggle('okrs')} />
-        {open.okrs && (
-          <div className="space-y-3">
-            <p className="text-[8px] leading-relaxed text-white/35">Objetivo = o que alcançar. Key Result = como medir. Atingir 70% já é sucesso — OKRs são ambiciosos por definição.</p>
-            {state.okrs.map(okr => (
-              <div key={okr.id} className="rounded-[0.9rem] border border-white/6 bg-white/[0.02] p-4">
-                <div className="mb-3 flex items-center gap-2">
-                  <input className={inputCls + ' flex-1'} placeholder="Objetivo — o que quero alcançar..." value={okr.objetivo} onChange={e => updateOKR(okr.id, e.target.value)} />
-                  <button onClick={() => removeOKR(okr.id)} className="text-white/20 hover:text-red-400/70"><Trash2 className="h-3.5 w-3.5" /></button>
-                </div>
-                <div className="space-y-2">
-                  {okr.krs.map(kr => (
-                    <div key={kr.id} className="flex items-center gap-2">
-                      <span className="text-[8px] text-white/25">KR</span>
-                      <input className={inputCls + ' flex-1'} placeholder="Key result mensurável..." value={kr.descricao} onChange={e => updateKR(okr.id, kr.id, { descricao: e.target.value })} />
-                      <div className="flex items-center gap-1">
-                        <input type="range" min={0} max={100} value={kr.progresso} onChange={e => updateKR(okr.id, kr.id, { progresso: Number(e.target.value) })} className="w-16 accent-white/50" />
-                        <span className="w-8 text-right text-[8px] text-white/40">{kr.progresso}%</span>
-                      </div>
-                      <button onClick={() => removeKR(okr.id, kr.id)} className="text-white/15 hover:text-red-400/70"><Trash2 className="h-3 w-3" /></button>
-                    </div>
+      {/* ── TENDÊNCIAS ─────────────────────────────────────────────────────── */}
+      <Sec label="Tendências 2025 — Watchlist" open={!!openSec.tend} toggle={() => setOpenSec(p=>({...p, tend: !p.tend}))}>
+        <div className="space-y-1.5">
+          {TEND_ROWS.map(row => (
+            <div key={row.id} className="rounded-[0.7rem] border border-white/5 bg-white/[0.01] px-3 py-2">
+              <div className="flex items-center gap-2">
+                <span className="text-sm leading-none">{row.emoji}</span>
+                <p className="flex-1 text-[9px] text-white/65">{row.label}</p>
+                <div className="flex shrink-0 gap-0.5">
+                  {TND_STATUS_LIST.map(s => (
+                    <button
+                      key={s.id}
+                      onClick={() => update({ tendencias: { ...state.tendencias, [row.id]: s.id } })}
+                      className={`rounded-full px-1.5 py-0.5 text-[7px] font-medium transition-all ${
+                        (state.tendencias[row.id] ?? 'nao_monitorando') === s.id
+                          ? 'bg-white/15 text-white/85'
+                          : 'bg-transparent text-white/22 hover:text-white/45'
+                      }`}
+                    >{s.short}</button>
                   ))}
                 </div>
-                <button onClick={() => addKR(okr.id)} className="mt-2 flex items-center gap-1 text-[8px] text-white/25 hover:text-white/50"><Plus className="h-3 w-3" /> Key Result</button>
               </div>
-            ))}
-            <button onClick={addOKR} className="flex w-full items-center justify-center gap-1 rounded-[0.8rem] border border-white/8 py-2.5 text-[9px] text-white/35 hover:text-white/55">
-              <Plus className="h-3.5 w-3.5" /> Objetivo
-            </button>
-          </div>
-        )}
-      </div>
+              <p className="mt-1 text-[7px] italic leading-relaxed text-white/22">{row.alerta}</p>
+            </div>
+          ))}
+        </div>
+      </Sec>
 
-      {/* ── TRÊS HORIZONTES ─────────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="Três Horizontes" sub="Distribuição de esforço: Core · Adjacente · Disruptivo" open={!!open.horizontes} toggle={() => toggle('horizontes')} />
-        {open.horizontes && (
-          <div className="space-y-4">
-            {[
-              { key: 'h1' as const, label: 'H1 · Core',       desc: 'Prontuário, calculadoras, conteúdo principal. Inovações incrementais.' },
-              { key: 'h2' as const, label: 'H2 · Adjacente',  desc: 'Novos perfis de usuário, parceiros, funcionalidades complementares.' },
-              { key: 'h3' as const, label: 'H3 · Disruptivo', desc: 'IA avançada, novos mercados, plataforma B2B, expansão LatAm.' },
-            ].map(h => (
-              <div key={h.key}>
-                <div className="mb-1 flex items-center justify-between">
-                  <div>
-                    <p className="text-[9px] font-semibold text-white/65">{h.label}</p>
-                    <p className="text-[8px] text-white/35">{h.desc}</p>
-                  </div>
-                  <span className="text-[10px] font-bold text-white/75">{state[h.key]}%</span>
-                </div>
-                <input type="range" min={0} max={100} value={state[h.key]} onChange={e => update({ [h.key]: Number(e.target.value) })} className="w-full accent-white/60" />
-              </div>
-            ))}
-            <p className={`text-[8px] ${state.h1 + state.h2 + state.h3 === 100 ? 'text-white/45' : 'text-red-400/60'}`}>
-              Soma: {state.h1 + state.h2 + state.h3}% {state.h1 + state.h2 + state.h3 !== 100 ? '— deve somar 100%' : '✓'}
-            </p>
-          </div>
-        )}
-      </div>
-
-      {/* ── NOTAS + SALVAR ──────────────────────────────────────────────────── */}
-      <div className="space-y-3">
-        <SectionHead label="Notas do Ciclo" sub="Reflexões, decisões, aprendizados" open={!!open.notas} toggle={() => toggle('notas')} />
-        {open.notas && (
-          <div className="space-y-2">
-            <textarea
-              rows={4}
-              className="w-full resize-none rounded-[0.8rem] border border-white/8 bg-white/[0.02] px-3 py-2.5 text-[9px] leading-relaxed text-white/60 placeholder:text-white/20 outline-none focus:border-white/15"
-              placeholder="Reflexões, decisões, próximos passos, aprendizados desta semana..."
-              value={state.notas}
-              onChange={e => update({ notas: e.target.value })}
+      {/* ── SUSTENTABILIDADE ───────────────────────────────────────────────── */}
+      <Sec label="Sustentabilidade Digital" sub="ESG nativo — práticas verificáveis" open={!!openSec.sust} toggle={() => setOpenSec(p=>({...p, sust: !p.sust}))}>
+        <div className="rounded-[0.8rem] border border-white/5 bg-white/[0.01] px-3 py-1">
+          {SUST_ROWS.map(row => (
+            <MatRow<MatStatus>
+              key={row.id}
+              emoji={row.emoji} label={row.label}
+              status={(state.sust[row.id] as MatStatus) ?? 'nao_iniciado'}
+              statusList={MAT_STATUS_LIST}
+              onChange={s => update({ sust: { ...state.sust, [row.id]: s } })}
             />
-            <button
-              onClick={() => { update({ ultimaRevisao: new Date().toLocaleString('pt-BR') }); setSaved(true); setTimeout(() => setSaved(false), 2500) }}
-              className="flex items-center gap-2 rounded-[0.6rem] border border-white/10 bg-white/[0.04] px-4 py-2 text-[9px] text-white/60 hover:text-white/80"
-            >
-              <Save className="h-3.5 w-3.5" />
-              {saved ? 'Revisão registrada ✓' : 'Registrar revisão'}
-            </button>
-            {state.ultimaRevisao && <p className="text-[6px] text-white/18">Última revisão: {state.ultimaRevisao}</p>}
-          </div>
-        )}
-      </div>
+          ))}
+        </div>
+      </Sec>
+
+      {/* ── OKRs ───────────────────────────────────────────────────────────── */}
+      <Sec label="OKRs do Ciclo" open={!!openSec.okrs} toggle={() => setOpenSec(p=>({...p, okrs: !p.okrs}))}>
+        <div className="space-y-2">
+          {state.okrs.map(okr => (
+            <div key={okr.id} className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] p-3">
+              <div className="mb-2 flex items-center gap-2">
+                <input className={inCls + ' flex-1'} placeholder="Objetivo..." value={okr.objetivo} onChange={e => updateOKR(okr.id, e.target.value)} />
+                <button onClick={() => removeOKR(okr.id)} className="shrink-0 text-white/15 hover:text-red-400/60"><Trash2 className="h-3.5 w-3.5" /></button>
+              </div>
+              {okr.krs.map(kr => (
+                <div key={kr.id} className="mb-1.5 flex items-center gap-2">
+                  <span className="text-[7px] text-white/25">KR</span>
+                  <input className={inCls + ' flex-1'} placeholder="Key result..." value={kr.descricao} onChange={e => updateKR(okr.id, kr.id, { descricao: e.target.value })} />
+                  <input type="range" min={0} max={100} value={kr.progresso} onChange={e => updateKR(okr.id, kr.id, { progresso: Number(e.target.value) })} className="w-14 accent-white/40" />
+                  <span className="w-7 text-right text-[8px] text-white/35">{kr.progresso}%</span>
+                  <button onClick={() => removeKR(okr.id, kr.id)} className="text-white/12 hover:text-red-400/60"><Trash2 className="h-3 w-3" /></button>
+                </div>
+              ))}
+              <button onClick={() => addKR(okr.id)} className="mt-1 flex items-center gap-1 text-[7px] text-white/22 hover:text-white/45"><Plus className="h-3 w-3" /> Key Result</button>
+            </div>
+          ))}
+          <button onClick={addOKR} className="flex w-full items-center justify-center gap-1 rounded-[0.7rem] border border-white/8 py-2 text-[8px] text-white/30 hover:text-white/55">
+            <Plus className="h-3 w-3" /> Objetivo
+          </button>
+        </div>
+      </Sec>
+
+      {/* ── NOTAS ──────────────────────────────────────────────────────────── */}
+      <Sec label="Notas do Ciclo" open={!!openSec.notas} toggle={() => setOpenSec(p=>({...p, notas: !p.notas}))}>
+        <div className="space-y-1.5">
+          <textarea
+            rows={3}
+            className="w-full resize-none rounded-[0.7rem] border border-white/8 bg-white/[0.02] px-3 py-2 text-[9px] leading-relaxed text-white/55 placeholder:text-white/18 outline-none focus:border-white/15"
+            placeholder="Reflexões, decisões, aprendizados..."
+            value={state.notas}
+            onChange={e => update({ notas: e.target.value })}
+          />
+          <button
+            onClick={() => { update({ ultimaRevisao: new Date().toLocaleString('pt-BR') }); setSaved(true); setTimeout(() => setSaved(false), 2500) }}
+            className="flex items-center gap-2 rounded-[0.5rem] border border-white/8 px-3 py-1.5 text-[8px] text-white/45 hover:text-white/70"
+          >
+            <Save className="h-3 w-3" />{saved ? 'Registrado ✓' : 'Registrar revisão'}
+          </button>
+          {state.ultimaRevisao && <p className="text-[6px] text-white/18">Última revisão: {state.ultimaRevisao}</p>}
+        </div>
+      </Sec>
 
     </div>
   )
