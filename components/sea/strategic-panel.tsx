@@ -406,39 +406,36 @@ function Sec({ label, badge, open, toggle, children }: {
 }) {
   return (
     <div className="border-t border-white/5 pt-3">
-      <button onClick={toggle} className="flex w-full items-center justify-between mb-2">
+      <button onClick={toggle} className="flex w-full items-center justify-between mb-2.5">
         <div className="flex items-center gap-2">
-          <p className="text-[8px] font-semibold uppercase tracking-[0.16em] text-white/35">{label}</p>
-          {badge && <span className="rounded-full border border-white/12 px-1.5 py-0.5 text-[6px] text-white/35">{badge}</span>}
+          <p className="text-[9px] font-semibold uppercase tracking-[0.14em] text-white/40">{label}</p>
+          {badge && <span className="rounded-full border border-white/12 px-2 py-0.5 text-[8px] text-white/35">{badge}</span>}
         </div>
-        {open ? <ChevronUp className="h-3 w-3 text-white/20" /> : <ChevronDown className="h-3 w-3 text-white/20" />}
+        {open ? <ChevronUp className="h-3.5 w-3.5 text-white/25" /> : <ChevronDown className="h-3.5 w-3.5 text-white/20" />}
       </button>
-      {open && <div className="space-y-1.5">{children}</div>}
+      {open && <div className="space-y-2">{children}</div>}
     </div>
   )
 }
 
 function CheckRow({ item }: { item: CheckItem }) {
   return (
-    <div className={`flex items-start gap-2 rounded-[0.6rem] px-2 py-1.5 ${item.ok ? 'bg-white/[0.025]' : 'bg-transparent'}`}>
+    <div className={`flex items-start gap-2.5 rounded-[0.6rem] px-2.5 py-2 ${item.ok ? 'bg-white/[0.03]' : 'bg-transparent'}`}>
       {item.ok
-        ? <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-white/45" />
-        : <Circle       className="mt-0.5 h-3 w-3 shrink-0 text-white/18" />
+        ? <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/45" />
+        : <Circle       className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/18" />
       }
       <div className="flex-1 min-w-0">
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className={`text-[8.5px] leading-snug ${item.ok ? 'text-white/70' : 'text-white/35'}`}>{item.label}</span>
-          <span className="text-[6px] text-white/22 border border-white/10 rounded px-1 py-0.5 shrink-0">via {item.fonte}</span>
-        </div>
-        {item.detalhe && <p className="text-[7px] text-white/30 mt-0.5 leading-snug">{item.detalhe}</p>}
+        <p className={`text-[9px] leading-snug ${item.ok ? 'text-white/72' : 'text-white/35'}`}>{item.label}</p>
+        {item.detalhe && <p className="text-[8px] text-white/32 mt-0.5 leading-snug">{item.detalhe}</p>}
       </div>
     </div>
   )
 }
 
 function MonitorDot({ status }: { status: 'ok' | 'atencao' | 'critico' }) {
-  const cls = status === 'ok' ? 'bg-white/45' : status === 'atencao' ? 'bg-white/25' : 'bg-white/10'
-  return <span className={`inline-block h-1.5 w-1.5 rounded-full shrink-0 ${cls}`} />
+  const cls = status === 'ok' ? 'bg-white/50' : status === 'atencao' ? 'bg-white/25' : 'bg-white/10'
+  return <span className={`inline-block h-2 w-2 rounded-full shrink-0 ${cls}`} />
 }
 
 // ─── Main ─────────────────────────────────────────────────────────────────────
@@ -553,16 +550,16 @@ export function StrategicPanel() {
           <div className="flex items-center gap-1.5 flex-wrap">
             {PHASES.map((ph, i) => (
               <React.Fragment key={ph.id}>
-                {i > 0 && <span className="text-white/15 text-[7px]">›</span>}
-                <span className={`text-[8px] font-bold ${i === phaseIdx ? 'text-white/90' : i < phaseIdx ? 'text-white/35' : 'text-white/15'}`}>
+                {i > 0 && <span className="text-white/15 text-[9px]">›</span>}
+                <span className={`text-[9px] font-bold ${i === phaseIdx ? 'text-white/90' : i < phaseIdx ? 'text-white/35' : 'text-white/15'}`}>
                   {ph.label}
-                  {i === phaseIdx && <span className="ml-0.5 text-[6.5px] font-normal text-white/45"> {ph.sublabel}</span>}
+                  {i === phaseIdx && <span className="ml-0.5 text-[8px] font-normal text-white/50"> {ph.sublabel}</span>}
                 </span>
               </React.Fragment>
             ))}
           </div>
           <button onClick={loadMetrics} className="text-white/20 hover:text-white/45">
-            <RefreshCw className="h-3 w-3" />
+            <RefreshCw className="h-3.5 w-3.5" />
           </button>
         </div>
 
@@ -575,45 +572,45 @@ export function StrategicPanel() {
             { l: 'Assin.',     v: metrics.subsActive },
           ].map(m => (
             <div key={m.l}>
-              <p className="text-[13px] font-bold tabular-nums text-white/80">{m.v}</p>
-              <p className="text-[6px] text-white/28">{m.l}</p>
+              <p className="text-[14px] font-bold tabular-nums text-white/80">{m.v}</p>
+              <p className="text-[8px] text-white/32">{m.l}</p>
             </div>
           ))}
-          {metrics.loadedAt && <p className="ml-auto text-[6px] text-white/18 pb-1">{metrics.loadedAt}</p>}
+          {metrics.loadedAt && <p className="ml-auto text-[7px] text-white/20 pb-1">{metrics.loadedAt}</p>}
         </div>
       </div>
 
       {/* ── DIRETIVA ─────────────────────────────────────────────────────── */}
       <Sec label="Diretiva" open={open.diretiva} toggle={() => tog('diretiva')}>
-        <div className="flex items-center justify-between mb-1">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-1.5">
             {loadingAI
-              ? <><div className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/35" /><span className="text-[6.5px] text-white/30">Groq gerando análise...</span></>
+              ? <><div className="h-1.5 w-1.5 animate-pulse rounded-full bg-white/35" /><span className="text-[8px] text-white/30">Groq gerando análise...</span></>
               : aiError
-                ? <><div className="h-1.5 w-1.5 rounded-full bg-white/15" /><span className="text-[6.5px] text-white/22">análise local</span></>
+                ? <><div className="h-1.5 w-1.5 rounded-full bg-white/15" /><span className="text-[8px] text-white/25">análise local</span></>
                 : aiDirective
-                  ? <><div className="h-1.5 w-1.5 rounded-full bg-white/50" /><span className="text-[6.5px] text-white/35">Groq · LLaMA 70b</span></>
+                  ? <><div className="h-1.5 w-1.5 rounded-full bg-white/50" /><span className="text-[8px] text-white/35">Groq · LLaMA 70b</span></>
                   : null
             }
           </div>
           <button onClick={() => fetchAI(metrics, phase)} disabled={loadingAI}
-            className="flex items-center gap-1 rounded border border-white/8 px-1.5 py-0.5 text-[6.5px] text-white/25 hover:text-white/50 disabled:opacity-30">
-            <Sparkles className="h-2 w-2" />{loadingAI ? '...' : 'Regenerar'}
+            className="flex items-center gap-1 rounded border border-white/8 px-2 py-1 text-[8px] text-white/28 hover:text-white/55 disabled:opacity-30">
+            <Sparkles className="h-2.5 w-2.5" />{loadingAI ? '...' : 'Regenerar'}
           </button>
         </div>
 
-        <p className="text-[11px] font-medium leading-snug text-white/85 mb-2">{directive.foco}</p>
-        <div className="rounded-[0.7rem] border border-white/8 bg-white/[0.02] p-3 mb-2">
-          <p className="text-[8.5px] leading-relaxed text-white/65">{directive.diretiva}</p>
+        <p className="text-[12px] font-medium leading-snug text-white/85 mb-3">{directive.foco}</p>
+        <div className="rounded-[0.7rem] border border-white/8 bg-white/[0.02] p-3 mb-3">
+          <p className="text-[9px] leading-relaxed text-white/65">{directive.diretiva}</p>
         </div>
         <div className="flex gap-3">
           <div className="flex-1">
-            <p className="text-[6.5px] font-semibold uppercase tracking-[0.1em] text-white/22 mb-1">Bloqueio</p>
-            <p className="text-[7.5px] leading-relaxed text-white/40 italic">{directive.bloqueio}</p>
+            <p className="text-[8px] font-semibold uppercase tracking-[0.1em] text-white/25 mb-1">Bloqueio</p>
+            <p className="text-[8px] leading-relaxed text-white/42 italic">{directive.bloqueio}</p>
           </div>
           <div className="flex-1">
-            <p className="text-[6.5px] font-semibold uppercase tracking-[0.1em] text-white/22 mb-1">Sinal de avanço</p>
-            <p className="text-[7.5px] leading-relaxed text-white/45">{directive.sinal}</p>
+            <p className="text-[8px] font-semibold uppercase tracking-[0.1em] text-white/25 mb-1">Sinal de avanço</p>
+            <p className="text-[8px] leading-relaxed text-white/48">{directive.sinal}</p>
           </div>
         </div>
       </Sec>
@@ -629,8 +626,8 @@ export function StrategicPanel() {
                 ? <CheckSquare className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/45" />
                 : <Square      className="mt-0.5 h-3.5 w-3.5 shrink-0 text-white/18" />
               }
-              <span className={`text-[8.5px] leading-relaxed ${done ? 'text-white/28 line-through' : 'text-white/62'}`}>
-                <span className="mr-1 text-[7px] font-bold text-white/28">{i + 1}.</span>{acao}
+              <span className={`text-[9px] leading-relaxed ${done ? 'text-white/28 line-through' : 'text-white/65'}`}>
+                <span className="mr-1 text-[8px] font-bold text-white/30">{i + 1}.</span>{acao}
               </span>
             </button>
           )
@@ -641,16 +638,16 @@ export function StrategicPanel() {
       <Sec label="Norte estratégico" open={open.norte} toggle={() => tog('norte')}>
         <div className="rounded-[0.8rem] border border-white/8 bg-white/[0.02] p-3 space-y-3">
           <div>
-            <p className="text-[6.5px] font-semibold uppercase tracking-[0.12em] text-white/25 mb-1">Onde o SEA está</p>
-            <p className="text-[8.5px] leading-relaxed text-white/65">{norte.onde}</p>
+            <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/28 mb-1">Onde o SEA está</p>
+            <p className="text-[9px] leading-relaxed text-white/65">{norte.onde}</p>
           </div>
           <div>
-            <p className="text-[6.5px] font-semibold uppercase tracking-[0.12em] text-white/25 mb-1">Próxima fase exige</p>
-            <p className="text-[8.5px] leading-relaxed text-white/55">{norte.proximo}</p>
+            <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/28 mb-1">Próxima fase exige</p>
+            <p className="text-[9px] leading-relaxed text-white/55">{norte.proximo}</p>
           </div>
           <div>
-            <p className="text-[6.5px] font-semibold uppercase tracking-[0.12em] text-white/25 mb-1">Aposta estratégica</p>
-            <p className="text-[8.5px] leading-relaxed text-white/70 font-medium">{norte.aposta}</p>
+            <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/28 mb-1">Aposta estratégica</p>
+            <p className="text-[9px] leading-relaxed text-white/72 font-medium">{norte.aposta}</p>
           </div>
         </div>
       </Sec>
@@ -658,18 +655,18 @@ export function StrategicPanel() {
       {/* ── OKRs ─────────────────────────────────────────────────────────── */}
       <Sec label="OKRs do ciclo" badge={`${phase.toUpperCase()} · ${PHASES[phaseIdx]?.sublabel}`} open={open.okrs} toggle={() => tog('okrs')}>
         {okrs.map((okr, oi) => (
-          <div key={oi} className="rounded-[0.8rem] border border-white/7 bg-white/[0.015] p-3 space-y-2">
-            <p className="text-[8px] font-semibold text-white/70 leading-snug">O{oi + 1}. {okr.objetivo}</p>
+          <div key={oi} className="rounded-[0.8rem] border border-white/7 bg-white/[0.015] p-3 space-y-2.5">
+            <p className="text-[9px] font-semibold text-white/72 leading-snug">O{oi + 1}. {okr.objetivo}</p>
             {okr.krs.map((kr, ki) => (
-              <div key={ki} className="flex items-center gap-2">
-                <span className="text-[6.5px] text-white/22 shrink-0">KR{ki + 1}</span>
+              <div key={ki} className="flex items-start gap-2">
+                <span className="text-[8px] text-white/25 shrink-0 mt-0.5">KR{ki + 1}</span>
                 <div className="flex-1">
-                  <p className="text-[7.5px] text-white/50 leading-snug mb-1">{kr.descricao}</p>
+                  <p className="text-[8.5px] text-white/52 leading-snug mb-1.5">{kr.descricao}</p>
                   <div className="flex items-center gap-2">
                     <div className="flex-1 h-0.5 bg-white/8 rounded-full overflow-hidden">
                       <div className="h-full bg-white/35 rounded-full transition-all" style={{ width: `${kr.progresso}%` }} />
                     </div>
-                    <span className="text-[6px] text-white/30 w-6 text-right">{kr.progresso}%</span>
+                    <span className="text-[8px] text-white/32 w-7 text-right">{kr.progresso}%</span>
                   </div>
                 </div>
               </div>
@@ -681,21 +678,17 @@ export function StrategicPanel() {
       {/* ── TD: TRANSFORMAÇÃO DIGITAL ─────────────────────────────────────── */}
       <Sec label="Transformação Digital" badge={`SGI ${sgiOk}/${sgi.length} · DDDM ${dddmOk}/${dddm.length}`} open={open.td} toggle={() => tog('td')}>
 
-        <Sec label={`SGI — Sistemas Integrados  ${sgiOk}/${sgi.length}`} open={open.sgi} toggle={() => tog('sgi')}>
-          {sgi.map((item, i) => <CheckRow key={i} item={item} />)}
-        </Sec>
+        <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/28 pt-1">SGI — Sistemas Integrados · {sgiOk}/{sgi.length}</p>
+        {sgi.map((item, i) => <CheckRow key={i} item={item} />)}
 
-        <Sec label={`DDDM — Decisão por Dados  ${dddmOk}/${dddm.length}`} open={open.dddm} toggle={() => tog('dddm')}>
-          {dddm.map((item, i) => <CheckRow key={i} item={item} />)}
-        </Sec>
+        <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/28 pt-2">DDDM — Decisão por Dados · {dddmOk}/{dddm.length}</p>
+        {dddm.map((item, i) => <CheckRow key={i} item={item} />)}
 
-        <Sec label={`Tendências  ${tendOk}/${tend.length}`} open={open.tend} toggle={() => tog('tend')}>
-          {tend.map((item, i) => <CheckRow key={i} item={item} />)}
-        </Sec>
+        <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/28 pt-2">Tendências · {tendOk}/{tend.length}</p>
+        {tend.map((item, i) => <CheckRow key={i} item={item} />)}
 
-        <Sec label={`Sustentabilidade  ${sustOk}/${sust.length}`} open={open.sust} toggle={() => tog('sust')}>
-          {sust.map((item, i) => <CheckRow key={i} item={item} />)}
-        </Sec>
+        <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/28 pt-2">Sustentabilidade · {sustOk}/{sust.length}</p>
+        {sust.map((item, i) => <CheckRow key={i} item={item} />)}
 
       </Sec>
 
@@ -704,20 +697,20 @@ export function StrategicPanel() {
         {gov.map((pilar, pi) => {
           const okCount = pilar.items.filter(i => i.ok).length
           return (
-            <div key={pi} className="rounded-[0.7rem] border border-white/6 p-2.5 space-y-1">
-              <div className="flex items-center justify-between mb-1.5">
-                <p className="text-[7.5px] font-semibold text-white/55">{pilar.pilar}</p>
-                <span className="text-[6px] text-white/25">{okCount}/{pilar.items.length}</span>
+            <div key={pi} className="rounded-[0.7rem] border border-white/6 p-3 space-y-1.5">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-[9px] font-semibold text-white/58">{pilar.pilar}</p>
+                <span className="text-[8px] text-white/28">{okCount}/{pilar.items.length}</span>
               </div>
               {pilar.items.map((item, ii) => (
-                <div key={ii} className="flex items-start gap-1.5">
+                <div key={ii} className="flex items-start gap-2">
                   {item.ok
-                    ? <CheckCircle2 className="mt-0.5 h-2.5 w-2.5 shrink-0 text-white/40" />
-                    : <AlertCircle  className="mt-0.5 h-2.5 w-2.5 shrink-0 text-white/18" />
+                    ? <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-white/42" />
+                    : <AlertCircle  className="mt-0.5 h-3 w-3 shrink-0 text-white/18" />
                   }
-                  <div>
-                    <span className={`text-[7.5px] ${item.ok ? 'text-white/60' : 'text-white/30'}`}>{item.label}</span>
-                    <span className="ml-1.5 text-[6px] text-white/20 border border-white/8 rounded px-1">via {item.fonte}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-[8.5px] leading-snug ${item.ok ? 'text-white/62' : 'text-white/30'}`}>{item.label}</p>
+                    <p className="text-[7.5px] text-white/22 leading-none mt-0.5">{item.fonte}</p>
                   </div>
                 </div>
               ))}
@@ -728,18 +721,18 @@ export function StrategicPanel() {
 
       {/* ── MONITOR ──────────────────────────────────────────────────────── */}
       <Sec label="Monitor" open={open.monitor} toggle={() => tog('monitor')}>
-        <div className="grid grid-cols-2 gap-1.5">
+        <div className="grid grid-cols-2 gap-2">
           {monitor.map((item, i) => (
-            <div key={i} className="flex items-center gap-1.5 rounded-[0.5rem] border border-white/6 px-2 py-1.5">
+            <div key={i} className="flex items-center gap-2 rounded-[0.6rem] border border-white/6 px-2.5 py-2">
               <MonitorDot status={item.status} />
               <div className="min-w-0">
-                <p className="text-[7px] text-white/45 truncate">{item.label}</p>
-                <p className="text-[6.5px] text-white/28">{item.valor}</p>
+                <p className="text-[8.5px] text-white/48 truncate">{item.label}</p>
+                <p className="text-[8px] text-white/30">{item.valor}</p>
               </div>
             </div>
           ))}
         </div>
-        <p className="text-[6px] text-white/18 text-right mt-1">atualizado {metrics.loadedAt || '—'}</p>
+        <p className="text-[7px] text-white/20 text-right mt-1">atualizado {metrics.loadedAt || '—'}</p>
       </Sec>
 
     </div>
