@@ -7,18 +7,12 @@ import { supabase } from '@/lib/supabase'
 import {
   ArrowLeft, Ban, Brain, Crown, Eye, EyeOff, Key, LineChart,
   Mail, MessageSquare, PencilLine, RefreshCw, Save, Search,
-  Send, Settings, Shield, Trash2, Unlock, User, Users, X, Target,
-  CheckCircle2, AlertTriangle, TrendingUp, Zap, Building2,
+  Send, Settings, Shield, Trash2, Unlock, User, Users, X,
+  CheckCircle2, AlertTriangle, TrendingUp, Zap,
 } from 'lucide-react'
-import { StrategicPanel } from '@/components/sea/strategic-panel'
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
-type AdminTab = 'users' | 'subscriptions' | 'analytics' | 'communication' | 'config' | 'estrategia' | 'crm'
-
-type ZohoLead    = { id: string; First_Name: string; Last_Name: string; Email: string; Lead_Status: string; Lead_Source: string; Created_Time: string; Phone: string }
-type ZohoDeal    = { id: string; Deal_Name: string; Stage: string; Amount: number; Closing_Date: string; Account_Name: string }
-type ZohoContact = { id: string; First_Name: string; Last_Name: string; Email: string; Phone: string; Account_Name: string; Created_Time: string }
-type ZohoStats   = { totalLeads: number; totalContacts: number; totalDeals: number; totalPipeline: number; dealsByStage: Record<string, number>; leadsByStatus: Record<string, number> }
+type AdminTab = 'users' | 'subscriptions' | 'analytics' | 'communication' | 'config'
 type UserRow = Profile & { blocked: boolean; last_login: string | null }
 type SubRow = { id: string; user_id: string; plan: string; status: string; started_at: string; expires_at: string | null; cancelled_at: string | null }
 
@@ -62,12 +56,6 @@ export default function AdminPage() {
   const [configs, setConfigs] = useState<Record<string, string>>({})
   const [configSaved, setConfigSaved] = useState(false)
 
-  // CRM — Zoho
-  const [crmLeads, setCrmLeads]       = useState<ZohoLead[]>([])
-  const [crmDeals, setCrmDeals]       = useState<ZohoDeal[]>([])
-  const [crmContacts, setCrmContacts] = useState<ZohoContact[]>([])
-  const [crmStats, setCrmStats]       = useState<ZohoStats | null>(null)
-  const [crmConnected, setCrmConnected] = useState<boolean | null>(null)
 
   const flash = (m: string) => { setMsg(m); setTimeout(() => setMsg(''), 3000) }
 
@@ -106,30 +94,13 @@ export default function AdminPage() {
     setLoading(false)
   }, [])
 
-  const loadCRM = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/zoho/data')
-      if (res.status === 401) { setCrmConnected(false); setLoading(false); return }
-      const data = await res.json()
-      if (data.error) { setCrmConnected(false); setLoading(false); return }
-      setCrmConnected(true)
-      setCrmLeads(data.leads ?? [])
-      setCrmDeals(data.deals ?? [])
-      setCrmContacts(data.contacts ?? [])
-      setCrmStats(data.stats ?? null)
-    } catch { setCrmConnected(false) }
-    setLoading(false)
-  }, [])
-
   useEffect(() => {
     if (!isAdmin) return
     if (tab === 'users') loadUsers()
     else if (tab === 'subscriptions') loadSubs()
     else if (tab === 'analytics') loadAnalytics()
     else if (tab === 'config') loadConfigs()
-    else if (tab === 'crm') loadCRM()
-  }, [tab, isAdmin, loadUsers, loadSubs, loadAnalytics, loadConfigs, loadCRM])
+  }, [tab, isAdmin, loadUsers, loadSubs, loadAnalytics, loadConfigs])
 
   // ── User Actions ──
   const changeOwnPassword = async () => {
@@ -321,8 +292,6 @@ export default function AdminPage() {
     { id: 'analytics', label: 'Analytics', icon: LineChart },
     { id: 'communication', label: 'Avisos', icon: MessageSquare },
     { id: 'config', label: 'Config', icon: Settings },
-    { id: 'estrategia', label: 'Estrategia', icon: Target },
-    { id: 'crm', label: 'CRM Zoho', icon: Building2 },
   ]
 
   return (
@@ -606,126 +575,6 @@ export default function AdminPage() {
         </div>
       )}
 
-      {/* ══════ ESTRATEGIA ══════ */}
-      {tab === 'estrategia' && !loading && <StrategicPanel />}
-
-      {/* ══════ CRM ZOHO ══════ */}
-      {tab === 'crm' && !loading && (
-        <div className="space-y-3">
-          {crmConnected === false ? (
-            <div className="rounded-[1rem] border border-white/8 bg-white/[0.02] p-6 text-center space-y-3">
-              <Building2 className="mx-auto h-8 w-8 text-white/15" />
-              <p className="text-[9px] font-semibold text-white/50">Zoho CRM não conectado</p>
-              <p className="text-[8px] text-white/30">Clique abaixo para autorizar o SEA a ler seu CRM</p>
-              <a href="/api/zoho/auth" className="inline-flex items-center gap-2 rounded-[0.6rem] border border-white/15 bg-white/[0.05] px-4 py-2 text-[9px] text-white/70 hover:text-white/90">
-                <Building2 className="h-3.5 w-3.5" /> Conectar Zoho CRM
-              </a>
-            </div>
-          ) : (
-            <>
-              {/* Stats */}
-              {crmStats && (
-                <div className="grid grid-cols-4 gap-1.5">
-                  {[
-                    { l: 'Leads', v: crmStats.totalLeads, c: '#60a5fa' },
-                    { l: 'Contatos', v: crmStats.totalContacts, c: '#4ade80' },
-                    { l: 'Negócios', v: crmStats.totalDeals, c: '#facc15' },
-                    { l: 'Pipeline', v: `R$${(crmStats.totalPipeline/1000).toFixed(0)}k`, c: '#a78bfa' },
-                  ].map(s => (
-                    <div key={s.l} className="rounded-[0.6rem] border border-white/6 bg-black/20 px-2 py-2 text-center">
-                      <p className="text-[13px] font-bold tabular-nums" style={{ color: s.c }}>{s.v}</p>
-                      <p className="text-[6px] text-white/30">{s.l}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Funil de negócios */}
-              {crmStats && Object.keys(crmStats.dealsByStage).length > 0 && (
-                <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] p-3">
-                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.12em] text-white/35">Funil de negócios</p>
-                  <div className="space-y-1">
-                    {Object.entries(crmStats.dealsByStage).map(([stage, count]) => (
-                      <div key={stage} className="flex items-center gap-2">
-                        <p className="w-32 shrink-0 truncate text-[8px] text-white/50">{stage}</p>
-                        <div className="flex-1 rounded-full bg-white/5 h-1.5">
-                          <div className="h-1.5 rounded-full bg-white/30" style={{ width: `${Math.min((count / Math.max(...Object.values(crmStats.dealsByStage))) * 100, 100)}%` }} />
-                        </div>
-                        <span className="text-[8px] font-bold text-white/50">{count}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Status dos leads */}
-              {crmStats && Object.keys(crmStats.leadsByStatus).length > 0 && (
-                <div className="rounded-[0.8rem] border border-white/6 bg-white/[0.02] p-3">
-                  <p className="mb-2 text-[7px] font-semibold uppercase tracking-[0.12em] text-white/35">Status dos leads</p>
-                  <div className="flex flex-wrap gap-1.5">
-                    {Object.entries(crmStats.leadsByStatus).map(([status, count]) => (
-                      <div key={status} className="rounded-full border border-white/8 px-2 py-1 text-[7px] text-white/50">
-                        {status} <span className="font-bold text-white/70">{count}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Leads recentes */}
-              {crmLeads.length > 0 && (
-                <div>
-                  <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.12em] text-white/30">Leads recentes</p>
-                  <div className="space-y-1">
-                    {crmLeads.slice(0, 8).map(lead => (
-                      <div key={lead.id} className="flex items-center gap-2 rounded-[0.5rem] border border-white/5 bg-white/[0.02] px-2.5 py-1.5">
-                        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-white/8 bg-white/[0.03] text-[8px] font-bold text-white/30">
-                          {(lead.First_Name?.[0] ?? lead.Last_Name?.[0] ?? '?').toUpperCase()}
-                        </div>
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-[8px] font-semibold text-white/70">{lead.First_Name} {lead.Last_Name}</p>
-                          <p className="truncate text-[6px] text-white/30">{lead.Email}</p>
-                        </div>
-                        <div className="shrink-0 text-right">
-                          <p className="text-[6px] text-white/30">{lead.Lead_Status || '—'}</p>
-                          <p className="text-[6px] text-white/20">{lead.Lead_Source || ''}</p>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Negócios abertos */}
-              {crmDeals.length > 0 && (
-                <div>
-                  <p className="mb-1.5 text-[7px] font-semibold uppercase tracking-[0.12em] text-white/30">Negócios em andamento</p>
-                  <div className="space-y-1">
-                    {crmDeals.slice(0, 6).map(deal => (
-                      <div key={deal.id} className="flex items-center gap-2 rounded-[0.5rem] border border-white/5 bg-white/[0.02] px-2.5 py-1.5">
-                        <div className="min-w-0 flex-1">
-                          <p className="truncate text-[8px] font-semibold text-white/70">{deal.Deal_Name}</p>
-                          <p className="text-[6px] text-white/30">{deal.Stage}</p>
-                        </div>
-                        <p className="shrink-0 text-[9px] font-bold text-white/55">
-                          {deal.Amount ? `R$${Number(deal.Amount).toLocaleString('pt-BR')}` : '—'}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              <div className="flex items-center justify-between">
-                <button onClick={loadCRM} className="flex items-center gap-1 text-[7px] text-white/30 hover:text-white/55">
-                  <RefreshCw className="h-2.5 w-2.5" /> Atualizar CRM
-                </button>
-                <p className="text-[6px] text-white/20">Zoho CRM conectado</p>
-              </div>
-            </>
-          )}
-        </div>
-      )}
 
       {/* ══════ CONFIG ══════ */}
       {tab === 'config' && !loading && (
