@@ -8,11 +8,12 @@ import {
   ArrowLeft, Ban, Brain, Crown, Eye, EyeOff, Key, LineChart,
   Mail, MessageSquare, PencilLine, RefreshCw, Save, Search,
   Send, Settings, Shield, Trash2, Unlock, User, Users, X,
-  CheckCircle2, AlertTriangle, TrendingUp, Zap,
+  CheckCircle2, AlertTriangle, TrendingUp, Zap, UserMinus, UserPlus, ArrowRightLeft,
 } from 'lucide-react'
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts'
 
-type AdminTab = 'users' | 'subscriptions' | 'analytics' | 'communication' | 'config'
+type AdminTab = 'users' | 'subscriptions' | 'analytics' | 'communication' | 'config' | 'equipes'
+type Team = { id: string; nome: string; memberIds: string[] }
 type UserRow = Profile & { blocked: boolean; last_login: string | null }
 type SubRow = { id: string; user_id: string; plan: string; status: string; started_at: string; expires_at: string | null; cancelled_at: string | null }
 
@@ -56,6 +57,10 @@ export default function AdminPage() {
   const [configs, setConfigs] = useState<Record<string, string>>({})
   const [configSaved, setConfigSaved] = useState(false)
 
+  // Equipes
+  const [teams, setTeams] = useState<Team[]>([])
+  const [newTeamName, setNewTeamName] = useState('')
+
 
   const flash = (m: string) => { setMsg(m); setTimeout(() => setMsg(''), 3000) }
 
@@ -94,13 +99,20 @@ export default function AdminPage() {
     setLoading(false)
   }, [])
 
+  const loadTeams = useCallback(async () => {
+    if (!supabase) return
+    const { data } = await supabase.from('app_config').select('value').eq('key', 'teams').single()
+    if (data?.value) { try { setTeams(JSON.parse(data.value as string) as Team[]) } catch {} }
+  }, [])
+
   useEffect(() => {
     if (!isAdmin) return
     if (tab === 'users') loadUsers()
     else if (tab === 'subscriptions') loadSubs()
     else if (tab === 'analytics') loadAnalytics()
     else if (tab === 'config') loadConfigs()
-  }, [tab, isAdmin, loadUsers, loadSubs, loadAnalytics, loadConfigs])
+    else if (tab === 'equipes') { loadTeams(); if (users.length === 0) loadUsers() }
+  }, [tab, isAdmin, loadUsers, loadSubs, loadAnalytics, loadConfigs, loadTeams, users.length])
 
   // ── User Actions ──
   const changeOwnPassword = async () => {
@@ -146,6 +158,46 @@ export default function AdminPage() {
 
   // ── Config ──
   const saveConfig = async (key: string, value: string) => { if (!supabase) return; try { const p = JSON.parse(value); await supabase.from('app_config').upsert({ key, value: p, updated_at: new Date().toISOString() }); setConfigSaved(true); setTimeout(() => setConfigSaved(false), 2000) } catch { flash('JSON invalido.') } }
+
+  // ── Admin Management ──
+  const promoteToAdmin = async (id: string, name: string) => {
+    if (!supabase) return
+    if (!confirm(`Tornar "${name}" admin? Ele terá acesso total ao painel.`)) return
+    await supabase.from('profiles').update({ role: 'admin' }).eq('id', id)
+    flash('Admin adicionado.'); loadUsers()
+  }
+  const demoteFromAdmin = async (id: string, name: string) => {
+    if (!supabase) return
+    if (!confirm(`Remover acesso admin de "${name}"?`)) return
+    await supabase.from('profiles').update({ role: 'user' }).eq('id', id)
+    flash('Admin removido.'); loadUsers()
+  }
+  const transferAdmin = async (id: string, name: string) => {
+    if (!supabase || !user) return
+    if (!confirm(`TRANSFERIR admin para "${name}"?\n\nVocê PERDERÁ acesso ao painel imediatamente.`)) return
+    await supabase.from('profiles').update({ role: 'admin' }).eq('id', id)
+    await supabase.from('profiles').update({ role: 'user' }).eq('id', user.id)
+    flash('Admin transferido. Saindo...')
+    setTimeout(async () => { await supabase!.auth.signOut(); router.replace('/sea') }, 1500)
+  }
+
+  // ── Teams ──
+  const saveTeams = async (updated: Team[]) => {
+    setTeams(updated)
+    if (!supabase) return
+    await supabase.from('app_config').upsert({ key: 'teams', value: JSON.stringify(updated), updated_at: new Date().toISOString() })
+  }
+  const createTeam = () => {
+    if (!newTeamName.trim()) return
+    saveTeams([...teams, { id: Date.now().toString(36), nome: newTeamName.trim(), memberIds: [] }])
+    setNewTeamName('')
+  }
+  const deleteTeam = (id: string) => { if (!confirm('Excluir equipe?')) return; saveTeams(teams.filter(t => t.id !== id)) }
+  const toggleMember = (teamId: string, userId: string) => {
+    saveTeams(teams.map(t => t.id !== teamId ? t : {
+      ...t, memberIds: t.memberIds.includes(userId) ? t.memberIds.filter(m => m !== userId) : [...t.memberIds, userId],
+    }))
+  }
 
   // ── Analytics Computed ──
   const now = Date.now()
@@ -291,6 +343,7 @@ export default function AdminPage() {
     { id: 'subscriptions', label: 'Assinaturas', icon: Crown },
     { id: 'analytics', label: 'Analytics', icon: LineChart },
     { id: 'communication', label: 'Avisos', icon: MessageSquare },
+    { id: 'equipes', label: 'Equipes', icon: UserPlus },
     { id: 'config', label: 'Config', icon: Settings },
   ]
 
@@ -391,6 +444,15 @@ export default function AdminPage() {
                       <button onClick={() => { setEditingUser(u.id); setEditName(u.name || ''); setEditEmail(u.email || '') }} title="Editar" className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border border-white/8 text-white/30 hover:text-white/60"><PencilLine className="h-2.5 w-2.5" /></button>
                       <button onClick={() => setResetPwUser(u.id)} title="Reset senha" className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border border-white/8 text-white/30 hover:text-white/60"><Key className="h-2.5 w-2.5" /></button>
                       <button onClick={() => blockUser(u.id, !u.blocked)} title={u.blocked ? 'Desbloquear' : 'Bloquear'} className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border border-white/8 text-white/30 hover:text-white/60">{u.blocked ? <Unlock className="h-2.5 w-2.5" /> : <Ban className="h-2.5 w-2.5" />}</button>
+                      {u.role !== 'admin' && u.id !== user?.id && (
+                        <button onClick={() => promoteToAdmin(u.id, u.name || u.email || '')} title="Tornar Admin" className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border border-[#a78bfa20] text-[#a78bfa]/35 hover:text-[#a78bfa]"><Crown className="h-2.5 w-2.5" /></button>
+                      )}
+                      {u.role === 'admin' && u.id !== user?.id && (
+                        <button onClick={() => demoteFromAdmin(u.id, u.name || u.email || '')} title="Remover Admin" className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border border-[#fb923c20] text-[#fb923c]/35 hover:text-[#fb923c]"><UserMinus className="h-2.5 w-2.5" /></button>
+                      )}
+                      {u.role !== 'admin' && u.id !== user?.id && (
+                        <button onClick={() => transferAdmin(u.id, u.name || u.email || '')} title="Transferir Admin" className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border border-[#f8717120] text-[#fca5a5]/30 hover:text-[#fca5a5]"><ArrowRightLeft className="h-2.5 w-2.5" /></button>
+                      )}
                       {u.role !== 'admin' && <button onClick={() => deleteUser(u.id, u.email || '')} title="Excluir" className="flex h-5 w-5 items-center justify-center rounded-[0.3rem] border border-[#f8717120] text-[#fca5a5]/50 hover:text-[#fca5a5]"><Trash2 className="h-2.5 w-2.5" /></button>}
                     </div>
                   </div>
@@ -575,6 +637,116 @@ export default function AdminPage() {
         </div>
       )}
 
+
+      {/* ══════ EQUIPES ══════ */}
+      {tab === 'equipes' && !loading && (
+        <div className="space-y-3">
+
+          {/* Criar equipe */}
+          <div className="flex gap-1">
+            <input
+              className={`${inputClass} flex-1`}
+              placeholder="Nome da equipe..."
+              value={newTeamName}
+              onChange={e => setNewTeamName(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && createTeam()}
+            />
+            <button
+              onClick={createTeam}
+              disabled={!newTeamName.trim()}
+              className="flex h-7 shrink-0 items-center gap-1 rounded-[0.4rem] border border-[#4ade8020] bg-[#4ade8008] px-3 text-[8px] text-[#4ade80] disabled:opacity-30"
+            >
+              <UserPlus className="h-3 w-3" /> Criar
+            </button>
+          </div>
+
+          {/* Lista de equipes */}
+          {teams.length === 0 && (
+            <p className="py-6 text-center text-[8px] text-white/30">Nenhuma equipe criada. Adicione uma acima.</p>
+          )}
+          {teams.map(team => (
+            <div key={team.id} className="rounded-[0.8rem] border border-white/7 bg-white/[0.02] p-3 space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <p className="text-[9px] font-semibold text-white/75">{team.nome}</p>
+                  <span className="text-[7px] text-white/28">{team.memberIds.length} membro(s)</span>
+                </div>
+                <button onClick={() => deleteTeam(team.id)} className="text-white/20 hover:text-[#f87171]/60">
+                  <Trash2 className="h-3 w-3" />
+                </button>
+              </div>
+              <div className="space-y-0.5 max-h-36 overflow-y-auto scrollbar-hide">
+                {users.filter(u => u.role !== 'admin').map(u => {
+                  const isMember = team.memberIds.includes(u.id)
+                  return (
+                    <button
+                      key={u.id}
+                      onClick={() => toggleMember(team.id, u.id)}
+                      className={`flex w-full items-center gap-2 rounded-[0.4rem] px-2 py-1 text-left transition-all ${isMember ? 'bg-white/[0.04]' : 'hover:bg-white/[0.015]'}`}
+                    >
+                      <div className={`h-3 w-3 shrink-0 rounded-[0.2rem] border ${isMember ? 'border-white/30 bg-white/20' : 'border-white/12'}`} />
+                      <span className={`text-[8px] ${isMember ? 'text-white/70' : 'text-white/38'}`}>{u.name || u.email}</span>
+                    </button>
+                  )
+                })}
+                {users.filter(u => u.role !== 'admin').length === 0 && (
+                  <p className="text-[7px] text-white/25 px-2">Nenhum usuário disponível.</p>
+                )}
+              </div>
+            </div>
+          ))}
+
+          {/* Gestão de admins */}
+          <div className="rounded-[0.8rem] border border-white/6 p-3 space-y-2">
+            <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-white/30">Admins</p>
+            {users.filter(u => u.id !== user?.id).map(u => (
+              <div key={u.id} className="flex items-center gap-2">
+                <div className="flex-1 min-w-0">
+                  <p className="truncate text-[8.5px] text-white/65">{u.name || u.email}</p>
+                  {u.role === 'admin' && <span className="text-[6px] font-bold text-[#a78bfa]">ADMIN</span>}
+                </div>
+                {u.role !== 'admin' ? (
+                  <button
+                    onClick={() => promoteToAdmin(u.id, u.name || u.email || '')}
+                    className="flex h-6 shrink-0 items-center gap-1 rounded-[0.4rem] border border-[#a78bfa20] bg-[#a78bfa08] px-2 text-[7px] text-[#a78bfa]/70 hover:text-[#a78bfa]"
+                  >
+                    <Crown className="h-2.5 w-2.5" /> Tornar Admin
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => demoteFromAdmin(u.id, u.name || u.email || '')}
+                    className="flex h-6 shrink-0 items-center gap-1 rounded-[0.4rem] border border-[#fb923c20] bg-[#fb923c08] px-2 text-[7px] text-[#fb923c]/70 hover:text-[#fb923c]"
+                  >
+                    <UserMinus className="h-2.5 w-2.5" /> Remover Admin
+                  </button>
+                )}
+              </div>
+            ))}
+          </div>
+
+          {/* Transferir admin */}
+          <div className="rounded-[0.8rem] border border-[#f8717115] bg-[#f8717106] p-3 space-y-2">
+            <p className="text-[8px] font-semibold uppercase tracking-[0.12em] text-[#fca5a5]/50">Transferir sua conta admin</p>
+            <p className="text-[7.5px] text-white/30">Você perderá o acesso imediatamente. Selecione para quem transferir:</p>
+            <div className="space-y-1">
+              {users.filter(u => u.id !== user?.id && u.role !== 'admin').map(u => (
+                <button
+                  key={u.id}
+                  onClick={() => transferAdmin(u.id, u.name || u.email || '')}
+                  className="flex w-full items-center gap-2 rounded-[0.5rem] border border-[#f8717118] px-3 py-1.5 text-left hover:bg-[#f8717108]"
+                >
+                  <ArrowRightLeft className="h-3 w-3 shrink-0 text-[#fca5a5]/40" />
+                  <span className="text-[8px] text-white/55">{u.name || u.email}</span>
+                </button>
+              ))}
+              {users.filter(u => u.id !== user?.id && u.role !== 'admin').length === 0 && (
+                <p className="text-[7px] text-white/25">Nenhum usuário disponível para transferência.</p>
+              )}
+            </div>
+          </div>
+
+        </div>
+      )}
 
       {/* ══════ CONFIG ══════ */}
       {tab === 'config' && !loading && (
